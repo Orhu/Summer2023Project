@@ -10,7 +10,7 @@ namespace CardSystem.Effects
         public int damage = 1;
         public override string GetFormatedDescription()
         {
-            return description.Replace("[Dmg]", damage.ToString());
+            return description.Replace("[Damage]", damage.ToString());
         }
 
         public override void PreviewEffect()

@@ -7,6 +7,36 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3129378300851380858, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
+      propertyPath: m_text
+      value: 'Deals 1 Dmg to enmies infront of you.
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3129378300851380858, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
+      propertyPath: m_fontSize
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3129378300851380858, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3129378300851380858, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3129378300851380858, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3129378300851380858, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
+      propertyPath: m_fontSizeMin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3129378300851380858, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190080
+      objectReference: {fileID: 0}
     - target: {fileID: 4149809545290367429, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
       propertyPath: m_Size.x
       value: 4.82
@@ -72,8 +102,36 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: c57cec6b067c4bc4ea88fdc1ed756ecb, type: 3}
     - target: {fileID: 4652894162424920165, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
+      propertyPath: isFlipped
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4652894162424920165, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
+      propertyPath: actionImage
+      value: 
+      objectReference: {fileID: 21300000, guid: c57cec6b067c4bc4ea88fdc1ed756ecb, type: 3}
+    - target: {fileID: 4652894162424920165, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
       propertyPath: displayName
-      value: Slash
+      value: Skeletal Slash
+      objectReference: {fileID: 0}
+    - target: {fileID: 4652894162424920165, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
+      propertyPath: effectImage
+      value: 
+      objectReference: {fileID: 21300000, guid: 4b6690a0bf1247048a96effe11ab39f1, type: 3}
+    - target: {fileID: 4652894162424920165, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
+      propertyPath: actionBackground
+      value: 
+      objectReference: {fileID: 21300000, guid: 1d3e10ede9181be46be82c8c8cf052fc, type: 3}
+    - target: {fileID: 6774084313467651314, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
+      propertyPath: m_text
+      value: Skeletal Slash
+      objectReference: {fileID: 0}
+    - target: {fileID: 7104296364916626323, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 1d3e10ede9181be46be82c8c8cf052fc, type: 3}
+    - target: {fileID: 7104296364916626323, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7248191284416664712, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
       propertyPath: m_text
@@ -87,7 +145,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7284162210290003178, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
       propertyPath: m_Name
-      value: Slash
+      value: SkeletalSlash
       objectReference: {fileID: 0}
     - target: {fileID: 7452000299590823328, guid: b85e369857e720c47b6bee30a5803fa7, type: 3}
       propertyPath: m_text
@@ -112,5 +170,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e38f078f8887ee4586de1b4da938ca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  description: Deals [DMG] Dmg to enmies infront of you.
+  description: Deals [Damage] Dmg to enmies infront of you.
   damage: 1
