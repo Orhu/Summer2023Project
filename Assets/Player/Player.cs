@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         moveDirection.x = Input.GetAxis("Horizontal");
@@ -26,6 +26,11 @@ public class Player : MonoBehaviour
         if (pressedPreview > 0)
         {
             DeckManager.playerDeck.TogglePreviewCard(pressedPreview - 1);
+        }
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            DeckManager.playerDeck.PlayPreveiwedCards();
         }
     }
     private void FixedUpdate()

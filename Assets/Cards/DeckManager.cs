@@ -45,7 +45,7 @@ public class DeckManager : MonoBehaviour
 
     private void Update()
     {
-        foreach (KeyValuePair<int, float> cardIndexToCooldown in cardIndicesToCooldowns)
+        foreach (KeyValuePair<int, float> cardIndexToCooldown in new Dictionary<int, float>(cardIndicesToCooldowns))
         {
             float newValue = cardIndexToCooldown.Value - Time.deltaTime;
             if (newValue <= 0)
@@ -73,7 +73,9 @@ public class DeckManager : MonoBehaviour
         }
         while(discardedCards.Count > 0)
         {
-            drawableCards.Push(discardedCards[Random.Range(0, discardedCards.Count)]);
+            int index = Random.Range(0, discardedCards.Count);
+            drawableCards.Push(discardedCards[index]);
+            discardedCards.RemoveAt(index);
         }
     }
 
@@ -115,11 +117,11 @@ public class DeckManager : MonoBehaviour
 
     public void PlayPreveiwedCards()
     {
-        for (int i = 0; i < previewedCardIndices.Count; i++)
+        foreach (int previewedCardIndex in previewedCardIndices)
         {
-            Card card = inHandCards[i];
+            Card card = inHandCards[previewedCardIndex];
             card.ConfirmPreview();
-            cardIndicesToCooldowns.Add(i, card.cooldown);
+            cardIndicesToCooldowns.Add(previewedCardIndex, card.cooldown);
         }
         previewedCardIndices.Clear();
     }

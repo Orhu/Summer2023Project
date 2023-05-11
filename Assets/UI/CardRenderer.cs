@@ -47,6 +47,16 @@ namespace CardSystem
             get{ return links.previewOverlay.enabled; }
         }
 
+        public float CooldownTime 
+        { 
+            set 
+            {
+                links.cooldownTimeTextBox.text = value.ToString();
+                links.cooldownOverlay.enabled = value > 0;
+                links.cooldownTimeTextBox.enabled = value > 0;
+            }
+        }
+        
         [SerializeField]
         private ComponentLinks links;
         [SerializeField]
@@ -68,9 +78,11 @@ namespace CardSystem
         {
             public TMP_Text nameTextBox;
             public TMP_Text descriptionTextBox;
+            public TMP_Text cooldownTimeTextBox;
             public Image backgroundSprite;
             public Image cardSprite;
             public Image previewOverlay;
+            public Image cooldownOverlay;
         }
     }
 }

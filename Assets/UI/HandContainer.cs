@@ -27,6 +27,15 @@ public class HandContainer : MonoBehaviour
                 cardRenderers[i].Card = card;
             }
             cardRenderers[i].Previewing = DeckManager.playerDeck.previewedCardIndices.Contains(i);
+
+            if (DeckManager.playerDeck.cardIndicesToCooldowns.ContainsKey(i))
+            {
+                cardRenderers[i].CooldownTime = DeckManager.playerDeck.cardIndicesToCooldowns[i];
+            }
+            else
+            {
+                cardRenderers[i].CooldownTime = 0;
+            }
         }
     }
 }
