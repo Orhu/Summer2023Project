@@ -21,9 +21,27 @@ public class Player : MonoBehaviour
     {
         moveDirection.x = Input.GetAxis("Horizontal");
         moveDirection.y = Input.GetAxis("Vertical");
+
+        int pressedPreview = getPressedPreviewButton();
+        if (pressedPreview > 0)
+        {
+            DeckManager.playerDeck.TogglePreviewCard(pressedPreview - 1);
+        }
     }
     private void FixedUpdate()
     {
         rigidBody.MovePosition(rigidBody.position + moveDirection * speed * Time.fixedDeltaTime);
+    }
+
+    private static int getPressedPreviewButton()
+    {
+        for (int i = 1; i <= DeckManager.playerDeck.handSize; i ++)
+        {
+            if (Input.GetButtonDown("PreviewCard" + i))
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 }

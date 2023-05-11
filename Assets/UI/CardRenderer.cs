@@ -41,6 +41,12 @@ namespace CardSystem
             get { return card; }
         }
 
+        public bool Previewing
+        {
+            set{ links.previewOverlay.enabled = value; }
+            get{ return links.previewOverlay.enabled; }
+        }
+
         [SerializeField]
         private ComponentLinks links;
         [SerializeField]
@@ -64,6 +70,7 @@ namespace CardSystem
             public TMP_Text descriptionTextBox;
             public Image backgroundSprite;
             public Image cardSprite;
+            public Image previewOverlay;
         }
     }
 }

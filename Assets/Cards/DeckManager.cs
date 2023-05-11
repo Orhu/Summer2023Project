@@ -14,9 +14,9 @@ public class DeckManager : MonoBehaviour
     [System.NonSerialized]
     public List<Card> inHandCards = new List<Card>();
     [System.NonSerialized]
-    public List<Card> previewedCards = new List<Card>();
+    public List<int> previewedCardIndices = new List<int>();
     [System.NonSerialized]
-    public Dictionary<Card, float> cardsToCooldowns = new Dictionary<Card, float>();
+    public Dictionary<int, float> cardIndicesToCooldowns = new Dictionary<int, float>();
     [System.NonSerialized]
     public List<Card> discardedCards = new List<Card>();
 
@@ -45,19 +45,21 @@ public class DeckManager : MonoBehaviour
 
     private void Update()
     {
-        foreach (KeyValuePair<Card, float> cardToCooldown in cardsToCooldowns)
+        foreach (KeyValuePair<int, float> cardIndexToCooldown in cardIndicesToCooldowns)
         {
-            float newValue = cardToCooldown.Value - Time.deltaTime;
+            float newValue = cardIndexToCooldown.Value - Time.deltaTime;
             if (newValue <= 0)
             {
-                cardsToCooldowns.Remove(cardToCooldown.Key);
-                discardedCards.Add(cardToCooldown.Key);
-                inHandCards.Remove(cardToCooldown.Key);
+                cardIndicesToCooldowns.Remove(cardIndexToCooldown.Key);
+
+                Card card = inHandCards[cardIndexToCooldown.Key];
+                discardedCards.Add(card);
+                inHandCards.Remove(card);
                 DrawCard();
             }
             else
             {
-                cardsToCooldowns[cardToCooldown.Key] = newValue;
+                cardIndicesToCooldowns[cardIndexToCooldown.Key] = newValue;
             }
         }
     }
@@ -94,30 +96,31 @@ public class DeckManager : MonoBehaviour
 
     public void TogglePreviewCard(int handIndex)
     {
-        if (inHandCards.Count <= handIndex || cardsToCooldowns.ContainsKey(inHandCards[handIndex]))
+        if (inHandCards.Count <= handIndex || cardIndicesToCooldowns.ContainsKey(handIndex))
         {
             return;
         }
         Card card = inHandCards[handIndex];
-        if (previewedCards.Contains(card))
+        if (previewedCardIndices.Contains(handIndex))
         {
             card.CancelPreview();
-            previewedCards.Remove(card);
+            previewedCardIndices.Remove(handIndex);
         }
         else
         {
             card.PreviewEffect();
-            previewedCards.Add(card);
+            previewedCardIndices.Add(handIndex);
         }
     }
 
     public void PlayPreveiwedCards()
     {
-        foreach (Card previewedCard in previewedCards)
+        for (int i = 0; i < previewedCardIndices.Count; i++)
         {
-            previewedCard.ConfirmPreview();
-            cardsToCooldowns.Add(previewedCard, previewedCard.cooldown);
+            Card card = inHandCards[i];
+            card.ConfirmPreview();
+            cardIndicesToCooldowns.Add(i, card.cooldown);
         }
-        previewedCards.Clear();
+        previewedCardIndices.Clear();
     }
 }

@@ -21,7 +21,12 @@ public class HandContainer : MonoBehaviour
     {
         for (int i = 0; i < DeckManager.playerDeck.handSize; i++)
         {
-            cardRenderers[i].Card = DeckManager.playerDeck.inHandCards[i];
+            Card card = DeckManager.playerDeck.inHandCards[i];
+            if (cardRenderers[i].Card != card)
+            {
+                cardRenderers[i].Card = card;
+            }
+            cardRenderers[i].Previewing = DeckManager.playerDeck.previewedCardIndices.Contains(i);
         }
     }
 }
