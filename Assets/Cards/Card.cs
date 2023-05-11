@@ -35,7 +35,7 @@ namespace CardSystem
                 CardDungeonEffect[] cardEffects = GetComponents<CardDungeonEffect>();
                 foreach (CardDungeonEffect cardEffect in cardEffects)
                 {
-                    description += cardEffect.GetFormatedDescription() + "\n";
+                    description += cardEffect.GetFormattedDescription() + "\n";
                 }
 
 
@@ -49,7 +49,7 @@ namespace CardSystem
                 CardAction[] cardActions = GetComponents<CardAction>();
                 foreach (CardAction cardAction in cardActions)
                 {
-                    description += cardAction.GetFormatedDescription() + "\n";
+                    description += cardAction.GetFormattedDescription() + "\n";
                 }
 
 
