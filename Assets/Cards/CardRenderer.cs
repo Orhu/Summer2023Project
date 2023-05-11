@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 namespace CardSystem
 {
@@ -33,7 +34,7 @@ namespace CardSystem
             if (shouldEnable)
             {
                 links.nameTextBox.text = card.displayName;
-                links.descriptionTextBox.text = card.GetDescription(isFlipped);
+                links.descriptionTextBox.text = card.GetDescription(!isFlipped);
 
                 if (isFlipped)
                 {
@@ -51,10 +52,10 @@ namespace CardSystem
         [System.Serializable]
         private struct ComponentLinks
         {
-            public TextMeshPro nameTextBox;
-            public TextMeshPro descriptionTextBox;
-            public SpriteRenderer backgroundSprite;
-            public SpriteRenderer cardSprite;
+            public TMP_Text nameTextBox;
+            public TMP_Text descriptionTextBox;
+            public Image backgroundSprite;
+            public Image cardSprite;
         }
     }
 }

@@ -5,5 +5,19 @@ using CardSystem;
 
 public class Deck : MonoBehaviour
 {
-    public static List<Card> cards;
+    public static Deck playerDeck;
+    public List<Card> cards;
+
+    private void Awake()
+    {
+        if (playerDeck == null)
+        {
+            playerDeck = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 }
