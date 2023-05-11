@@ -16,6 +16,7 @@ namespace CardSystem
         public Sprite effectBackground;
 
         [Header("Effects")]
+        public float cooldown = 1.0f;
         public CardAction[] cardActions;
         public CardDungeonEffect[] cardEffects;
 
