@@ -8,7 +8,21 @@ public class ProceduralGeneration : MonoBehaviour
 
     [SerializeField] List<Room> rooms;
 
+    [SerializeField] RoomGenerationParameters roomGenerationParameters;
+
+    public static ProceduralGeneration proceduralGenerationInstance { get; private set; }
+
     // Start is called before the first frame update
+    void Awake()
+    {
+        if (proceduralGenerationInstance != null && proceduralGenerationInstance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        proceduralGenerationInstance = this;
+    }
+
     void Start()
     {
         Generate();
@@ -44,4 +58,27 @@ public class ProceduralGeneration : MonoBehaviour
         createdRoom.SetActive(true);
         createdRoom.transform.parent = this.transform;
     }
+
+    public RoomGenerationParameters GetRoomGenerationParameters()
+    {
+        return roomGenerationParameters;
+    }
+
+    public void AddRoomGenerationParameters(RoomGenerationParameters addedRoomParams)
+    {
+        roomGenerationParameters.Add(addedRoomParams);
+    }
 }
+
+[System.Serializable]
+public class RoomGenerationParameters
+{
+    [SerializeField] public int numEnemies;
+    [SerializeField] public GameObject enemy;
+
+    public void Add(RoomGenerationParameters other)
+    {
+        numEnemies += other.numEnemies;
+    }
+
+};
