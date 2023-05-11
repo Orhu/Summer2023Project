@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public static GameObject _instance;
     public float speed = 10.0f;
-
-
+    
     private Vector2 moveDirection = Vector2.zero;
     private Rigidbody2D rigidBody;
 
     private void Awake()
     {
+        _instance = this.gameObject;
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
     }
 

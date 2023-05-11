@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CardSystem
 {
-    abstract public class CardAction : MonoBehaviour
+    abstract public class CardAction : ScriptableObject
     {
         public string description = "";
         public virtual string GetFormattedDescription()
