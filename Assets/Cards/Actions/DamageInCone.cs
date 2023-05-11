@@ -8,7 +8,7 @@ namespace CardSystem.Effects
     public class DamageInCone : CardAction
     {
         public int damage = 1;
-        public override string GetFormatedDescription()
+        public override string GetFormattedDescription()
         {
             return description.Replace("[Damage]", damage.ToString());
         }

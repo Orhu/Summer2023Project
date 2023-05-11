@@ -26,14 +26,14 @@ namespace CardSystem
             {
                 foreach (CardDungeonEffect cardEffect in cardEffects)
                 {
-                    description += cardEffect.GetFormatedDescription() + "\n";
+                    description += cardEffect.GetFormattedDescription() + "\n";
                 }
             }
             else
             {
                 foreach (CardAction cardAction in cardActions)
                 {
-                    description += cardAction.GetFormatedDescription() + "\n";
+                    description += cardAction.GetFormattedDescription() + "\n";
                 }
             }
             return description;

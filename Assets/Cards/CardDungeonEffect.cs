@@ -2,11 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-abstract public class CardDungeonEffect : MonoBehaviour
+public class CardDungeonEffect : ScriptableObject
 {
-    public string description = "";
-    public virtual string GetFormatedDescription()
+    [SerializeField] RoomGenerationParameters changeInRoomGenerationParameters;
+
+    [SerializeField] public string description = "";
+
+    void Start()
+    {
+        
+    }
+    public string GetFormattedDescription()
     {
         return description;
+    }
+
+    public void Effect()
+    {
+        ProceduralGeneration.proceduralGenerationInstance.AddRoomGenerationParameters(changeInRoomGenerationParameters);
     }
 }

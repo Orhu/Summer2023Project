@@ -7,7 +7,7 @@ namespace CardSystem
     abstract public class CardAction : ScriptableObject
     {
         public string description = "";
-        public virtual string GetFormatedDescription()
+        public virtual string GetFormattedDescription()
         {
             return description;
         }
