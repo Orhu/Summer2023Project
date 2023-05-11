@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace CardSystem.Effects
 {
-    [AddComponentMenu("Card Effects/Slash")]
-    public class Slash : CardAction
+    [CreateAssetMenu(fileName = "NewDamageInCone", menuName = "Cards/Actions/DamageInCone")]
+    public class DamageInCone : CardAction
     {
         public int damage = 1;
         public override string GetFormatedDescription()
