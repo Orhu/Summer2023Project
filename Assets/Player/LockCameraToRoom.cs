@@ -11,7 +11,6 @@ public class LockCameraToRoom : MonoBehaviour
     {
         Vector3 parentPosition = Player._instance.transform.position;
         Vector3 newPosition = new Vector3(Mathf.Round(parentPosition.x / roomScale.x) * roomScale.x, Mathf.Round(parentPosition.y / roomScale.y) * roomScale.y, -10);
-        Debug.Log(newPosition + " <-- " + parentPosition / roomScale);
         transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * speed);
     }
 }
