@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "NewDungeonEffect", menuName = "Cards/DungeonEffect", order = 1)]
 public class CardDungeonEffect : ScriptableObject
 {
     [SerializeField] RoomGenerationParameters changeInRoomGenerationParameters;

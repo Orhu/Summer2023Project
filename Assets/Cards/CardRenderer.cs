@@ -24,20 +24,28 @@ namespace CardSystem
         public void SetFlipped(bool newIsFlipped)
         {
             isFlipped = newIsFlipped;
+            bool shouldEnable = card != null;
 
-            //links.nameTextBox.text = card.displayName;
-            //links.descriptionTextBox.text = card.GetDescription(isFlipped);
+            links.nameTextBox.enabled = shouldEnable;
+            links.descriptionTextBox.enabled = shouldEnable;
+            links.backgroundSprite.enabled = shouldEnable;
+            links.cardSprite.enabled = shouldEnable;
+            if (shouldEnable)
+            {
+                links.nameTextBox.text = card.displayName;
+                links.descriptionTextBox.text = card.GetDescription(isFlipped);
 
-            //if (isFlipped)
-            //{
-            //    links.cardSprite.sprite = card.effectImage;
-            //    links.backgroundSprite.sprite = card.effectBackground;
-            //}
-            //else
-            //{
-            //    links.cardSprite.sprite = card.actionImage;
-            //    links.backgroundSprite.sprite = card.actionBackground;
-            //}
+                if (isFlipped)
+                {
+                    links.cardSprite.sprite = card.effectImage;
+                    links.backgroundSprite.sprite = card.effectBackground;
+                }
+                else
+                {
+                    links.cardSprite.sprite = card.actionImage;
+                    links.backgroundSprite.sprite = card.actionBackground;
+                }
+            }
         }
 
         [System.Serializable]
