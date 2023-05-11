@@ -54,9 +54,15 @@ public class ProceduralGeneration : MonoBehaviour
 
     void CreateRoom(Room room, Vector2 location)
     {
-        GameObject createdRoom = Instantiate(room.GetTilemap(), location, Quaternion.identity);
-        createdRoom.SetActive(true);
-        createdRoom.transform.parent = this.transform;
+        Room newRoom = this.gameObject.AddComponent<Room>();
+        newRoom.Copy(room);
+        newRoom.SetLocation(location);
+        GameObject createdTilemap = Instantiate(newRoom.GetTilemap(), location, Quaternion.identity);
+        createdTilemap.SetActive(true);
+        createdTilemap.transform.parent = this.transform;
+
+
+        newRoom.GenerateRoom();
     }
 
     public RoomGenerationParameters GetRoomGenerationParameters()
