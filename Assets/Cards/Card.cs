@@ -75,7 +75,7 @@ namespace CardSystem
         /// <summary>
         /// Causes all of this cards Actions to stop rendering their previews.
         /// </summary>
-        public void CancelPreview()
+        public void CancelPreviewActions()
         {
             foreach (CardAction cardAction in cardActions)
             {
