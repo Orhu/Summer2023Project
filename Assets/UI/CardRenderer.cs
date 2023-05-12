@@ -9,6 +9,7 @@ namespace CardSystem
     [ExecuteInEditMode]
     public class CardRenderer : MonoBehaviour
     {
+        [SerializeField]
         private Card card;
         public Card Card
         {
@@ -70,7 +71,7 @@ namespace CardSystem
         public void SetFlipped(bool newIsFlipped)
         {
             isFlipped = newIsFlipped;
-            card = card;
+            Card = card;
         }
 
         [System.Serializable]

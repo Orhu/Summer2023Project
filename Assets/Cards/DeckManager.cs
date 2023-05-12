@@ -9,8 +9,11 @@ public class DeckManager : MonoBehaviour
     public List<Card> cards;
     public int handSize = 3;
 
+    public delegate void deckChangedNotification();
+    public deckChangedNotification onCardDrawn;
+
     [System.NonSerialized]
-    public Stack<Card> drawableCards;
+    public List<Card> drawableCards;
     [System.NonSerialized]
     public List<Card> inHandCards = new List<Card>();
     [System.NonSerialized]
@@ -35,7 +38,7 @@ public class DeckManager : MonoBehaviour
 
     private void Start()
     {
-        drawableCards = new Stack<Card>(cards);
+        drawableCards = new List<Card>(cards);
 
         for (int i = 0; i < handSize; i++)
         {
@@ -45,6 +48,7 @@ public class DeckManager : MonoBehaviour
 
     private void Update()
     {
+        List<int> offCooldownCardIndices = new List<int>();
         foreach (KeyValuePair<int, float> cardIndexToCooldown in new Dictionary<int, float>(cardIndicesToCooldowns))
         {
             float newValue = cardIndexToCooldown.Value - Time.deltaTime;
@@ -52,15 +56,21 @@ public class DeckManager : MonoBehaviour
             {
                 cardIndicesToCooldowns.Remove(cardIndexToCooldown.Key);
 
-                Card card = inHandCards[cardIndexToCooldown.Key];
-                discardedCards.Add(card);
-                inHandCards.Remove(card);
-                DrawCard();
+                offCooldownCardIndices.Add(cardIndexToCooldown.Key);
             }
             else
             {
                 cardIndicesToCooldowns[cardIndexToCooldown.Key] = newValue;
             }
+        }
+        offCooldownCardIndices.Sort();
+        offCooldownCardIndices.Reverse();
+        foreach (int offCooldownCardIndex in offCooldownCardIndices)
+        {
+            Card card = inHandCards[offCooldownCardIndex];
+            discardedCards.Add(card);
+            inHandCards.Remove(card);
+            DrawCard();
         }
     }
 
@@ -69,12 +79,13 @@ public class DeckManager : MonoBehaviour
     {
         while (drawableCards.Count > 0)
         {
-            discardedCards.Add(drawableCards.Pop());
+            discardedCards.Add(drawableCards[drawableCards.Count - 1]);
+            drawableCards.RemoveAt(drawableCards.Count - 1);
         }
         while(discardedCards.Count > 0)
         {
             int index = Random.Range(0, discardedCards.Count);
-            drawableCards.Push(discardedCards[index]);
+            drawableCards.Add(discardedCards[index]);
             discardedCards.RemoveAt(index);
         }
     }
@@ -91,8 +102,10 @@ public class DeckManager : MonoBehaviour
             ReshuffleDrawPile();
         }
 
-        Card drawnCard = drawableCards.Pop();
+        Card drawnCard = drawableCards[drawableCards.Count - 1];
+        drawableCards.RemoveAt(drawableCards.Count - 1);
         inHandCards.Add(drawnCard);
+        onCardDrawn();
         return true;
     }
 
