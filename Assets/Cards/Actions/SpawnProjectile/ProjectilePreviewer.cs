@@ -24,11 +24,16 @@ public class ProjectilePreviewer : MonoBehaviour
     {
         sprite = GetComponentInChildren<SpriteRenderer>();
         sprite.color = spawner.previewColor;
+        transform.localScale = new Vector3(spawner.range, spawner.size * 2, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.LookAt(player.GetActionAimPosition());
+        Vector3 diff = player.GetActionAimPosition() - transform.position;
+        diff.Normalize();
+
+        float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
     }
 }

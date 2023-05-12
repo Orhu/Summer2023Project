@@ -23,5 +23,5 @@ public interface ICardPlayer
     /// Gets the collider of this player.
     /// </summary>
     /// <returns> The collider. </returns>
-    public abstract Collider GetCollider();
+    public abstract Collider2D GetCollider();
 }

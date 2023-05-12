@@ -10,22 +10,28 @@ public class Projectile : MonoBehaviour
     // The player of the projectile.
     internal ICardPlayer player;
 
-    private Rigidbody rigidbody;
+    private Rigidbody2D rigidbody;
     private float distanceTraveled;
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
+        rigidbody = GetComponent<Rigidbody2D>();
         CircleCollider2D collider = GetComponent<CircleCollider2D>();
         collider.radius = spawner.size;
-        Physics.IgnoreCollision(GetComponent<Collider>(), player.GetCollider());
+        Physics2D.IgnoreCollision(collider, player.GetCollider());
         GetComponent<SpriteRenderer>().sprite = spawner.sprite;
+
+        Vector3 diff = player.GetActionAimPosition() - transform.position;
+        diff.Normalize();
+
+        float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
     }
 
     private void FixedUpdate()
     {
         distanceTraveled += Time.fixedDeltaTime * spawner.speed;
-        rigidbody.MovePosition(transform.position + transform.forward * Time.fixedDeltaTime * spawner.speed);
+        rigidbody.MovePosition(transform.position + transform.right * Time.fixedDeltaTime * spawner.speed);
         if (distanceTraveled > spawner.range)
         {
             Destroy(gameObject);

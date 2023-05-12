@@ -87,7 +87,7 @@ public class Player : MonoBehaviour, ICardPlayer
     /// <returns> The mouse position in world space. </returns>
     public Vector3 GetActionAimPosition()
     {
-        return Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        return Vector3.Scale(Camera.main.ScreenToWorldPoint(Input.mousePosition), new Vector3(1, 1, 0));
     }
 
 
@@ -95,9 +95,9 @@ public class Player : MonoBehaviour, ICardPlayer
     /// Gets the collider of this player.
     /// </summary>
     /// <returns> The collider. </returns>
-    public Collider GetCollider()
+    public Collider2D GetCollider()
     {
-        return GetComponent<Collider>();
+        return GetComponent<Collider2D>();
     }
     #endregion
 }
