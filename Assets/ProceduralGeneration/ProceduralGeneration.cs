@@ -6,7 +6,7 @@ public class ProceduralGeneration : MonoBehaviour
 {
     [SerializeField] Vector2 mapSize;
 
-    [SerializeField] List<Room> rooms;
+    [SerializeField] List<Room> possibleRooms;
 
     [SerializeField] RoomGenerationParameters roomGenerationParameters;
 
@@ -36,11 +36,13 @@ public class ProceduralGeneration : MonoBehaviour
 
     void Generate()
     {
+
         for (int i = 0; i < mapSize.x; i++)
         {
+
             for (int j = 0; j < mapSize.y; j++)
             {
-                Room room = rooms[Random.Range(0, rooms.Count - 1)];
+                Room room = possibleRooms[Random.Range(0, possibleRooms.Count - 1)];
                 Vector2 location;
                 Vector2 tileSize;
                 tileSize.x = room.GetTilemap().GetComponent<Grid>().cellSize.x;
@@ -61,8 +63,9 @@ public class ProceduralGeneration : MonoBehaviour
         createdTilemap.SetActive(true);
         createdTilemap.transform.parent = this.transform;
 
-
-        newRoom.GenerateRoom();
+        Vector2 tileSize;
+        tileSize.x = room.GetTilemap().GetComponent<Grid>().cellSize.x;
+        tileSize.y = room.GetTilemap().GetComponent<Grid>().cellSize.y;
     }
 
     public RoomGenerationParameters GetRoomGenerationParameters()

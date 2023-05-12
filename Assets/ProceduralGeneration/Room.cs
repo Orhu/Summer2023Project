@@ -8,6 +8,8 @@ public class Room : MonoBehaviour
     [SerializeField] GameObject tilemap;
     [SerializeField] Vector2 size = new Vector2(11, 11);
 
+    BoxCollider2D roomBox;
+
     Vector2 location;
     bool generated = false;
 
@@ -21,6 +23,10 @@ public class Room : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        roomBox = gameObject.AddComponent<BoxCollider2D>();
+        roomBox.size = new Vector3(size.x, size.y, 0);
+        Debug.Log(roomBox.size);
+        roomBox.isTrigger = true;
     }
 
     // Update is called once per frame
@@ -63,5 +69,14 @@ public class Room : MonoBehaviour
     public void SetLocation(Vector2 newLocation)
     {
         location = newLocation;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("collid");
+        if (collision.gameObject == Player._instance)
+        {
+            GenerateRoom();
+        }
     }
 }
