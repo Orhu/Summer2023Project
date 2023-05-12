@@ -6,9 +6,13 @@ using UnityEngine.UI;
 
 namespace CardSystem
 {
+    /// <summary>
+    /// A component for rendering cards in UI space.
+    /// </summary>
     [ExecuteInEditMode]
     public class CardRenderer : MonoBehaviour
     {
+        // The card to render.
         [SerializeField]
         private Card card;
         public Card Card
@@ -25,9 +29,9 @@ namespace CardSystem
                 if (shouldEnable)
                 {
                     links.nameTextBox.text = card.displayName;
-                    links.descriptionTextBox.text = card.GetDescription(!isFlipped);
+                    links.descriptionTextBox.text = card.GetDescription(renderActionSide);
 
-                    if (isFlipped)
+                    if (!renderActionSide)
                     {
                         links.cardSprite.sprite = card.effectImage;
                         links.backgroundSprite.sprite = card.effectBackground;
@@ -42,12 +46,14 @@ namespace CardSystem
             get { return card; }
         }
 
+        // Whether or not the preview overlay should be enabled.
         public bool Previewing
         {
             set{ links.previewOverlay.enabled = value; }
             get{ return links.previewOverlay.enabled; }
         }
 
+        // The cooldown time to display. If <= 0 no cooldown overlay will be rendered.
         public float CooldownTime 
         { 
             set 
@@ -58,22 +64,33 @@ namespace CardSystem
             }
         }
         
+        // The links to the necessary components for rendering.
         [SerializeField]
         private ComponentLinks links;
+        // Whether to render the action side or the effect side of the card.
         [SerializeField]
-        private bool isFlipped;
-
+        private bool renderActionSide;
+        private bool RenderActionSide
+        {
+            set
+            {
+                renderActionSide = value;
+                Card = card;
+            }
+            get { return renderActionSide; }
+        }
+        
+        /// <summary>
+        /// Refreshes the rendering on property change.
+        /// </summary>
         public void Update()
         {
-            SetFlipped(isFlipped);
+            RenderActionSide = renderActionSide;
         }
 
-        public void SetFlipped(bool newIsFlipped)
-        {
-            isFlipped = newIsFlipped;
-            Card = card;
-        }
-
+        /// <summary>
+        /// Struct for storing the needed component references.
+        /// </summary>
         [System.Serializable]
         private struct ComponentLinks
         {
