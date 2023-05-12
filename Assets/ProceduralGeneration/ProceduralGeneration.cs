@@ -6,9 +6,11 @@ public class ProceduralGeneration : MonoBehaviour
 {
     [SerializeField] Vector2 mapSize;
 
-    [SerializeField] List<Room> possibleRooms;
+    [SerializeField] List<GameObject> possibleTilemaps;
 
     [SerializeField] RoomGenerationParameters roomGenerationParameters;
+
+    [SerializeField] GameObject room;
 
     public static ProceduralGeneration proceduralGenerationInstance { get; private set; }
 
@@ -42,30 +44,32 @@ public class ProceduralGeneration : MonoBehaviour
 
             for (int j = 0; j < mapSize.y; j++)
             {
-                Room room = possibleRooms[Random.Range(0, possibleRooms.Count - 1)];
+                GameObject tilemap = possibleTilemaps[Random.Range(0, possibleTilemaps.Count - 1)];
                 Vector2 location;
                 Vector2 tileSize;
-                tileSize.x = room.GetTilemap().GetComponent<Grid>().cellSize.x;
-                tileSize.y = room.GetTilemap().GetComponent<Grid>().cellSize.y;
-                location.x = i * tileSize.x * room.GetSize().x;
-                location.y = j * tileSize.y * room.GetSize().y;
-                CreateRoom(room, location);
+                tileSize.x = tilemap.GetComponent<Grid>().cellSize.x;
+                tileSize.y = tilemap.GetComponent<Grid>().cellSize.y;
+                location.x = i * tileSize.x * room.GetComponent<Room>().GetSize().x;
+                location.y = j * tileSize.y * room.GetComponent<Room>().GetSize().y;
+                CreateRoom(tilemap, location);
             }
         }
     }
 
-    void CreateRoom(Room room, Vector2 location)
+    void CreateRoom(GameObject tilemap, Vector2 location)
     {
-        Room newRoom = this.gameObject.AddComponent<Room>();
-        newRoom.Copy(room);
-        newRoom.SetLocation(location);
-        GameObject createdTilemap = Instantiate(newRoom.GetTilemap(), location, Quaternion.identity);
-        createdTilemap.SetActive(true);
-        createdTilemap.transform.parent = this.transform;
+        GameObject newRoom = Instantiate(room, location, Quaternion.identity);
+        newRoom.transform.parent = this.transform;
+        newRoom.GetComponent<Room>().tilemap = tilemap;
+        newRoom.GetComponent<Room>().size = room.GetComponent<Room>().size;
+        newRoom.SetActive(true);
 
-        Vector2 tileSize;
-        tileSize.x = room.GetTilemap().GetComponent<Grid>().cellSize.x;
-        tileSize.y = room.GetTilemap().GetComponent<Grid>().cellSize.y;
+        //Room newRoom = this.gameObject.AddComponent<Room>();
+        //newRoom.Copy(room);
+        //newRoom.SetLocation(location);
+        //GameObject createdTilemap = Instantiate(newRoom.GetTilemap(), location, Quaternion.identity);
+        //createdTilemap.SetActive(true);
+        //createdTilemap.transform.parent = this.transform;
     }
 
     public RoomGenerationParameters GetRoomGenerationParameters()
