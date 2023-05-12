@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, ICardPlayer
 {
-    public static GameObject _instance;
+    public static Player _instance;
     public float speed = 10.0f;
     
     private Vector2 moveDirection = Vector2.zero;
@@ -12,7 +12,7 @@ public class Player : MonoBehaviour, ICardPlayer
 
     private void Awake()
     {
-        _instance = this.gameObject;
+        _instance = this;
         rigidBody = gameObject.GetComponent<Rigidbody2D>();
     }
 
