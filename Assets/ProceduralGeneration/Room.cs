@@ -60,7 +60,6 @@ public class Room : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("collid");
         if (collision.gameObject == Player._instance)
         {
             GenerateRoom();
