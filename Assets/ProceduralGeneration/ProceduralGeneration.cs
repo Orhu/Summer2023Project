@@ -30,18 +30,10 @@ public class ProceduralGeneration : MonoBehaviour
         Generate();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void Generate()
     {
-
         for (int i = 0; i < mapSize.x; i++)
         {
-
             for (int j = 0; j < mapSize.y; j++)
             {
                 GameObject tilemap = possibleTilemaps[Random.Range(0, possibleTilemaps.Count - 1)];
@@ -63,13 +55,6 @@ public class ProceduralGeneration : MonoBehaviour
         newRoom.GetComponent<Room>().tilemap = tilemap;
         newRoom.GetComponent<Room>().size = room.GetComponent<Room>().size;
         newRoom.SetActive(true);
-
-        //Room newRoom = this.gameObject.AddComponent<Room>();
-        //newRoom.Copy(room);
-        //newRoom.SetLocation(location);
-        //GameObject createdTilemap = Instantiate(newRoom.GetTilemap(), location, Quaternion.identity);
-        //createdTilemap.SetActive(true);
-        //createdTilemap.transform.parent = this.transform;
     }
 
     public RoomGenerationParameters GetRoomGenerationParameters()
