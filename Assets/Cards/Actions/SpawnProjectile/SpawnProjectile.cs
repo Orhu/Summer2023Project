@@ -8,14 +8,32 @@ namespace CardSystem.Effects
     /// A scriptable object for storing data about a projectile type.
     /// </summary>
     [CreateAssetMenu(fileName = "NewProjectile", menuName = "Cards/Actions/Projectile")]
-    public class Projectile : CardAction
+    public class SpawnProjectile : CardAction
     {
+        [Header("Mechanics")]
         // The damage this projectile will deal.
         public int damage = 1;
+        // The radius of the projectile.
+        public float size = 12;
         // The distance this projectile will travel.
         public float range = 6;
         // The speed this projectile will travel at.
         public float speed = 12;
+        // The projectile to spawn
+        public Projectile projectilePrefab;
+
+        [Header("Visuals")]
+        // The previewer prefab to use.
+        public ProjectilePreviewer previewerPrefab;
+        // The tint of the previewer spawned.
+        public Color previewColor;
+        // The projectile's sprite.
+        public Sprite sprite;
+        // The particle system to add to the projectile.
+        public ParticleSystem particleEffect;
+
+        // Maps players to the previewer
+        private Dictionary<ICardPlayer, ProjectilePreviewer> playersToPreviewers;
 
         /// <summary>
         /// Gets the formated description of this card.
@@ -32,7 +50,16 @@ namespace CardSystem.Effects
         /// <param name="player"> The player that will be playing this action. </param>
         public override void Preview(ICardPlayer player)
         {
-
+            if (playersToPreviewers.ContainsKey(player))
+            {
+                playersToPreviewers[player].Count++;
+            }
+            else
+            {
+                ProjectilePreviewer previewer = Instantiate<ProjectilePreviewer>(previewerPrefab, player.GetActionSourceTransform());
+                previewer.player = player;
+                previewer.spawner = this;
+            }
         }
 
         /// <summary>
@@ -41,7 +68,15 @@ namespace CardSystem.Effects
         /// <param name="player"> The player that will no longer be playing this action. </param>
         public override void CancelPreview(ICardPlayer player)
         {
-
+            if (playersToPreviewers.ContainsKey(player))
+            {
+                playersToPreviewers[player].Count--;
+                if (playersToPreviewers[player].Count <= 0)
+                {
+                    Destroy(playersToPreviewers[player]);
+                    playersToPreviewers.Remove(player);
+                }
+            }
         }
 
         /// <summary>
@@ -50,7 +85,10 @@ namespace CardSystem.Effects
         /// <param name="player"> The player that will be playing this action. </param>
         public override void Play(ICardPlayer player)
         {
-
+            CancelPreview(player);
+            Projectile projectile = Instantiate<Projectile>(projectilePrefab, player.GetActionSourceTransform().position, player.GetActionSourceTransform().rotation);
+            projectile.player = player;
+            projectile.spawner = this;
         }
     }
 }
