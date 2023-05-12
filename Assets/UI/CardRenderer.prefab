@@ -465,7 +465,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: 210}
+  m_SizeDelta: {x: 75, y: 105}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6953673026084279046
 MonoBehaviour:
@@ -479,6 +479,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52e716a912fee4c4f99fd8f993b26a10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  card: {fileID: 0}
   links:
     nameTextBox: {fileID: 194833537011146976}
     descriptionTextBox: {fileID: 430826756743227616}
@@ -487,7 +488,7 @@ MonoBehaviour:
     cardSprite: {fileID: 2482902422043559722}
     previewOverlay: {fileID: 1091632258719590717}
     cooldownOverlay: {fileID: 3141068986896957119}
-  isFlipped: 0
+  renderActionSide: 0
 --- !u!1 &6497369226318563661
 GameObject:
   m_ObjectHideFlags: 0
