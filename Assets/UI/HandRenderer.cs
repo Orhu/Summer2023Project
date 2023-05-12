@@ -3,11 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandContainer : MonoBehaviour
+
+/// <summary>
+/// UI element for rendering the player's current hand.
+/// </summary>
+public class HandRenderer : MonoBehaviour
 {
+    // The card renderer prefab to instantiate.
     public CardRenderer cardRendererTemplate;
+
+    // The card renderers that were created to display the hand.
     private List<CardRenderer> cardRenderers = new List<CardRenderer>();
 
+    /// <summary>
+    /// Creates the card needed renderers.
+    /// </summary>
     private void Start()
     {
         for (int i = 0; i < DeckManager.playerDeck.handSize; i++)
@@ -16,7 +26,9 @@ public class HandContainer : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Updates the renders to show the appropriate cards and their preview/cooldown state.
+    /// </summary>
     void Update()
     {
         for (int i = 0; i < DeckManager.playerDeck.handSize; i++)

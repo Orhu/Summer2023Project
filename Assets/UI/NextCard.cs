@@ -3,17 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using CardSystem;
 
+/// <summary>
+/// Makes a card renderer show the card at the top of the draw pile.
+/// </summary>
 public class NextCard : MonoBehaviour
 {
+    // The card renderer to update.
     private CardRenderer cardRenderer;
 
+    /// <summary>
+    /// Initializes reference and binding.
+    /// </summary>
     private void Start()
     {
         cardRenderer = gameObject.GetComponent<CardRenderer>();
         DeckManager.playerDeck.onCardDrawn += OnCardDrawn;
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Updates the renderer when a card is drawn.
+    /// </summary>
     void OnCardDrawn()
     {
         if (DeckManager.playerDeck.drawableCards.Count == 0)

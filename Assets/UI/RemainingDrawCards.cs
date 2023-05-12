@@ -3,12 +3,20 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-
+/// <summary>
+/// Sets text to the number of cards in the draw pile
+/// </summary>
 public class RemainingDrawCards : MonoBehaviour
 {
+    // The number subtracted from the text to account for other UI elements.
     public int offset = 0;
+
+    // The text box to set the text on.
     private TMP_Text textBox;
-    // Start is called before the first frame update
+
+    /// <summary>
+    /// Initializes bindings and references.
+    /// </summary>
     void Start()
     {
         textBox = gameObject.GetComponent<TMP_Text>();
@@ -18,6 +26,9 @@ public class RemainingDrawCards : MonoBehaviour
         OnCardDrawn();
     }
 
+    /// <summary>
+    /// Updates the text after card is drawn.
+    /// </summary>
     void OnCardDrawn()
     {
         if (DeckManager.playerDeck.drawableCards != null)
@@ -26,8 +37,11 @@ public class RemainingDrawCards : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Forces the parent to update the layout to ensure correct formating.
+    /// </summary>
     private void RefreshParent()
     {
-        GetComponentInParent<UnityEngine.UI.VerticalLayoutGroup>().enabled = true;
+        GetComponentInParent<UnityEngine.UI.LayoutGroup>().enabled = true;
     }
 }
