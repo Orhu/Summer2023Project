@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// A scriptable object for storing data a specific effect a card can have on a dungeon.
+/// </summary>
 [CreateAssetMenu(fileName = "NewDungeonEffect", menuName = "Cards/DungeonEffect", order = 1)]
 public class CardDungeonEffect : ScriptableObject
 {
-    [SerializeField] RoomGenerationParameters changeInRoomGenerationParameters;
+    //[SerializeField] RoomGenerationParameters changeInRoomGenerationParameters;
 
     [SerializeField] public string description = "";
 
@@ -20,6 +23,6 @@ public class CardDungeonEffect : ScriptableObject
 
     public void Effect()
     {
-        ProceduralGeneration.proceduralGenerationInstance.AddRoomGenerationParameters(changeInRoomGenerationParameters);
+        //ProceduralGeneration.proceduralGenerationInstance.AddRoomGenerationParameters(changeInRoomGenerationParameters);
     }
 }
