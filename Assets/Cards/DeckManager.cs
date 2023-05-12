@@ -48,29 +48,20 @@ public class DeckManager : MonoBehaviour
 
     private void Update()
     {
-        List<int> offCooldownCardIndices = new List<int>();
         foreach (KeyValuePair<int, float> cardIndexToCooldown in new Dictionary<int, float>(cardIndicesToCooldowns))
         {
             float newValue = cardIndexToCooldown.Value - Time.deltaTime;
             if (newValue <= 0)
             {
                 cardIndicesToCooldowns.Remove(cardIndexToCooldown.Key);
-
-                offCooldownCardIndices.Add(cardIndexToCooldown.Key);
+                discardedCards.Add(inHandCards[cardIndexToCooldown.Key]);
+                inHandCards[cardIndexToCooldown.Key] = null;
+                DrawCard();
             }
             else
             {
                 cardIndicesToCooldowns[cardIndexToCooldown.Key] = newValue;
             }
-        }
-        offCooldownCardIndices.Sort();
-        offCooldownCardIndices.Reverse();
-        foreach (int offCooldownCardIndex in offCooldownCardIndices)
-        {
-            Card card = inHandCards[offCooldownCardIndex];
-            discardedCards.Add(card);
-            inHandCards.Remove(card);
-            DrawCard();
         }
     }
 
@@ -92,21 +83,29 @@ public class DeckManager : MonoBehaviour
 
     private bool DrawCard()
     {
-        if (inHandCards.Count == handSize)
+        while (inHandCards.Count < handSize)
         {
-            return false;
+            inHandCards.Add(null);
         }
 
-        if (drawableCards.Count == 0)
+        for (int i = 0; i < handSize; i++)
         {
-            ReshuffleDrawPile();
-        }
+            if (inHandCards[i] == null)
+            {
+                Card drawnCard = drawableCards[drawableCards.Count - 1];
+                drawableCards.RemoveAt(drawableCards.Count - 1);
+                inHandCards[i] = drawnCard;
 
-        Card drawnCard = drawableCards[drawableCards.Count - 1];
-        drawableCards.RemoveAt(drawableCards.Count - 1);
-        inHandCards.Add(drawnCard);
-        onCardDrawn();
-        return true;
+                if (drawableCards.Count == 0)
+                {
+                    ReshuffleDrawPile();
+                }
+
+                onCardDrawn();
+                return true;
+            }
+        }
+        return false;
     }
 
     public void TogglePreviewCard(int handIndex)
