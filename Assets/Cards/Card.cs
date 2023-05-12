@@ -5,21 +5,42 @@ using TMPro;
 
 namespace CardSystem
 {
+    /// <summary>
+    /// A scriptable object for containing data about a card type including:
+    /// - Card visuals
+    /// - The cooldown of the card
+    /// - Actions - What the card does when played
+    /// - Effects - How the card effects the dungeon
+    /// </summary>
     [CreateAssetMenu(fileName = "NewCard", menuName = "Cards/Card", order = 1)]
     public class Card : ScriptableObject
     {
-        [Header("Visuals")]
-        public string displayName = "Unnamed";
-        public Sprite actionImage;
-        public Sprite actionBackground;
-        public Sprite effectImage;
-        public Sprite effectBackground;
-
-        [Header("Effects")]
+        [Header("Mechanics")]
+        // The amount of time this card reserves the hand slot for after being played.
         public float cooldown = 1.0f;
+        // The actions that will be taken when this card is played.
         public CardAction[] cardActions;
+        // The effects that this card will have on the dungeon while in the player's deck.
         public CardDungeonEffect[] cardEffects;
 
+        [Header("Visuals")]
+        // The name of the card as shown to the player.
+        public string displayName = "Unnamed";
+        // The card specific sprite on the Actions side of the card.
+        public Sprite actionImage;
+        // The general background card sprite on the Actions side of the card.
+        public Sprite actionBackground;
+        // The card specific sprite on the Effects side of the card.
+        public Sprite effectImage;
+        // The general background card sprite on the Effects side of the card.
+        public Sprite effectBackground;
+
+
+        /// <summary>
+        /// Gets the description of this card by collecting all the formated descriptions from the card's mechanics.
+        /// </summary>
+        /// <param name="isActionSide"> Whether or not to get the description for the action side or the effect side of the card.</param>
+        /// <returns>The description.</returns>
         public string GetDescription(bool isActionSide)
         {
             string description = "";
@@ -40,27 +61,36 @@ namespace CardSystem
             return description;
         }
 
-        public void PreviewEffect()
+        /// <summary>
+        /// Causes all of this cards Actions to start rendering their previews around the player.
+        /// </summary>
+        public void PreviewActions()
         {
             foreach (CardAction cardAction in cardActions)
             {
-                cardAction.PreviewEffect();
+                cardAction.Preview(Player._instance);
             }
         }
 
+        /// <summary>
+        /// Causes all of this cards Actions to stop rendering their previews.
+        /// </summary>
         public void CancelPreview()
         {
             foreach (CardAction cardAction in cardActions)
             {
-                cardAction.CancelPreview();
+                cardAction.CancelPreview(Player._instance);
             }
         }
 
-        public void ConfirmPreview()
+        /// <summary>
+        /// Plays all of the actions of this card from the player.
+        /// </summary>
+        public void PlayActions()
         {
             foreach (CardAction cardAction in cardActions)
             {
-                cardAction.ConfirmPreview();
+                cardAction.Play(Player._instance);
             }
         }
     }
