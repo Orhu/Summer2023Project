@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, ICardPlayer
 {
     public static GameObject _instance;
     public float speed = 10.0f;
@@ -48,5 +48,10 @@ public class Player : MonoBehaviour
             }
         }
         return -1;
+    }
+
+    public Vector3 getActionSourcePosition()
+    {
+        return transform.position;
     }
 }
