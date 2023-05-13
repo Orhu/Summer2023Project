@@ -10,12 +10,12 @@ public class Projectile : MonoBehaviour
     // The player of the projectile.
     internal ICardPlayer player;
 
-    private Rigidbody2D rigidbody;
+    private Rigidbody2D rigidBody;
     private float distanceTraveled;
     // Start is called before the first frame update
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
+        rigidBody = GetComponent<Rigidbody2D>();
         CircleCollider2D collider = GetComponent<CircleCollider2D>();
         collider.radius = spawner.size;
         Physics2D.IgnoreCollision(collider, player.GetCollider());
@@ -31,20 +31,15 @@ public class Projectile : MonoBehaviour
     private void FixedUpdate()
     {
         distanceTraveled += Time.fixedDeltaTime * spawner.speed;
-        rigidbody.MovePosition(transform.position + transform.right * Time.fixedDeltaTime * spawner.speed);
+        rigidBody.MovePosition(transform.position + transform.right * Time.fixedDeltaTime * spawner.speed);
         if (distanceTraveled > spawner.range)
         {
             Destroy(gameObject);
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        //Health health = collision.gameObject.GetComponent<Health>();
-        //if (health != null)
-        //{
-        //    health.damage(spawner.damage);
-        //}
         Destroy(gameObject);
     }
 }
