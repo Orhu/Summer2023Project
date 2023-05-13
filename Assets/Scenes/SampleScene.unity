@@ -378,7 +378,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 6.00352
+  orthographic size: 1
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -651,6 +651,34 @@ PrefabInstance:
       propertyPath: size.y
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 3892937759945379954, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
+      propertyPath: mapSize.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3892937759945379954, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
+      propertyPath: mapSize.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3892937759945379954, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
+      propertyPath: roomSize.x
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 3892937759945379954, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
+      propertyPath: roomSize.y
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 3892937759945379954, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
+      propertyPath: possibleTilemaps.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6114439529421373759, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
+      propertyPath: size.x
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 6114439529421373759, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
+      propertyPath: size.y
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 7193603730077290634, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -697,7 +725,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8981761170834576851, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
       propertyPath: m_Name
-      value: New Prefab
+      value: ProceduralGeneration
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
