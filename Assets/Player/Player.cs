@@ -23,7 +23,7 @@ public class Player : MonoBehaviour, ICardPlayer
     private void Awake()
     {
         _instance = this;
-        rigidBody = gameObject.GetComponent<Rigidbody2D>();
+        rigidBody = GetComponent<Rigidbody2D>();
     }
 
     /// <summary>
@@ -70,12 +70,34 @@ public class Player : MonoBehaviour, ICardPlayer
         return -1;
     }
 
+    #region ICardPlayerImplementation
     /// <summary>
-    /// Get the position that the action should be played from.
+    /// Get the transform that the action should be played from.
     /// </summary>
-    /// <returns> The player position in world space. </returns>
-    public Vector3 getActionSourcePosition()
+    /// <returns> The player transform. </returns>
+    public Transform GetActionSourceTransform()
     {
-        return transform.position;
+        return transform;
     }
+
+
+    /// <summary>
+    /// Get the position that the action should be aimed at.
+    /// </summary>
+    /// <returns> The mouse position in world space. </returns>
+    public Vector3 GetActionAimPosition()
+    {
+        return Vector3.Scale(Camera.main.ScreenToWorldPoint(Input.mousePosition), new Vector3(1, 1, 0));
+    }
+
+
+    /// <summary>
+    /// Gets the collider of this player.
+    /// </summary>
+    /// <returns> The collider. </returns>
+    public Collider2D GetCollider()
+    {
+        return GetComponent<Collider2D>();
+    }
+    #endregion
 }
