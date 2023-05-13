@@ -20,6 +20,9 @@ public class Room : MonoBehaviour
     // TODO: Actually implement this
     public Vector2 tilesize = new Vector2(1, 1);
 
+    // The directions that this room has doors in
+    public Direction directions;
+
     // The tile to use to create the walls
     // TODO: change this to actually use art, also make it so collider maps only generate for walls or whatever
     [SerializeField] public TileBase tile;
@@ -105,50 +108,40 @@ public class Room : MonoBehaviour
     /// Checks whether the position on the tilemap should be a door
     /// </summary>
     /// <param name="pos"> The position on the tilemap to check </param>
-    /// <returns></returns>
+    /// <returns> Whether or not the position should be a door </returns>
     bool ShouldBeDoor(Vector2Int pos)
     {
+        if (directions == Direction.None)
+        {
+            return false;
+        }
+
         if ((pos.x != 0 && pos.x != size.x - 1) && (pos.y != 0 && pos.y != size.y - 1))
         {
             return false;
         }
 
-        if (pos.y == 0 || pos.y == size.y - 1)
+        if (((directions & Direction.Up) != Direction.None) && pos.y == size.y - 1 && (pos.x == (size.x / 2) || pos.x == (size.x / 2) - System.Convert.ToInt32((size.x % 2) == 0)))
         {
-            if (size.x % 2 == 1)
-            {
-                if (pos.x == (size.x / 2))
-                {
-                    return true;
-                }
-                return false;
-            }
-            else
-            {
-                if (pos.x == ((size.x / 2) - 1) || pos.x == (size.x / 2))
-                {
-                    return true;
-                }
-                return false;
-            }
+            return true;
         }
 
-        if (size.y % 2 == 1)
+        if (((directions & Direction.Left) != Direction.None) && pos.x == 0 && (pos.y == (size.y / 2) || pos.y == (size.y / 2) - System.Convert.ToInt32((size.y % 2) == 0)))
         {
-            if (pos.y == ((size.y / 2)))
-            {
-                return true;
-            }
-            return false;
+            return true;
         }
-        else
+
+        if (((directions & Direction.Down) != Direction.None) && pos.y == 0 && (pos.x == (size.x / 2) || pos.x == (size.x / 2) - System.Convert.ToInt32((size.x % 2) == 0)))
         {
-            if (pos.y == ((size.y / 2) - 1) || pos.y == (size.y / 2))
-            {
-                return true;
-            }
-            return false;
+            return true;
         }
+
+        if (((directions & Direction.Right) != Direction.None) && pos.x == size.x - 1 && (pos.y == (size.y / 2) || pos.y == (size.y / 2) - System.Convert.ToInt32((size.y % 2) == 0)))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>

@@ -75,6 +75,7 @@ public class ProceduralGeneration : MonoBehaviour
         newRoom.GetComponent<Room>().tile = room.GetComponent<Room>().tile;
         newRoom.GetComponent<Room>().size = roomSize;
         newRoom.GetComponent<Room>().tilesize = tilesize;
+        newRoom.GetComponent<Room>().directions = Direction.Right | Direction.Up | Direction.Left | Direction.Down;
         newRoom.SetActive(true);
     }
 
@@ -116,3 +117,15 @@ public class RoomGenerationParameters
     }
 
 };
+
+/// <summary>
+/// Stores door directions
+/// </summary>
+public enum Direction
+{
+    None = 0,
+    Right = 1,
+    Up = 2,
+    Left = 4,
+    Down = 8
+}
