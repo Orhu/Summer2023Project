@@ -10,9 +10,12 @@ public class ProceduralGeneration : MonoBehaviour
     // The size of the map
     [SerializeField] Vector2 mapSize;
 
-    // The tilemaps that can be chosen from
-    // TODO: Remove this
-    [SerializeField] List<GameObject> possibleTilemaps;
+    // The size (in tiles) of a room
+    [SerializeField] public Vector2Int roomSize = new Vector2Int(11, 11);
+
+    // The size of a tile
+    // TODO: Actually implement this
+    [SerializeField] public Vector2 tilesize = new Vector2(1, 1);
 
     // The room generation parameters
     [SerializeField] RoomGenerationParameters roomGenerationParameters;
@@ -39,7 +42,6 @@ public class ProceduralGeneration : MonoBehaviour
     /// <summary>
     /// Generates the rooms
     /// </summary>
-
     void Start()
     {
         Generate();
@@ -54,14 +56,10 @@ public class ProceduralGeneration : MonoBehaviour
         {
             for (int j = 0; j < mapSize.y; j++)
             {
-                GameObject tilemap = possibleTilemaps[Random.Range(0, possibleTilemaps.Count - 1)];
                 Vector2 location;
-                Vector2 tileSize;
-                tileSize.x = tilemap.GetComponent<Grid>().cellSize.x;
-                tileSize.y = tilemap.GetComponent<Grid>().cellSize.y;
-                location.x = i * tileSize.x * room.GetComponent<Room>().size.x;
-                location.y = j * tileSize.y * room.GetComponent<Room>().size.y;
-                CreateRoom(tilemap, location);
+                location.x = i * roomSize.x * tilesize.x;
+                location.y = j * roomSize.y * tilesize.y;
+                CreateRoom(location);
             }
         }
     }
@@ -69,14 +67,14 @@ public class ProceduralGeneration : MonoBehaviour
     /// <summary>
     /// Creates a room with the given tilemap and a given location
     /// </summary>
-    /// <param name="tilemap"> The tilemap of the new room </param>
     /// <param name="location"> The location of the new room </param>
-    void CreateRoom(GameObject tilemap, Vector2 location)
+    void CreateRoom(Vector2 location)
     {
         GameObject newRoom = Instantiate(room, location, Quaternion.identity);
         newRoom.transform.parent = this.transform;
-        newRoom.GetComponent<Room>().tilemap = tilemap;
-        newRoom.GetComponent<Room>().size = room.GetComponent<Room>().size;
+        newRoom.GetComponent<Room>().tile = room.GetComponent<Room>().tile;
+        newRoom.GetComponent<Room>().size = roomSize;
+        newRoom.GetComponent<Room>().tilesize = tilesize;
         newRoom.SetActive(true);
     }
 
