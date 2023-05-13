@@ -8,24 +8,26 @@ using UnityEngine.Tilemaps;
 /// </summary>
 public class Room : MonoBehaviour
 {
-    // The tile map of this room; defines the shape of this room.
-    // TODO: Make this determined by the room size and a bitmap of directions
-    //[SerializeField] public GameObject tilemap;
-    Tilemap tilemap;
+    // TODO: change this to actually use art, also make it so collider maps only generate for walls or whatever
+    [Tooltip("The tile to use to create the walls")]
+    [SerializeField] 
+    public TileBase tile;
 
     // The dimensions of this room
+    [System.NonSerialized] 
     public Vector2Int size = new Vector2Int(11, 11);
 
     // The size of the tiles
     // TODO: Actually implement this
+    [System.NonSerialized]
     public Vector2 cellSize = new Vector2(1, 1);
 
     // The directions that this room has doors in
+    [System.NonSerialized]
     public Direction directions;
 
-    // The tile to use to create the walls
-    // TODO: change this to actually use art, also make it so collider maps only generate for walls or whatever
-    [SerializeField] public TileBase tile;
+    // The tilemap of this room; defines the shape of this room.
+    Tilemap tilemap;
 
     // The collider that detects when this room has been entered
     BoxCollider2D roomBox;
