@@ -11,13 +11,14 @@ public class DeckManager : MonoBehaviour
     // Global singleton for the actor's deck.
     public static DeckManager playerDeck;
 
+    [Tooltip("All the cards in the deck.")]
+    public List<Card> cards;
+    [Tooltip("The side of this deck's hand.")]
+    public int handSize = 3;
+
     // The actor that plays cards from this deck.
     [System.NonSerialized]
     public IActor actor;
-    // All the cards in the deck.
-    public List<Card> cards;
-    // The side of this deck's hand.
-    public int handSize = 3;
     // The cards in the draw pile.
     [System.NonSerialized]
     public List<Card> drawableCards;
@@ -151,7 +152,7 @@ public class DeckManager : MonoBehaviour
                 }
 
                 rootCard.PreviewActions(actor);
-                rootCard.AddCountToPreview(actor, playCount);
+                rootCard.AddStacksToPreview(actor, playCount);
                 rootCard.ApplyModifiersToPreview(actor, modifiers);
             }
             return;
@@ -162,7 +163,7 @@ public class DeckManager : MonoBehaviour
         {
             if (card == rootCard)
             {
-                rootCard.AddCountToPreview(actor, - 1);
+                rootCard.AddStacksToPreview(actor, - 1);
             }
             else
             {
@@ -174,7 +175,7 @@ public class DeckManager : MonoBehaviour
         {
             if (card == rootCard)
             {
-                rootCard.AddCountToPreview(actor, 1);
+                rootCard.AddStacksToPreview(actor, 1);
             }
             else
             {

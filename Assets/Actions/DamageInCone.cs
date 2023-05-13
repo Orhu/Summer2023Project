@@ -48,23 +48,38 @@ namespace CardSystem.Effects
         /// Plays this action and causes all its effects. Also cancels any relevant previews.
         /// </summary>
         /// <param name="actor"> The actor that will be playing this action. </param>
-        /// <param name="count"> The number of times action is to be played. </param>
+        /// <param name="numStacks"> The number of times action is to be played. </param>
         /// <param name="modifiers"> The modifier affecting this action. </param>
-        public override void Play(IActor actor, int count, List<ActionModifier> modifiers)
+        public override void Play(IActor actor, int numStacks, List<ActionModifier> modifiers)
         {
 
         }
 
-        public override void AddCountToPreview(IActor actor, int count)
+        /// <summary>
+        /// Adds a stacks to a preview.
+        /// </summary>
+        /// <param name="actor"> The actor previewing </param>
+        /// <param name="numStacks"> The number of stacks to add </param>
+        public override void AddStacksToPreview(IActor actor, int numStacks)
         {
             throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// Applies modifiers to a preview.
+        /// </summary>
+        /// <param name="actor"> The actor previewing</param>
+        /// <param name="actionModifiers"> The modifiers to apply </param>
         public override void ApplyModifiersToPreview(IActor actor, List<ActionModifier> actionModifiers)
         {
             throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// Removes modifiers from a preview.
+        /// </summary>
+        /// <param name="actor"> The actor previewing</param>
+        /// <param name="actionModifiers"> The modifiers to remove </param>
         public override void RemoveModifiersFromPreview(IActor actor, List<ActionModifier> actionModifiers)
         {
             throw new System.NotImplementedException();

@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class ActionModifier : MonoBehaviour
-{
-    
-}
+/// <summary>
+/// The base any modification that can be made to action actions
+/// </summary>
+public abstract class ActionModifier : ScriptableObject {}

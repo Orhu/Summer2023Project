@@ -3,31 +3,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// Previews the path that a projectile will take.
+/// </summary>
 public class ProjectilePreviewer : MonoBehaviour
 {
+    // The owner of the preview
     internal IActor actor;
+    // The spawner that this is previewing.
     internal SpawnProjectile spawner;
-    int count = 1;
-    internal int Count
+    // The number of stacks of the projectile to preview.
+    int numStacks = 1;
+    internal int NumStacks
     {
         set 
         {
-            transform.localScale *= (float)value / count;
-            count = value;
+            transform.localScale *= (float)value / numStacks;
+            numStacks = value;
         }
-        get { return count; }
+        get { return numStacks; }
     }
+
+    // The sprite of the preview.
     SpriteRenderer sprite;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Updates sprite color and size.
+    /// </summary>
     void Start()
     {
         sprite = GetComponentInChildren<SpriteRenderer>();
         sprite.color = spawner.previewColor;
-        transform.localScale = new Vector3(spawner.range * count, spawner.size * 2 * count, 0);
+        transform.localScale = new Vector3(spawner.range * numStacks, spawner.size * 2 * numStacks, 0);
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Updates rotation.
+    /// </summary
     void Update()
     {
         Vector3 diff = actor.GetActionAimPosition() - transform.position;
