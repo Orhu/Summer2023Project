@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// The player character, that handles input, movement, and animation.
+/// The actor character, that handles input, movement, and animation.
 /// </summary>
-public class Player : MonoBehaviour, ICardPlayer
+public class Player : MonoBehaviour, IActor
 {
-    // Global player singleton.
+    // Global actor singleton.
     public static Player _instance;
-    // The move speed of the player.
+    // The move speed of the actor.
     public float speed = 10.0f;
     
-    // The direction the player is tying to move.
+    // The direction the actor is tying to move.
     Vector2 moveDirection = Vector2.zero;
     // The rigid body using for collision detection.
     Rigidbody2D rigidBody;
@@ -42,7 +42,7 @@ public class Player : MonoBehaviour, ICardPlayer
 
         if (Input.GetButtonDown("Fire1"))
         {
-            DeckManager.playerDeck.PlayPreveiwedCards();
+            DeckManager.playerDeck.PlayPreviewedCard();
         }
     }
 
@@ -70,11 +70,11 @@ public class Player : MonoBehaviour, ICardPlayer
         return -1;
     }
 
-    #region ICardPlayerImplementation
+    #region IActor Implementation
     /// <summary>
     /// Get the transform that the action should be played from.
     /// </summary>
-    /// <returns> The player transform. </returns>
+    /// <returns> The actor transform. </returns>
     public Transform GetActionSourceTransform()
     {
         return transform;
@@ -92,7 +92,7 @@ public class Player : MonoBehaviour, ICardPlayer
 
 
     /// <summary>
-    /// Gets the collider of this player.
+    /// Gets the collider of this actor.
     /// </summary>
     /// <returns> The collider. </returns>
     public Collider2D GetCollider()

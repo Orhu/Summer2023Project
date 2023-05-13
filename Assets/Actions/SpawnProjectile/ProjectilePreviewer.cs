@@ -5,15 +5,15 @@ using UnityEngine;
 
 public class ProjectilePreviewer : MonoBehaviour
 {
-    internal ICardPlayer player;
+    internal IActor actor;
     internal SpawnProjectile spawner;
     int count = 1;
     internal int Count
     {
         set 
-        { 
+        {
+            transform.localScale *= (float)value / count;
             count = value;
-            sprite.color = new Color(spawner.previewColor.r, spawner.previewColor.g, spawner.previewColor.b, spawner.previewColor.a * value);
         }
         get { return count; }
     }
@@ -24,13 +24,13 @@ public class ProjectilePreviewer : MonoBehaviour
     {
         sprite = GetComponentInChildren<SpriteRenderer>();
         sprite.color = spawner.previewColor;
-        transform.localScale = new Vector3(spawner.range, spawner.size * 2, 0);
+        transform.localScale = new Vector3(spawner.range * count, spawner.size * 2 * count, 0);
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 diff = player.GetActionAimPosition() - transform.position;
+        Vector3 diff = actor.GetActionAimPosition() - transform.position;
         diff.Normalize();
 
         float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;

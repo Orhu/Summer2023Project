@@ -5,7 +5,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// UI element for rendering the player's current hand.
+/// UI element for rendering the actor's current hand.
 /// </summary>
 public class HandRenderer : MonoBehaviour
 {

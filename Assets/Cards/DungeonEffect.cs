@@ -6,7 +6,7 @@ using UnityEngine;
 /// A scriptable object for storing data a specific effect a card can have on a dungeon.
 /// </summary>
 [CreateAssetMenu(fileName = "NewDungeonEffect", menuName = "Cards/DungeonEffect", order = 1)]
-public class CardDungeonEffect : ScriptableObject
+public class DungeonEffect : ScriptableObject
 {
     //[SerializeField] RoomGenerationParameters changeInRoomGenerationParameters;
 

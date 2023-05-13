@@ -9,7 +9,8 @@ namespace CardSystem
     /// A scriptable object for containing data about a card type including:
     /// - Card visuals
     /// - The cooldown of the card
-    /// - Actions - What the card does when played
+    /// - Actions - What the card does when played as a root
+    /// - Action Modifiers - What the card does when played as part of a combo
     /// - Effects - How the card effects the dungeon
     /// </summary>
     [CreateAssetMenu(fileName = "NewCard", menuName = "Cards/Card", order = 1)]
@@ -18,13 +19,15 @@ namespace CardSystem
         [Header("Mechanics")]
         // The amount of time this card reserves the hand slot for after being played.
         public float cooldown = 1.0f;
-        // The actions that will be taken when this card is played.
-        public CardAction[] cardActions;
-        // The effects that this card will have on the dungeon while in the player's deck.
-        public CardDungeonEffect[] cardEffects;
+        // The actions that will be taken when this card is played as the root of a combo.
+        public Action[] actions;
+        // The how this card will modify actions when used in a combo.
+        public List<ActionModifier> actionModifiers;
+        // The effects that this card will have on the dungeon while in the actor's deck.
+        public DungeonEffect[] effects;
 
         [Header("Visuals")]
-        // The name of the card as shown to the player.
+        // The name of the card as shown to the actor.
         public string displayName = "Unnamed";
         // The card specific sprite on the Actions side of the card.
         public Sprite actionImage;
@@ -46,14 +49,14 @@ namespace CardSystem
             string description = "";
             if (!isActionSide)
             {
-                foreach (CardDungeonEffect cardEffect in cardEffects)
+                foreach (DungeonEffect cardEffect in effects)
                 {
                     description += cardEffect.GetFormattedDescription() + "\n";
                 }
             }
             else
             {
-                foreach (CardAction cardAction in cardActions)
+                foreach (Action cardAction in actions)
                 {
                     description += cardAction.GetFormattedDescription() + "\n";
                 }
@@ -62,35 +65,62 @@ namespace CardSystem
         }
 
         /// <summary>
-        /// Causes all of this cards Actions to start rendering their previews around the player.
+        /// Causes all of this cards Actions to start rendering their previews around the actor.
         /// </summary>
-        public void PreviewActions()
+        public void PreviewActions(IActor actor)
         {
-            foreach (CardAction cardAction in cardActions)
+            foreach (Action cardAction in actions)
             {
-                cardAction.Preview(Player._instance as ICardPlayer);
+                cardAction.Preview(actor);
+            }
+        }
+
+        public void AddCountToPreview(IActor actor, int count)
+        {
+            foreach (Action cardAction in actions)
+            {
+                cardAction.AddCountToPreview(actor, count);
+            }
+        }
+
+        public void ApplyModifiersToPreview(IActor actor, List<ActionModifier> actionModifiers)
+        {
+            foreach (Action cardAction in actions)
+            {
+                cardAction.ApplyModifiersToPreview(actor, actionModifiers);
+            }
+        }
+
+        internal void RemoveModifiersFromPreview(IActor actor, List<ActionModifier> actionModifiers)
+        {
+            foreach (Action cardAction in actions)
+            {
+                cardAction.RemoveModifiersFromPreview(actor, actionModifiers);
             }
         }
 
         /// <summary>
         /// Causes all of this cards Actions to stop rendering their previews.
         /// </summary>
-        public void CancelPreviewActions()
+        public void CancelPreviewActions(IActor actor)
         {
-            foreach (CardAction cardAction in cardActions)
+            foreach (Action cardAction in actions)
             {
-                cardAction.CancelPreview(Player._instance as ICardPlayer);
+                cardAction.CancelPreview(actor);
             }
         }
 
         /// <summary>
-        /// Plays all of the actions of this card from the player.
+        /// Plays all of the actions of this card from the actor.
         /// </summary>
-        public void PlayActions()
+        /// <param name="actor"> The actor that will be playing this action. </param>
+        /// <param name="count"> The number of times action is to be played. </param>
+        /// <param name="modifiers"> The modifier affecting this action. </param>
+        public void PlayActions(IActor actor, int count, List<ActionModifier> modifiers)
         {
-            foreach (CardAction cardAction in cardActions)
+            foreach (Action cardAction in actions)
             {
-                cardAction.Play(Player._instance as ICardPlayer);
+                cardAction.Play(actor, count, modifiers);
             }
         }
     }

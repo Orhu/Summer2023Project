@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3373922adce6b7499fc68de66d68524, type: 3}
   m_Name: FlamingBalls
   m_EditorClassIdentifier: 
+  cooldown: 1
+  actions:
+  - {fileID: 11400000, guid: b03c4464aec03624ba01b61c283a6055, type: 2}
+  actionModifiers: []
+  effects:
+  - {fileID: 11400000, guid: 3a5d2b0abfc3bbd4eb7cdd30064203b3, type: 2}
   displayName: Flaming Balls
   actionImage: {fileID: 21300000, guid: 33f5bb66a5ebd3d4797f8a2c43581542, type: 3}
   actionBackground: {fileID: 21300000, guid: 1d3e10ede9181be46be82c8c8cf052fc, type: 3}
   effectImage: {fileID: 21300000, guid: c0b610d183c554249959799fd2bb8734, type: 3}
   effectBackground: {fileID: 21300000, guid: 280775b361f06c04e9c3d8465b4df03f, type: 3}
-  cardActions:
-  - {fileID: 11400000, guid: b03c4464aec03624ba01b61c283a6055, type: 2}
-  cardEffects:
-  - {fileID: 11400000, guid: 3a5d2b0abfc3bbd4eb7cdd30064203b3, type: 2}

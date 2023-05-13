@@ -6,15 +6,18 @@ public class Health : MonoBehaviour
 {
     public int MaxHealth = 5;
     int currentHealth;
-    public int CurrentHealth {
-        get { return CurrentHealth; } 
-        set 
-        {
-            if (value <= 0)
-            {
-                Destroy(gameObject);
-            }
-            CurrentHealth = value;
-        }
+
+    delegate void AttackNotification(Attack attack);
+    AttackNotification onAttacked;
+
+    void Start()
+    {
+        currentHealth = MaxHealth;
+    }
+
+    public void Attack(Attack attack)
+    {
+        currentHealth -= attack.damage;
+        onAttacked(attack);
     }
 }

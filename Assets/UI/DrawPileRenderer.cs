@@ -4,7 +4,7 @@ using UnityEngine;
 using CardSystem;
 
 /// <summary>
-/// A UI element for rendering the player's draw pile.
+/// A UI element for rendering the actor's draw pile.
 /// </summary>
 public class DrawPileRenderer : MonoBehaviour
 {

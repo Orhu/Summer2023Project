@@ -8,7 +8,7 @@ namespace CardSystem.Effects
     /// A scriptable object for storing data about a damage cone type.
     /// </summary>
     [CreateAssetMenu(fileName = "NewDamageInCone", menuName = "Cards/Actions/DamageInCone")]
-    public class DamageInCone : CardAction
+    public class DamageInCone : Action
     {
         // The damage that will be dealt.
         public int damage = 1;
@@ -29,8 +29,8 @@ namespace CardSystem.Effects
         /// <summary>
         /// Starts rendering a preview of what this action will do.
         /// </summary>
-        /// <param name="player"> The player that will be playing this action. </param>
-        public override void Preview(ICardPlayer player)
+        /// <param name="actor"> The actor that will be playing this action. </param>
+        public override void Preview(IActor actor)
         {
 
         }
@@ -38,8 +38,8 @@ namespace CardSystem.Effects
         /// <summary>
         /// Stops rendering a preview of what this action will do.
         /// </summary>
-        /// <param name="player"> The player that will no longer be playing this action. </param>
-        public override void CancelPreview(ICardPlayer player)
+        /// <param name="actor"> The actor that will no longer be playing this action. </param>
+        public override void CancelPreview(IActor actor)
         {
 
         }
@@ -47,10 +47,27 @@ namespace CardSystem.Effects
         /// <summary>
         /// Plays this action and causes all its effects. Also cancels any relevant previews.
         /// </summary>
-        /// <param name="player"> The player that will be playing this action. </param>
-        public override void Play(ICardPlayer player)
+        /// <param name="actor"> The actor that will be playing this action. </param>
+        /// <param name="count"> The number of times action is to be played. </param>
+        /// <param name="modifiers"> The modifier affecting this action. </param>
+        public override void Play(IActor actor, int count, List<ActionModifier> modifiers)
         {
 
+        }
+
+        public override void AddCountToPreview(IActor actor, int count)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void ApplyModifiersToPreview(IActor actor, List<ActionModifier> actionModifiers)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void RemoveModifiersFromPreview(IActor actor, List<ActionModifier> actionModifiers)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
