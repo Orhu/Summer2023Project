@@ -29,6 +29,9 @@ public class ProceduralGeneration : MonoBehaviour
     // The instance
     public static ProceduralGeneration proceduralGenerationInstance { get; private set; }
 
+    /// <summary>
+    /// The cell that is stored in the room grid, to keep track of room generation
+    /// </summary>
     public class RoomGridCell
     {
         public Direction direction = Direction.None;
@@ -36,8 +39,14 @@ public class ProceduralGeneration : MonoBehaviour
         public Vector2Int location;
     }
 
+    /// <summary>
+    /// A grid to keep track of room generation
+    /// </summary>
     List<List<RoomGridCell>> roomGrid;
 
+    /// <summary>
+    /// Specifies what directions a room must have and which directions a room must not have
+    /// </summary>
     public class DirectionConstraint
     {
         public Direction mustHave = Direction.None;
@@ -87,8 +96,8 @@ public class ProceduralGeneration : MonoBehaviour
         roomGrid[(int)startPos.x][(int)startPos.y].direction = Direction.Right | Direction.Left | Direction.Up | Direction.Down;
         roomGrid[(int)startPos.x][(int)startPos.y].visited = true;
         Vector2 startLocation;
-        startLocation.x = (startPos.x - mapSize.x / 2) * roomSize.x * cellSize.x;
-        startLocation.y = (startPos.y - mapSize.y / 2) * roomSize.y * cellSize.y;
+        startLocation.x = (startPos.x - mapSize.x / 2 + ((mapSize.x % 2) * (float) 1.0/2)) * roomSize.x * cellSize.x;
+        startLocation.y = (startPos.y - mapSize.y / 2 + ((mapSize.y % 2) * (float) 1.0/2)) * roomSize.y * cellSize.y;
         CreateRoom(startLocation, roomGrid[startPos.x][startPos.y].direction);
 
         Queue<RoomGridCell> cellsToGenerate = new Queue<RoomGridCell>();
@@ -109,8 +118,8 @@ public class ProceduralGeneration : MonoBehaviour
             Direction invertedMustNotHave = (Direction)15 ^ directionConstraint.mustNotHave;
             direction = direction & invertedMustNotHave;
             Vector2 location;
-            location.x = (currentCell.location.x - mapSize.x / 2) * roomSize.x * cellSize.x;
-            location.y = (currentCell.location.y - mapSize.y / 2) * roomSize.y * cellSize.y;
+            location.x = (currentCell.location.x - mapSize.x / 2 + ((mapSize.x % 2) * (float)1.0 / 2)) * roomSize.x * cellSize.x;
+            location.y = (currentCell.location.y - mapSize.y / 2 + ((mapSize.y % 2) * (float)1.0 / 2)) * roomSize.y * cellSize.y;
             CreateRoom(location, direction);
             currentCell.direction = direction;
 
@@ -158,6 +167,12 @@ public class ProceduralGeneration : MonoBehaviour
         roomGenerationParameters.Add(addedRoomParams);
     }
 
+    /// <summary>
+    /// Gets the neighbors to the pos specified in the room grid in the direction specified 
+    /// </summary>
+    /// <param name="pos"> The position to get the neighbors of </param>
+    /// <param name="direction"> The directions to check </param>
+    /// <returns> The neighbors </returns>
     List<RoomGridCell> GetUnvisitedNeighbors(Vector2Int pos, Direction direction = (Direction) 15)
     {
         List<RoomGridCell> neighbors = new List<RoomGridCell>();
@@ -182,6 +197,11 @@ public class ProceduralGeneration : MonoBehaviour
         return neighbors;
     }
 
+    /// <summary>
+    /// Gets what directions the room at the given position must and must not have
+    /// </summary>
+    /// <param name="pos"> The position of the room </param>
+    /// <returns> The direction constraints </returns>
     DirectionConstraint GetDirectionConstraint(Vector2Int pos)
     {
         DirectionConstraint directionConstraint = new DirectionConstraint();
