@@ -12,6 +12,12 @@ public class LockCameraToRoom : MonoBehaviour
     // The speed at which the camera snaps.
     public float speed = 10;
 
+    // Gets the room scale
+    void Start()
+    {
+        roomScale = ProceduralGeneration.proceduralGenerationInstance.cellSize * ProceduralGeneration.proceduralGenerationInstance.roomSize;
+    }
+
     /// <summary>
     /// Updates the position.
     /// </summary>

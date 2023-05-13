@@ -13,9 +13,9 @@ public class ProceduralGeneration : MonoBehaviour
     // The size (in tiles) of a room
     [SerializeField] public Vector2Int roomSize = new Vector2Int(11, 11);
 
-    // The size of a tile
+    // The size (in unity units) of a tile
     // TODO: Actually implement this
-    [SerializeField] public Vector2 tilesize = new Vector2(1, 1);
+    [SerializeField] public Vector2 cellSize = new Vector2(1, 1);
 
     // The room generation parameters
     [SerializeField] RoomGenerationParameters roomGenerationParameters;
@@ -57,8 +57,8 @@ public class ProceduralGeneration : MonoBehaviour
             for (int j = 0; j < mapSize.y; j++)
             {
                 Vector2 location;
-                location.x = i * roomSize.x * tilesize.x;
-                location.y = j * roomSize.y * tilesize.y;
+                location.x = i * roomSize.x * cellSize.x;
+                location.y = j * roomSize.y * cellSize.y;
                 CreateRoom(location);
             }
         }
@@ -74,7 +74,7 @@ public class ProceduralGeneration : MonoBehaviour
         newRoom.transform.parent = this.transform;
         newRoom.GetComponent<Room>().tile = room.GetComponent<Room>().tile;
         newRoom.GetComponent<Room>().size = roomSize;
-        newRoom.GetComponent<Room>().tilesize = tilesize;
+        newRoom.GetComponent<Room>().cellSize = cellSize;
         newRoom.GetComponent<Room>().directions = Direction.Right | Direction.Up | Direction.Left | Direction.Down;
         newRoom.SetActive(true);
     }

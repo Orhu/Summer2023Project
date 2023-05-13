@@ -18,7 +18,7 @@ public class Room : MonoBehaviour
 
     // The size of the tiles
     // TODO: Actually implement this
-    public Vector2 tilesize = new Vector2(1, 1);
+    public Vector2 cellSize = new Vector2(1, 1);
 
     // The directions that this room has doors in
     public Direction directions;
