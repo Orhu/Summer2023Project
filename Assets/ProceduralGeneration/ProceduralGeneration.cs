@@ -47,6 +47,7 @@ public class ProceduralGeneration : MonoBehaviour
     /// </summary>
     void Start()
     {
+        roomGenerationParameters.CalcTotalWeight();
         Generate();
     }
 
@@ -107,8 +108,24 @@ public class ProceduralGeneration : MonoBehaviour
 [System.Serializable]
 public class RoomGenerationParameters
 {
-    [SerializeField] public int numEnemies;
-    [SerializeField] public GameObject enemy;
+    [Tooltip("The number of enemies that will spawn in a room")]
+    public int numEnemies;
+
+    [Tooltip("The enemies that can spawn and their weights")]
+    public List<WeightedEnemy> enemies;
+
+    // All the weights of the enemies added together
+    [System.NonSerialized]
+    public float totalWeight;
+
+    public void CalcTotalWeight()
+    {
+        totalWeight = 0;
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            totalWeight += enemies[i].weight;
+        }
+    }
 
     /// <summary>
     /// Adds another room generation paramters to this one
@@ -117,9 +134,58 @@ public class RoomGenerationParameters
     public void Add(RoomGenerationParameters other)
     {
         numEnemies += other.numEnemies;
+
+        bool enemyFound = false;
+        for (int i = 0; i < other.enemies.Count; i++)
+        {
+            for (int j = 0; i < enemies.Count; j++)
+            {
+                // This may need to be changed
+                if (enemies[j].enemy == other.enemies[i].enemy)
+                {
+                    enemies[j].weight += other.enemies[i].weight;
+                    enemyFound = true;
+                    break;
+                }
+            }
+
+            totalWeight += other.enemies[i].weight;
+            if (!enemyFound)
+            {
+                WeightedEnemy newEnemy = new WeightedEnemy();
+                newEnemy.enemy = other.enemies[i].enemy;
+                newEnemy.weight = other.enemies[i].weight;
+                enemies.Add(newEnemy);
+            }
+        }
     }
 
+    public GameObject GetRandomEnemyWeighted()
+    {
+        float randomPercent = Random.value;
+        Debug.Log(randomPercent);
+        float percentCounter = 0;
+
+        for (int i = 0; i < enemies.Count; i++)
+        {
+            percentCounter += (enemies[i].weight / totalWeight);
+
+            if (percentCounter >= randomPercent)
+            {
+                return enemies[i].enemy;
+            }
+        }
+
+        return enemies[enemies.Count - 1].enemy;
+    }
 };
+
+[System.Serializable]
+public class WeightedEnemy
+{
+    public GameObject enemy;
+    public float weight;
+}
 
 /// <summary>
 /// Stores door directions

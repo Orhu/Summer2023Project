@@ -160,11 +160,13 @@ public class Room : MonoBehaviour
         generated = true;
 
         RoomGenerationParameters roomParams = ProceduralGeneration.proceduralGenerationInstance.GetRoomGenerationParameters();
+
         for (int i = 0; i < roomParams.numEnemies; i++)
         {
             Vector2 enemyLocation = new Vector2(transform.position.x + Random.Range(-1, 1), transform.position.y + Random.Range(-1, 1));
-            GameObject newEnemy = Instantiate(roomParams.enemy, enemyLocation, Quaternion.identity);
+            GameObject newEnemy = Instantiate(roomParams.GetRandomEnemyWeighted(), enemyLocation, Quaternion.identity);
             newEnemy.SetActive(true);
+            newEnemy.transform.parent = transform;
         }
     }
 
