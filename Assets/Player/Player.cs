@@ -13,14 +13,14 @@ public class Player : MonoBehaviour, ICardPlayer
     public float speed = 10.0f;
     
     // The direction the player is tying to move.
-    private Vector2 moveDirection = Vector2.zero;
+    Vector2 moveDirection = Vector2.zero;
     // The rigid body using for collision detection.
-    private Rigidbody2D rigidBody;
+    Rigidbody2D rigidBody;
 
     /// <summary>
     /// Initializes singleton and rigid body.
     /// </summary>
-    private void Awake()
+    void Awake()
     {
         _instance = this;
         rigidBody = GetComponent<Rigidbody2D>();
@@ -49,7 +49,7 @@ public class Player : MonoBehaviour, ICardPlayer
     /// <summary>
     /// Updates position.
     /// </summary>
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         rigidBody.MovePosition(rigidBody.position + moveDirection * speed * Time.fixedDeltaTime);
     }
@@ -58,7 +58,7 @@ public class Player : MonoBehaviour, ICardPlayer
     /// Gets the card preview button being pressed.
     /// </summary>
     /// <returns> The number corresponding to the current button, -1 if none pressed. </returns>
-    private static int getPressedPreviewButton()
+    static int getPressedPreviewButton()
     {
         for (int i = 1; i <= DeckManager.playerDeck.handSize; i ++)
         {

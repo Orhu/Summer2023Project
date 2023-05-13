@@ -10,8 +10,8 @@ public class Projectile : MonoBehaviour
     // The player of the projectile.
     internal ICardPlayer player;
 
-    private Rigidbody2D rigidBody;
-    private float distanceTraveled;
+    Rigidbody2D rigidBody;
+    float distanceTraveled;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,7 +28,7 @@ public class Projectile : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         distanceTraveled += Time.fixedDeltaTime * spawner.speed;
         rigidBody.MovePosition(transform.position + transform.right * Time.fixedDeltaTime * spawner.speed);
@@ -38,7 +38,7 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D collision)
     {
         Destroy(gameObject);
     }

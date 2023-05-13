@@ -14,12 +14,12 @@ public class DrawPileRenderer : MonoBehaviour
     public int previewRangeStart = 0;
     // The end (inclusive) of the range of indices from the top of the draw pile to preview.
     public int previewRangeEnd = 4;
-    private List<CardRenderer> cardRenderers = new List<CardRenderer>();
+    List<CardRenderer> cardRenderers = new List<CardRenderer>();
 
     /// <summary>
     /// Creates the necessary card renderers.
     /// </summary>
-    private void Start()
+    void Start()
     {
         for (int i = 0; i < previewRangeEnd - previewRangeStart; i++)
         {

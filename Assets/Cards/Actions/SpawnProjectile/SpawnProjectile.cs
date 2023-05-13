@@ -33,7 +33,7 @@ namespace CardSystem.Effects
         public ParticleSystem particleEffect;
 
         // Maps players to the previewer
-        private Dictionary<ICardPlayer, ProjectilePreviewer> playersToPreviewers = new Dictionary<ICardPlayer, ProjectilePreviewer>();
+        Dictionary<ICardPlayer, ProjectilePreviewer> playersToPreviewers = new Dictionary<ICardPlayer, ProjectilePreviewer>();
 
         /// <summary>
         /// Gets the formated description of this card.

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     public int MaxHealth = 5;
-    private int currentHealth;
+    int currentHealth;
     public int CurrentHealth {
         get { return CurrentHealth; } 
         set 

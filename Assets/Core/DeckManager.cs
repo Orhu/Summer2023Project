@@ -37,7 +37,7 @@ public class DeckManager : MonoBehaviour
     /// <summary>
     /// Initializes Singleton
     /// </summary>
-    private void Awake()
+    void Awake()
     {
         if (playerDeck == null)
         {
@@ -53,7 +53,7 @@ public class DeckManager : MonoBehaviour
     /// <summary>
     /// Initializes the draw pile and hand.
     /// </summary>
-    private void Start()
+    void Start()
     {
         drawableCards = new List<Card>(cards);
 
@@ -66,7 +66,7 @@ public class DeckManager : MonoBehaviour
     /// <summary>
     /// Updates all cooldowns and draws new cards when needed.
     /// </summary>
-    private void Update()
+    void Update()
     {
         foreach (KeyValuePair<int, float> cardIndexToCooldown in new Dictionary<int, float>(cardIndicesToCooldowns))
         {
@@ -144,7 +144,7 @@ public class DeckManager : MonoBehaviour
     /// Fills the first empty spot in the player's hand with a card from the draw pile.
     /// </summary>
     /// <returns> Whether or not an empty spot was found. </returns>
-    private bool DrawCard()
+    bool DrawCard()
     {
         while (inHandCards.Count < handSize)
         {

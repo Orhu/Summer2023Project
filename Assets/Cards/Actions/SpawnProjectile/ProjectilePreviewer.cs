@@ -7,7 +7,7 @@ public class ProjectilePreviewer : MonoBehaviour
 {
     internal ICardPlayer player;
     internal SpawnProjectile spawner;
-    private int count = 1;
+    int count = 1;
     internal int Count
     {
         set 
@@ -17,7 +17,7 @@ public class ProjectilePreviewer : MonoBehaviour
         }
         get { return count; }
     }
-    private SpriteRenderer sprite;
+    SpriteRenderer sprite;
 
     // Start is called before the first frame update
     void Start()
