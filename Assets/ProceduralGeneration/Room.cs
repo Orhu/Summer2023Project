@@ -8,12 +8,26 @@ using UnityEngine.Tilemaps;
 /// </summary>
 public class Room : MonoBehaviour
 {
-    // The tile map of this room; defines the shape of this room.
-    // TODO: Make this determined by the room size and a bitmap of directions
-    [SerializeField] public GameObject tilemap;
+    // TODO: change this to actually use art, also make it so collider maps only generate for walls or whatever
+    [Tooltip("The tile to use to create the walls")]
+    [SerializeField] 
+    public TileBase tile;
 
     // The dimensions of this room
-    [SerializeField] public Vector2 size = new Vector2(11, 11);
+    [System.NonSerialized] 
+    public Vector2Int size = new Vector2Int(11, 11);
+
+    // The size of the tiles
+    // TODO: Actually implement this
+    [System.NonSerialized]
+    public Vector2 cellSize = new Vector2(1, 1);
+
+    // The directions that this room has doors in
+    [System.NonSerialized]
+    public Direction directions;
+
+    // The tilemap of this room; defines the shape of this room.
+    Tilemap tilemap;
 
     // The collider that detects when this room has been entered
     BoxCollider2D roomBox;
@@ -26,14 +40,110 @@ public class Room : MonoBehaviour
     /// </summary>
     void Start()
     {
-        tilemap = Instantiate(tilemap, transform);
-        tilemap.SetActive(true);
+        CreateTilemap();
 
         roomBox = gameObject.AddComponent<BoxCollider2D>();
         roomBox.transform.parent = this.transform;
         roomBox.transform.position = this.transform.position;
         roomBox.size = new Vector3(size.x, size.y, 0);
         roomBox.isTrigger = true;
+    }
+
+    /// <summary>
+    /// Creates a tilemap with the size of the room
+    /// </summary>
+    void CreateTilemap()
+    {
+        gameObject.AddComponent<Grid>();
+        tilemap = gameObject.AddComponent<Tilemap>();
+
+        Vector2Int endOffset = new Vector2Int();
+        if (size.x % 2 == 0)
+        {
+            endOffset.x = size.x / 2 - 1;
+        }
+        else
+        {
+            endOffset.x = size.x / 2;
+        }
+
+        if (size.y % 2 == 0)
+        {
+            endOffset.y = size.y / 2 - 1;
+        }
+        else
+        {
+            endOffset.y = size.y / 2;
+        }
+
+        for (int x = 0; x < size.x; x++)
+        {
+            if (!ShouldBeDoor(new Vector2Int(x, 0)))
+            {
+                tilemap.SetTile(new Vector3Int(x - (size.x / 2), -(size.y / 2), 0), tile);
+            }
+            if (!ShouldBeDoor(new Vector2Int(x, size.y - 1)))
+            {
+                tilemap.SetTile(new Vector3Int(x - (size.x / 2), endOffset.y, 0), tile);
+            }
+        }
+
+        for (int y = 1; y < size.y - 1; y++)
+        {
+            if (!ShouldBeDoor(new Vector2Int(0, y)))
+            {
+                tilemap.SetTile(new Vector3Int(-(size.x / 2), y - (size.y / 2), 0), tile);
+            }
+            if (!ShouldBeDoor(new Vector2Int(size.x - 1, y)))
+            {
+                tilemap.SetTile(new Vector3Int(endOffset.x, y - (size.y / 2), 0), tile);
+            }
+        }
+
+        tilemap.CompressBounds();
+
+        gameObject.AddComponent<TilemapCollider2D>();
+        gameObject.AddComponent<TilemapRenderer>();
+    }
+
+    /// <summary>
+    /// Checks whether the position on the tilemap should be a door
+    /// </summary>
+    /// <param name="pos"> The position on the tilemap to check </param>
+    /// <returns> Whether or not the position should be a door </returns>
+    bool ShouldBeDoor(Vector2Int pos)
+    {
+        if (directions == Direction.None)
+        {
+            return false;
+        }
+
+        if ((pos.x != 0 && pos.x != size.x - 1) && (pos.y != 0 && pos.y != size.y - 1))
+        {
+            return false;
+        }
+
+        if (((directions & Direction.Up) != Direction.None) && pos.y == size.y - 1 && (pos.x == (size.x / 2) || pos.x == (size.x / 2) - System.Convert.ToInt32((size.x % 2) == 0)))
+        {
+            return true;
+        }
+
+        if (((directions & Direction.Left) != Direction.None) && pos.x == 0 && (pos.y == (size.y / 2) || pos.y == (size.y / 2) - System.Convert.ToInt32((size.y % 2) == 0)))
+        {
+            return true;
+        }
+
+        if (((directions & Direction.Down) != Direction.None) && pos.y == 0 && (pos.x == (size.x / 2) || pos.x == (size.x / 2) - System.Convert.ToInt32((size.x % 2) == 0)))
+        {
+            return true;
+        }
+
+        if (((directions & Direction.Right) != Direction.None) && pos.x == size.x - 1 && (pos.y == (size.y / 2) || pos.y == (size.y / 2) - System.Convert.ToInt32((size.y % 2) == 0)))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>

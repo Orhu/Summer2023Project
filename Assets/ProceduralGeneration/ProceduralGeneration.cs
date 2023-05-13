@@ -7,18 +7,24 @@ using UnityEngine;
 /// </summary>
 public class ProceduralGeneration : MonoBehaviour
 {
-    // The size of the map
-    [SerializeField] Vector2 mapSize;
+    [Tooltip("The size (in tiles) of a room")]
+    public Vector2Int roomSize = new Vector2Int(11, 11);
 
-    // The tilemaps that can be chosen from
-    // TODO: Remove this
-    [SerializeField] List<GameObject> possibleTilemaps;
+    // TODO: Actually implement this
+    [Tooltip("The size (in unity units) of a tile")]
+    public Vector2 cellSize = new Vector2(1, 1);
 
-    // The room generation parameters
-    [SerializeField] RoomGenerationParameters roomGenerationParameters;
+    [Tooltip("The size (in rooms) of the map")]
+    [SerializeField]
+    Vector2 mapSize;
 
-    // Default room that will be instantiated when generating
-    [SerializeField] GameObject room;
+    [Tooltip("The room generation parameters")]
+    [SerializeField] 
+    RoomGenerationParameters roomGenerationParameters;
+
+    [Tooltip("Default room that will be instantiated when generating")]
+    [SerializeField] 
+    GameObject room;
 
     // The instance
     public static ProceduralGeneration proceduralGenerationInstance { get; private set; }
@@ -39,7 +45,6 @@ public class ProceduralGeneration : MonoBehaviour
     /// <summary>
     /// Generates the rooms
     /// </summary>
-
     void Start()
     {
         Generate();
@@ -54,14 +59,10 @@ public class ProceduralGeneration : MonoBehaviour
         {
             for (int j = 0; j < mapSize.y; j++)
             {
-                GameObject tilemap = possibleTilemaps[Random.Range(0, possibleTilemaps.Count - 1)];
                 Vector2 location;
-                Vector2 tileSize;
-                tileSize.x = tilemap.GetComponent<Grid>().cellSize.x;
-                tileSize.y = tilemap.GetComponent<Grid>().cellSize.y;
-                location.x = i * tileSize.x * room.GetComponent<Room>().size.x;
-                location.y = j * tileSize.y * room.GetComponent<Room>().size.y;
-                CreateRoom(tilemap, location);
+                location.x = i * roomSize.x * cellSize.x;
+                location.y = j * roomSize.y * cellSize.y;
+                CreateRoom(location);
             }
         }
     }
@@ -69,14 +70,15 @@ public class ProceduralGeneration : MonoBehaviour
     /// <summary>
     /// Creates a room with the given tilemap and a given location
     /// </summary>
-    /// <param name="tilemap"> The tilemap of the new room </param>
     /// <param name="location"> The location of the new room </param>
-    void CreateRoom(GameObject tilemap, Vector2 location)
+    void CreateRoom(Vector2 location)
     {
         GameObject newRoom = Instantiate(room, location, Quaternion.identity);
         newRoom.transform.parent = this.transform;
-        newRoom.GetComponent<Room>().tilemap = tilemap;
-        newRoom.GetComponent<Room>().size = room.GetComponent<Room>().size;
+        newRoom.GetComponent<Room>().tile = room.GetComponent<Room>().tile;
+        newRoom.GetComponent<Room>().size = roomSize;
+        newRoom.GetComponent<Room>().cellSize = cellSize;
+        newRoom.GetComponent<Room>().directions = Direction.Right | Direction.Up | Direction.Left | Direction.Down;
         newRoom.SetActive(true);
     }
 
@@ -118,3 +120,15 @@ public class RoomGenerationParameters
     }
 
 };
+
+/// <summary>
+/// Stores door directions
+/// </summary>
+public enum Direction
+{
+    None = 0,
+    Right = 1,
+    Up = 2,
+    Left = 4,
+    Down = 8
+}
