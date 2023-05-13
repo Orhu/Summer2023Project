@@ -8,12 +8,17 @@ using CardSystem;
 /// </summary>
 public class DeckManager : MonoBehaviour
 {
-    // Global singleton for the player's deck.
+    // Global singleton for the actor's deck.
     public static DeckManager playerDeck;
-    // All the cards in the deck.
+
+    [Tooltip("All the cards in the deck.")]
     public List<Card> cards;
-    // The side of this deck's hand.
+    [Tooltip("The side of this deck's hand.")]
     public int handSize = 3;
+
+    // The actor that plays cards from this deck.
+    [System.NonSerialized]
+    public IActor actor;
     // The cards in the draw pile.
     [System.NonSerialized]
     public List<Card> drawableCards;
@@ -37,11 +42,12 @@ public class DeckManager : MonoBehaviour
     /// <summary>
     /// Initializes Singleton
     /// </summary>
-    private void Awake()
+    void Awake()
     {
         if (playerDeck == null)
         {
             playerDeck = this;
+            playerDeck.actor = Player._instance;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -53,7 +59,7 @@ public class DeckManager : MonoBehaviour
     /// <summary>
     /// Initializes the draw pile and hand.
     /// </summary>
-    private void Start()
+    void Start()
     {
         drawableCards = new List<Card>(cards);
 
@@ -66,7 +72,7 @@ public class DeckManager : MonoBehaviour
     /// <summary>
     /// Updates all cooldowns and draws new cards when needed.
     /// </summary>
-    private void Update()
+    void Update()
     {
         foreach (KeyValuePair<int, float> cardIndexToCooldown in new Dictionary<int, float>(cardIndicesToCooldowns))
         {
@@ -113,15 +119,68 @@ public class DeckManager : MonoBehaviour
         {
             return;
         }
+
         Card card = inHandCards[handIndex];
+        if (previewedCardIndices.Count == 0)
+        {
+            card.PreviewActions(actor);
+            previewedCardIndices.Add(handIndex);
+            return;
+        }
+        Card rootCard = inHandCards[previewedCardIndices[0]];
+
+        if (handIndex == previewedCardIndices[0])
+        {
+            previewedCardIndices.Remove(handIndex);
+            rootCard.CancelPreviewActions(actor);
+            if (previewedCardIndices.Count > 0)
+            {
+                rootCard = inHandCards[previewedCardIndices[0]];
+
+                int playCount = 0;
+                List<ActionModifier> modifiers = new List<ActionModifier>();
+                for (int i = 1; i < previewedCardIndices.Count; i++)
+                {
+                    if (inHandCards[previewedCardIndices[i]] == rootCard)
+                    {
+                        playCount++;
+                    }
+                    else
+                    {
+                        modifiers.AddRange(inHandCards[previewedCardIndices[i]].actionModifiers);
+                    }
+                }
+
+                rootCard.PreviewActions(actor);
+                rootCard.AddStacksToPreview(actor, playCount);
+                rootCard.ApplyModifiersToPreview(actor, modifiers);
+            }
+            return;
+        }
+
+
         if (previewedCardIndices.Contains(handIndex))
         {
-            card.CancelPreviewActions();
+            if (card == rootCard)
+            {
+                rootCard.AddStacksToPreview(actor, - 1);
+            }
+            else
+            {
+                rootCard.RemoveModifiersFromPreview(actor, card.actionModifiers);
+            }
             previewedCardIndices.Remove(handIndex);
         }
         else
         {
-            card.PreviewActions();
+            if (card == rootCard)
+            {
+                rootCard.AddStacksToPreview(actor, 1);
+            }
+            else
+            {
+                rootCard.ApplyModifiersToPreview(actor, card.actionModifiers);
+            }
             previewedCardIndices.Add(handIndex);
         }
     }
@@ -129,22 +188,40 @@ public class DeckManager : MonoBehaviour
     /// <summary>
     /// Play any cards currently being previewed.
     /// </summary>
-    public void PlayPreveiwedCards()
+    public void PlayPreviewedCard()
     {
-        foreach (int previewedCardIndex in previewedCardIndices)
+        if (previewedCardIndices.Count == 0)
         {
-            Card card = inHandCards[previewedCardIndex];
-            card.PlayActions();
-            cardIndicesToCooldowns.Add(previewedCardIndex, card.cooldown);
+            return;
         }
+
+        Card cardToPlay = inHandCards[previewedCardIndices[0]];
+        int playCount = 1;
+        List<ActionModifier> modifiers = new List<ActionModifier>();
+        for (int i = 1; i < previewedCardIndices.Count; i++)
+        {
+            cardIndicesToCooldowns.Add(previewedCardIndices[i], cardToPlay.cooldown);
+            if (inHandCards[previewedCardIndices[i]] == cardToPlay)
+            {
+                playCount++;
+            }
+            else
+            {
+                modifiers.AddRange(inHandCards[previewedCardIndices[i]].actionModifiers);
+            }
+        }
+
+        cardIndicesToCooldowns.Add(previewedCardIndices[0], cardToPlay.cooldown);
+        cardToPlay.PlayActions(actor, playCount, modifiers);
+
         previewedCardIndices.Clear();
     }
 
     /// <summary>
-    /// Fills the first empty spot in the player's hand with a card from the draw pile.
+    /// Fills the first empty spot in the actor's hand with a card from the draw pile.
     /// </summary>
     /// <returns> Whether or not an empty spot was found. </returns>
-    private bool DrawCard()
+    bool DrawCard()
     {
         while (inHandCards.Count < handSize)
         {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Cause the camera to follow the player and snap to the center of rooms.
+/// Cause the camera to follow the actor and snap to the center of rooms.
 /// </summary>
 public class LockCameraToRoom : MonoBehaviour
 {

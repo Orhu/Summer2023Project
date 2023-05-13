@@ -12,14 +12,14 @@ public class RemainingDrawCards : MonoBehaviour
     public int offset = 0;
 
     // The text box to set the text on.
-    private TMP_Text textBox;
+    TMP_Text textBox;
 
     /// <summary>
     /// Initializes bindings and references.
     /// </summary>
     void Start()
     {
-        textBox = gameObject.GetComponent<TMP_Text>();
+        textBox = GetComponent<TMP_Text>();
         DeckManager.playerDeck.onCardDrawn += OnCardDrawn;
         GetComponentInParent<UnityEngine.UI.VerticalLayoutGroup>().enabled = false;
         Invoke("RefreshParent", 0.1f);
@@ -40,7 +40,7 @@ public class RemainingDrawCards : MonoBehaviour
     /// <summary>
     /// Forces the parent to update the layout to ensure correct formating.
     /// </summary>
-    private void RefreshParent()
+    void RefreshParent()
     {
         GetComponentInParent<UnityEngine.UI.LayoutGroup>().enabled = true;
     }

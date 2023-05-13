@@ -12,6 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6bfc91f16abe584bb2cebcfe2ee1e71, type: 3}
   m_Name: Fireball
   m_EditorClassIdentifier: 
-  description: Shoots A Fireball that Does [Damage] Dmg
-  damage: 1
+  attack:
+    damage: 1
+  size: 0.25
   range: 6
+  speed: 12
+  projectilePrefab: {fileID: 2538858936763256791, guid: c62f923ad374e324aa44121459b80de1, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  previewColor: {r: 0.27058828, g: 0.9233453, b: 1, a: 0.23529412}
+  sprite: {fileID: 21300000, guid: 420106231a80b0840a10da7b053a74a4, type: 3}
+  particleEffect: {fileID: 0}

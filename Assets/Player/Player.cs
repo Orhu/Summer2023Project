@@ -3,27 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// The player character, that handles input, movement, and animation.
+/// The actor character, that handles input, movement, and animation.
 /// </summary>
-public class Player : MonoBehaviour, ICardPlayer
+public class Player : MonoBehaviour, IActor
 {
-    // Global player singleton.
+    // Global actor singleton.
     public static Player _instance;
-    // The move speed of the player.
+    // The move speed of the actor.
     public float speed = 10.0f;
     
-    // The direction the player is tying to move.
-    private Vector2 moveDirection = Vector2.zero;
+    // The direction the actor is tying to move.
+    Vector2 moveDirection = Vector2.zero;
     // The rigid body using for collision detection.
-    private Rigidbody2D rigidBody;
+    Rigidbody2D rigidBody;
 
     /// <summary>
     /// Initializes singleton and rigid body.
     /// </summary>
-    private void Awake()
+    void Awake()
     {
         _instance = this;
-        rigidBody = gameObject.GetComponent<Rigidbody2D>();
+        rigidBody = GetComponent<Rigidbody2D>();
     }
 
     /// <summary>
@@ -42,14 +42,14 @@ public class Player : MonoBehaviour, ICardPlayer
 
         if (Input.GetButtonDown("Fire1"))
         {
-            DeckManager.playerDeck.PlayPreveiwedCards();
+            DeckManager.playerDeck.PlayPreviewedCard();
         }
     }
 
     /// <summary>
     /// Updates position.
     /// </summary>
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         rigidBody.MovePosition(rigidBody.position + moveDirection * speed * Time.fixedDeltaTime);
     }
@@ -58,7 +58,7 @@ public class Player : MonoBehaviour, ICardPlayer
     /// Gets the card preview button being pressed.
     /// </summary>
     /// <returns> The number corresponding to the current button, -1 if none pressed. </returns>
-    private static int getPressedPreviewButton()
+    static int getPressedPreviewButton()
     {
         for (int i = 1; i <= DeckManager.playerDeck.handSize; i ++)
         {
@@ -70,12 +70,34 @@ public class Player : MonoBehaviour, ICardPlayer
         return -1;
     }
 
+    #region IActor Implementation
     /// <summary>
-    /// Get the position that the action should be played from.
+    /// Get the transform that the action should be played from.
     /// </summary>
-    /// <returns> The player position in world space. </returns>
-    public Vector3 getActionSourcePosition()
+    /// <returns> The actor transform. </returns>
+    public Transform GetActionSourceTransform()
     {
-        return transform.position;
+        return transform;
     }
+
+
+    /// <summary>
+    /// Get the position that the action should be aimed at.
+    /// </summary>
+    /// <returns> The mouse position in world space. </returns>
+    public Vector3 GetActionAimPosition()
+    {
+        return Vector3.Scale(Camera.main.ScreenToWorldPoint(Input.mousePosition), new Vector3(1, 1, 0));
+    }
+
+
+    /// <summary>
+    /// Gets the collider of this actor.
+    /// </summary>
+    /// <returns> The collider. </returns>
+    public Collider2D GetCollider()
+    {
+        return GetComponent<Collider2D>();
+    }
+    #endregion
 }

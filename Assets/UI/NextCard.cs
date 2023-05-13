@@ -9,14 +9,14 @@ using CardSystem;
 public class NextCard : MonoBehaviour
 {
     // The card renderer to update.
-    private CardRenderer cardRenderer;
+    CardRenderer cardRenderer;
 
     /// <summary>
     /// Initializes reference and binding.
     /// </summary>
-    private void Start()
+    void Start()
     {
-        cardRenderer = gameObject.GetComponent<CardRenderer>();
+        cardRenderer = GetComponent<CardRenderer>();
         DeckManager.playerDeck.onCardDrawn += OnCardDrawn;
     }
 
