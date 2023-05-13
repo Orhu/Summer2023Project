@@ -41,6 +41,7 @@ public class Room : MonoBehaviour
     void Start()
     {
         CreateTilemap();
+        GetComponent<TilemapRenderer>().enabled = false;
 
         roomBox = gameObject.AddComponent<BoxCollider2D>();
         roomBox.transform.parent = this.transform;
@@ -175,7 +176,16 @@ public class Room : MonoBehaviour
     {
         if (collision.gameObject == Player._instance.gameObject)
         {
+            GetComponent<TilemapRenderer>().enabled = true;
             GenerateRoom();
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject == Player._instance.gameObject)
+        {
+            GetComponent<TilemapRenderer>().enabled = false;
         }
     }
 }
