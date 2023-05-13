@@ -68,7 +68,7 @@ namespace CardSystem
         {
             foreach (CardAction cardAction in cardActions)
             {
-                cardAction.Preview(Player._instance);
+                cardAction.Preview(Player._instance as ICardPlayer);
             }
         }
 
@@ -79,7 +79,7 @@ namespace CardSystem
         {
             foreach (CardAction cardAction in cardActions)
             {
-                cardAction.CancelPreview(Player._instance);
+                cardAction.CancelPreview(Player._instance as ICardPlayer);
             }
         }
 
@@ -90,7 +90,7 @@ namespace CardSystem
         {
             foreach (CardAction cardAction in cardActions)
             {
-                cardAction.Play(Player._instance);
+                cardAction.Play(Player._instance as ICardPlayer);
             }
         }
     }

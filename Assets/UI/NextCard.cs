@@ -16,7 +16,7 @@ public class NextCard : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        cardRenderer = gameObject.GetComponent<CardRenderer>();
+        cardRenderer = GetComponent<CardRenderer>();
         DeckManager.playerDeck.onCardDrawn += OnCardDrawn;
     }
 
