@@ -34,6 +34,10 @@ public class Health : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        onAttacked(attack);
+
+        if (onAttacked != null)
+        {
+            onAttacked(attack);
+        }
     }
 }

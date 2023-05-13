@@ -655,7 +655,6 @@ GameObject:
   - component: {fileID: 7281680880204442666}
   - component: {fileID: 7281680880204442665}
   - component: {fileID: 2453830812017951992}
-  - component: {fileID: 7281680880204442664}
   - component: {fileID: 906744404}
   - component: {fileID: 906744405}
   - component: {fileID: 906744410}
@@ -750,21 +749,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHealth: 5
-  OnDamageTaken:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5532314005131209340}
-        m_TargetAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
-        m_MethodName: set_value
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!61 &7281680880204442665
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -812,20 +796,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &7281680880204442664
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7281680880204442677}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc2e7c30ce299fd4f8b3790d76d8bc4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  projectileTag: FriendlyProjectile
-  damageOfProjectile: 1
 --- !u!114 &906744404
 MonoBehaviour:
   m_ObjectHideFlags: 0
