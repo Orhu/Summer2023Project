@@ -12,10 +12,15 @@ public class LockCameraToRoom : MonoBehaviour
     // The speed at which the camera snaps.
     public float speed = 10;
 
+    // The size of a cell
+    Vector2 cellSize;
+
     // Gets the room scale
     void Start()
     {
-        roomScale = ProceduralGeneration.proceduralGenerationInstance.cellSize * ProceduralGeneration.proceduralGenerationInstance.roomSize;
+        cellSize = ProceduralGeneration.proceduralGenerationInstance.cellSize;
+        roomScale = cellSize * ProceduralGeneration.proceduralGenerationInstance.roomSize;
+        GetComponent<Camera>().orthographicSize = roomScale.y / 2;
     }
 
     /// <summary>
@@ -24,7 +29,7 @@ public class LockCameraToRoom : MonoBehaviour
     void Update()
     {
         Vector3 parentPosition = Player._instance.transform.position;
-        Vector3 newPosition = new Vector3(Mathf.Round(parentPosition.x / roomScale.x) * roomScale.x, Mathf.Round(parentPosition.y / roomScale.y) * roomScale.y, -10);
+        Vector3 newPosition = new Vector3(Mathf.Round(parentPosition.x / roomScale.x) * roomScale.x, Mathf.Round(parentPosition.y / roomScale.y) * roomScale.y + ((roomScale.y % 2) * (cellSize.y / 2)), -1);
         transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * speed);
     }
 }
