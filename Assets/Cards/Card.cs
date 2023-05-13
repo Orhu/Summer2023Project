@@ -9,30 +9,33 @@ namespace CardSystem
     /// A scriptable object for containing data about a card type including:
     /// - Card visuals
     /// - The cooldown of the card
-    /// - Actions - What the card does when played
+    /// - Actions - What the card does when played as a root
+    /// - Action Modifiers - What the card does when played as part of a combo
     /// - Effects - How the card effects the dungeon
     /// </summary>
     [CreateAssetMenu(fileName = "NewCard", menuName = "Cards/Card", order = 1)]
     public class Card : ScriptableObject
     {
         [Header("Mechanics")]
-        // The amount of time this card reserves the hand slot for after being played.
+        [Tooltip("The amount of time this card reserves the hand slot for after being played.")]
         public float cooldown = 1.0f;
-        // The actions that will be taken when this card is played.
-        public CardAction[] cardActions;
-        // The effects that this card will have on the dungeon while in the player's deck.
-        public CardDungeonEffect[] cardEffects;
+        [Tooltip("The actions that will be taken when this card is played as the root of a combo.")]
+        public Action[] actions;
+        [Tooltip("The how this card will modify actions when used in a combo.")]
+        public List<ActionModifier> actionModifiers;
+        [Tooltip("The effects that this card will have on the dungeon while in the actor's deck.")]
+        public DungeonEffect[] effects;
 
         [Header("Visuals")]
-        // The name of the card as shown to the player.
+        [Tooltip("The name of the card as shown to the actor.")]
         public string displayName = "Unnamed";
-        // The card specific sprite on the Actions side of the card.
+        [Tooltip("The card specific sprite on the Actions side of the card.")]
         public Sprite actionImage;
-        // The general background card sprite on the Actions side of the card.
+        [Tooltip("The general background card sprite on the Actions side of the card.")]
         public Sprite actionBackground;
-        // The card specific sprite on the Effects side of the card.
+        [Tooltip("The card specific sprite on the Effects side of the card.")]
         public Sprite effectImage;
-        // The general background card sprite on the Effects side of the card.
+        [Tooltip("The general background card sprite on the Effects side of the card.")]
         public Sprite effectBackground;
 
 
@@ -46,14 +49,14 @@ namespace CardSystem
             string description = "";
             if (!isActionSide)
             {
-                foreach (CardDungeonEffect cardEffect in cardEffects)
+                foreach (DungeonEffect cardEffect in effects)
                 {
                     description += cardEffect.GetFormattedDescription() + "\n";
                 }
             }
             else
             {
-                foreach (CardAction cardAction in cardActions)
+                foreach (Action cardAction in actions)
                 {
                     description += cardAction.GetFormattedDescription() + "\n";
                 }
@@ -62,35 +65,77 @@ namespace CardSystem
         }
 
         /// <summary>
-        /// Causes all of this cards Actions to start rendering their previews around the player.
+        /// Causes all of this cards Actions to start rendering their previews around the actor.
         /// </summary>
-        public void PreviewActions()
+        public void PreviewActions(IActor actor)
         {
-            foreach (CardAction cardAction in cardActions)
+            foreach (Action cardAction in actions)
             {
-                cardAction.Preview(Player._instance as ICardPlayer);
+                cardAction.Preview(actor);
+            }
+        }
+
+        /// <summary>
+        /// Adds stacks to all the previews of this card's actions.
+        /// </summary>
+        /// <param name="actor"> The actor previewing </param>
+        /// <param name="numStacks"> The number of stacks to apply </param>
+        public void AddStacksToPreview(IActor actor, int numStacks)
+        {
+            foreach (Action cardAction in actions)
+            {
+                cardAction.AddStacksToPreview(actor, numStacks);
+            }
+        }
+
+        /// <summary>
+        /// Applies modifiers to all the previews of this card's actions.
+        /// </summary>
+        /// <param name="actor"> The actor previewing </param>
+        /// <param name="actionModifiers"> The modifiers to apply </param>
+        public void ApplyModifiersToPreview(IActor actor, List<ActionModifier> actionModifiers)
+        {
+            foreach (Action cardAction in actions)
+            {
+                cardAction.ApplyModifiersToPreview(actor, actionModifiers);
+            }
+        }
+
+        /// <summary>
+        /// Removes modifiers from all the previews of this card's actions.
+        /// </summary>
+        /// <param name="actor"> The actor previewing </param>
+        /// <param name="actionModifiers"> The modifiers to remove </param>
+        internal void RemoveModifiersFromPreview(IActor actor, List<ActionModifier> actionModifiers)
+        {
+            foreach (Action cardAction in actions)
+            {
+                cardAction.RemoveModifiersFromPreview(actor, actionModifiers);
             }
         }
 
         /// <summary>
         /// Causes all of this cards Actions to stop rendering their previews.
         /// </summary>
-        public void CancelPreviewActions()
+        public void CancelPreviewActions(IActor actor)
         {
-            foreach (CardAction cardAction in cardActions)
+            foreach (Action cardAction in actions)
             {
-                cardAction.CancelPreview(Player._instance as ICardPlayer);
+                cardAction.CancelPreview(actor);
             }
         }
 
         /// <summary>
-        /// Plays all of the actions of this card from the player.
+        /// Plays all of the actions of this card from the actor.
         /// </summary>
-        public void PlayActions()
+        /// <param name="actor"> The actor that will be playing this action. </param>
+        /// <param name="numStacks"> The number of times action is to be played. </param>
+        /// <param name="modifiers"> The modifier affecting this action. </param>
+        public void PlayActions(IActor actor, int numStacks, List<ActionModifier> modifiers)
         {
-            foreach (CardAction cardAction in cardActions)
+            foreach (Action cardAction in actions)
             {
-                cardAction.Play(Player._instance as ICardPlayer);
+                cardAction.Play(actor, numStacks, modifiers);
             }
         }
     }

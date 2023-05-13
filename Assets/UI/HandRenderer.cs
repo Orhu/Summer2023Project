@@ -5,7 +5,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// UI element for rendering the player's current hand.
+/// UI element for rendering the actor's current hand.
 /// </summary>
 public class HandRenderer : MonoBehaviour
 {
@@ -13,12 +13,12 @@ public class HandRenderer : MonoBehaviour
     public CardRenderer cardRendererTemplate;
 
     // The card renderers that were created to display the hand.
-    private List<CardRenderer> cardRenderers = new List<CardRenderer>();
+    List<CardRenderer> cardRenderers = new List<CardRenderer>();
 
     /// <summary>
     /// Creates the card needed renderers.
     /// </summary>
-    private void Start()
+    void Start()
     {
         for (int i = 0; i < DeckManager.playerDeck.handSize; i++)
         {

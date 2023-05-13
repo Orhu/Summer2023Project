@@ -14,7 +14,7 @@ namespace CardSystem
     {
         // The card to render.
         [SerializeField]
-        private Card card;
+        Card card;
         public Card Card
         {
             set
@@ -66,11 +66,11 @@ namespace CardSystem
         
         // The links to the necessary components for rendering.
         [SerializeField]
-        private ComponentLinks links;
+        ComponentLinks links;
         // Whether to render the action side or the effect side of the card.
         [SerializeField]
-        private bool renderActionSide;
-        private bool RenderActionSide
+        bool renderActionSide;
+        bool RenderActionSide
         {
             set
             {
@@ -92,7 +92,7 @@ namespace CardSystem
         /// Struct for storing the needed component references.
         /// </summary>
         [System.Serializable]
-        private struct ComponentLinks
+        struct ComponentLinks
         {
             public TMP_Text nameTextBox;
             public TMP_Text descriptionTextBox;

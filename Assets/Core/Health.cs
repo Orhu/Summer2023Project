@@ -1,32 +1,43 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
+
+/// <summary>
+/// Add this component to make an object damageable and affectable by status effects.
+/// </summary>
 public class Health : MonoBehaviour
 {
+    [Tooltip("The Max health of this object")]
     public int MaxHealth = 5;
-    private int currentHealth;
-    public UnityEvent<float> OnDamageTaken;
-    public int CurrentHealth {
-        get { return currentHealth; } 
-        set
-        {
-            currentHealth = value;
-            
-            OnDamageTaken?.Invoke(currentHealth);
-            
-            if (value <= 0)
-            {
-                Destroy(gameObject);
-            }
-            
-        }
-    }
+    // The current health of this object
+    public int currentHealth { get; private set; }
 
-    private void Start()
+    delegate void AttackNotification(Attack attack);
+    AttackNotification onAttacked;
+
+    /// <summary>
+    /// Initializes current health.
+    /// </summary>
+    void Start()
     {
         currentHealth = MaxHealth;
+    }
+
+    /// <summary>
+    /// Receive an attack, apply status effects and kill the owner if out of health.
+    /// </summary>
+    /// <param name="attack"> The attack being received</param>
+    public void ReceiveAttack(Attack attack)
+    {
+        //TODO: Status effects
+        currentHealth -= attack.damage;
+        if (currentHealth <= 0)
+        {
+            Destroy(gameObject);
+        }
+
+        if (onAttacked != null)
+        {
+            onAttacked(attack);
+        }
     }
 }

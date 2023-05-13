@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// The player character, that handles input, movement, and animation.
+/// The actor character, that handles input, movement, and animation.
 /// </summary>
-public class Player : MonoBehaviour, ICardPlayer
+public class Player : MonoBehaviour, IActor
 {
-    // Global player singleton.
+    // Global actor singleton.
     public static Player _instance;
-    // The move speed of the player.
+    // The move speed of the actor.
     public float speed = 10.0f;
     
-    // The direction the player is tying to move.
-    private Vector2 moveDirection = Vector2.zero;
+    // The direction the actor is tying to move.
+    Vector2 moveDirection = Vector2.zero;
     // The rigid body using for collision detection.
-    private Rigidbody2D rigidBody;
+    Rigidbody2D rigidBody;
 
     /// <summary>
     /// Initializes singleton and rigid body.
     /// </summary>
-    private void Awake()
+    void Awake()
     {
         _instance = this;
         rigidBody = GetComponent<Rigidbody2D>();
@@ -42,14 +42,14 @@ public class Player : MonoBehaviour, ICardPlayer
 
         if (Input.GetButtonDown("Fire1"))
         {
-            DeckManager.playerDeck.PlayPreveiwedCards();
+            DeckManager.playerDeck.PlayPreviewedCard();
         }
     }
 
     /// <summary>
     /// Updates position.
     /// </summary>
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         rigidBody.MovePosition(rigidBody.position + moveDirection * speed * Time.fixedDeltaTime);
     }
@@ -58,7 +58,7 @@ public class Player : MonoBehaviour, ICardPlayer
     /// Gets the card preview button being pressed.
     /// </summary>
     /// <returns> The number corresponding to the current button, -1 if none pressed. </returns>
-    private static int getPressedPreviewButton()
+    static int getPressedPreviewButton()
     {
         for (int i = 1; i <= DeckManager.playerDeck.handSize; i ++)
         {
@@ -70,11 +70,11 @@ public class Player : MonoBehaviour, ICardPlayer
         return -1;
     }
 
-    #region ICardPlayerImplementation
+    #region IActor Implementation
     /// <summary>
     /// Get the transform that the action should be played from.
     /// </summary>
-    /// <returns> The player transform. </returns>
+    /// <returns> The actor transform. </returns>
     public Transform GetActionSourceTransform()
     {
         return transform;
@@ -92,7 +92,7 @@ public class Player : MonoBehaviour, ICardPlayer
 
 
     /// <summary>
-    /// Gets the collider of this player.
+    /// Gets the collider of this actor.
     /// </summary>
     /// <returns> The collider. </returns>
     public Collider2D GetCollider()

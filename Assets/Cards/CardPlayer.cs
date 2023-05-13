@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// An interface for any object that can play card actions.
 /// </summary>
-public interface ICardPlayer
+public interface IActor
 {
     /// <summary>
     /// Get the transform that the action should be played from.
@@ -20,7 +20,7 @@ public interface ICardPlayer
     public abstract Vector3 GetActionAimPosition();
 
     /// <summary>
-    /// Gets the collider of this player.
+    /// Gets the collider of this actor.
     /// </summary>
     /// <returns> The collider. </returns>
     public abstract Collider2D GetCollider();
