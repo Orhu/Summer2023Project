@@ -28,7 +28,7 @@ public class TakeDamageFromCertainProjectile : MonoBehaviour
         if (other.gameObject.CompareTag(projectileTag))
         {
             // if this is the correct projectile type, take damage
-            healthComponent.CurrentHealth -= damageOfProjectile;
+            healthComponent.currentHealth -= damageOfProjectile;
         }
     }
 }

@@ -5,7 +5,8 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     public int MaxHealth = 5;
-    int currentHealth;
+    [System.NonSerialized]
+    public int currentHealth;
 
     delegate void AttackNotification(Attack attack);
     AttackNotification onAttacked;
