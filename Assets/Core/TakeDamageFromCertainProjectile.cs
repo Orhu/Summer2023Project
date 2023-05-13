@@ -17,7 +17,7 @@ public class TakeDamageFromCertainProjectile : MonoBehaviour
         {
             healthComponent = gameObject.GetComponent<Health>();
         }
-        catch (Exception e)
+        catch
         {
             Debug.LogError("Attempting to TakeDamageFromCertainProjectile but no Health component found");
         }

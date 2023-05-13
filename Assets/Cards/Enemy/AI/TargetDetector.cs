@@ -11,7 +11,7 @@ public class TargetDetector : Detector
     private LayerMask obstaclesLayerMask, playerLayerMask;
 
     [SerializeField]
-    private bool showGizmos;
+    private bool showGizmos = false;
 
     //gizmo parameters
     private List<Transform> colliders;
@@ -28,15 +28,16 @@ public class TargetDetector : Detector
             Vector2 direction = (playerCollider.transform.position - transform.position).normalized;
             RaycastHit2D hit = 
                 Physics2D.Raycast(transform.position, direction, targetDetectionRange, obstaclesLayerMask);
-
-            //Make sure that the collider we see is on the "Player" layer
-            if (hit.collider != null && (playerLayerMask & (1 << hit.collider.gameObject.layer)) != 0)
+            
+            //Make sure we didn't hit any obstacles
+            if (hit.collider == null)
             {
                 Debug.DrawRay(transform.position, direction * targetDetectionRange, Color.magenta);
                 colliders = new List<Transform>() { playerCollider.transform };
             }
             else
             {
+                // If we hit an obstacle, we cannot see the player currently
                 colliders = null;
             }
         }
