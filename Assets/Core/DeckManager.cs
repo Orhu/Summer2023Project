@@ -35,9 +35,18 @@ public class DeckManager : MonoBehaviour
     [System.NonSerialized]
     public Dictionary<int, float> cardIndicesToCooldowns = new Dictionary<int, float>();
 
-    public delegate void deckChangedNotification();
+    public delegate void handChangedNotification();
     // Called when a card is drawn.
-    public deckChangedNotification onCardDrawn;
+    public handChangedNotification onCardDrawn;
+
+
+    public delegate void deckChangedNotification(Card card);
+
+    // Called when a card is added
+    public deckChangedNotification onCardAdded;
+
+    // Called when a card is removed
+    public deckChangedNotification onCardRemoved;
 
     /// <summary>
     /// Initializes Singleton

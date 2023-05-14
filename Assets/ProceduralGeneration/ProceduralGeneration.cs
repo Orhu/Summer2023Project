@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CardSystem;
 
 /// <summary>
 /// Generates the layout of rooms
@@ -16,7 +17,7 @@ public class ProceduralGeneration : MonoBehaviour
 
     [Tooltip("The size (in rooms) of the map")]
     [SerializeField]
-    Vector2 mapSize;
+    Vector2Int mapSize;
 
     [Tooltip("The room generation parameters")]
     [SerializeField] 
@@ -72,6 +73,8 @@ public class ProceduralGeneration : MonoBehaviour
     void Start()
     {
         roomGenerationParameters.CalcTotalWeight();
+        DeckManager.playerDeck.onCardAdded += OnCardAdded;
+        DeckManager.playerDeck.onCardRemoved += OnCardRemoved;
         Generate();
     }
 
@@ -160,12 +163,21 @@ public class ProceduralGeneration : MonoBehaviour
     }
 
     /// <summary>
-    /// Changes the room generation paramters by the added amount
+    /// Changes the room generation parameters by the added amount
     /// </summary>
-    /// <param name="addedRoomParams"> The amount to change the room generation parmaters by </param>
+    /// <param name="addedRoomParams"> The amount to change the room generation parameters by </param>
     public void AddRoomGenerationParameters(RoomGenerationParameters addedRoomParams)
     {
         roomGenerationParameters.Add(addedRoomParams);
+    }
+
+    /// <summary>
+    /// Changes the room generation parameters by the removed amount
+    /// </summary>
+    /// <param name="removedRoomParams"> The amount to change the room generation parameters by S</param>
+    public void RemoveRoomGenerationParameters(RoomGenerationParameters removedRoomParams)
+    {
+        roomGenerationParameters.Remove(removedRoomParams);
     }
 
     /// <summary>
@@ -286,6 +298,24 @@ public class ProceduralGeneration : MonoBehaviour
 
         return directionConstraint;
     }
+
+    void OnCardAdded(Card card)
+    {
+        for (int i = 0; i < card.effects.Length; i++)
+        {
+            AddRoomGenerationParameters(card.effects[i].addedRoomGenerationParameters);
+            RemoveRoomGenerationParameters(card.effects[i].removedRoomGenerationParameters);
+        }
+    }
+
+    void OnCardRemoved(Card card)
+    {
+        for (int i = 0; i < card.effects.Length; i++)
+        {
+            AddRoomGenerationParameters(card.effects[i].removedRoomGenerationParameters);
+            RemoveRoomGenerationParameters(card.effects[i].addedRoomGenerationParameters);
+        }
+    }
 }
 
 /// <summary>
@@ -295,6 +325,7 @@ public class ProceduralGeneration : MonoBehaviour
 public class RoomGenerationParameters
 {
     [Tooltip("The number of enemies that will spawn in a room")]
+    [Min(0)]
     public int numEnemies;
 
     [Tooltip("The enemies that can spawn and their weights")]
@@ -304,6 +335,9 @@ public class RoomGenerationParameters
     [System.NonSerialized]
     public float totalWeight;
 
+    /// <summary>
+    /// Recalculates the total weight of all the enemies
+    /// </summary>
     public void CalcTotalWeight()
     {
         totalWeight = 0;
@@ -314,7 +348,7 @@ public class RoomGenerationParameters
     }
 
     /// <summary>
-    /// Adds another room generation paramters to this one
+    /// Adds another room generation parameters to this one
     /// </summary>
     /// <param name="other"> The other room generation parameters </param>
     public void Add(RoomGenerationParameters other)
@@ -324,7 +358,7 @@ public class RoomGenerationParameters
         bool enemyFound = false;
         for (int i = 0; i < other.enemies.Count; i++)
         {
-            for (int j = 0; i < enemies.Count; j++)
+            for (int j = 0; j < enemies.Count; j++)
             {
                 // This may need to be changed
                 if (enemies[j].enemy == other.enemies[i].enemy)
@@ -346,10 +380,49 @@ public class RoomGenerationParameters
         }
     }
 
+    /// <summary>
+    /// Removes other room generation parameters from this one
+    /// </summary>
+    /// <param name="other"> The other room generation parameters </param>
+    public void Remove(RoomGenerationParameters other)
+    {
+        if (numEnemies - other.numEnemies < 0)
+        {
+            numEnemies = 0;
+        }
+        else
+        {
+            numEnemies -= other.numEnemies;
+        }
+
+        for (int i = 0; i < other.enemies.Count; i++)
+        {
+            for (int j = 0; j < enemies.Count; j++)
+            {
+                if (enemies[j].enemy == other.enemies[i].enemy)
+                {
+                    if (enemies[j].weight - other.enemies[i].weight <= 0)
+                    {
+                        totalWeight -= enemies[j].weight;
+                        enemies.RemoveAt(j);
+                    }
+                    else
+                    {
+                        enemies[j].weight -= other.enemies[i].weight;
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Returns a random enemy, with the likelyhood of getting any enemy weighted by the weight values
+    /// </summary>
+    /// <returns> A random enemy </returns>
     public GameObject GetRandomEnemyWeighted()
     {
         float randomPercent = Random.value;
-        Debug.Log(randomPercent);
         float percentCounter = 0;
 
         for (int i = 0; i < enemies.Count; i++)
@@ -366,10 +439,17 @@ public class RoomGenerationParameters
     }
 };
 
+/// <summary>
+/// A class that stores an enemy alongside a spawn weight
+/// </summary>
 [System.Serializable]
 public class WeightedEnemy
 {
+    [Tooltip("The enemy that can be spawned")]
     public GameObject enemy;
+
+    [Tooltip("The likelyhood of spawning the enemy (not a percent, it's out of all the weights added together)")]
+    [Min(0)]
     public float weight;
 }
 
