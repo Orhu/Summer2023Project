@@ -2,34 +2,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The target detector detects targets
+/// </summary>
 public class TargetDetector : Detector
 {
+    // radius to detect targets
     [SerializeField]
     private float targetDetectionRange = 5;
 
+    // layer masks for obstacles and player
     [SerializeField]
     private LayerMask obstaclesLayerMask, playerLayerMask;
 
+    // show gizmos?
     [SerializeField]
-    private bool showGizmos = false;
+    private bool showGizmos = true;
 
-    //gizmo parameters
+    // gizmo parameters
     private List<Transform> colliders;
 
+    /// <summary>
+    /// Detects nearby targets
+    /// </summary>
+    /// <param name="aiData">AI data structure to write to</param>
     public override void Detect(AIData aiData)
     {
-        //Find out if player is near
+        // find out if player is near
         Collider2D playerCollider = 
             Physics2D.OverlapCircle(transform.position, targetDetectionRange, playerLayerMask);
 
+        // is there a player nearby?
         if (playerCollider != null)
         {
-            //Check if you see the player
+            // check if you see the player
             Vector2 direction = (playerCollider.transform.position - transform.position).normalized;
             RaycastHit2D hit = 
                 Physics2D.Raycast(transform.position, direction, targetDetectionRange, obstaclesLayerMask);
             
-            //Make sure we didn't hit any obstacles
+            // make sure we didn't hit any obstacles
             if (hit.collider == null)
             {
                 Debug.DrawRay(transform.position, direction * targetDetectionRange, Color.magenta);
@@ -37,13 +48,13 @@ public class TargetDetector : Detector
             }
             else
             {
-                // If we hit an obstacle, we cannot see the player currently
+                // if we hit an obstacle, we cannot see the player currently
                 colliders = null;
             }
         }
         else
         {
-            //Enemy doesn't see the player
+            // we can't see the player
             colliders = null;
         }
         aiData.targets = colliders;
