@@ -2,19 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The obstacle detector detects obstacles
+/// </summary>
 public class ObstacleDetector : Detector
 {
+    // radius to detect obstacles
     [SerializeField]
     private float detectionRadius = 2;
 
+    // layer mask that has obstacles on it
     [SerializeField]
     private LayerMask obstacleLayerMask;
-
+    
+    // show gizmos?
     [SerializeField]
     private bool showGizmos = true;
 
+    // tracks colliders
     Collider2D[] colliders;
 
+    /// <summary>
+    /// Detects nearby obstacles
+    /// </summary>
+    /// <param name="aiData">AI data structure to write to</param>
     public override void Detect(AIData aiData)
     {
         colliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius, obstacleLayerMask);
