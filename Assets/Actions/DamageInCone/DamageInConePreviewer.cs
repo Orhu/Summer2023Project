@@ -24,13 +24,13 @@ public class DamageInConePreviewer : MonoBehaviour
             filter.mesh = new Mesh();
 
             Vector3[] vertices = new Vector3[Resolution + 1];
-            float arcWidth = Mathf.Clamp(spawner.arcWidth * numStacks * Mathf.Deg2Rad, 0, 2f * Mathf.PI);
+            float arcWidth = Mathf.Clamp(spawner.arcWidth * (spawner.stackArcWidth ? numStacks : 1) * Mathf.Deg2Rad, 0, 2f * Mathf.PI);
             vertices[0] = new Vector3(0, 0, 0);
 
             for (int i = 0; i < Resolution; i++)
             {
                 float angle = i * (arcWidth / (Resolution - 1)) - arcWidth / 2f;
-                vertices[i + 1] = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * spawner.range * numStacks;
+                vertices[i + 1] = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle)) * spawner.range * (spawner.stackRange ? numStacks : 1);
             }
             filter.mesh.vertices = vertices;
 

@@ -13,10 +13,16 @@ namespace CardSystem.Effects
         [Header("Mechanics")]
         [Tooltip("The damage that will be dealt to anything this hits.")]
         public Attack attack;
+        [Tooltip("Whether or not the range is multiplied by the number stacks when played.")]
+        public bool stackAttack = true;
         [Tooltip("The radius of the cone.")]
         public float range = 1;
+        [Tooltip("Whether or not the range is multiplied by the number stacks when played.")]
+        public bool stackRange = true;
         [Tooltip("The arc width in degrees of the cone.")]
         public float arcWidth = 12;
+        [Tooltip("Whether or not the arc width is multiplied by the number stacks when played.")]
+        public bool stackArcWidth = true;
 
         [Header("Visuals")]
         [Tooltip("The previewer prefab to use.")]
@@ -104,15 +110,20 @@ namespace CardSystem.Effects
             }
             attack = modifiedAttack;
 
-            Collider2D[] OverlapingColliders = Physics2D.OverlapCircleAll(actor.GetActionSourceTransform().position, range);
+            Collider2D[] OverlapingColliders = Physics2D.OverlapCircleAll(actor.GetActionSourceTransform().position, range * (stackRange ? numStacks : 1));
             foreach (Collider2D OverlapingCollider in OverlapingColliders)
             {
                 Health hitHealth = OverlapingCollider.GetComponent<Health>();
                 if (hitHealth != null)
                 {
-                    if (Vector2.Dot((OverlapingCollider.transform.position - actor.GetActionSourceTransform().position), actor.GetActionSourceTransform().right) > Mathf.Cos(arcWidth / 2f))
+                    Vector2 aimDirection = (actor.GetActionAimPosition() - actor.GetActionSourceTransform().position).normalized;
+                    Vector2 overlapDirection = (OverlapingCollider.transform.position - actor.GetActionSourceTransform().position).normalized;
+                    Debug.Log(aimDirection + " dot " + overlapDirection + " = " + Vector2.Dot(aimDirection, overlapDirection));
+
+
+                    if (Vector2.Dot(aimDirection, overlapDirection) > Mathf.Cos(arcWidth * (stackArcWidth ? numStacks : 1) / 2f))
                     {
-                        hitHealth.ReceiveAttack(attack);
+                        hitHealth.ReceiveAttack(attack * (stackAttack ? numStacks : 1));
                     }
                 }
             }
