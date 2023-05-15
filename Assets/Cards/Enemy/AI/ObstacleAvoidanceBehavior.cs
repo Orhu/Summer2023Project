@@ -2,17 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// This steering behavior avoids obstacles
+/// </summary>
 public class ObstacleAvoidanceBehavior : SteeringBehavior
 {
+    // radius of the agent is used to calculate distance,
+    // collider size determines the minimum distance we can allow
     [SerializeField]
     private float radius = 2f, agentColliderSize = 0.6f;
 
+    // show gizmos?
     [SerializeField]
     private bool showGizmo = true;
 
-    //gizmo parameters
+    // gizmo parameters
     float[] dangersResultTemp = null;
 
+    /// <summary>
+    /// Based on AI data loaded with targets and obstacles,
+    /// determines interest and danger weights based on avoiding obstacles
+    /// </summary>
+    /// <param name="danger">Current danger values array</param>
+    /// <param name="interest">Current interest values array</param>
+    /// <param name="aiData">AI data object containing targets and obstacles</param>
+    /// <returns>The updated danger and interest arrays in the form (danger, interest)</returns>
     public override (float[] danger, float[] interest) GetSteering(float[] danger, float[] interest, AIData aiData)
     {
         foreach (Collider2D obstacleCollider in aiData.obstacles)
