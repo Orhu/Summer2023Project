@@ -5,35 +5,27 @@ using UnityEngine;
 namespace CardSystem.Effects
 {
     /// <summary>
-    /// A scriptable object for storing data about a projectile type.
+    /// A scriptable object for storing data about a damage cone type.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewProjectile", menuName = "Cards/Actions/Projectile")]
-    public class SpawnProjectile : Action
+    [CreateAssetMenu(fileName = "NewDamageInCone", menuName = "Cards/Actions/DamageInCone")]
+    public class DamageInCone : Action
     {
         [Header("Mechanics")]
-        [Tooltip("The damage this projectile will deal.")]
+        [Tooltip("The damage that will be dealt to anything this hits.")]
         public Attack attack;
-        [Tooltip("The radius of the projectile.")]
-        public float size = 12;
-        [Tooltip("The distance this projectile will travel.")]
-        public float range = 6;
-        [Tooltip("The speed this projectile will travel at.")]
-        public float speed = 12;
-        [Tooltip("The projectile to spawn")]
-        public Projectile projectilePrefab;
+        [Tooltip("The radius of the cone.")]
+        public float range = 1;
+        [Tooltip("The arc width in degrees of the cone.")]
+        public float arcWidth = 12;
 
         [Header("Visuals")]
         [Tooltip("The previewer prefab to use.")]
-        public ProjectilePreviewer previewerPrefab;
+        public DamageInConePreviewer previewerPrefab;
         [Tooltip("The tint of the previewer spawned.")]
         public Color previewColor;
-        [Tooltip("The projectile's sprite.")]
-        public Sprite sprite;
-        [Tooltip("The particle system to add to the projectile.")]
-        public ParticleSystem particleEffect;
 
         // Maps players to their previewers.
-        Dictionary<IActor, ProjectilePreviewer> playersToPreviewers = new Dictionary<IActor, ProjectilePreviewer>();
+        Dictionary<IActor, DamageInConePreviewer> playersToPreviewers = new Dictionary<IActor, DamageInConePreviewer>();
 
         /// <summary>
         /// Gets the formated description of this card.
@@ -50,11 +42,13 @@ namespace CardSystem.Effects
         /// <param name="actor"> The actor that will be playing this action. </param>
         public override void Preview(IActor actor)
         {
-            ProjectilePreviewer previewer = Instantiate<ProjectilePreviewer>(previewerPrefab, actor.GetActionSourceTransform());
+            DamageInConePreviewer previewer = Instantiate<DamageInConePreviewer>(previewerPrefab, actor.GetActionSourceTransform());
             previewer.actor = actor;
             previewer.spawner = this;
+            previewer.NumStacks = 1;
             playersToPreviewers.Add(actor, previewer);
         }
+
 
         /// <summary>
         /// Adds a stacks to a preview.
@@ -71,14 +65,14 @@ namespace CardSystem.Effects
         /// </summary>
         /// <param name="actor"> The actor previewing</param>
         /// <param name="actionModifiers"> The modifiers to apply </param>
-        public override void ApplyModifiersToPreview(IActor actor, List<ActionModifier> actionModifiers) {}
+        public override void ApplyModifiersToPreview(IActor actor, List<ActionModifier> actionModifiers) { }
 
         /// <summary>
         /// Removes modifiers from a preview.
         /// </summary>
         /// <param name="actor"> The actor previewing</param>
         /// <param name="actionModifiers"> The modifiers to remove </param>
-        public override void RemoveModifiersFromPreview(IActor actor, List<ActionModifier> actionModifiers) {}
+        public override void RemoveModifiersFromPreview(IActor actor, List<ActionModifier> actionModifiers) { }
 
         /// <summary>
         /// Stops rendering a preview of what this action will do.
@@ -99,10 +93,6 @@ namespace CardSystem.Effects
         public override void Play(IActor actor, int numStacks, List<ActionModifier> modifiers)
         {
             CancelPreview(actor);
-            Projectile projectile = Instantiate<Projectile>(projectilePrefab, actor.GetActionSourceTransform().position, actor.GetActionSourceTransform().rotation);
-            projectile.actor = actor;
-            projectile.spawner = this;
-            projectile.numStacks = numStacks;
 
             Attack modifiedAttack = new Attack(attack, actor.GetActionSourceTransform().gameObject);
             foreach (ActionModifier modifier in modifiers)
@@ -112,7 +102,20 @@ namespace CardSystem.Effects
                     (modifier as AttackModifier).ModifyAttack(modifiedAttack);
                 }
             }
-            projectile.attack = modifiedAttack;
+            attack = modifiedAttack;
+
+            Collider2D[] OverlapingColliders = Physics2D.OverlapCircleAll(actor.GetActionSourceTransform().position, range);
+            foreach (Collider2D OverlapingCollider in OverlapingColliders)
+            {
+                Health hitHealth = OverlapingCollider.GetComponent<Health>();
+                if (hitHealth != null)
+                {
+                    if (Vector2.Dot((OverlapingCollider.transform.position - actor.GetActionSourceTransform().position), actor.GetActionSourceTransform().right) > Mathf.Cos(arcWidth / 2f))
+                    {
+                        hitHealth.ReceiveAttack(attack);
+                    }
+                }
+            }
         }
     }
 }
