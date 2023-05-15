@@ -13,12 +13,20 @@ namespace CardSystem.Effects
         [Header("Mechanics")]
         [Tooltip("The damage this projectile will deal.")]
         public Attack attack;
+        [Tooltip("Whether or not the range is multiplied by the number stacks when played.")]
+        public bool stackAttack = true;
         [Tooltip("The radius of the projectile.")]
         public float size = 12;
+        [Tooltip("Whether or not the size is multiplied by the number stacks when played.")]
+        public bool stackSize = true;
         [Tooltip("The distance this projectile will travel.")]
         public float range = 6;
+        [Tooltip("Whether or not the range is multiplied by the number stacks when played.")]
+        public bool stackRange = true;
         [Tooltip("The speed this projectile will travel at.")]
         public float speed = 12;
+        [Tooltip("Whether or not the speed is multiplied by the number stacks when played.")]
+        public bool stackSpeed = true;
         [Tooltip("The projectile to spawn")]
         public Projectile projectilePrefab;
 
