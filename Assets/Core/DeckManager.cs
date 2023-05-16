@@ -17,22 +17,22 @@ public class DeckManager : MonoBehaviour
     public int handSize = 3;
 
     // The actor that plays cards from this deck.
-    [System.NonSerialized]
+    [HideInInspector]
     public IActor actor;
     // The cards in the draw pile.
-    [System.NonSerialized]
+    [HideInInspector]
     public List<Card> drawableCards;
     // The cards in hand.
-    [System.NonSerialized]
+    [HideInInspector]
     public List<Card> inHandCards = new List<Card>();
     // The cards in the discard pile.
-    [System.NonSerialized]
+    [HideInInspector]
     public List<Card> discardedCards = new List<Card>();
     // The indices in the hand of the cards currently being previewed.
-    [System.NonSerialized]
+    [HideInInspector]
     public List<int> previewedCardIndices = new List<int>();
     // The indices of the cards on cooldown mapped to the time remaining on the cooldown.
-    [System.NonSerialized]
+    [HideInInspector]
     public Dictionary<int, float> cardIndicesToCooldowns = new Dictionary<int, float>();
 
     public delegate void handChangedNotification();
@@ -61,7 +61,7 @@ public class DeckManager : MonoBehaviour
         if (playerDeck == null)
         {
             playerDeck = this;
-            playerDeck.actor = Player._instance;
+            playerDeck.actor = GameObject.FindGameObjectWithTag("Player").GetComponent<Agent>();
             DontDestroyOnLoad(gameObject);
         }
         else

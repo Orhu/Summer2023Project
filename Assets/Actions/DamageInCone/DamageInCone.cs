@@ -114,7 +114,7 @@ namespace CardSystem.Effects
             foreach (Collider2D OverlapingCollider in OverlapingColliders)
             {
                 Health hitHealth = OverlapingCollider.GetComponent<Health>();
-                if (hitHealth != null)
+                if (hitHealth != null && OverlapingCollider.gameObject != actor.GetActionSourceTransform().gameObject)
                 {
                     Vector2 aimDirection = (actor.GetActionAimPosition() - actor.GetActionSourceTransform().position).normalized;
                     Vector2 overlapDirection = (OverlapingCollider.transform.position - actor.GetActionSourceTransform().position).normalized;
