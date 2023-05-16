@@ -201,7 +201,7 @@ public class Room : MonoBehaviour
     /// <param name="collision"> The collider that entered the trigger </param>
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject == Player._instance.gameObject)
+        if (collision.gameObject.CompareTag("Player"))
         {
             GetComponent<TilemapRenderer>().enabled = true;
             GenerateRoom();
@@ -210,7 +210,7 @@ public class Room : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject == Player._instance.gameObject)
+        if (collision.gameObject.CompareTag("Player"))
         {
             GetComponent<TilemapRenderer>().enabled = false;
         }

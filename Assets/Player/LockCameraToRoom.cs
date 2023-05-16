@@ -17,10 +17,14 @@ public class LockCameraToRoom : MonoBehaviour
 
     // The height of the camera
     float height;
+    
+    // player
+    GameObject player;
 
     // Gets the room scale
     void Start()
     {
+       player = GameObject.FindGameObjectWithTag("Player");
         cellSize = ProceduralGeneration.proceduralGenerationInstance.cellSize;
         roomScale = cellSize * ProceduralGeneration.proceduralGenerationInstance.roomSize;
         if (roomScale.y > roomScale.x * (1 / GetComponent<Camera>().aspect))
@@ -40,8 +44,8 @@ public class LockCameraToRoom : MonoBehaviour
     /// </summary>
     void Update()
     {
-        Vector3 parentPosition = Player._instance.transform.position;
-        Vector3 newPosition = new Vector3(Mathf.Round(parentPosition.x / roomScale.x) * roomScale.x + ((roomScale.x % 2) * (cellSize.y / 2)), Mathf.Round(parentPosition.y / roomScale.y) * roomScale.y + ((roomScale.y % 2) * (cellSize.y / 2)), -1);
+        var playerPos = player.transform.position; 
+        Vector3 newPosition = new Vector3(Mathf.Round(playerPos.x / roomScale.x) * roomScale.x + ((roomScale.x % 2) * (cellSize.y / 2)), Mathf.Round(playerPos.y / roomScale.y) * roomScale.y + ((roomScale.y % 2) * (cellSize.y / 2)), -1);
         transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * speed);
     }
 }
