@@ -207,6 +207,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3892937759945379954, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
+      propertyPath: roomGenerationParameters.enemies.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3892937759945379954, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
+      propertyPath: roomGenerationParameters.enemies.Array.data[1].weight
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 3892937759945379954, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
+      propertyPath: roomGenerationParameters.enemies.Array.data[2].weight
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3892937759945379954, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
+      propertyPath: roomGenerationParameters.enemies.Array.data[0].spawnableObject
+      value: 
+      objectReference: {fileID: 7281680880204442677, guid: 331b0dd8572779d419fe0bcfbf25be26, type: 3}
+    - target: {fileID: 3892937759945379954, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
+      propertyPath: roomGenerationParameters.enemies.Array.data[1].spawnableObject
+      value: 
+      objectReference: {fileID: 7281680880204442677, guid: 4e23275c95f66174895d66b8b766a984, type: 3}
+    - target: {fileID: 3892937759945379954, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
+      propertyPath: roomGenerationParameters.enemies.Array.data[2].spawnableObject
+      value: 
+      objectReference: {fileID: 7281680880204442677, guid: d1401cd978224864cbd82f64ce110c2a, type: 3}
     - target: {fileID: 5650873665119193763, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

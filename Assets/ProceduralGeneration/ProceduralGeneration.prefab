@@ -50,6 +50,10 @@ MonoBehaviour:
   roomGenerationParameters:
     numEnemies: 1
     enemies:
-    - enemy: {fileID: 7281680880204442677, guid: 20d5b5ba29bc9ce46ae489da32783190, type: 3}
+    - spawnableObject: {fileID: 7281680880204442677, guid: 20d5b5ba29bc9ce46ae489da32783190, type: 3}
+      weight: 0.5
+    numObstacles: 1
+    obstacles:
+    - spawnableObject: {fileID: 7137899261409682106, guid: 728c4a6b6482b404f8dda824752402a5, type: 3}
       weight: 0.5
   room: {fileID: 7719025423910255222, guid: 11a55ccec8a66d34ea3f793b7803b8b8, type: 3}

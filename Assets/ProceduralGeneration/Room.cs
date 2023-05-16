@@ -161,12 +161,37 @@ public class Room : MonoBehaviour
 
         RoomGenerationParameters roomParams = ProceduralGeneration.proceduralGenerationInstance.GetRoomGenerationParameters();
 
+        List<Vector2> spawnableLocations = new List<Vector2>();
+        for (int i = 2; i < size.x - 2; i++)
+        {
+            for (int j = 2; j < size.y - 2; j++)
+            {
+                spawnableLocations.Add(new Vector2(i, j));
+            }
+        }
+
         for (int i = 0; i < roomParams.numEnemies; i++)
         {
-            Vector2 enemyLocation = new Vector2(transform.position.x + Random.Range(-1, 1), transform.position.y + Random.Range(-1, 1));
+            int randomLocation = Random.Range(0, spawnableLocations.Count);
+            Vector2 enemyLocation = spawnableLocations[randomLocation] * cellSize - new Vector2(size.x / 2.0f, size.y / 2.0f);
+            enemyLocation.x += transform.position.x;
+            enemyLocation.y += transform.position.y;
+            spawnableLocations.RemoveAt(randomLocation);
             GameObject newEnemy = Instantiate(roomParams.GetRandomEnemyWeighted(), enemyLocation, Quaternion.identity);
             newEnemy.SetActive(true);
             newEnemy.transform.parent = transform;
+        }
+
+        for (int i = 0; i < roomParams.numObstacles; i++)
+        {
+            int randomLocation = Random.Range(0, spawnableLocations.Count);
+            Vector2 obstacleLocation = spawnableLocations[randomLocation] * cellSize - new Vector2(size.x / 2.0f, size.y / 2.0f);
+            obstacleLocation.x += transform.position.x;
+            obstacleLocation.y += transform.position.y;
+            spawnableLocations.RemoveAt(randomLocation);
+            GameObject newObstacle = Instantiate(roomParams.GetRandomObstacleWeighted(), obstacleLocation, Quaternion.identity);
+            newObstacle.SetActive(true);
+            newObstacle.transform.parent = transform;
         }
     }
 
