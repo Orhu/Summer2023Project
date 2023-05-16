@@ -26,7 +26,7 @@ public class Projectile : MonoBehaviour
     {
         rigidBody = GetComponent<Rigidbody2D>();
         CircleCollider2D collider = GetComponent<CircleCollider2D>();
-        collider.radius = spawner.size * numStacks;
+        collider.radius = spawner.size * (spawner.stackSize ? numStacks : 1);
         Physics2D.IgnoreCollision(collider, actor.GetCollider());
 
         SpriteRenderer sprite = GetComponentInChildren<SpriteRenderer>();
@@ -38,7 +38,7 @@ public class Projectile : MonoBehaviour
 
         float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
-        transform.position += transform.right * spawner.size * numStacks;
+        transform.position += transform.right * spawner.size * (spawner.stackSize ? numStacks : 1);
     }
 
     /// <summary>
@@ -46,9 +46,9 @@ public class Projectile : MonoBehaviour
     /// </summary>
     void FixedUpdate()
     {
-        distanceTraveled += Time.fixedDeltaTime * spawner.speed * numStacks;
-        rigidBody.MovePosition(transform.position + transform.right * Time.fixedDeltaTime * spawner.speed * numStacks);
-        if (distanceTraveled > spawner.range * numStacks)
+        distanceTraveled += Time.fixedDeltaTime * spawner.speed * (spawner.stackSpeed ? numStacks : 1);
+        rigidBody.MovePosition(transform.position + transform.right * Time.fixedDeltaTime * spawner.speed * (spawner.stackSpeed ? numStacks : 1));
+        if (distanceTraveled > spawner.range * (spawner.stackRange ? numStacks : 1))
         {
             Destroy(gameObject);
         }
@@ -63,7 +63,7 @@ public class Projectile : MonoBehaviour
         Health hitHealth = collision.gameObject.GetComponent<Health>();
         if (hitHealth != null)
         {
-            hitHealth.ReceiveAttack(attack);
+            hitHealth.ReceiveAttack(attack * (spawner.stackAttack ? numStacks : 1));
         }
         Destroy(gameObject);
     }
