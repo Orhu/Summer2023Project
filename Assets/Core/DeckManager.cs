@@ -99,7 +99,7 @@ public class DeckManager : MonoBehaviour
 
         for (int i = 0; i < handSize; i++)
         {
-            if (inHandCards[i] == null)
+            if (inHandCards[i] == null && drawableCards.Count > 0)
             {
                 Card drawnCard = drawableCards[drawableCards.Count - 1];
                 drawableCards.RemoveAt(drawableCards.Count - 1);
@@ -348,27 +348,42 @@ public class DeckManager : MonoBehaviour
     /// <returns> Whether or not it was successfully removed. </returns>
     public bool RemoveCard(Card card, CardLocation location)
     {
-        bool returnValue = false;
-        cards.Remove(card);
         switch(location)
         {
             case CardLocation.DrawPile:
-                returnValue = drawableCards.Remove(card);
+                if (!drawableCards.Remove(card))
+                {
+                    return false;
+                }
+
+                if (drawableCards.Count == 0)
+                {
+                    ReshuffleDrawPile();
+                }
                 onDrawPileChanged?.Invoke();
                 break;
 
             case CardLocation.Hand:
-                returnValue = inHandCards.Remove(card);
-                onHandChanged?.Invoke();
+                if (!inHandCards.Contains(card))
+                {
+                    return false;
+                }
+                inHandCards[inHandCards.IndexOf(card)] = null;
+                cardIndicesToCooldowns.Remove(inHandCards.IndexOf(card));
+                DrawCard();
                 break;
 
             case CardLocation.DiscardPile:
-                returnValue = inHandCards.Remove(card);
+                if (!discardedCards.Remove(card))
+                {
+                    return false;
+                }
                 onDiscardPileChanged?.Invoke();
                 break;
         }
 
-        return returnValue;
+        cards.Remove(card);
+        return true;
     }
 
     /// <summary>
@@ -388,6 +403,11 @@ public class DeckManager : MonoBehaviour
                 }
                 cards.Remove(drawableCards[index]);
                 drawableCards.RemoveAt(index);
+
+                if (drawableCards.Count == 0)
+                {
+                    ReshuffleDrawPile();
+                }
                 onDrawPileChanged?.Invoke();
                 break;
 
@@ -397,8 +417,8 @@ public class DeckManager : MonoBehaviour
                     return false;
                 }
                 cards.Remove(inHandCards[index]);
-                inHandCards.RemoveAt(index);
-                onHandChanged?.Invoke();
+                inHandCards[index] = null;
+                DrawCard();
                 break;
 
             case CardLocation.DiscardPile:
