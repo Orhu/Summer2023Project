@@ -94,8 +94,12 @@ namespace CardSystem.Effects
         /// <param name="actor"> The actor that will no longer be playing this action. </param>
         public override void CancelPreview(IActor actor)
         {
-            Destroy(playersToPreviewers[actor].gameObject);
-            playersToPreviewers.Remove(actor);
+            ProjectilePreviewer value;
+            if (playersToPreviewers.TryGetValue(actor, out value))
+            {
+                Destroy(value.gameObject);
+                playersToPreviewers.Remove(actor);
+            }
         }
 
         /// <summary>
