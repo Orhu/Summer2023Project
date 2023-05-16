@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2955610700603225862}
   - component: {fileID: 2591183591901039891}
   - component: {fileID: -8563880425545905597}
+  - component: {fileID: -367758208246744017}
   m_Layer: 6
   m_Name: PlayerControler
   m_TagString: Player
@@ -182,6 +183,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onDeath:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &-367758208246744017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608508398850829056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06486e8d4e6bbe445a85a96320a8c30a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2316064574484971592
 PrefabInstance:
   m_ObjectHideFlags: 0

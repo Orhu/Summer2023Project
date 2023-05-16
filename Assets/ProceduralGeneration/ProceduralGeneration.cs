@@ -78,6 +78,7 @@ public class ProceduralGeneration : MonoBehaviour
         Generate();
     }
 
+    #region Generation
     /// <summary>
     /// Generates the rooms
     /// </summary>
@@ -299,6 +300,12 @@ public class ProceduralGeneration : MonoBehaviour
         return directionConstraint;
     }
 
+    #endregion 
+
+    /// <summary>
+    /// Updates the room generation parameters when a card is added to the deck
+    /// </summary>
+    /// <param name="card"> The card that was added </param>
     void OnCardAdded(Card card)
     {
         for (int i = 0; i < card.effects.Length; i++)
@@ -308,6 +315,10 @@ public class ProceduralGeneration : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates the room generation parameters when a card is removed from the deck
+    /// </summary>
+    /// <param name="card"> The card that was removed </param>
     void OnCardRemoved(Card card)
     {
         for (int i = 0; i < card.effects.Length; i++)
@@ -315,6 +326,27 @@ public class ProceduralGeneration : MonoBehaviour
             AddRoomGenerationParameters(card.effects[i].removedRoomGenerationParameters);
             RemoveRoomGenerationParameters(card.effects[i].addedRoomGenerationParameters);
         }
+    }
+
+    /// <summary>
+    /// Destroys all the rooms that have been created
+    /// </summary>
+    void DestroyRooms()
+    {
+        foreach(Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+        transform.DetachChildren();
+    }
+
+    /// <summary>
+    /// Reloads the generation. Destroyed the previous generated rooms and generates new ones
+    /// </summary>
+    public void Reload()
+    {
+        DestroyRooms();
+        Generate();
     }
 }
 

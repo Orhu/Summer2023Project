@@ -323,6 +323,7 @@ GameObject:
   - component: {fileID: 906744405}
   - component: {fileID: 906744410}
   - component: {fileID: 5097362261395317995}
+  - component: {fileID: 2939038239829249596}
   m_Layer: 7
   m_Name: SmartEnemy
   m_TagString: Untagged
@@ -435,6 +436,21 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
         m_MethodName: set_maxValue
         m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2939038239829249596}
+        m_TargetAssemblyTypeName: Destroy, Assembly-CSharp
+        m_MethodName: OnDestroy
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -587,6 +603,18 @@ MonoBehaviour:
   acceleration: 50
   deacceleration: 100
   currentSpeed: 0
+--- !u!114 &2939038239829249596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7281680880204442677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cee7b6ce1412d7647aa5ebf11c7202be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4824836971328898898
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -594,6 +622,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7281680880204442667}
     m_Modifications:
+    - target: {fileID: 4700101517325140728, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4700101517325140728, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4824836972866494860, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
       propertyPath: m_Name
       value: HealthBar

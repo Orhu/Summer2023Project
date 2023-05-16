@@ -8,7 +8,7 @@ using UnityEngine.Events;
 public class Health : MonoBehaviour
 {
     [Tooltip("The Max health of this object")]
-    public int MaxHealth = 5;
+    public int maxHealth = 5;
     // The current health of this object
     public int currentHealth { get; private set; }
 
@@ -20,6 +20,8 @@ public class Health : MonoBehaviour
 
     public UnityEvent<float> UpdateHealthBar, SetInitialHealthBarValue;
 
+    public UnityEvent onDeath;
+
     delegate void AttackNotification(Attack attack);
     AttackNotification onAttacked;
 
@@ -28,10 +30,10 @@ public class Health : MonoBehaviour
     /// </summary>
     void Start()
     {
-        currentHealth = MaxHealth;
+        currentHealth = maxHealth;
         
         // set max health bar value, then update health bar to contain its current value
-        SetInitialHealthBarValue?.Invoke(MaxHealth);
+        SetInitialHealthBarValue?.Invoke(maxHealth);
         UpdateHealthBar?.Invoke(currentHealth);
     }
 
@@ -59,7 +61,7 @@ public class Health : MonoBehaviour
 
             if (currentHealth <= 0)
             {
-                Destroy(gameObject);
+                onDeath?.Invoke();
             }
 
             if (onAttacked != null)
@@ -67,5 +69,23 @@ public class Health : MonoBehaviour
                 onAttacked(attack);
             }
         }
+    }
+
+    /// <summary>
+    /// Increases the current health by the given amount, maxxed out at the max health
+    /// </summary>
+    /// <param name="healAmount"> The amount to heal by</param>
+    public void Heal(int healAmount)
+    {
+        if (currentHealth + healAmount > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+        else
+        {
+            currentHealth += healAmount;
+        }
+
+        UpdateHealthBar?.Invoke(currentHealth);
     }
 }
