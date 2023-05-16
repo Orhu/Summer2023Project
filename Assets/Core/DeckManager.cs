@@ -99,6 +99,11 @@ public class DeckManager : MonoBehaviour
 
         for (int i = 0; i < handSize; i++)
         {
+            if (drawableCards.Count == 0)
+            {
+                ReshuffleDrawPile();
+            }
+
             if (inHandCards[i] == null && drawableCards.Count > 0)
             {
                 Card drawnCard = drawableCards[drawableCards.Count - 1];
@@ -311,7 +316,6 @@ public class DeckManager : MonoBehaviour
                 break;
         }
 
-
         onCardAdded(card);
     }
 
@@ -383,6 +387,7 @@ public class DeckManager : MonoBehaviour
         }
 
         cards.Remove(card);
+        onCardRemoved?.Invoke(card);
         return true;
     }
 
@@ -394,6 +399,7 @@ public class DeckManager : MonoBehaviour
     /// <returns> Whether or not it was successfully removed. </returns>
     public bool RemoveCard(CardLocation location, int index)
     {
+        Card removedCard = null;
         switch (location)
         {
             case CardLocation.DrawPile:
@@ -401,7 +407,8 @@ public class DeckManager : MonoBehaviour
                 {
                     return false;
                 }
-                cards.Remove(drawableCards[index]);
+                removedCard = drawableCards[index];
+                cards.Remove(removedCard);
                 drawableCards.RemoveAt(index);
 
                 if (drawableCards.Count == 0)
@@ -416,7 +423,8 @@ public class DeckManager : MonoBehaviour
                 {
                     return false;
                 }
-                cards.Remove(inHandCards[index]);
+                removedCard = inHandCards[index];
+                cards.Remove(removedCard);
                 inHandCards[index] = null;
                 DrawCard();
                 break;
@@ -426,12 +434,14 @@ public class DeckManager : MonoBehaviour
                 {
                     return false;
                 }
-                cards.Remove(discardedCards[index]);
+                removedCard = inHandCards[index];
+                cards.Remove(removedCard);
                 discardedCards.RemoveAt(index);
                 onDiscardPileChanged?.Invoke();
                 break;
         }
 
+        onCardRemoved?.Invoke(removedCard);
         return true;
     }
 
