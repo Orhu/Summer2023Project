@@ -12,5 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e38f078f8887ee4586de1b4da938ca2, type: 3}
   m_Name: Slash
   m_EditorClassIdentifier: 
-  description: Melee Attack for [Damage] Dmg
-  damage: 1
+  attack:
+    damage: 1
+  stackAttack: 1
+  range: 1
+  stackRange: 0
+  arcWidth: 90
+  stackArcWidth: 1
+  previewerPrefab: {fileID: 8230480903329435842, guid: 91de4170fb1794844958a9a7b549adb7, type: 3}
+  previewColor: {r: 0.27058825, g: 0.92156863, b: 1, a: 0.23529412}

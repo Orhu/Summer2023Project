@@ -26,4 +26,14 @@ public class Attack
     }
     // Status effects go here
     // Knockback goes here
+
+
+    public Attack(int damage, GameObject causer)
+    {
+        this.damage = damage;
+        this.causer = causer;
+    }
+
+    public static Attack operator *(Attack attack, int integer)
+      => new Attack(attack.damage * integer, attack.causer);
 }
