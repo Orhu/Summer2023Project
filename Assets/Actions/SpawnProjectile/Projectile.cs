@@ -25,9 +25,12 @@ public class Projectile : MonoBehaviour
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
-        CircleCollider2D collider = GetComponent<CircleCollider2D>();
-        collider.radius = spawner.size * (spawner.stackSize ? numStacks : 1);
-        Physics2D.IgnoreCollision(collider, actor.GetCollider());
+        if (actor.GetCollider() != null)
+        {
+            CircleCollider2D collider = GetComponent<CircleCollider2D>();
+            collider.radius = spawner.size * (spawner.stackSize ? numStacks : 1);
+            Physics2D.IgnoreCollision(collider, actor.GetCollider());
+        }
 
         SpriteRenderer sprite = GetComponentInChildren<SpriteRenderer>();
         sprite.sprite = spawner.sprite;
