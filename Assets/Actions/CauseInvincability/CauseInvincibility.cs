@@ -123,15 +123,31 @@ namespace CardSystem.Effects
         {
             CancelPreview(actor);
             actor.GetActionSourceTransform().GetComponent<Health>().InvincibilityTime += invincibilityTime * (stackInvincibilityTime ? numStacks : 1);
+
+            List<SpriteRenderer> sprites = new List<SpriteRenderer>();
+
             for (int i = 0; i < (stackSprites ? numStacks : 1); i++)
             {
                 SpriteRenderer spriteRenderer = new GameObject().AddComponent<SpriteRenderer>();
                 spriteRenderer.sprite = sprite;
                 spriteRenderer.sortingOrder = 1;
-                spriteRenderer.transform.localScale = new Vector3((i + 1) * stackSpriteScale, (i + 1) * stackSpriteScale, (i + 1) * stackSpriteScale);
+                spriteRenderer.transform.localScale = new Vector3(1 + i * stackSpriteScale, 1 + i * stackSpriteScale, 1 + i * stackSpriteScale);
                 spriteRenderer.transform.parent = actor.GetActionSourceTransform();
                 spriteRenderer.transform.localPosition = Vector3.zero;
                 spriteRenderer.transform.localRotation = Quaternion.identity;
+
+                sprites.Add(spriteRenderer);
+            }
+
+            actor.GetActionSourceTransform().gameObject.GetComponent<MonoBehaviour>().StartCoroutine(DestroySprites(sprites));
+        }
+
+        private IEnumerator DestroySprites(List<SpriteRenderer> sprites)
+        {
+            foreach (SpriteRenderer sprite in sprites)
+            {
+                yield return new WaitForSeconds(invincibilityTime);
+                Destroy(sprite.gameObject);
             }
         }
     }
