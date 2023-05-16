@@ -343,7 +343,7 @@ public class ProceduralGeneration : MonoBehaviour
     /// <summary>
     /// Reloads the generation. Destroyed the previous generated rooms and generates new ones
     /// </summary>
-    public void Reload()
+    public void Regenerate()
     {
         DestroyRooms();
         Generate();
