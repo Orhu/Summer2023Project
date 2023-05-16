@@ -6,17 +6,18 @@ using UnityEngine;
 /// </summary>
 public class Agent : MonoBehaviour, IActor
 {
-    // agent mover component to allow the agent to move
+    [Tooltip("agent mover component to allow the agent to move")]
     private AgentMover agentMover;
     
-    // movement input
+    [Tooltip("movement input")]
     private Vector2 movementInput;
+    [Tooltip("movement input")]
     public Vector2 MovementInput { get => movementInput; set => movementInput = value; }
     
-    // is this agent controllable by inputs?
+    [Tooltip("is this agent controllable by inputs?")]
     [SerializeField] private bool isControllable;
     
-    // is this agent capable of selecting/using cards?
+    [Tooltip("is this agent capable of selecting/using cards?")]
     [SerializeField] private bool canPlayCards;
 
     /// <summary>
