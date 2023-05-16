@@ -35,7 +35,7 @@ public class ProjectilePreviewer : MonoBehaviour
     {
         sprite = GetComponentInChildren<SpriteRenderer>();
         sprite.color = spawner.previewColor;
-        transform.localScale = new Vector3(spawner.range * numStacks, spawner.size * 2 * numStacks, 0);
+        transform.localScale = new Vector3(spawner.range * (spawner.stackRange ? numStacks : 1), spawner.size * 2 * (spawner.stackSize ? numStacks : 1), 0);
     }
 
     /// <summary>
