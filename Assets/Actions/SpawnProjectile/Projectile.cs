@@ -10,8 +10,10 @@ public class Projectile : MonoBehaviour
 {
     // The spawner of the projectile.
     internal SpawnProjectile spawner;
+
     // The actor of the projectile.
     internal IActor actor;
+
     // The attack this will cause when it hits
     internal Attack attack;
 
@@ -50,7 +52,9 @@ public class Projectile : MonoBehaviour
     void FixedUpdate()
     {
         distanceTraveled += Time.fixedDeltaTime * spawner.speed * (spawner.stackSpeed ? numStacks : 1);
-        rigidBody.MovePosition(transform.position + transform.right * Time.fixedDeltaTime * spawner.speed * (spawner.stackSpeed ? numStacks : 1));
+        rigidBody.MovePosition(transform.position +
+                               transform.right * (Time.fixedDeltaTime * spawner.speed *
+                                                  (spawner.stackSpeed ? numStacks : 1)));
         if (distanceTraveled > spawner.range * (spawner.stackRange ? numStacks : 1))
         {
             Destroy(gameObject);
@@ -68,6 +72,7 @@ public class Projectile : MonoBehaviour
         {
             hitHealth.ReceiveAttack(attack * (spawner.stackAttack ? numStacks : 1));
         }
+
         Destroy(gameObject);
     }
 }
