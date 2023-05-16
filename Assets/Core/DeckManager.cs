@@ -36,8 +36,12 @@ public class DeckManager : MonoBehaviour
     public Dictionary<int, float> cardIndicesToCooldowns = new Dictionary<int, float>();
 
     public delegate void handChangedNotification();
-    // Called when a card is drawn.
-    public handChangedNotification onCardDrawn;
+    // Called when the draw pile changes.
+    public handChangedNotification onDrawPileChanged;
+    // Called when the hand changes.
+    public handChangedNotification onHandChanged;
+    // Called when the discard pile changes.
+    public handChangedNotification onDiscardPileChanged;
 
 
     public delegate void deckChangedNotification(Card card);
@@ -48,6 +52,7 @@ public class DeckManager : MonoBehaviour
     // Called when a card is removed
     public deckChangedNotification onCardRemoved;
 
+    #region Initialization
     /// <summary>
     /// Initializes Singleton
     /// </summary>
@@ -72,11 +77,77 @@ public class DeckManager : MonoBehaviour
     {
         drawableCards = new List<Card>(cards);
 
+        ReshuffleDrawPile();
         for (int i = 0; i < handSize; i++)
         {
             DrawCard();
         }
     }
+    #endregion
+
+    #region Card Draw
+    /// <summary>
+    /// Fills the first empty spot in the actor's hand with a card from the draw pile.
+    /// </summary>
+    /// <returns> Whether or not an empty spot was found. </returns>
+    bool DrawCard()
+    {
+        while (inHandCards.Count < handSize)
+        {
+            inHandCards.Add(null);
+        }
+
+        for (int i = 0; i < handSize; i++)
+        {
+            if (inHandCards[i] == null)
+            {
+                Card drawnCard = drawableCards[drawableCards.Count - 1];
+                drawableCards.RemoveAt(drawableCards.Count - 1);
+                inHandCards[i] = drawnCard;
+
+                if (drawableCards.Count == 0)
+                {
+                    ReshuffleDrawPile();
+                }
+
+                onDrawPileChanged?.Invoke();
+                onHandChanged?.Invoke();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void DiscardCard(int handIndex)
+    {
+        discardedCards.Add(inHandCards[handIndex]);
+        inHandCards[handIndex] = null;
+        onDiscardPileChanged?.Invoke();
+        DrawCard();
+    }
+
+    /// <summary>
+    /// Moves all cards from the discard pile to the draw pile and shuffles.
+    /// </summary>
+    public void ReshuffleDrawPile()
+    {
+        while (drawableCards.Count > 0)
+        {
+            discardedCards.Add(drawableCards[drawableCards.Count - 1]);
+            drawableCards.RemoveAt(drawableCards.Count - 1);
+        }
+
+        while (discardedCards.Count > 0)
+        {
+            int index = Random.Range(0, discardedCards.Count);
+            drawableCards.Add(discardedCards[index]);
+            discardedCards.RemoveAt(index);
+        }
+
+        onDiscardPileChanged?.Invoke();
+        onDrawPileChanged?.Invoke();
+    }
+
 
     /// <summary>
     /// Updates all cooldowns and draws new cards when needed.
@@ -91,6 +162,7 @@ public class DeckManager : MonoBehaviour
                 cardIndicesToCooldowns.Remove(cardIndexToCooldown.Key);
                 discardedCards.Add(inHandCards[cardIndexToCooldown.Key]);
                 inHandCards[cardIndexToCooldown.Key] = null;
+                onDiscardPileChanged?.Invoke();
                 DrawCard();
             }
             else
@@ -99,25 +171,9 @@ public class DeckManager : MonoBehaviour
             }
         }
     }
+    #endregion
 
-    /// <summary>
-    /// Moves all cards from the discard pile to the draw pile and shuffles.
-    /// </summary>
-    public void ReshuffleDrawPile()
-    {
-        while (drawableCards.Count > 0)
-        {
-            discardedCards.Add(drawableCards[drawableCards.Count - 1]);
-            drawableCards.RemoveAt(drawableCards.Count - 1);
-        }
-        while(discardedCards.Count > 0)
-        {
-            int index = Random.Range(0, discardedCards.Count);
-            drawableCards.Add(discardedCards[index]);
-            discardedCards.RemoveAt(index);
-        }
-    }
-
+    #region Playing & Previewing
     /// <summary>
     /// Toggles the preview for the a card.
     /// </summary>
@@ -225,35 +281,158 @@ public class DeckManager : MonoBehaviour
 
         previewedCardIndices.Clear();
     }
+    #endregion
+
+    #region Deck Modifications
+    /// <summary>
+    /// Adds a card to the deck
+    /// </summary>
+    /// <param name="card"> The card to add. </param>
+    /// <param name="addLocation"> The place to add the card. </param>
+    public void AddCard(Card card, AddCardLocation addLocation)
+    {
+        cards.Add(card);
+
+        switch (addLocation)
+        {
+            case AddCardLocation.BottomOfDrawPile:
+                drawableCards.Insert(0, card);
+                onDrawPileChanged?.Invoke();
+                break;
+
+            case AddCardLocation.TopOfDrawPile:
+                drawableCards.Add(card);
+                onDrawPileChanged?.Invoke();
+                break;
+
+            case AddCardLocation.DiscardPile:
+                discardedCards.Add(card);
+                onDrawPileChanged?.Invoke();
+                break;
+        }
+
+
+        onCardAdded(card);
+    }
 
     /// <summary>
-    /// Fills the first empty spot in the actor's hand with a card from the draw pile.
+    /// Removes a card from the deck.
     /// </summary>
-    /// <returns> Whether or not an empty spot was found. </returns>
-    bool DrawCard()
+    /// <param name="card"> The card to remove </param>
+    /// <returns> Whether or not it was successfully removed. </returns>
+    public bool RemoveCard(Card card)
     {
-        while (inHandCards.Count < handSize)
+        if (RemoveCard(card, CardLocation.DiscardPile))
         {
-            inHandCards.Add(null);
+            return true;
         }
 
-        for (int i = 0; i < handSize; i++)
+        if (RemoveCard(card, CardLocation.DrawPile))
         {
-            if (inHandCards[i] == null)
-            {
-                Card drawnCard = drawableCards[drawableCards.Count - 1];
-                drawableCards.RemoveAt(drawableCards.Count - 1);
-                inHandCards[i] = drawnCard;
-
-                if (drawableCards.Count == 0)
-                {
-                    ReshuffleDrawPile();
-                }
-
-                onCardDrawn();
-                return true;
-            }
+            return true;
         }
+
+        if (RemoveCard(card, CardLocation.Hand))
+        {
+            return true;
+        }
+
         return false;
     }
+
+    /// <summary>
+    /// Removes a card from the deck.
+    /// </summary>
+    /// <param name="card"> The card to remove. </param>
+    /// <param name="location"> The place in the deck to remove it from. </param>
+    /// <returns> Whether or not it was successfully removed. </returns>
+    public bool RemoveCard(Card card, CardLocation location)
+    {
+        bool returnValue = false;
+        cards.Remove(card);
+        switch(location)
+        {
+            case CardLocation.DrawPile:
+                returnValue = drawableCards.Remove(card);
+                onDrawPileChanged?.Invoke();
+                break;
+
+            case CardLocation.Hand:
+                returnValue = inHandCards.Remove(card);
+                onHandChanged?.Invoke();
+                break;
+
+            case CardLocation.DiscardPile:
+                returnValue = inHandCards.Remove(card);
+                onDiscardPileChanged?.Invoke();
+                break;
+        }
+
+        return returnValue;
+    }
+
+    /// <summary>
+    /// Removes a card from the deck.
+    /// </summary>
+    /// <param name="location"> The place in the deck to remove the card from. </param>
+    /// <param name="index"> The index of the card to remove. </param>
+    /// <returns> Whether or not it was successfully removed. </returns>
+    public bool RemoveCard(CardLocation location, int index)
+    {
+        switch (location)
+        {
+            case CardLocation.DrawPile:
+                if (index >= drawableCards.Count)
+                {
+                    return false;
+                }
+                cards.Remove(drawableCards[index]);
+                drawableCards.RemoveAt(index);
+                onDrawPileChanged?.Invoke();
+                break;
+
+            case CardLocation.Hand:
+                if (index >= inHandCards.Count)
+                {
+                    return false;
+                }
+                cards.Remove(inHandCards[index]);
+                inHandCards.RemoveAt(index);
+                onHandChanged?.Invoke();
+                break;
+
+            case CardLocation.DiscardPile:
+                if (index >= discardedCards.Count)
+                {
+                    return false;
+                }
+                cards.Remove(discardedCards[index]);
+                discardedCards.RemoveAt(index);
+                onDiscardPileChanged?.Invoke();
+                break;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Used to determine where to add a card to the deck.
+    /// </summary>
+    public enum AddCardLocation
+    {
+        BottomOfDrawPile,
+        TopOfDrawPile,
+        DiscardPile
+    }
+
+    /// <summary>
+    /// Which pile a card is in.
+    /// </summary>
+    public enum CardLocation
+    {
+        DrawPile,
+        Hand,
+        DiscardPile
+    }
+    #endregion
 }

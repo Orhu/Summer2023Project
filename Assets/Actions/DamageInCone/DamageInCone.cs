@@ -118,8 +118,6 @@ namespace CardSystem.Effects
                 {
                     Vector2 aimDirection = (actor.GetActionAimPosition() - actor.GetActionSourceTransform().position).normalized;
                     Vector2 overlapDirection = (OverlapingCollider.transform.position - actor.GetActionSourceTransform().position).normalized;
-                    Debug.Log(aimDirection + " dot " + overlapDirection + " = " + Vector2.Dot(aimDirection, overlapDirection));
-
 
                     if (Vector2.Dot(aimDirection, overlapDirection) > Mathf.Cos(arcWidth * (stackArcWidth ? numStacks : 1) / 2f))
                     {
