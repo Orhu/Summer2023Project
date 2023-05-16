@@ -100,18 +100,20 @@ public class ProceduralGeneration : MonoBehaviour
         roomGrid[(int)startPos.x][(int)startPos.y].direction = Direction.Right | Direction.Left | Direction.Up | Direction.Down;
         roomGrid[(int)startPos.x][(int)startPos.y].visited = true;
         Vector2 startLocation;
-        startLocation.x = (startPos.x - mapSize.x / 2 + ((mapSize.x % 2) * (float) 1.0/2)) * roomSize.x * cellSize.x;
-        startLocation.y = (startPos.y - mapSize.y / 2 + ((mapSize.y % 2) * (float) 1.0/2)) * roomSize.y * cellSize.y;
+        startLocation.x = (startPos.x - mapSize.x / 2 + ((0) * 1.0f/2)) * roomSize.x * cellSize.x;
+        startLocation.y = (startPos.y - mapSize.y / 2 + ((0) * 1.0f/2)) * roomSize.y * cellSize.y;
         CreateRoom(startLocation, roomGrid[startPos.x][startPos.y].direction);
 
         Queue<RoomGridCell> cellsToGenerate = new Queue<RoomGridCell>();
         List<RoomGridCell> initialNeighbors = GetUnvisitedNeighbors(startPos);
-        
+
         for (int i = 0; i < initialNeighbors.Count; i++)
         {
             initialNeighbors[i].visited = true;
             cellsToGenerate.Enqueue(initialNeighbors[i]);
         }
+
+        Room lastGeneratedRoom = null;
 
         while (cellsToGenerate.Count != 0)
         {
@@ -122,9 +124,9 @@ public class ProceduralGeneration : MonoBehaviour
             Direction invertedMustNotHave = (Direction)15 ^ directionConstraint.mustNotHave;
             direction = direction & invertedMustNotHave;
             Vector2 location;
-            location.x = (currentCell.location.x - mapSize.x / 2 + ((mapSize.x % 2) * (float)1.0 / 2)) * roomSize.x * cellSize.x;
-            location.y = (currentCell.location.y - mapSize.y / 2 + ((mapSize.y % 2) * (float)1.0 / 2)) * roomSize.y * cellSize.y;
-            CreateRoom(location, direction);
+            location.x = (currentCell.location.x - mapSize.x / 2 + ((0) * 1.0f / 2)) * roomSize.x * cellSize.x;
+            location.y = (currentCell.location.y - mapSize.y / 2 + ((0) * 1.0f / 2)) * roomSize.y * cellSize.y;
+            lastGeneratedRoom = CreateRoom(location, direction);
             currentCell.direction = direction;
 
             cellsToGenerate.Dequeue();
@@ -134,7 +136,10 @@ public class ProceduralGeneration : MonoBehaviour
                 newNeighbors[i].visited = true;
                 cellsToGenerate.Enqueue(newNeighbors[i]);
             }
+
         }
+
+        lastGeneratedRoom.exitRoom = true;
     }
 
     /// <summary>
@@ -142,7 +147,10 @@ public class ProceduralGeneration : MonoBehaviour
     /// </summary>
     /// <param name="location"> The location of the new room </param>
     /// <param name="direction"> The direction of the new room </param>
-    void CreateRoom(Vector2 location, Direction direction)
+    /// 
+
+    ///
+    Room CreateRoom(Vector2 location, Direction direction)
     {
         GameObject newRoom = Instantiate(room, location, Quaternion.identity);
         newRoom.transform.parent = this.transform;
@@ -151,6 +159,7 @@ public class ProceduralGeneration : MonoBehaviour
         newRoom.GetComponent<Room>().cellSize = cellSize;
         newRoom.GetComponent<Room>().directions = direction;
         newRoom.SetActive(true);
+        return newRoom.GetComponent<Room>();
     }
 
     /// <summary>
@@ -345,6 +354,9 @@ public class RoomGenerationParameters
     // All the weights of the obstacles added together
     [System.NonSerialized]
     public float totalObstacleWeight;
+
+    [Tooltip("The object that appears in the exit room idk")]
+    public GameObject exitRoomObject;
 
     /// <summary>
     /// Recalculates the total weight of the enemies and obstacles

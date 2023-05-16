@@ -216,6 +216,22 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3892937759945379954, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
+      propertyPath: mapSize.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3892937759945379954, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
+      propertyPath: mapSize.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3892937759945379954, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
+      propertyPath: roomSize.x
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 3892937759945379954, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
+      propertyPath: roomSize.y
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 3892937759945379954, guid: 2b87e2d6c0d7eca468a07b20c02e90ac, type: 3}
       propertyPath: roomGenerationParameters.enemies.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -353,6 +369,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 734fff48dc296a14eb49fb47a2d8c09c, type: 2}
   - {fileID: 11400000, guid: ffb6784d1efa03946b8b3e5ca5c41d1c, type: 2}
   handSize: 3
+  drawableCards: []
+  inHandCards: []
+  discardedCards: []
+  previewedCardIndices: 
 --- !u!1 &1754814198
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,7 +10,6 @@ public class Room : MonoBehaviour
 {
     // TODO: change this to actually use art, also make it so collider maps only generate for walls or whatever
     [Tooltip("The tile to use to create the walls")]
-    [SerializeField] 
     public TileBase tile;
 
     // The dimensions of this room
@@ -19,11 +18,11 @@ public class Room : MonoBehaviour
 
     // The size of the tiles
     // TODO: Actually implement this
-    [System.NonSerialized]
+    [HideInInspector]
     public Vector2 cellSize = new Vector2(1, 1);
 
     // The directions that this room has doors in
-    [System.NonSerialized]
+    [HideInInspector]
     public Direction directions;
 
     // The tilemap of this room; defines the shape of this room.
@@ -34,6 +33,10 @@ public class Room : MonoBehaviour
 
     // Whether or not this room has been generated
     bool generated = false;
+
+    // Whether or not this room is the exit room
+    [HideInInspector]
+    public bool exitRoom = false;
 
     /// <summary>
     /// Initializes the collision and the tilemap
@@ -161,11 +164,38 @@ public class Room : MonoBehaviour
 
         RoomGenerationParameters roomParams = ProceduralGeneration.proceduralGenerationInstance.GetRoomGenerationParameters();
 
-        List<Vector2> spawnableLocations = new List<Vector2>();
-        for (int i = 2; i < size.x - 2; i++)
+        if (exitRoom)
         {
-            for (int j = 2; j < size.y - 2; j++)
+            Vector2 offset = -new Vector2(size.x / 2 - 0.5f, size.y / 2 - 0.5f);
+            Vector2 location = (new Vector2(size.x / 2, size.y / 2) + offset) * cellSize;
+            location.x += transform.position.x;
+            location.y += transform.position.y;
+            GameObject exitObject = Instantiate(roomParams.exitRoomObject, location, Quaternion.identity);
+            exitObject.SetActive(true);
+            return;
+        }
+
+        List<Vector2> spawnableLocations = new List<Vector2>();
+        for (int i = 1; i < size.x - 1; i++)
+        {
+            for (int j = 1; j < size.y - 1; j++)
             {
+                if ((directions & Direction.Right) != Direction.None && ShouldBeDoor(new Vector2Int(i + 1, j)))
+                {
+                    continue;
+                }
+                if ((directions & Direction.Up) != Direction.None && ShouldBeDoor(new Vector2Int(i, j + 1)))
+                {
+                    continue;
+                }
+                if ((directions & Direction.Left) != Direction.None && ShouldBeDoor(new Vector2Int(i - 1, j)))
+                {
+                    continue;
+                }
+                if ((directions & Direction.Down) != Direction.None && ShouldBeDoor(new Vector2Int(i, j - 1)))
+                {
+                    continue;
+                }
                 spawnableLocations.Add(new Vector2(i, j));
             }
         }
@@ -173,7 +203,8 @@ public class Room : MonoBehaviour
         for (int i = 0; i < roomParams.numEnemies; i++)
         {
             int randomLocation = Random.Range(0, spawnableLocations.Count);
-            Vector2 enemyLocation = spawnableLocations[randomLocation] * cellSize - new Vector2(size.x / 2.0f, size.y / 2.0f);
+            Vector2 offset = -new Vector2(size.x / 2 - 0.5f, size.y / 2 - 0.5f);
+            Vector2 enemyLocation = (spawnableLocations[randomLocation] + offset) * cellSize;
             enemyLocation.x += transform.position.x;
             enemyLocation.y += transform.position.y;
             spawnableLocations.RemoveAt(randomLocation);
@@ -185,7 +216,8 @@ public class Room : MonoBehaviour
         for (int i = 0; i < roomParams.numObstacles; i++)
         {
             int randomLocation = Random.Range(0, spawnableLocations.Count);
-            Vector2 obstacleLocation = spawnableLocations[randomLocation] * cellSize - new Vector2(size.x / 2.0f, size.y / 2.0f);
+            Vector2 offset = -new Vector2(size.x / 2 - 0.5f, size.y / 2 - 0.5f);
+            Vector2 obstacleLocation = (spawnableLocations[randomLocation] + offset) * cellSize;
             obstacleLocation.x += transform.position.x;
             obstacleLocation.y += transform.position.y;
             spawnableLocations.RemoveAt(randomLocation);
