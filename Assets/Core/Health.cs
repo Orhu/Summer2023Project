@@ -40,7 +40,7 @@ public class Health : MonoBehaviour
     /// </summary>
     void Update()
     {
-        invincibilityTime -= Time.deltaTime;
+        InvincibilityTime -= Time.deltaTime;
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ public class Health : MonoBehaviour
     /// <param name="attack"> The attack being received</param>
     public void ReceiveAttack(Attack attack)
     {
-        if (invincibilityTime == 0)
+        if (InvincibilityTime == 0)
         {
             //TODO: Status effects
             currentHealth -= attack.damage;
