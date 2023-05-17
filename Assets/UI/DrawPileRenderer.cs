@@ -25,7 +25,7 @@ public class DrawPileRenderer : MonoBehaviour
         {
             cardRenderers.Add(Instantiate(cardRendererTemplate.gameObject, transform).GetComponent<CardRenderer>());
         }
-        DeckManager.playerDeck.onCardDrawn += OnCardDrawn;
+        DeckManager.playerDeck.onDrawPileChanged += OnCardDrawn;
     }
 
     /// <summary>
