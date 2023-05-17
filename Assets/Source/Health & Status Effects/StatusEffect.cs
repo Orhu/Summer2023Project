@@ -8,15 +8,25 @@ public abstract class StatusEffect : ScriptableObject
     [Tooltip("The Duration this status effect will be applied for")]
     [Min(0.0166666667f)]
     private float duration;
-    public float Duration { get { return duration; } set { duration = Mathf.Max(value, 0); } }
-    [field: SerializeField]
-    public virtual int Stacks { get; private set; }
+    public float Duration 
+    { 
+        get { return duration; } 
+        set {
+            duration = Mathf.Max(value, 0);
+            if (duration == 0)
+            {
+                Destroy(this);
+            }
+        }
+    }
+
+    public virtual int Stacks { get; protected set; } = 1;
 
     protected GameObject gameObject;
 
-    public abstract StatusEffect Instantiate(GameObject gameObject);
+    internal abstract StatusEffect Instantiate(GameObject gameObject);
 
-    public virtual bool Stack(StatusEffect other)
+    internal virtual bool Stack(StatusEffect other)
     {
         if (other.GetType() != GetType())
         {
@@ -27,5 +37,8 @@ public abstract class StatusEffect : ScriptableObject
         return true;
     }
 
-    public virtual void Update() { }
+    internal virtual void Update() 
+    {
+        Duration -= Time.deltaTime;
+    }
 }

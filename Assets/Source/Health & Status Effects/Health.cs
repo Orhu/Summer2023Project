@@ -46,9 +46,15 @@ public class Health : MonoBehaviour
     void Update()
     {
         InvincibilityTime -= Time.deltaTime;
-        foreach (StatusEffect statusEffect in statusEffects)
+        for (int i = 0; i < statusEffects.Count; i++)
         {
-            statusEffect.Update();
+            if (statusEffects[i] == null)
+            {
+                statusEffects.RemoveAt(i);
+                i--;
+                continue;
+            }
+            statusEffects[i].Update();
         }
     }
 
@@ -76,14 +82,14 @@ public class Health : MonoBehaviour
             }
         }
 
-        //foreach (StatusEffect statusEffect in attack.statusEffects) 
-        //{
-        //    StatusEffect matchingEffect = statusEffects.Find(statusEffect.Stack);
-        //    if (matchingEffect == null)
-        //    {
-        //        statusEffects.Add(statusEffect.Instantiate(gameObject));
-        //    }
-        //}
+        foreach (StatusEffect statusEffect in attack.statusEffects)
+        {
+            StatusEffect matchingEffect = statusEffects.Find(statusEffect.Stack);
+            if (matchingEffect == null)
+            {
+                statusEffects.Add(statusEffect.Instantiate(gameObject));
+            }
+        }
     }
 
     /// <summary>
