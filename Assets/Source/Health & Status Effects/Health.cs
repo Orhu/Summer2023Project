@@ -18,7 +18,7 @@ public class Health : MonoBehaviour
     { set { invincibilityTime = Mathf.Max(value, 0); } get { return invincibilityTime; } }
 
 
-    private List<StatusEffect> statusEffects;
+    private List<StatusEffect> statusEffects = new List<StatusEffect>();
 
 
     public UnityEvent<float> onHealthChanged, onMaxHealthChanged;
@@ -76,14 +76,14 @@ public class Health : MonoBehaviour
             }
         }
 
-        foreach (StatusEffect statusEffect in attack.statusEffects) 
-        {
-            StatusEffect matchingEffect = statusEffects.Find(statusEffect.Stack);
-            if (matchingEffect == null)
-            {
-                statusEffects.Add(statusEffect.Instantiate(gameObject));
-            }
-        }
+        //foreach (StatusEffect statusEffect in attack.statusEffects) 
+        //{
+        //    StatusEffect matchingEffect = statusEffects.Find(statusEffect.Stack);
+        //    if (matchingEffect == null)
+        //    {
+        //        statusEffects.Add(statusEffect.Instantiate(gameObject));
+        //    }
+        //}
     }
 
     /// <summary>
