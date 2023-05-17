@@ -20,7 +20,7 @@ public class RemainingDrawCards : MonoBehaviour
     void Start()
     {
         textBox = GetComponent<TMP_Text>();
-        DeckManager.playerDeck.onCardDrawn += OnCardDrawn;
+        DeckManager.playerDeck.onDrawPileChanged += OnCardDrawn;
         GetComponentInParent<UnityEngine.UI.VerticalLayoutGroup>().enabled = false;
         Invoke("RefreshParent", 0.1f);
         OnCardDrawn();
