@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +9,10 @@ public class Attack
 {
     [Tooltip("The damage this attack deals")]
     public int damage;
+    [Tooltip("The status effects to apply when this is received")]
+    public List<StatusEffect> statusEffects;
+
+
     // The causer of this attack.
     [System.NonSerialized]
     public GameObject causer;
