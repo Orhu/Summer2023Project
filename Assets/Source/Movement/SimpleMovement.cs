@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimpleMovement : MonoBehaviour
+public class SimpleMovement : Movement
 {
     private Rigidbody2D rb2d;
 
@@ -12,7 +12,7 @@ public class SimpleMovement : MonoBehaviour
     [SerializeField]
     private float currentSpeed = 0;
     private Vector2 oldMovementInput;
-    public Vector2 MovementInput { get; set; }
+    public override Vector2 MovementInput { get; set; }
 
     private void Awake()
     {
@@ -31,6 +31,7 @@ public class SimpleMovement : MonoBehaviour
             currentSpeed -= deacceleration * maxSpeed * Time.deltaTime;
         }
         currentSpeed = Mathf.Clamp(currentSpeed, 0, maxSpeed);
+        requestSpeedModifications?.Invoke(out currentSpeed);
         rb2d.velocity = oldMovementInput * currentSpeed;
 
     }
