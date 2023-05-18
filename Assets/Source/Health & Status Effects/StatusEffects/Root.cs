@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Root", menuName = "Status Effects [Don't Use]/Root")]
+[CreateAssetMenu(fileName = "Root", menuName = "Status Effects [Don't Create]/Root")]
 public class Root : StatusEffect
 {
     internal override StatusEffect Instantiate(GameObject gameObject)

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Invulnerable", menuName = "Status Effects [Don't Use]/Invulnerable")]
+[CreateAssetMenu(fileName = "Invulnerable", menuName = "Status Effects [Don't Create]/Invulnerable")]
 public class Invulnerable : StatusEffect
 {
     internal override StatusEffect Instantiate(GameObject gameObject)

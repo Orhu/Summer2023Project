@@ -36,9 +36,12 @@ public abstract class StatusEffect : ScriptableObject
         instance.Duration = Duration;
         instance.gameObject = gameObject;
 
-        instance.particleEffect = Instantiate<GameObject>(particleEffect.gameObject);
-        instance.particleEffect.transform.parent = gameObject.transform;
-        instance.particleEffect.transform.localPosition = Vector3.zero;
+        if (particleEffect != null)
+        {
+            instance.particleEffect = Instantiate<GameObject>(particleEffect);
+            instance.particleEffect.transform.parent = gameObject.transform;
+            instance.particleEffect.transform.localPosition = Vector3.zero;
+        }
 
         return instance;
     }

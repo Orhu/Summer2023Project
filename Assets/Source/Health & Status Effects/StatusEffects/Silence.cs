@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Silence", menuName = "Status Effects [Don't Use]/Silence")]
+[CreateAssetMenu(fileName = "Silence", menuName = "Status Effects [Don't Create]/Silence")]
 public class Silence : StatusEffect
 {
     internal override StatusEffect Instantiate(GameObject gameObject)
