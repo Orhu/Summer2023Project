@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+[CreateAssetMenu(fileName = "Ignite", menuName = "Status Effects [Don't Use]/Ignite")]
 public class Ignite : StatusEffect
 {
     [SerializeField]

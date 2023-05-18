@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -12,21 +13,20 @@ public class Health : MonoBehaviour
     public int maxHealth = 5;
     // The current health of this object
     public int currentHealth { get; private set; }
-    // The amount of time this health will be invincible for
-    private float invincibilityTime = 0f;
-    public float InvincibilityTime
-    { set { invincibilityTime = Mathf.Max(value, 0); } get { return invincibilityTime; } }
 
-
+    // All status effects currently affecting this.
     private List<StatusEffect> statusEffects = new List<StatusEffect>();
 
-
+    // Called when health values are changed and passes the new health.
     public UnityEvent<float> onHealthChanged, onMaxHealthChanged;
-
+    // Called when this is attacked and passes the attack.
+    public UnityEvent<Attack> onAttacked;
+    // Called when this dies
     public UnityEvent onDeath;
+    // Called before this processes an attack and passes the incoming attack so can be modified.   
+    public RequestIncomingAttackModification onRequestIncomingAttackModification;
+    public delegate void RequestIncomingAttackModification(ref Attack attack);
 
-    delegate void AttackNotification(Attack attack);
-    AttackNotification onAttacked;
 
     /// <summary>
     /// Initializes current health.
@@ -41,20 +41,19 @@ public class Health : MonoBehaviour
     }
 
     /// <summary>
-    /// Update invincibility timer.
+    /// Update status effects and prunes null values
     /// </summary>
     void Update()
     {
-        InvincibilityTime -= Time.deltaTime;
         for (int i = 0; i < statusEffects.Count; i++)
         {
+            statusEffects[i]?.Update();
             if (statusEffects[i] == null)
             {
                 statusEffects.RemoveAt(i);
                 i--;
                 continue;
             }
-            statusEffects[i].Update();
         }
     }
 
@@ -64,22 +63,14 @@ public class Health : MonoBehaviour
     /// <param name="attack"> The attack being received. </param>
     public void ReceiveAttack(Attack attack)
     {
-        if (InvincibilityTime == 0)
+        onRequestIncomingAttackModification?.Invoke(ref attack);
+        currentHealth -= attack.damage;
+
+        onHealthChanged?.Invoke(currentHealth);
+        onAttacked?.Invoke(attack);
+        if (currentHealth <= 0)
         {
-            currentHealth -= attack.damage;
-
-            // take damage event is triggered
-            onHealthChanged?.Invoke(currentHealth);
-
-            if (currentHealth <= 0)
-            {
-                onDeath?.Invoke();
-            }
-
-            if (onAttacked != null)
-            {
-                onAttacked(attack);
-            }
+            onDeath?.Invoke();
         }
 
         foreach (StatusEffect statusEffect in attack.statusEffects)
@@ -98,7 +89,7 @@ public class Health : MonoBehaviour
     /// <param name="healAmount"> The amount to heal by</param>
     public void Heal(int healAmount)
     {
-        currentHealth = Mathf.Min(healAmount + currentHealth, maxHealth);
+        currentHealth = Mathf.Min(Math.Max(healAmount, 0) + currentHealth, maxHealth);
 
         onHealthChanged?.Invoke(currentHealth);
     }

@@ -32,7 +32,7 @@ public class Controller : MonoBehaviour, IActor
             movementInput.y = Input.GetAxis("Vertical");
         }
 
-        if (canPlayCards)
+        if (canPlayCards && CanAct)
         {
             int pressedPreview = getPressedPreviewButton();
             if (pressedPreview > 0)
@@ -77,8 +77,20 @@ public class Controller : MonoBehaviour, IActor
         }
         return -1;
     }
-    
+
     #region IActor Implementation
+    // Gets whether or not this actor can act.
+    IActor.CanActRequest canAct;
+    bool CanAct
+    {
+        get
+        {
+            bool shouldAct = true;
+            canAct?.Invoke(ref shouldAct);
+            return shouldAct;
+        }
+    }
+
     /// <summary>
     /// Get the transform that the action should be played from.
     /// </summary>
@@ -106,6 +118,11 @@ public class Controller : MonoBehaviour, IActor
     public Collider2D GetCollider()
     {
         return GetComponent<Collider2D>();
+    }
+
+    public ref IActor.CanActRequest GetOnRequestCanAct()
+    {
+        return ref canAct;
     }
     #endregion
 }

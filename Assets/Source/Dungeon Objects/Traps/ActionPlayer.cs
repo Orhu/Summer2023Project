@@ -18,7 +18,10 @@ public class ActionPlayer : MonoBehaviour, IActor
         while(true)
         {
             yield return new WaitForSeconds(playFrequency);
-            action.Play(this, 1, new List<ActionModifier>());
+            if (CanAct)
+            {
+                action.Play(this, 1, new List<ActionModifier>());
+            }
         }
     }
 
@@ -36,4 +39,16 @@ public class ActionPlayer : MonoBehaviour, IActor
     {
         return null;
     }
+
+    bool CanAct 
+    { 
+        get 
+        {
+            bool shouldAct = true;
+            canAct?.Invoke(ref shouldAct);
+            return shouldAct;
+        } 
+    }
+    IActor.CanActRequest canAct;
+    public ref IActor.CanActRequest GetOnRequestCanAct() { return ref canAct; }
 }

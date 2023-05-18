@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Root", menuName = "Status Effects [Don't Use]/Root")]
-public class Root : StatusEffect
+[CreateAssetMenu(fileName = "Silence", menuName = "Status Effects [Don't Use]/Silence")]
+public class Silence : StatusEffect
 {
     internal override StatusEffect Instantiate(GameObject gameObject)
     {
-        Root instance = (Root)base.Instantiate(gameObject);
+        Silence instance = (Silence)base.Instantiate(gameObject);
 
-        gameObject.GetComponent<Movement>().requestSpeedModifications += instance.PreventMovement;
+        gameObject.GetComponent<Controller>().GetOnRequestCanAct() += instance.PreventAction;
 
         return instance;
     }
@@ -25,14 +25,14 @@ public class Root : StatusEffect
         return true;
     }
 
-    void PreventMovement(out float speed)
+    private void PreventAction(ref bool CanAct)
     {
-        speed = 0;
+        CanAct = false;
     }
 
     private new void OnDestroy()
     {
         base.OnDestroy();
-        gameObject.GetComponent<Movement>().requestSpeedModifications -= PreventMovement;
+        gameObject.GetComponent<Controller>().GetOnRequestCanAct() -= PreventAction;
     }
 }
