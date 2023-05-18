@@ -3,10 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Plays any action on a regular interval.
+/// </summary>
 public class ActionPlayer : MonoBehaviour, IActor
 {
+    [Tooltip("The action to play.")]
     public Action action;
-    public float playFrequency = 1f;
+    [Tooltip("The time between playing the action.")]
+    public float playRate = 1f;
 
     void Start()
     {
@@ -17,7 +22,7 @@ public class ActionPlayer : MonoBehaviour, IActor
     {
         while(true)
         {
-            yield return new WaitForSeconds(playFrequency);
+            yield return new WaitForSeconds(playRate);
             if (CanAct)
             {
                 action.Play(this, 1, new List<ActionModifier>());
@@ -25,6 +30,7 @@ public class ActionPlayer : MonoBehaviour, IActor
         }
     }
 
+    #region IActor Implementation
     public Transform GetActionSourceTransform()
     {
         return transform;
@@ -51,4 +57,5 @@ public class ActionPlayer : MonoBehaviour, IActor
     }
     IActor.CanActRequest canAct;
     public ref IActor.CanActRequest GetOnRequestCanAct() { return ref canAct; }
+    #endregion
 }

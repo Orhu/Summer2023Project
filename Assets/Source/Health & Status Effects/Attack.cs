@@ -31,19 +31,33 @@ public class Attack
     // Status effects go here
     // Knockback goes here
 
-
+    /// <summary>
+    /// Create a new damaging attack.
+    /// </summary>
+    /// <param name="damage"> The damage it will deal. </param>
+    /// <param name="causer"> The causer of the damage </param>
     public Attack(int damage, Object causer)
     {
         this.damage = damage;
         this.causer = causer;
     }
-    public Attack(int damage, List<StatusEffect> statusEffects, Object causer)
+
+    /// <summary>
+    /// Create a new damaging attack.
+    /// </summary>
+    /// <param name="damage"> The damage it will deal. </param>
+    /// <param name="causer"> The causer of the damage </param>
+    public Attack(int damage, List<StatusEffect> statusEffects, Object causer) : this(damage, causer)
     {
-        this.damage = damage;
         this.statusEffects = statusEffects;
-        this.causer = causer;
     }
 
+    /// <summary>
+    /// Multiplies an attack so it is applied a certain number of times.
+    /// </summary>
+    /// <param name="attack"> The original attack. </param>
+    /// <param name="integer"> The number of times to apply it. </param>
+    /// <returns> The multiplied attack </returns>
     public static Attack operator *(Attack attack, int integer)
     {
         if (integer > 1)
