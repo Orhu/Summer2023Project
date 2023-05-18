@@ -13,6 +13,8 @@ public class Health : MonoBehaviour
     public int maxHealth = 5;
     // The current health of this object
     public int currentHealth { get; private set; }
+    // All status effects this is immune to.
+    public List<StatusEffect> immuneStatusEffects = new List<StatusEffect>();
 
     // All status effects currently affecting this.
     private List<StatusEffect> statusEffects = new List<StatusEffect>();
@@ -75,10 +77,13 @@ public class Health : MonoBehaviour
 
         foreach (StatusEffect statusEffect in attack.statusEffects)
         {
-            StatusEffect matchingEffect = statusEffects.Find(statusEffect.Stack);
-            if (matchingEffect == null)
+            if (!immuneStatusEffects.Contains(statusEffect))
             {
-                statusEffects.Add(statusEffect.Instantiate(gameObject));
+                StatusEffect matchingEffect = statusEffects.Find(statusEffect.Stack);
+                if (matchingEffect == null)
+                {
+                    statusEffects.Add(statusEffect.Instantiate(gameObject));
+                }
             }
         }
     }
