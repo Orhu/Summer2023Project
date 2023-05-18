@@ -8,6 +8,11 @@ public abstract class StatusEffect : ScriptableObject
     [Tooltip("The Duration this status effect will be applied for")]
     [Min(0.0166666667f)]
     private float duration;
+
+    [SerializeField]
+    protected GameObject particleEffect;
+
+
     public float Duration 
     { 
         get { return duration; } 
@@ -24,7 +29,19 @@ public abstract class StatusEffect : ScriptableObject
 
     protected GameObject gameObject;
 
-    internal abstract StatusEffect Instantiate(GameObject gameObject);
+    internal virtual StatusEffect Instantiate(GameObject gameObject)
+    {
+        StatusEffect instance = (StatusEffect)CreateInstance(GetType());
+
+        instance.Duration = Duration;
+        instance.gameObject = gameObject;
+
+        instance.particleEffect = Instantiate<GameObject>(particleEffect.gameObject);
+        instance.particleEffect.transform.parent = gameObject.transform;
+        instance.particleEffect.transform.localPosition = Vector3.zero;
+
+        return instance;
+    }
 
     internal virtual bool Stack(StatusEffect other)
     {
@@ -40,5 +57,10 @@ public abstract class StatusEffect : ScriptableObject
     internal virtual void Update() 
     {
         Duration -= Time.deltaTime;
+    }
+
+    protected void OnDestroy()
+    {
+        Destroy(particleEffect);
     }
 }

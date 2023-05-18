@@ -28,12 +28,11 @@ public class Ignite : StatusEffect
 
     internal override StatusEffect Instantiate(GameObject gameObject)
     {
-        Ignite instance = CreateInstance<Ignite>();
+        Ignite instance = (Ignite)base.Instantiate(gameObject);
 
         instance.Stacks = Stacks;
         instance.Duration = Duration;
         instance.dps = dps;
-        instance.gameObject = gameObject;
 
         return instance;
     }

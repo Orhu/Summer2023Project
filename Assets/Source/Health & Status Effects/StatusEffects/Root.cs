@@ -6,10 +6,7 @@ public class Root : StatusEffect
 {
     internal override StatusEffect Instantiate(GameObject gameObject)
     {
-        Root instance = CreateInstance<Root>();
-
-        instance.Duration = Duration;
-        instance.gameObject = gameObject;
+        Root instance = (Root)base.Instantiate(gameObject);
 
         gameObject.GetComponent<Movement>().requestSpeedModifications += instance.PreventMovement;
 
@@ -34,6 +31,7 @@ public class Root : StatusEffect
 
     private void OnDestroy()
     {
+        base.OnDestroy();
         gameObject.GetComponent<Movement>().requestSpeedModifications -= PreventMovement;
     }
 }
