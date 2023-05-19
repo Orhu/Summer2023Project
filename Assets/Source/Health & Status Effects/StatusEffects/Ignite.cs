@@ -1,15 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-
+/// <summary>
+/// A status effect the does damage over time proportional to stacks, and who's duration is reset on each stack.
+/// </summary>
 [CreateAssetMenu(fileName = "Ignite", menuName = "Status Effects [Don't Create]/Ignite")]
 public class Ignite : StatusEffect
 {
     [SerializeField]
+    [Tooltip("Damage per second per stack.")]
     float dps = 1f;
-    float timeToDamage;
 
+    // The time until the next damage tick is applied
+    float timeToDamage;
+    // The number of times this status effect has been applied.
     int stacks = 1;
     public override int Stacks
     {
@@ -22,11 +25,20 @@ public class Ignite : StatusEffect
         get { return stacks; }
     }
 
+    /// <summary>
+    /// Initialize timeToDamage
+    /// </summary>
     private void Awake()
     {
         timeToDamage = 1f / dps;
     }
 
+
+    /// <summary>
+    /// Creates a new status effect that is a copy of the caller.
+    /// </summary>
+    /// <param name="gameObject"> The object to apply the status effect.</param>
+    /// <returns> The status effect that was created. </returns>
     internal override StatusEffect Instantiate(GameObject gameObject)
     {
         Ignite instance = (Ignite)base.Instantiate(gameObject);
@@ -38,8 +50,9 @@ public class Ignite : StatusEffect
         return instance;
     }
 
-
-    // Update is called once per frame
+    /// <summary>
+    /// Causes damage over time.
+    /// </summary>
     internal override void Update()
     {
         base.Update();
@@ -49,5 +62,20 @@ public class Ignite : StatusEffect
             gameObject.GetComponent<Health>().ReceiveAttack(new Attack(1, this));
             timeToDamage += 1f / dps;
         }
+    }
+
+    /// <summary>
+    /// Stacks this effect onto another status effect.
+    /// </summary>
+    /// <param name="other"> The other particle effect to stack this onto. </param>
+    /// <returns> Whether or not this status effect was consumed by the stacking. </returns>
+    internal override bool Stack(StatusEffect other)
+    {
+        if (base.Stack(other))
+        {
+            other.Duration = Duration;
+            return true;
+        }
+        return false;
     }
 }
