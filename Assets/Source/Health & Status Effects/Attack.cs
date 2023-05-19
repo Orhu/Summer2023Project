@@ -75,4 +75,77 @@ public class Attack
 
         return new Attack(attack, attack.causer);
     }
+
+    /// <summary>
+    /// Reverses the multiplication of an attack.
+    /// </summary>
+    /// <param name="attack"> The original attack. </param>
+    /// <param name="integer"> The number of times it was applied. </param>
+    /// <returns> The divided attack </returns>
+    public static Attack operator /(Attack attack, int integer)
+    {
+        if (integer > 1)
+        {
+            List<StatusEffect> newStatusEffects = new List<StatusEffect>(attack.statusEffects.Count / integer);
+            for (int i = 0; i < newStatusEffects.Count; i++)
+            {
+                foreach (StatusEffect statusEffect in attack.statusEffects)
+                {
+                    newStatusEffects.Add(statusEffect);
+                }
+            }
+            return new Attack(attack.damage / integer, new List<StatusEffect>(newStatusEffects), attack.causer);
+        }
+
+        return new Attack(attack, attack.causer);
+    }
+
+    /// <summary>
+    /// Adds damage to an attack.
+    /// </summary>
+    /// <param name="attack"> The original attack. </param>
+    /// <param name="integer"> The damage to add. </param>
+    /// <returns> A copy of the modified attack </returns>
+    public static Attack operator +(Attack attack, int integer)
+    {
+        return new Attack(attack.damage + integer, attack.statusEffects, attack.causer);
+    }
+
+    /// <summary>
+    /// Removes damage from an attack.
+    /// </summary>
+    /// <param name="attack"> The original attack. </param>
+    /// <param name="integer"> The damage to remove. </param>
+    /// <returns> A copy of the modified attack </returns>
+    public static Attack operator -(Attack attack, int integer)
+    {
+        return new Attack(attack.damage - integer, attack.statusEffects, attack.causer);
+    }
+
+    /// <summary>
+    /// Adds status effects to an attack.
+    /// </summary>
+    /// <param name="attack"> The original attack. </param>
+    /// <param name="effects"> The status effects to add. </param>
+    /// <returns> A copy of the modified attack </returns>
+    public static Attack operator +(Attack attack, List<StatusEffect> effects)
+    {
+        effects.AddRange(attack.statusEffects);
+        return new Attack(attack.damage, effects, attack.causer);
+    }
+
+    /// <summary>
+    /// Removes status effects to an attack.
+    /// </summary>
+    /// <param name="attack"> The original attack. </param>
+    /// <param name="effects"> The status effects to remove. </param>
+    /// <returns> A copy of the modified attack </returns>
+    public static Attack operator -(Attack attack, List<StatusEffect> effects)
+    {
+        foreach (StatusEffect statusEffect in attack.statusEffects)
+        {
+            effects.Remove(statusEffect);
+        }
+        return new Attack(attack.damage, effects, attack.causer);
+    }
 }

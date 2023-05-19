@@ -105,7 +105,7 @@ namespace CardSystem.Effects
             {
                 if (modifier is AttackModifier)
                 {
-                    (modifier as AttackModifier).ModifyAttack(modifiedAttack);
+                    (modifier as AttackModifier).ModifyAttack(ref modifiedAttack);
                 }
             }
             attack = modifiedAttack;
