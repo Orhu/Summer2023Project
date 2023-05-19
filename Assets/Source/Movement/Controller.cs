@@ -6,8 +6,8 @@ using UnityEngine;
 /// </summary>
 public class Controller : MonoBehaviour, IActor
 {
-    [Tooltip("agent mover component to allow the agent to move")]
-    private SimpleMovement agentMover;
+    [Tooltip("movement component to allow the agent to move")]
+    private Movement movementComponent;
     
     [Tooltip("movement input")]
     private Vector2 movementInput;
@@ -45,8 +45,8 @@ public class Controller : MonoBehaviour, IActor
                 Deck.playerDeck.PlayPreviewedCard();
             }
         }
-        
-        agentMover.MovementInput = movementInput;
+
+        movementComponent.MovementInput = movementInput;
     }
 
     /// <summary>
@@ -57,9 +57,12 @@ public class Controller : MonoBehaviour, IActor
         // TODO attack
     }
 
+    /// <summary>
+    /// Initializes the movement component
+    /// </summary>
     private void Awake()
     {
-        agentMover = GetComponent<SimpleMovement>();
+        movementComponent = GetComponent<Movement>();
     }
     
     /// <summary>
