@@ -24,4 +24,11 @@ public interface IActor
     /// </summary>
     /// <returns> The collider. </returns>
     public abstract Collider2D GetCollider();
+
+    /// <summary>
+    /// Gets the delegate that will fetch whether this actor can act.
+    /// </summary>
+    /// <returns> A delegate with a out parameter, that allows any subscribed objects to determine whether or not this actor can act. </returns>
+    public ref CanActRequest GetOnRequestCanAct();
+    delegate void CanActRequest(ref bool canAct);
 }
