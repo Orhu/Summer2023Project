@@ -8,17 +8,36 @@ public class Controller : MonoBehaviour, IActor
 {
     [Tooltip("movement component to allow the agent to move")]
     private Movement movementComponent;
-    
+
+    [Tooltip("movement input")] private Vector2 movementInput;
+
     [Tooltip("movement input")]
-    private Vector2 movementInput;
-    [Tooltip("movement input")]
-    public Vector2 MovementInput { get => movementInput; set => movementInput = value; }
-    
-    [Tooltip("is this agent controllable by inputs?")]
-    [SerializeField] private bool isControllable;
-    
-    [Tooltip("is this agent capable of selecting/using cards?")]
-    [SerializeField] private bool canPlayCards;
+    public Vector2 MovementInput
+    {
+        get => movementInput;
+        set => movementInput = value;
+    }
+
+    [Tooltip("is this agent controllable by inputs?")] [SerializeField]
+    private bool isControllable;
+
+    [Tooltip("is this agent capable of selecting/using cards?")] [SerializeField]
+    private bool canPlayCards;
+
+    [Tooltip("Does this agent use enemy logic?")] [SerializeField]
+    private bool useEnemyLogic;
+
+    private EnemyAttacker enemyAttacker;
+    private EnemyAI enemyAI;
+
+    private void Start()
+    {
+        if (useEnemyLogic)
+        {
+            enemyAttacker = GetComponent<EnemyAttacker>();
+            enemyAI = GetComponent<EnemyAI>();
+        }
+    }
 
     /// <summary>
     /// Retrieve inputs where necessary and perform actions as needed
@@ -54,7 +73,8 @@ public class Controller : MonoBehaviour, IActor
     /// </summary>
     private void PerformAttack()
     {
-        // TODO attack
+        if (useEnemyLogic)
+            enemyAttacker.PerformAttack(this);
     }
 
     /// <summary>
@@ -64,26 +84,29 @@ public class Controller : MonoBehaviour, IActor
     {
         movementComponent = GetComponent<Movement>();
     }
-    
+
     /// <summary>
     /// Gets the card preview button being pressed.
     /// </summary>
     /// <returns> The number corresponding to the current button, -1 if none pressed. </returns>
     static int getPressedPreviewButton()
     {
-        for (int i = 1; i <= Deck.playerDeck.handSize; i ++)
+        for (int i = 1; i <= Deck.playerDeck.handSize; i++)
         {
             if (Input.GetButtonDown("PreviewCard" + i))
             {
                 return i;
             }
         }
+
         return -1;
     }
 
     #region IActor Implementation
+
     // Gets whether or not this actor can act.
     IActor.CanActRequest canAct;
+
     bool CanAct
     {
         get
@@ -110,6 +133,9 @@ public class Controller : MonoBehaviour, IActor
     /// <returns> The mouse position in world space. </returns>
     public Vector3 GetActionAimPosition()
     {
+        if (useEnemyLogic)
+            return enemyAI.GetCurrentTargetPos();
+
         return Vector3.Scale(Camera.main.ScreenToWorldPoint(Input.mousePosition), new Vector3(1, 1, 0));
     }
 
@@ -127,5 +153,6 @@ public class Controller : MonoBehaviour, IActor
     {
         return ref canAct;
     }
+
     #endregion
 }

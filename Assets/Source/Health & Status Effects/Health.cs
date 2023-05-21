@@ -60,7 +60,7 @@ public class Health : MonoBehaviour
     }
 
     /// <summary>
-    /// Receive an attack  and kill the owner if out of health.
+    /// Receive an attack and kill the owner if out of health.
     /// </summary>
     /// <param name="attack"> The attack being received. </param>
     public void ReceiveAttack(Attack attack)
