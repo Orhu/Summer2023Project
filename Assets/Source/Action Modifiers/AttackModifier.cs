@@ -3,19 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Base for anything modifier that changes attacks.
+/// An action modifier that changes the attack of an action modifier.
 /// </summary>
-public abstract class AttackModifier : ActionModifier
+[CreateAssetMenu(fileName = "NewAttackModifer", menuName = "Cards/ActionModifers/AttackModifer")]
+public class AttackModifier : ActionModifier
 {
+    [Tooltip("The damage to add to the attack")]
+    public int damageToAdd = 0;
+    [Tooltip("The status effects to add to the attack")]
+    public List<StatusEffect> statusEffectToAdd;
+    [Tooltip("The number of times the attack will be multiplied by before adding the effects of this modifier")]
+    [Min(0)]
+    public int attackMultiplier = 1;
+
     /// <summary>
     /// Modifies the given attack.
     /// </summary>
     /// <param name="attack"> The attack to modify </param>
-    public abstract void ModifyAttack(Attack attack);
-
-    /// <summary>
-    /// Unmodifies the given attack.
-    /// </summary>
-    /// <param name="attack"> The attack to unmodify </param>
-    public abstract void UnmodifyAttack(Attack attack);
+    public void ModifyAttack(ref Attack attack)
+    {
+        attack = ((attack * attackMultiplier) + damageToAdd) + statusEffectToAdd;
+    }
 }

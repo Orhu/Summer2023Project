@@ -14,6 +14,7 @@ namespace CardSystem
     /// - Effects - How the card effects the dungeon
     /// </summary>
     [CreateAssetMenu(fileName = "NewCard", menuName = "Cards/Card", order = 1)]
+    [ExecuteInEditMode]
     public class Card : ScriptableObject
     {
         [Header("Mechanics")]
@@ -62,6 +63,11 @@ namespace CardSystem
                 }
             }
             return description;
+        }
+
+        public void Awake()
+        {
+            UnityEditor.EditorGUIUtility.SetIconForObject(this, UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Content/Developer Utilities/Icons/CardIcon.png"));
         }
 
         /// <summary>
