@@ -70,8 +70,14 @@ public class LayoutGenerator : MonoBehaviour
             }
         }
 
+        // If there are more special rooms than dead ends, create more dead ends 
+        if (parameters.specialRooms.Count + 1 > deadEnds.Count)
+        {
+            deadEnds = CreateNewDeadEnds(parameters.specialRooms.Count + 1 - deadEnds.Count, deadEnds, genMap);
+        }
+
         // Decide which dead ends will be the special rooms
-        while (parameters.specialRooms.Count != 0 && deadEnds.Count > 0)
+        while (parameters.specialRooms.Count != 0 && deadEnds.Count > 1)
         {
             MapCell specialRoom = deadEnds[Random.Range(0, deadEnds.Count)];
             Destroy(specialRoom.room.gameObject);
@@ -80,7 +86,20 @@ public class LayoutGenerator : MonoBehaviour
             parameters.specialRooms.RemoveAt(0);
         }
 
-        // What do we do if we run out of dead ends?
+        // Generate the rest of the special rooms
+        while (parameters.specialRooms.Count != 0)
+        {
+            MapCell specialRoom = deadEnds[Random.Range(0, deadEnds.Count)];
+            Destroy(specialRoom.room.gameObject);
+            specialRoom.room = CreateRoom(specialRoom, parameters.specialRooms[0]);
+            deadEnds.Remove(specialRoom);
+            parameters.specialRooms.RemoveAt(0);
+        }
+
+        // Generate the boss room
+        MapCell bossRoom = deadEnds[Random.Range(0, deadEnds.Count)];
+        Destroy(bossRoom.room.gameObject);
+        bossRoom.room = CreateRoom(bossRoom, parameters.bossRoom);
     }
 
     /// <summary>
@@ -311,6 +330,44 @@ public class LayoutGenerator : MonoBehaviour
     bool IsDeadEnd(Direction direction)
     {
         return direction == Direction.Right || direction == Direction.Up || direction == Direction.Left || direction == Direction.Down;
+    }
+
+    /// <summary>
+    /// Handles an edge case where the number of dead ends is less than the number of special rooms that need to be generated. Creates
+    /// NEW dead ends, so the number of dead ends remaining will be 1 plus the numNew.
+    /// </summary>
+    /// <param name="numNew"> The number of new dead ends to make </param>
+    /// <param name="existingDeadEnds"> An list of existing dead ends to branch off of </param>
+    /// <param name="genMap"> The existing generated map </param>
+    /// <returns> The new dead ends, combined with the list of remaining old dead ends </returns>
+    List<MapCell> CreateNewDeadEnds(int numNew, List<MapCell> existingDeadEnds, MapCell[,] genMap)
+    {
+        List<MapCell> newDeadEnds = new List<MapCell>();
+        List<MapCell> possibleBranchers = existingDeadEnds;
+        int currentIndex = Random.Range(0, possibleBranchers.Count);
+        MapCell current = possibleBranchers[currentIndex];
+        possibleBranchers.RemoveAt(currentIndex);
+        while (newDeadEnds.Count < numNew + 1)
+        {
+            List<MapCell> neighbors = GetUnvisitedNeighbors(current.location, genMap);
+            if (neighbors.Count == 0)
+            {
+                if (possibleBranchers.Count > 0)
+                {
+                    currentIndex = Random.Range(0, possibleBranchers.Count);
+                    existingDeadEnds.Add(current);
+                    current = existingDeadEnds[currentIndex];
+                    existingDeadEnds.RemoveAt(currentIndex);
+                }
+                else
+                {
+                    // Be sad and break
+                    break;
+                }
+            }
+
+            existingDeadEnds.RemoveAt(currentIndex);
+        }
     }
 
     /// <summary>
