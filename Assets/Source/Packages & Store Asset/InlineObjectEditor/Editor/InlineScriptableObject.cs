@@ -21,6 +21,10 @@ namespace Skaillz.EditInline
             if (property.objectReferenceValue == null)
                 return base.GetPropertyHeight(property, label);
 
+            if (expand)
+                return base.GetPropertyHeight(property, label) * 2f;
+
+
             if (!(property.objectReferenceValue is ScriptableObject) || HasEditor(property.serializedObject.targetObject))
                 return base.GetPropertyHeight(property, label);
 
@@ -50,7 +54,7 @@ namespace Skaillz.EditInline
                 return;
             }
 
-            expand = EditorGUI.Foldout(new Rect(position.x, position.y, position.x + 10f, position.height), expand, "");
+            expand = EditorGUI.Foldout(new Rect(position.x, position.y, position.x + 10f, 18f), expand, "");
 
             if (!expand)
                 return;
@@ -61,19 +65,20 @@ namespace Skaillz.EditInline
             editor.OnInspectorGUI();
             property.serializedObject.ApplyModifiedProperties();
             EditorGUI.indentLevel --; 
-            if (GUI.Button(new Rect(position.x, position.y + 20f, position.width, 16f), "Make Unque"))
+            if (GUI.Button(new Rect(position.x, position.y + 20f, position.width, 16f), "Make Unique"))
             {
-                property.objectReferenceValue = DuplicateObject(property.objectReferenceValue, property.serializedObject.targetObject.ToString().Split(" ")[0]);
+                string duplicatePath = AssetDatabase.GetAssetPath(Selection.activeObject).Split(".")[0];
+                duplicatePath += "_" + property.objectReferenceValue.ToString().Split(" ")[0] + ".asset";
+
+                property.objectReferenceValue = DuplicateObject(property.objectReferenceValue, duplicatePath);
                 RefreshCache(property.serializedObject.targetObject);
-                //Selection.activeObject = null;
             }
         }
 
-        private Object DuplicateObject(Object objectToDuplicate, string suffix)
+        private Object DuplicateObject(Object objectToDuplicate, string filepath)
         {
             ScriptableObject duplicate = ScriptableObject.CreateInstance(objectToDuplicate.GetType());
-            string path = AssetDatabase.GetAssetPath(objectToDuplicate).Split(".")[0] + "_" + suffix + ".asset";
-            AssetDatabase.CreateAsset(duplicate, path);
+            AssetDatabase.CreateAsset(duplicate, filepath);
             AssetDatabase.SaveAssets();
             return duplicate;
         }
@@ -123,7 +128,7 @@ namespace Skaillz.EditInline
 
         public void CreateStub(Type type)
         {
-            string editorPath = "Assets/Editor";
+            string editorPath = "Assets/Source/Packages & Store Asset/InlineObjectEditor/Editor";
             string[] assets = AssetDatabase.FindAssets("EditorStubs t:MonoScript");
             string stubFilePath = null;
             if (assets.Length <= 0)

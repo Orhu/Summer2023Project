@@ -20,10 +20,13 @@ namespace CardSystem
         [Tooltip("The amount of time this card reserves the hand slot for after being played.")]
         public float cooldown = 1.0f;
         [Tooltip("The actions that will be taken when this card is played as the root of a combo.")]
+        [Skaillz.EditInline.EditInline]
         public Action[] actions;
         [Tooltip("The how this card will modify actions when used in a combo.")]
+        [Skaillz.EditInline.EditInline]
         public List<ActionModifier> actionModifiers;
         [Tooltip("The effects that this card will have on the dungeon while in the actor's deck.")]
+        [Skaillz.EditInline.EditInline]
         public DungeonEffect[] effects;
 
         [Header("Visuals")]
