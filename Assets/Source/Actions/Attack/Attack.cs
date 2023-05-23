@@ -51,8 +51,6 @@ namespace CardSystem.Effects
         [Tooltip("Whether or not the player needs to aim. If false it will be aimed at the closet enemy")]
         public bool isAimed = true;
 
-        [Space(100f)]
-
         // The projectile to spawn
         private Projectile projectilePrefab;
         // The previewer prefab to use.

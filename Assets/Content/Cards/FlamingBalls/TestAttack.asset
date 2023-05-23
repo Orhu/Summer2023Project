@@ -18,8 +18,6 @@ MonoBehaviour:
     hitActions: []
   modifiers: []
   shape: {fileID: 0}
-  spawnLocation: 0
-  isAimed: 1
   lifetime: 10
   initialSpeed: 0
   acceleration: 12
@@ -28,6 +26,15 @@ MonoBehaviour:
   homingWeight: 0
   homingTime: 0
   visualObject: {fileID: 0}
+  spawnLocation: 0
+  isAimed: 1
   previewerPrefab: {fileID: 0}
+  spawnSequence:
+  - delay: 0
+    angle: 0
+    offset: {x: 0, y: 0}
+  - delay: 0
+    angle: 0
+    offset: {x: 0, y: 0}
   randomAngle: 0
   randomOffset: {x: 0, y: 0}
