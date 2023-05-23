@@ -14,20 +14,13 @@ namespace CardSystem.Effects
         [Tooltip("The damage, damage type, status effects, and knockback this projectile will deal.")]
         public AttackData attack;
 
-        //[EditInline] TODO: Uncomment after merge
+        [EditInline]
         [Tooltip("The modifiers that are always applied to this projectile")]
         public List<AttackModifier> modifiers;
 
-        //[EditInline] TODO: Uncomment after merge
+        [EditInline]
         [Tooltip("The radius of the projectile.")]
         public ProjectileShape shape;
-
-
-        [Header("Spawning")]
-        [Tooltip("The location to spawn the projectiles at.")]
-        public SpawnLocation spawnLocation;
-        [Tooltip("Whether or not the player needs to aim. If false it will be aimed at the closet enemy")]
-        public bool isAimed = true;
 
         [Header("Movement Info")]
         [Tooltip("The lifetime of projectiles spawned by this.")]
@@ -51,6 +44,14 @@ namespace CardSystem.Effects
         [Header("Visuals")]
         [Tooltip("The game object used to render the projectiles.")]
         public GameObject visualObject;
+
+        [Header("Spawning")]
+        [Tooltip("The location to spawn the projectiles at.")]
+        public SpawnLocation spawnLocation;
+        [Tooltip("Whether or not the player needs to aim. If false it will be aimed at the closet enemy")]
+        public bool isAimed = true;
+
+        [Space(100f)]
 
         // The projectile to spawn
         private Projectile projectilePrefab;

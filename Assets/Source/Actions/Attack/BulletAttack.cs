@@ -7,9 +7,8 @@ namespace CardSystem.Effects
     [CreateAssetMenu(fileName = "NewBulletAttack", menuName = "Cards/Actions/BulletAttack")]
     internal class BulletAttack : Attack
     {
-        [Header("Spawning")]
         [Tooltip("The sequence of when and where to spawn bullets")]
-        internal List<BulletSpawnInfo> spawnSequence = new List<BulletSpawnInfo>();
+        public List<BulletSpawnInfo> spawnSequence = new List<BulletSpawnInfo>();
 
         [Tooltip("The angle relative to the aim direction that this projectile will spawn at")]
         public float randomAngle = 0;

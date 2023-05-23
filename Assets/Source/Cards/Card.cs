@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Skaillz.EditInline;
 
 namespace CardSystem
 {
@@ -22,7 +23,7 @@ namespace CardSystem
         public float actionTime = 1.0f;
         [Tooltip("The amount of time this card reserves the hand slot for after being played.")]
         public float cooldownTime = 1.0f;
-        //[EditInline] TODO: Uncomment after merge
+        [EditInline]
         [Tooltip("The actions that will be taken when this card is played as the root of a combo.")]
         public Action[] actions;
         [Tooltip("The effects that this card will have on the dungeon while in the actor's deck.")]
