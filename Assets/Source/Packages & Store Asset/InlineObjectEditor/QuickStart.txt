@@ -1,0 +1,29 @@
+InlineScriptableObjects allows you to speed up your workflow by editing
+ScriptableObjects of any type directly in the inspector of the object that
+references them. This guide will help you getting started.
+
+1. Decorate the ScriptableObject in the code with the [EditInline] attribute.
+   e.g. [EditInline] public Character character;
+
+2. Select the object you want to edit to display it in the Inspector.
+   Due to a limitation of Unity, it can only be displayed correctly if a
+   custom editor exists for the object the ScriptableObject is referenced
+   in. Click the "Create one for me!" button to automatically create an
+   empty implementation that is enough to display the inline editor.
+   By default, a .cs file will be created in the Editor folder.
+
+3. (optional) Your can move this file to another editor-only folder, e.g.
+   a sub folder of the Editor folder or another folder called Editor that
+   is located in a non-editor folder.
+
+4. Reselect the object you want to edit. You are now able to inline edit
+   your ScriptableObject! Feel free to examine the sample scene located
+   in the Samples folder.
+
+Known issues:
+   - Creating the stub script could fail in rare cases.
+     Workaround: Manually create an editor script that inherits from 
+     UnityEditor.Editor and add the Attribute [CustomEditor(typeof(MyType))]
+     to it.
+   - Custom editors in imported .dll libraries are not supported and
+     recognized at the moment.
