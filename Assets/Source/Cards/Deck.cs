@@ -92,43 +92,43 @@ public class Deck : MonoBehaviour
     /// <returns> Whether or not an empty spot was found. </returns>
     bool DrawCard()
     {
-        while (inHandCards.Count < handSize)
-        {
-            inHandCards.Add(null);
-        }
+        //while (inHandCards.Count < handSize)
+        //{
+        //    inHandCards.Add(null);
+        //}
 
-        for (int i = 0; i < handSize; i++)
-        {
-            if (drawableCards.Count == 0)
-            {
-                ReshuffleDrawPile();
-            }
+        //for (int i = 0; i < handSize; i++)
+        //{
+        //    if (drawableCards.Count == 0)
+        //    {
+        //        ReshuffleDrawPile();
+        //    }
 
-            if (inHandCards[i] == null && drawableCards.Count > 0)
-            {
-                Card drawnCard = drawableCards[drawableCards.Count - 1];
-                drawableCards.RemoveAt(drawableCards.Count - 1);
-                inHandCards[i] = drawnCard;
+        //    if (inHandCards[i] == null && drawableCards.Count > 0)
+        //    {
+        //        Card drawnCard = drawableCards[drawableCards.Count - 1];
+        //        drawableCards.RemoveAt(drawableCards.Count - 1);
+        //        inHandCards[i] = drawnCard;
 
-                if (drawableCards.Count == 0)
-                {
-                    ReshuffleDrawPile();
-                }
+        //        if (drawableCards.Count == 0)
+        //        {
+        //            ReshuffleDrawPile();
+        //        }
 
-                onDrawPileChanged?.Invoke();
-                onHandChanged?.Invoke();
-                return true;
-            }
-        }
+        //        onDrawPileChanged?.Invoke();
+        //        onHandChanged?.Invoke();
+        //        return true;
+        //    }
+        //}
         return false;
     }
 
     public void DiscardCard(int handIndex)
     {
-        discardedCards.Add(inHandCards[handIndex]);
-        inHandCards[handIndex] = null;
-        onDiscardPileChanged?.Invoke();
-        DrawCard();
+        //discardedCards.Add(inHandCards[handIndex]);
+        //inHandCards[handIndex] = null;
+        //onDiscardPileChanged?.Invoke();
+        //DrawCard();
     }
 
     /// <summary>
@@ -136,21 +136,21 @@ public class Deck : MonoBehaviour
     /// </summary>
     public void ReshuffleDrawPile()
     {
-        while (drawableCards.Count > 0)
-        {
-            discardedCards.Add(drawableCards[drawableCards.Count - 1]);
-            drawableCards.RemoveAt(drawableCards.Count - 1);
-        }
+        //while (drawableCards.Count > 0)
+        //{
+        //    discardedCards.Add(drawableCards[drawableCards.Count - 1]);
+        //    drawableCards.RemoveAt(drawableCards.Count - 1);
+        //}
 
-        while (discardedCards.Count > 0)
-        {
-            int index = Random.Range(0, discardedCards.Count);
-            drawableCards.Add(discardedCards[index]);
-            discardedCards.RemoveAt(index);
-        }
+        //while (discardedCards.Count > 0)
+        //{
+        //    int index = Random.Range(0, discardedCards.Count);
+        //    drawableCards.Add(discardedCards[index]);
+        //    discardedCards.RemoveAt(index);
+        //}
 
-        onDiscardPileChanged?.Invoke();
-        onDrawPileChanged?.Invoke();
+        //onDiscardPileChanged?.Invoke();
+        //onDrawPileChanged?.Invoke();
     }
 
 
@@ -159,22 +159,22 @@ public class Deck : MonoBehaviour
     /// </summary>
     void Update()
     {
-        foreach (KeyValuePair<int, float> cardIndexToCooldown in new Dictionary<int, float>(cardIndicesToCooldowns))
-        {
-            float newValue = cardIndexToCooldown.Value - Time.deltaTime;
-            if (newValue <= 0)
-            {
-                cardIndicesToCooldowns.Remove(cardIndexToCooldown.Key);
-                discardedCards.Add(inHandCards[cardIndexToCooldown.Key]);
-                inHandCards[cardIndexToCooldown.Key] = null;
-                onDiscardPileChanged?.Invoke();
-                DrawCard();
-            }
-            else
-            {
-                cardIndicesToCooldowns[cardIndexToCooldown.Key] = newValue;
-            }
-        }
+        //foreach (KeyValuePair<int, float> cardIndexToCooldown in new Dictionary<int, float>(cardIndicesToCooldowns))
+        //{
+        //    float newValue = cardIndexToCooldown.Value - Time.deltaTime;
+        //    if (newValue <= 0)
+        //    {
+        //        cardIndicesToCooldowns.Remove(cardIndexToCooldown.Key);
+        //        discardedCards.Add(inHandCards[cardIndexToCooldown.Key]);
+        //        inHandCards[cardIndexToCooldown.Key] = null;
+        //        onDiscardPileChanged?.Invoke();
+        //        DrawCard();
+        //    }
+        //    else
+        //    {
+        //        cardIndicesToCooldowns[cardIndexToCooldown.Key] = newValue;
+        //    }
+        //}
     }
     #endregion
 
@@ -185,74 +185,81 @@ public class Deck : MonoBehaviour
     /// <param name="handIndex"> The index in the hand of the card. </param>
     public void TogglePreviewCard(int handIndex)
     {
-        if (inHandCards.Count <= handIndex || cardIndicesToCooldowns.ContainsKey(handIndex))
-        {
-            return;
-        }
+        //if (inHandCards.Count <= handIndex || cardIndicesToCooldowns.ContainsKey(handIndex))
+        //{
+        //    return;
+        //}
 
-        Card card = inHandCards[handIndex];
-        if (previewedCardIndices.Count == 0)
-        {
-            card.PreviewActions(actor);
-            previewedCardIndices.Add(handIndex);
-            return;
-        }
-        Card rootCard = inHandCards[previewedCardIndices[0]];
+        //if (inHandCards[handIndex] is not AttackCard)
+        //{
+        //    //inHandCards[handIndex];
+        //    return;
+        //}
 
-        if (handIndex == previewedCardIndices[0])
-        {
-            previewedCardIndices.Remove(handIndex);
-            rootCard.CancelPreviewActions(actor);
-            if (previewedCardIndices.Count > 0)
-            {
-                rootCard = inHandCards[previewedCardIndices[0]];
+        //AttackCard card = inHandCards[handIndex] as AttackCard;
 
-                int playCount = 0;
-                List<ActionModifier> modifiers = new List<ActionModifier>();
-                for (int i = 1; i < previewedCardIndices.Count; i++)
-                {
-                    if (inHandCards[previewedCardIndices[i]] == rootCard)
-                    {
-                        playCount++;
-                    }
-                    else
-                    {
-                        modifiers.AddRange(inHandCards[previewedCardIndices[i]].actionModifiers);
-                    }
-                }
+        //if (previewedCardIndices.Count == 0)
+        //{
+        //    card.PreviewActions(actor);
+        //    previewedCardIndices.Add(handIndex);
+        //    return;
+        //}
+        //Card rootCard = inHandCards[previewedCardIndices[0]];
 
-                rootCard.PreviewActions(actor);
-                rootCard.AddStacksToPreview(actor, playCount);
-                rootCard.ApplyModifiersToPreview(actor, modifiers);
-            }
-            return;
-        }
+        //if (handIndex == previewedCardIndices[0])
+        //{
+        //    previewedCardIndices.Remove(handIndex);
+        //    //rootCard.CancelPreviewActions(actor);
+        //    if (previewedCardIndices.Count > 0)
+        //    {
+        //        rootCard = inHandCards[previewedCardIndices[0]];
+
+        //        int playCount = 0;
+        //        List<ActionModifier> modifiers = new List<ActionModifier>();
+        //        for (int i = 1; i < previewedCardIndices.Count; i++)
+        //        {
+        //            if (inHandCards[previewedCardIndices[i]] == rootCard)
+        //            {
+        //                //modifiers.AddRange(inHandCards[previewedCardIndices[i]].duplicateModifiers);
+        //            }
+        //            else
+        //            {
+        //                //modifiers.AddRange(inHandCards[previewedCardIndices[i]].actionModifiers);
+        //            }
+        //        }
+
+        //        //rootCard.PreviewActions(actor);
+        //        //rootCard.AddStacksToPreview(actor, playCount);
+        //        //rootCard.ApplyModifiersToPreview(actor, modifiers);
+        //    }
+        //    return;
+        //}
 
 
-        if (previewedCardIndices.Contains(handIndex))
-        {
-            if (card == rootCard)
-            {
-                rootCard.AddStacksToPreview(actor, - 1);
-            }
-            else
-            {
-                rootCard.RemoveModifiersFromPreview(actor, card.actionModifiers);
-            }
-            previewedCardIndices.Remove(handIndex);
-        }
-        else
-        {
-            if (card == rootCard)
-            {
-                rootCard.AddStacksToPreview(actor, 1);
-            }
-            else
-            {
-                rootCard.ApplyModifiersToPreview(actor, card.actionModifiers);
-            }
-            previewedCardIndices.Add(handIndex);
-        }
+        //if (previewedCardIndices.Contains(handIndex))
+        //{
+        //    if (card == rootCard)
+        //    {
+        //        //rootCard.AddStacksToPreview(actor, - 1);
+        //    }
+        //    else
+        //    {
+        //        //rootCard.RemoveModifiersFromPreview(actor, card.actionModifiers);
+        //    }
+        //    previewedCardIndices.Remove(handIndex);
+        //}
+        //else
+        //{
+        //    if (card == rootCard)
+        //    {
+        //        //rootCard.AddStacksToPreview(actor, 1);
+        //    }
+        //    else
+        //    {
+        //        //rootCard.ApplyModifiersToPreview(actor, card.actionModifiers);
+        //    }
+        //    previewedCardIndices.Add(handIndex);
+        //}
     }
 
     /// <summary>
@@ -260,31 +267,31 @@ public class Deck : MonoBehaviour
     /// </summary>
     public void PlayPreviewedCard()
     {
-        if (previewedCardIndices.Count == 0)
-        {
-            return;
-        }
+        //if (previewedCardIndices.Count == 0)
+        //{
+        //    return;
+        //}
 
-        Card cardToPlay = inHandCards[previewedCardIndices[0]];
-        int playCount = 1;
-        List<ActionModifier> modifiers = new List<ActionModifier>();
-        for (int i = 1; i < previewedCardIndices.Count; i++)
-        {
-            cardIndicesToCooldowns.Add(previewedCardIndices[i], cardToPlay.cooldown);
-            if (inHandCards[previewedCardIndices[i]] == cardToPlay)
-            {
-                playCount++;
-            }
-            else
-            {
-                modifiers.AddRange(inHandCards[previewedCardIndices[i]].actionModifiers);
-            }
-        }
+        //Card cardToPlay = inHandCards[previewedCardIndices[0]];
+        //int playCount = 1;
+        //List<ActionModifier> modifiers = new List<ActionModifier>();
+        //for (int i = 1; i < previewedCardIndices.Count; i++)
+        //{
+        //    cardIndicesToCooldowns.Add(previewedCardIndices[i], cardToPlay.cooldown);
+        //    if (inHandCards[previewedCardIndices[i]] == cardToPlay)
+        //    {
+        //        playCount++;
+        //    }
+        //    else
+        //    {
+        //        //modifiers.AddRange(inHandCards[previewedCardIndices[i]].actionModifiers);
+        //    }
+        //}
 
-        cardIndicesToCooldowns.Add(previewedCardIndices[0], cardToPlay.cooldown);
-        cardToPlay.PlayActions(actor, playCount, modifiers);
+        //cardIndicesToCooldowns.Add(previewedCardIndices[0], cardToPlay.cooldown);
+        ////cardToPlay.PlayActions(actor, playCount, modifiers);
 
-        previewedCardIndices.Clear();
+        //previewedCardIndices.Clear();
     }
     #endregion
 
@@ -296,27 +303,27 @@ public class Deck : MonoBehaviour
     /// <param name="addLocation"> The place to add the card. </param>
     public void AddCard(Card card, AddCardLocation addLocation)
     {
-        cards.Add(card);
+        //cards.Add(card);
 
-        switch (addLocation)
-        {
-            case AddCardLocation.BottomOfDrawPile:
-                drawableCards.Insert(0, card);
-                onDrawPileChanged?.Invoke();
-                break;
+        //switch (addLocation)
+        //{
+        //    case AddCardLocation.BottomOfDrawPile:
+        //        drawableCards.Insert(0, card);
+        //        onDrawPileChanged?.Invoke();
+        //        break;
 
-            case AddCardLocation.TopOfDrawPile:
-                drawableCards.Add(card);
-                onDrawPileChanged?.Invoke();
-                break;
+        //    case AddCardLocation.TopOfDrawPile:
+        //        drawableCards.Add(card);
+        //        onDrawPileChanged?.Invoke();
+        //        break;
 
-            case AddCardLocation.DiscardPile:
-                discardedCards.Add(card);
-                onDrawPileChanged?.Invoke();
-                break;
-        }
+        //    case AddCardLocation.DiscardPile:
+        //        discardedCards.Add(card);
+        //        onDrawPileChanged?.Invoke();
+        //        break;
+        //}
 
-        onCardAdded(card);
+        //onCardAdded(card);
     }
 
     /// <summary>
@@ -326,20 +333,20 @@ public class Deck : MonoBehaviour
     /// <returns> Whether or not it was successfully removed. </returns>
     public bool RemoveCard(Card card)
     {
-        if (RemoveCard(card, CardLocation.DiscardPile))
-        {
-            return true;
-        }
+        //if (RemoveCard(card, CardLocation.DiscardPile))
+        //{
+        //    return true;
+        //}
 
-        if (RemoveCard(card, CardLocation.DrawPile))
-        {
-            return true;
-        }
+        //if (RemoveCard(card, CardLocation.DrawPile))
+        //{
+        //    return true;
+        //}
 
-        if (RemoveCard(card, CardLocation.Hand))
-        {
-            return true;
-        }
+        //if (RemoveCard(card, CardLocation.Hand))
+        //{
+        //    return true;
+        //}
 
         return false;
     }
@@ -352,7 +359,7 @@ public class Deck : MonoBehaviour
     /// <returns> Whether or not it was successfully removed. </returns>
     public bool RemoveCard(Card card, CardLocation location)
     {
-        switch(location)
+        switch (location)
         {
             case CardLocation.DrawPile:
                 if (!drawableCards.Remove(card))

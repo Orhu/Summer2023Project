@@ -6,7 +6,7 @@ using UnityEngine;
 /// An action modifier that changes the attack of an action modifier.
 /// </summary>
 [CreateAssetMenu(fileName = "NewAttackModifer", menuName = "Cards/ActionModifers/AttackModifer")]
-public class AttackModifier : ActionModifier
+public class AttackModifier : ScriptableObject
 {
     [Tooltip("The damage to add to the attack")]
     public int damageToAdd = 0;
@@ -20,7 +20,7 @@ public class AttackModifier : ActionModifier
     /// Modifies the given attack.
     /// </summary>
     /// <param name="attack"> The attack to modify </param>
-    public void ModifyAttack(ref Attack attack)
+    public void ModifyAttack(ref AttackData attack)
     {
         attack = ((attack * attackMultiplier) + damageToAdd) + statusEffectToAdd;
     }

@@ -22,12 +22,12 @@ public class Health : MonoBehaviour
     // Called when health values are changed and passes the new health.
     public UnityEvent<float> onHealthChanged, onMaxHealthChanged;
     // Called when this is attacked and passes the attack.
-    public UnityEvent<Attack> onAttacked;
+    public UnityEvent<AttackData> onAttacked;
     // Called when this dies
     public UnityEvent onDeath;
     // Called before this processes an attack and passes the incoming attack so can be modified.   
     public RequestIncomingAttackModification onRequestIncomingAttackModification;
-    public delegate void RequestIncomingAttackModification(ref Attack attack);
+    public delegate void RequestIncomingAttackModification(ref AttackData attack);
 
 
     /// <summary>
@@ -63,7 +63,7 @@ public class Health : MonoBehaviour
     /// Receive an attack  and kill the owner if out of health.
     /// </summary>
     /// <param name="attack"> The attack being received. </param>
-    public void ReceiveAttack(Attack attack)
+    public void ReceiveAttack(AttackData attack)
     {
         onRequestIncomingAttackModification?.Invoke(ref attack);
         currentHealth -= attack.damage;

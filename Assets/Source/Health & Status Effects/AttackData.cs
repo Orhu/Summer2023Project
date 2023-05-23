@@ -1,3 +1,4 @@
+using CardSystem;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,12 +6,14 @@ using UnityEngine;
 /// The data of an attack
 /// </summary>
 [System.Serializable]
-public class Attack
+public class AttackData
 {
     [Tooltip("The damage this attack deals")]
     public int damage;
     [Tooltip("The status effects to apply when this is received")]
     public List<StatusEffect> statusEffects = new List<StatusEffect>();
+    [Tooltip("The actions played by the hit game object.")]
+    public List<Action> hitActions = new List<Action>();
 
 
     // The causer of this attack.
@@ -22,7 +25,7 @@ public class Attack
     /// </summary>
     /// <param name="attack"> The attack to copy </param>
     /// <param name="causer"> The new causer </param>
-    public Attack(Attack attack, Object causer)
+    public AttackData(AttackData attack, Object causer)
     {
         damage = attack.damage;
         statusEffects = attack.statusEffects;
@@ -36,7 +39,7 @@ public class Attack
     /// </summary>
     /// <param name="damage"> The damage it will deal. </param>
     /// <param name="causer"> The causer of the damage </param>
-    public Attack(int damage, Object causer)
+    public AttackData(int damage, Object causer)
     {
         this.damage = damage;
         this.causer = causer;
@@ -47,7 +50,7 @@ public class Attack
     /// </summary>
     /// <param name="damage"> The damage it will deal. </param>
     /// <param name="causer"> The causer of the damage </param>
-    public Attack(int damage, List<StatusEffect> statusEffects, Object causer) : this(damage, causer)
+    public AttackData(int damage, List<StatusEffect> statusEffects, Object causer) : this(damage, causer)
     {
         this.statusEffects = statusEffects;
     }
@@ -58,7 +61,7 @@ public class Attack
     /// <param name="attack"> The original attack. </param>
     /// <param name="integer"> The number of times to apply it. </param>
     /// <returns> The multiplied attack </returns>
-    public static Attack operator *(Attack attack, int integer)
+    public static AttackData operator *(AttackData attack, int integer)
     {
         if (integer > 1)
         {
@@ -70,10 +73,10 @@ public class Attack
                     newStatusEffects.Add(statusEffect);
                 }
             }
-            return new Attack(attack.damage * integer, new List<StatusEffect>(newStatusEffects), attack.causer);
+            return new AttackData(attack.damage * integer, new List<StatusEffect>(newStatusEffects), attack.causer);
         }
 
-        return new Attack(attack, attack.causer);
+        return new AttackData(attack, attack.causer);
     }
 
     /// <summary>
@@ -82,7 +85,7 @@ public class Attack
     /// <param name="attack"> The original attack. </param>
     /// <param name="integer"> The number of times it was applied. </param>
     /// <returns> The divided attack </returns>
-    public static Attack operator /(Attack attack, int integer)
+    public static AttackData operator /(AttackData attack, int integer)
     {
         if (integer > 1)
         {
@@ -94,10 +97,10 @@ public class Attack
                     newStatusEffects.Add(statusEffect);
                 }
             }
-            return new Attack(attack.damage / integer, new List<StatusEffect>(newStatusEffects), attack.causer);
+            return new AttackData(attack.damage / integer, new List<StatusEffect>(newStatusEffects), attack.causer);
         }
 
-        return new Attack(attack, attack.causer);
+        return new AttackData(attack, attack.causer);
     }
 
     /// <summary>
@@ -106,9 +109,9 @@ public class Attack
     /// <param name="attack"> The original attack. </param>
     /// <param name="integer"> The damage to add. </param>
     /// <returns> A copy of the modified attack </returns>
-    public static Attack operator +(Attack attack, int integer)
+    public static AttackData operator +(AttackData attack, int integer)
     {
-        return new Attack(attack.damage + integer, attack.statusEffects, attack.causer);
+        return new AttackData(attack.damage + integer, attack.statusEffects, attack.causer);
     }
 
     /// <summary>
@@ -117,9 +120,9 @@ public class Attack
     /// <param name="attack"> The original attack. </param>
     /// <param name="integer"> The damage to remove. </param>
     /// <returns> A copy of the modified attack </returns>
-    public static Attack operator -(Attack attack, int integer)
+    public static AttackData operator -(AttackData attack, int integer)
     {
-        return new Attack(attack.damage - integer, attack.statusEffects, attack.causer);
+        return new AttackData(attack.damage - integer, attack.statusEffects, attack.causer);
     }
 
     /// <summary>
@@ -128,10 +131,10 @@ public class Attack
     /// <param name="attack"> The original attack. </param>
     /// <param name="effects"> The status effects to add. </param>
     /// <returns> A copy of the modified attack </returns>
-    public static Attack operator +(Attack attack, List<StatusEffect> effects)
+    public static AttackData operator +(AttackData attack, List<StatusEffect> effects)
     {
         effects.AddRange(attack.statusEffects);
-        return new Attack(attack.damage, effects, attack.causer);
+        return new AttackData(attack.damage, effects, attack.causer);
     }
 
     /// <summary>
@@ -140,12 +143,12 @@ public class Attack
     /// <param name="attack"> The original attack. </param>
     /// <param name="effects"> The status effects to remove. </param>
     /// <returns> A copy of the modified attack </returns>
-    public static Attack operator -(Attack attack, List<StatusEffect> effects)
+    public static AttackData operator -(AttackData attack, List<StatusEffect> effects)
     {
         foreach (StatusEffect statusEffect in attack.statusEffects)
         {
             effects.Remove(statusEffect);
         }
-        return new Attack(attack.damage, effects, attack.causer);
+        return new AttackData(attack.damage, effects, attack.causer);
     }
 }

@@ -9,17 +9,16 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     // The spawner of the projectile.
-    internal SpawnProjectile spawner;
+    internal Attack spawner;
 
     // The actor of the projectile.
     internal IActor actor;
 
     // The attack this will cause when it hits
-    internal Attack attack;
+    internal AttackData attack;
 
     Rigidbody2D rigidBody;
     float distanceTraveled;
-    internal int numStacks;
 
     /// <summary>
     /// Initializes components based on spawner stats.
@@ -30,20 +29,18 @@ public class Projectile : MonoBehaviour
         if (actor.GetCollider() != null)
         {
             CircleCollider2D collider = GetComponent<CircleCollider2D>();
-            collider.radius = spawner.size * (spawner.stackSize ? numStacks : 1);
+            //collider.radius = spawner.size * (spawner.stackSize ? numStacks : 1);
             Physics2D.IgnoreCollision(collider, actor.GetCollider());
         }
 
         SpriteRenderer sprite = GetComponentInChildren<SpriteRenderer>();
-        sprite.sprite = spawner.sprite;
-        sprite.transform.localScale = new Vector3(numStacks, numStacks, numStacks);
 
         Vector3 diff = actor.GetActionAimPosition() - transform.position;
         diff.Normalize();
 
         float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
-        transform.position += transform.right * spawner.size * (spawner.stackSize ? numStacks : 1);
+        //transform.position += transform.right * spawner.size * (spawner.stackSize ? numStacks : 1);
     }
 
     /// <summary>
@@ -51,14 +48,14 @@ public class Projectile : MonoBehaviour
     /// </summary>
     void FixedUpdate()
     {
-        distanceTraveled += Time.fixedDeltaTime * spawner.speed * (spawner.stackSpeed ? numStacks : 1);
-        rigidBody.MovePosition(transform.position +
-                               transform.right * (Time.fixedDeltaTime * spawner.speed *
-                                                  (spawner.stackSpeed ? numStacks : 1)));
-        if (distanceTraveled > spawner.range * (spawner.stackRange ? numStacks : 1))
-        {
-            Destroy(gameObject);
-        }
+        //distanceTraveled += Time.fixedDeltaTime * spawner.speed * (spawner.stackSpeed ? numStacks : 1);
+        //rigidBody.MovePosition(transform.position +
+        //                       transform.right * (Time.fixedDeltaTime * spawner.speed *
+        //                                          (spawner.stackSpeed ? numStacks : 1)));
+        //if (distanceTraveled > spawner.range * (spawner.stackRange ? numStacks : 1))
+        //{
+        //    Destroy(gameObject);
+        //}
     }
 
     /// <summary>
@@ -70,7 +67,7 @@ public class Projectile : MonoBehaviour
         Health hitHealth = collision.gameObject.GetComponent<Health>();
         if (hitHealth != null)
         {
-            hitHealth.ReceiveAttack(attack * (spawner.stackAttack ? numStacks : 1));
+            hitHealth.ReceiveAttack(attack);
         }
 
         Destroy(gameObject);

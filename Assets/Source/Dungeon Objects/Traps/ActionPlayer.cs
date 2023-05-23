@@ -32,7 +32,7 @@ public class ActionPlayer : MonoBehaviour, IActor
             yield return new WaitForSeconds(playRate);
             if (CanAct)
             {
-                action.Play(this, 1, new List<ActionModifier>());
+                action.Play(this);
             }
         }
     }

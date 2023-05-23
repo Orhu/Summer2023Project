@@ -40,10 +40,10 @@ public class Invulnerable : StatusEffect
     /// Responds to a health's incoming damage modification request, and prevents the attack from passing.
     /// </summary>
     /// <param name="attack"> The attack to prevent. </param>
-    void PreventAttack(ref Attack attack)
+    void PreventAttack(ref AttackData attack)
     {
-        Attack prevousAttack = attack;
-        attack = new Attack(0, prevousAttack.causer);
+        AttackData prevousAttack = attack;
+        attack = new AttackData(0, prevousAttack.causer);
     }
 
     /// <summary>

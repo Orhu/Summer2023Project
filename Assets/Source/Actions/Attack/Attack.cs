@@ -7,41 +7,64 @@ namespace CardSystem.Effects
     /// <summary>
     /// A scriptable object for storing data about a projectile type.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewProjectile", menuName = "Cards/Actions/Projectile")]
-    public class SpawnProjectile : Action
+    internal abstract class Attack : Action
     {
         [Header("Mechanics")]
-        [Tooltip("The damage this projectile will deal.")]
-        public Attack attack;
-        [Tooltip("Whether or not the range is multiplied by the number stacks when played.")]
-        public bool stackAttack = true;
+        [Tooltip("The damage, damage type, status effects, and knockback this projectile will deal.")]
+        public AttackData attack;
+
+        //[EditInline] TODO: Uncomment after merge
+        [Tooltip("The modifiers that are always applied to this projectile")]
+        public List<AttackModifier> modifiers;
+
+        //[EditInline] TODO: Uncomment after merge
         [Tooltip("The radius of the projectile.")]
-        public float size = 12;
-        [Tooltip("Whether or not the size is multiplied by the number stacks when played.")]
-        public bool stackSize = true;
-        [Tooltip("The distance this projectile will travel.")]
-        public float range = 6;
-        [Tooltip("Whether or not the range is multiplied by the number stacks when played.")]
-        public bool stackRange = true;
-        [Tooltip("The speed this projectile will travel at.")]
-        public float speed = 12;
-        [Tooltip("Whether or not the speed is multiplied by the number stacks when played.")]
-        public bool stackSpeed = true;
-        [Tooltip("The projectile to spawn")]
-        public Projectile projectilePrefab;
+        public ProjectileShape shape;
+
+
+        [Header("Spawning")]
+        [Tooltip("The location to spawn the projectiles at.")]
+        public SpawnLocation spawnLocation;
+        [Tooltip("Whether or not the player needs to aim. If false it will be aimed at the closet enemy")]
+        public bool isAimed = true;
+
+        [Header("Movement Info")]
+        [Tooltip("The lifetime of projectiles spawned by this.")]
+        public float lifetime = 10f;
+        [Tooltip("The speed projectile will start traveling at. In tiles/second")]
+        public float initialSpeed;
+        [Tooltip("The acceleration this projectile will experience. In tiles/second^2")]
+        public float acceleration = 12f;
+        [Tooltip("The minimum speed projectile will travel at. In tiles/second")]
+        public float minSpeed = 0;
+        [Tooltip("The maximum speed projectile will travel at. In tiles/second")]
+        public float maxSpeed = 0;
+
+        [Header("Homing")]
+        [Range(0, 1)]
+        [Tooltip("The percent change every that this will point towards the closes enemy. 0 no homing, 1 always point at closest enemy")]
+        public float homingWeight = 0;
+        [Tooltip("The duration that this will home for.")]
+        public float homingTime = 0;
 
         [Header("Visuals")]
-        [Tooltip("The previewer prefab to use.")]
+        [Tooltip("The game object used to render the projectiles.")]
+        public GameObject visualObject;
+
+        // The projectile to spawn
+        private Projectile projectilePrefab;
+        // The previewer prefab to use.
         public ProjectilePreviewer previewerPrefab;
-        [Tooltip("The tint of the previewer spawned.")]
-        public Color previewColor;
-        [Tooltip("The projectile's sprite.")]
-        public Sprite sprite;
-        [Tooltip("The particle system to add to the projectile.")]
-        public ParticleSystem particleEffect;
+
 
         // Maps players to their previewers.
         Dictionary<IActor, ProjectilePreviewer> playersToPreviewers = new Dictionary<IActor, ProjectilePreviewer>();
+
+        private new void Awake()
+        {
+            base.Awake();
+            projectilePrefab = Resources.Load<Projectile>("Projectile");
+        }
 
         /// <summary>
         /// Gets the formated description of this card.
@@ -56,7 +79,7 @@ namespace CardSystem.Effects
         /// Starts rendering a preview of what this action will do.
         /// </summary>
         /// <param name="actor"> The actor that will be playing this action. </param>
-        public override void Preview(IActor actor)
+        public void Preview(IActor actor)
         {
             ProjectilePreviewer previewer = Instantiate<ProjectilePreviewer>(previewerPrefab, actor.GetActionSourceTransform());
             previewer.actor = actor;
@@ -65,34 +88,24 @@ namespace CardSystem.Effects
         }
 
         /// <summary>
-        /// Adds a stacks to a preview.
-        /// </summary>
-        /// <param name="actor"> The actor previewing </param>
-        /// <param name="numStacks"> The number of stacks to add </param>
-        public override void AddStacksToPreview(IActor actor, int numStacks)
-        {
-            playersToPreviewers[actor].NumStacks += numStacks;
-        }
-
-        /// <summary>
         /// Applies modifiers to a preview.
         /// </summary>
         /// <param name="actor"> The actor previewing</param>
         /// <param name="actionModifiers"> The modifiers to apply </param>
-        public override void ApplyModifiersToPreview(IActor actor, List<ActionModifier> actionModifiers) {}
+        public void ApplyModifiersToPreview(IActor actor, List<AttackModifier> actionModifiers) {}
 
         /// <summary>
         /// Removes modifiers from a preview.
         /// </summary>
         /// <param name="actor"> The actor previewing</param>
         /// <param name="actionModifiers"> The modifiers to remove </param>
-        public override void RemoveModifiersFromPreview(IActor actor, List<ActionModifier> actionModifiers) {}
+        public void RemoveModifiersFromPreview(IActor actor, List<AttackModifier> actionModifiers) {}
 
         /// <summary>
         /// Stops rendering a preview of what this action will do.
         /// </summary>
         /// <param name="actor"> The actor that will no longer be playing this action. </param>
-        public override void CancelPreview(IActor actor)
+        public void CancelPreview(IActor actor)
         {
             ProjectilePreviewer value;
             if (playersToPreviewers.TryGetValue(actor, out value))
@@ -106,18 +119,16 @@ namespace CardSystem.Effects
         /// Plays this action and causes all its effects. Also cancels any relevant previews.
         /// </summary>
         /// <param name="actor"> The actor that will be playing this action. </param>
-        /// <param name="numStacks"> The number of times action is to be played. </param>
         /// <param name="modifiers"> The modifier affecting this action. </param>
-        public override void Play(IActor actor, int numStacks, List<ActionModifier> modifiers)
+        public void Play(IActor actor, List<GameObject> ignoredObjects, List<AttackModifier> modifiers)
         {
             CancelPreview(actor);
             Projectile projectile = Instantiate<Projectile>(projectilePrefab, actor.GetActionSourceTransform().position, actor.GetActionSourceTransform().rotation);
             projectile.actor = actor;
             projectile.spawner = this;
-            projectile.numStacks = numStacks;
 
-            Attack modifiedAttack = new Attack(attack, actor.GetActionSourceTransform().gameObject);
-            foreach (ActionModifier modifier in modifiers)
+            AttackData modifiedAttack = new AttackData(attack, actor.GetActionSourceTransform().gameObject);
+            foreach (AttackModifier modifier in modifiers)
             {
                 if (modifier is AttackModifier)
                 {
@@ -125,6 +136,18 @@ namespace CardSystem.Effects
                 }
             }
             projectile.attack = modifiedAttack;
+        }
+
+        public override void Play(IActor actor, List<GameObject> ignoredObjects)
+        {
+            Play(actor, ignoredObjects, new List<AttackModifier>());
+        }
+
+
+        public enum SpawnLocation
+        {
+            Actor,
+            Mouse
         }
     }
 }

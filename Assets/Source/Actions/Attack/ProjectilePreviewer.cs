@@ -12,18 +12,7 @@ public class ProjectilePreviewer : MonoBehaviour
     // The owner of the preview
     internal IActor actor;
     // The spawner that this is previewing.
-    internal SpawnProjectile spawner;
-    // The number of stacks of the projectile to preview.
-    int numStacks = 1;
-    internal int NumStacks
-    {
-        set 
-        {
-            transform.localScale *= (float)value / numStacks;
-            numStacks = value;
-        }
-        get { return numStacks; }
-    }
+    internal Attack spawner;
 
     // The sprite of the preview.
     SpriteRenderer sprite;
@@ -34,8 +23,7 @@ public class ProjectilePreviewer : MonoBehaviour
     void Start()
     {
         sprite = GetComponentInChildren<SpriteRenderer>();
-        sprite.color = spawner.previewColor;
-        transform.localScale = new Vector3(spawner.range * (spawner.stackRange ? numStacks : 1), spawner.size * 2 * (spawner.stackSize ? numStacks : 1), 0);
+        //transform.localScale = new Vector3(spawner.range * (spawner.stackRange ? numStacks : 1), spawner.size * 2 * (spawner.stackSize ? numStacks : 1), 0);
     }
 
     /// <summary>
