@@ -9,13 +9,15 @@ using System;
 /// </summary>
 public class Deck : MonoBehaviour
 {
-    // Global singleton for the actor's deck.
-    public static Deck playerDeck;
-
+    #region Variables
     [Tooltip("All the cards in the deck.")]
     public List<Card> cards;
     [Tooltip("The side of this deck's hand.")]
     public int handSize = 3;
+
+    #region Hidden in Inspector Variables
+    // Global singleton for the actor's deck.
+    public static Deck playerDeck;
 
     // The actor that plays cards from this deck.
     [HideInInspector]
@@ -38,20 +40,21 @@ public class Deck : MonoBehaviour
     // The indices of the cards on cooldown mapped to the time remaining on the cooldown.
     [HideInInspector]
     public Dictionary<int, float> cardIndicesToCooldowns = new Dictionary<int, float>();
+    #endregion
 
-    public delegate void handChangedNotification();
+    #region Delegates
     // Called when the draw pile changes.
-    public handChangedNotification onDrawPileChanged;
+    public System.Action onDrawPileChanged;
     // Called when the hand changes.
-    public handChangedNotification onHandChanged;
+    public System.Action onHandChanged;
     // Called when the discard pile changes.
-    public handChangedNotification onDiscardPileChanged;
-
+    public System.Action onDiscardPileChanged;
     // Called when a card is added
     public Action<Card> onCardAdded;
-
     // Called when a card is removed
     public Action<Card> onCardRemoved;
+    #endregion
+    #endregion
 
     #region Initialization
     /// <summary>
@@ -192,86 +195,81 @@ public class Deck : MonoBehaviour
 
     #region Playing & Previewing
     /// <summary>
-    /// Selects a card. Will immediately play any not cord able cards. Will toggle the preview for cord able cards.
+    /// Selects a card. Will immediately play any non-cordable cards. Will toggle the preview for cordable cards.
     /// </summary>
     /// <param name="handIndex"> The index in the hand of the card. </param>
     public void SelectCard(int handIndex)
     {
-        //if (inHandCards.Count <= handIndex || cardIndicesToCooldowns.ContainsKey(handIndex))
-        //{
-        //    return;
-        //}
+        if (inHandCards.Count <= handIndex || inHandCards[handIndex] == null || cardIndicesToCooldowns.ContainsKey(handIndex) || cardIndicesToCooldowns.ContainsKey(handIndex))
+        {
+            return;
+        }
 
-        //if (inHandCards[handIndex] is not AttackCard)
-        //{
-        //    //inHandCards[handIndex];
-        //    return;
-        //}
-
-        //AttackCard card = inHandCards[handIndex] as AttackCard;
-
-        //if (previewedCardIndices.Count == 0)
-        //{
-        //    card.PreviewActions(actor);
-        //    previewedCardIndices.Add(handIndex);
-        //    return;
-        //}
-        //Card rootCard = inHandCards[previewedCardIndices[0]];
-
-        //if (handIndex == previewedCardIndices[0])
-        //{
-        //    previewedCardIndices.Remove(handIndex);
-        //    //rootCard.CancelPreviewActions(actor);
-        //    if (previewedCardIndices.Count > 0)
-        //    {
-        //        rootCard = inHandCards[previewedCardIndices[0]];
-
-        //        int playCount = 0;
-        //        List<ActionModifier> modifiers = new List<ActionModifier>();
-        //        for (int i = 1; i < previewedCardIndices.Count; i++)
-        //        {
-        //            if (inHandCards[previewedCardIndices[i]] == rootCard)
-        //            {
-        //                //modifiers.AddRange(inHandCards[previewedCardIndices[i]].duplicateModifiers);
-        //            }
-        //            else
-        //            {
-        //                //modifiers.AddRange(inHandCards[previewedCardIndices[i]].actionModifiers);
-        //            }
-        //        }
-
-        //        //rootCard.PreviewActions(actor);
-        //        //rootCard.AddStacksToPreview(actor, playCount);
-        //        //rootCard.ApplyModifiersToPreview(actor, modifiers);
-        //    }
-        //    return;
-        //}
+        // Play normal cards.
+        if (inHandCards[handIndex] is not AttackCard)
+        {
+            inHandCards[handIndex].PlayActions(actor);
+            return;
+        }
 
 
-        //if (previewedCardIndices.Contains(handIndex))
-        //{
-        //    if (card == rootCard)
-        //    {
-        //        //rootCard.AddStacksToPreview(actor, - 1);
-        //    }
-        //    else
-        //    {
-        //        //rootCard.RemoveModifiersFromPreview(actor, card.actionModifiers);
-        //    }
-        //    previewedCardIndices.Remove(handIndex);
-        //}
-        //else
-        //{
-        //    if (card == rootCard)
-        //    {
-        //        //rootCard.AddStacksToPreview(actor, 1);
-        //    }
-        //    else
-        //    {
-        //        //rootCard.ApplyModifiersToPreview(actor, card.actionModifiers);
-        //    }
-        //    previewedCardIndices.Add(handIndex);
-        //}
+        AttackCard card = inHandCards[handIndex] as AttackCard;
+        // If nothing is being previewed, start previewing.
+        if (previewedCardIndices.Count == 0)
+        {
+            card.PreviewActions(actor);
+            previewedCardIndices.Add(handIndex);
+            return;
+        }
+
+        AttackCard rootCard = inHandCards[previewedCardIndices[0]] as AttackCard;
+        // If root of cord is changed
+        if (card == rootCard)
+        {
+            previewedCardIndices.RemoveAt(0);
+            rootCard.CancelPreviewActions(actor);
+
+            // If there are still previewed cards
+            if (previewedCardIndices.Count > 0)
+            {
+                rootCard = inHandCards[previewedCardIndices[0]] as AttackCard;
+
+                int playCount = 0;
+                List<AttackCard> cordedCards = new List<AttackCard>();
+                for (int i = 1; i < previewedCardIndices.Count; i++)
+                {
+                    cordedCards.Add(inHandCards[previewedCardIndices[i]] as AttackCard);
+                }
+
+                rootCard.PreviewActions(actor, cordedCards);
+            }
+            return;
+        }
+
+        // Add or remove cards from preview
+        if (previewedCardIndices.Contains(handIndex))
+        {
+            rootCard.RemoveFromPreview(actor, card);
+            previewedCardIndices.Remove(handIndex);
+        }
+        else
+        {
+            rootCard.AddToPreview(actor, card);
+            previewedCardIndices.Add(handIndex);
+        }
+    }
+
+    /// <summary>
+    /// Play any cards currently being previewed.
+    /// </summary>
+    public void PlayCard(int handIndex)
+    {
+        if (handIndex >= inHandCards.Count)
+        {
+            return;
+        }
+
+        inHandCards[handIndex]?.PlayActions(actor);
     }
 
     /// <summary>
@@ -285,6 +283,11 @@ public class Deck : MonoBehaviour
         for (int i = 0; i < handIndices.Count; i++)
         {
             Card card = inHandCards[handIndices[i]];
+            if (card == null)
+            {
+                continue;
+            }
+            
             if (cardToPlay == null && card is AttackCard)
             {
                 cardToPlay = card as AttackCard;

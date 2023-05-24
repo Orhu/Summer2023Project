@@ -26,10 +26,19 @@ namespace CardSystem
         [Tooltip("The how this card will modify actions when used in a combo with itself.")]
         public List<AttackModifier> duplicateModifiers;
 
+        #region Previewing
         /// <summary>
         /// Causes all of this cards Actions to start rendering their previews around the actor.
         /// </summary>
         public void PreviewActions(IActor actor)
+        {
+            foreach (Action cardAction in actions)
+            {
+                //cardAction.Preview(actor);
+            }
+        }
+
+        public void PreviewActions(IActor actor, List<AttackCard> cordedCards)
         {
             foreach (Action cardAction in actions)
             {
@@ -42,7 +51,14 @@ namespace CardSystem
         /// </summary>
         /// <param name="actor"> The actor previewing </param>
         /// <param name="actionModifiers"> The modifiers to apply </param>
-        public void ApplyModifiersToPreview(IActor actor, List<AttackModifier> actionModifiers)
+        public void AddToPreview(IActor actor, List<AttackModifier> actionModifiers)
+        {
+            foreach (Action cardAction in actions)
+            {
+                //cardAction.ApplyModifiersToPreview(actor, actionModifiers);
+            }
+        }
+        public void AddToPreview(IActor actor, AttackCard cordedCard)
         {
             foreach (Action cardAction in actions)
             {
@@ -55,7 +71,14 @@ namespace CardSystem
         /// </summary>
         /// <param name="actor"> The actor previewing </param>
         /// <param name="actionModifiers"> The modifiers to remove </param>
-        internal void RemoveModifiersFromPreview(IActor actor, List<AttackModifier> actionModifiers)
+        internal void RemoveFromPreview(IActor actor, List<AttackModifier> actionModifiers)
+        {
+            foreach (Action cardAction in actions)
+            {
+                //cardAction.RemoveModifiersFromPreview(actor, actionModifiers);
+            }
+        }
+        internal void RemoveFromPreview(IActor actor, AttackCard cordedCard)
         {
             foreach (Action cardAction in actions)
             {
@@ -73,6 +96,7 @@ namespace CardSystem
                 //cardAction.CancelPreview(actor);
             }
         }
+        #endregion
 
         public void PlayActions(IActor actor, List<AttackCard> cordedCards)
         {
