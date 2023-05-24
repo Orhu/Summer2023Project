@@ -200,7 +200,7 @@ public class Deck : MonoBehaviour
     /// <param name="handIndex"> The index in the hand of the card. </param>
     public void SelectCard(int handIndex)
     {
-        if (inHandCards.Count <= handIndex || inHandCards[handIndex] == null || cardIndicesToCooldowns.ContainsKey(handIndex) || cardIndicesToCooldowns.ContainsKey(handIndex))
+        if (inHandCards.Count <= handIndex || inHandCards[handIndex] == null || cardIndicesToCooldowns.ContainsKey(handIndex) || cardIndicesToActionTimes.ContainsKey(handIndex))
         {
             return;
         }
@@ -208,7 +208,7 @@ public class Deck : MonoBehaviour
         // Play normal cards.
         if (inHandCards[handIndex] is not AttackCard)
         {
-            inHandCards[handIndex].PlayActions(actor);
+            PlayCard(handIndex);
             return;
         }
 
@@ -268,7 +268,14 @@ public class Deck : MonoBehaviour
             return;
         }
 
-        inHandCards[handIndex]?.PlayActions(actor);
+        Card card = inHandCards[handIndex];
+        if (card == null)
+        {
+            return;
+        }
+
+        card.PlayActions(actor);
+        cardIndicesToActionTimes.Add(handIndex, card.actionTime);
     }
 
     /// <summary>
@@ -279,14 +286,15 @@ public class Deck : MonoBehaviour
         AttackCard cardToPlay = null;
         List<AttackCard> cordedCards = new List<AttackCard>();
 
-        for (int i = 0; i < handIndices.Count; i++)
+        foreach (int handIndex in handIndices)
         {
-            Card card = inHandCards[handIndices[i]];
+            Card card = inHandCards[handIndex];
             if (card == null)
             {
                 continue;
             }
-            
+
+            cardIndicesToActionTimes.Add(handIndex, card.actionTime);
             if (cardToPlay == null && card is AttackCard)
             {
                 cardToPlay = card as AttackCard;
@@ -299,7 +307,7 @@ public class Deck : MonoBehaviour
             }
             else
             {
-                card.PlayActions(actor);
+                PlayCard(handIndex);
             }
         }
 
