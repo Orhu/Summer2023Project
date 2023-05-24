@@ -119,7 +119,7 @@ namespace CardSystem.Effects
         /// </summary>
         /// <param name="actor"> The actor that will be playing this action. </param>
         /// <param name="modifiers"> The modifier affecting this action. </param>
-        public void Play(IActor actor, List<GameObject> ignoredObjects, List<AttackModifier> modifiers)
+        public void Play(IActor actor, List<AttackModifier> modifiers, List<GameObject> ignoredObjects = null)
         {
             CancelPreview(actor);
             Projectile projectile = Instantiate<Projectile>(projectilePrefab, actor.GetActionSourceTransform().position, actor.GetActionSourceTransform().rotation);
@@ -137,9 +137,9 @@ namespace CardSystem.Effects
             projectile.attack = modifiedAttack;
         }
 
-        public override void Play(IActor actor, List<GameObject> ignoredObjects)
+        public override void Play(IActor actor, List<GameObject> ignoredObjects = null)
         {
-            Play(actor, ignoredObjects, new List<AttackModifier>());
+            Play(actor, new List<AttackModifier>(), ignoredObjects);
         }
 
 

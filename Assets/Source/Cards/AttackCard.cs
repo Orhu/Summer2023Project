@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Skaillz.EditInline;
+using CardSystem.Effects;
 
 namespace CardSystem
 {
@@ -73,5 +74,37 @@ namespace CardSystem
             }
         }
 
+        public void PlayActions(IActor actor, List<AttackCard> cordedCards)
+        {
+            List<AttackModifier> modifiers = new List<AttackModifier>();
+            foreach (AttackCard cordedCard in cordedCards)
+            {
+                if (cordedCard == this)
+                {
+                    modifiers.AddRange(cordedCard.duplicateModifiers);
+                }
+                else
+                {
+                    modifiers.AddRange(cordedCard.cordModifiers);
+                }
+            }
+
+            PlayActions(actor, modifiers);
+        }
+
+        public void PlayActions(IActor actor, List<AttackModifier> modifiers)
+        {
+            foreach(Action action in actions)
+            {
+                if (action is Attack)
+                {
+                    (action as Attack).Play(actor, modifiers);
+                }
+                else
+                {
+                    action.Play(actor);
+                }
+            }
+        }
     }
 }
