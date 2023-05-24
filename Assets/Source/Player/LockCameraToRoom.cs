@@ -25,8 +25,8 @@ public class LockCameraToRoom : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        cellSize = ProceduralGeneration.proceduralGenerationInstance.cellSize;
-        roomScale = cellSize * ProceduralGeneration.proceduralGenerationInstance.roomSize;
+        //cellSize = ProceduralGeneration.proceduralGenerationInstance.cellSize;
+        //roomScale = cellSize * ProceduralGeneration.proceduralGenerationInstance.roomSize;
         if (roomScale.y > roomScale.x * (1 / GetComponent<Camera>().aspect))
         {
             height = roomScale.y;

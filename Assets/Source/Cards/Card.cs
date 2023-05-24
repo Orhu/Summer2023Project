@@ -25,9 +25,9 @@ namespace CardSystem
         [Tooltip("The how this card will modify actions when used in a combo.")]
         [Skaillz.EditInline.EditInline]
         public List<ActionModifier> actionModifiers;
-        [Tooltip("The effects that this card will have on the dungeon while in the actor's deck.")]
-        [Skaillz.EditInline.EditInline]
-        public DungeonEffect[] effects;
+        //[Tooltip("The effects that this card will have on the dungeon while in the actor's deck.")]
+        //[Skaillz.EditInline.EditInline]
+        //public DungeonEffect[] effects;
 
         [Header("Visuals")]
         [Tooltip("The name of the card as shown to the actor.")]
@@ -52,10 +52,10 @@ namespace CardSystem
             string description = "";
             if (!isActionSide)
             {
-                foreach (DungeonEffect cardEffect in effects)
-                {
-                    description += cardEffect.GetFormattedDescription() + "\n";
-                }
+                //foreach (DungeonEffect cardEffect in effects)
+                //{
+                //    description += cardEffect.GetFormattedDescription() + "\n";
+                //}
             }
             else
             {

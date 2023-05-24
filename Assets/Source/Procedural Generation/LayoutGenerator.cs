@@ -4,405 +4,548 @@ using UnityEngine;
 
 public class LayoutGenerator : MonoBehaviour
 {
-    [Tooltip("The parameters that affect the layout generation")]
+    [Tooltip("The parameters for controlling the layout generation")]
     public LayoutGenerationParameters parameters;
 
     // The map of the rooms
     [HideInInspector]
     public MapCell[,] map;
 
-    /// <summary>
-    /// Generates the layout
-    /// </summary>
+    // The starting cell
+    [HideInInspector]
+    public MapCell startCell;
+
+    // The map size
+    [HideInInspector]
+    public Vector2Int mapSize;
+
+    void Start()
+    {
+        Generate();
+        PrintMap();
+    }
+
     void Generate()
     {
-        MapCell[,] genMap = InitializeGenMap();
+        // Get the number of normal cells
+        int numNormalCells = parameters.numNormalRooms + Random.Range(0, parameters.numNormalRoomsVariance * 2 + 1) - parameters.numNormalRoomsVariance;
 
-        // Generate start room
-        Vector2Int startPos = new Vector2Int(parameters.mapSize.x / 2, parameters.mapSize.y / 2);
-        MapCell startCell = genMap[startPos.x, startPos.y];
-        startCell.direction = Direction.All;
-        Dictionary<Direction, int> directionDict = new Dictionary<Direction, int>();
-        directionDict.Add(Direction.Right, GetRandomDoorPos(false));
-        directionDict.Add(Direction.Up, GetRandomDoorPos(true));
-        directionDict.Add(Direction.Left, GetRandomDoorPos(false));
-        directionDict.Add(Direction.Down, GetRandomDoorPos(true));
-        startCell.directionToDoorPos = directionDict;
-        CreateRoom(startCell, parameters.startRoom);
+        // Initialize the gen map
+        MapCell[,] genMap = InitializeGenMap(numNormalCells + parameters.numSpecialRooms);
 
-        // Get the neighbors around the start room
-        Queue<MapCell> cellsToGenerate = new Queue<MapCell>();
-        List<MapCell> initialNeighbors = GetUnvisitedNeighbors(startPos, genMap);
-        foreach (MapCell mapCell in initialNeighbors)
+        // Create the starting cell
+        startCell = GenerateStartCell(genMap);
+       
+        // Get all the branchable cells (which will start out as all the normal cells, then cells will be removed from them as it goes along
+        List<MapCell> branchableCells = GenerateNormalCells(genMap, startCell, numNormalCells);
+
+        // If somehow (this should never happen) The boss or special cells failed to generate, just start over
+        if (!GenerateBossAndExitCells(genMap, branchableCells))
         {
-            cellsToGenerate.Enqueue(mapCell);
+            // This should never happen butttt y'know just in case
+            Generate();
+        }
+        if (!GenerateSpecialCells(genMap, branchableCells, parameters.numSpecialRooms))
+        {
+            Generate();
         }
 
-        // Generate the layout, keeping track of the dead ends
-        List<MapCell> deadEnds = new List<MapCell>();
+        CreateMap(genMap);
+    }
+
+    MapCell[,] InitializeGenMap(int numRooms)
+    {
+        // Make the map size to be able to hold all the rooms in a row in any direction (worst case scenario)
+        // +5 because boss room is 3x3, then you have the exit room, and finally you have the start room in the middle.
+        // TODO: Change boos room size to not be hard coded lol
+        mapSize = new Vector2Int(numRooms * 2 + 7, numRooms * 2 + 7);
+
+        MapCell[,] genMap = new MapCell[mapSize.x, mapSize.y];
+
+        // Iterate over the map size and set each cell to have the correct location
+        for (int i = 0; i < mapSize.x; i++)
+        {
+            for (int j = 0; j < mapSize.y; j++)
+            {
+                genMap[i, j] = new MapCell();
+                genMap[i, j].location = new Vector2Int(i, j);
+            }
+        }
+
+        return genMap;
+    }
+
+    MapCell GenerateStartCell(MapCell[,] genMap)
+    {
+        Vector2Int startPos = new Vector2Int((mapSize.x + 1) / 2, (mapSize.y + 1) / 2);
+        MapCell startRoom = genMap[startPos.x, startPos.y];
+        startRoom.visited = true;
+        startRoom.type = RoomType.Start;
+        startRoom.direction = Direction.All;
+        return startRoom;
+    }
+
+    List<MapCell> GenerateNormalCells(MapCell[,] genMap, MapCell startCell, int numNormalCells)
+    {
+        Debug.Log("Num normal cells: " + numNormalCells);
+        // Track the normal cells created
+        List<MapCell> normalCells = new List<MapCell>();
+
+        // Track the cells that still need to be generated
+        Queue<MapCell> cellsToGenerate = new Queue<MapCell>();
+        int newCellsCount = 0;
+
+        // Add the neighbors of the start cell to the cells to generate
+        List<MapCell> initialNeighbors = GetUnvisitedNeighbors(genMap, startCell, true);
+        while (initialNeighbors.Count != 0)
+        {
+            MapCell randomInitialNeighbor = initialNeighbors[Random.Range(0, initialNeighbors.Count)];
+            randomInitialNeighbor.visited = true;
+            cellsToGenerate.Enqueue(randomInitialNeighbor);
+            initialNeighbors.Remove(randomInitialNeighbor);
+            newCellsCount++;
+        }
+
+        // Generate all the cells using BFS
         while (cellsToGenerate.Count != 0)
         {
+            // Generate the current cell
             MapCell currentCell = cellsToGenerate.Peek();
+            normalCells.Add(currentCell);
+            currentCell.type = RoomType.Normal;
 
-            // Get the door positions
-            currentCell.directionToDoorPos = CreateRandomDirectionToDoorPosDict(GetDirectionConstraint(currentCell.location, genMap));
-            currentCell.direction = DirectionToDoorDictToDirection(currentCell.directionToDoorPos);
+            Debug.Log("Generating normal cell: " + currentCell.location);
 
-            // Check if it's a dead end
-            if (IsDeadEnd(currentCell.direction))
-            {
-                deadEnds.Add(currentCell);
-            }
+            // The direction should not make it so the number of added neighbors exceeds the numNormalCells limit
+            currentCell.direction = GetRandomConstrainedDirection(GetDirectionConstraint(genMap, currentCell, numNormalCells, newCellsCount));
 
-            // Instatiate the room
-            CreateRoom(currentCell, parameters.normalRoom);
-            currentCell.generated = true;
-
-            // Remove the current cell from the cells to generate
+            // Remove the current cell from the queue
             cellsToGenerate.Dequeue();
 
-            // Add all the neighbors to the cells to generate
-            List<MapCell> newNeighbors = GetUnvisitedNeighbors(currentCell.location, currentCell.direction, genMap);
-            for (int i = 0; i < newNeighbors.Count; i++)
+            // Add the neighbors of the cell to the queue
+            List<MapCell> neighbors = GetUnvisitedNeighbors(genMap, currentCell, true);
+            while (neighbors.Count != 0)
             {
-                newNeighbors[i].added = true;
-                cellsToGenerate.Enqueue(newNeighbors[i]);
+                MapCell randomNeighbor = neighbors[Random.Range(0, neighbors.Count)];
+                randomNeighbor.visited = true;
+                cellsToGenerate.Enqueue(randomNeighbor);
+                neighbors.Remove(randomNeighbor);
+                newCellsCount++;
             }
         }
 
-        // If there are more special rooms than dead ends, create more dead ends 
-        if (parameters.specialRooms.Count + 1 > deadEnds.Count)
-        {
-            deadEnds = CreateNewDeadEnds(parameters.specialRooms.Count + 1 - deadEnds.Count, deadEnds, genMap);
-        }
-
-        // Decide which dead ends will be the special rooms
-        while (parameters.specialRooms.Count != 0 && deadEnds.Count > 1)
-        {
-            MapCell specialRoom = deadEnds[Random.Range(0, deadEnds.Count)];
-            Destroy(specialRoom.room.gameObject);
-            specialRoom.room = CreateRoom(specialRoom, parameters.specialRooms[0]);
-            deadEnds.Remove(specialRoom);
-            parameters.specialRooms.RemoveAt(0);
-        }
-
-        // Generate the rest of the special rooms
-        while (parameters.specialRooms.Count != 0)
-        {
-            MapCell specialRoom = deadEnds[Random.Range(0, deadEnds.Count)];
-            Destroy(specialRoom.room.gameObject);
-            specialRoom.room = CreateRoom(specialRoom, parameters.specialRooms[0]);
-            deadEnds.Remove(specialRoom);
-            parameters.specialRooms.RemoveAt(0);
-        }
-
-        // Generate the boss room
-        MapCell bossRoom = deadEnds[Random.Range(0, deadEnds.Count)];
-        Destroy(bossRoom.room.gameObject);
-        bossRoom.room = CreateRoom(bossRoom, parameters.bossRoom);
+        return normalCells;
     }
 
-    /// <summary>
-    /// Initializes the generation map, to be used while generating
-    /// </summary>
-    /// <returns> The generation map </returns>
-    MapCell[,] InitializeGenMap()
+    List<MapCell> GetUnvisitedNeighbors(MapCell[,] genMap, MapCell cell, bool useDirection)
     {
-        MapCell[,] returnVal = new MapCell[parameters.mapSize.x, parameters.mapSize.y];
-        for (int i = 0; i < parameters.mapSize.x; i++)
+        List<MapCell> neighbors = new List<MapCell>();
+
+        bool checkRightDirection = !useDirection || (useDirection && (cell.direction & Direction.Right) != Direction.None);
+        if (checkRightDirection && !genMap[cell.location.x + 1, cell.location.y].visited)
         {
-            for (int j = 0; j < parameters.mapSize.y; j++)
-            {
-                returnVal[i, j].location = new Vector2Int(i, j);
-            }
+            neighbors.Add(genMap[cell.location.x + 1, cell.location.y]);
         }
-        return returnVal;
+
+        bool checkUpDirection = !useDirection || (useDirection && (cell.direction & Direction.Up) != Direction.None);
+        if (checkUpDirection && !genMap[cell.location.x, cell.location.y + 1].visited)
+        {
+            neighbors.Add(genMap[cell.location.x, cell.location.y + 1]);
+        }
+
+        bool checkLeftDirection = !useDirection || (useDirection && (cell.direction & Direction.Left) != Direction.None);
+        if (checkLeftDirection && !genMap[cell.location.x - 1, cell.location.y].visited)
+        {
+            neighbors.Add(genMap[cell.location.x - 1, cell.location.y]);
+        }
+
+        bool checkDownDirection = !useDirection || (useDirection && (cell.direction & Direction.Down) != Direction.None);
+        if (checkDownDirection && !genMap[cell.location.x, cell.location.y - 1].visited)
+        {
+            neighbors.Add(genMap[cell.location.x, cell.location.y - 1]);
+        }
+
+        return neighbors;
     }
 
-    /// <summary>
-    /// Transforms the mapLoc into the world frame
-    /// </summary>
-    /// <param name="mapLoc"> The map location </param>
-    /// <returns> The world location </returns>
-    Vector2 MapLocToWorldLoc(Vector2Int mapLoc)
+    Direction GetRandomConstrainedDirection(DirectionConstraint constraint)
     {
-        return new Vector2(mapLoc.x - (parameters.mapSize.x / 2) * parameters.roomSize.x, mapLoc.y - (parameters.mapSize.y / 2) * parameters.roomSize.y);
-    }
+        // Get a random direction that adheres to the must have and must not have constraints
+        Direction direction = (Direction) Random.Range((int) Direction.None, (int) Direction.All + 1);
+        direction |= constraint.mustHave;
+        Direction invertedMustNotHave = ~constraint.mustNotHave;
+        direction &= invertedMustNotHave;
 
-    /// <summary>
-    /// Gets all the unvisited neighbors next to the mapLoc
-    /// </summary>
-    /// <param name="mapLoc"> The location to get neighbors around </param>
-    /// <param name="genMap"> The current generated map </param>
-    /// <returns> The unvisted neighbors </returns>
-    List<MapCell> GetUnvisitedNeighbors(Vector2Int mapLoc, MapCell[,] genMap)
-    {
-        return GetUnvisitedNeighbors(mapLoc, Direction.All, genMap);
-    }
+        List<Direction> directionsList = new List<Direction>();
+        directionsList.Add(Direction.Right);
+        directionsList.Add(Direction.Up);
+        directionsList.Add(Direction.Left);
+        directionsList.Add(Direction.Down);
 
-    /// <summary>
-    /// Gets the unvisited neighbors next to the mapLoc in the directions given
-    /// </summary>
-    /// <param name="mapLoc"> The location to get neighbors around</param>
-    /// <param name="direction"> The directions to get the neighbors in </param>
-    /// <param name="genMap"> The current generated map </param>
-    /// <returns> The unvisited neighbors </returns>
-    List<MapCell> GetUnvisitedNeighbors(Vector2Int mapLoc, Direction direction, MapCell[,] genMap)
-    {
-        List<MapCell> returnVal = new List<MapCell>();
+        List<Direction> directions = new List<Direction>();
 
-        bool rightDirection = (direction & Direction.Right) != Direction.None;
-        bool onRightEdge = mapLoc.x == parameters.mapSize.x - 1;
-        if (rightDirection && !onRightEdge && genMap[mapLoc.x + 1, mapLoc.y].added == false)
+        // Count the number of directions
+        int count = 0;
+        for (int i = 0; i < directionsList.Count; i++)
         {
-            returnVal.Add(genMap[mapLoc.x + 1, mapLoc.y]);
-        }
-
-        bool upDirection = (direction & Direction.Up) != Direction.None;
-        bool onUpEdge = mapLoc.y == parameters.mapSize.x - 1;
-        if (upDirection && !onUpEdge && genMap[mapLoc.x, mapLoc.y + 1].added == false)
-        {
-            returnVal.Add(genMap[mapLoc.x, mapLoc.y + 1]);
-        }
-
-        bool leftDirection = (direction & Direction.Left) != Direction.None;
-        bool onLeftEdge = mapLoc.x == 0;
-        if (leftDirection && !onLeftEdge && genMap[mapLoc.x - 1, mapLoc.y].added == false)
-        {
-            returnVal.Add(genMap[mapLoc.x - 1, mapLoc.y]);
-        }
-
-        bool downDirection = (direction & Direction.Down) != Direction.None;
-        bool onDownEdge = mapLoc.y == 0;
-        if (downDirection && !onDownEdge && genMap[mapLoc.x, mapLoc.y - 1].added == false)
-        {
-            returnVal.Add(genMap[mapLoc.x, mapLoc.y - 1]);
-        }
-
-        return returnVal;
-    }
-
-    /// <summary>
-    /// Gets the directions this position must have and must not have
-    /// </summary>
-    /// <param name="mapLoc"> The location to get the constraints of </param>
-    /// <returns> The constraint </returns>
-    DirectionConstraint GetDirectionConstraint(Vector2Int mapLoc, MapCell[,] genMap)
-    {
-        DirectionConstraint constraint = new DirectionConstraint();
-
-        bool onRightEdge = mapLoc.x == parameters.mapSize.x - 1;
-        if (!onRightEdge && (genMap[mapLoc.x + 1, mapLoc.y].generated))
-        {
-            if ((genMap[mapLoc.x + 1, mapLoc.y].direction & Direction.Left) != Direction.None)
+            if ((direction & directionsList[i]) != Direction.None)
             {
-                constraint.mustHave.Add(Direction.Right, genMap[mapLoc.x + 1, mapLoc.y].directionToDoorPos[Direction.Left]);
-            }
-            else
-            {
-                constraint.mustNotHave |= Direction.Right;
+                count++;
+                directions.Add(directionsList[i]);
             }
         }
 
-        bool onUpEdge = mapLoc.y == parameters.mapSize.y - 1;
-        if (!onUpEdge && (genMap[mapLoc.x, mapLoc.y + 1].generated))
+        // If it doesn't constrain to the max number of directions, then remove random directions
+        while (count > constraint.maxDirections)
         {
-            if ((genMap[mapLoc.x, mapLoc.y + 1].direction & Direction.Down) != Direction.None)
+            if (directions.Count == 0)
             {
-                constraint.mustHave.Add(Direction.Up, genMap[mapLoc.x + 1, mapLoc.y].directionToDoorPos[Direction.Down]);
+                throw new System.Exception("A room was generated that must have more directions than it's allowed");
             }
-            else
+
+            // Get the random direction to remove
+            Direction removedDirection = directions[Random.Range(0, directions.Count)];
+
+            // Make sure this direction is not required
+            if ((removedDirection & constraint.mustHave) != Direction.None)
             {
-                constraint.mustNotHave |= Direction.Up;
+                directions.Remove(removedDirection);
+                continue;
             }
-        }
 
-        bool onLeftEdge = mapLoc.x == 0;
-        if (!onLeftEdge && (genMap[mapLoc.x - 1, mapLoc.y].generated))
-        {
-            if ((genMap[mapLoc.x - 1, mapLoc.y].direction & Direction.Right) != Direction.None)
-            {
-                constraint.mustHave.Add(Direction.Left, genMap[mapLoc.x + 1, mapLoc.y].directionToDoorPos[Direction.Right]);
-            }
-            else
-            {
-                constraint.mustNotHave |= Direction.Left;
-            }
-        }
-
-        bool onDownEdge = mapLoc.y == 0;
-        if (!onDownEdge && (genMap[mapLoc.x, mapLoc.y - 1].generated))
-        {
-            if ((genMap[mapLoc.x, mapLoc.y - 1].direction & Direction.Up) != Direction.None)
-            {
-                constraint.mustHave.Add(Direction.Down, genMap[mapLoc.x, mapLoc.y - 1].directionToDoorPos[Direction.Up]);
-            }
-            else
-            {
-                constraint.mustNotHave |= Direction.Down;
-            }
-        }
-
-        return constraint;
-    }
-
-    /// <summary>
-    /// Gets a random direction and door pos, adhering to the given constraint
-    /// </summary>
-    /// <param name="constraint"> The constraint to adhere to </param>
-    /// <returns> The direction to door dict </returns>
-    Dictionary<Direction, int> CreateRandomDirectionToDoorPosDict(DirectionConstraint constraint)
-    {
-        Dictionary<Direction, int> returnVal = new Dictionary<Direction, int>();
-        Direction direction = (Direction) Random.Range(0, 16);
-
-        foreach (KeyValuePair<Direction, int> directionToDoor in constraint.mustHave)
-        {
-            direction |= directionToDoor.Key;
-            returnVal.Add(directionToDoor.Key, directionToDoor.Value);
-        }
-
-        Direction invertedMustNotHave = (Direction) 15 ^ constraint.mustNotHave;
-        direction = direction & invertedMustNotHave;
-
-        if ((direction & Direction.Right) != Direction.None && !returnVal.ContainsKey(Direction.Right))
-        {
-            returnVal.Add(Direction.Right, GetRandomDoorPos(false));
-        }
-
-        if ((direction & Direction.Up) != Direction.None && !returnVal.ContainsKey(Direction.Up))
-        {
-            returnVal.Add(Direction.Up, GetRandomDoorPos(true));
-        }
-
-        if ((direction & Direction.Left) != Direction.None && !returnVal.ContainsKey(Direction.Left))
-        {
-            returnVal.Add(Direction.Left, GetRandomDoorPos(false));
-        }
-
-        if ((direction & Direction.Down) != Direction.None && !returnVal.ContainsKey(Direction.Down))
-        {
-            returnVal.Add(Direction.Down, GetRandomDoorPos(true));
-        }
-
-        return returnVal;
-    }
-
-    /// <summary>
-    /// Gets the overall direction within the dictionary
-    /// </summary>
-    /// <param name="dictionary"> The dictionary </param>
-    /// <returns> The direction </returns>
-    Direction DirectionToDoorDictToDirection(Dictionary<Direction, int> dictionary)
-    {
-        Direction direction = Direction.None;
-
-        foreach (KeyValuePair<Direction, int> directionToDoor in dictionary)
-        {
-            direction |= directionToDoor.Key;
+            // Remove the direction
+            Direction invertedRemoved = ~removedDirection;
+            direction &= invertedRemoved;
+            directions.Remove(removedDirection);
+            count--;
         }
 
         return direction;
     }
 
-    /// <summary>
-    /// Gets a random position for the door to appear in
-    /// </summary>
-    /// <param name="topOrBottom"> Whether or not this is getting a door for the top or bottom, or from the left or right </param>
-    /// <returns> The random position </returns>
-    int GetRandomDoorPos(bool topOrBottom)
+    DirectionConstraint GetDirectionConstraint(MapCell[,] genMap, MapCell cell, int maxNewCells = -1, int currentNewCells = -1)
     {
-        if (topOrBottom)
-        {
-            return Random.Range(1, parameters.roomSize.x - 1);
-        }
-        else
-        {
-            return Random.Range(1, parameters.roomSize.y - 1);
-        }
-    }
+        DirectionConstraint directionConstraint = new DirectionConstraint();
 
-    /// <summary>
-    /// Gets whether or not there is only one direction in this direction
-    /// </summary>
-    /// <param name="direction"> The direction to check </param>
-    /// <returns> Whether the direction is a dead end or not </returns>
-    bool IsDeadEnd(Direction direction)
-    {
-        return direction == Direction.Right || direction == Direction.Up || direction == Direction.Left || direction == Direction.Down;
-    }
+        // Check the right neighbor
+        MapCell rightNeighbor = genMap[cell.location.x + 1, cell.location.y];
 
-    /// <summary>
-    /// Handles an edge case where the number of dead ends is less than the number of special rooms that need to be generated. Creates
-    /// NEW dead ends, so the number of dead ends remaining will be 1 plus the numNew.
-    /// </summary>
-    /// <param name="numNew"> The number of new dead ends to make </param>
-    /// <param name="existingDeadEnds"> An list of existing dead ends to branch off of </param>
-    /// <param name="genMap"> The existing generated map </param>
-    /// <returns> The new dead ends, combined with the list of remaining old dead ends </returns>
-    List<MapCell> CreateNewDeadEnds(int numNew, List<MapCell> existingDeadEnds, MapCell[,] genMap)
-    {
-        List<MapCell> newDeadEnds = new List<MapCell>();
-        List<MapCell> possibleBranchers = existingDeadEnds;
-        int currentIndex = Random.Range(0, possibleBranchers.Count);
-        MapCell current = possibleBranchers[currentIndex];
-        possibleBranchers.RemoveAt(currentIndex);
-        while (newDeadEnds.Count < numNew + 1)
+        if (rightNeighbor.visited)
         {
-            List<MapCell> neighbors = GetUnvisitedNeighbors(current.location, genMap);
-            if (neighbors.Count == 0)
+            // If it's been visited and it has a door there, make sure to generate a door in that direction
+            if ((rightNeighbor.direction & Direction.Left) != Direction.None)
             {
-                if (possibleBranchers.Count > 0)
+                directionConstraint.mustHave |= Direction.Right;
+            }
+            // If it doesn't have a door there (or hasn't been generated yet), make sure to not put a door there
+            else
+            {
+                directionConstraint.mustNotHave |= Direction.Right;
+            }
+        }
+        
+        // Check the up neighbor
+        MapCell upNeighbor = genMap[cell.location.x, cell.location.y + 1];
+        if (upNeighbor.visited)
+        {
+            if ((upNeighbor.direction & Direction.Down) != Direction.None)
+            {
+                directionConstraint.mustHave |= Direction.Up;
+            }
+            else
+            {
+                directionConstraint.mustNotHave |= Direction.Up;
+            }
+        }
+        
+        // Check the left neighbor
+        MapCell leftNeighbor = genMap[cell.location.x - 1, cell.location.y];
+        if (leftNeighbor.visited)
+        {
+            if ((leftNeighbor.direction & Direction.Right) != Direction.None)
+            {
+                directionConstraint.mustHave |= Direction.Left;
+            }
+            else
+            {
+                directionConstraint.mustNotHave |= Direction.Left;
+            }
+        }
+        
+        // Check the down neighbor
+        MapCell downNeighbor = genMap[cell.location.x, cell.location.y - 1];
+        if (downNeighbor.visited)
+        {
+            if ((downNeighbor.direction & Direction.Up) != Direction.None)
+            {
+                directionConstraint.mustHave |= Direction.Down;
+            }
+            else
+            {
+                directionConstraint.mustNotHave |= Direction.Down;
+            }
+        }
+
+        // If we do care about the number of max new cells, then set the max number
+        if (maxNewCells != -1)
+        {
+            // Count the number of directions the room must have (because they don't count towards new rooms)
+            List<Direction> directions = new List<Direction>();
+            directions.Add(Direction.Right);
+            directions.Add(Direction.Up);
+            directions.Add(Direction.Left);
+            directions.Add(Direction.Down);
+
+            int count = 0;
+            for (int i = 0; i < directions.Count; i++)
+            {
+                if ((directionConstraint.mustHave & directions[i]) != Direction.None)
                 {
-                    currentIndex = Random.Range(0, possibleBranchers.Count);
-                    existingDeadEnds.Add(current);
-                    current = existingDeadEnds[currentIndex];
-                    existingDeadEnds.RemoveAt(currentIndex);
-                }
-                else
-                {
-                    // Be sad and break
-                    break;
+                    count++;
                 }
             }
 
-            existingDeadEnds.RemoveAt(currentIndex);
+            directionConstraint.maxDirections = maxNewCells - currentNewCells + count;
+        }
+
+        return directionConstraint;
+    }
+
+    bool GenerateBossAndExitCells(MapCell[,] genMap, List<MapCell> branchableCells)
+    {
+        while (true)
+        {
+            if (branchableCells.Count == 0)
+            {
+                // This should never happen, but if it does then sadge
+                return false;
+            }
+
+            MapCell branchCell = branchableCells[Random.Range(0, branchableCells.Count)];
+
+            List<Direction> directions = new List<Direction>();
+            directions.Add(Direction.Right);
+            directions.Add(Direction.Up);
+            directions.Add(Direction.Left);
+            directions.Add(Direction.Down);
+
+            while (directions.Count > 0)
+            {
+                Direction randomDirection = directions[Random.Range(0, directions.Count)];
+
+                // Check directions (yes yes it's hard coded and 1000% terrible I know)
+
+                bool checkRight = (randomDirection & Direction.Right) != Direction.None;
+                if (checkRight && Check3x3Grid(genMap, branchCell.location + new Vector2Int(2, 0)) && !genMap[branchCell.location.x + 4, branchCell.location.y].visited)
+                {
+                    Set3x3GridToBoss(genMap, branchCell.location + new Vector2Int(2, 0));
+                    genMap[branchCell.location.x + 4, branchCell.location.y].visited = true;
+                    genMap[branchCell.location.x + 4, branchCell.location.y].type = RoomType.Exit;
+                    branchCell.direction |= Direction.Right;
+                    return true;
+                }
+
+                bool checkUp = (randomDirection & Direction.Up) != Direction.None;
+                if (checkUp && Check3x3Grid(genMap, branchCell.location + new Vector2Int(0, 2)) && !genMap[branchCell.location.x, branchCell.location.y + 4].visited)
+                {
+                    Set3x3GridToBoss(genMap, branchCell.location + new Vector2Int(0, 2));
+                    genMap[branchCell.location.x, branchCell.location.y + 4].visited = true;
+                    genMap[branchCell.location.x, branchCell.location.y + 4].type = RoomType.Exit;
+                    branchCell.direction |= Direction.Up;
+                    return true;
+                }
+
+                bool checkLeft = (randomDirection & Direction.Left) != Direction.None;
+                if (checkLeft && Check3x3Grid(genMap, branchCell.location + new Vector2Int(-2, 0)) && !genMap[branchCell.location.x - 4, branchCell.location.y].visited)
+                {
+                    Set3x3GridToBoss(genMap, branchCell.location + new Vector2Int(-2, 0));
+                    genMap[branchCell.location.x - 4, branchCell.location.y].visited = true;
+                    genMap[branchCell.location.x - 4, branchCell.location.y].type = RoomType.Exit;
+                    branchCell.direction |= Direction.Left;
+                    return true;
+                }
+
+                bool checkDown = (randomDirection & Direction.Down) != Direction.None;
+                if (checkDown && Check3x3Grid(genMap, branchCell.location + new Vector2Int(0, -2)) && !genMap[branchCell.location.x, branchCell.location.y - 4].visited)
+                {
+                    Set3x3GridToBoss(genMap, branchCell.location + new Vector2Int(0, -2));
+                    genMap[branchCell.location.x, branchCell.location.y - 4].visited = true;
+                    genMap[branchCell.location.x, branchCell.location.y - 4].type = RoomType.Exit;
+                    branchCell.direction |= Direction.Down;
+                    return true;
+                }
+
+                directions.Remove(randomDirection);
+            }
+
+            branchableCells.Remove(branchCell);
         }
     }
 
     /// <summary>
-    /// Insantiates the given room
+    /// This function is sad and hopefully I will change this eventually
+    /// Checks a 3x3 grid on the genMap, making sure it's clear
     /// </summary>
-    /// <param name="cell"> The cell to instantiate in </param>
-    /// <param name="room"> The room to instantiate </param>
-    /// <returns> The instantiated room </returns>
-    GameObject CreateRoom(MapCell cell, GameObject room)
+    /// <param name="genMap"> The current generated map </param>
+    /// <param name="middlePoint"> The middle point of the 3x3 grid </param>
+    /// <returns> Whether or not this 3x3 is clear </returns>
+    bool Check3x3Grid(MapCell[,] genMap, Vector2Int middlePoint)
     {
-        GameObject newRoom = Instantiate(room, MapLocToWorldLoc(cell.location), Quaternion.identity);
-        newRoom.transform.parent = transform;
-        newRoom.SetActive(true);
-        return newRoom;
+        for (int i = -1; i <= 1; i++)
+        {
+            for (int j = -1; j <= 1; j++)
+            {
+                if (genMap[middlePoint.x + i, middlePoint.y + j].visited)
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
-}
 
-/// <summary>
-/// Stores door directions
-/// </summary>
-public enum Direction
-{
-    None = 0,
-    Right = 1,
-    Up = 2,
-    Left = 4,
-    Down = 8,
-    All = 15
-}
+    /// <summary>
+    /// This function is also sad
+    /// Sets a 3x3 to be the boss room
+    /// </summary>
+    /// <param name="genMap"> The current generated map </param>
+    /// <param name="middlePoint"> The middle point of the 3x3 grid </param>
+    void Set3x3GridToBoss(MapCell[,] genMap, Vector2Int middlePoint)
+    {
+        for (int i = -1; i <= 1; i++)
+        {
+            for (int j = -1; j <= 1; j++)
+            {
+                genMap[middlePoint.x + i, middlePoint.y + j].visited = true;
+                genMap[middlePoint.x + i, middlePoint.y + j].type = RoomType.Boss;
+            }
+        }
+    }
 
-/// <summary>
-/// Specifies what directions a room must have and which directions a room must not have
-/// </summary>
-public class DirectionConstraint
-{
-    public Dictionary<Direction, int> mustHave;
-    public Direction mustNotHave = Direction.None;
+    bool GenerateSpecialCells(MapCell[,] genMap, List<MapCell> branchableCells, int numSpecialCells)
+    {
+        for (int i = 0; i < numSpecialCells; i++)
+        {
+            while (true)
+            {
+                // Check that it's still possible to branch
+                if (branchableCells.Count == 0)
+                {
+                    // This should never happen, but if it does then sadge
+                    return false;
+                }
+
+                // Choose a random cell to branch off of
+                MapCell branchCell = branchableCells[Random.Range(0, branchableCells.Count)];
+
+                // Get its unvisited neighbors
+                List<MapCell> neighbors = GetUnvisitedNeighbors(genMap, branchCell, false);
+
+                // Check that there actually are any neighbors
+                if (neighbors.Count == 0)
+                {
+                    branchableCells.Remove(branchCell);
+                    continue;
+                }
+
+                // Choose a random neighbor to be the special room
+                MapCell specialCell = neighbors[Random.Range(0, neighbors.Count)];
+                specialCell.visited = true;
+                specialCell.type = RoomType.Special;
+
+                // Figure out what direction it's in
+                if (specialCell.location.x > branchCell.location.x)
+                {
+                    specialCell.direction = Direction.Left;
+                    branchCell.direction |= Direction.Right;
+                }
+                else if (specialCell.location.y > branchCell.location.y)
+                {
+                    specialCell.direction = Direction.Down;
+                    branchCell.direction |= Direction.Up;
+                }
+                else if (specialCell.location.x < branchCell.location.x)
+                {
+                    specialCell.direction = Direction.Right;
+                    branchCell.direction = Direction.Left;
+                }
+                else
+                {
+                    specialCell.direction = Direction.Up;
+                    branchCell.direction = Direction.Down;
+                }
+
+                break;
+            }
+        }
+
+        return true;
+    }
+
+    void CreateMap(MapCell[,] genMap)
+    {
+        map = genMap;
+        for (int i = 0; i < mapSize.x; i++)
+        {
+            for (int j = 0; j < mapSize.y; j++)
+            {
+                map[i, j].visited = false;
+            }
+        }
+    }
+
+    void PrintMap(bool printOnlyVisited = false)
+    {
+        PrintMap(map, printOnlyVisited);
+    }
+
+    void PrintMap(MapCell[,] mapToPrint, bool printOnlyVisited = false)
+    {
+        Debug.Log("Map length: " + mapToPrint.Length);
+        Debug.Log("Printing generated map:");
+        string mapString = "\n";
+        for (int i = 0; i < mapSize.x; i++)
+        {
+            string line = "";
+            for (int j = 0; j < mapSize.y; j++)
+            {
+                if (!printOnlyVisited || mapToPrint[i, j].visited)
+                {
+                    if (mapToPrint[i, j].type == RoomType.None)
+                    {
+                        line += "-";
+                    }
+                    else if (mapToPrint[i, j].type == RoomType.Normal)
+                    {
+                        line += "*";
+                    }
+                    else if (mapToPrint[i, j].type == RoomType.Start)
+                    {
+                        line += "P";
+                    }
+                    else if (mapToPrint[i, j].type == RoomType.Special)
+                    {
+                        line += "S";
+                    }
+                    else if (mapToPrint[i, j].type == RoomType.Boss)
+                    {
+                        line += "B";
+                    }
+                    else
+                    {
+                        line += "E";
+                    }
+                }
+                else
+                {
+                    line += " ";
+                }
+            }
+            mapString = line + "\n" + mapString;
+        }
+        System.IO.File.WriteAllText("map.txt", mapString);
+
+        Debug.Log("Saved to file map.txt");
+    }
 }

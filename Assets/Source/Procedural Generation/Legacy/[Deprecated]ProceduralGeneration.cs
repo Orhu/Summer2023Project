@@ -318,11 +318,11 @@ namespace DeprecatedProceduralGeneration
         /// <param name="card"> The card that was added </param>
         void OnCardAdded(Card card)
         {
-            for (int i = 0; i < card.effects.Length; i++)
-            {
-                AddRoomGenerationParameters(card.effects[i].addedRoomGenerationParameters);
-                RemoveRoomGenerationParameters(card.effects[i].removedRoomGenerationParameters);
-            }
+            //for (int i = 0; i < card.effects.Length; i++)
+            //{
+            //    AddRoomGenerationParameters(card.effects[i].addedRoomGenerationParameters);
+            //    RemoveRoomGenerationParameters(card.effects[i].removedRoomGenerationParameters);
+            //}
         }
 
         /// <summary>
@@ -331,11 +331,11 @@ namespace DeprecatedProceduralGeneration
         /// <param name="card"> The card that was removed </param>
         void OnCardRemoved(Card card)
         {
-            for (int i = 0; i < card.effects.Length; i++)
-            {
-                AddRoomGenerationParameters(card.effects[i].removedRoomGenerationParameters);
-                RemoveRoomGenerationParameters(card.effects[i].addedRoomGenerationParameters);
-            }
+            //for (int i = 0; i < card.effects.Length; i++)
+            //{
+            //    AddRoomGenerationParameters(card.effects[i].removedRoomGenerationParameters);
+            //    RemoveRoomGenerationParameters(card.effects[i].addedRoomGenerationParameters);
+            //}
         }
 
         /// <summary>
