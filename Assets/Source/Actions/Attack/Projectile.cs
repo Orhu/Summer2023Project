@@ -22,6 +22,29 @@ public class Projectile : MonoBehaviour
     float speed;
     float remainingLifetime;
     int remainingHits;
+    GameObject target;
+    protected GameObject Target
+    {
+        get
+        {
+            if (target != null)
+            {
+                return target;
+            }
+            Collider2D[] roomObjects = Physics2D.OverlapBoxAll(transform.position, ProceduralGeneration.proceduralGenerationInstance.roomSize, 0f);
+            foreach (Collider2D roomObject in roomObjects)
+            {
+                // If has health, is not ignored, and is the closest object.
+                if (roomObject.GetComponent<Health>() != null && actor.GetActionSourceTransform().gameObject != roomObject.gameObject && (ignoredObjects == null || !ignoredObjects.Contains(roomObject.gameObject)) && 
+                    (target == null || (roomObject.transform.position - transform.position).sqrMagnitude < (target.transform.position - transform.position).sqrMagnitude))
+                {
+                    target = roomObject.gameObject;
+                }
+            }
+
+            return target;
+        }
+    }
 
     /// <summary>
     /// Initializes components based on spawner stats.

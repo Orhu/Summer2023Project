@@ -12,7 +12,7 @@ namespace CardSystem.Effects
     {
         [Header("Hits")]
         [Tooltip("The damage, damage type, status effects, and knockback this projectile will deal.")]
-        public AttackData attack; // TODO: Knockback
+        public AttackData attack;
         [Min(1)]
         [Tooltip("The number of objects this can hit before being destroyed.")]
         public int hitCount = 1;
@@ -52,7 +52,7 @@ namespace CardSystem.Effects
         [Tooltip("The location to spawn the projectiles at.")]
         public SpawnLocation spawnLocation;
         [Tooltip("Whether or not the player needs to aim. If false it will be aimed at the closet enemy")]
-        public bool isAimed = true; // TODO: Implement on projectiles
+        public bool isAimed = true;
 
         // The projectile to spawn
         public Projectile projectilePrefab;

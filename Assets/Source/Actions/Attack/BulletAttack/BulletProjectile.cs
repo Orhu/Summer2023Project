@@ -19,10 +19,17 @@ public class BulletProjectile : Projectile
                 transform.position = actor.GetActionAimPosition();
                 break;
         }
-        Vector3 diff = actor.GetActionAimPosition() - actor.GetActionSourceTransform().position;
-        diff.Normalize();
-        float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
+
+        Vector3 direction;
+        if (attack.isAimed)
+        {
+            direction = (actor.GetActionAimPosition() - actor.GetActionSourceTransform().position).normalized;
+        }
+        else
+        {
+            direction = (Target.transform.position - actor.GetActionSourceTransform().position).normalized;
+        }
+        transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
 
         base.Start();
     }
