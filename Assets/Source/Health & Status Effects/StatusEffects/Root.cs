@@ -51,7 +51,10 @@ public class Root : StatusEffect
     /// </summary>
     private new void OnDestroy()
     {
+        if (gameObject != null)
+        {
+            gameObject.GetComponent<Movement>().requestSpeedModifications -= PreventMovement;
+        }
         base.OnDestroy();
-        gameObject.GetComponent<Movement>().requestSpeedModifications -= PreventMovement;
     }
 }
