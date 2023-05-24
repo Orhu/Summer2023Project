@@ -8,7 +8,7 @@ namespace CardSystem.Effects
     /// <summary>
     /// A scriptable object for storing data about a projectile type.
     /// </summary>
-    internal abstract class Attack : Action
+    public abstract class Attack : Action
     {
         [Header("Mechanics")]
         [Tooltip("The damage, damage type, status effects, and knockback this projectile will deal.")]
@@ -60,9 +60,8 @@ namespace CardSystem.Effects
         // Maps players to their previewers.
         Dictionary<IActor, ProjectilePreviewer> playersToPreviewers = new Dictionary<IActor, ProjectilePreviewer>();
 
-        private new void Awake()
+        private void Awake()
         {
-            base.Awake();
             projectilePrefab = Resources.Load<Projectile>("Projectile");
         }
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Skaillz.EditInline;
 
 namespace CardSystem
 {
@@ -14,14 +15,13 @@ namespace CardSystem
     /// - Effects - How the card effects the dungeon
     /// </summary>
     [CreateAssetMenu(fileName = "NewCard", menuName = "Cards/Cards/Attack Card", order = 1)]
-    [ExecuteInEditMode]
     public class AttackCard : Card
     {
-        [Tooltip("The damage, damage type, status effects, and knockback applied by this attack.")]
-        public AttackData attack;
-
+        [Header("Cording Modifiers")]
+        [EditInline]
         [Tooltip("The how this card will modify actions when used in a combo.")]
         public List<AttackModifier> cordModifiers;
+        [EditInline]
         [Tooltip("The how this card will modify actions when used in a combo with itself.")]
         public List<AttackModifier> duplicateModifiers;
 

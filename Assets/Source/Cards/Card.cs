@@ -15,7 +15,7 @@ namespace CardSystem
     /// - Effects - How the card effects the dungeon
     /// </summary>
     [CreateAssetMenu(fileName = "NewCard", menuName = "Cards/Cards/Normal Card", order = 1)]
-    [ExecuteInEditMode]
+    //[ExecuteInEditMode]
     public class Card : ScriptableObject
     {
         [Header("Mechanics")]
@@ -27,7 +27,7 @@ namespace CardSystem
         [Tooltip("The actions that will be taken when this card is played as the root of a combo.")]
         public Action[] actions;
         [Tooltip("The effects that this card will have on the dungeon while in the actor's deck.")]
-        //[EditInline] TODO: Uncomment after merge
+        [EditInline]
         public DungeonEffect[] effects;
 
         [Header("Visuals")]
@@ -70,10 +70,6 @@ namespace CardSystem
             return description;
         }
 
-        public void Awake()
-        {
-            UnityEditor.EditorGUIUtility.SetIconForObject(this, UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Content/Developer Utilities/Icons/CardIcon.png"));
-        }
 
         /// <summary>
         /// Plays all of the actions of this card from the actor.

@@ -7,7 +7,6 @@ namespace CardSystem
     /// <summary>
     /// A scriptable object that serves as the base of any action a card can have when played.
     /// </summary>
-    [ExecuteInEditMode]
     abstract public class Action : ScriptableObject
     {
         // 
@@ -25,10 +24,6 @@ namespace CardSystem
             return description;
         }
 
-        public void Awake()
-        {
-            UnityEditor.EditorGUIUtility.SetIconForObject(this, UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Content/Developer Utilities/Icons/ActionIcon.png"));
-        }
 
         /// <summary>
         /// Plays this action and causes all its effects. Also cancels any relevant previews.

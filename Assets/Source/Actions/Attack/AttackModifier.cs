@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// An action modifier that changes the attack of an action modifier.
 /// </summary>
+
 [CreateAssetMenu(fileName = "NewAttackModifer", menuName = "Cards/ActionModifers/AttackModifer")]
 public class AttackModifier : ScriptableObject
 {

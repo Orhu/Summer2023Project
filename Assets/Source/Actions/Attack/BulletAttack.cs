@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace CardSystem.Effects
 {
-    [CreateAssetMenu(fileName = "NewBulletAttack", menuName = "Cards/Actions/BulletAttack")]
-    internal class BulletAttack : Attack
+    [CreateAssetMenu(fileName = "NewBulletAttack", menuName = "Cards/Actions/Attacks/BulletAttack")]
+    public class BulletAttack : Attack
     {
         [Tooltip("The sequence of when and where to spawn bullets")]
         public List<BulletSpawnInfo> spawnSequence = new List<BulletSpawnInfo>();
@@ -17,7 +17,7 @@ namespace CardSystem.Effects
         public Vector2 randomOffset = Vector2.zero;
 
         [System.Serializable]
-        internal class BulletSpawnInfo
+        public class BulletSpawnInfo
         {
             [Tooltip("The time to wait after the previous bullet to spawn this one")]
             public float delay = 0;
