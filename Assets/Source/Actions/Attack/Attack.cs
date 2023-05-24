@@ -10,9 +10,12 @@ namespace CardSystem.Effects
     /// </summary>
     public abstract class Attack : Action
     {
-        [Header("Mechanics")]
+        [Header("Hits")]
         [Tooltip("The damage, damage type, status effects, and knockback this projectile will deal.")]
         public AttackData attack;
+        [Min(1)]
+        [Tooltip("The number of objects this can hit before being destroyed.")]
+        public int hitCount = 1;
 
         [EditInline]
         [Tooltip("The modifiers that are always applied to this projectile")]
@@ -26,13 +29,13 @@ namespace CardSystem.Effects
         [Tooltip("The lifetime of projectiles spawned by this.")]
         public float lifetime = 10f;
         [Tooltip("The speed projectile will start traveling at. In tiles/second")]
-        public float initialSpeed;
+        public float initialSpeed = 10f;
         [Tooltip("The acceleration this projectile will experience. In tiles/second^2")]
-        public float acceleration = 12f;
+        public float acceleration = -1f;
         [Tooltip("The minimum speed projectile will travel at. In tiles/second")]
-        public float minSpeed = 0;
+        public float minSpeed = 5f;
         [Tooltip("The maximum speed projectile will travel at. In tiles/second")]
-        public float maxSpeed = 0;
+        public float maxSpeed = 10f;
 
         [Header("Homing")]
         [Range(0, 1)]

@@ -21,6 +21,7 @@ public class Projectile : MonoBehaviour
     Rigidbody2D rigidBody;
     float speed;
     float remainingLifetime;
+    int remainingHits;
 
     /// <summary>
     /// Initializes components based on spawner stats.
@@ -62,6 +63,7 @@ public class Projectile : MonoBehaviour
         // Set of vars
         speed = attack.initialSpeed;
         remainingLifetime = attack.lifetime;
+        remainingHits = attack.hitCount;
     }
 
     /// <summary>
@@ -89,14 +91,26 @@ public class Projectile : MonoBehaviour
     /// Applies an attack to the hit object
     /// </summary>
     /// <param name="collision"> The collision data </param>
-    void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        Health hitHealth = collision.gameObject.GetComponent<Health>();
+        if (collision.isTrigger)
+        {
+            return;
+        }
+
+        Health hitHealth = collision.GetComponent<Health>();
         if (hitHealth != null)
         {
             hitHealth.ReceiveAttack(attack.attack);
+            if (--remainingHits <= 0)
+            {
+                Destroy(gameObject);
+            }
+        }
+        else
+        {
+            Destroy(gameObject);
         }
 
-        Destroy(gameObject);
     }
 }

@@ -13,23 +13,26 @@ MonoBehaviour:
   m_Name: BulletAttack_TestCard
   m_EditorClassIdentifier: 
   attack:
-    damage: 0
-    statusEffects: []
+    damage: 1
+    statusEffects:
+    - {fileID: 11400000, guid: 20ae7d3779018ce4d9911bb66bc6b7f6, type: 2}
     hitActions: []
+  hitCount: 1
   modifiers:
   - {fileID: 11400000, guid: efb10bd7c7c6f6c499cefa2e42c6fc60, type: 2}
   shape: {fileID: 11400000, guid: 9009f0e272fb0964b84d5e019d3ea5b4, type: 2}
   lifetime: 10
   initialSpeed: 0
-  acceleration: 12
+  acceleration: 0.5
   minSpeed: 0
-  maxSpeed: 0
+  maxSpeed: 20
   homingWeight: 0
   homingTime: 0
   visualObject: {fileID: 815138696641318384, guid: 5a43758f167be394badf944662ecc2c3, type: 3}
   spawnLocation: 0
   isAimed: 1
-  previewerPrefab: {fileID: 0}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   spawnSequence: []
   randomAngle: 0
   randomOffset: {x: 0, y: 0}
