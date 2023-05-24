@@ -19,43 +19,70 @@ public class Projectile : MonoBehaviour
     internal List<GameObject> ignoredObjects;
 
     Rigidbody2D rigidBody;
+    float speed;
+    float remainingLifetime;
 
     /// <summary>
     /// Initializes components based on spawner stats.
     /// </summary>
-    void Start()
+    protected void Start()
     {
+        // Setup collision
         rigidBody = GetComponent<Rigidbody2D>();
         if (actor.GetCollider() != null)
         {
-            CircleCollider2D collider = GetComponent<CircleCollider2D>();
-            //collider.radius = spawner.size * (spawner.stackSize ? numStacks : 1);
+            Collider2D collider = attack.shape.CreateCollider(gameObject);
             Physics2D.IgnoreCollision(collider, actor.GetCollider());
+
+            // Ignore collision on ignored objects
+            if (ignoredObjects != null)
+            {
+                foreach (GameObject ignoredObject in ignoredObjects)
+                {
+                    List<Collider2D> ignoredColliders = new List<Collider2D>();
+                    ignoredObject.GetComponentsInChildren(ignoredColliders);
+                    ignoredObject.GetComponents(ignoredColliders);
+                    if (ignoredColliders.Count > 0)
+                    {
+                        foreach (Collider2D ignoredCollider in ignoredColliders)
+                        {
+                            Physics2D.IgnoreCollision(ignoredCollider, actor.GetCollider());
+                        }
+                    }
+                }
+            }
         }
 
-        SpriteRenderer sprite = GetComponentInChildren<SpriteRenderer>();
+        // Set up visuals
+        GameObject visuals = Instantiate(attack.visualObject);
+        visuals.transform.parent = transform;
+        visuals.transform.localPosition = Vector2.zero;
+        visuals.transform.localRotation = Quaternion.identity;
 
-        Vector3 diff = actor.GetActionAimPosition() - transform.position;
-        diff.Normalize();
-
-        float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0f, 0f, rot_z);
-        //transform.position += transform.right * spawner.size * (spawner.stackSize ? numStacks : 1);
+        // Set of vars
+        speed = attack.initialSpeed;
+        remainingLifetime = attack.lifetime;
     }
 
     /// <summary>
-    /// Updates position and kills self when at max range.
+    /// Updates position.
     /// </summary>
     void FixedUpdate()
     {
-        //distanceTraveled += Time.fixedDeltaTime * spawner.speed * (spawner.stackSpeed ? numStacks : 1);
-        //rigidBody.MovePosition(transform.position +
-        //                       transform.right * (Time.fixedDeltaTime * spawner.speed *
-        //                                          (spawner.stackSpeed ? numStacks : 1)));
-        //if (distanceTraveled > spawner.range * (spawner.stackRange ? numStacks : 1))
-        //{
-        //    Destroy(gameObject);
-        //}
+        speed = Mathf.Clamp(speed + attack.acceleration * Time.fixedDeltaTime, attack.minSpeed, attack.maxSpeed);
+        rigidBody.velocity = transform.right * speed;
+    }
+
+    /// <summary>
+    /// Handles lifetime
+    /// </summary>
+    void Update()
+    {
+        remainingLifetime -= Time.deltaTime;
+        if(remainingLifetime <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 
     /// <summary>

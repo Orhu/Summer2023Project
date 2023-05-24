@@ -113,7 +113,7 @@ namespace CardSystem.Effects
         public enum SpawnLocation
         {
             Actor,
-            Mouse
+            AimPosition
         }
     }
 }
