@@ -12,14 +12,14 @@ namespace CardSystem.Effects
     {
         [Header("Hits")]
         [Tooltip("The damage, damage type, status effects, and knockback this projectile will deal.")]
-        public AttackData attack;
+        public AttackData attack; // TODO: Knockback
         [Min(1)]
         [Tooltip("The number of objects this can hit before being destroyed.")]
         public int hitCount = 1;
 
         [EditInline]
         [Tooltip("The modifiers that are always applied to this projectile")]
-        public List<AttackModifier> modifiers;
+        public List<AttackModifier> modifiers; // TODO: Implement on projectiles
 
         [EditInline]
         [Tooltip("The radius of the projectile.")]
@@ -40,9 +40,9 @@ namespace CardSystem.Effects
         [Header("Homing")]
         [Range(0, 1)]
         [Tooltip("The percent change every that this will point towards the closes enemy. 0 no homing, 1 always point at closest enemy")]
-        public float homingWeight = 0;
+        public float homingWeight = 0; // TODO: Implement on projectiles
         [Tooltip("The duration that this will home for.")]
-        public float homingTime = 0;
+        public float homingTime = 0; // TODO: Implement on projectiles
 
         [Header("Visuals")]
         [Tooltip("The game object used to render the projectiles.")]
@@ -52,7 +52,7 @@ namespace CardSystem.Effects
         [Tooltip("The location to spawn the projectiles at.")]
         public SpawnLocation spawnLocation;
         [Tooltip("Whether or not the player needs to aim. If false it will be aimed at the closet enemy")]
-        public bool isAimed = true;
+        public bool isAimed = true; // TODO: Implement on projectiles
 
         // The projectile to spawn
         public Projectile projectilePrefab;

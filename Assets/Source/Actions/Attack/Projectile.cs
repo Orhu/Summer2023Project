@@ -101,7 +101,7 @@ public class Projectile : MonoBehaviour
         Health hitHealth = collision.GetComponent<Health>();
         if (hitHealth != null)
         {
-            hitHealth.ReceiveAttack(attack.attack);
+            hitHealth.ReceiveAttack(attack.attack, transform.right);
             if (--remainingHits <= 0)
             {
                 Destroy(gameObject);

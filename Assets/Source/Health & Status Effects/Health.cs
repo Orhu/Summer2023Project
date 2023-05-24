@@ -65,6 +65,11 @@ public class Health : MonoBehaviour
     /// <param name="attack"> The attack being received. </param>
     public void ReceiveAttack(AttackData attack)
     {
+        ReceiveAttack(attack, Vector2.zero);
+    }
+    public void ReceiveAttack(AttackData attack, Vector2 knockbackDirection)
+    {
+        // Damage
         onRequestIncomingAttackModification?.Invoke(ref attack);
         currentHealth -= attack.damage;
 
@@ -73,8 +78,10 @@ public class Health : MonoBehaviour
         if (currentHealth <= 0)
         {
             onDeath?.Invoke();
+            return;
         }
-
+        
+        // Status effects
         foreach (StatusEffect statusEffect in attack.statusEffects)
         {
             if (!immuneStatusEffects.Contains(statusEffect))
@@ -85,6 +92,16 @@ public class Health : MonoBehaviour
                     statusEffects.Add(statusEffect.Instantiate(gameObject));
                 }
             }
+        }
+
+        // Knockback
+        if(GetComponent<Rigidbody2D>())
+        {
+            GetComponent<Rigidbody2D>().MovePosition(transform.position + (Vector3)knockbackDirection * attack.knockback);
+        }
+        else
+        {
+            transform.position += (Vector3)knockbackDirection * attack.knockback;
         }
     }
 

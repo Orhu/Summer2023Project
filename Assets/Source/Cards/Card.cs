@@ -53,20 +53,20 @@ namespace CardSystem
         public string GetDescription(bool isActionSide)
         {
             string description = "";
-            //if (!isActionSide)
-            //{
-            //    foreach (DungeonEffect cardEffect in effects)
-            //    {
-            //        description += cardEffect.GetFormattedDescription() + "\n";
-            //    }
-            //}
-            //else
-            //{
-            //    foreach (Action cardAction in actions)
-            //    {
-            //        description += cardAction.GetFormattedDescription() + "\n";
-            //    }
-            //}
+            if (!isActionSide)
+            {
+                foreach (DungeonEffect cardEffect in effects)
+                {
+                    description += cardEffect.GetFormattedDescription() + "\n";
+                }
+            }
+            else
+            {
+                foreach (Action cardAction in actions)
+                {
+                    description += cardAction.GetFormattedDescription() + "\n";
+                }
+            }
             return description;
         }
 

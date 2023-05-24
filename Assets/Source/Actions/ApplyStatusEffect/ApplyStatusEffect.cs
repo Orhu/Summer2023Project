@@ -19,6 +19,6 @@ public class ApplyStatusEffect : Action
     /// <returns> The description with any Serialized Field names that appear in [] replaced with their actual value.</returns>
     public override void Play(IActor actor, List<GameObject> ignoredObjects)
     {
-        actor.GetActionSourceTransform().GetComponent<Health>().ReceiveAttack(new AttackData(0, statusEffects, actor.GetActionSourceTransform().gameObject));
+        actor.GetActionSourceTransform().GetComponent<Health>().ReceiveAttack(new AttackData(statusEffects, actor.GetActionSourceTransform().gameObject));
     }
 }

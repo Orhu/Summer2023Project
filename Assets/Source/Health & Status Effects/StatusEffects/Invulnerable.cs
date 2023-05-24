@@ -43,7 +43,7 @@ public class Invulnerable : StatusEffect
     void PreventAttack(ref AttackData attack)
     {
         AttackData prevousAttack = attack;
-        attack = new AttackData(0, prevousAttack.causer);
+        attack = new AttackData(0, attack.damageType, prevousAttack.causer);
     }
 
     /// <summary>
