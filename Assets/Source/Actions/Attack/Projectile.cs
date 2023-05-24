@@ -6,19 +6,19 @@ using UnityEngine;
 /// <summary>
 /// An object that travels and deals an attack when it collides with an object.
 /// </summary>
+[RequireComponent(typeof(Rigidbody2D))]
 public class Projectile : MonoBehaviour
 {
-    // The spawner of the projectile.
-    internal Attack spawner;
-
+    // The attack this is a part of.
+    internal Attack attack;
     // The actor of the projectile.
     internal IActor actor;
-
-    // The attack this will cause when it hits
-    internal AttackData attack;
+    // The modifiers applied to this.
+    internal List<AttackModifier> modifiers;
+    // The object for this to ignore.
+    internal List<GameObject> ignoredObjects;
 
     Rigidbody2D rigidBody;
-    float distanceTraveled;
 
     /// <summary>
     /// Initializes components based on spawner stats.
@@ -67,7 +67,7 @@ public class Projectile : MonoBehaviour
         Health hitHealth = collision.gameObject.GetComponent<Health>();
         if (hitHealth != null)
         {
-            hitHealth.ReceiveAttack(attack);
+            hitHealth.ReceiveAttack(attack.attack);
         }
 
         Destroy(gameObject);

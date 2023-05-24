@@ -148,7 +148,7 @@ public class Deck : MonoBehaviour
 
         while (discardedCards.Count > 0)
         {
-            int index = Random.Range(0, discardedCards.Count);
+            int index = UnityEngine.Random.Range(0, discardedCards.Count);
             drawableCards.Add(discardedCards[index]);
             discardedCards.RemoveAt(index);
         }
@@ -224,7 +224,7 @@ public class Deck : MonoBehaviour
 
         AttackCard rootCard = inHandCards[previewedCardIndices[0]] as AttackCard;
         // If root of cord is changed
-        if (card == rootCard)
+        if (handIndex == previewedCardIndices[0])
         {
             previewedCardIndices.RemoveAt(0);
             rootCard.CancelPreviewActions(actor);
@@ -234,7 +234,6 @@ public class Deck : MonoBehaviour
             {
                 rootCard = inHandCards[previewedCardIndices[0]] as AttackCard;
 
-                int playCount = 0;
                 List<AttackCard> cordedCards = new List<AttackCard>();
                 for (int i = 1; i < previewedCardIndices.Count; i++)
                 {

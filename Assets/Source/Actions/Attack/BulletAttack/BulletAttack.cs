@@ -16,6 +16,28 @@ namespace CardSystem.Effects
         [Tooltip("Random ")]
         public Vector2 randomOffset = Vector2.zero;
 
+        #region Previewing
+        public override void ApplyModifiersToPreview(IActor actor, List<AttackModifier> actionModifiers)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void CancelPreview(IActor actor)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Preview(IActor actor)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void RemoveModifiersFromPreview(IActor actor, List<AttackModifier> actionModifiers)
+        {
+            throw new System.NotImplementedException();
+        }
+        #endregion
+
         [System.Serializable]
         public class BulletSpawnInfo
         {

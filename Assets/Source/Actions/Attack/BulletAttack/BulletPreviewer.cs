@@ -7,12 +7,8 @@ using UnityEngine;
 /// <summary>
 /// Previews the path that a projectile will take.
 /// </summary>
-public class ProjectilePreviewer : MonoBehaviour
+public class BulletPreviewer : AttackPreviewer
 {
-    // The owner of the preview
-    internal IActor actor;
-    // The spawner that this is previewing.
-    internal Attack spawner;
 
     // The sprite of the preview.
     SpriteRenderer sprite;

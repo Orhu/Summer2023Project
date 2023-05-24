@@ -52,18 +52,9 @@ namespace CardSystem.Effects
         public bool isAimed = true;
 
         // The projectile to spawn
-        private Projectile projectilePrefab;
+        public Projectile projectilePrefab;
         // The previewer prefab to use.
-        public ProjectilePreviewer previewerPrefab;
-
-
-        // Maps players to their previewers.
-        Dictionary<IActor, ProjectilePreviewer> playersToPreviewers = new Dictionary<IActor, ProjectilePreviewer>();
-
-        private void Awake()
-        {
-            projectilePrefab = Resources.Load<Projectile>("Projectile");
-        }
+        public AttackPreviewer previewerPrefab;
 
         /// <summary>
         /// Gets the formated description of this card.
@@ -78,41 +69,27 @@ namespace CardSystem.Effects
         /// Starts rendering a preview of what this action will do.
         /// </summary>
         /// <param name="actor"> The actor that will be playing this action. </param>
-        public void Preview(IActor actor)
-        {
-            ProjectilePreviewer previewer = Instantiate<ProjectilePreviewer>(previewerPrefab, actor.GetActionSourceTransform());
-            previewer.actor = actor;
-            previewer.spawner = this;
-            playersToPreviewers.Add(actor, previewer);
-        }
+        public abstract void Preview(IActor actor);
 
         /// <summary>
         /// Applies modifiers to a preview.
         /// </summary>
         /// <param name="actor"> The actor previewing</param>
         /// <param name="actionModifiers"> The modifiers to apply </param>
-        public void ApplyModifiersToPreview(IActor actor, List<AttackModifier> actionModifiers) {}
+        public abstract void ApplyModifiersToPreview(IActor actor, List<AttackModifier> actionModifiers);
 
         /// <summary>
         /// Removes modifiers from a preview.
         /// </summary>
         /// <param name="actor"> The actor previewing</param>
         /// <param name="actionModifiers"> The modifiers to remove </param>
-        public void RemoveModifiersFromPreview(IActor actor, List<AttackModifier> actionModifiers) {}
+        public abstract void RemoveModifiersFromPreview(IActor actor, List<AttackModifier> actionModifiers);
 
         /// <summary>
         /// Stops rendering a preview of what this action will do.
         /// </summary>
         /// <param name="actor"> The actor that will no longer be playing this action. </param>
-        public void CancelPreview(IActor actor)
-        {
-            ProjectilePreviewer value;
-            if (playersToPreviewers.TryGetValue(actor, out value))
-            {
-                Destroy(value.gameObject);
-                playersToPreviewers.Remove(actor);
-            }
-        }
+        public abstract void CancelPreview(IActor actor);
 
         /// <summary>
         /// Plays this action and causes all its effects. Also cancels any relevant previews.
@@ -121,22 +98,12 @@ namespace CardSystem.Effects
         /// <param name="modifiers"> The modifier affecting this action. </param>
         public void Play(IActor actor, List<AttackModifier> modifiers, List<GameObject> ignoredObjects = null)
         {
-            CancelPreview(actor);
-            Projectile projectile = Instantiate<Projectile>(projectilePrefab, actor.GetActionSourceTransform().position, actor.GetActionSourceTransform().rotation);
-            projectile.actor = actor;
-            projectile.spawner = this;
-
-            AttackData modifiedAttack = new AttackData(attack, actor.GetActionSourceTransform().gameObject);
-            foreach (AttackModifier modifier in modifiers)
-            {
-                if (modifier is AttackModifier)
-                {
-                    (modifier as AttackModifier).ModifyAttack(ref modifiedAttack);
-                }
-            }
-            projectile.attack = modifiedAttack;
+            BulletProjectile bullet = Instantiate(projectilePrefab.gameObject).GetComponent<BulletProjectile>();
+            bullet.attack = this;
+            bullet.actor = actor;
+            bullet.modifiers = modifiers;
+            bullet.ignoredObjects = ignoredObjects;
         }
-
         public override void Play(IActor actor, List<GameObject> ignoredObjects = null)
         {
             Play(actor, new List<AttackModifier>(), ignoredObjects);

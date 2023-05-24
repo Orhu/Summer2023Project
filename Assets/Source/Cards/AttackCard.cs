@@ -40,9 +40,10 @@ namespace CardSystem
 
         public void PreviewActions(IActor actor, List<AttackCard> cordedCards)
         {
-            foreach (Action cardAction in actions)
+            PreviewActions(actor);
+            foreach (AttackCard cordedCard in cordedCards)
             {
-                //cardAction.Preview(actor);
+                AddToPreview(actor, cordedCard);
             }
         }
 
@@ -60,10 +61,7 @@ namespace CardSystem
         }
         public void AddToPreview(IActor actor, AttackCard cordedCard)
         {
-            foreach (Action cardAction in actions)
-            {
-                //cardAction.ApplyModifiersToPreview(actor, actionModifiers);
-            }
+            AddToPreview(actor, GetAppliedModifers(cordedCard));
         }
 
         /// <summary>
@@ -80,10 +78,7 @@ namespace CardSystem
         }
         internal void RemoveFromPreview(IActor actor, AttackCard cordedCard)
         {
-            foreach (Action cardAction in actions)
-            {
-                //cardAction.RemoveModifiersFromPreview(actor, actionModifiers);
-            }
+            RemoveFromPreview(actor, GetAppliedModifers(cordedCard));
         }
 
         /// <summary>
@@ -103,14 +98,7 @@ namespace CardSystem
             List<AttackModifier> modifiers = new List<AttackModifier>();
             foreach (AttackCard cordedCard in cordedCards)
             {
-                if (cordedCard == this)
-                {
-                    modifiers.AddRange(cordedCard.duplicateModifiers);
-                }
-                else
-                {
-                    modifiers.AddRange(cordedCard.cordModifiers);
-                }
+                modifiers.AddRange(GetAppliedModifers(cordedCard));
             }
 
             PlayActions(actor, modifiers);
@@ -128,6 +116,19 @@ namespace CardSystem
                 {
                     action.Play(actor);
                 }
+            }
+        }
+
+
+        List<AttackModifier> GetAppliedModifers(AttackCard modifingCard)
+        {
+            if (modifingCard == this)
+            {
+                return modifingCard.duplicateModifiers;
+            }
+            else
+            {
+                return modifingCard.cordModifiers;
             }
         }
     }
