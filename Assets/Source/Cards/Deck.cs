@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CardSystem;
+using System;
 
 /// <summary>
 /// Represents a deck of cards and a hand that cards can be previewed and played from.
@@ -31,6 +32,9 @@ public class Deck : MonoBehaviour
     // The indices in the hand of the cards currently being previewed.
     [HideInInspector]
     public List<int> previewedCardIndices = new List<int>();
+    // The indices of the cards on being acted mapped to the remaining action time.
+    [HideInInspector]
+    public Dictionary<int, float> cardIndicesToActionTimes = new Dictionary<int, float>();
     // The indices of the cards on cooldown mapped to the time remaining on the cooldown.
     [HideInInspector]
     public Dictionary<int, float> cardIndicesToCooldowns = new Dictionary<int, float>();
@@ -43,14 +47,11 @@ public class Deck : MonoBehaviour
     // Called when the discard pile changes.
     public handChangedNotification onDiscardPileChanged;
 
-
-    public delegate void deckChangedNotification(Card card);
-
     // Called when a card is added
-    public deckChangedNotification onCardAdded;
+    public Func<Card> onCardAdded;
 
     // Called when a card is removed
-    public deckChangedNotification onCardRemoved;
+    public Func<Card> onCardRemoved;
 
     #region Initialization
     /// <summary>
@@ -92,43 +93,43 @@ public class Deck : MonoBehaviour
     /// <returns> Whether or not an empty spot was found. </returns>
     bool DrawCard()
     {
-        //while (inHandCards.Count < handSize)
-        //{
-        //    inHandCards.Add(null);
-        //}
+        while (inHandCards.Count < handSize)
+        {
+            inHandCards.Add(null);
+        }
 
-        //for (int i = 0; i < handSize; i++)
-        //{
-        //    if (drawableCards.Count == 0)
-        //    {
-        //        ReshuffleDrawPile();
-        //    }
+        for (int i = 0; i < handSize; i++)
+        {
+            if (drawableCards.Count == 0)
+            {
+                ReshuffleDrawPile();
+            }
 
-        //    if (inHandCards[i] == null && drawableCards.Count > 0)
-        //    {
-        //        Card drawnCard = drawableCards[drawableCards.Count - 1];
-        //        drawableCards.RemoveAt(drawableCards.Count - 1);
-        //        inHandCards[i] = drawnCard;
+            if (inHandCards[i] == null && drawableCards.Count > 0)
+            {
+                Card drawnCard = drawableCards[drawableCards.Count - 1];
+                drawableCards.RemoveAt(drawableCards.Count - 1);
+                inHandCards[i] = drawnCard;
 
-        //        if (drawableCards.Count == 0)
-        //        {
-        //            ReshuffleDrawPile();
-        //        }
+                if (drawableCards.Count == 0)
+                {
+                    ReshuffleDrawPile();
+                }
 
-        //        onDrawPileChanged?.Invoke();
-        //        onHandChanged?.Invoke();
-        //        return true;
-        //    }
-        //}
+                onDrawPileChanged?.Invoke();
+                onHandChanged?.Invoke();
+                return true;
+            }
+        }
         return false;
     }
 
     public void DiscardCard(int handIndex)
     {
-        //discardedCards.Add(inHandCards[handIndex]);
-        //inHandCards[handIndex] = null;
-        //onDiscardPileChanged?.Invoke();
-        //DrawCard();
+        discardedCards.Add(inHandCards[handIndex]);
+        inHandCards[handIndex] = null;
+        onDiscardPileChanged?.Invoke();
+        DrawCard();
     }
 
     /// <summary>
@@ -136,45 +137,56 @@ public class Deck : MonoBehaviour
     /// </summary>
     public void ReshuffleDrawPile()
     {
-        //while (drawableCards.Count > 0)
-        //{
-        //    discardedCards.Add(drawableCards[drawableCards.Count - 1]);
-        //    drawableCards.RemoveAt(drawableCards.Count - 1);
-        //}
+        while (drawableCards.Count > 0)
+        {
+            discardedCards.Add(drawableCards[drawableCards.Count - 1]);
+            drawableCards.RemoveAt(drawableCards.Count - 1);
+        }
 
-        //while (discardedCards.Count > 0)
-        //{
-        //    int index = Random.Range(0, discardedCards.Count);
-        //    drawableCards.Add(discardedCards[index]);
-        //    discardedCards.RemoveAt(index);
-        //}
+        while (discardedCards.Count > 0)
+        {
+            int index = Random.Range(0, discardedCards.Count);
+            drawableCards.Add(discardedCards[index]);
+            discardedCards.RemoveAt(index);
+        }
 
-        //onDiscardPileChanged?.Invoke();
-        //onDrawPileChanged?.Invoke();
+        onDiscardPileChanged?.Invoke();
+        onDrawPileChanged?.Invoke();
     }
 
 
     /// <summary>
-    /// Updates all cooldowns and draws new cards when needed.
+    /// Updates all action times and cooldowns, and it draws new cards when needed.
     /// </summary>
     void Update()
     {
-        //foreach (KeyValuePair<int, float> cardIndexToCooldown in new Dictionary<int, float>(cardIndicesToCooldowns))
-        //{
-        //    float newValue = cardIndexToCooldown.Value - Time.deltaTime;
-        //    if (newValue <= 0)
-        //    {
-        //        cardIndicesToCooldowns.Remove(cardIndexToCooldown.Key);
-        //        discardedCards.Add(inHandCards[cardIndexToCooldown.Key]);
-        //        inHandCards[cardIndexToCooldown.Key] = null;
-        //        onDiscardPileChanged?.Invoke();
-        //        DrawCard();
-        //    }
-        //    else
-        //    {
-        //        cardIndicesToCooldowns[cardIndexToCooldown.Key] = newValue;
-        //    }
-        //}
+        foreach (KeyValuePair<int, float> cardIndexToCooldown in new Dictionary<int, float>(cardIndicesToCooldowns))
+        {
+            float newValue = cardIndexToCooldown.Value - Time.deltaTime;
+            if (newValue <= 0)
+            {
+                cardIndicesToCooldowns.Remove(cardIndexToCooldown.Key);
+                DiscardCard(cardIndexToCooldown.Key);
+            }
+            else
+            {
+                cardIndicesToCooldowns[cardIndexToCooldown.Key] = newValue;
+            }
+        }
+
+        foreach (KeyValuePair<int, float> cardIndexToActionTime in new Dictionary<int, float>(cardIndicesToActionTimes))
+        {
+            float newValue = cardIndexToActionTime.Value - Time.deltaTime;
+            if (newValue <= 0)
+            {
+                cardIndicesToActionTimes.Remove(cardIndexToActionTime.Key);
+                cardIndicesToCooldowns.Add(cardIndexToActionTime.Key, inHandCards[cardIndexToActionTime.Key].cooldownTime);
+            }
+            else
+            {
+                cardIndicesToActionTimes[cardIndexToActionTime.Key] = newValue;
+            }
+        }
     }
     #endregion
 
