@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// A status effect the does damage over time proportional to stacks, and who's duration is reset on each stack.
 /// </summary>
-[CreateAssetMenu(fileName = "Ignite", menuName = "Status Effects [Don't Create]/Ignite")]
+[CreateAssetMenu(fileName = "Ignite", menuName = "Status Effects/Ignite")]
 public class Ignite : StatusEffect
 {
     [SerializeField]

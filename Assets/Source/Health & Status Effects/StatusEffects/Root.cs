@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// A status effect that prevents movement entirely.
 /// </summary>
-[CreateAssetMenu(fileName = "Root", menuName = "Status Effects [Don't Create]/Root")]
+[CreateAssetMenu(fileName = "Root", menuName = "Status Effects/Root")]
 public class Root : StatusEffect
 {
     /// <summary>

@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// A status effect that prevents health from receiving attacks.
 /// </summary>
-[CreateAssetMenu(fileName = "Invulnerable", menuName = "Status Effects [Don't Create]/Invulnerable")]
+[CreateAssetMenu(fileName = "Invulnerable", menuName = "Status Effects/Invulnerable")]
 public class Invulnerable : StatusEffect
 {
     /// <summary>
