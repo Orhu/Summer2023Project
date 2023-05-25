@@ -16,8 +16,6 @@ public class AttackData
     public float knockback = 0f;
     [Tooltip("The status effects to apply when this is received")]
     public List<StatusEffect> statusEffects = new List<StatusEffect>();
-    [Tooltip("The actions played by the hit game object.")]
-    public List<Action> hitActions = new List<Action>();
 
 
     // The causer of this attack.
@@ -32,6 +30,8 @@ public class AttackData
     public AttackData(AttackData attack, Object causer)
     {
         damage = attack.damage;
+        damageType = attack.damageType;
+        knockback = attack.knockback;
         statusEffects = attack.statusEffects;
         this.causer = causer;
     }

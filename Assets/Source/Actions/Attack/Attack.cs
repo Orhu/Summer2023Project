@@ -49,6 +49,8 @@ namespace CardSystem.Effects
         [Min(0)]
         [Tooltip("The duration that this will home for.")]
         public float homingTime = 0;
+        [Tooltip("What the homing will rotate the projectile towards")]
+        public AimMode homingAimMode;
 
         [Header("Visuals")]
         [Tooltip("The game object used to render the projectiles.")]
@@ -58,7 +60,7 @@ namespace CardSystem.Effects
         [Tooltip("The location to spawn the projectiles at.")]
         public SpawnLocation spawnLocation;
         [Tooltip("Whether or not the player needs to aim. If false it will be aimed at the closet enemy")]
-        public bool isAimed = true;
+        public AimMode aimMode;
 
         /// <summary>
         /// Gets the formated description of this card.
@@ -100,22 +102,31 @@ namespace CardSystem.Effects
         /// </summary>
         /// <param name="actor"> The actor that will be playing this action. </param>
         /// <param name="modifiers"> The modifier affecting this action. </param>
+        public virtual void Play(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects = null)
+        {
+            SpawnProjectile(actor, modifiers, causer, ignoredObjects);
+        }
+        public virtual void Play(IActor actor, GameObject causer, List<GameObject> ignoredObjects = null)
+        {
+            Play(actor, new List<AttackModifier>(), causer, ignoredObjects);
+        }
         public virtual void Play(IActor actor, List<AttackModifier> modifiers, List<GameObject> ignoredObjects = null)
         {
-            SpawnProjectile(actor, modifiers, ignoredObjects);
+            Play(actor, modifiers, actor.GetActionSourceTransform().gameObject, ignoredObjects);
         }
         public override void Play(IActor actor, List<GameObject> ignoredObjects = null)
         {
-            Play(actor, new List<AttackModifier>(), ignoredObjects);
+            Play(actor, new List<AttackModifier>(), actor.GetActionSourceTransform().gameObject, ignoredObjects);
         }
 
-        protected Projectile SpawnProjectile(IActor actor, List<AttackModifier> modifiers, List<GameObject> ignoredObjects)
+        protected Projectile SpawnProjectile(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects)
         {
             Projectile projectile = Instantiate(projectilePrefab.gameObject).GetComponent<Projectile>();
             projectile.attack = this;
             projectile.actor = actor;
             projectile.modifiers = modifiers;
-            projectile.ignoredObjects = ignoredObjects;
+            projectile.causer = causer;
+            projectile.IgnoredObjects = ignoredObjects;
             return projectile;
         }
 
@@ -124,6 +135,12 @@ namespace CardSystem.Effects
         {
             Actor,
             AimPosition
+        }
+        public enum AimMode
+        {
+            AtMouse,
+            AtClosestEnemy,
+            AtRandomEnemy
         }
     }
 }

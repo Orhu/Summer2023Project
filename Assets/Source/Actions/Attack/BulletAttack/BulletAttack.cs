@@ -38,12 +38,12 @@ namespace CardSystem.Effects
         }
         #endregion
 
-        public override void Play(IActor actor, List<AttackModifier> modifiers, List<GameObject> ignoredObjects = null)
+        public override void Play(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects = null)
         {
-            actor.GetActionSourceTransform().GetComponent<MonoBehaviour>().StartCoroutine(PlaySpawnSequence(actor, modifiers, ignoredObjects));
+            actor.GetActionSourceTransform().GetComponent<MonoBehaviour>().StartCoroutine(PlaySpawnSequence(actor, modifiers, causer, ignoredObjects));
         }
 
-        IEnumerator PlaySpawnSequence(IActor actor, List<AttackModifier> modifiers, List<GameObject> ignoredObjects)
+        IEnumerator PlaySpawnSequence(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects)
         {
             for (int i = 0; i < spawnSequence.Count; i++)
             {
@@ -51,7 +51,7 @@ namespace CardSystem.Effects
                 {
                     yield return new WaitForSeconds(spawnSequence[i].delay);
                 }
-                BulletProjectile bullet = SpawnProjectile(actor, modifiers, ignoredObjects) as BulletProjectile;
+                BulletProjectile bullet = SpawnProjectile(actor, modifiers, causer, ignoredObjects) as BulletProjectile;
                 bullet.bulletIndex = i;
             }
         }

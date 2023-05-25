@@ -2,6 +2,7 @@ using CardSystem.Effects;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static CardSystem.Effects.Attack;
 
 /// <summary>
 /// An object that travels and deals an attack when it collides with an object.
@@ -13,41 +14,37 @@ public class Projectile : MonoBehaviour
     internal Attack attack;
     // The actor of the projectile.
     internal IActor actor;
+    // The actor of the projectile.
+    internal GameObject causer;
     // The modifiers applied to this.
     internal List<AttackModifier> modifiers;
     // The object for this to ignore.
-    internal List<GameObject> ignoredObjects;
-
-    Rigidbody2D rigidBody;
-    float speed;
-    float remainingLifetime;
-    int remainingHits;
-    GameObject target;
-    float remainingHomingTime;
-
-    protected GameObject Target
+    internal List<GameObject> IgnoredObjects
     {
         get
         {
-            if (target != null)
+            if (ignoredObjects != null)
             {
-                return target;
+                return ignoredObjects;
             }
 
-            Collider2D[] roomObjects = Physics2D.OverlapBoxAll(transform.position, ProceduralGeneration.proceduralGenerationInstance.roomSize, 0f);
-            foreach (Collider2D roomObject in roomObjects)
-            {
-                // If has health, is not ignored, and is the closest object.
-                if (roomObject.GetComponent<Health>() != null && actor.GetActionSourceTransform().gameObject != roomObject.gameObject && (ignoredObjects == null || !ignoredObjects.Contains(roomObject.gameObject)) && 
-                    (target == null || (roomObject.transform.position - transform.position).sqrMagnitude < (target.transform.position - transform.position).sqrMagnitude))
-                {
-                    target = roomObject.gameObject;
-                }
-            }
-
-            return target;
+            ignoredObjects = new List<GameObject>();
+            ignoredObjects.Add(actor.GetActionSourceTransform().gameObject);
+            ignoredObjects.Add(causer);
+            return ignoredObjects;
         }
+        set { ignoredObjects = value; }
     }
+    List<GameObject> ignoredObjects;
+
+    Rigidbody2D rigidBody;
+    private AttackData attackData;
+    float speed;
+    float remainingLifetime;
+    int remainingHits;
+    GameObject closestTarget;
+    GameObject randomTarget;
+    float remainingHomingTime;
 
     /// <summary>
     /// Initializes components based on spawner stats.
@@ -62,9 +59,9 @@ public class Projectile : MonoBehaviour
             Physics2D.IgnoreCollision(collider, actor.GetCollider());
 
             // Ignore collision on ignored objects
-            if (ignoredObjects != null)
+            if (IgnoredObjects != null)
             {
-                foreach (GameObject ignoredObject in ignoredObjects)
+                foreach (GameObject ignoredObject in IgnoredObjects)
                 {
                     List<Collider2D> ignoredColliders = new List<Collider2D>();
                     ignoredObject.GetComponentsInChildren(ignoredColliders);
@@ -86,11 +83,12 @@ public class Projectile : MonoBehaviour
         visuals.transform.localPosition = Vector2.zero;
         visuals.transform.localRotation = Quaternion.identity;
 
-        // Set of vars
+        // Set up vars
         speed = attack.initialSpeed;
         remainingLifetime = attack.lifetime;
         remainingHits = attack.hitCount;
         remainingHomingTime = attack.homingTime;
+        attackData = new AttackData(attack.attack, causer);
     }
 
     /// <summary>
@@ -98,9 +96,9 @@ public class Projectile : MonoBehaviour
     /// </summary>
     void FixedUpdate()
     {
-        if (remainingHomingTime > 0 && attack.homingSpeed > 0 && Target != null)
+        if (remainingHomingTime > 0 && attack.homingSpeed > 0)
         {
-            Vector3 targetDirection = (Target.transform.position - transform.position).normalized;
+            Vector3 targetDirection = (GetAimTarget(attack.homingAimMode) - transform.position).normalized;
             float targetRotation = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
             float currentRotation = transform.rotation.eulerAngles.z;
             transform.rotation = Quaternion.AngleAxis(Mathf.LerpAngle(currentRotation, targetRotation, (attack.homingSpeed * Time.fixedDeltaTime) / Mathf.Abs(targetRotation - currentRotation)), Vector3.forward);
@@ -127,9 +125,9 @@ public class Projectile : MonoBehaviour
     /// Applies an attack to the hit object
     /// </summary>
     /// <param name="collision"> The collision data </param>
-    private void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.isTrigger)
+        if (collision.isTrigger || IgnoredObjects.Contains(collision.gameObject))
         {
             return;
         }
@@ -137,7 +135,7 @@ public class Projectile : MonoBehaviour
         Health hitHealth = collision.GetComponent<Health>();
         if (hitHealth != null)
         {
-            hitHealth.ReceiveAttack(attack.attack, transform.right);
+            hitHealth.ReceiveAttack(attackData, transform.right);
             if (--remainingHits <= 0)
             {
                 Destroy(gameObject);
@@ -148,5 +146,74 @@ public class Projectile : MonoBehaviour
             Destroy(gameObject);
         }
 
+    }
+
+    protected Vector3 GetAimTarget(AimMode aimMode)
+    {
+        switch (aimMode)
+        {
+            case AimMode.AtMouse:
+                if (actor == null)
+                {
+                    return transform.right;
+                }
+                return actor.GetActionAimPosition();
+
+            case AimMode.AtClosestEnemy:
+                if (closestTarget != null)
+                {
+                    return closestTarget.transform.position;
+                }
+                if (actor == null)
+                {
+                    return transform.right;
+                }
+
+                Collider2D[] roomObjects = Physics2D.OverlapBoxAll(actor.GetActionSourceTransform().position, ProceduralGeneration.proceduralGenerationInstance.roomSize * 2, 0f);
+                foreach (Collider2D roomObject in roomObjects)
+                {
+                    // If has health, is not ignored, and is the closest object.
+                    if (roomObject.GetComponent<Health>() != null && !IgnoredObjects.Contains(roomObject.gameObject) &&
+                        (closestTarget == null || (roomObject.transform.position - transform.position).sqrMagnitude < (closestTarget.transform.position - transform.position).sqrMagnitude))
+                    {
+                        closestTarget = roomObject.gameObject;
+                    }
+                }
+
+                if (closestTarget == null)
+                {
+                    return transform.right;
+                }
+                return closestTarget.transform.position;
+
+            case AimMode.AtRandomEnemy:
+                if (randomTarget != null)
+                {
+                    return randomTarget.transform.position;
+                }
+                if (actor == null)
+                {
+                    return transform.right;
+                }
+
+                Collider2D[] roomColliders = Physics2D.OverlapBoxAll(actor.GetActionSourceTransform().position, ProceduralGeneration.proceduralGenerationInstance.roomSize * 2, 0f);
+                List<GameObject> possibleTargets = new List<GameObject>(roomColliders.Length);
+                foreach (Collider2D roomCollider in roomColliders)
+                {
+                    // If has health, is not ignored, and is the closest object.
+                    if (roomCollider.GetComponent<Health>() != null && !IgnoredObjects.Contains(roomCollider.gameObject))
+                    {
+                        possibleTargets.Add(roomCollider.gameObject);
+                    }
+                }
+                
+                randomTarget = possibleTargets[Random.Range(0, possibleTargets.Count)].gameObject;
+                if (randomTarget == null)
+                {
+                    return transform.right;
+                }
+                return randomTarget.transform.position;
+        }
+        return transform.right;
     }
 }

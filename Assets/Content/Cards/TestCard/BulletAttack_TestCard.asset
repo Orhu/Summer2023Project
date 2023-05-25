@@ -20,7 +20,8 @@ MonoBehaviour:
     knockback: 0
     statusEffects:
     - {fileID: 11400000, guid: 4d24f873cabfd794093b74fa3a36ff3e, type: 2}
-    hitActions: []
+    hitActions:
+    - {fileID: 11400000}
   hitCount: 2
   modifiers:
   - {fileID: 11400000, guid: efb10bd7c7c6f6c499cefa2e42c6fc60, type: 2}
@@ -34,18 +35,9 @@ MonoBehaviour:
   homingTime: 2
   visualObject: {fileID: 815138696641318384, guid: 5a43758f167be394badf944662ecc2c3, type: 3}
   spawnLocation: 0
-  isAimed: 1
+  aimMode: 0
   spawnSequence:
   - delay: 0
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.25
-    angle: 20
-    offset: {x: 0, y: -1}
-  - delay: 0
-    angle: -20
-    offset: {x: 0, y: 1}
-  - delay: 0.25
     angle: 0
     offset: {x: 0, y: 0}
   randomAngle: 5
