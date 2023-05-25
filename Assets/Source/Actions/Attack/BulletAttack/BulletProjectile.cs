@@ -29,8 +29,8 @@ public class BulletProjectile : Projectile
         transform.position += (Vector3)Random.insideUnitCircle * bulletAttack.randomOffset;
 
         // Rotation
-        Vector3 direction = (GetAimTarget(attack.aimMode) - actor.GetActionSourceTransform().position).normalized;
-        float aimRotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        Vector3 aimDirection = (GetAimTarget(attack.aimMode) - actor.GetActionSourceTransform().position).normalized;
+        float aimRotation = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
 
         float randomAngle = Random.Range(bulletAttack.randomAngle / -2f, bulletAttack.randomAngle / 2f);
         transform.rotation = Quaternion.AngleAxis(aimRotation + randomAngle + bulletAttack.spawnSequence[bulletIndex].angle, Vector3.forward);

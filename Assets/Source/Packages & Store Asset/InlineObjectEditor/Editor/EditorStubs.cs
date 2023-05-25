@@ -5,3 +5,6 @@ public partial class AttackCardEditorStub : UnityEditor.Editor { }
 [UnityEditor.CustomEditor(typeof(CardSystem.Effects.BulletAttack))]
 public partial class BulletAttackEditorStub : UnityEditor.Editor { }
 
+[UnityEditor.CustomEditor(typeof(CardSystem.Effects.OrbitAttack))]
+public partial class OrbitAttackEditorStub : UnityEditor.Editor { }
+

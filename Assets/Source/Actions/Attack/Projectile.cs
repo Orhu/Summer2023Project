@@ -39,7 +39,7 @@ public class Projectile : MonoBehaviour
 
     Rigidbody2D rigidBody;
     private AttackData attackData;
-    float speed;
+    protected float speed;
     float remainingLifetime;
     int remainingHits;
     GameObject closestTarget;
@@ -94,7 +94,7 @@ public class Projectile : MonoBehaviour
     /// <summary>
     /// Updates position.
     /// </summary>
-    void FixedUpdate()
+    protected void FixedUpdate()
     {
         if (remainingHomingTime > 0 && attack.homingSpeed > 0)
         {
