@@ -168,8 +168,85 @@ public class LayoutGenerator : MonoBehaviour
         return neighbors;
     }
 
+    int CountNumDirections(Direction direction)
+    {
+        int count = 0;
+        for (int i = 1; i < (int)Direction.All; i *= 2)
+        {
+            count += ((int) direction & i) / i;
+        }
+        return count;
+    }
+
     Direction GetRandomConstrainedDirection(DirectionConstraint constraint)
     {
+        Direction direction = Direction.None;
+        int numDirections = 0;
+
+        List<Direction> possibleDirections = new List<Direction>();
+        possibleDirections.Add(Direction.Right);
+        possibleDirections.Add(Direction.Up);
+        possibleDirections.Add(Direction.Left);
+        possibleDirections.Add(Direction.Down);
+
+        for (int i = 1; i <= (int) Direction.Down; i *= 2)
+        {
+            if ((constraint.mustHave & (Direction) i) != Direction.None)
+            {
+                possibleDirections.Remove((Direction) i);
+                numDirections++;
+                direction |= (Direction) i;
+            }
+        }
+
+        // This should never happen but you never know
+        if (numDirections > constraint.maxDirections)
+        {
+            throw new System.Exception("A room was generated that must have more directions than it's allowed");
+        }
+
+        while (possibleDirections.Count != 0)
+        {
+            if (numDirections >= constraint.maxDirections)
+            {
+                break;
+            }
+
+            Direction randomDirection = possibleDirections[Random.Range(0, possibleDirections.Count)];
+
+            if ((constraint.mustNotHave & randomDirection) != Direction.None)
+            {
+                possibleDirections.Remove(randomDirection);
+                continue;
+            }
+
+            int distance = parameters.preferredNumDoors - numDirections;
+            float likelyhood = 0;
+
+            // Temp -- remove this maybe ? idk
+            if (distance == 0 && parameters.strictnessNumDoors == 1)
+            {
+                likelyhood = 0;
+            }
+            else
+            {
+                likelyhood = 0.5f + (distance / 4.0f * (parameters.strictnessNumDoors * 2.0f));
+            }
+            
+            if (likelyhood > Random.value)
+            {
+                direction |= randomDirection;
+                numDirections++;
+            }
+
+            possibleDirections.Remove(randomDirection);
+        }
+        return direction;
+    }
+
+    /*Direction GetRandomConstrainedDirection(DirectionConstraint constraint, int maxDirections = -1, int minDirections = - 1)
+    {
+        
         // Get a random direction that adheres to the must have and must not have constraints
         Direction direction = (Direction) Random.Range((int) Direction.None, (int) Direction.All + 1);
         direction |= constraint.mustHave;
@@ -186,12 +263,12 @@ public class LayoutGenerator : MonoBehaviour
 
         // Count the number of directions
         int count = 0;
-        for (int i = 0; i < directionsList.Count; i++)
+        for (int i = 1; i < (int) Direction.All; i *= 2)
         {
-            if ((direction & directionsList[i]) != Direction.None)
+            count += ((int) direction & i) / i;
+            if (((int) direction & i) != 0)
             {
-                count++;
-                directions.Add(directionsList[i]);
+                directions.Add((Direction) i);
             }
         }
 
@@ -221,7 +298,7 @@ public class LayoutGenerator : MonoBehaviour
         }
 
         return direction;
-    }
+    }*/
 
     DirectionConstraint GetDirectionConstraint(MapCell[,] genMap, MapCell cell, int maxNewCells = -1, int currentNewCells = -1)
     {
@@ -290,19 +367,10 @@ public class LayoutGenerator : MonoBehaviour
         if (maxNewCells != -1)
         {
             // Count the number of directions the room must have (because they don't count towards new rooms)
-            List<Direction> directions = new List<Direction>();
-            directions.Add(Direction.Right);
-            directions.Add(Direction.Up);
-            directions.Add(Direction.Left);
-            directions.Add(Direction.Down);
-
             int count = 0;
-            for (int i = 0; i < directions.Count; i++)
+            for (int i = 1; i < (int) Direction.All; i *= 2)
             {
-                if ((directionConstraint.mustHave & directions[i]) != Direction.None)
-                {
-                    count++;
-                }
+                count += ((int) directionConstraint.mustHave & i) / i;
             }
 
             directionConstraint.maxDirections = maxNewCells - currentNewCells + count;
@@ -505,30 +573,30 @@ public class LayoutGenerator : MonoBehaviour
         Debug.Log("Map length: " + mapToPrint.Length);
         Debug.Log("Printing generated map:");
         string mapString = "\n";
-        for (int i = 0; i < mapSize.x; i++)
+        for (int i = 0; i < mapSize.y; i++)
         {
             string line = "";
-            for (int j = 0; j < mapSize.y; j++)
+            for (int j = 0; j < mapSize.x; j++)
             {
-                if (!printOnlyVisited || mapToPrint[i, j].visited)
+                if (!printOnlyVisited || mapToPrint[j, i].visited)
                 {
-                    if (mapToPrint[i, j].type == RoomType.None)
+                    if (mapToPrint[j, i].type == RoomType.None)
                     {
                         line += "-";
                     }
-                    else if (mapToPrint[i, j].type == RoomType.Normal)
+                    else if (mapToPrint[j, i].type == RoomType.Normal)
                     {
                         line += "*";
                     }
-                    else if (mapToPrint[i, j].type == RoomType.Start)
+                    else if (mapToPrint[j, i].type == RoomType.Start)
                     {
                         line += "P";
                     }
-                    else if (mapToPrint[i, j].type == RoomType.Special)
+                    else if (mapToPrint[j, i].type == RoomType.Special)
                     {
                         line += "S";
                     }
-                    else if (mapToPrint[i, j].type == RoomType.Boss)
+                    else if (mapToPrint[j, i].type == RoomType.Boss)
                     {
                         line += "B";
                     }
@@ -542,7 +610,7 @@ public class LayoutGenerator : MonoBehaviour
                     line += " ";
                 }
             }
-            mapString = line + "\n" + mapString;
+            mapString  = line + "\n" + mapString;
         }
         System.IO.File.WriteAllText("map.txt", mapString);
 
