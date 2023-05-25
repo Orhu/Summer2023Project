@@ -100,17 +100,23 @@ namespace CardSystem.Effects
         /// </summary>
         /// <param name="actor"> The actor that will be playing this action. </param>
         /// <param name="modifiers"> The modifier affecting this action. </param>
-        public void Play(IActor actor, List<AttackModifier> modifiers, List<GameObject> ignoredObjects = null)
+        public virtual void Play(IActor actor, List<AttackModifier> modifiers, List<GameObject> ignoredObjects = null)
         {
-            BulletProjectile bullet = Instantiate(projectilePrefab.gameObject).GetComponent<BulletProjectile>();
-            bullet.attack = this;
-            bullet.actor = actor;
-            bullet.modifiers = modifiers;
-            bullet.ignoredObjects = ignoredObjects;
+            SpawnProjectile(actor, modifiers, ignoredObjects);
         }
         public override void Play(IActor actor, List<GameObject> ignoredObjects = null)
         {
             Play(actor, new List<AttackModifier>(), ignoredObjects);
+        }
+
+        protected Projectile SpawnProjectile(IActor actor, List<AttackModifier> modifiers, List<GameObject> ignoredObjects)
+        {
+            Projectile projectile = Instantiate(projectilePrefab.gameObject).GetComponent<Projectile>();
+            projectile.attack = this;
+            projectile.actor = actor;
+            projectile.modifiers = modifiers;
+            projectile.ignoredObjects = ignoredObjects;
+            return projectile;
         }
 
 
