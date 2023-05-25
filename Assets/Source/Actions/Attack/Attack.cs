@@ -10,6 +10,11 @@ namespace CardSystem.Effects
     /// </summary>
     public abstract class Attack : Action
     {
+        // The projectile to spawn
+        public Projectile projectilePrefab;
+        // The previewer prefab to use.
+        public AttackPreviewer previewerPrefab;
+
         [Header("Hits")]
         [Tooltip("The damage, damage type, status effects, and knockback this projectile will deal.")]
         public AttackData attack;
@@ -40,10 +45,10 @@ namespace CardSystem.Effects
         [Header("Homing")]
         [Min(0)]
         [Tooltip("The speed in degrees/s that projectiles will rotate towards the closest enemy")]
-        public float homingSpeed = 0; // TODO: Implement on projectiles
+        public float homingSpeed = 0;
         [Min(0)]
         [Tooltip("The duration that this will home for.")]
-        public float homingTime = 0; // TODO: Implement on projectiles
+        public float homingTime = 0;
 
         [Header("Visuals")]
         [Tooltip("The game object used to render the projectiles.")]
@@ -54,11 +59,6 @@ namespace CardSystem.Effects
         public SpawnLocation spawnLocation;
         [Tooltip("Whether or not the player needs to aim. If false it will be aimed at the closet enemy")]
         public bool isAimed = true;
-
-        // The projectile to spawn
-        public Projectile projectilePrefab;
-        // The previewer prefab to use.
-        public AttackPreviewer previewerPrefab;
 
         /// <summary>
         /// Gets the formated description of this card.

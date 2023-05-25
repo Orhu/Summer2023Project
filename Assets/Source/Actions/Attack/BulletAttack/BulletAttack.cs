@@ -11,10 +11,10 @@ namespace CardSystem.Effects
         public List<BulletSpawnInfo> spawnSequence = new List<BulletSpawnInfo>();
 
         [Tooltip("The angle relative to the aim direction that this projectile will spawn at")]
-        public float randomAngle = 0;
+        public float randomAngle = 0f;
 
-        [Tooltip("Random ")]
-        public Vector2 randomOffset = Vector2.zero;
+        [Tooltip("The radius of the circle to randomly pick a point to spawn projectiles within.")]
+        public float randomOffset = 0f;
 
         #region Previewing
         public override void ApplyModifiersToPreview(IActor actor, List<AttackModifier> actionModifiers)
