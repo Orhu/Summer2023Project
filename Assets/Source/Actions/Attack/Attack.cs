@@ -38,9 +38,10 @@ namespace CardSystem.Effects
         public float maxSpeed = 10f;
 
         [Header("Homing")]
-        [Range(0, 1)]
-        [Tooltip("The percent change every that this will point towards the closes enemy. 0 no homing, 1 always point at closest enemy")]
-        public float homingWeight = 0; // TODO: Implement on projectiles
+        [Min(0)]
+        [Tooltip("The speed in degrees/s that projectiles will rotate towards the closest enemy")]
+        public float homingSpeed = 0; // TODO: Implement on projectiles
+        [Min(0)]
         [Tooltip("The duration that this will home for.")]
         public float homingTime = 0; // TODO: Implement on projectiles
 

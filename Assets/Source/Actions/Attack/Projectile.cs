@@ -23,6 +23,8 @@ public class Projectile : MonoBehaviour
     float remainingLifetime;
     int remainingHits;
     GameObject target;
+    float remainingHomingTime;
+
     protected GameObject Target
     {
         get
@@ -31,6 +33,7 @@ public class Projectile : MonoBehaviour
             {
                 return target;
             }
+
             Collider2D[] roomObjects = Physics2D.OverlapBoxAll(transform.position, ProceduralGeneration.proceduralGenerationInstance.roomSize, 0f);
             foreach (Collider2D roomObject in roomObjects)
             {
@@ -87,6 +90,7 @@ public class Projectile : MonoBehaviour
         speed = attack.initialSpeed;
         remainingLifetime = attack.lifetime;
         remainingHits = attack.hitCount;
+        remainingHomingTime = attack.homingTime;
     }
 
     /// <summary>
@@ -94,6 +98,14 @@ public class Projectile : MonoBehaviour
     /// </summary>
     void FixedUpdate()
     {
+        if (remainingHomingTime > 0 && attack.homingSpeed > 0 && Target != null)
+        {
+            Vector3 targetDirection = (Target.transform.position - transform.position).normalized;
+            float targetRotation = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
+            float currentRotation = transform.rotation.eulerAngles.z;
+            transform.rotation = Quaternion.AngleAxis(Mathf.LerpAngle(currentRotation, targetRotation, (attack.homingSpeed * Time.fixedDeltaTime) / Mathf.Abs(targetRotation - currentRotation)), Vector3.forward);
+        }
+
         speed = Mathf.Clamp(speed + attack.acceleration * Time.fixedDeltaTime, attack.minSpeed, attack.maxSpeed);
         rigidBody.velocity = transform.right * speed;
     }
@@ -104,7 +116,8 @@ public class Projectile : MonoBehaviour
     void Update()
     {
         remainingLifetime -= Time.deltaTime;
-        if(remainingLifetime <= 0)
+        remainingHomingTime -= Time.deltaTime;
+        if (remainingLifetime <= 0)
         {
             Destroy(gameObject);
         }
