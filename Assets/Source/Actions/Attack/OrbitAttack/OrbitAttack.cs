@@ -16,6 +16,8 @@ namespace CardSystem.Effects
         [Tooltip("The amount the radius will vary by")]
         public float randomRadius = 0f;
 
+        [Tooltip("Whether or not the projectiles will follow the spawn location")]
+        public bool attachedToSpawnLocaiton = true;
 
 
         #region Previewing

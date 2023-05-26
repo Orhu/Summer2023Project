@@ -37,14 +37,14 @@ public class Projectile : MonoBehaviour
     }
     List<GameObject> ignoredObjects;
 
-    Rigidbody2D rigidBody;
-    private AttackData attackData;
+    protected Rigidbody2D rigidBody;
+    AttackData attackData;
     protected float speed;
-    float remainingLifetime;
+    protected float remainingLifetime;
     int remainingHits;
     GameObject closestTarget;
     GameObject randomTarget;
-    float remainingHomingTime;
+    protected float remainingHomingTime;
 
     /// <summary>
     /// Initializes components based on spawner stats.
@@ -148,6 +148,18 @@ public class Projectile : MonoBehaviour
 
     }
 
+    protected Vector3 GetSpawnLocation()
+    {
+        switch (attack.spawnLocation)
+        {
+            case SpawnLocation.Actor:
+                return actor.GetActionSourceTransform().position;
+            case SpawnLocation.AimPosition:
+                return actor.GetActionAimPosition();
+        }
+        return Vector3.zero;
+    }
+
     protected Vector3 GetAimTarget(AimMode aimMode)
     {
         switch (aimMode)
@@ -155,7 +167,7 @@ public class Projectile : MonoBehaviour
             case AimMode.AtMouse:
                 if (actor == null)
                 {
-                    return transform.right;
+                    return transform.position + transform.right;
                 }
                 return actor.GetActionAimPosition();
 
@@ -166,7 +178,7 @@ public class Projectile : MonoBehaviour
                 }
                 if (actor == null)
                 {
-                    return transform.right;
+                    return transform.position + transform.right;
                 }
 
                 Collider2D[] roomObjects = Physics2D.OverlapBoxAll(actor.GetActionSourceTransform().position, ProceduralGeneration.proceduralGenerationInstance.roomSize * 2, 0f);
@@ -182,7 +194,7 @@ public class Projectile : MonoBehaviour
 
                 if (closestTarget == null)
                 {
-                    return transform.right;
+                    return transform.position + transform.right;
                 }
                 return closestTarget.transform.position;
 
@@ -193,7 +205,7 @@ public class Projectile : MonoBehaviour
                 }
                 if (actor == null)
                 {
-                    return transform.right;
+                    return transform.position + transform.right;
                 }
 
                 Collider2D[] roomColliders = Physics2D.OverlapBoxAll(actor.GetActionSourceTransform().position, ProceduralGeneration.proceduralGenerationInstance.roomSize * 2, 0f);
@@ -210,10 +222,10 @@ public class Projectile : MonoBehaviour
                 randomTarget = possibleTargets[Random.Range(0, possibleTargets.Count)].gameObject;
                 if (randomTarget == null)
                 {
-                    return transform.right;
+                    return transform.position + transform.right;
                 }
                 return randomTarget.transform.position;
         }
-        return transform.right;
+        return transform.position + transform.right;
     }
 }

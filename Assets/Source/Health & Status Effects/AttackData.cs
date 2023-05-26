@@ -1,4 +1,5 @@
 using CardSystem;
+using Skaillz.EditInline;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ public class AttackData
     public DamageType damageType;
     [Tooltip("The number of tiles that hit objects will be pushed back")]
     public float knockback = 0f;
+    [EditInline]
     [Tooltip("The status effects to apply when this is received")]
     public List<StatusEffect> statusEffects = new List<StatusEffect>();
 
