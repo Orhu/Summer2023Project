@@ -37,8 +37,9 @@ public class Projectile : MonoBehaviour
     }
     List<GameObject> ignoredObjects;
 
+
     // The rigidbody responsible for the collision of this projectile.
-    protected Rigidbody2D rigidbody;
+    protected Rigidbody2D rigidBody;
     // The modified attack data of this projectile.
     DamageData attackData;
 
@@ -55,7 +56,7 @@ public class Projectile : MonoBehaviour
     protected void Start()
     {
         // Setup collision
-        rigidbody = GetComponent<Rigidbody2D>();
+        rigidBody = GetComponent<Rigidbody2D>();
         if (actor.GetCollider() != null)
         {
             Collider2D collider = attack.shape.CreateCollider(gameObject);
@@ -108,7 +109,7 @@ public class Projectile : MonoBehaviour
         }
 
         speed = Mathf.Clamp(speed + attack.acceleration * Time.fixedDeltaTime, attack.minSpeed, attack.maxSpeed);
-        rigidbody.velocity = transform.right * speed;
+        rigidBody.velocity = transform.right * speed;
     }
 
     /// <summary>
@@ -231,5 +232,13 @@ public class Projectile : MonoBehaviour
                 return randomTarget.transform.position;
         }
         return transform.position + transform.right;
+    }
+
+    protected void OnDestroy()
+    {
+        if (attack.detachVisualsBeforeDestroy)
+        {
+            transform.GetChild(0).transform.parent = null;
+        }
     }
 }

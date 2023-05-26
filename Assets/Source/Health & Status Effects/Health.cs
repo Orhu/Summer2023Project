@@ -93,16 +93,6 @@ public class Health : MonoBehaviour
                 }
             }
         }
-
-        // Knockback
-        if(GetComponent<Rigidbody2D>())
-        {
-            GetComponent<Rigidbody2D>().MovePosition(transform.position + (Vector3)knockbackDirection * attack.knockback);
-        }
-        else
-        {
-            transform.position += (Vector3)knockbackDirection * attack.knockback;
-        }
     }
 
     /// <summary>

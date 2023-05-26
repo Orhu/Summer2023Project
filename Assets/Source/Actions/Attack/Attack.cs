@@ -55,6 +55,8 @@ namespace CardSystem.Effects
         [Header("Visuals")]
         [Tooltip("The game object used to render the projectiles.")]
         public GameObject visualObject;
+        [Tooltip("Whether or not the visuals should be detached before the object is destroyed so that they can handle their own lifetime.")]
+        public bool detachVisualsBeforeDestroy = false;
 
         [Header("Spawning")]
         [Tooltip("The location to spawn the projectiles at.")]

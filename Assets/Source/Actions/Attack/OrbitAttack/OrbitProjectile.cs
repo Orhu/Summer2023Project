@@ -15,7 +15,6 @@ public class OrbitProjectile : Projectile
 
     float radius;
     Vector3 lastSpawnLocationPosition;
-    float previousHomingSign = 0f;
 
     /// <summary>
     /// Handles initial position and rotation.
@@ -59,7 +58,7 @@ public class OrbitProjectile : Projectile
 
         if (orbitAttack.attachedToSpawnLocation)
         {
-            rigidbody.MovePosition(transform.position + GetSpawnLocation() - lastSpawnLocationPosition + (Vector3)rigidbody.velocity * Time.fixedDeltaTime);
+            rigidBody.MovePosition(transform.position + GetSpawnLocation() - lastSpawnLocationPosition + (Vector3)rigidBody.velocity * Time.fixedDeltaTime);
             lastSpawnLocationPosition = GetSpawnLocation();
         }
     }
