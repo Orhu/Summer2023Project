@@ -93,7 +93,24 @@ public class Projectile : MonoBehaviour
         remainingHits = attack.hitCount;
         remainingHomingTime = attack.homingTime;
         attackData = new DamageData(attack.attack, causer);
+
+        InitializeModifiers();
     }
+
+
+    void InitializeModifiers()
+    {
+        List<AttackModifier> newModifiers = new List<AttackModifier>(modifiers.Count);
+        foreach (AttackModifier modifier in modifiers)
+        {
+            AttackModifier instance = Instantiate(modifier);
+            instance.ModifiedProjectile = this;
+            newModifiers.Add(Instantiate(modifier));
+        }
+
+        modifiers = newModifiers;
+    }
+
 
     /// <summary>
     /// Updates position.

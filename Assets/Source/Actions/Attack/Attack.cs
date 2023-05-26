@@ -24,7 +24,7 @@ namespace CardSystem.Effects
 
         [EditInline]
         [Tooltip("The modifiers that are always applied to this projectile")]
-        public List<AttackModifier> modifiers; // TODO: Implement on projectiles
+        public List<AttackModifier> modifiers;
 
         [EditInline]
         [Tooltip("The radius of the projectile.")]
@@ -122,7 +122,8 @@ namespace CardSystem.Effects
             Projectile projectile = Instantiate(projectilePrefab.gameObject).GetComponent<Projectile>();
             projectile.attack = this;
             projectile.actor = actor;
-            projectile.modifiers = modifiers;
+            projectile.modifiers = new List<AttackModifier>(this.modifiers);
+            projectile.modifiers.AddRange(modifiers);
             projectile.causer = causer;
             projectile.IgnoredObjects = ignoredObjects;
             return projectile;
