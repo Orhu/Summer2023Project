@@ -4,21 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// The data of an attack
+/// The data relating to a single damage event.
 /// </summary>
 [System.Serializable]
-public class AttackData
+public class DamageData
 {
     [Tooltip("The damage this attack deals")]
     public int damage;
     [Tooltip("The type of damage that will be applied")]
     public DamageType damageType;
-    [Tooltip("The number of tiles that hit objects will be pushed back")]
-    public float knockback = 0f;
     [EditInline]
     [Tooltip("The status effects to apply when this is received")]
     public List<StatusEffect> statusEffects = new List<StatusEffect>();
-
 
     // The causer of this attack.
     [System.NonSerialized]
@@ -29,23 +26,21 @@ public class AttackData
     /// </summary>
     /// <param name="attack"> The attack to copy </param>
     /// <param name="causer"> The new causer </param>
-    public AttackData(AttackData attack, Object causer)
+    public DamageData(DamageData attack, Object causer)
     {
         damage = attack.damage;
         damageType = attack.damageType;
-        knockback = attack.knockback;
         statusEffects = attack.statusEffects;
         this.causer = causer;
     }
-    // Status effects go here
-    // Knockback goes here
 
     /// <summary>
-    /// Create a new damaging attack.
+    /// Create a new damage data.
     /// </summary>
     /// <param name="damage"> The damage it will deal. </param>
+    /// <param name="damageType"> The type of damage dealt. </param>
     /// <param name="causer"> The causer of the damage </param>
-    public AttackData(int damage, DamageType damageType, Object causer)
+    public DamageData(int damage, DamageType damageType, Object causer)
     {
         this.damage = damage;
         this.damageType = damageType;
@@ -53,18 +48,23 @@ public class AttackData
     }
 
     /// <summary>
-    /// Create a new damaging attack.
+    /// Create a new damage data.
     /// </summary>
     /// <param name="damage"> The damage it will deal. </param>
+    /// <param name="damageType"> The type of damage dealt. </param>
+    /// <param name="statusEffects"> The status effects applied. </param>
     /// <param name="causer"> The causer of the damage </param>
-    public AttackData(int damage, DamageType damageType, float knockback, List<StatusEffect> statusEffects, Object causer) : this(damage, damageType, causer)
+    public DamageData(int damage, DamageType damageType, List<StatusEffect> statusEffects, Object causer) : this(damage, damageType, causer)
     {
         this.statusEffects = statusEffects;
-        this.knockback = knockback;
     }
 
-
-    public AttackData(List<StatusEffect> statusEffects, Object causer)
+    /// <summary>
+    /// Create a new damage data.
+    /// </summary>
+    /// <param name="statusEffects"> The status effects applied. </param>
+    /// <param name="causer"> The causer of the damage. </param>
+    public DamageData(List<StatusEffect> statusEffects, Object causer)
     {
         this.statusEffects = statusEffects;
         this.causer = causer;
@@ -76,7 +76,7 @@ public class AttackData
     /// <param name="attack"> The original attack. </param>
     /// <param name="integer"> The number of times to apply it. </param>
     /// <returns> The multiplied attack </returns>
-    public static AttackData operator *(AttackData attack, int integer)
+    public static DamageData operator *(DamageData attack, int integer)
     {
         if (integer > 1)
         {
@@ -88,10 +88,10 @@ public class AttackData
                     newStatusEffects.Add(statusEffect);
                 }
             }
-            return new AttackData(attack.damage * integer, attack.damageType, attack.knockback * integer, new List<StatusEffect>(newStatusEffects), attack.causer);
+            return new DamageData(attack.damage * integer, attack.damageType, new List<StatusEffect>(newStatusEffects), attack.causer);
         }
 
-        return new AttackData(attack, attack.causer);
+        return new DamageData(attack, attack.causer);
     }
 
     /// <summary>
@@ -100,7 +100,7 @@ public class AttackData
     /// <param name="attack"> The original attack. </param>
     /// <param name="integer"> The number of times it was applied. </param>
     /// <returns> The divided attack </returns>
-    public static AttackData operator /(AttackData attack, int integer)
+    public static DamageData operator /(DamageData attack, int integer)
     {
         if (integer > 1)
         {
@@ -112,10 +112,10 @@ public class AttackData
                     newStatusEffects.Add(statusEffect);
                 }
             }
-            return new AttackData(attack.damage / integer, attack.damageType, attack.knockback / integer, new List<StatusEffect>(newStatusEffects), attack.causer);
+            return new DamageData(attack.damage / integer, attack.damageType, new List<StatusEffect>(newStatusEffects), attack.causer);
         }
 
-        return new AttackData(attack, attack.causer);
+        return new DamageData(attack, attack.causer);
     }
 
     /// <summary>
@@ -124,9 +124,9 @@ public class AttackData
     /// <param name="attack"> The original attack. </param>
     /// <param name="integer"> The damage to add. </param>
     /// <returns> A copy of the modified attack </returns>
-    public static AttackData operator +(AttackData attack, int damage)
+    public static DamageData operator +(DamageData attack, int damage)
     {
-        return new AttackData(attack.damage + damage, attack.damageType, attack.knockback, attack.statusEffects, attack.causer);
+        return new DamageData(attack.damage + damage, attack.damageType, attack.statusEffects, attack.causer);
     }
 
     /// <summary>
@@ -135,31 +135,9 @@ public class AttackData
     /// <param name="attack"> The original attack. </param>
     /// <param name="integer"> The damage to remove. </param>
     /// <returns> A copy of the modified attack </returns>
-    public static AttackData operator -(AttackData attack, int damage)
+    public static DamageData operator -(DamageData attack, int damage)
     {
-        return new AttackData(attack.damage - damage, attack.damageType, attack.knockback, attack.statusEffects, attack.causer);
-    }
-
-    /// <summary>
-    /// Adds knockback to an attack.
-    /// </summary>
-    /// <param name="attack"> The original attack. </param>
-    /// <param name="knockback"> The damage to add. </param>
-    /// <returns> A copy of the modified attack </returns>
-    public static AttackData operator +(AttackData attack, float knockback)
-    {
-        return new AttackData(attack.damage, attack.damageType, attack.knockback + knockback, attack.statusEffects, attack.causer);
-    }
-
-    /// <summary>
-    /// Removes knockback from an attack.
-    /// </summary>
-    /// <param name="attack"> The original attack. </param>
-    /// <param name="knockback"> The damage to remove. </param>
-    /// <returns> A copy of the modified attack </returns>
-    public static AttackData operator -(AttackData attack, float knockback)
-    {
-        return new AttackData(attack.damage, attack.damageType, attack.knockback - knockback, attack.statusEffects, attack.causer);
+        return new DamageData(attack.damage - damage, attack.damageType, attack.statusEffects, attack.causer);
     }
 
     /// <summary>
@@ -168,10 +146,10 @@ public class AttackData
     /// <param name="attack"> The original attack. </param>
     /// <param name="effects"> The status effects to add. </param>
     /// <returns> A copy of the modified attack </returns>
-    public static AttackData operator +(AttackData attack, List<StatusEffect> effects)
+    public static DamageData operator +(DamageData attack, List<StatusEffect> effects)
     {
         effects.AddRange(attack.statusEffects);
-        return new AttackData(attack.damage, attack.damageType, attack.knockback, effects, attack.causer);
+        return new DamageData(attack.damage, attack.damageType, effects, attack.causer);
     }
 
     /// <summary>
@@ -180,13 +158,13 @@ public class AttackData
     /// <param name="attack"> The original attack. </param>
     /// <param name="effects"> The status effects to remove. </param>
     /// <returns> A copy of the modified attack </returns>
-    public static AttackData operator -(AttackData attack, List<StatusEffect> effects)
+    public static DamageData operator -(DamageData attack, List<StatusEffect> effects)
     {
         foreach (StatusEffect statusEffect in attack.statusEffects)
         {
             effects.Remove(statusEffect);
         }
-        return new AttackData(attack.damage, attack.damageType, attack.knockback, effects, attack.causer);
+        return new DamageData(attack.damage, attack.damageType, effects, attack.causer);
     }
 
     public enum DamageType

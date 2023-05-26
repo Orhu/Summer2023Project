@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using static CardSystem.Effects.Attack;
 
+/// <summary>
+/// A projectile that orbits in a circle around the spawn location.
+/// </summary>
 public class OrbitProjectile : Projectile
 {
     OrbitAttack orbitAttack;
@@ -14,7 +17,9 @@ public class OrbitProjectile : Projectile
     Vector3 lastSpawnLocationPosition;
     float previousHomingSign = 0f;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Handles initial position and rotation.
+    /// </summary>
     new void Start()
     {
         orbitAttack = attack as OrbitAttack;
@@ -40,6 +45,9 @@ public class OrbitProjectile : Projectile
         }
     }
 
+    /// <summary>
+    /// Updates orbit rotation if not homing.
+    /// </summary>
     new void FixedUpdate()
     {
         if (remainingHomingTime <= 0 && attack.homingSpeed <= 0)
@@ -49,13 +57,17 @@ public class OrbitProjectile : Projectile
 
         base.FixedUpdate();
 
-        if (orbitAttack.attachedToSpawnLocaiton)
+        if (orbitAttack.attachedToSpawnLocation)
         {
-            rigidBody.MovePosition(transform.position + GetSpawnLocation() - lastSpawnLocationPosition + (Vector3)rigidBody.velocity * Time.fixedDeltaTime);
+            rigidbody.MovePosition(transform.position + GetSpawnLocation() - lastSpawnLocationPosition + (Vector3)rigidbody.velocity * Time.fixedDeltaTime);
             lastSpawnLocationPosition = GetSpawnLocation();
         }
     }
 
+    /// <summary>
+    /// Gets the sign of the tangent rotation of the orbit direction.
+    /// </summary>
+    /// <returns> -1 if clockwise, 1 if counterclockwise. </returns>
     float OrbitSign()
     {
         return (orbitAttack.spawnSequence[orbitIndex].orbitDirection == OrbitAttack.RotationDirection.Clockwise ? -1f : 1f);

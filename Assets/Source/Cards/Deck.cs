@@ -127,6 +127,10 @@ public class Deck : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Discards a card from the deck's hand.
+    /// </summary>
+    /// <param name="handIndex"> The index in the hand of the card to discard. </param>
     public void DiscardCard(int handIndex)
     {
         discardedCards.Add(inHandCards[handIndex]);
@@ -259,8 +263,9 @@ public class Deck : MonoBehaviour
     }
 
     /// <summary>
-    /// Play any cards currently being previewed.
+    /// Plays a card in the hand.
     /// </summary>
+    /// <param name="handIndex"> The index in the hand of the card to play. </param>
     public void PlayCard(int handIndex)
     {
         if (handIndex >= inHandCards.Count)
@@ -279,8 +284,9 @@ public class Deck : MonoBehaviour
     }
 
     /// <summary>
-    /// Play any cards currently being previewed.
+    /// Plays a cord consisting of cards from the hand.
     /// </summary>
+    /// <param name="handIndices"> The indices of the cards to play. Index 0 will be the root of the chord. </param>
     public void PlayChord(List<int> handIndices)
     {
         AttackCard cardToPlay = null;
@@ -314,6 +320,9 @@ public class Deck : MonoBehaviour
         cardToPlay?.PlayActions(actor, chordedCards);
     }
 
+    /// <summary>
+    /// Plays a cord consisting of the cards being previewed.
+    /// </summary>
     public void PlayChord()
     {
         if (previewedCardIndices.Count == 0)

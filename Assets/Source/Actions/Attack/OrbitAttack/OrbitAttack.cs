@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace CardSystem.Effects
 {
+    /// <summary>
+    /// An attack that creates a projectile that orbits around the spawn location.
+    /// </summary>
     [CreateAssetMenu(fileName = "NewOrbitAttack", menuName = "Cards/Actions/Attacks/Orbit Attack")]
     public class OrbitAttack : Attack
     {
@@ -17,36 +20,68 @@ namespace CardSystem.Effects
         public float randomRadius = 0f;
 
         [Tooltip("Whether or not the projectiles will follow the spawn location")]
-        public bool attachedToSpawnLocaiton = true;
+        public bool attachedToSpawnLocation = true;
 
 
         #region Previewing
-        public override void ApplyModifiersToPreview(IActor actor, List<AttackModifier> actionModifiers)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void CancelPreview(IActor actor)
-        {
-            throw new System.NotImplementedException();
-        }
-
+        /// <summary>
+        /// Starts rendering a preview of what this action will do.
+        /// </summary>
+        /// <param name="actor"> The actor that will be playing this action. </param>
         public override void Preview(IActor actor)
         {
             throw new System.NotImplementedException();
         }
 
+        /// <summary>
+        /// Applies modifiers to a preview.
+        /// </summary>
+        /// <param name="actor"> The actor previewing. </param>
+        /// <param name="actionModifiers"> The modifiers to apply </param>
+        public override void ApplyModifiersToPreview(IActor actor, List<AttackModifier> actionModifiers)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Removes modifiers from a preview.
+        /// </summary>
+        /// <param name="actor"> The actor previewing. </param>
+        /// <param name="actionModifiers"> The modifiers to remove </param>
         public override void RemoveModifiersFromPreview(IActor actor, List<AttackModifier> actionModifiers)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <summary>
+        /// Stops rendering a preview of what this action will do.
+        /// </summary>
+        /// <param name="actor"> The actor that will no longer be playing this action. </param>
+        public override void CancelPreview(IActor actor)
         {
             throw new System.NotImplementedException();
         }
         #endregion
 
+        /// <summary>
+        /// Plays this action and causes all its effects. Also cancels any relevant previews.
+        /// </summary>
+        /// <param name="actor"> The actor that will be playing this action. </param>
+        /// <param name="modifiers"> The modifiers to be applied to this attack. </param>
+        /// <param name="causer"> The causer of damage dealt by this attack. </param>
+        /// <param name="ignoredObjects"> The objects this action will ignore. </param>
         public override void Play(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects = null)
         {
             actor.GetActionSourceTransform().GetComponent<MonoBehaviour>().StartCoroutine(PlaySpawnSequence(actor, modifiers, causer, ignoredObjects));
         }
 
+        /// <summary>
+        /// Spawns all of the projectiles in spawnSequence and creates delays appropriately.
+        /// </summary>
+        /// <param name="actor"> The actor that is playing this action. </param>
+        /// <param name="modifiers"> The modifiers that are applied to this attack. </param>
+        /// <param name="causer"> The causer of damage dealt by this attack. </param>
+        /// <param name="ignoredObjects"> The objects this action will ignore. </param>
         IEnumerator PlaySpawnSequence(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects)
         {
             for (int i = 0; i < spawnSequence.Count; i++)
@@ -60,7 +95,9 @@ namespace CardSystem.Effects
             }
         }
 
-
+        /// <summary>
+        /// The information about a single bullet spawning event.
+        /// </summary>
         [System.Serializable]
         public class OrbitSpawnInfo
         {
@@ -77,6 +114,9 @@ namespace CardSystem.Effects
             public RotationDirection orbitDirection;
         }
 
+        /// <summary>
+        /// The direction a projectile orbits in.
+        /// </summary>
         public enum RotationDirection
         {
             Clockwise,

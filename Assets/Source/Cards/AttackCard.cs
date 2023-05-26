@@ -12,7 +12,8 @@ namespace CardSystem
     /// - Card visuals
     /// - The cooldown of the card
     /// - Actions - What the card does when played as a root
-    /// - Action Modifiers - What the card does when played as part of a combo
+    /// - Duplicate Modifiers - What the card does when played in addition to itself
+    /// - Cord Modifiers - What the card does when played with other cards.
     /// - Effects - How the card effects the dungeon
     /// </summary>
     [CreateAssetMenu(fileName = "NewCard", menuName = "Cards/Cards/Attack Card", order = 1)]
@@ -28,8 +29,9 @@ namespace CardSystem
 
         #region Previewing
         /// <summary>
-        /// Causes all of this cards Actions to start rendering their previews around the actor.
+        /// Renders a preview of this action.
         /// </summary>
+        /// <param name="actor"> The actor that would play the action. </param>
         public void PreviewActions(IActor actor)
         {
             foreach (Action cardAction in actions)
@@ -38,6 +40,11 @@ namespace CardSystem
             }
         }
 
+        /// <summary>
+        /// Renders a preview of this action.
+        /// </summary>
+        /// <param name="actor"> The actor that would play the action. </param>
+        /// <param name="chordedCards"> The cards being corded with this. </param>
         public void PreviewActions(IActor actor, List<AttackCard> chordedCards)
         {
             PreviewActions(actor);
@@ -59,6 +66,12 @@ namespace CardSystem
                 //cardAction.ApplyModifiersToPreview(actor, actionModifiers);
             }
         }
+
+        /// <summary>
+        /// Applies modifiers to all the previews of this card's actions.
+        /// </summary>
+        /// <param name="actor"> The actor previewing </param>
+        /// <param name="chordedCard"> The card's who's modifiers should be added </param>
         public void AddToPreview(IActor actor, AttackCard chordedCard)
         {
             AddToPreview(actor, GetAppliedModifers(chordedCard));
@@ -76,6 +89,12 @@ namespace CardSystem
                 //cardAction.RemoveModifiersFromPreview(actor, actionModifiers);
             }
         }
+
+        /// <summary>
+        /// Removes modifiers from all the previews of this card's actions.
+        /// </summary>
+        /// <param name="actor"> The actor previewing </param>
+        /// <param name="chordedCard"> The card's who's modifiers should be removed </param>
         internal void RemoveFromPreview(IActor actor, AttackCard chordedCard)
         {
             RemoveFromPreview(actor, GetAppliedModifers(chordedCard));
@@ -93,6 +112,11 @@ namespace CardSystem
         }
         #endregion
 
+        /// <summary>
+        /// Plays the actions of this card.
+        /// </summary>
+        /// <param name="actor"> The actor playing the card. </param>
+        /// <param name="chordedCards"> The cards being corded with this. </param>
         public void PlayActions(IActor actor, List<AttackCard> chordedCards)
         {
             List<AttackModifier> modifiers = new List<AttackModifier>();
@@ -104,6 +128,11 @@ namespace CardSystem
             PlayActions(actor, modifiers);
         }
 
+        /// <summary>
+        /// Plays the actions of this card.
+        /// </summary>
+        /// <param name="actor"> The actor playing the card. </param>
+        /// <param name="modifiers"> The modifiers being applied to this. </param>
         public void PlayActions(IActor actor, List<AttackModifier> modifiers)
         {
             foreach(Action action in actions)
@@ -119,7 +148,11 @@ namespace CardSystem
             }
         }
 
-
+        /// <summary>
+        /// Gets the modifiers that another attack card would apply to this.
+        /// </summary>
+        /// <param name="modifingCard"></param>
+        /// <returns></returns>
         List<AttackModifier> GetAppliedModifers(AttackCard modifingCard)
         {
             if (modifingCard == this)
