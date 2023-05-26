@@ -1,9 +1,10 @@
+using CardSystem;
 using Skaillz.EditInline;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CardSystem.Effects
+namespace Attacks
 {
     /// <summary>
     /// A scriptable object data about an attack that can be used by cards and enemies.

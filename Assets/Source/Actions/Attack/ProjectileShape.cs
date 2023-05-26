@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace CardSystem.Effects
+namespace Attacks
 {
     /// <summary>
     /// Base class for the shape a projectile can take.

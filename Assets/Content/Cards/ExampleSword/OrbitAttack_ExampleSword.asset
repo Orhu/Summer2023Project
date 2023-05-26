@@ -17,10 +17,10 @@ MonoBehaviour:
   attack:
     damage: 1
     damageType: 1
-    knockback: 1
     statusEffects: []
   hitCount: 30
-  modifiers: []
+  modifiers:
+  - {fileID: 11400000, guid: 643435c34547da24dbe03731c0b2e8df, type: 2}
   shape: {fileID: 11400000, guid: 974e8cc2eb24bdd4d98a1033c08aba7c, type: 2}
   lifetime: 0.33333334
   initialSpeed: 4.712389
@@ -31,6 +31,7 @@ MonoBehaviour:
   homingTime: 0
   homingAimMode: 1
   visualObject: {fileID: 293521835147723709, guid: 32c525403adfffb4e98835cb379cac84, type: 3}
+  detachVisualsBeforeDestroy: 0
   spawnLocation: 0
   aimMode: 0
   spawnSequence:
@@ -44,4 +45,4 @@ MonoBehaviour:
     orbitDirection: 1
   randomStartingAngle: 0
   randomRadius: 0
-  attachedToSpawnLocaiton: 1
+  attachedToSpawnLocation: 1

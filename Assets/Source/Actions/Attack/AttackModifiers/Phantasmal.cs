@@ -6,7 +6,7 @@ using UnityEngine;
 /// An action modifier that changes the attack of an action modifier.
 /// </summary>
 
-namespace CardSystem.Effects
+namespace Attacks
 {
     [CreateAssetMenu(fileName = "NewPhantasmal", menuName = "Cards/AttackModifers/Phantasmal")]
     internal class Phantasmal : AttackModifier
@@ -18,7 +18,6 @@ namespace CardSystem.Effects
             {
                 value.gameObject.layer = LayerMask.NameToLayer("PhantasmalProjectile");
             }
-            protected get { return null; }
         }
     }
 }

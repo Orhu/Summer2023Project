@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace CardSystem.Effects
+namespace Attacks
 {
     /// <summary>
     /// A box projectile shape a serialized size.

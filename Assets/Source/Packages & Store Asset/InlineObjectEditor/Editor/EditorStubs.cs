@@ -2,9 +2,9 @@
 [UnityEditor.CustomEditor(typeof(CardSystem.AttackCard))]
 public partial class AttackCardEditorStub : UnityEditor.Editor { }
 
-[UnityEditor.CustomEditor(typeof(CardSystem.Effects.BulletAttack))]
+[UnityEditor.CustomEditor(typeof(Attacks.BulletAttack))]
 public partial class BulletAttackEditorStub : UnityEditor.Editor { }
 
-[UnityEditor.CustomEditor(typeof(CardSystem.Effects.OrbitAttack))]
+[UnityEditor.CustomEditor(typeof(Attacks.OrbitAttack))]
 public partial class OrbitAttackEditorStub : UnityEditor.Editor { }
 

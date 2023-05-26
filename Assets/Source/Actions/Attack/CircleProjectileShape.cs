@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace CardSystem.Effects
+namespace Attacks
 {
     /// <summary>
     /// A circle projectile shape a serialized radius.

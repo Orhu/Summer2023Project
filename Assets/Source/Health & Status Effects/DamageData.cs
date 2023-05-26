@@ -122,13 +122,12 @@ public class DamageData
     /// Adds damage to an attack.
     /// </summary>
     /// <param name="attack"> The original attack. </param>
-    /// <param name="integer"> The damage to add. </param>
+    /// <param name="damage"> The damage to add. </param>
     /// <returns> A copy of the modified attack </returns>
     public static DamageData operator +(DamageData attack, int damage)
     {
         return new DamageData(attack.damage + damage, attack.damageType, attack.statusEffects, attack.causer);
     }
-
     /// <summary>
     /// Removes damage from an attack.
     /// </summary>

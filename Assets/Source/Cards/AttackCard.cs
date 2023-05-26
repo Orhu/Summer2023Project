@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 using Skaillz.EditInline;
-using CardSystem.Effects;
+using Attacks;
 
 namespace CardSystem
 {

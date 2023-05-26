@@ -8,7 +8,7 @@ public abstract class StatusEffect : ScriptableObject
     [SerializeField]
     [Tooltip("The Duration this status effect will be applied for")]
     [Min(0.0166666667f)]
-    private float duration;
+    private float duration = 2f;
     public float Duration
     {
         get { return duration; }

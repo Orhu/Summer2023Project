@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace CardSystem.Effects
+namespace Attacks
 {
     /// <summary>
     /// An attack that fires a bullet in a strait line.
