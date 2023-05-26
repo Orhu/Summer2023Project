@@ -18,10 +18,10 @@ namespace CardSystem
     [CreateAssetMenu(fileName = "NewCard", menuName = "Cards/Cards/Attack Card", order = 1)]
     public class AttackCard : Card
     {
-        [Header("Cording Modifiers")]
+        [Header("Chording Modifiers")]
         [EditInline]
         [Tooltip("The how this card will modify actions when used in a combo.")]
-        public List<AttackModifier> cordModifiers;
+        public List<AttackModifier> chordModifiers;
         [EditInline]
         [Tooltip("The how this card will modify actions when used in a combo with itself.")]
         public List<AttackModifier> duplicateModifiers;
@@ -38,12 +38,12 @@ namespace CardSystem
             }
         }
 
-        public void PreviewActions(IActor actor, List<AttackCard> cordedCards)
+        public void PreviewActions(IActor actor, List<AttackCard> chordedCards)
         {
             PreviewActions(actor);
-            foreach (AttackCard cordedCard in cordedCards)
+            foreach (AttackCard chordedCard in chordedCards)
             {
-                AddToPreview(actor, cordedCard);
+                AddToPreview(actor, chordedCard);
             }
         }
 
@@ -59,9 +59,9 @@ namespace CardSystem
                 //cardAction.ApplyModifiersToPreview(actor, actionModifiers);
             }
         }
-        public void AddToPreview(IActor actor, AttackCard cordedCard)
+        public void AddToPreview(IActor actor, AttackCard chordedCard)
         {
-            AddToPreview(actor, GetAppliedModifers(cordedCard));
+            AddToPreview(actor, GetAppliedModifers(chordedCard));
         }
 
         /// <summary>
@@ -76,9 +76,9 @@ namespace CardSystem
                 //cardAction.RemoveModifiersFromPreview(actor, actionModifiers);
             }
         }
-        internal void RemoveFromPreview(IActor actor, AttackCard cordedCard)
+        internal void RemoveFromPreview(IActor actor, AttackCard chordedCard)
         {
-            RemoveFromPreview(actor, GetAppliedModifers(cordedCard));
+            RemoveFromPreview(actor, GetAppliedModifers(chordedCard));
         }
 
         /// <summary>
@@ -93,12 +93,12 @@ namespace CardSystem
         }
         #endregion
 
-        public void PlayActions(IActor actor, List<AttackCard> cordedCards)
+        public void PlayActions(IActor actor, List<AttackCard> chordedCards)
         {
             List<AttackModifier> modifiers = new List<AttackModifier>();
-            foreach (AttackCard cordedCard in cordedCards)
+            foreach (AttackCard chordedCard in chordedCards)
             {
-                modifiers.AddRange(GetAppliedModifers(cordedCard));
+                modifiers.AddRange(GetAppliedModifers(chordedCard));
             }
 
             PlayActions(actor, modifiers);
@@ -128,7 +128,7 @@ namespace CardSystem
             }
             else
             {
-                return modifingCard.cordModifiers;
+                return modifingCard.chordModifiers;
             }
         }
     }

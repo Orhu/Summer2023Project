@@ -42,7 +42,7 @@ public class Controller : MonoBehaviour, IActor
 
             if (Input.GetButtonDown("Fire1"))
             {
-                Deck.playerDeck.PlayCord();
+                Deck.playerDeck.PlayChord();
             }
         }
 

@@ -8,7 +8,7 @@ using UnityEngine;
 public abstract class SteeringBehavior : MonoBehaviour
 {
     /// <summary>
-    /// Update danger and interest arrays according to steering type
+    /// Update danger and interest arrays acchording to steering type
     /// </summary>
     /// <param name="danger">Current danger values array</param>
     /// <param name="interest">Current interest values array</param>

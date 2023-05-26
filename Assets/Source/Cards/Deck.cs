@@ -195,7 +195,7 @@ public class Deck : MonoBehaviour
 
     #region Playing & Previewing
     /// <summary>
-    /// Selects a card. Will immediately play any non-cordable cards. Will toggle the preview for cordable cards.
+    /// Selects a card. Will immediately play any non-chordable cards. Will toggle the preview for chordable cards.
     /// </summary>
     /// <param name="handIndex"> The index in the hand of the card. </param>
     public void SelectCard(int handIndex)
@@ -223,7 +223,7 @@ public class Deck : MonoBehaviour
         }
 
         AttackCard rootCard = inHandCards[previewedCardIndices[0]] as AttackCard;
-        // If root of cord is changed
+        // If root of chord is changed
         if (handIndex == previewedCardIndices[0])
         {
             previewedCardIndices.RemoveAt(0);
@@ -234,13 +234,13 @@ public class Deck : MonoBehaviour
             {
                 rootCard = inHandCards[previewedCardIndices[0]] as AttackCard;
 
-                List<AttackCard> cordedCards = new List<AttackCard>();
+                List<AttackCard> chordedCards = new List<AttackCard>();
                 for (int i = 1; i < previewedCardIndices.Count; i++)
                 {
-                    cordedCards.Add(inHandCards[previewedCardIndices[i]] as AttackCard);
+                    chordedCards.Add(inHandCards[previewedCardIndices[i]] as AttackCard);
                 }
 
-                rootCard.PreviewActions(actor, cordedCards);
+                rootCard.PreviewActions(actor, chordedCards);
             }
             return;
         }
@@ -281,10 +281,10 @@ public class Deck : MonoBehaviour
     /// <summary>
     /// Play any cards currently being previewed.
     /// </summary>
-    public void PlayCord(List<int> handIndices)
+    public void PlayChord(List<int> handIndices)
     {
         AttackCard cardToPlay = null;
-        List<AttackCard> cordedCards = new List<AttackCard>();
+        List<AttackCard> chordedCards = new List<AttackCard>();
 
         foreach (int handIndex in handIndices)
         {
@@ -303,7 +303,7 @@ public class Deck : MonoBehaviour
 
             if (card is AttackCard)
             {
-                cordedCards.Add(card as AttackCard);
+                chordedCards.Add(card as AttackCard);
             }
             else
             {
@@ -311,17 +311,17 @@ public class Deck : MonoBehaviour
             }
         }
 
-        cardToPlay?.PlayActions(actor, cordedCards);
+        cardToPlay?.PlayActions(actor, chordedCards);
     }
 
-    public void PlayCord()
+    public void PlayChord()
     {
         if (previewedCardIndices.Count == 0)
         {
             return;
         }
 
-        PlayCord(previewedCardIndices);
+        PlayChord(previewedCardIndices);
 
         previewedCardIndices.Clear();
     }
