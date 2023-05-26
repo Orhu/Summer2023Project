@@ -15,29 +15,33 @@ MonoBehaviour:
   projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
   previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   attack:
-    damage: 0
-    damageType: 0
-    knockback: 0
+    damage: 1
+    damageType: 1
+    knockback: 1
     statusEffects: []
-  hitCount: 1
+  hitCount: 30
   modifiers: []
-  shape: {fileID: 0}
-  lifetime: 10
-  initialSpeed: 10
-  acceleration: -1
-  minSpeed: 5
-  maxSpeed: 10
+  shape: {fileID: 11400000, guid: 974e8cc2eb24bdd4d98a1033c08aba7c, type: 2}
+  lifetime: 0.33333334
+  initialSpeed: 4.712389
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 20
   homingSpeed: 0
   homingTime: 0
-  homingAimMode: 0
-  visualObject: {fileID: 0}
+  homingAimMode: 1
+  visualObject: {fileID: 293521835147723709, guid: 32c525403adfffb4e98835cb379cac84, type: 3}
   spawnLocation: 0
   aimMode: 0
   spawnSequence:
   - delay: 0
-    startingAngle: 0
-    radius: 0
+    startingAngle: 45
+    radius: 1
     orbitDirection: 0
+  - delay: 0.33333334
+    startingAngle: -45
+    radius: 1
+    orbitDirection: 1
   randomStartingAngle: 0
   randomRadius: 0
   attachedToSpawnLocaiton: 1
