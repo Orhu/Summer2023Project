@@ -10,26 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
-  m_Name: BulletAttack_ManaBullet
+  m_Name: BulletAttack_PoisonBlade
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
-    damage: 4
+    damage: 2
     damageType: 0
     statusEffects: []
   hitCount: 1
   modifiers: []
-  shape: {fileID: 11400000, guid: 1e7505a74e59d2a48bbca6cde8ae76f6, type: 2}
-  lifetime: 0.75
-  initialSpeed: 10
-  acceleration: -9.333333
-  minSpeed: 2.5
-  maxSpeed: 20
+  shape: {fileID: 11400000, guid: ab81ad971c03ce34bb2e26a52c530bee, type: 2}
+  lifetime: 0.9166667
+  initialSpeed: 12
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 12
   homingSpeed: 0
   homingTime: 0
   homingAimMode: 0
-  visualObject: {fileID: 2238662938685823967, guid: d30dac2222e24914097423291f8d6df0, type: 3}
+  visualObject: {fileID: 5429226520074857060, guid: 4b30524aa2b4ea449b50103a4bbf7463, type: 3}
   detachVisualsBeforeDestroy: 0
   spawnLocation: 0
   aimMode: 0
