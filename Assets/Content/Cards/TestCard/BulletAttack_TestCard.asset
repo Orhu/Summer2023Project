@@ -17,7 +17,6 @@ MonoBehaviour:
   attack:
     damage: 1
     damageType: 0
-    knockback: 0
     statusEffects:
     - {fileID: 11400000, guid: 4d24f873cabfd794093b74fa3a36ff3e, type: 2}
   hitCount: 2
@@ -33,6 +32,7 @@ MonoBehaviour:
   homingTime: 2
   homingAimMode: 1
   visualObject: {fileID: 815138696641318384, guid: 5a43758f167be394badf944662ecc2c3, type: 3}
+  detachVisualsBeforeDestroy: 1
   spawnLocation: 0
   aimMode: 0
   spawnSequence:
