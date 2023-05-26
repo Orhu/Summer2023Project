@@ -44,7 +44,7 @@ namespace Attacks
         internal DamageData attackData;
 
         protected float speed;
-        protected float remainingLifetime;
+        internal float remainingLifetime;
         internal int remainingHits;
         GameObject closestTarget;
         GameObject randomTarget;
