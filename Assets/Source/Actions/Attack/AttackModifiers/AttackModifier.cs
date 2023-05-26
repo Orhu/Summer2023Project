@@ -21,7 +21,7 @@ public class AttackModifier : ScriptableObject
     /// Modifies the given attack.
     /// </summary>
     /// <param name="attack"> The attack to modify </param>
-    public void ModifyAttack(ref AttackData attack)
+    public void ModifyAttack(ref DamageData attack)
     {
         attack = ((attack * attackMultiplier) + damageToAdd) + statusEffectToAdd;
     }

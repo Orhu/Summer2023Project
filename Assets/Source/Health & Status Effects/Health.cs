@@ -22,12 +22,12 @@ public class Health : MonoBehaviour
     // Called when health values are changed and passes the new health.
     public UnityEvent<float> onHealthChanged, onMaxHealthChanged;
     // Called when this is attacked and passes the attack.
-    public UnityEvent<AttackData> onAttacked;
+    public UnityEvent<DamageData> onAttacked;
     // Called when this dies
     public UnityEvent onDeath;
     // Called before this processes an attack and passes the incoming attack so can be modified.   
     public RequestIncomingAttackModification onRequestIncomingAttackModification;
-    public delegate void RequestIncomingAttackModification(ref AttackData attack);
+    public delegate void RequestIncomingAttackModification(ref DamageData attack);
 
 
     /// <summary>
@@ -63,11 +63,11 @@ public class Health : MonoBehaviour
     /// Receive an attack  and kill the owner if out of health.
     /// </summary>
     /// <param name="attack"> The attack being received. </param>
-    public void ReceiveAttack(AttackData attack)
+    public void ReceiveAttack(DamageData attack)
     {
         ReceiveAttack(attack, Vector2.zero);
     }
-    public void ReceiveAttack(AttackData attack, Vector2 knockbackDirection)
+    public void ReceiveAttack(DamageData attack, Vector2 knockbackDirection)
     {
         // Damage
         onRequestIncomingAttackModification?.Invoke(ref attack);
@@ -92,16 +92,6 @@ public class Health : MonoBehaviour
                     statusEffects.Add(statusEffect.Instantiate(gameObject));
                 }
             }
-        }
-
-        // Knockback
-        if(GetComponent<Rigidbody2D>())
-        {
-            GetComponent<Rigidbody2D>().MovePosition(transform.position + (Vector3)knockbackDirection * attack.knockback);
-        }
-        else
-        {
-            transform.position += (Vector3)knockbackDirection * attack.knockback;
         }
     }
 

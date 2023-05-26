@@ -59,7 +59,7 @@ public class Ignite : StatusEffect
         timeToDamage -= Time.deltaTime;
         if (timeToDamage <= 0)
         {
-            gameObject.GetComponent<Health>().ReceiveAttack(new AttackData(1, AttackData.DamageType.Special, this));
+            gameObject.GetComponent<Health>().ReceiveAttack(new DamageData(1, DamageData.DamageType.Special, this));
             timeToDamage += 1f / dps;
         }
     }

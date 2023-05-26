@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace CardSystem.Effects
 {
+    /// <summary>
+    /// An attack that fires a bullet in a strait line.
+    /// </summary>
     [CreateAssetMenu(fileName = "NewBulletAttack", menuName = "Cards/Actions/Attacks/Bullet Attack")]
     public class BulletAttack : Attack
     {
@@ -38,11 +41,26 @@ namespace CardSystem.Effects
         }
         #endregion
 
+        #region Playing
+        /// <summary>
+        /// Plays this action and causes all its effects. Also cancels any relevant previews.
+        /// </summary>
+        /// <param name="actor"> The actor that will be playing this action. </param>
+        /// <param name="modifiers"> The modifiers to be applied to this attack. </param>
+        /// <param name="causer"> The causer of damage dealt by this attack. </param>
+        /// <param name="ignoredObjects"> The objects this action will ignore. </param>
         public override void Play(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects = null)
         {
             actor.GetActionSourceTransform().GetComponent<MonoBehaviour>().StartCoroutine(PlaySpawnSequence(actor, modifiers, causer, ignoredObjects));
         }
 
+        /// <summary>
+        /// Spawns all of the projectiles in spawnSequence and creates delays appropriately.
+        /// </summary>
+        /// <param name="actor"> The actor that is playing this action. </param>
+        /// <param name="modifiers"> The modifiers that are applied to this attack. </param>
+        /// <param name="causer"> The causer of damage dealt by this attack. </param>
+        /// <param name="ignoredObjects"> The objects this action will ignore. </param>
         IEnumerator PlaySpawnSequence(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects)
         {
             for (int i = 0; i < spawnSequence.Count; i++)
@@ -55,8 +73,11 @@ namespace CardSystem.Effects
                 bullet.bulletIndex = i;
             }
         }
+        #endregion
 
-
+        /// <summary>
+        /// The information about a single bullet spawning event.
+        /// </summary>
         [System.Serializable]
         public class BulletSpawnInfo
         {

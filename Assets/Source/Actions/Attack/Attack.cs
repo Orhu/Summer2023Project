@@ -6,7 +6,7 @@ using UnityEngine;
 namespace CardSystem.Effects
 {
     /// <summary>
-    /// A scriptable object for storing data about a projectile type.
+    /// A scriptable object data about an attack that can be used by cards and enemies.
     /// </summary>
     public abstract class Attack : Action
     {
@@ -17,7 +17,7 @@ namespace CardSystem.Effects
 
         [Header("Hits")]
         [Tooltip("The damage, damage type, status effects, and knockback this projectile will deal.")]
-        public AttackData attack;
+        public DamageData attack;
         [Min(1)]
         [Tooltip("The number of objects this can hit before being destroyed.")]
         public int hitCount = 1;
@@ -55,6 +55,8 @@ namespace CardSystem.Effects
         [Header("Visuals")]
         [Tooltip("The game object used to render the projectiles.")]
         public GameObject visualObject;
+        [Tooltip("Whether or not the visuals should be detached before the object is destroyed so that they can handle their own lifetime.")]
+        public bool detachVisualsBeforeDestroy = false;
 
         [Header("Spawning")]
         [Tooltip("The location to spawn the projectiles at.")]
@@ -62,15 +64,7 @@ namespace CardSystem.Effects
         [Tooltip("Whether or not the player needs to aim. If false it will be aimed at the closet enemy")]
         public AimMode aimMode;
 
-        /// <summary>
-        /// Gets the formated description of this card.
-        /// </summary>
-        /// <returns> The description with any Serialized Field names that appear in [] replaced with their actual value.</returns>
-        public override string GetFormattedDescription()
-        {
-            return description.Replace("[Damage]", attack.damage.ToString());
-        }
-
+        #region Previewing
         /// <summary>
         /// Starts rendering a preview of what this action will do.
         /// </summary>
@@ -80,14 +74,14 @@ namespace CardSystem.Effects
         /// <summary>
         /// Applies modifiers to a preview.
         /// </summary>
-        /// <param name="actor"> The actor previewing</param>
+        /// <param name="actor"> The actor previewing. </param>
         /// <param name="actionModifiers"> The modifiers to apply </param>
         public abstract void ApplyModifiersToPreview(IActor actor, List<AttackModifier> actionModifiers);
 
         /// <summary>
         /// Removes modifiers from a preview.
         /// </summary>
-        /// <param name="actor"> The actor previewing</param>
+        /// <param name="actor"> The actor previewing. </param>
         /// <param name="actionModifiers"> The modifiers to remove </param>
         public abstract void RemoveModifiersFromPreview(IActor actor, List<AttackModifier> actionModifiers);
 
@@ -96,12 +90,16 @@ namespace CardSystem.Effects
         /// </summary>
         /// <param name="actor"> The actor that will no longer be playing this action. </param>
         public abstract void CancelPreview(IActor actor);
+        #endregion
 
+        #region Playing
         /// <summary>
         /// Plays this action and causes all its effects. Also cancels any relevant previews.
         /// </summary>
         /// <param name="actor"> The actor that will be playing this action. </param>
-        /// <param name="modifiers"> The modifier affecting this action. </param>
+        /// <param name="modifiers"> The modifiers to be applied to this attack. </param>
+        /// <param name="causer"> The causer of damage dealt by this attack. </param>
+        /// <param name="ignoredObjects"> The objects this action will ignore. </param>
         public virtual void Play(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects = null)
         {
             SpawnProjectile(actor, modifiers, causer, ignoredObjects);
@@ -129,13 +127,20 @@ namespace CardSystem.Effects
             projectile.IgnoredObjects = ignoredObjects;
             return projectile;
         }
+        #endregion
 
-
+        /// <summary>
+        /// The different location where a projectile could spawn at.
+        /// </summary>
         public enum SpawnLocation
         {
             Actor,
             AimPosition
         }
+
+        /// <summary>
+        /// The different things a projectile could be aimed at.
+        /// </summary>
         public enum AimMode
         {
             AtMouse,

@@ -37,8 +37,12 @@ public class Projectile : MonoBehaviour
     }
     List<GameObject> ignoredObjects;
 
+
+    // The rigidbody responsible for the collision of this projectile.
     protected Rigidbody2D rigidBody;
-    AttackData attackData;
+    // The modified attack data of this projectile.
+    DamageData attackData;
+
     protected float speed;
     protected float remainingLifetime;
     int remainingHits;
@@ -88,7 +92,7 @@ public class Projectile : MonoBehaviour
         remainingLifetime = attack.lifetime;
         remainingHits = attack.hitCount;
         remainingHomingTime = attack.homingTime;
-        attackData = new AttackData(attack.attack, causer);
+        attackData = new DamageData(attack.attack, causer);
     }
 
     /// <summary>
@@ -148,6 +152,10 @@ public class Projectile : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Gets the desired spawn location
+    /// </summary>
+    /// <returns> The position in world space of the spawn location. </returns>
     protected Vector3 GetSpawnLocation()
     {
         switch (attack.spawnLocation)
@@ -160,6 +168,11 @@ public class Projectile : MonoBehaviour
         return Vector3.zero;
     }
 
+    /// <summary>
+    /// Gets the desired aim target
+    /// </summary>
+    /// <param name="aimMode"> The aim mode to get the target for. </param>
+    /// <returns> The position in world space of the target. </returns>
     protected Vector3 GetAimTarget(AimMode aimMode)
     {
         switch (aimMode)
@@ -176,12 +189,8 @@ public class Projectile : MonoBehaviour
                 {
                     return closestTarget.transform.position;
                 }
-                if (actor == null)
-                {
-                    return transform.position + transform.right;
-                }
 
-                Collider2D[] roomObjects = Physics2D.OverlapBoxAll(actor.GetActionSourceTransform().position, ProceduralGeneration.proceduralGenerationInstance.roomSize * 2, 0f);
+                Collider2D[] roomObjects = Physics2D.OverlapBoxAll(transform.position, ProceduralGeneration.proceduralGenerationInstance.roomSize * 2, 0f);
                 foreach (Collider2D roomObject in roomObjects)
                 {
                     // If has health, is not ignored, and is the closest object.
@@ -203,12 +212,8 @@ public class Projectile : MonoBehaviour
                 {
                     return randomTarget.transform.position;
                 }
-                if (actor == null)
-                {
-                    return transform.position + transform.right;
-                }
 
-                Collider2D[] roomColliders = Physics2D.OverlapBoxAll(actor.GetActionSourceTransform().position, ProceduralGeneration.proceduralGenerationInstance.roomSize * 2, 0f);
+                Collider2D[] roomColliders = Physics2D.OverlapBoxAll(transform.position, ProceduralGeneration.proceduralGenerationInstance.roomSize * 2, 0f);
                 List<GameObject> possibleTargets = new List<GameObject>(roomColliders.Length);
                 foreach (Collider2D roomCollider in roomColliders)
                 {
@@ -227,5 +232,13 @@ public class Projectile : MonoBehaviour
                 return randomTarget.transform.position;
         }
         return transform.position + transform.right;
+    }
+
+    protected void OnDestroy()
+    {
+        if (attack.detachVisualsBeforeDestroy)
+        {
+            transform.GetChild(0).transform.parent = null;
+        }
     }
 }

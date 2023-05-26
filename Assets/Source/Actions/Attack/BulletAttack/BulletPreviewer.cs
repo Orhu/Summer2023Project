@@ -5,7 +5,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// Previews the path that a projectile will take.
+/// Previews the path that a bullet will take.
 /// </summary>
 public class BulletPreviewer : AttackPreviewer
 {

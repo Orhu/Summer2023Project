@@ -11,7 +11,6 @@ namespace CardSystem
     /// - Card visuals
     /// - The cooldown of the card
     /// - Actions - What the card does when played as a root
-    /// - Action Modifiers - What the card does when played as part of a combo
     /// - Effects - How the card effects the dungeon
     /// </summary>
     [CreateAssetMenu(fileName = "NewCard", menuName = "Cards/Cards/Normal Card", order = 1)]
@@ -75,7 +74,6 @@ namespace CardSystem
         /// Plays all of the actions of this card from the actor.
         /// </summary>
         /// <param name="actor"> The actor that will be playing this action. </param>
-        /// <param name="modifiers"> The modifier affecting this action. </param>
         public void PlayActions(IActor actor)
         {
             foreach (Action cardAction in actions)

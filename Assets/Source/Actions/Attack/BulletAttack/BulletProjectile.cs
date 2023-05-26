@@ -4,13 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using static CardSystem.Effects.Attack;
 
+/// <summary>
+/// A projectile that moves in a straight line.
+/// </summary>
 public class BulletProjectile : Projectile
 {
+    // The bullet attack that spawned this.
     BulletAttack bulletAttack;
     // The index in the spawn sequence that this was created from.
     internal int bulletIndex;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Initializes position and rotation.
+    /// </summary>
     new void Start()
     {
         bulletAttack = attack as BulletAttack;
