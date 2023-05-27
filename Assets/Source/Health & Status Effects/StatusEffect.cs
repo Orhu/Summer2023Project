@@ -5,10 +5,8 @@ using UnityEngine;
 /// </summary>
 public abstract class StatusEffect : ScriptableObject
 {
-    [SerializeField]
-    [Tooltip("The Duration this status effect will be applied for")]
-    [Min(0.0166666667f)]
-    private float duration = 2f;
+    [Tooltip("The Duration this status effect will be applied for")] [Min(0.0166666667f)]
+    [SerializeField]  private float _duration = 2f;
     public float Duration
     {
         get { return duration; }
