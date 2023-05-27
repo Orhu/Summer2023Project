@@ -24,8 +24,8 @@ public class LayoutGenerationParameters
     [Range(0, 4)]
     public int preferredNumDoors;
 
-    [Tooltip("How strictly the generation adheres to the preferred number of doors (1 = completely strict, 0 = not strict at all)")]
-    [Range(0, 1)]
+    [Tooltip("How strictly the generation adheres to the preferred number of doors (100 = very strict, 0 = not strict at all)")]
+    [Range(0, 100)]
     public float strictnessNumDoors;
 
     [Tooltip("The normal room")]

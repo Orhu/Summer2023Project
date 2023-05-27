@@ -221,19 +221,9 @@ public class LayoutGenerator : MonoBehaviour
             }
 
             int distance = parameters.preferredNumDoors - numDirections;
-            float likelyhood = 0;
-
-            // Temp -- remove this maybe ? idk
-            if (distance == 0 && parameters.strictnessNumDoors == 1)
-            {
-                likelyhood = 0;
-            }
-            else
-            {
-                likelyhood = 0.5f + (distance / 4.0f * (parameters.strictnessNumDoors * 2.0f));
-            }
+            float percentLikelyhood = (50.0f * 2.0f) / (Mathf.PI) * (Mathf.Atan(parameters.strictnessNumDoors * (distance - 0.25f))) + 50;
             
-            if (likelyhood > Random.value)
+            if (percentLikelyhood/100 > Random.value)
             {
                 direction |= randomDirection;
                 numDirections++;
