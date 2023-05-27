@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Generates the layout of a floor
+/// </summary>
 public class LayoutGenerator : MonoBehaviour
 {
     [Tooltip("The parameters for controlling the layout generation")]
@@ -19,12 +22,18 @@ public class LayoutGenerator : MonoBehaviour
     [HideInInspector]
     public Vector2Int mapSize;
 
+    /// <summary>
+    /// Generates the layout
+    /// </summary>
     void Start()
     {
         Generate();
-        PrintMap();
+        SaveMap();
     }
 
+    /// <summary>
+    /// Generates the layout
+    /// </summary>
     void Generate()
     {
         // Get the number of normal cells
@@ -53,10 +62,16 @@ public class LayoutGenerator : MonoBehaviour
         CreateMap(genMap);
     }
 
+    /// <summary>
+    /// Initializes the gen map with MapCells that have their locations set correctly
+    /// </summary>
+    /// <param name="numRooms"> The number of normal rooms and special rooms that will appear in the layout </param>
+    /// <returns> The initialized gen map </returns>
     MapCell[,] InitializeGenMap(int numRooms)
     {
         // Make the map size to be able to hold all the rooms in a row in any direction (worst case scenario)
-        // +5 because boss room is 3x3, then you have the exit room, and finally you have the start room in the middle.
+        // +7 because boss room is 3x3, then you have the exit room, and finally you have the start room in the middle. 
+        // Then a couple extra for safety (even though it should be very unlikely to happen). 
         // TODO: Change boos room size to not be hard coded lol
         mapSize = new Vector2Int(numRooms * 2 + 7, numRooms * 2 + 7);
 
@@ -75,6 +90,11 @@ public class LayoutGenerator : MonoBehaviour
         return genMap;
     }
 
+    /// <summary>
+    /// Initializes the starting cell in the center of the map
+    /// </summary>
+    /// <param name="genMap"> The map that is being generated </param>
+    /// <returns> The start cell </returns>
     MapCell GenerateStartCell(MapCell[,] genMap)
     {
         Vector2Int startPos = new Vector2Int((mapSize.x + 1) / 2, (mapSize.y + 1) / 2);
@@ -85,9 +105,15 @@ public class LayoutGenerator : MonoBehaviour
         return startRoom;
     }
 
+    /// <summary>
+    /// Generates all the normal cells in the map
+    /// </summary>
+    /// <param name="genMap"> The map being generated </param>
+    /// <param name="startCell"> The starting cell </param>
+    /// <param name="numNormalCells"> The number of normal cells to generate </param>
+    /// <returns> A list of all the normal cells </returns>
     List<MapCell> GenerateNormalCells(MapCell[,] genMap, MapCell startCell, int numNormalCells)
     {
-        Debug.Log("Num normal cells: " + numNormalCells);
         // Track the normal cells created
         List<MapCell> normalCells = new List<MapCell>();
 
@@ -114,8 +140,6 @@ public class LayoutGenerator : MonoBehaviour
             normalCells.Add(currentCell);
             currentCell.type = RoomType.Normal;
 
-            Debug.Log("Generating normal cell: " + currentCell.location);
-
             // The direction should not make it so the number of added neighbors exceeds the numNormalCells limit
             currentCell.direction = GetRandomConstrainedDirection(GetDirectionConstraint(genMap, currentCell, numNormalCells, newCellsCount));
 
@@ -137,37 +161,37 @@ public class LayoutGenerator : MonoBehaviour
         return normalCells;
     }
 
+    /// <summary>
+    /// Gets all the unvisited neighbors of the given cell
+    /// </summary>
+    /// <param name="genMap"> The current generated map </param>
+    /// <param name="cell"> The cell to get the neighbors of </param>
+    /// <param name="useDirection"> Whether or not to use the directions that the given cell opens in to get the neighbors </param>
+    /// <returns> The unvisited neighbors </returns>
     List<MapCell> GetUnvisitedNeighbors(MapCell[,] genMap, MapCell cell, bool useDirection)
     {
         List<MapCell> neighbors = new List<MapCell>();
 
-        bool checkRightDirection = !useDirection || (useDirection && (cell.direction & Direction.Right) != Direction.None);
-        if (checkRightDirection && !genMap[cell.location.x + 1, cell.location.y].visited)
+        for (int i = 1; i <= (int) Direction.Down; i *= 2)
         {
-            neighbors.Add(genMap[cell.location.x + 1, cell.location.y]);
-        }
-
-        bool checkUpDirection = !useDirection || (useDirection && (cell.direction & Direction.Up) != Direction.None);
-        if (checkUpDirection && !genMap[cell.location.x, cell.location.y + 1].visited)
-        {
-            neighbors.Add(genMap[cell.location.x, cell.location.y + 1]);
-        }
-
-        bool checkLeftDirection = !useDirection || (useDirection && (cell.direction & Direction.Left) != Direction.None);
-        if (checkLeftDirection && !genMap[cell.location.x - 1, cell.location.y].visited)
-        {
-            neighbors.Add(genMap[cell.location.x - 1, cell.location.y]);
-        }
-
-        bool checkDownDirection = !useDirection || (useDirection && (cell.direction & Direction.Down) != Direction.None);
-        if (checkDownDirection && !genMap[cell.location.x, cell.location.y - 1].visited)
-        {
-            neighbors.Add(genMap[cell.location.x, cell.location.y - 1]);
+            bool checkDirection = !useDirection || (useDirection && (cell.direction & (Direction) i) != Direction.None);
+            Vector2Int locationOffset = new Vector2Int();
+            locationOffset.x = System.Convert.ToInt32(((Direction) i & Direction.Right) != Direction.None) - System.Convert.ToInt32(((Direction) i & Direction.Left) != Direction.None);
+            locationOffset.y = System.Convert.ToInt32(((Direction) i & Direction.Up) != Direction.None) - System.Convert.ToInt32(((Direction) i & Direction.Down) != Direction.None);
+            if (checkDirection && !genMap[cell.location.x + locationOffset.x, cell.location.y + locationOffset.y].visited)
+            {
+                neighbors.Add(genMap[cell.location.x + locationOffset.x, cell.location.y + locationOffset.y]);
+            }
         }
 
         return neighbors;
     }
 
+    /// <summary>
+    /// Counts the number of directions the given direction has
+    /// </summary>
+    /// <param name="direction"> The direction to count </param>
+    /// <returns> The number of directions </returns>
     int CountNumDirections(Direction direction)
     {
         int count = 0;
@@ -178,17 +202,24 @@ public class LayoutGenerator : MonoBehaviour
         return count;
     }
 
+    /// <summary>
+    /// Gets a random direction constrained by the constraint
+    /// </summary>
+    /// <param name="constraint"> The constraint </param>
+    /// <returns> The random direction </returns>
     Direction GetRandomConstrainedDirection(DirectionConstraint constraint)
     {
         Direction direction = Direction.None;
         int numDirections = 0;
 
+        // Store the possible (new) directions this cell can open in
         List<Direction> possibleDirections = new List<Direction>();
         possibleDirections.Add(Direction.Right);
         possibleDirections.Add(Direction.Up);
         possibleDirections.Add(Direction.Left);
         possibleDirections.Add(Direction.Down);
 
+        // Add all the directions this cell must have
         for (int i = 1; i <= (int) Direction.Down; i *= 2)
         {
             if ((constraint.mustHave & (Direction) i) != Direction.None)
@@ -205,151 +236,109 @@ public class LayoutGenerator : MonoBehaviour
             throw new System.Exception("A room was generated that must have more directions than it's allowed");
         }
 
+        // While it's still possible to open in another direction
         while (possibleDirections.Count != 0)
         {
+            // If we're at the max number of directions this room is allowed to have, then stop adding more directions
             if (numDirections >= constraint.maxDirections)
             {
                 break;
             }
 
+            // Choose a random possible direction
             Direction randomDirection = possibleDirections[Random.Range(0, possibleDirections.Count)];
 
+            // If this room must not have this direction, then remove it from the possible directions and try again
             if ((constraint.mustNotHave & randomDirection) != Direction.None)
             {
                 possibleDirections.Remove(randomDirection);
                 continue;
             }
 
+            // Get the "distance" from the number of directions this cell already has to the number of directions is preferred
             int distance = parameters.preferredNumDoors - numDirections;
-            float percentLikelyhood = (50.0f * 2.0f) / (Mathf.PI) * (Mathf.Atan(parameters.strictnessNumDoors * (distance - 0.25f))) + 50;
-            
-            if (percentLikelyhood/100 > Random.value)
+
+            // Using the likelyhood from the distance, determine whether or not to add this direction            
+            if (CalculateLikelyhoodOfAddingDirection(distance) > Random.value)
             {
                 direction |= randomDirection;
                 numDirections++;
             }
 
+            // Whether the direction was added or not, remove it from the possible new directions
             possibleDirections.Remove(randomDirection);
         }
         return direction;
     }
 
-    /*Direction GetRandomConstrainedDirection(DirectionConstraint constraint, int maxDirections = -1, int minDirections = - 1)
+    /// <summary>
+    /// Calculates the likelyhood of a cell having another door, using the distance from the number of directions the cell
+    /// already has to the desired number of directions
+    /// </summary>
+    /// <param name="distance"> The distance from the number of directions the cell already has to the preferred number of directions </param>
+    /// <returns> The likelyood </returns>
+    float CalculateLikelyhoodOfAddingDirection(int distance)
     {
-        
-        // Get a random direction that adheres to the must have and must not have constraints
-        Direction direction = (Direction) Random.Range((int) Direction.None, (int) Direction.All + 1);
-        direction |= constraint.mustHave;
-        Direction invertedMustNotHave = ~constraint.mustNotHave;
-        direction &= invertedMustNotHave;
+        // Get the amount to scale the range of atan by so that it has a range of 100
+        float scaleRange = (50.0f * 2.0f) / (Mathf.PI);
 
-        List<Direction> directionsList = new List<Direction>();
-        directionsList.Add(Direction.Right);
-        directionsList.Add(Direction.Up);
-        directionsList.Add(Direction.Left);
-        directionsList.Add(Direction.Down);
+        // Set the horizontal offset of the atan function so that when the distance is 0, the function doesn't always spit out 50
+        float horizontalOffset = 0.25f;
 
-        List<Direction> directions = new List<Direction>();
+        // Set the vertical offset so that the function ranges from 0 to 100 instead of -50 to 50
+        float verticalOffset = 50;
 
-        // Count the number of directions
-        int count = 0;
-        for (int i = 1; i < (int) Direction.All; i *= 2)
-        {
-            count += ((int) direction & i) / i;
-            if (((int) direction & i) != 0)
-            {
-                directions.Add((Direction) i);
-            }
-        }
+        // Get the value of the atan function, using the strictness to control how steep the function is
+        float atanVal = Mathf.Atan(parameters.strictnessNumDoors * (distance - horizontalOffset));
 
-        // If it doesn't constrain to the max number of directions, then remove random directions
-        while (count > constraint.maxDirections)
-        {
-            if (directions.Count == 0)
-            {
-                throw new System.Exception("A room was generated that must have more directions than it's allowed");
-            }
+        // Divide by 100 to convert the percent to decimal
+        return (scaleRange * atanVal + verticalOffset) / 100;
+    }
 
-            // Get the random direction to remove
-            Direction removedDirection = directions[Random.Range(0, directions.Count)];
-
-            // Make sure this direction is not required
-            if ((removedDirection & constraint.mustHave) != Direction.None)
-            {
-                directions.Remove(removedDirection);
-                continue;
-            }
-
-            // Remove the direction
-            Direction invertedRemoved = ~removedDirection;
-            direction &= invertedRemoved;
-            directions.Remove(removedDirection);
-            count--;
-        }
-
-        return direction;
-    }*/
-
+    /// <summary>
+    /// Gets the constraint the given MapCell must adhere to
+    /// </summary>
+    /// <param name="genMap"> The current generated map </param>
+    /// <param name="cell"> The cell to get the constraint of </param>
+    /// <param name="maxNewCells"> The maximum number of new cells to add. -1 to not check </param>
+    /// <param name="currentNewCells"> The number of current new cells already added </param>
+    /// <returns> The constraint </returns>
     DirectionConstraint GetDirectionConstraint(MapCell[,] genMap, MapCell cell, int maxNewCells = -1, int currentNewCells = -1)
     {
         DirectionConstraint directionConstraint = new DirectionConstraint();
 
-        // Check the right neighbor
-        MapCell rightNeighbor = genMap[cell.location.x + 1, cell.location.y];
+        // Store the opposite direction of the current direction we're checking
+        int oppositeDirectionToCheck = (int) Direction.Left;
+        for (int directionToCheck = 1; directionToCheck <= (int) Direction.Down; directionToCheck *= 2)
+        {
+            // Get the location offset of the neighboring cell baesd on the direction
+            Vector2Int locationOffset = new Vector2Int();
+            locationOffset.x = System.Convert.ToInt32(((Direction) directionToCheck & Direction.Right) != Direction.None) - System.Convert.ToInt32(((Direction) directionToCheck & Direction.Left) != Direction.None);
+            locationOffset.y = System.Convert.ToInt32(((Direction) directionToCheck & Direction.Up) != Direction.None) - System.Convert.ToInt32(((Direction) directionToCheck & Direction.Down) != Direction.None);
 
-        if (rightNeighbor.visited)
-        {
-            // If it's been visited and it has a door there, make sure to generate a door in that direction
-            if ((rightNeighbor.direction & Direction.Left) != Direction.None)
+            // Get the neighbor cell
+            MapCell neighbor = genMap[cell.location.x + locationOffset.x, cell.location.y + locationOffset.y];
+
+            // If the neighbor is visited, then it affects the constraint
+            if (neighbor.visited)
             {
-                directionConstraint.mustHave |= Direction.Right;
+                // If the neighbor has a door opening in the opposite direction, then the constraint must have that direction
+                if ((neighbor.direction & (Direction) oppositeDirectionToCheck) != Direction.None)
+                {
+                    directionConstraint.mustHave |= (Direction) directionToCheck;
+                }
+                // If it doesn't, then the constraint must not have that direction 
+                else
+                {
+                    directionConstraint.mustNotHave |= (Direction) directionToCheck;
+                }
             }
-            // If it doesn't have a door there (or hasn't been generated yet), make sure to not put a door there
-            else
+
+            // Update the opposite direction to stay in sync 
+            oppositeDirectionToCheck *= 2;
+            if (oppositeDirectionToCheck > (int) Direction.Down)
             {
-                directionConstraint.mustNotHave |= Direction.Right;
-            }
-        }
-        
-        // Check the up neighbor
-        MapCell upNeighbor = genMap[cell.location.x, cell.location.y + 1];
-        if (upNeighbor.visited)
-        {
-            if ((upNeighbor.direction & Direction.Down) != Direction.None)
-            {
-                directionConstraint.mustHave |= Direction.Up;
-            }
-            else
-            {
-                directionConstraint.mustNotHave |= Direction.Up;
-            }
-        }
-        
-        // Check the left neighbor
-        MapCell leftNeighbor = genMap[cell.location.x - 1, cell.location.y];
-        if (leftNeighbor.visited)
-        {
-            if ((leftNeighbor.direction & Direction.Right) != Direction.None)
-            {
-                directionConstraint.mustHave |= Direction.Left;
-            }
-            else
-            {
-                directionConstraint.mustNotHave |= Direction.Left;
-            }
-        }
-        
-        // Check the down neighbor
-        MapCell downNeighbor = genMap[cell.location.x, cell.location.y - 1];
-        if (downNeighbor.visited)
-        {
-            if ((downNeighbor.direction & Direction.Up) != Direction.None)
-            {
-                directionConstraint.mustHave |= Direction.Down;
-            }
-            else
-            {
-                directionConstraint.mustNotHave |= Direction.Down;
+                oppositeDirectionToCheck = (int) Direction.Right;
             }
         }
 
@@ -369,8 +358,15 @@ public class LayoutGenerator : MonoBehaviour
         return directionConstraint;
     }
 
+    /// <summary>
+    /// Generates the boss and exit cells by branching off one the branchable cells
+    /// </summary>
+    /// <param name="genMap"> The current generated map </param>
+    /// <param name="branchableCells"> The cells that can be branched off of </param>
+    /// <returns> Whether or not the boss room was successfully generated </returns>
     bool GenerateBossAndExitCells(MapCell[,] genMap, List<MapCell> branchableCells)
     {
+        // While the cells haven't been generated
         while (true)
         {
             if (branchableCells.Count == 0)
@@ -379,6 +375,7 @@ public class LayoutGenerator : MonoBehaviour
                 return false;
             }
 
+            // Choose a random cell to branch off of
             MapCell branchCell = branchableCells[Random.Range(0, branchableCells.Count)];
 
             List<Direction> directions = new List<Direction>();
@@ -387,6 +384,7 @@ public class LayoutGenerator : MonoBehaviour
             directions.Add(Direction.Left);
             directions.Add(Direction.Down);
 
+            // See if the boss room can fit in any of the directions
             while (directions.Count > 0)
             {
                 Direction randomDirection = directions[Random.Range(0, directions.Count)];
@@ -436,6 +434,7 @@ public class LayoutGenerator : MonoBehaviour
                 directions.Remove(randomDirection);
             }
 
+            // If the boss room couldn't fit, then remove this cell from branchable cells and try again
             branchableCells.Remove(branchCell);
         }
     }
@@ -481,6 +480,13 @@ public class LayoutGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Generates the special cells by branching off the branchable cells
+    /// </summary>
+    /// <param name="genMap"> The current generated map </param>
+    /// <param name="branchableCells"> The cells that can be branched off of</param>
+    /// <param name="numSpecialCells"> The number of special cells to generate </param>
+    /// <returns></returns>
     bool GenerateSpecialCells(MapCell[,] genMap, List<MapCell> branchableCells, int numSpecialCells)
     {
         for (int i = 0; i < numSpecialCells; i++)
@@ -541,6 +547,10 @@ public class LayoutGenerator : MonoBehaviour
         return true;
     }
 
+    /// <summary>
+    /// Idk I'm not really using this right now
+    /// </summary>
+    /// <param name="genMap"> The current generated map </param>
     void CreateMap(MapCell[,] genMap)
     {
         map = genMap;
@@ -553,47 +563,49 @@ public class LayoutGenerator : MonoBehaviour
         }
     }
 
-    void PrintMap(bool printOnlyVisited = false)
+    /// <summary>
+    /// Saves the map variable to a file
+    /// </summary>
+    void SaveMap()
     {
-        PrintMap(map, printOnlyVisited);
+        SaveMap(map);
     }
 
-    void PrintMap(MapCell[,] mapToPrint, bool printOnlyVisited = false)
+    /// <summary>
+    /// Saves the given map to a file
+    /// </summary>
+    /// <param name="mapToSave"></param>
+    void SaveMap(MapCell[,] mapToSave)
     {
-        Debug.Log("Map length: " + mapToPrint.Length);
-        Debug.Log("Printing generated map:");
         string mapString = "\n";
         for (int i = 0; i < mapSize.y; i++)
         {
             string line = "";
             for (int j = 0; j < mapSize.x; j++)
             {
-                if (!printOnlyVisited || mapToPrint[j, i].visited)
+                if (mapToSave[j, i].type == RoomType.None)
                 {
-                    if (mapToPrint[j, i].type == RoomType.None)
-                    {
-                        line += "-";
-                    }
-                    else if (mapToPrint[j, i].type == RoomType.Normal)
-                    {
-                        line += "*";
-                    }
-                    else if (mapToPrint[j, i].type == RoomType.Start)
-                    {
-                        line += "P";
-                    }
-                    else if (mapToPrint[j, i].type == RoomType.Special)
-                    {
-                        line += "S";
-                    }
-                    else if (mapToPrint[j, i].type == RoomType.Boss)
-                    {
-                        line += "B";
-                    }
-                    else
-                    {
-                        line += "E";
-                    }
+                    line += "-";
+                }
+                else if (mapToSave[j, i].type == RoomType.Normal)
+                {
+                    line += "*";
+                }
+                else if (mapToSave[j, i].type == RoomType.Start)
+                {
+                    line += "P";
+                }
+                else if (mapToSave[j, i].type == RoomType.Special)
+                {
+                    line += "S";
+                }
+                else if (mapToSave[j, i].type == RoomType.Boss)
+                {
+                    line += "B";
+                }
+                else if (mapToSave[j, i].type == RoomType.Exit)
+                {
+                    line += "E";
                 }
                 else
                 {
