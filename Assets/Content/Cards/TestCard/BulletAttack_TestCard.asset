@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
+  m_Name: BulletAttack_TestCard
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  attack:
+    damage: 1
+    damageType: 0
+    statusEffects:
+    - {fileID: 11400000, guid: 4d24f873cabfd794093b74fa3a36ff3e, type: 2}
+  hitCount: 2
+  modifiers:
+  - {fileID: 11400000, guid: efb10bd7c7c6f6c499cefa2e42c6fc60, type: 2}
+  shape: {fileID: 11400000, guid: 9009f0e272fb0964b84d5e019d3ea5b4, type: 2}
+  lifetime: 10
+  initialSpeed: 0
+  acceleration: 1
+  minSpeed: 0
+  maxSpeed: 20
+  homingSpeed: 90
+  homingTime: 2
+  homingAimMode: 1
+  visualObject: {fileID: 815138696641318384, guid: 5a43758f167be394badf944662ecc2c3, type: 3}
+  detachVisualsBeforeDestroy: 1
+  spawnLocation: 0
+  aimMode: 0
+  spawnSequence:
+  - delay: 0
+    angle: 0
+    offset: {x: 0, y: 0}
+  - delay: 0.25
+    angle: 0
+    offset: {x: 0, y: 0}
+  - delay: 0.25
+    angle: 0
+    offset: {x: 0, y: 0}
+  - delay: 0.25
+    angle: 0
+    offset: {x: 0, y: 0}
+  randomAngle: 20
+  randomOffset: 0.1

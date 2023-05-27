@@ -28,8 +28,8 @@ public class Controller : MonoBehaviour, IActor
         // if we are controllable, get inputs. otherwise, don't
         if (isControllable)
         {
-            movementInput.x = Input.GetAxis("Horizontal");
-            movementInput.y = Input.GetAxis("Vertical");
+            movementInput.x = Input.GetAxisRaw("Horizontal");
+            movementInput.y = Input.GetAxisRaw("Vertical");
         }
 
         if (canPlayCards && CanAct)
@@ -37,12 +37,12 @@ public class Controller : MonoBehaviour, IActor
             int pressedPreview = getPressedPreviewButton();
             if (pressedPreview > 0)
             {
-                Deck.playerDeck.TogglePreviewCard(pressedPreview - 1);
+                Deck.playerDeck.SelectCard(pressedPreview - 1);
             }
 
             if (Input.GetButtonDown("Fire1"))
             {
-                Deck.playerDeck.PlayPreviewedCard();
+                Deck.playerDeck.PlayChord();
             }
         }
 

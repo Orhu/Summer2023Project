@@ -21,9 +21,6 @@ namespace Skaillz.EditInline
             if (property.objectReferenceValue == null)
                 return base.GetPropertyHeight(property, label);
 
-            if (expand)
-                return base.GetPropertyHeight(property, label) * 2f;
-
 
             if (!(property.objectReferenceValue is ScriptableObject) || HasEditor(property.serializedObject.targetObject))
                 return base.GetPropertyHeight(property, label);
@@ -64,23 +61,7 @@ namespace Skaillz.EditInline
             Editor.CreateCachedEditor(property.objectReferenceValue, null, ref editor);
             editor.OnInspectorGUI();
             property.serializedObject.ApplyModifiedProperties();
-            EditorGUI.indentLevel --; 
-            if (GUI.Button(new Rect(position.x, position.y + 20f, position.width, 16f), "Make Unique"))
-            {
-                string duplicatePath = AssetDatabase.GetAssetPath(Selection.activeObject).Split(".")[0];
-                duplicatePath += "_" + property.objectReferenceValue.ToString().Split(" ")[0] + ".asset";
-
-                property.objectReferenceValue = DuplicateObject(property.objectReferenceValue, duplicatePath);
-                RefreshCache(property.serializedObject.targetObject);
-            }
-        }
-
-        private Object DuplicateObject(Object objectToDuplicate, string filepath)
-        {
-            ScriptableObject duplicate = ScriptableObject.CreateInstance(objectToDuplicate.GetType());
-            AssetDatabase.CreateAsset(duplicate, filepath);
-            AssetDatabase.SaveAssets();
-            return duplicate;
+            EditorGUI.indentLevel --;
         }
 
         public bool HasEditor(Object obj)
