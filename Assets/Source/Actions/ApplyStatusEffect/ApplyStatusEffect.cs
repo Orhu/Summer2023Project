@@ -9,16 +9,16 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewApplyStatusEffect", menuName = "Cards/Actions/ApplyStatusEffect")]
 public class ApplyStatusEffect : Action
 {
-    [SerializeField]
-    [Tooltip("The status effect to apply")]
+    [Tooltip("The status effect to apply")][SerializeField]
     private List<StatusEffect> statusEffects;
 
     /// <summary>
-    /// Gets the formated description of this card.
+    /// Plays this action and causes all its effects.
     /// </summary>
-    /// <returns> The description with any Serialized Field names that appear in [] replaced with their actual value.</returns>
-    public override void Play(IActor actor, int numStacks, List<ActionModifier> modifiers)
+    /// <param name="actor"> The actor that will be playing this action. </param>
+    /// <param name="ignoredObjects"> The objects this action will ignore. </param>
+    public override void Play(IActor actor, List<GameObject> ignoredObjects)
     {
-        actor.GetActionSourceTransform().GetComponent<Health>().ReceiveAttack(new Attack(0, statusEffects, actor.GetActionSourceTransform().gameObject) * numStacks);
+        actor.GetActionSourceTransform().GetComponent<Health>().ReceiveAttack(new DamageData(statusEffects, actor.GetActionSourceTransform().gameObject));
     }
 }

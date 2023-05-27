@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
+  m_Name: OrbitAttack_ThornShield
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
+  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
+  attack:
+    damage: 1
+    damageType: 0
+    statusEffects: []
+  hitCount: 1
+  modifiers: []
+  shape: {fileID: 11400000, guid: 8602451807138754aa4a41cfdeca55d9, type: 2}
+  lifetime: 0.5
+  initialSpeed: 9.424778
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 9.424778
+  homingSpeed: 0
+  homingTime: 0
+  homingAimMode: 0
+  visualObject: {fileID: 4662436964472314495, guid: d03b5893446d656409cf3c393f69e864, type: 3}
+  detachVisualsBeforeDestroy: 0
+  spawnLocation: 0
+  aimMode: 0
+  spawnSequence:
+  - delay: 0
+    startingAngle: 0
+    radius: 0.75
+    orbitDirection: 0
+  - delay: 0
+    startingAngle: 30
+    radius: 0.75
+    orbitDirection: 0
+  - delay: 0
+    startingAngle: 60
+    radius: 0.75
+    orbitDirection: 0
+  - delay: 0
+    startingAngle: 90
+    radius: 0.75
+    orbitDirection: 0
+  - delay: 0
+    startingAngle: 120
+    radius: 0.75
+    orbitDirection: 0
+  - delay: 0
+    startingAngle: 150
+    radius: 0.75
+    orbitDirection: 0
+  - delay: 0
+    startingAngle: 180
+    radius: 0.75
+    orbitDirection: 0
+  - delay: 0
+    startingAngle: 210
+    radius: 0.75
+    orbitDirection: 0
+  - delay: 0
+    startingAngle: 240
+    radius: 0.75
+    orbitDirection: 0
+  - delay: 0
+    startingAngle: 270
+    radius: 0.75
+    orbitDirection: 0
+  - delay: 0
+    startingAngle: 300
+    radius: 0.75
+    orbitDirection: 0
+  - delay: 0
+    startingAngle: 330
+    radius: 0.75
+    orbitDirection: 0
+  randomStartingAngle: 0
+  randomRadius: 0
+  attachedToSpawnLocation: 1

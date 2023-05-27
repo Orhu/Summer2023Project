@@ -40,13 +40,20 @@ public class HandRenderer : MonoBehaviour
             }
             cardRenderers[i].Previewing = Deck.playerDeck.previewedCardIndices.Contains(i);
 
-            if (Deck.playerDeck.cardIndicesToCooldowns.ContainsKey(i))
+            if(Deck.playerDeck.cardIndicesToActionTimes.ContainsKey(i))
             {
+                cardRenderers[i].CooldownTime = 0;
+                cardRenderers[i].ActionTime = Deck.playerDeck.cardIndicesToActionTimes[i];
+            }
+            else if (Deck.playerDeck.cardIndicesToCooldowns.ContainsKey(i))
+            {
+                cardRenderers[i].ActionTime = 0;
                 cardRenderers[i].CooldownTime = Deck.playerDeck.cardIndicesToCooldowns[i];
             }
             else
             {
                 cardRenderers[i].CooldownTime = 0;
+                cardRenderers[i].ActionTime = 0;
             }
         }
     }
