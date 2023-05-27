@@ -43,12 +43,16 @@ namespace Attacks
         // The modified attack data of this projectile.
         internal DamageData attackData;
 
-        protected float speed;
+        internal float speed;
+        internal float maxSpeed;
+        internal float minSpeed;
+        internal float acceleration;
         internal float remainingLifetime;
         internal int remainingHits;
         GameObject closestTarget;
         GameObject randomTarget;
-        protected float remainingHomingTime;
+        internal float remainingHomingTime;
+        internal float homingSpeed;
 
         /// <summary>
         /// Initializes components based on spawner stats.
@@ -92,12 +96,19 @@ namespace Attacks
             remainingLifetime = attack.lifetime;
             remainingHits = attack.hitCount;
             remainingHomingTime = attack.homingTime;
+            homingSpeed = attack.homingSpeed;
+            maxSpeed = attack.maxSpeed;
+            minSpeed = attack.minSpeed;
+            acceleration = attack.acceleration;
+
             attackData = new DamageData(attack.attack, causer);
 
             InitializeModifiers();
         }
 
-
+        /// <summary>
+        /// Creates instances of all the modifiers and applies their initial effects.
+        /// </summary>
         void InitializeModifiers()
         {
             List<AttackModifier> newModifiers = new List<AttackModifier>(modifiers.Count);
@@ -117,15 +128,15 @@ namespace Attacks
         /// </summary>
         protected void FixedUpdate()
         {
-            if (remainingHomingTime > 0 && attack.homingSpeed > 0)
+            if (remainingHomingTime > 0 && homingSpeed > 0)
             {
                 Vector3 targetDirection = (GetAimTarget(attack.homingAimMode) - transform.position).normalized;
                 float targetRotation = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
                 float currentRotation = transform.rotation.eulerAngles.z;
-                transform.rotation = Quaternion.AngleAxis(Mathf.LerpAngle(currentRotation, targetRotation, (attack.homingSpeed * Time.fixedDeltaTime) / Mathf.Abs(targetRotation - currentRotation)), Vector3.forward);
+                transform.rotation = Quaternion.AngleAxis(Mathf.LerpAngle(currentRotation, targetRotation, (homingSpeed * Time.fixedDeltaTime) / Mathf.Abs(targetRotation - currentRotation)), Vector3.forward);
             }
 
-            speed = Mathf.Clamp(speed + attack.acceleration * Time.fixedDeltaTime, attack.minSpeed, attack.maxSpeed);
+            speed = Mathf.Clamp(speed + acceleration * Time.fixedDeltaTime, minSpeed, maxSpeed);
             rigidBody.velocity = transform.right * speed;
         }
 

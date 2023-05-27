@@ -11,7 +11,7 @@ namespace Attacks
     /// <summary>
     /// Makes an attack deal additional damage and status effects.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewAddDamage", menuName = "Cards/AttackModifers/AddDamage")]
+    [CreateAssetMenu(fileName = "NewAddDamage", menuName = "Cards/AttackModifers/Add[Stat]/AddDamage")]
     internal class AddDamage : AttackModifier
     {
         [Tooltip("The additional damage")]

@@ -11,7 +11,7 @@ namespace Attacks
     /// <summary>
     /// Makes an attack's projectile last longer.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewAddLifetime", menuName = "Cards/AttackModifers/AddLifetime")]
+    [CreateAssetMenu(fileName = "NewAddLifetime", menuName = "Cards/AttackModifers/Add[Stat]/AddLifetime")]
     internal class AddLifetime : AttackModifier
     {
         [Tooltip("The additional lifetime in seconds")]

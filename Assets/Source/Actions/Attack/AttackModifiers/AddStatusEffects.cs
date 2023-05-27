@@ -11,7 +11,7 @@ namespace Attacks
     /// <summary>
     /// Makes an attack deal additional status effects.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewAddStatusEffects", menuName = "Cards/AttackModifers/AddStatusEffects")]
+    [CreateAssetMenu(fileName = "NewAddStatusEffects", menuName = "Cards/AttackModifers/Add[Stat]/AddStatusEffects")]
     internal class AddStatusEffects : AttackModifier
     {
         [Tooltip("The additional status effects to apply")]
