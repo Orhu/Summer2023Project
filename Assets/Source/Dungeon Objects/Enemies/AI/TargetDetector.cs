@@ -7,20 +7,21 @@ using UnityEngine;
 /// </summary>
 public class TargetDetector : Detector
 {
-    // radius to detect targets
+    [Tooltip("Radius to detect targets")]
     [SerializeField] private float targetDetectionRange = 5;
 
-    // layer masks for obstacles and player
+    [Tooltip("Layer masks for obstacles and players")]
     [SerializeField] private LayerMask obstaclesLayerMask, playerLayerMask;
 
-    // does this detector need line of sight to detect a target?
+    [Tooltip("Does this detector need line of sight to detect a target?")]
     [SerializeField] private bool needsLineOfSight;
 
-    // show gizmos?
+    [Tooltip("Show gizmos?")]
     [SerializeField] private bool showGizmos = true;
 
+    
     // gizmo parameters
-    private List<Transform> colliders;
+    [HideInInspector] private List<Transform> colliders;
 
     /// <summary>
     /// Detects nearby targets

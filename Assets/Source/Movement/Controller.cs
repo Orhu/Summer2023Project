@@ -6,28 +6,31 @@ using UnityEngine;
 /// </summary>
 public class Controller : MonoBehaviour, IActor
 {
-    [Tooltip("movement component to allow the agent to move")]
-    private Movement movementComponent;
+    [Tooltip("is this agent controllable by inputs?")] 
+    [SerializeField] private bool isControllable;
 
-    [Tooltip("movement input")] private Vector2 movementInput;
+    [Tooltip("is this agent capable of selecting/using cards?")] 
+    [SerializeField] private bool canPlayCards;
 
-    [Tooltip("movement input")]
+    [Tooltip("Does this agent use enemy logic?")] 
+    [SerializeField] private bool useEnemyLogic;
+    
+    
+    // "Movement component to allow the agent to move"
+    [HideInInspector] private Movement movementComponent;
+
+    // -1 to 1 range representing current movement input, same system as built-in Input.GetAxis"
+    [HideInInspector] private Vector2 _movementInput;
     public Vector2 MovementInput
     {
-        get => movementInput;
-        set => movementInput = value;
+        get => _movementInput;
+        set => _movementInput = value;
     }
 
-    [Tooltip("is this agent controllable by inputs?")] [SerializeField]
-    private bool isControllable;
-
-    [Tooltip("is this agent capable of selecting/using cards?")] [SerializeField]
-    private bool canPlayCards;
-
-    [Tooltip("Does this agent use enemy logic?")] [SerializeField]
-    private bool useEnemyLogic;
-
+    // enemy attacker component, if it exists on this agent
     private EnemyAttacker enemyAttacker;
+    
+    // enemy AI component, if it exists on this agent
     private EnemyAI enemyAI;
 
     private void Start()
@@ -47,8 +50,8 @@ public class Controller : MonoBehaviour, IActor
         // if we are controllable, get inputs. otherwise, don't
         if (isControllable)
         {
-            movementInput.x = Input.GetAxis("Horizontal");
-            movementInput.y = Input.GetAxis("Vertical");
+            _movementInput.x = Input.GetAxis("Horizontal");
+            _movementInput.y = Input.GetAxis("Vertical");
         }
 
         if (canPlayCards && CanAct)
@@ -65,7 +68,7 @@ public class Controller : MonoBehaviour, IActor
             }
         }
 
-        movementComponent.MovementInput = movementInput;
+        movementComponent.MovementInput = _movementInput;
     }
 
     /// <summary>
