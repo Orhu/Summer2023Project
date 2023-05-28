@@ -9,10 +9,7 @@ using UnityEngine;
 public class EnemyAttacker : MonoBehaviour
 {
     [Tooltip("Card representing the attack of this unit")]
-    [SerializeField] private Card mainAttack; 
-    
-    [Tooltip("Number of attacks this unit will issue")]
-    [SerializeField] private int attackCount;
+    [SerializeField] private Card mainAttack;
 
     /// <summary>
     /// Issue an attack from the given agent
@@ -21,9 +18,6 @@ public class EnemyAttacker : MonoBehaviour
    public void PerformAttack(IActor agent)
     {
         Card cardToPlay = mainAttack;
-        int playCount = attackCount;
-        List<ActionModifier> modifiers = cardToPlay.actionModifiers;
-
-        cardToPlay.PlayActions(agent, playCount, modifiers);
+        cardToPlay.PlayActions(agent);
     }
 }

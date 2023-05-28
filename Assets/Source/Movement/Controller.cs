@@ -50,8 +50,8 @@ public class Controller : MonoBehaviour, IActor
         // if we are controllable, get inputs. otherwise, don't
         if (isControllable)
         {
-            movementInput.x = Input.GetAxisRaw("Horizontal");
-            movementInput.y = Input.GetAxisRaw("Vertical");
+            _movementInput.x = Input.GetAxisRaw("Horizontal");
+            _movementInput.y = Input.GetAxisRaw("Vertical");
         }
 
         if (canPlayCards && CanAct)
@@ -68,7 +68,7 @@ public class Controller : MonoBehaviour, IActor
             }
         }
 
-        movementComponent.MovementInput = _movementInput;
+        movementComponent.MovementInput = _movementInput.normalized;
     }
 
     /// <summary>
