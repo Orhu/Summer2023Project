@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 2591183591901039891}
   - component: {fileID: -8563880425545905597}
   - component: {fileID: 1503026416}
-  - component: {fileID: 1503026417}
   - component: {fileID: 1503026418}
   - component: {fileID: 5436055868885082538}
   m_Layer: 6
@@ -141,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccaee7cb219bc7b43bdeb72aa48e7a12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 5
+  maxHealth: 12
   immuneStatusEffects: []
   onHealthChanged:
     m_PersistentCalls:
@@ -217,44 +216,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isControllable: 1
   canPlayCards: 1
---- !u!114 &1503026417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 608508398850829056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccaee7cb219bc7b43bdeb72aa48e7a12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 5
-  immuneStatusEffects: []
-  onHealthChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onMaxHealthChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onAttacked:
-    m_PersistentCalls:
-      m_Calls: []
-  onDeath:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5436055868885082538}
-        m_TargetAssemblyTypeName: Respawn, Assembly-CSharp
-        m_MethodName: RespawnAtSpawnLocation
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &1503026418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,7 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 744fc462e7720f14798c279f3af2ebfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 3
+  maxSpeed: 4
   acceleration: 100
   deacceleration: 7
 --- !u!114 &5436055868885082538
