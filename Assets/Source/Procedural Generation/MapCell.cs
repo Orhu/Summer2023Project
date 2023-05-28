@@ -3,27 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// The cell that is stored in the room grid, to keep track of room generation
-/// </summary>
-public class MapCell
-{
-    [Tooltip("The directions that this cell has")]
-    public Direction direction = Direction.None;
-
-    [Tooltip("The type of room this is")]
-    public RoomType type = RoomType.None;
-
-    [Tooltip("Whether this cell has been visited")]
-    public bool visited = false;
-
-    [Tooltip("The location in the map (each integer corresponds to one room)")]
-    public Vector2Int location;
-
-    [Tooltip("The room at this location")]
-    public GameObject room;
-}
-
-/// <summary>
 /// Stores door directions
 /// </summary>
 [System.Flags]
@@ -35,6 +14,27 @@ public enum Direction
     Left = 4,
     Down = 8,
     All = 15
+}
+
+/// <summary>
+/// The cell that is stored in the room grid, to keep track of room generation
+/// </summary>
+public class MapCell
+{
+    // The directions that this cell has
+    public Direction direction = Direction.None;
+
+    // The type of room this is
+    public RoomType type = RoomType.None;
+
+    // Whether this cell has been visited
+    public bool visited = false;
+
+    // The location in the map (each integer corresponds to one room)
+    public Vector2Int location;
+
+    // The room at this location
+    public GameObject room;
 }
 
 /// <summary>
@@ -52,9 +52,17 @@ public class DirectionConstraint
     public int maxDirections = 4;
 }
 
+/// <summary>
+/// Holds a 2D array, a start cell, and a map size
+/// </summary>
 public class Map
 {
+    // The 2D array of map cells
     public MapCell[,] map;
+
+    // The start cell (or midpoint)
     public MapCell startCell;
+
+    // The size of the map
     public Vector2Int mapSize;
 }

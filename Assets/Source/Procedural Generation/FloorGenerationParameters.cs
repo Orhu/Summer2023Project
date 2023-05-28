@@ -2,14 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The generation parameters for an entire floor
+/// </summary>
 [System.Serializable]
 public class FloorGenerationParameters
 {
-    public RoomTypesToRoomExteriorGenerationParameters roomTypesToExteriorGenerationParameters;
-    public LayoutGenerationParameters layoutGenerationParameters;
-    public Vector2Int roomSize;
+    [Tooltip("The generation parameters for the layout of this floor")]
+    [SerializeField] public LayoutGenerationParameters layoutGenerationParameters;
+
+    [Tooltip("The size of a room on this floor")]
+    [SerializeField] public Vector2Int roomSize;
+
+    [Tooltip("A dictionary that holds room types and their associated exterior generation parameters for this floor")]
+    [SerializeField] public RoomTypesToRoomExteriorGenerationParameters roomTypesToExteriorGenerationParameters;
 }
 
+/// <summary>
+/// Stores the type of a room
+/// </summary>
 [System.Serializable]
 public enum RoomType
 {
@@ -21,11 +32,20 @@ public enum RoomType
     Exit
 }
 
+/// <summary>
+/// A dictionary that maps room types to exterior generation parameters
+/// </summary>
 [System.Serializable]
 public class RoomTypesToRoomExteriorGenerationParameters
 {
-    public List<RoomTypeToRoomExteriorGenerationParameters> roomTypesToRoomExteriorGenerationParameters;
+    [Tooltip("A list of room types to exterior generation parameters")]
+    [SerializeField] public List<RoomTypeToRoomExteriorGenerationParameters> roomTypesToRoomExteriorGenerationParameters;
 
+    /// <summary>
+    /// Gets the exterior generation parameters associated with the given room type
+    /// </summary>
+    /// <param name="roomType"> The room type to find the exterior generation parameters of </param>
+    /// <returns> The exterior generation parameters </returns>
     public RoomExteriorGenerationParameters At(RoomType roomType)
     {
         for (int i = 0; i < roomTypesToRoomExteriorGenerationParameters.Count; i++)
@@ -40,9 +60,15 @@ public class RoomTypesToRoomExteriorGenerationParameters
     }
 }
 
+/// <summary>
+/// A sturct that holds a room type and its associated exterior generation parameters
+/// </summary>
 [System.Serializable]
 public struct RoomTypeToRoomExteriorGenerationParameters
 {
-    public RoomType roomType;
-    public RoomExteriorGenerationParameters roomExteriorGenerationParameters;
+    [Tooltip("The type")]
+    [SerializeField] public RoomType roomType;
+
+    [Tooltip("The generation parameters associated with that type")]
+    [SerializeField] public RoomExteriorGenerationParameters roomExteriorGenerationParameters;
 }

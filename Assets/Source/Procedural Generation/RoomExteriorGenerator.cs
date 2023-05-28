@@ -3,10 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/// <summary>
+/// Generates the exteriors of the rooms (walls, doors, and floors)
+/// </summary>
 public class RoomExteriorGenerator : MonoBehaviour
 {
+    /// <summary>
+    /// Transforms a map location to a world location
+    /// </summary>
+    /// <param name="mapLocation"> The location to transform </param>
+    /// <param name="startLocation"> The start location (aka midpoint of the map) </param>
+    /// <param name="roomSize"> The room size </param>
+    /// <returns></returns>
+    public Vector2 TransformMapToWorld(Vector2Int mapLocation, Vector2Int startLocation, Vector2Int roomSize)
+    {
+        // +0.5 In order to align with the tilemap's grid
+        return new Vector2((mapLocation.x - startLocation.x) * roomSize.x, (mapLocation.y - startLocation.y) * roomSize.y);
+    }
+
+    /// <summary>
+    /// Generates the exteriors of the rooms (walls, doors, and floors)
+    /// </summary>
+    /// <param name="roomTypesToExteriorParameters"> The parameters for each type of room </param>
+    /// <param name="map"> The map to generate the rooms for </param>
+    /// <param name="roomSize"> The size of a single room </param>
     public void Generate(RoomTypesToRoomExteriorGenerationParameters roomTypesToExteriorParameters, Map map, Vector2Int roomSize)
     {
+        // Iterate over every room and create it
         for (int i = 0; i < map.mapSize.x; i++)
         {
             for (int j = 0; j < map.mapSize.y; j++)
@@ -27,6 +50,13 @@ public class RoomExteriorGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Creates the room for the given cell
+    /// </summary>
+    /// <param name="createdCell"> The cell to create the room for </param>
+    /// <param name="exteriorParameters"> The parameters for this type of room </param>
+    /// <param name="startCell"> The starting cell (to get a reference for the midpoint of the map) </param>
+    /// <param name="roomSize"> The size of a single room </param>
     private void CreateRoom(MapCell createdCell, RoomExteriorGenerationParameters exteriorParameters, MapCell startCell, Vector2Int roomSize)
     {
         // Instantiate the new room
@@ -53,6 +83,13 @@ public class RoomExteriorGenerator : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Initializes a tilemap
+    /// </summary>
+    /// <param name="room"> The room to create the tilemap for </param>
+    /// <param name="layer"> The layer the tilemap should have </param>
+    /// <param name="name"> The name to give the tilemap </param>
+    /// <returns> The tilemap </returns>
     private GameObject InitializeTilemap(GameObject room, int layer, string name)
     {
         GameObject tilemap = new GameObject();
@@ -67,6 +104,12 @@ public class RoomExteriorGenerator : MonoBehaviour
         return tilemap;
     }
 
+    /// <summary>
+    /// Creates walls for a normally shaped room
+    /// </summary>
+    /// <param name="roomCell"> The room to create the walls for </param>
+    /// <param name="exteriorParameters"> The parameters of this type of room </param>
+    /// <param name="roomSize"> The size of a room </param>
     private void CreateWalls(MapCell roomCell, RoomExteriorGenerationParameters exteriorParameters, Vector2Int roomSize)
     {
         int ObstacleLayer = LayerMask.NameToLayer("Obstacle");
@@ -154,6 +197,14 @@ public class RoomExteriorGenerator : MonoBehaviour
         wallTilemap.CompressBounds();
     }
 
+    /// <summary>
+    /// Creates walls, doors, and floors for a boss room (which is not normally sized)
+    /// </summary>
+    /// <param name="createdCell"> One of the cells that should be part of the boss room </param>
+    /// <param name="exteriorParameters"> The parameters for the boss room </param>
+    /// <param name="map"> The map </param>
+    /// <param name="startCell"> The start cell </param>
+    /// <param name="roomSize"> The size of a room </param>
     private void CreateBossRoom(MapCell createdCell, RoomExteriorGenerationParameters exteriorParameters, Map map, MapCell startCell, Vector2Int roomSize)
     {
         if (createdCell.room != null)
@@ -269,11 +320,5 @@ public class RoomExteriorGenerator : MonoBehaviour
                 map.map[centerCell.location.x + i, centerCell.location.y + j].room = bossRoom;
             }
         }
-    }
-
-    public Vector2 TransformMapToWorld(Vector2Int mapLocation, Vector2Int startLocation, Vector2Int roomSize)
-    {
-        // +0.5 In order to align with the tilemap's grid
-        return new Vector2((mapLocation.x - startLocation.x) * roomSize.x, (mapLocation.y - startLocation.y) * roomSize.y);
     }
 }

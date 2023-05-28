@@ -9,19 +9,17 @@ using UnityEngine;
 public class LayoutGenerationParameters
 {
     [Tooltip("The (approximate) number of normal rooms to generate")]
-    public int numNormalRooms;
+    [SerializeField] public int numNormalRooms;
 
     [Tooltip("The variance of randomness for the number of normal rooms to generate")]
-    public int numNormalRoomsVariance;
+    [SerializeField] public int numNormalRoomsVariance;
 
     [Tooltip("The number of special rooms that will appear")]
-    public int numSpecialRooms;
+    [SerializeField] public int numSpecialRooms;
 
-    [Tooltip("The number of doors that is preferred")]
-    [Range(0, 4)]
-    public int preferredNumDoors;
+    [Tooltip("The number of doors that is preferred")] [Range(0, 4)]
+    [SerializeField] public int preferredNumDoors;
 
-    [Tooltip("How strictly the generation adheres to the preferred number of doors (100 = very strict, 0 = not strict at all)")]
-    [Range(0, 100)]
-    public float strictnessNumDoors;
+    [Tooltip("How strictly the generation adheres to the preferred number of doors (100 = very strict, 0 = not strict at all)")] [Range(0, 100)]
+    [SerializeField] public float strictnessNumDoors;
 }
