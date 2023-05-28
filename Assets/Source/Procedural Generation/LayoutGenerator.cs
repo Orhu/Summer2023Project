@@ -7,74 +7,54 @@ using UnityEngine;
 /// </summary>
 public class LayoutGenerator : MonoBehaviour
 {
-    [Tooltip("The parameters for controlling the layout generation")]
-    public LayoutGenerationParameters parameters;
-
-    // The map of the rooms
-    [HideInInspector]
-    public MapCell[,] map;
-
-    // The starting cell
-    [HideInInspector]
-    public MapCell startCell;
-
-    // The map size
-    [HideInInspector]
-    public Vector2Int mapSize;
-
     /// <summary>
     /// Generates the layout
     /// </summary>
-    void Start()
-    {
-        Generate();
-        SaveMap();
-    }
-
-    /// <summary>
-    /// Generates the layout
-    /// </summary>
-    void Generate()
+    public Map Generate(LayoutGenerationParameters layoutParameters)
     {
         // Get the number of normal cells
-        int numNormalCells = parameters.numNormalRooms + Random.Range(0, parameters.numNormalRoomsVariance * 2 + 1) - parameters.numNormalRoomsVariance;
+        int numNormalCells = layoutParameters.numNormalRooms + Random.Range(0, layoutParameters.numNormalRoomsVariance * 2 + 1) - layoutParameters.numNormalRoomsVariance;
 
         // Initialize the gen map
-        MapCell[,] genMap = InitializeGenMap(numNormalCells + parameters.numSpecialRooms);
+        Vector2Int mapSize = DetermineMapSize(numNormalCells + layoutParameters.numSpecialRooms);
+        MapCell[,] genMap = InitializeGenMap(mapSize);
 
         // Create the starting cell
-        startCell = GenerateStartCell(genMap);
+        MapCell startCell = GenerateStartCell(genMap, mapSize);
        
         // Get all the branchable cells (which will start out as all the normal cells, then cells will be removed from them as it goes along
-        List<MapCell> branchableCells = GenerateNormalCells(genMap, startCell, numNormalCells);
+        List<MapCell> branchableCells = GenerateNormalCells(genMap, startCell, numNormalCells, layoutParameters);
 
         // If somehow (this should never happen) The boss or special cells failed to generate, just start over
         if (!GenerateBossAndExitCells(genMap, branchableCells))
         {
             // This should never happen butttt y'know just in case
-            Generate();
+            return Generate(layoutParameters);
         }
-        if (!GenerateSpecialCells(genMap, branchableCells, parameters.numSpecialRooms))
+        if (!GenerateSpecialCells(genMap, branchableCells, layoutParameters.numSpecialRooms))
         {
-            Generate();
+            return Generate(layoutParameters);
         }
 
-        CreateMap(genMap);
+        return CreateMap(genMap, startCell, mapSize);
+    }
+
+    private Vector2Int DetermineMapSize(int numRooms)
+    {
+        // Make the map size to be able to hold all the rooms in a row in any direction (worst case scenario)
+        // +7 because boss room is 3x3, then you have the exit room, and finally you have the start room in the middle. 
+        // Then a couple extra for safety (even though it should be very unlikely to happen). 
+        // TODO: Change boos room size to not be hard coded lol
+        return new Vector2Int(numRooms * 2 + 7, numRooms * 2 + 7);
     }
 
     /// <summary>
     /// Initializes the gen map with MapCells that have their locations set correctly
     /// </summary>
     /// <param name="numRooms"> The number of normal rooms and special rooms that will appear in the layout </param>
-    /// <returns> The initialized gen map </returns>
-    MapCell[,] InitializeGenMap(int numRooms)
+    /// <returns> The map size </returns>
+    private MapCell[,] InitializeGenMap(Vector2Int mapSize)
     {
-        // Make the map size to be able to hold all the rooms in a row in any direction (worst case scenario)
-        // +7 because boss room is 3x3, then you have the exit room, and finally you have the start room in the middle. 
-        // Then a couple extra for safety (even though it should be very unlikely to happen). 
-        // TODO: Change boos room size to not be hard coded lol
-        mapSize = new Vector2Int(numRooms * 2 + 7, numRooms * 2 + 7);
-
         MapCell[,] genMap = new MapCell[mapSize.x, mapSize.y];
 
         // Iterate over the map size and set each cell to have the correct location
@@ -95,7 +75,7 @@ public class LayoutGenerator : MonoBehaviour
     /// </summary>
     /// <param name="genMap"> The map that is being generated </param>
     /// <returns> The start cell </returns>
-    MapCell GenerateStartCell(MapCell[,] genMap)
+    private MapCell GenerateStartCell(MapCell[,] genMap, Vector2Int mapSize)
     {
         Vector2Int startPos = new Vector2Int((mapSize.x + 1) / 2, (mapSize.y + 1) / 2);
         MapCell startRoom = genMap[startPos.x, startPos.y];
@@ -112,7 +92,7 @@ public class LayoutGenerator : MonoBehaviour
     /// <param name="startCell"> The starting cell </param>
     /// <param name="numNormalCells"> The number of normal cells to generate </param>
     /// <returns> A list of all the normal cells </returns>
-    List<MapCell> GenerateNormalCells(MapCell[,] genMap, MapCell startCell, int numNormalCells)
+    private List<MapCell> GenerateNormalCells(MapCell[,] genMap, MapCell startCell, int numNormalCells, LayoutGenerationParameters layoutParameters)
     {
         // Track the normal cells created
         List<MapCell> normalCells = new List<MapCell>();
@@ -141,7 +121,8 @@ public class LayoutGenerator : MonoBehaviour
             currentCell.type = RoomType.Normal;
 
             // The direction should not make it so the number of added neighbors exceeds the numNormalCells limit
-            currentCell.direction = GetRandomConstrainedDirection(GetDirectionConstraint(genMap, currentCell, numNormalCells, newCellsCount));
+            DirectionConstraint constraint = GetDirectionConstraint(genMap, currentCell, numNormalCells, newCellsCount);
+            currentCell.direction = GetRandomConstrainedDirection(constraint, layoutParameters.preferredNumDoors, layoutParameters.strictnessNumDoors);
 
             // Remove the current cell from the queue
             cellsToGenerate.Dequeue();
@@ -168,7 +149,7 @@ public class LayoutGenerator : MonoBehaviour
     /// <param name="cell"> The cell to get the neighbors of </param>
     /// <param name="useDirection"> Whether or not to use the directions that the given cell opens in to get the neighbors </param>
     /// <returns> The unvisited neighbors </returns>
-    List<MapCell> GetUnvisitedNeighbors(MapCell[,] genMap, MapCell cell, bool useDirection)
+    private List<MapCell> GetUnvisitedNeighbors(MapCell[,] genMap, MapCell cell, bool useDirection)
     {
         List<MapCell> neighbors = new List<MapCell>();
 
@@ -188,26 +169,11 @@ public class LayoutGenerator : MonoBehaviour
     }
 
     /// <summary>
-    /// Counts the number of directions the given direction has
-    /// </summary>
-    /// <param name="direction"> The direction to count </param>
-    /// <returns> The number of directions </returns>
-    int CountNumDirections(Direction direction)
-    {
-        int count = 0;
-        for (int i = 1; i < (int)Direction.All; i *= 2)
-        {
-            count += ((int) direction & i) / i;
-        }
-        return count;
-    }
-
-    /// <summary>
     /// Gets a random direction constrained by the constraint
     /// </summary>
     /// <param name="constraint"> The constraint </param>
     /// <returns> The random direction </returns>
-    Direction GetRandomConstrainedDirection(DirectionConstraint constraint)
+    private Direction GetRandomConstrainedDirection(DirectionConstraint constraint, int preferredNumDoors, float strictnessNumDoors)
     {
         Direction direction = Direction.None;
         int numDirections = 0;
@@ -256,10 +222,10 @@ public class LayoutGenerator : MonoBehaviour
             }
 
             // Get the "distance" from the number of directions this cell already has to the number of directions is preferred
-            int distance = parameters.preferredNumDoors - numDirections;
+            int distance = preferredNumDoors - numDirections;
 
             // Using the likelyhood from the distance, determine whether or not to add this direction            
-            if (CalculateLikelyhoodOfAddingDirection(distance) > Random.value)
+            if (CalculateLikelyhoodOfAddingDirection(distance, strictnessNumDoors) > Random.value)
             {
                 direction |= randomDirection;
                 numDirections++;
@@ -277,7 +243,7 @@ public class LayoutGenerator : MonoBehaviour
     /// </summary>
     /// <param name="distance"> The distance from the number of directions the cell already has to the preferred number of directions </param>
     /// <returns> The likelyood </returns>
-    float CalculateLikelyhoodOfAddingDirection(int distance)
+    private float CalculateLikelyhoodOfAddingDirection(int distance, float strictnessNumDoors)
     {
         // Get the amount to scale the range of atan by so that it has a range of 100
         float scaleRange = (50.0f * 2.0f) / (Mathf.PI);
@@ -289,7 +255,7 @@ public class LayoutGenerator : MonoBehaviour
         float verticalOffset = 50;
 
         // Get the value of the atan function, using the strictness to control how steep the function is
-        float atanVal = Mathf.Atan(parameters.strictnessNumDoors * (distance - horizontalOffset));
+        float atanVal = Mathf.Atan(strictnessNumDoors * (distance - horizontalOffset));
 
         // Divide by 100 to convert the percent to decimal
         return (scaleRange * atanVal + verticalOffset) / 100;
@@ -303,7 +269,7 @@ public class LayoutGenerator : MonoBehaviour
     /// <param name="maxNewCells"> The maximum number of new cells to add. -1 to not check </param>
     /// <param name="currentNewCells"> The number of current new cells already added </param>
     /// <returns> The constraint </returns>
-    DirectionConstraint GetDirectionConstraint(MapCell[,] genMap, MapCell cell, int maxNewCells = -1, int currentNewCells = -1)
+    private DirectionConstraint GetDirectionConstraint(MapCell[,] genMap, MapCell cell, int maxNewCells = -1, int currentNewCells = -1)
     {
         DirectionConstraint directionConstraint = new DirectionConstraint();
 
@@ -364,7 +330,7 @@ public class LayoutGenerator : MonoBehaviour
     /// <param name="genMap"> The current generated map </param>
     /// <param name="branchableCells"> The cells that can be branched off of </param>
     /// <returns> Whether or not the boss room was successfully generated </returns>
-    bool GenerateBossAndExitCells(MapCell[,] genMap, List<MapCell> branchableCells)
+    private bool GenerateBossAndExitCells(MapCell[,] genMap, List<MapCell> branchableCells)
     {
         // While the cells haven't been generated
         while (true)
@@ -395,8 +361,11 @@ public class LayoutGenerator : MonoBehaviour
                 if (checkRight && Check3x3Grid(genMap, branchCell.location + new Vector2Int(2, 0)) && !genMap[branchCell.location.x + 4, branchCell.location.y].visited)
                 {
                     Set3x3GridToBoss(genMap, branchCell.location + new Vector2Int(2, 0));
+                    genMap[branchCell.location.x + 1, branchCell.location.y].direction = Direction.Left;
+                    genMap[branchCell.location.x + 3, branchCell.location.y].direction = Direction.Right;
                     genMap[branchCell.location.x + 4, branchCell.location.y].visited = true;
                     genMap[branchCell.location.x + 4, branchCell.location.y].type = RoomType.Exit;
+                    genMap[branchCell.location.x + 4, branchCell.location.y].direction = Direction.Left;
                     branchCell.direction |= Direction.Right;
                     return true;
                 }
@@ -405,8 +374,11 @@ public class LayoutGenerator : MonoBehaviour
                 if (checkUp && Check3x3Grid(genMap, branchCell.location + new Vector2Int(0, 2)) && !genMap[branchCell.location.x, branchCell.location.y + 4].visited)
                 {
                     Set3x3GridToBoss(genMap, branchCell.location + new Vector2Int(0, 2));
+                    genMap[branchCell.location.x, branchCell.location.y + 1].direction = Direction.Down;
+                    genMap[branchCell.location.x, branchCell.location.y + 3].direction = Direction.Up;
                     genMap[branchCell.location.x, branchCell.location.y + 4].visited = true;
                     genMap[branchCell.location.x, branchCell.location.y + 4].type = RoomType.Exit;
+                    genMap[branchCell.location.x, branchCell.location.y + 4].direction = Direction.Down;
                     branchCell.direction |= Direction.Up;
                     return true;
                 }
@@ -415,8 +387,11 @@ public class LayoutGenerator : MonoBehaviour
                 if (checkLeft && Check3x3Grid(genMap, branchCell.location + new Vector2Int(-2, 0)) && !genMap[branchCell.location.x - 4, branchCell.location.y].visited)
                 {
                     Set3x3GridToBoss(genMap, branchCell.location + new Vector2Int(-2, 0));
+                    genMap[branchCell.location.x - 1, branchCell.location.y].direction = Direction.Right;
+                    genMap[branchCell.location.x - 3, branchCell.location.y].direction = Direction.Left;
                     genMap[branchCell.location.x - 4, branchCell.location.y].visited = true;
                     genMap[branchCell.location.x - 4, branchCell.location.y].type = RoomType.Exit;
+                    genMap[branchCell.location.x - 4, branchCell.location.y].direction = Direction.Right;
                     branchCell.direction |= Direction.Left;
                     return true;
                 }
@@ -425,8 +400,11 @@ public class LayoutGenerator : MonoBehaviour
                 if (checkDown && Check3x3Grid(genMap, branchCell.location + new Vector2Int(0, -2)) && !genMap[branchCell.location.x, branchCell.location.y - 4].visited)
                 {
                     Set3x3GridToBoss(genMap, branchCell.location + new Vector2Int(0, -2));
+                    genMap[branchCell.location.x, branchCell.location.y - 1].direction = Direction.Up;
+                    genMap[branchCell.location.x, branchCell.location.y - 3].direction = Direction.Down;
                     genMap[branchCell.location.x, branchCell.location.y - 4].visited = true;
                     genMap[branchCell.location.x, branchCell.location.y - 4].type = RoomType.Exit;
+                    genMap[branchCell.location.x, branchCell.location.y - 4].direction = Direction.Up;
                     branchCell.direction |= Direction.Down;
                     return true;
                 }
@@ -446,7 +424,7 @@ public class LayoutGenerator : MonoBehaviour
     /// <param name="genMap"> The current generated map </param>
     /// <param name="middlePoint"> The middle point of the 3x3 grid </param>
     /// <returns> Whether or not this 3x3 is clear </returns>
-    bool Check3x3Grid(MapCell[,] genMap, Vector2Int middlePoint)
+    private bool Check3x3Grid(MapCell[,] genMap, Vector2Int middlePoint)
     {
         for (int i = -1; i <= 1; i++)
         {
@@ -468,7 +446,7 @@ public class LayoutGenerator : MonoBehaviour
     /// </summary>
     /// <param name="genMap"> The current generated map </param>
     /// <param name="middlePoint"> The middle point of the 3x3 grid </param>
-    void Set3x3GridToBoss(MapCell[,] genMap, Vector2Int middlePoint)
+    private void Set3x3GridToBoss(MapCell[,] genMap, Vector2Int middlePoint)
     {
         for (int i = -1; i <= 1; i++)
         {
@@ -486,8 +464,8 @@ public class LayoutGenerator : MonoBehaviour
     /// <param name="genMap"> The current generated map </param>
     /// <param name="branchableCells"> The cells that can be branched off of</param>
     /// <param name="numSpecialCells"> The number of special cells to generate </param>
-    /// <returns></returns>
-    bool GenerateSpecialCells(MapCell[,] genMap, List<MapCell> branchableCells, int numSpecialCells)
+    /// <returns> Whether or not all the special cells were successfully generated </returns>
+    private bool GenerateSpecialCells(MapCell[,] genMap, List<MapCell> branchableCells, int numSpecialCells)
     {
         for (int i = 0; i < numSpecialCells; i++)
         {
@@ -532,12 +510,12 @@ public class LayoutGenerator : MonoBehaviour
                 else if (specialCell.location.x < branchCell.location.x)
                 {
                     specialCell.direction = Direction.Right;
-                    branchCell.direction = Direction.Left;
+                    branchCell.direction |= Direction.Left;
                 }
                 else
                 {
                     specialCell.direction = Direction.Up;
-                    branchCell.direction = Direction.Down;
+                    branchCell.direction |= Direction.Down;
                 }
 
                 break;
@@ -548,12 +526,13 @@ public class LayoutGenerator : MonoBehaviour
     }
 
     /// <summary>
-    /// Idk I'm not really using this right now
+    /// Takes the genMap and sets it up for use (by resetting whether the cells have been visited or not)
     /// </summary>
     /// <param name="genMap"> The current generated map </param>
-    void CreateMap(MapCell[,] genMap)
+    /// <returns> The map </returns>
+    private Map CreateMap(MapCell[,] genMap, MapCell startCell, Vector2Int mapSize)
     {
-        map = genMap;
+        MapCell[,] map = genMap;
         for (int i = 0; i < mapSize.x; i++)
         {
             for (int j = 0; j < mapSize.y; j++)
@@ -561,49 +540,47 @@ public class LayoutGenerator : MonoBehaviour
                 map[i, j].visited = false;
             }
         }
-    }
 
-    /// <summary>
-    /// Saves the map variable to a file
-    /// </summary>
-    void SaveMap()
-    {
-        SaveMap(map);
+        Map createdMap = new Map();
+        createdMap.map = map;
+        createdMap.mapSize = mapSize;
+        createdMap.startCell = startCell;
+        return createdMap;
     }
 
     /// <summary>
     /// Saves the given map to a file
     /// </summary>
-    /// <param name="mapToSave"></param>
-    void SaveMap(MapCell[,] mapToSave)
+    /// <param name="mapToSave"> The map to save </param>
+    public void SaveMap(Map mapToSave)
     {
-        string mapString = "\n";
-        for (int i = 0; i < mapSize.y; i++)
+        string mapString = "";
+        for (int i = 0; i < mapToSave.mapSize.y; i++)
         {
             string line = "";
-            for (int j = 0; j < mapSize.x; j++)
+            for (int j = 0; j < mapToSave.mapSize.x; j++)
             {
-                if (mapToSave[j, i].type == RoomType.None)
+                if (mapToSave.map[j, i].type == RoomType.None)
                 {
                     line += "-";
                 }
-                else if (mapToSave[j, i].type == RoomType.Normal)
+                else if (mapToSave.map[j, i].type == RoomType.Normal)
                 {
                     line += "*";
                 }
-                else if (mapToSave[j, i].type == RoomType.Start)
+                else if (mapToSave.map[j, i].type == RoomType.Start)
                 {
                     line += "P";
                 }
-                else if (mapToSave[j, i].type == RoomType.Special)
+                else if (mapToSave.map[j, i].type == RoomType.Special)
                 {
                     line += "S";
                 }
-                else if (mapToSave[j, i].type == RoomType.Boss)
+                else if (mapToSave.map[j, i].type == RoomType.Boss)
                 {
                     line += "B";
                 }
-                else if (mapToSave[j, i].type == RoomType.Exit)
+                else if (mapToSave.map[j, i].type == RoomType.Exit)
                 {
                     line += "E";
                 }

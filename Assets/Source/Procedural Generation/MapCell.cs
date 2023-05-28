@@ -51,3 +51,10 @@ public class DirectionConstraint
     // The maximum number of directions the room can have
     public int maxDirections = 4;
 }
+
+public class Map
+{
+    public MapCell[,] map;
+    public MapCell startCell;
+    public Vector2Int mapSize;
+}
