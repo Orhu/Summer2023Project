@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// A status effect that prevents an actor from acting.
 /// </summary>
-[CreateAssetMenu(fileName = "Silence", menuName = "Status Effects [Don't Create]/Silence")]
+[CreateAssetMenu(fileName = "Silence", menuName = "Status Effects/Silence")]
 public class Silence : StatusEffect
 {
     /// <summary>

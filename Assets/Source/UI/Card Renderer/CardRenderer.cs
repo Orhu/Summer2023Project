@@ -58,12 +58,21 @@ namespace CardSystem
         { 
             set 
             {
-                links.cooldownTimeTextBox.text = value.ToString();
                 links.cooldownOverlay.enabled = value > 0;
+                links.cooldownTimeTextBox.text = (Mathf.Round(value * 10f) / 10f).ToString();
                 links.cooldownTimeTextBox.enabled = value > 0;
             }
         }
-        
+        public float ActionTime
+        {
+            set
+            {
+                links.actionTimeOverlay.enabled = value > 0;
+                links.actionTimeTextBox.text = (Mathf.Round(value * 10f) / 10f).ToString();
+                links.actionTimeTextBox.enabled = value > 0;
+            }
+        }
+
         // The links to the necessary components for rendering.
         [SerializeField]
         ComponentLinks links;
@@ -97,10 +106,12 @@ namespace CardSystem
             public TMP_Text nameTextBox;
             public TMP_Text descriptionTextBox;
             public TMP_Text cooldownTimeTextBox;
+            public TMP_Text actionTimeTextBox;
             public Image backgroundSprite;
             public Image cardSprite;
             public Image previewOverlay;
             public Image cooldownOverlay;
+            public Image actionTimeOverlay;
         }
     }
 }
