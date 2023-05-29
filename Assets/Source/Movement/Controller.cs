@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Action = CardSystem.Action;
 
 /// <summary>
 /// Agent serves as the brain of any agent. Has the ability to input basic tasks, delegating them to various parts of the agent as needed.
@@ -9,14 +11,10 @@ public class Controller : MonoBehaviour, IActor
     [Tooltip("is this agent controllable by inputs?")] 
     [SerializeField] private bool isControllable;
 
-    [Tooltip("is this agent capable of selecting/using cards?")] 
-    [SerializeField] private bool canPlayCards;
-
-    [Tooltip("Does this agent use enemy logic?")] 
+    [Tooltip("Does this agent use enemy brain components?")] 
     [SerializeField] private bool useEnemyLogic;
-    
-    
-    // "Movement component to allow the agent to move"
+
+    // Movement component to allow the agent to move
     [HideInInspector] private Movement movementComponent;
 
     // -1 to 1 range representing current movement input, same system as built-in Input.GetAxis"
@@ -26,20 +24,25 @@ public class Controller : MonoBehaviour, IActor
         get => _movementInput;
         set => _movementInput = value;
     }
-
+    
     // enemy attacker component, if it exists on this agent
     private EnemyAttacker enemyAttacker;
     
-    // enemy AI component, if it exists on this agent
-    private EnemyAI enemyAI;
+    // enemy brain component, if it exists on this agent
+    private EnemyBrain enemyBrain;
 
-    private void Start()
+    /// <summary>
+    /// Initialize components
+    /// </summary>
+    private void Awake()
     {
         if (useEnemyLogic)
         {
             enemyAttacker = GetComponent<EnemyAttacker>();
-            enemyAI = GetComponent<EnemyAI>();
+            enemyBrain = GetComponent<EnemyBrain>();
         }
+        
+        movementComponent = GetComponent<Movement>();
     }
 
     /// <summary>
@@ -54,9 +57,9 @@ public class Controller : MonoBehaviour, IActor
             _movementInput.y = Input.GetAxisRaw("Vertical");
         }
 
-        if (canPlayCards && CanAct)
+        if (!useEnemyLogic && CanAct)
         {
-            int pressedPreview = getPressedPreviewButton();
+            int pressedPreview = GetPressedPreviewButton();
             if (pressedPreview > 0)
             {
                 Deck.playerDeck.SelectCard(pressedPreview - 1);
@@ -72,27 +75,18 @@ public class Controller : MonoBehaviour, IActor
     }
 
     /// <summary>
-    /// Launch an attack
+    /// Launch an action from this agent
     /// </summary>
-    private void PerformAttack()
+    public void PerformAttack()
     {
-        if (useEnemyLogic)
-            enemyAttacker.PerformAttack(this);
-    }
-
-    /// <summary>
-    /// Initializes the movement component
-    /// </summary>
-    private void Awake()
-    {
-        movementComponent = GetComponent<Movement>();
+        enemyAttacker.PerformAttack(this);
     }
 
     /// <summary>
     /// Gets the card preview button being pressed.
     /// </summary>
     /// <returns> The number corresponding to the current button, -1 if none pressed. </returns>
-    static int getPressedPreviewButton()
+    static int GetPressedPreviewButton()
     {
         for (int i = 1; i <= Deck.playerDeck.handSize; i++)
         {
@@ -103,6 +97,48 @@ public class Controller : MonoBehaviour, IActor
         }
 
         return -1;
+    }
+
+    /// <summary>
+    /// Issues a command to move towards the given Vector2. Essentially, converts a Vector2 targetPos into an input vector and sets that as our input
+    /// </summary>
+    /// <param name="target"> Target to move to </param>
+    /// <param name="buffer"> How close to get to a tile before being considered "arrived" </param>
+    public void MoveTowards(Vector2 target, float buffer)
+    {
+        var myPos = (Vector2)transform.position;
+        var targetPos = target;
+        
+        var needToMoveUp = targetPos.y + buffer > myPos.y;
+        var needToMoveDown = targetPos.y - buffer < myPos.y;
+        var needToMoveRight = targetPos.x + buffer > myPos.x;
+        var needToMoveLeft = targetPos.x - buffer < myPos.x;
+        
+        // compare the two positions to determine inputs
+        if (needToMoveUp && needToMoveDown)
+        {
+            // we are at the right y 
+            _movementInput.y = 0;
+        }
+        else if (needToMoveUp)
+        {
+            _movementInput.y = 1;
+        }
+        else
+        {
+            _movementInput.y = -1;
+        }
+        
+        if (needToMoveRight && needToMoveLeft)
+        {
+            // we are at the right x 
+            _movementInput.x = 0;
+        } else if (needToMoveRight)
+        {
+            _movementInput.x = 1;
+        } else {
+            _movementInput.x = -1;
+        }
     }
 
     #region IActor Implementation
@@ -137,7 +173,7 @@ public class Controller : MonoBehaviour, IActor
     public Vector3 GetActionAimPosition()
     {
         if (useEnemyLogic)
-            return enemyAI.GetCurrentTargetPos();
+            return enemyBrain.GetTargetPosition();
 
         return Vector3.Scale(Camera.main.ScreenToWorldPoint(Input.mousePosition), new Vector3(1, 1, 0));
     }
