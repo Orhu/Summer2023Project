@@ -11,59 +11,83 @@ namespace Attacks
     /// </summary>
     public abstract class Attack : Action
     {
+        [Header("Hits")]
+
+        [Tooltip("The damage, damage type, status effects, and knockback this projectile will deal.")]
+        public DamageData attack;
+        
+        [Tooltip("The number of objects this can hit before being destroyed.")] [Min(1)]
+        public int hitCount = 1;
+
+        [Tooltip("Whether or not this projectile should apply damage on hit.")]
+        public bool applyDamageOnHit = true;
+                
+        [Tooltip("The modifiers that are always applied to this projectile")] [EditInline]
+        public List<AttackModifier> modifiers;
+
+        [Tooltip("The radius of the projectile.")] [EditInline]
+        public ProjectileShape shape;
+
+
+
+        [Header("Movement Info")]
+
+        [Tooltip("The lifetime of projectiles spawned by this.")]
+        public float lifetime = 10f;
+
+        [Tooltip("The speed projectile will start traveling at. In tiles/second")]
+        public float initialSpeed = 10f;
+
+        [Tooltip("The acceleration this projectile will experience. In tiles/second^2")]
+        public float acceleration = -1f;
+
+        [Tooltip("The minimum speed projectile will travel at. In tiles/second")]
+        public float minSpeed = 5f;
+
+        [Tooltip("The maximum speed projectile will travel at. In tiles/second")]
+        public float maxSpeed = 10f;
+
+
+
+        [Header("Homing")]
+        
+        [Tooltip("The speed in degrees/s that projectiles will rotate towards the closest enemy")] [Min(0)]
+        public float homingSpeed = 0;
+
+        [Tooltip("The duration that this will home for.")] [Min(0)]
+        public float homingTime = 0;
+
+        [Tooltip("What the homing will rotate the projectile towards")]
+        public AimMode homingAimMode;
+
+
+
+        [Header("Visuals")]
+
+        [Tooltip("The game object used to render the projectiles.")]
+        public GameObject visualObject;
+
+        [Tooltip("Whether or not the visuals should be detached before the object is destroyed so that they can handle their own lifetime.")]
+        public bool detachVisualsBeforeDestroy = false;
+
+
+
+        [Header("Spawning")]
+
+        [Tooltip("The location to spawn the projectiles at.")]
+        public SpawnLocation spawnLocation;
+
+        [Tooltip("Whether or not the player needs to aim. If false it will be aimed at the closet enemy")]
+        public AimMode aimMode;
+
+
+
         // The projectile to spawn
         public Projectile projectilePrefab;
         // The previewer prefab to use.
         public AttackPreviewer previewerPrefab;
 
-        [Header("Hits")]
-        [Tooltip("The damage, damage type, status effects, and knockback this projectile will deal.")]
-        public DamageData attack;
-        [Min(1)]
-        [Tooltip("The number of objects this can hit before being destroyed.")]
-        public int hitCount = 1;
 
-        [EditInline]
-        [Tooltip("The modifiers that are always applied to this projectile")]
-        public List<AttackModifier> modifiers;
-
-        [EditInline]
-        [Tooltip("The radius of the projectile.")]
-        public ProjectileShape shape;
-
-        [Header("Movement Info")]
-        [Tooltip("The lifetime of projectiles spawned by this.")]
-        public float lifetime = 10f;
-        [Tooltip("The speed projectile will start traveling at. In tiles/second")]
-        public float initialSpeed = 10f;
-        [Tooltip("The acceleration this projectile will experience. In tiles/second^2")]
-        public float acceleration = -1f;
-        [Tooltip("The minimum speed projectile will travel at. In tiles/second")]
-        public float minSpeed = 5f;
-        [Tooltip("The maximum speed projectile will travel at. In tiles/second")]
-        public float maxSpeed = 10f;
-
-        [Header("Homing")]
-        [Min(0)]
-        [Tooltip("The speed in degrees/s that projectiles will rotate towards the closest enemy")]
-        public float homingSpeed = 0;
-        [Min(0)]
-        [Tooltip("The duration that this will home for.")]
-        public float homingTime = 0;
-        [Tooltip("What the homing will rotate the projectile towards")]
-        public AimMode homingAimMode;
-
-        [Header("Visuals")]
-        [Tooltip("The game object used to render the projectiles.")]
-        public GameObject visualObject;
-        [Tooltip("Whether or not the visuals should be detached before the object is destroyed so that they can handle their own lifetime.")]
-        public bool detachVisualsBeforeDestroy = false;
-
-        [Header("Spawning")]
-        [Tooltip("The location to spawn the projectiles at.")]
-        public SpawnLocation spawnLocation;
-        [Tooltip("Whether or not the player needs to aim. If false it will be aimed at the closet enemy")]
-        public AimMode aimMode;
 
         #region Previewing
         /// <summary>

@@ -9,11 +9,11 @@ public abstract class StatusEffect : ScriptableObject
     [SerializeField]  private float _duration = 2f;
     public float Duration
     {
-        get { return duration; }
+        get { return _duration; }
         set
         {
-            duration = Mathf.Max(value, 0);
-            if (duration == 0)
+            _duration = Mathf.Max(value, 0);
+            if (_duration == 0)
             {
                 Destroy(this);
             }

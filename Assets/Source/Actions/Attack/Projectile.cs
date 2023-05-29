@@ -36,6 +36,10 @@ namespace Attacks
             set { ignoredObjects = value; }
         }
         List<GameObject> ignoredObjects;
+        // Invoked when this projectile hits something.
+        public System.Action onHit;
+        // Invoked when this is destroyed.
+        public System.Action onDestroyed;
 
 
         // The rigidbody responsible for the collision of this projectile.
@@ -53,6 +57,7 @@ namespace Attacks
         GameObject randomTarget;
         internal float remainingHomingTime;
         internal float homingSpeed;
+
 
         /// <summary>
         /// Initializes components based on spawner stats.
@@ -167,17 +172,24 @@ namespace Attacks
             Health hitHealth = collision.GetComponent<Health>();
             if (hitHealth != null)
             {
-                hitHealth.ReceiveAttack(attackData, transform.right);
+                if (attack.applyDamageOnHit)
+                {
+                    hitHealth.ReceiveAttack(attackData, transform.right);
+                }
+                
+                onHit?.Invoke();
                 if (--remainingHits <= 0)
                 {
+                    onDestroyed?.Invoke();
                     Destroy(gameObject);
                 }
             }
             else
             {
+                onHit?.Invoke();
+                onDestroyed?.Invoke();
                 Destroy(gameObject);
             }
-
         }
 
         /// <summary>
