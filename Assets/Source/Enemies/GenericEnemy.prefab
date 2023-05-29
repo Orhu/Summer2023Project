@@ -316,16 +316,17 @@ GameObject:
   m_Component:
   - component: {fileID: 7281680880204442667}
   - component: {fileID: 7281680880204442676}
-  - component: {fileID: 7281680880204442666}
-  - component: {fileID: 7281680880204442665}
+  - component: {fileID: 8164781224420689191}
   - component: {fileID: 2453830812017951992}
   - component: {fileID: 906744404}
+  - component: {fileID: 7281680880204442666}
   - component: {fileID: 906744405}
   - component: {fileID: 906744410}
   - component: {fileID: 5097362261395317995}
+  - component: {fileID: 7613015043317099198}
   - component: {fileID: 2939038239829249596}
   m_Layer: 7
-  m_Name: SmartEnemy
+  m_Name: GenericEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -390,77 +391,19 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c0b610d183c554249959799fd2bb8734, type: 3}
+  m_Sprite: {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.16, y: 0.16}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7281680880204442666
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7281680880204442677}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccaee7cb219bc7b43bdeb72aa48e7a12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 5
-  onHealthChanged:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6867717402833838142}
-        m_TargetAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
-        m_MethodName: set_value
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onMaxHealthChanged:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6867717402833838142}
-        m_TargetAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
-        m_MethodName: set_maxValue
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onDeath:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2939038239829249596}
-        m_TargetAssemblyTypeName: Destroy, Assembly-CSharp
-        m_MethodName: OnDestroy
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!61 &7281680880204442665
-BoxCollider2D:
+--- !u!58 &8164781224420689191
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -473,18 +416,8 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.33, y: 4.21}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Radius: 0.5
 --- !u!50 &2453830812017951992
 Rigidbody2D:
   serializedVersion: 4
@@ -521,6 +454,68 @@ MonoBehaviour:
   targets: []
   obstacles: []
   currentTarget: {fileID: 0}
+--- !u!114 &7281680880204442666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7281680880204442677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccaee7cb219bc7b43bdeb72aa48e7a12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 5
+  immuneStatusEffects: []
+  onHealthChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6867717402833838142}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
+        m_MethodName: set_value
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onMaxHealthChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6867717402833838142}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
+        m_MethodName: set_maxValue
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onAttacked:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2939038239829249596}
+        m_TargetAssemblyTypeName: Destroy, Assembly-CSharp
+        m_MethodName: DestroyMe
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &906744405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -543,7 +538,7 @@ MonoBehaviour:
   detectionDelay: 0.05
   aiUpdateDelay: 0.06
   attackDelay: 1
-  attackDistance: 0.5
+  attackDistance: 3
   OnAttackPressed:
     m_PersistentCalls:
       m_Calls:
@@ -589,6 +584,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isControllable: 0
   canPlayCards: 0
+  useEnemyLogic: 1
 --- !u!114 &5097362261395317995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -604,7 +600,20 @@ MonoBehaviour:
   maxSpeed: 2
   acceleration: 50
   deacceleration: 100
-  currentSpeed: 0
+--- !u!114 &7613015043317099198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7281680880204442677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75c7487ee7b54004fb971055ea6fe2cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainAttack: {fileID: 11400000, guid: 83804c2d0998aa549be3219dace61ead, type: 2}
+  attackCount: 1
 --- !u!114 &2939038239829249596
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -9,37 +9,31 @@ using UnityEngine.Events;
 public class EnemyAI : MonoBehaviour
 {
     // list of steering behaviors to consider
-    [SerializeField]
-    private List<SteeringBehavior> steeringBehaviors;
+    [SerializeField] private List<SteeringBehavior> steeringBehaviors;
 
     // list of detectors to use
-    [SerializeField]
-    private List<Detector> detectors;
+    [SerializeField] private List<Detector> detectors;
 
     // AI data container
-    [SerializeField]
-    private AIData aiData;
+    [SerializeField] private AIData aiData;
 
     // detection delay is how often the detection occurs,
     // update delay is how often the AI updates itself,
     // attack delay is how often the AI can attempt an attack
-    [SerializeField]
-    private float detectionDelay = 0.05f, aiUpdateDelay = 0.06f, attackDelay = 1f;
+    [SerializeField] private float detectionDelay = 0.05f, aiUpdateDelay = 0.06f, attackDelay = 1f;
 
     // at what range can the enemy attempt to attack?
-    [SerializeField]
-    private float attackDistance = 0.5f;
+    [SerializeField] private float attackDistance = 0.5f;
 
     // inputs sent from the Enemy AI to the Enemy controller
     public UnityEvent OnAttackPressed;
     public UnityEvent<Vector2> OnMovementInput;
-    
+
     // tracks movement input as determined by the AI
     private Vector2 movementInput;
 
     // context solver to determine movement direction
-    [SerializeField]
-    private ContextSolver movementDirectionSolver;
+    [SerializeField] private ContextSolver movementDirectionSolver;
 
     // tracks whether the enemy is current following something or not
     bool following = false;
@@ -87,6 +81,7 @@ public class EnemyAI : MonoBehaviour
             // target acquisition logic
             aiData.currentTarget = aiData.targets[0];
         }
+
         // moving the Agent
         OnMovementInput?.Invoke(movementInput);
     }
@@ -121,15 +116,21 @@ public class EnemyAI : MonoBehaviour
                 StartCoroutine(ChaseAndAttack());
             }
             else
-            // we are not in attack range...
+                // we are not in attack range...
             {
                 // chase logic
                 movementInput = movementDirectionSolver.GetDirectionToMove(steeringBehaviors, aiData);
                 yield return new WaitForSeconds(aiUpdateDelay);
                 StartCoroutine(ChaseAndAttack());
             }
-
         }
+    }
 
+    public Vector2 GetCurrentTargetPos()
+    {
+        if (aiData.currentTarget != null)
+            return aiData.currentTarget.position;
+
+        return Vector2.zero;
     }
 }
