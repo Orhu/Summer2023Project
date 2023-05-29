@@ -2,18 +2,17 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Tile = Room.Tile;
 
 public class Pathfinding : MonoBehaviour
 {
     private PathRequestManager requestManager;
 
-    // represents the grid of this room
-    private Room.RoomGrid grid;
+    // The room this enemy is part of
+    private Room room;
 
     void Awake()
     {
-        grid = GetComponentInParent<Room>().ThisRoom;
+        room = GetComponentInParent<Room>();
         requestManager = GetComponent<PathRequestManager>();
     }
 
@@ -22,12 +21,12 @@ public class Pathfinding : MonoBehaviour
         Vector2[] waypoints = new Vector2[0];
         bool pathfindSuccess = false;
 
-        Tile startTile = grid.TileFromWorldPoint(startPos);
-        Tile targetTile = grid.TileFromWorldPoint(targetPos);
+        Tile startTile = room.WorldPosToTile(startPos);
+        Tile targetTile = room.WorldPosToTile(targetPos);
 
         if (startTile.walkable && targetTile.walkable)
         {
-            Heap<Tile> openList = new Heap<Tile>(grid.MaxSize);
+            Heap<Tile> openList = new Heap<Tile>(room.maxSize);
             HashSet<Tile> closedList = new HashSet<Tile>();
             openList.Add(startTile);
 
@@ -44,7 +43,7 @@ public class Pathfinding : MonoBehaviour
                     break;
                 }
 
-                foreach (Tile neighbor in grid.GetNeighbors(currentTile))
+                foreach (Tile neighbor in room.GetNeighbors(currentTile))
                 {
                     if (!neighbor.walkable || closedList.Contains(neighbor))
                     {
@@ -105,11 +104,11 @@ public class Pathfinding : MonoBehaviour
 
         for (int i = 1; i < path.Count; i++)
         {
-            Vector2 directionNew = new Vector2(path[i - 1].gridX - path[i].gridX, path[i - 1].gridY - path[i].gridY);
+            Vector2 directionNew = new Vector2(path[i - 1].gridLocation.x - path[i].gridLocation.x, path[i - 1].gridLocation.y - path[i].gridLocation.y);
             if (directionNew != directionOld)
             {
                 // we have a change in direction, add a waypoint here
-                waypoints.Add(path[i].worldPos);
+                waypoints.Add(room.TileToWorldPos(path[i]));
             }
 
             directionOld = directionNew;
@@ -126,8 +125,8 @@ public class Pathfinding : MonoBehaviour
     /// <returns> Distance, in tiles (moves), between the two tiles </returns>
     int GetDistance(Tile a, Tile b)
     {
-        int distX = Mathf.Abs(a.gridX - b.gridX);
-        int distY = Mathf.Abs(a.gridY - b.gridY);
+        int distX = Mathf.Abs(a.gridLocation.x - b.gridLocation.y);
+        int distY = Mathf.Abs(a.gridLocation.y - b.gridLocation.y);
 
         if (distX > distY)
         {

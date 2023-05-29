@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// A template, to be used for generating the interior of rooms
+/// </summary>
 public class Template : MonoBehaviour
 {
     [Tooltip("The tiles in this template")]

@@ -28,7 +28,7 @@ public class Heap<T> where T : IHeapItem<T>
     /// <param name="item"> Item to add to the heap </param>
     public void Add(T item)
     {
-        item.HeapIndex = _count;
+        item.heapIndex = _count;
         items[_count] = item;
         SortUp(item);
         _count++;
@@ -43,7 +43,7 @@ public class Heap<T> where T : IHeapItem<T>
         T firstItem = items[0];
         _count--;
         items[0] = items[_count];
-        items[0].HeapIndex = 0;
+        items[0].heapIndex = 0;
         SortDown(items[0]);
         return firstItem;
     }
@@ -65,7 +65,7 @@ public class Heap<T> where T : IHeapItem<T>
     /// <returns> True if the heap contains the item, false otherwise </returns>
     public bool Contains(T item)
     {
-        return Equals(items[item.HeapIndex], item);
+        return Equals(items[item.heapIndex], item);
     }
 
     /// <summary>
@@ -76,8 +76,8 @@ public class Heap<T> where T : IHeapItem<T>
     {
         while (true)
         {
-            int childIndexLeft = item.HeapIndex * 2 + 1;
-            int childIndexRight = item.HeapIndex * 2 + 2;
+            int childIndexLeft = item.heapIndex * 2 + 1;
+            int childIndexRight = item.heapIndex * 2 + 2;
             int swapIndex = 0;
 
             // is there a left child?
@@ -123,7 +123,7 @@ public class Heap<T> where T : IHeapItem<T>
     /// <param name="item"> Item to sort </param>
     void SortUp(T item)
     {
-        int parentIndex = (item.HeapIndex - 1) / 2;
+        int parentIndex = (item.heapIndex - 1) / 2;
 
         while (true)
         {
@@ -137,7 +137,7 @@ public class Heap<T> where T : IHeapItem<T>
                 break;
             }
             
-            parentIndex = (item.HeapIndex - 1) / 2;
+            parentIndex = (item.heapIndex - 1) / 2;
         }
     }
 
@@ -148,11 +148,11 @@ public class Heap<T> where T : IHeapItem<T>
     /// <param name="itemB"> Second item to swap with </param>
     void Swap(T itemA, T itemB)
     {
-        items[itemA.HeapIndex] = itemB;
-        items[itemB.HeapIndex] = itemA;
+        items[itemA.heapIndex] = itemB;
+        items[itemB.heapIndex] = itemA;
         
         // swap their HeapIndex with each other
-        (itemA.HeapIndex, itemB.HeapIndex) = (itemB.HeapIndex, itemA.HeapIndex);
+        (itemA.heapIndex, itemB.heapIndex) = (itemB.heapIndex, itemA.heapIndex);
     }
 }
 
@@ -162,5 +162,5 @@ public class Heap<T> where T : IHeapItem<T>
 /// <typeparam name="T"> The item's type </typeparam>
 public interface IHeapItem<T> : IComparable<T>
 {
-    int HeapIndex { get; set; }
+    int heapIndex { get; set; }
 }

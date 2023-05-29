@@ -11,7 +11,7 @@ public class Room : MonoBehaviour
     [HideInInspector] public Tile[,] roomGrid;
 
     // The size of the room
-    [HideInInspector] public Vector2Int roomSize { get; private set; }
+    [HideInInspector] public Vector2Int roomSize;
 
     // Returns the size of the room, x * y
     [HideInInspector]
@@ -22,10 +22,10 @@ public class Room : MonoBehaviour
     }
 
     // The type of the room
-    [HideInInspector] public RoomType roomType { get; private set; }
+    [HideInInspector] public RoomType roomType;
 
     // The location of the room in the map
-    [HideInInspector] public Vector2Int roomLocation { get; private set; }
+    [HideInInspector] public Vector2Int roomLocation;
 
     // Whether this room has been generated or not
     [HideInInspector] private bool generated = false;
