@@ -36,8 +36,9 @@ namespace Attacks
             set { ignoredObjects = value; }
         }
         List<GameObject> ignoredObjects;
-        // Invoked when this projectile hits something.
-        public System.Action onHit;
+
+        // Invoked when this projectile hits something, passes the hit collider as a parameter.
+        public System.Action<Collider2D> onHit;
         // Invoked when this is destroyed.
         public System.Action onDestroyed;
 
@@ -177,7 +178,7 @@ namespace Attacks
                     hitHealth.ReceiveAttack(attackData, transform.right);
                 }
                 
-                onHit?.Invoke();
+                onHit?.Invoke(collision);
                 if (--remainingHits <= 0)
                 {
                     onDestroyed?.Invoke();
@@ -186,7 +187,7 @@ namespace Attacks
             }
             else
             {
-                onHit?.Invoke();
+                onHit?.Invoke(collision);
                 onDestroyed?.Invoke();
                 Destroy(gameObject);
             }

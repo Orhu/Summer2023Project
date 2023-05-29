@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// An action modifier that changes the attack of an action modifier.
+/// An action modifier that spawns explosive bombs when the projectile hits or is destroyed.
 /// </summary>
-
 namespace Attacks
 {
     [CreateAssetMenu(fileName = "NewSpawnBomb", menuName = "Cards/AttackModifers/SpawnBomb")]
@@ -19,6 +15,9 @@ namespace Attacks
 
         [Tooltip("The time in seconds after the bomb is spawned until it detonates.")] [Min(0f)]
         public float fuseTime = 2f;
+
+        [Tooltip("Whether or not this should stick to the hit object.")]
+        public bool sticky = false;
 
         [Tooltip("Whether or not this should ignore the same objects as it's parent projectile.")]
         public bool inheritIgnore = false;
@@ -48,17 +47,13 @@ namespace Attacks
             }
         }
 
-        private GameObject bombPrefab;
-
-
-        private void Awake()
-        {
-            bombPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Source/Actions/Attack/AttackModifiers/SpawnBomb/Bomb.prefab");
-        }
-
         private void CreateBomb()
         {
-            Bomb newBomb = Instantiate(bombPrefab).GetComponent<Bomb>();
+            CreateBomb(null);
+        }
+        private void CreateBomb(Collider2D collider)
+        {
+            Bomb newBomb = new GameObject().AddComponent<Bomb>();
             newBomb.explosionRadius = explosionRadius;
             newBomb.fuseTime = fuseTime;
             newBomb.damageData = modifiedProjectile.attackData;
@@ -71,6 +66,11 @@ namespace Attacks
             if (inheritIgnore)
             {
                 newBomb.ignoredObjects = modifiedProjectile.IgnoredObjects;
+            }
+
+            if (sticky)
+            {
+                newBomb.transform.parent = collider.transform;
             }
 
             newBomb.transform.position = modifiedProjectile.transform.position;

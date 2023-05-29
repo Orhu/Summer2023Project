@@ -14,7 +14,7 @@ public class Bomb : MonoBehaviour
     public float fuseTime = 2f;
 
     // The objects not to damage when exploding.
-    public List<GameObject> ignoredObjects;
+    public List<GameObject> ignoredObjects = new List<GameObject>();
 
 
     // Invoked when this explodes.
