@@ -6,17 +6,27 @@ using Tile = Room.Tile;
 
 public class Pathfinding : MonoBehaviour
 {
+    // the request manager component that sends us requests
     private PathRequestManager requestManager;
 
     // represents the grid of this room
     private Room.RoomGrid grid;
 
+    /// <summary>
+    /// Initialize variables
+    /// </summary>
     void Awake()
     {
         grid = GetComponentInParent<Room>().ThisRoom;
         requestManager = GetComponent<PathRequestManager>();
     }
 
+    /// <summary>
+    /// Find a path from a given pos to a target pos
+    /// </summary>
+    /// <param name="startPos"> Starting position </param>
+    /// <param name="targetPos"> Target position </param>
+    /// <returns> Sends a signal to the request manager that a path has been found </returns>
     IEnumerator FindPath(Vector2 startPos, Vector2 targetPos)
     {
         Vector2[] waypoints = new Vector2[0];
@@ -82,6 +92,7 @@ public class Pathfinding : MonoBehaviour
     /// </summary>
     /// <param name="startTile"></param>
     /// <param name="endTile"></param>
+    /// <returns> Array containing waypoints to travel from start to end </returns>
     Vector2[] RetracePath(Tile startTile, Tile endTile)
     {
         List<Tile> path = new List<Tile>();
@@ -98,6 +109,11 @@ public class Pathfinding : MonoBehaviour
         return waypoints;
     }
 
+    /// <summary>
+    /// Simplifies path by removing unnecessary waypoints by determining directions
+    /// </summary>
+    /// <param name="path"> Input path </param>
+    /// <returns></returns>
     Vector2[] SimplifyPath(List<Tile> path)
     {
         List<Vector2> waypoints = new List<Vector2>();
@@ -141,6 +157,11 @@ public class Pathfinding : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Starts the FindPath coroutine from start to target pos
+    /// </summary>
+    /// <param name="startPos"> Starting position </param>
+    /// <param name="targetPos"> Target position </param>
     public void StartFindPath(Vector2 startPos, Vector2 targetPos)
     {
         StartCoroutine(FindPath(startPos, targetPos));

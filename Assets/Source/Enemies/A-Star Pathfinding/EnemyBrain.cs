@@ -53,12 +53,21 @@ public class EnemyBrain : MonoBehaviour
     [Tooltip("Draw debug gizmos?")]
     [SerializeField] private bool drawGizmos;
     
+    // current target
     private Transform target;
+    
+    // path to target 
     private Vector2[] path;
+    
+    // index of where we are in the path
     private int targetIndex;
 
+    // controller component for issuing commands
     private Controller controller;
 
+    /// <summary>
+    /// Requests path to target and initializes variables
+    /// </summary>
     void Start()
     {
         PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
@@ -66,6 +75,11 @@ public class EnemyBrain : MonoBehaviour
        // InvokeRepeating(nameof(GetTargetPosition), scanDelay, scanRate);
     }
 
+    /// <summary>
+    /// Called when a path is successfully found
+    /// </summary>
+    /// <param name="newPath"> The new path </param>
+    /// <param name="success"> Whether the path was successfully found or not </param>
     public void OnPathFound(Vector2[] newPath, bool success)
     {
         if (success)
@@ -120,6 +134,9 @@ public class EnemyBrain : MonoBehaviour
         controller.PerformAttack();
     }
 
+    /// <summary>
+    /// Draw gizmos
+    /// </summary>
     public void OnDrawGizmos()
     {
         if (!drawGizmos)

@@ -13,10 +13,21 @@ public class PathRequestManager : MonoBehaviour
     /// </summary>
     struct PathRequest
     {
+        // start position
         public Vector2 startPos;
+        
+        // end position
         public Vector2 endPos;
+        
+        // callback action
         public Action<Vector2[], bool> callback;
 
+        /// <summary>
+        /// Constructor for a pathfinding request
+        /// </summary>
+        /// <param name="myStart"> Starting position </param>
+        /// <param name="myEnd"> Target position </param>
+        /// <param name="myCallback"> What function to call when path calculation is complete </param>
         public PathRequest(Vector2 myStart, Vector2 myEnd, Action<Vector2[], bool> myCallback)
         {
             startPos = myStart;
@@ -34,10 +45,15 @@ public class PathRequestManager : MonoBehaviour
     // This instance of the path request manager
     private static PathRequestManager instance;
 
+    // The pathfinding component
     private Pathfinding pathfinding;
 
+    // Indicates if we are currently processing a path
     private bool isProcessingPath;
 
+    /// <summary>
+    /// Intiializes variables
+    /// </summary>
     void Awake()
     {
         instance = this;
@@ -57,6 +73,9 @@ public class PathRequestManager : MonoBehaviour
         instance.TryProcessNext();
     }
 
+    /// <summary>
+    /// Attempt to process the next request in the queue, if there is one
+    /// </summary>
     void TryProcessNext()
     {
         if (!isProcessingPath && pathRequestQueue.Count > 0)
@@ -67,6 +86,11 @@ public class PathRequestManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called when a path is finished processing
+    /// </summary>
+    /// <param name="path"> The new path </param>
+    /// <param name="success"> Whether a path was successfully found to the target </param>
     public void FinishedProcessingPath(Vector2[] path, bool success)
     {
         currentPathRequest.callback(path, success);
