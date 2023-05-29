@@ -18,7 +18,7 @@ namespace Attacks
         [SerializeField] private List<StatusEffect> statusEffects;
 
         // The projectile this modifies
-        public override Projectile ModifiedProjectile
+        public override Projectile modifiedProjectile
         {
             set
             {

@@ -121,7 +121,7 @@ namespace Attacks
             foreach (AttackModifier modifier in modifiers)
             {
                 AttackModifier instance = Instantiate(modifier);
-                instance.ModifiedProjectile = this;
+                instance.modifiedProjectile = this;
                 newModifiers.Add(Instantiate(modifier));
             }
 

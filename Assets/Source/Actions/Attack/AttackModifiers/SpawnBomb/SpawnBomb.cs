@@ -30,19 +30,19 @@ namespace Attacks
 
 
         // The projectile this modifies
-        [HideInInspector] private Projectile modifiedProjectile;
-        public override Projectile ModifiedProjectile
+        private Projectile _modifiedProjectile;
+        public override Projectile modifiedProjectile
         {
             set
             {
-                modifiedProjectile = value;
+                _modifiedProjectile = value;
                 if (spawnMode == SpawnMode.OnDestroyed)
                 {
-                    modifiedProjectile.onDestroyed += CreateBomb;
+                    _modifiedProjectile.onDestroyed += CreateBomb;
                 }
                 else
                 {
-                    modifiedProjectile.onHit += CreateBomb;
+                    _modifiedProjectile.onHit += CreateBomb;
                 }
             }
         }
@@ -56,7 +56,7 @@ namespace Attacks
             Bomb newBomb = new GameObject().AddComponent<Bomb>();
             newBomb.explosionRadius = explosionRadius;
             newBomb.fuseTime = fuseTime;
-            newBomb.damageData = modifiedProjectile.attackData;
+            newBomb.damageData = _modifiedProjectile.attackData;
             
             if (bombVisuals != null)
             {
@@ -65,7 +65,7 @@ namespace Attacks
 
             if (inheritIgnore)
             {
-                newBomb.ignoredObjects = modifiedProjectile.IgnoredObjects;
+                newBomb.ignoredObjects = _modifiedProjectile.IgnoredObjects;
             }
 
             if (sticky)
@@ -73,7 +73,7 @@ namespace Attacks
                 newBomb.transform.parent = collider.transform;
             }
 
-            newBomb.transform.position = modifiedProjectile.transform.position;
+            newBomb.transform.position = _modifiedProjectile.transform.position;
         }
     }
 }

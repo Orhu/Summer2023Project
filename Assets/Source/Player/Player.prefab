@@ -268,8 +268,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 2.5
-  acceleration: 100
-  deacceleration: 150
+  acceleration: 0
+  deacceleration: 25
 --- !u!114 &5436055868885082538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,6 +293,14 @@ PrefabInstance:
     - target: {fileID: 1023436346225110318, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
       propertyPath: m_Value
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4700101517325140728, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4700101517325140728, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4824836972866494860, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
       propertyPath: m_Name

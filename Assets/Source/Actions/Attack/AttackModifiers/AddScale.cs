@@ -14,7 +14,7 @@ namespace Attacks
         [SerializeField] private float scale;
 
         // The projectile this modifies
-        public override Projectile ModifiedProjectile
+        public override Projectile modifiedProjectile
         {
             set
             {

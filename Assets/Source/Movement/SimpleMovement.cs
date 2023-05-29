@@ -13,19 +13,14 @@ public class SimpleMovement : Movement
     private Rigidbody2D rb2d;
 
     [SerializeField]
-    [Tooltip("The max speed this can accelerate to")]
+    [Tooltip("The max speed in tiles/s this can accelerate to")]
     private float maxSpeed = 2;
     [SerializeField]
-    [Tooltip("The speed at which this accelerates to the desired move direction")]
+    [Tooltip("The speed in maxSpeed/s at which this accelerates to the desired move direction")]
     private float acceleration = 50;
     [SerializeField]
-    [Tooltip("The speed at which this accelerates to zero velocity")]
+    [Tooltip("The speed in maxSpeed/s at which this accelerates to zero velocity")]
     private float deacceleration = 100;
-    
-    // The current speed that this is moving at.
-    private float currentSpeed = 0;
-    // The last movement input.
-    private Vector2 oldMovementInput;
 
     /// <summary>
     /// Initializes the rigid body reference.
@@ -40,19 +35,17 @@ public class SimpleMovement : Movement
     /// </summary>
     private void FixedUpdate()
     {
-        if (MovementInput.magnitude > 0 && currentSpeed >= 0)
-        {
-            oldMovementInput = MovementInput;
-            currentSpeed += acceleration * maxSpeed * Time.deltaTime;
-        }
-        else
-        {
-            currentSpeed -= deacceleration * maxSpeed * Time.deltaTime;
-        }
-        currentSpeed = Mathf.Clamp(currentSpeed, 0, maxSpeed);
-        requestSpeedModifications?.Invoke(ref currentSpeed);
-        rb2d.velocity = oldMovementInput * currentSpeed;
+        float targetSpeed = maxSpeed;
+        requestSpeedModifications?.Invoke(ref targetSpeed);
+        Vector2 targetVelocity = MovementInput * targetSpeed;
 
+        Vector2 deltaVelocity = targetVelocity - rb2d.velocity;
+
+        float currentAcceleration = Time.deltaTime * maxSpeed;
+        currentAcceleration *= MovementInput.sqrMagnitude == 0 ? deacceleration : acceleration;
+
+        rb2d.velocity += Vector2.ClampMagnitude(deltaVelocity.normalized * currentAcceleration, deltaVelocity.magnitude);
+        Debug.Log(rb2d.velocity);
     }
 
 

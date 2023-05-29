@@ -11,6 +11,6 @@ namespace Attacks
     public abstract class AttackModifier : ScriptableObject
     {
         // The projectile this modifies
-        public abstract Projectile ModifiedProjectile { set; }
+        public abstract Projectile modifiedProjectile { set; }
     }
 }
