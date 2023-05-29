@@ -57,17 +57,19 @@ public class TemplateGenerationParameters
     {
         PossibleTiles possibleTiles = tileTypesToPossibleTiles.At(preferredTile.tileType);
 
-        if (possibleTiles.possibleTiles.Contains(preferredTile.preferredTile.GetComponent<Tile>()))
+        Tile returnTile = new Tile();
+
+        if (possibleTiles.possibleTiles.Contains(preferredTile.preferredTile))
         {
-            return preferredTile.preferredTile.GetComponent<Tile>();
+            return preferredTile.preferredTile.GetComponent<TileComponent>().tile.ShallowCopy();
         }
 
         if (possibleTiles.possibleTiles.Count != 0)
         {
-            return possibleTiles.possibleTiles[Random.Range(0, possibleTiles.possibleTiles.Count)];
+            return possibleTiles.possibleTiles[Random.Range(0, possibleTiles.possibleTiles.Count)].GetComponent<TileComponent>().tile.ShallowCopy();
         }
 
-        return possibleTiles.generic;
+        return possibleTiles.generic.GetComponent<TileComponent>().tile.ShallowCopy();
     }
     
     /// <summary>
@@ -146,7 +148,7 @@ public enum Difficulty
 public class RoomTypesToDifficultiesToTemplates
 {
     [Tooltip("The room types and their associated difficulties and their associated templates")]
-    [SerializeField] public List<RoomTypeToDifficultiesToTemplates> roomTypesToDifficultiesToTemplates = new List<RoomTypeToDifficultiesToTemplates>();
+    public List<RoomTypeToDifficultiesToTemplates> roomTypesToDifficultiesToTemplates = new List<RoomTypeToDifficultiesToTemplates>();
 
     /// <summary>
     /// Gets the difficulties to templates associated with the given room type
@@ -186,10 +188,10 @@ public class RoomTypesToDifficultiesToTemplates
 public struct RoomTypeToDifficultiesToTemplates
 {
     [Tooltip("The room type")]
-    [SerializeField] public RoomType roomType;
+    public RoomType roomType;
 
     [Tooltip("The room type's associated difficulties and templates")]
-    [SerializeField] public DifficultiesToTemplates difficultiesToTemplates;
+    public DifficultiesToTemplates difficultiesToTemplates;
 }
 
 /// <summary>
@@ -199,7 +201,7 @@ public struct RoomTypeToDifficultiesToTemplates
 public class DifficultiesToTemplates
 {
     [Tooltip("The difficulties and their associated templates")]
-    [SerializeField] public List<DifficultyToTemplates> difficultiesToTemplates = new List<DifficultyToTemplates>();
+    public List<DifficultyToTemplates> difficultiesToTemplates = new List<DifficultyToTemplates>();
 
     /// <summary>
     /// Finds the associated list of templates of the given difficulty
@@ -227,10 +229,10 @@ public class DifficultiesToTemplates
 public struct DifficultyToTemplates
 {
     [Tooltip("The difficulty")]
-    [SerializeField] public Difficulty difficulty;
+    public Difficulty difficulty;
 
     [Tooltip("The associated templates of that difficulty")]
-    [SerializeField] public List<GameObject> templates;
+    public List<GameObject> templates;
 }
 
 /// <summary>
@@ -240,7 +242,7 @@ public struct DifficultyToTemplates
 public class TileTypesToPossibleTiles
 {
     [Tooltip("Tile types and their associated possible tiles")]
-    [SerializeField] public List<TileTypeToPossibleTiles> tileTypesToPossibleTiles = new List<TileTypeToPossibleTiles>();
+    public List<TileTypeToPossibleTiles> tileTypesToPossibleTiles = new List<TileTypeToPossibleTiles>();
 
     /// <summary>
     /// Gets the associated possible tiles with the given tile type
@@ -268,20 +270,21 @@ public class TileTypesToPossibleTiles
 public struct TileTypeToPossibleTiles
 {
     [Tooltip("The tile type")]
-    [SerializeField] public TileType tileType;
+    public TileType tileType;
 
     [Tooltip("The possible tiles")]
-    [SerializeField] public PossibleTiles possibleTiles;
+    public PossibleTiles possibleTiles;
 }
 
 /// <summary>
 /// Holds a generic tile, and a list of possible spawnable tiles
 /// </summary>
+[System.Serializable]
 public struct PossibleTiles
 {
     [Tooltip("The generic version of this type of tile")]
-    [SerializeField] public Tile generic;
+    public GameObject generic;
 
     [Tooltip("The possible spawnable tiles (from the player deck)")]
-    [SerializeField] public List<Tile> possibleTiles;
+    public List<GameObject> possibleTiles;
 }

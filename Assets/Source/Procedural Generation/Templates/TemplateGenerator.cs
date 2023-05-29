@@ -14,23 +14,29 @@ public class TemplateGenerator : MonoBehaviour
     /// <param name="template"> The template to generate </param>
     public void Generate(Room room, Template template)
     {
+        GameObject tileContainer = new GameObject();
+        tileContainer.name = "Tile Container";
+        tileContainer.transform.parent = room.transform;
+        tileContainer.transform.localPosition = new Vector3(-room.roomSize.x / 2, -room.roomSize.y / 2, 0);
+
         for (int i = 0; i < template.roomSize.x; i++)
         {
             for (int j = 0; j < template.roomSize.y; j++)
             { 
-                TemplateTile templateTile = template.tiles[i, j];
+                TemplateTile templateTile = template.tiles[i][j];
 
                 if (templateTile == null || templateTile.tileType == TileType.None)
                 {
                     continue;
                 }
 
-                TemplateGenerationParameters templateGenParams = GetComponent<FloorGenerator>().floorGenerationParameters.templateGenerationParameters;
-                Tile createdTile = templateGenParams.GetRandomTile(templateTile);
+                TemplateGenerationParameters templateGenParams = transform.parent.GetComponent<FloorGenerator>().floorGenerationParameters.templateGenerationParameters;
+                Tile createdTile = templateGenParams.GetRandomTile(templateTile);    
                 createdTile.gridLocation = new Vector2Int(i, j);
                 createdTile.spawnedObject = Instantiate(createdTile.spawnedObject);
-                createdTile.spawnedObject.transform.parent = room.transform;
+                createdTile.spawnedObject.transform.parent = tileContainer.transform;
                 createdTile.spawnedObject.transform.localPosition = new Vector2(i, j);
+                createdTile.spawnedObject.SetActive(true);
             }
         }
     }

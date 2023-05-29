@@ -6,16 +6,10 @@ using UnityEngine;
 /// Tiles for use in the room grid. Holds information for pathfinding and spawning the tiles
 /// </summary>
 [System.Serializable]
-public class Tile
+public class Tile : IHeapItem<Tile>
 {
     [Tooltip("is this tile walkable?")]
     [SerializeField] public bool walkable;
-
-    // parent of this tile, as determined by pathfinding algorithm
-    public Tile parent;
-
-    // the x and y location of this tile within the 2D array grid
-    public Vector2Int gridLocation;
 
     // cost of reaching this node from the start node, tracking cumulative cost incurred so far
     public int gCost;
@@ -26,11 +20,60 @@ public class Tile
     // we can use hCost + gCost to get the total cost of reaching this node
     public int fCost => gCost + hCost;
 
+    // parent of this tile, as determined by pathfinding algorithm
+    [HideInInspector] public Tile parent;
+
+    // the x and y location of this tile within the 2D array grid
+    [HideInInspector] public Vector2Int gridLocation;
+
+    // heap index of this tile
+    private int _heapIndex;
+    [HideInInspector] public int heapIndex
+    {
+        get => _heapIndex;
+        set => _heapIndex = value;
+    }
+
+    /// <summary>
+    /// Compare this tile to another tile
+    /// </summary>
+    /// <param name="other"> other tile to compare to </param>
+    /// <returns> 1 if this tile has a lower fCost, -1 if this tile has a higher fCost, 0 if they are equal </returns>
+    public int CompareTo(Tile other)
+    {
+        int compare = fCost.CompareTo(other.fCost);
+        if (compare == 0)
+        {
+            // tiebreakers decided based on hCost
+            compare = hCost.CompareTo(other.hCost);
+        }
+
+        // heap comparison is in reverse order from int comparison
+        return -compare;
+    }
+
     [Tooltip("The type of this tile")]
     [SerializeField] public TileType type = TileType.None;
 
     [Tooltip("The game object on this tile (or to spawn on this tile)")]
     [SerializeField] public GameObject spawnedObject;
+
+    /// <summary>
+    /// Creates a shallow copy of the tile
+    /// </summary>
+    /// <returns> The shallow copy </returns>
+    public Tile ShallowCopy()
+    {
+        Tile copiedTile = new Tile();
+        copiedTile.walkable = walkable;
+        copiedTile.parent = parent;
+        copiedTile.gridLocation = gridLocation;
+        copiedTile.gCost = gCost;
+        copiedTile.hCost = hCost;
+        copiedTile.type = type;
+        copiedTile.spawnedObject = spawnedObject;
+        return copiedTile;
+    }
 }
 
 /// <summary>

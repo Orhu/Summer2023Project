@@ -629,10 +629,50 @@ MonoBehaviour:
       strictnessNumDoors: 10
     templateGenerationParameters:
       templatesPool:
-        roomTypesToDifficultiesToTemplates: []
-      hardRoomPercentageIncrease: 0
+        roomTypesToDifficultiesToTemplates:
+        - roomType: 2
+          difficultiesToTemplates:
+            difficultiesToTemplates:
+            - difficulty: 0
+              templates:
+              - {fileID: 7963333090731212111, guid: 526bf081a3964a04abea6468996d70b3, type: 3}
+        - roomType: 1
+          difficultiesToTemplates:
+            difficultiesToTemplates:
+            - difficulty: 1
+              templates:
+              - {fileID: 5313591176924185987, guid: 1405fb2bd4e883d48b55f82dfb291e71, type: 3}
+              - {fileID: 9053152825564546870, guid: 5ef4d7612d4d3324195b9cebd54a7d98, type: 3}
+            - difficulty: 2
+              templates:
+              - {fileID: 2903055439089201911, guid: 22d67a186a30d2f418059b2dabaee50f, type: 3}
+              - {fileID: 8661304923741462523, guid: abc493aedab221f4b952c26bd9c29594, type: 3}
+        - roomType: 3
+          difficultiesToTemplates:
+            difficultiesToTemplates:
+            - difficulty: 0
+              templates:
+              - {fileID: 5313591176924185987, guid: 1405fb2bd4e883d48b55f82dfb291e71, type: 3}
+              - {fileID: 9053152825564546870, guid: 5ef4d7612d4d3324195b9cebd54a7d98, type: 3}
+        - roomType: 4
+          difficultiesToTemplates:
+            difficultiesToTemplates:
+            - difficulty: 0
+              templates:
+              - {fileID: 1965839902288551373, guid: 3853af9696d2c0e44b23865fb2386de1, type: 3}
+        - roomType: 5
+          difficultiesToTemplates:
+            difficultiesToTemplates:
+            - difficulty: 0
+              templates:
+              - {fileID: 3801689193944766413, guid: 63cac9f621695904d99bd8d015841862, type: 3}
+      hardRoomPercentageIncrease: 20
       tileTypesToPossibleTiles:
-        tileTypesToPossibleTiles: []
+        tileTypesToPossibleTiles:
+        - tileType: 2
+          possibleTiles:
+            generic: {fileID: 4079167132613704304, guid: 8ca5b1c429868ff48bd32c0320125269, type: 3}
+            possibleTiles: []
     roomSize: {x: 13, y: 9}
     roomTypesToExteriorGenerationParameters:
       roomTypesToRoomExteriorGenerationParameters:
