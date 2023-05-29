@@ -11,6 +11,9 @@ public class FloorGenerationParameters
     [Tooltip("The generation parameters for the layout of this floor")]
     [SerializeField] public LayoutGenerationParameters layoutGenerationParameters;
 
+    [Tooltip("The template generation parameters for this floor")]
+    [SerializeField] public TemplateGenerationParameters templateGenerationParameters;
+
     [Tooltip("The size of a room on this floor")]
     [SerializeField] public Vector2Int roomSize;
 
