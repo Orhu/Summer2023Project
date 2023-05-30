@@ -45,7 +45,6 @@ public class SimpleMovement : Movement
         currentAcceleration *= MovementInput.sqrMagnitude == 0 ? deacceleration : acceleration;
 
         rb2d.velocity += Vector2.ClampMagnitude(deltaVelocity.normalized * currentAcceleration, deltaVelocity.magnitude);
-        Debug.Log(rb2d.velocity);
     }
 
 

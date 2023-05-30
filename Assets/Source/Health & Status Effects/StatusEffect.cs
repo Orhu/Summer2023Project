@@ -35,7 +35,7 @@ public abstract class StatusEffect : ScriptableObject
     /// </summary>
     /// <param name="gameObject"> The object to apply the status effect.</param>
     /// <returns> The status effect that was created. </returns>
-    internal virtual StatusEffect Instantiate(GameObject gameObject)
+    public virtual StatusEffect Instantiate(GameObject gameObject)
     {
         StatusEffect instance = (StatusEffect)CreateInstance(GetType());
 
@@ -57,7 +57,7 @@ public abstract class StatusEffect : ScriptableObject
     /// </summary>
     /// <param name="other"> The other particle effect to stack this onto. </param>
     /// <returns> Whether or not this status effect was consumed by the stacking. </returns>
-    internal virtual bool Stack(StatusEffect other)
+    public virtual bool Stack(StatusEffect other)
     {
         if (other.GetType() != GetType())
         {
@@ -71,7 +71,7 @@ public abstract class StatusEffect : ScriptableObject
     /// <summary>
     /// Called every tick and updates the duration.
     /// </summary>
-    internal virtual void Update() 
+    public virtual void Update() 
     {
         Duration -= Time.deltaTime;
     }

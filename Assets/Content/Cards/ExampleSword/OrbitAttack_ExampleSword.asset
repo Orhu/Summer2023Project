@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
   m_Name: OrbitAttack_ExampleSword
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
-  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   attack:
     damage: 1
     damageType: 1
     statusEffects: []
   hitCount: 30
+  applyDamageOnHit: 1
   modifiers:
   - {fileID: 11400000, guid: 643435c34547da24dbe03731c0b2e8df, type: 2}
+  - {fileID: 11400000, guid: 14ebc74d2925e1d40affbc9e66348723, type: 2}
   shape: {fileID: 11400000, guid: 974e8cc2eb24bdd4d98a1033c08aba7c, type: 2}
   lifetime: 0.33333334
   initialSpeed: 4.712389
@@ -34,6 +34,8 @@ MonoBehaviour:
   detachVisualsBeforeDestroy: 0
   spawnLocation: 0
   aimMode: 0
+  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
+  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   spawnSequence:
   - delay: 0
     startingAngle: 45
