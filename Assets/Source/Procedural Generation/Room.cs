@@ -1,230 +1,100 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 /// <summary>
-/// The room, that handles enemy and trap generation when entered
+/// Holds a grid of tiles, and handles any room behaviors
 /// </summary>
 public class Room : MonoBehaviour
 {
-    // TODO: change this to actually use art, also make it so collider maps only generate for walls or whatever
-    [Tooltip("The tile to use to create the walls")]
-    public TileBase tile;
+    // The grid of tiles
+    [HideInInspector] public Tile[,] roomGrid;
 
-    // The dimensions of this room
-    [System.NonSerialized] 
-    public Vector2Int size = new Vector2Int(11, 11);
+    // The size of the room
+    [HideInInspector] public Vector2Int roomSize;
 
-    // The size of the tiles
-    // TODO: Actually implement this
+    // Returns the size of the room, x * y
     [HideInInspector]
-    public Vector2 cellSize = new Vector2(1, 1);
-
-    // The directions that this room has doors in
-    [HideInInspector]
-    public Direction directions;
-
-    // The tilemap of this room; defines the shape of this room.
-    Tilemap tilemap;
-
-    // The collider that detects when this room has been entered
-    BoxCollider2D roomBox;
-
-    // Whether or not this room has been generated
-    bool generated = false;
-
-    // Whether or not this room is the exit room
-    [HideInInspector]
-    public bool exitRoom = false;
-
-    /// <summary>
-    /// Initializes the collision and the tilemap
-    /// </summary>
-    void Start()
+    public int maxSize
     {
-        CreateTilemap();
-        GetComponent<TilemapRenderer>().enabled = false;
+        // TODO not sure if this is right
+        get => roomSize.x * roomSize.y;
+    }
 
-        roomBox = gameObject.AddComponent<BoxCollider2D>();
-        roomBox.transform.parent = this.transform;
-        roomBox.transform.position = this.transform.position;
-        roomBox.size = new Vector3(size.x, size.y, 0);
-        roomBox.isTrigger = true;
+    // The type of the room
+    [HideInInspector] public RoomType roomType;
+
+    // The location of the room in the map
+    [HideInInspector] public Vector2Int roomLocation;
+
+    // Whether this room has been generated or not
+    [HideInInspector] private bool generated = false;
+    
+    /// <summary>
+    /// Gets the tile at the given world position
+    /// </summary>
+    /// <param name="worldPos"> The world position </param>
+    /// <returns> The tile </returns>
+    public Tile WorldPosToTile(Vector2 worldPos)
+    {
+        Vector2Int gridLocation = new Vector2Int();
+        gridLocation.x = (int) (worldPos.x - transform.position.x) / roomSize.x;
+        gridLocation.y = (int) (worldPos.y - transform.position.y) / roomSize.y;
+        return roomGrid[gridLocation.x, gridLocation.y];
     }
 
     /// <summary>
-    /// Creates a tilemap with the size of the room
+    /// Gets the world position the given tile
     /// </summary>
-    void CreateTilemap()
+    /// <param name="tile"> The tile </param>
+    /// <returns> The world position </returns>
+    public Vector2 TileToWorldPos(Tile tile)
     {
-        gameObject.AddComponent<Grid>();
-        tilemap = gameObject.AddComponent<Tilemap>();
-
-        Vector2Int endOffset = new Vector2Int();
-        if (size.x % 2 == 0)
-        {
-            endOffset.x = size.x / 2 - 1;
-        }
-        else
-        {
-            endOffset.x = size.x / 2;
-        }
-
-        if (size.y % 2 == 0)
-        {
-            endOffset.y = size.y / 2 - 1;
-        }
-        else
-        {
-            endOffset.y = size.y / 2;
-        }
-
-        for (int x = 0; x < size.x; x++)
-        {
-            if (!ShouldBeDoor(new Vector2Int(x, 0)))
-            {
-                tilemap.SetTile(new Vector3Int(x - (size.x / 2), -(size.y / 2), 0), tile);
-            }
-            if (!ShouldBeDoor(new Vector2Int(x, size.y - 1)))
-            {
-                tilemap.SetTile(new Vector3Int(x - (size.x / 2), endOffset.y, 0), tile);
-            }
-        }
-
-        for (int y = 1; y < size.y - 1; y++)
-        {
-            if (!ShouldBeDoor(new Vector2Int(0, y)))
-            {
-                tilemap.SetTile(new Vector3Int(-(size.x / 2), y - (size.y / 2), 0), tile);
-            }
-            if (!ShouldBeDoor(new Vector2Int(size.x - 1, y)))
-            {
-                tilemap.SetTile(new Vector3Int(endOffset.x, y - (size.y / 2), 0), tile);
-            }
-        }
-
-        tilemap.CompressBounds();
-
-        gameObject.AddComponent<TilemapCollider2D>();
-        gameObject.AddComponent<TilemapRenderer>();
+        Vector2 worldPos = new Vector2();
+        worldPos.x = tile.gridLocation.x * roomSize.x + transform.position.x;
+        worldPos.y = tile.gridLocation.y * roomSize.y + transform.position.y;
+        return worldPos;
     }
 
     /// <summary>
-    /// Checks whether the position on the tilemap should be a door
+    /// Gets the neighbors of a given tile
     /// </summary>
-    /// <param name="pos"> The position on the tilemap to check </param>
-    /// <returns> Whether or not the position should be a door </returns>
-    bool ShouldBeDoor(Vector2Int pos)
+    /// <param name="tile"> The tile </param>
+    /// <returns> The neighbors </returns>
+    public List<Tile> GetNeighbors(Tile tile)
     {
-        if (directions == Direction.None)
+        List<Tile> neighbors = new List<Tile>();
+
+        for (int i = 1; i <= (int) Direction.Down; i *= 2)
         {
-            return false;
+            Vector2Int locationOffset = new Vector2Int();
+            locationOffset.x = System.Convert.ToInt32(((Direction) i & Direction.Right) != Direction.None) - System.Convert.ToInt32(((Direction)i & Direction.Left) != Direction.None);
+            locationOffset.y = System.Convert.ToInt32(((Direction) i & Direction.Up) != Direction.None) - System.Convert.ToInt32(((Direction)i & Direction.Down) != Direction.None);
+
+            bool outOfXRange = tile.gridLocation.x + locationOffset.x < 0 || tile.gridLocation.x + locationOffset.x >= roomSize.x;
+            bool outOfYRange = tile.gridLocation.y + locationOffset.y < 0 || tile.gridLocation.y + locationOffset.y >= roomSize.y;
+            if (outOfXRange || outOfYRange) { continue; }
+
+            neighbors.Add(roomGrid[tile.gridLocation.x + locationOffset.x, tile.gridLocation.y + locationOffset.y]);
         }
 
-        if ((pos.x != 0 && pos.x != size.x - 1) && (pos.y != 0 && pos.y != size.y - 1))
-        {
-            return false;
-        }
-
-        if (((directions & Direction.Up) != Direction.None) && pos.y == size.y - 1 && (pos.x == (size.x / 2) || pos.x == (size.x / 2) - System.Convert.ToInt32((size.x % 2) == 0)))
-        {
-            return true;
-        }
-
-        if (((directions & Direction.Left) != Direction.None) && pos.x == 0 && (pos.y == (size.y / 2) || pos.y == (size.y / 2) - System.Convert.ToInt32((size.y % 2) == 0)))
-        {
-            return true;
-        }
-
-        if (((directions & Direction.Down) != Direction.None) && pos.y == 0 && (pos.x == (size.x / 2) || pos.x == (size.x / 2) - System.Convert.ToInt32((size.x % 2) == 0)))
-        {
-            return true;
-        }
-
-        if (((directions & Direction.Right) != Direction.None) && pos.x == size.x - 1 && (pos.y == (size.y / 2) || pos.y == (size.y / 2) - System.Convert.ToInt32((size.y % 2) == 0)))
-        {
-            return true;
-        }
-
-        return false;
+        return neighbors;
     }
 
     /// <summary>
-    /// Generates the enemies and traps and other things that appear in a room
+    /// TODO: Implement this
     /// </summary>
-    public void GenerateRoom()
+    public void OpenDoors()
     {
-        // Don't generate if already generated
-        if (generated)
-        {
-            return;
-        }
-        generated = true;
 
-        RoomGenerationParameters roomParams = ProceduralGeneration.proceduralGenerationInstance.GetRoomGenerationParameters();
+    }
 
-        if (exitRoom)
-        {
-            Vector2 offset = -new Vector2(size.x / 2 - 0.5f, size.y / 2 - 0.5f);
-            Vector2 location = (new Vector2(size.x / 2, size.y / 2) + offset) * cellSize;
-            location.x += transform.position.x;
-            location.y += transform.position.y;
-            GameObject exitObject = Instantiate(roomParams.exitRoomObject, location, Quaternion.identity);
-            exitObject.SetActive(true);
-            return;
-        }
+    /// <summary>
+    /// TODO: Implement this
+    /// </summary>
+    public void CloseDoors()
+    {
 
-        List<Vector2> spawnableLocations = new List<Vector2>();
-        for (int i = 1; i < size.x - 1; i++)
-        {
-            for (int j = 1; j < size.y - 1; j++)
-            {
-                if ((directions & Direction.Right) != Direction.None && ShouldBeDoor(new Vector2Int(i + 1, j)))
-                {
-                    continue;
-                }
-                if ((directions & Direction.Up) != Direction.None && ShouldBeDoor(new Vector2Int(i, j + 1)))
-                {
-                    continue;
-                }
-                if ((directions & Direction.Left) != Direction.None && ShouldBeDoor(new Vector2Int(i - 1, j)))
-                {
-                    continue;
-                }
-                if ((directions & Direction.Down) != Direction.None && ShouldBeDoor(new Vector2Int(i, j - 1)))
-                {
-                    continue;
-                }
-                spawnableLocations.Add(new Vector2(i, j));
-            }
-        }
-
-        for (int i = 0; i < roomParams.numEnemies; i++)
-        {
-            int randomLocation = Random.Range(0, spawnableLocations.Count);
-            Vector2 offset = -new Vector2(size.x / 2 - 0.5f, size.y / 2 - 0.5f);
-            Vector2 enemyLocation = (spawnableLocations[randomLocation] + offset) * cellSize;
-            enemyLocation.x += transform.position.x;
-            enemyLocation.y += transform.position.y;
-            spawnableLocations.RemoveAt(randomLocation);
-            GameObject newEnemy = Instantiate(roomParams.GetRandomEnemyWeighted(), enemyLocation, Quaternion.identity);
-            newEnemy.SetActive(true);
-            newEnemy.transform.parent = transform;
-        }
-
-        for (int i = 0; i < roomParams.numObstacles; i++)
-        {
-            int randomLocation = Random.Range(0, spawnableLocations.Count);
-            Vector2 offset = -new Vector2(size.x / 2 - 0.5f, size.y / 2 - 0.5f);
-            Vector2 obstacleLocation = (spawnableLocations[randomLocation] + offset) * cellSize;
-            obstacleLocation.x += transform.position.x;
-            obstacleLocation.y += transform.position.y;
-            spawnableLocations.RemoveAt(randomLocation);
-            GameObject newObstacle = Instantiate(roomParams.GetRandomObstacleWeighted(), obstacleLocation, Quaternion.identity);
-            newObstacle.SetActive(true);
-            newObstacle.transform.parent = transform;
-        }
     }
 
     /// <summary>
@@ -235,16 +105,24 @@ public class Room : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            GetComponent<TilemapRenderer>().enabled = true;
-            GenerateRoom();
+            if (!generated)
+            {
+                Template template = transform.parent.gameObject.GetComponent<FloorGenerator>().floorGenerationParameters.templateGenerationParameters.GetRandomTemplate(roomType);
+                GetComponent<TemplateGenerator>().Generate(this, template);
+                generated = true;
+            }
         }
     }
 
+    /// <summary>
+    /// Handles when the player exits the room
+    /// </summary>
+    /// <param name="collision"> The collider that exited the trigger </param>
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        /*if (collision.gameObject.CompareTag("Player"))
         {
             GetComponent<TilemapRenderer>().enabled = false;
-        }
+        }*/
     }
 }
