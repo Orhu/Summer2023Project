@@ -102,6 +102,11 @@ public class EnemyBrain : MonoBehaviour
     /// <returns></returns>
     IEnumerator FollowPath()
     {
+        if (path.Length == 0)
+        {
+             yield break;
+        }
+        
         print(this.name + ": Following path");
         Vector2 currentWaypoint = path[0];
 

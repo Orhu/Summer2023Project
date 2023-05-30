@@ -110,9 +110,14 @@ public class Heap<T> where T : IHeapItem<T>
                 }
                 else
                 {
-                    // parent has no children, it is in the right place
+                    // parent has no right child, nothing else to do
                     return;
                 }
+            }
+            else
+            {
+                // no children
+                return;
             }
         }
     }
