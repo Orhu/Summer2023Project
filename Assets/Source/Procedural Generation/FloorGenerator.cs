@@ -19,7 +19,25 @@ public class FloorGenerator : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        GetSpecialRoomsFromDeck();
+        Deck.playerDeck.onCardAdded += OnCardAdded;
+        Deck.playerDeck.onCardRemoved += OnCardRemoved;
         map = GetComponent<LayoutGenerator>().Generate(floorGenerationParameters.layoutGenerationParameters);
         GetComponent<RoomExteriorGenerator>().Generate(floorGenerationParameters.roomTypesToExteriorGenerationParameters, map, floorGenerationParameters.roomSize);
+    }
+
+    private void GetSpecialRoomsFromDeck()
+    {
+        
+    }
+
+    private void OnCardAdded(Card card)
+    {
+
+    }
+
+    private void OnCardRemoved(Card card)
+    {
+
     }
 }

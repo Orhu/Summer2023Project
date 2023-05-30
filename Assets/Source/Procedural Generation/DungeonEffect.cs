@@ -8,15 +8,19 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewDungeonEffect", menuName = "Cards/DungeonEffect", order = 1)]
 public class DungeonEffect : ScriptableObject
 {
-    //[Tooltip("The room generation parameters that are added to the current parameters (e.g. if current numEnemies is one, and the added numEnemies is also one, the new current is 2")]
-   // public RoomGenerationParameters addedRoomGenerationParameters;
-
-    //[Tooltip("The room generation parameters that are removed from the current parameters (e.g. if current numEnemies is one, and the removed numEnemies is also one, the new current is 0")]
-    //public RoomGenerationParameters removedRoomGenerationParameters;
-
     [Tooltip("The description of the dungeon effect")]
     public string description = "";
 
+    [Tooltip("The special rooms that this card will add (to the next floor). These game objects must have a template component.")]
+    List<GameObject> specialRooms;
+
+    [Tooltip("The tiles that this card will add. These game objects must have tile components.")]
+    List<GameObject> tiles;
+
+    /// <summary>
+    /// Returns the formatted description for display
+    /// </summary>
+    /// <returns> The formatted description </returns>
     public string GetFormattedDescription()
     {
         return description;
