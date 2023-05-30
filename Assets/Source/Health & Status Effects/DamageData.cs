@@ -1,4 +1,3 @@
-using CardSystem;
 using Skaillz.EditInline;
 using System.Collections.Generic;
 using UnityEngine;
