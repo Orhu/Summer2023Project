@@ -22,7 +22,9 @@ public class LockCameraToRoom : MonoBehaviour
     // A reference to the player
     GameObject player;
 
-    // Gets the room scale
+    /// <summary>
+    /// Initializes the height, floor generator, and player references
+    /// </summary>
     void Start()
     {
         Vector2 roomScale = FloorGenerator.floorGeneratorInstance.floorGenerationParameters.roomSize;
