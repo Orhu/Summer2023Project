@@ -10,7 +10,7 @@ public class Destroy : MonoBehaviour
     /// <summary>
     /// Destroys the game object
     /// </summary>
-    public void OnDestroy()
+    public void DestroyMe()
     {
         Destroy(gameObject);
     }
