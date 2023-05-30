@@ -9,7 +9,7 @@ using UnityEngine;
 public class Tile : IHeapItem<Tile>
 {
     [Tooltip("is this tile walkable?")]
-    [SerializeField] public bool walkable;
+    [SerializeField] public bool walkable = true;
 
     // cost of reaching this node from the start node, tracking cumulative cost incurred so far
     public int gCost;
