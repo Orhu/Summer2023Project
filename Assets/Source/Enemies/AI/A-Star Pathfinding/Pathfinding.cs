@@ -8,15 +8,11 @@ public class Pathfinding : MonoBehaviour
     // the request manager component that sends us requests
     private PathRequestManager requestManager;
 
-    // The room this enemy is part of
-    private Room room;
-
     /// <summary>
     /// Initialize variables
     /// </summary>
     void Awake()
     {
-        room = GetComponentInParent<Room>();
         requestManager = GetComponent<PathRequestManager>();
     }
 
@@ -25,8 +21,9 @@ public class Pathfinding : MonoBehaviour
     /// </summary>
     /// <param name="startPos"> Starting position </param>
     /// <param name="targetPos"> Target position </param>
+    /// <param name="room"> The room the enemy is a part of </param>
     /// <returns> Sends a signal to the request manager that a path has been found </returns>
-    IEnumerator FindPath(Vector2 startPos, Vector2 targetPos)
+    IEnumerator FindPath(Vector2 startPos, Vector2 targetPos, Room room)
     {
         Vector2[] waypoints = new Vector2[0];
         bool pathfindSuccess = false;
@@ -80,7 +77,7 @@ public class Pathfinding : MonoBehaviour
         yield return null;
         if (pathfindSuccess)
         {
-            waypoints = RetracePath(startTile, targetTile);
+            waypoints = RetracePath(startTile, targetTile, room);
         }
 
         requestManager.FinishedProcessingPath(waypoints, pathfindSuccess);
@@ -89,10 +86,11 @@ public class Pathfinding : MonoBehaviour
     /// <summary>
     /// Retrace path backwards via parents to determine final shortest path
     /// </summary>
-    /// <param name="startTile"></param>
-    /// <param name="endTile"></param>
+    /// <param name="startTile"> Start tile </param>
+    /// <param name="endTile"> End tile </param>
+    /// <param name="room"> The room the enemy is a part of </param>
     /// <returns> Array containing waypoints to travel from start to end </returns>
-    Vector2[] RetracePath(Tile startTile, Tile endTile)
+    Vector2[] RetracePath(Tile startTile, Tile endTile, Room room)
     {
         List<Tile> path = new List<Tile>();
         Tile currentTile = endTile;
@@ -103,7 +101,7 @@ public class Pathfinding : MonoBehaviour
             currentTile = currentTile.parent;
         }
 
-        Vector2[] waypoints = SimplifyPath(path);
+        Vector2[] waypoints = SimplifyPath(path, room);
         Array.Reverse(waypoints);
         return waypoints;
     }
@@ -112,8 +110,9 @@ public class Pathfinding : MonoBehaviour
     /// Simplifies path by removing unnecessary waypoints by determining directions
     /// </summary>
     /// <param name="path"> Input path </param>
+    /// <param name="room"> The room the enemy is a part of </param>
     /// <returns></returns>
-    Vector2[] SimplifyPath(List<Tile> path)
+    Vector2[] SimplifyPath(List<Tile> path, Room room)
     {
         List<Vector2> waypoints = new List<Vector2>();
         Vector2 directionOld = Vector2.zero;
@@ -161,8 +160,9 @@ public class Pathfinding : MonoBehaviour
     /// </summary>
     /// <param name="startPos"> Starting position </param>
     /// <param name="targetPos"> Target position </param>
-    public void StartFindPath(Vector2 startPos, Vector2 targetPos)
+    /// <param name="room"> The room this enemy is part of </param>
+    public void StartFindPath(Vector2 startPos, Vector2 targetPos, Room room)
     {
-        StartCoroutine(FindPath(startPos, targetPos));
+        StartCoroutine(FindPath(startPos, targetPos, room));
     }
 }

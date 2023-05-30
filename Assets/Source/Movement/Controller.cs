@@ -104,15 +104,17 @@ public class Controller : MonoBehaviour, IActor
     /// </summary>
     /// <param name="target"> Target to move to </param>
     /// <param name="buffer"> How close to get to a tile before being considered "arrived" </param>
-    public void MoveTowards(Vector2 target, float buffer)
+    public void MoveTowards(Vector2 target)
     {
         var myPos = (Vector2)transform.position;
         var targetPos = target;
         
-        var needToMoveUp = targetPos.y + buffer > myPos.y;
-        var needToMoveDown = targetPos.y - buffer < myPos.y;
-        var needToMoveRight = targetPos.x + buffer > myPos.x;
-        var needToMoveLeft = targetPos.x - buffer < myPos.x;
+        var needToMoveUp = targetPos.y > myPos.y;
+        var needToMoveDown = targetPos.y < myPos.y;
+        var needToMoveRight = targetPos.x > myPos.x;
+        var needToMoveLeft = targetPos.x < myPos.x;
+        
+        print(this.name + ": Issuing movement command");
         
         // compare the two positions to determine inputs
         if (needToMoveUp && needToMoveDown)
@@ -173,7 +175,18 @@ public class Controller : MonoBehaviour, IActor
     public Vector3 GetActionAimPosition()
     {
         if (useEnemyLogic)
-            return enemyBrain.GetTargetPosition();
+        {
+            var targetPos = enemyBrain.GetTargetPosition();
+            if (targetPos != null)
+            {
+                return targetPos.transform.position;
+            }
+            else
+            {
+                // TODO probably think of a better fail case than just returning the zero vector
+                return Vector2.zero;
+            }
+        }
 
         return Vector3.Scale(Camera.main.ScreenToWorldPoint(Input.mousePosition), new Vector3(1, 1, 0));
     }

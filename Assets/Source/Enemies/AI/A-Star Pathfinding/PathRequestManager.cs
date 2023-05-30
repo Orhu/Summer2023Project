@@ -22,17 +22,21 @@ public class PathRequestManager : MonoBehaviour
         // callback action
         public Action<Vector2[], bool> callback;
 
+        // the room the enemy is a part of
+        public Room room;
+
         /// <summary>
         /// Constructor for a pathfinding request
         /// </summary>
         /// <param name="myStart"> Starting position </param>
         /// <param name="myEnd"> Target position </param>
         /// <param name="myCallback"> What function to call when path calculation is complete </param>
-        public PathRequest(Vector2 myStart, Vector2 myEnd, Action<Vector2[], bool> myCallback)
+        public PathRequest(Vector2 myStart, Vector2 myEnd, Action<Vector2[], bool> myCallback, Room myRoom)
         {
             startPos = myStart;
             endPos = myEnd;
             callback = myCallback;
+            room = myRoom;
         }
     }
 
@@ -66,9 +70,9 @@ public class PathRequestManager : MonoBehaviour
     /// <param name="pathStart"> Start location </param>
     /// <param name="pathEnd"> End location </param>
     /// <param name="callback"> Action that will receive the found path and a boolean saying if the path was found </param>
-    public static void RequestPath(Vector2 pathStart, Vector2 pathEnd, Action<Vector2[], bool> callback)
+    public static void RequestPath(Vector2 pathStart, Vector2 pathEnd, Action<Vector2[], bool> callback, Room myRoom)
     {
-        PathRequest newRequest = new PathRequest(pathStart, pathEnd, callback);
+        PathRequest newRequest = new PathRequest(pathStart, pathEnd, callback, myRoom);
         instance.pathRequestQueue.Enqueue(newRequest);
         instance.TryProcessNext();
     }
@@ -82,7 +86,7 @@ public class PathRequestManager : MonoBehaviour
         {
             currentPathRequest = pathRequestQueue.Dequeue();
             isProcessingPath = true;
-            pathfinding.StartFindPath(currentPathRequest.startPos, currentPathRequest.endPos);
+            pathfinding.StartFindPath(currentPathRequest.startPos, currentPathRequest.endPos, currentPathRequest.room);
         }
     }
 
