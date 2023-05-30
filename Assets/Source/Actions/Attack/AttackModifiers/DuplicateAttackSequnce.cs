@@ -7,7 +7,7 @@ using UnityEngine;
 public class DuplicateAttackSequence : AttackModifier
 {
     // The projectile this modifies
-    public override Projectile<ProjectileSpawnInfo> modifiedProjectile
+    public override Projectile modifiedProjectile
     {
         set
         {

@@ -1,4 +1,5 @@
 using UnityEngine;
+using static Attack;
 
 /// <summary>
 /// A projectile that moves in a straight line.

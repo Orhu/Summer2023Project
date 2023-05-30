@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static Attack;
 
 /// <summary>
 /// An object that travels and deals an attack when it collides with an object.
