@@ -37,22 +37,23 @@ public class Room : MonoBehaviour
     /// <returns> The tile </returns>
     public Tile WorldPosToTile(Vector2 worldPos)
     {
+        Debug.Log("first world pos: " + worldPos.ToString());
         Vector2Int gridLocation = new Vector2Int();
-        gridLocation.x = (int) (worldPos.x - transform.position.x) / roomSize.x;
-        gridLocation.y = (int) (worldPos.y - transform.position.y) / roomSize.y;
+        gridLocation.x = Mathf.RoundToInt(worldPos.x - (transform.position.x - roomSize.x / 2));
+        gridLocation.y = Mathf.RoundToInt(worldPos.y - (transform.position.y - roomSize.y / 2));
         return roomGrid[gridLocation.x, gridLocation.y];
     }
 
     /// <summary>
-    /// Gets the world position the given tile
+    /// Gets the world position of the given tile
     /// </summary>
     /// <param name="tile"> The tile </param>
     /// <returns> The world position </returns>
     public Vector2 TileToWorldPos(Tile tile)
     {
         Vector2 worldPos = new Vector2();
-        worldPos.x = tile.gridLocation.x * roomSize.x + transform.position.x;
-        worldPos.y = tile.gridLocation.y * roomSize.y + transform.position.y;
+        worldPos.x = tile.gridLocation.x + transform.position.x - roomSize.x / 2 + 0.5f;
+        worldPos.y = tile.gridLocation.y + transform.position.y - roomSize.y / 2 + 0.5f;
         return worldPos;
     }
 
