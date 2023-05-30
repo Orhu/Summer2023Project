@@ -9,19 +9,6 @@ using UnityEngine.Tilemaps;
 public class RoomExteriorGenerator : MonoBehaviour
 {
     /// <summary>
-    /// Transforms a map location to a world location
-    /// </summary>
-    /// <param name="mapLocation"> The location to transform </param>
-    /// <param name="startLocation"> The start location (aka midpoint of the map) </param>
-    /// <param name="roomSize"> The room size </param>
-    /// <returns></returns>
-    public Vector2 TransformMapToWorld(Vector2Int mapLocation, Vector2Int startLocation, Vector2Int roomSize)
-    {
-        // +0.5 In order to align with the tilemap's grid
-        return new Vector2((mapLocation.x - startLocation.x) * roomSize.x, (mapLocation.y - startLocation.y) * roomSize.y);
-    }
-
-    /// <summary>
     /// Generates the exteriors of the rooms (walls, doors, and floors)
     /// </summary>
     /// <param name="roomTypesToExteriorParameters"> The parameters for each type of room </param>
@@ -64,7 +51,7 @@ public class RoomExteriorGenerator : MonoBehaviour
         createdCell.room = newRoom;
         newRoom.name = createdCell.type.ToString() + " Room " + createdCell.location.ToString();
         newRoom.transform.parent = transform;
-        newRoom.transform.position = TransformMapToWorld(createdCell.location, startCell.location, roomSize);
+        newRoom.transform.position = FloorGenerator.TransformMapToWorld(createdCell.location, startCell.location, roomSize);
 
         // Add the room component
         Room roomComponent = newRoom.AddComponent<Room>();
@@ -258,7 +245,7 @@ public class RoomExteriorGenerator : MonoBehaviour
         bossRoom.transform.parent = transform;
         bossRoom.name = createdCell.type.ToString() + " Room " + createdCell.location.ToString();
         bossRoom.transform.parent = transform;
-        bossRoom.transform.position = TransformMapToWorld(centerCell.location, startCell.location, roomSize);
+        bossRoom.transform.position = FloorGenerator.TransformMapToWorld(centerCell.location, startCell.location, roomSize);
 
         Room room = bossRoom.AddComponent<Room>();
         room.roomLocation = centerCell.location - new Vector2Int(1, 1);
