@@ -45,7 +45,7 @@ namespace CardSystem
 
 
         /// <summary>
-        /// Gets the description of this card by collecting all the formatted descriptions from the card's mechanics.
+        /// Gets the description of this card by collecting all the formated descriptions from the card's mechanics.
         /// </summary>
         /// <param name="isActionSide"> Whether or not to get the description for the action side or the effect side of the card.</param>
         /// <returns>The description.</returns>
