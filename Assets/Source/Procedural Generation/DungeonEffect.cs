@@ -12,10 +12,10 @@ public class DungeonEffect : ScriptableObject
     public string description = "";
 
     [Tooltip("The special rooms that this card will add (to the next floor). These game objects must have a template component.")]
-    List<GameObject> specialRooms;
+    public List<GameObject> specialRooms;
 
     [Tooltip("The tiles that this card will add. These game objects must have tile components.")]
-    List<GameObject> tiles;
+    public List<GameObject> tiles;
 
     /// <summary>
     /// Returns the formatted description for display

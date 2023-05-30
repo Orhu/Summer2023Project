@@ -26,18 +26,41 @@ public class FloorGenerator : MonoBehaviour
         GetComponent<RoomExteriorGenerator>().Generate(floorGenerationParameters.roomTypesToExteriorGenerationParameters, map, floorGenerationParameters.roomSize);
     }
 
+    /// <summary>
+    /// Initializes the floor generator with the special rooms found in the deck
+    /// </summary>
     private void GetSpecialRoomsFromDeck()
     {
         
     }
 
-    private void OnCardAdded(Card card)
+    /// <summary>
+    /// Adds the added tiles from the card
+    /// </summary>
+    /// <param name="card"> The card </param>
+    private void OnCardAdded(CardSystem.Card card)
     {
-
+        foreach (DungeonEffect effect in card.effects)
+        {
+            foreach (GameObject tile in effect.tiles)
+            {
+                floorGenerationParameters.templateGenerationParameters.tileTypesToPossibleTiles.At(tile.GetComponent<Tile>().type).possibleTiles.Add(tile);
+            }
+        }
     }
 
-    private void OnCardRemoved(Card card)
+    /// <summary>
+    /// Removes the added tiles from the card
+    /// </summary>
+    /// <param name="card"> The card </param>
+    private void OnCardRemoved(CardSystem.Card card)
     {
-
+        foreach (DungeonEffect effect in card.effects)
+        {
+            foreach (GameObject tile in effect.tiles)
+            {
+                floorGenerationParameters.templateGenerationParameters.tileTypesToPossibleTiles.At(tile.GetComponent<Tile>().type).possibleTiles.Remove(tile);
+            }
+        }
     }
 }
