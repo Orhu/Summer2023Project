@@ -105,6 +105,7 @@ public class Room : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            FloorGenerator.floorGeneratorInstance.currentRoom = this;
             if (!generated)
             {
                 Template template = transform.parent.gameObject.GetComponent<FloorGenerator>().floorGenerationParameters.templateGenerationParameters.GetRandomTemplate(roomType);
