@@ -51,7 +51,17 @@ public class FloorGenerator : MonoBehaviour
     /// </summary>
     private void GetSpecialRoomsFromDeck()
     {
-        
+        foreach (CardSystem.Card card in Deck.playerDeck.cards)
+        {
+            foreach (DungeonEffect effect in card.effects)
+            {
+                foreach (GameObject specialRoom in effect.specialRooms)
+                {
+                    floorGenerationParameters.layoutGenerationParameters.numSpecialRooms++;
+                    floorGenerationParameters.templateGenerationParameters.templatesPool.At(RoomType.Special).At(Difficulty.NotApplicable).Add(specialRoom);
+                }
+            }
+        }
     }
 
     /// <summary>
