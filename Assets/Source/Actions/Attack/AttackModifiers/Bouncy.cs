@@ -21,7 +21,7 @@ public class Bouncy : AttackModifier
     {
         set
         {
-            if (!value.onHitWall.GetInvocationList().Contains((Action<Collision2D>)Bounce))
+            if (value.onHitWall == null || !value.onHitWall.GetInvocationList().Contains((Action<Collision2D>)Bounce))
             {
                 value.onHitWall += Bounce;
                 bouncyProjectile = value;
