@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
+/// <summary>
+/// Allows you to create templates
+/// </summary>
 public class TemplateCreator : MonoBehaviour
 {
     /// <summary>
