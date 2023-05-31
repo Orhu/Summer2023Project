@@ -49,6 +49,9 @@ public class Knockback : AttackModifier
 
     private void ApplyKnockback(Collider2D collider)
     {
+        Rigidbody2D rigidbody = collider.GetComponent<Rigidbody2D>();
+        if (rigidbody == null) { return; }
+
         Vector2 impulse;
         if (pushDirection == PushDirection.InProjectileForwardDirection || pushDirection == PushDirection.InSpawnerForwardDirection)
         {
@@ -58,8 +61,7 @@ public class Knockback : AttackModifier
         {
             impulse = (collider.transform.position - knockbackSource.transform.position).normalized;
         }
-        impulse *= knockbackVelocity;
 
-        collider.GetComponent<Rigidbody2D>().velocity += impulse;
+        rigidbody.velocity += impulse * knockbackVelocity;
     }
 }
