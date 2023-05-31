@@ -11,14 +11,14 @@ using UnityEngine.Events;
 public class EnemyAttacker : MonoBehaviour
 { 
     [Header("Attacking/Actions")]
+
     [Tooltip("After requesting an action, how long does it take for the action to be performed?")]
     public float actionChargeUpTime;
 
     [Tooltip("After the action is performed, what is the delay before the action can be performed again?")]
     public float actionCooldownTime;
     
-    [EditInline]
-    [Tooltip("The actions that will be taken when the enemy attempts to issue an action.")]
+    [Tooltip("The actions that will be taken when the enemy attempts to issue an action.")] [EditInline]
     public Action[] actions;
 
     [Tooltip("Before the action charge up is started, do you want to do anything else?")]
@@ -34,6 +34,10 @@ public class EnemyAttacker : MonoBehaviour
     public UnityEvent afterCooldown;
 
 
+    /// <summary>
+    /// Performs an attack
+    /// </summary>
+    /// <param name="agent"> The agent performing the attack </param>
     public void PerformAttack(IActor agent)
     {
         beforeChargeUp?.Invoke();
