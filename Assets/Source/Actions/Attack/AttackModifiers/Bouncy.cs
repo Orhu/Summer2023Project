@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -8,10 +10,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewBouncy", menuName = "Cards/AttackModifers/Bouncy")]
 public class Bouncy : AttackModifier
 {
-    [Tooltip("Whether or not bullets will pass through or bounce off damageable targets.")]
-    public bool bounceOffDamageable = false;
-
     // The rigid body to bounce.
+    private Rigidbody2D bouncyRigidbody;
+
+    // The projectile to bounce.
     private Projectile bouncyProjectile;
 
     // The projectile this modifies
@@ -19,35 +21,50 @@ public class Bouncy : AttackModifier
     {
         set
         {
-            if (!value.onHit.GetInvocationList().Contains((Action<Collider2D>)Bounce))
+            if (!value.onHitWall.GetInvocationList().Contains((Action<Collision2D>)Bounce))
             {
-                value.onHit += Bounce;
+                value.onHitWall += Bounce;
                 bouncyProjectile = value;
+                bouncyRigidbody = value.GetComponent<Rigidbody2D>();
             }
         }
     }
 
 
-    void Bounce(Collider2D collision)
+    private void Bounce(Collision2D collision)
     {
-        if (!bounceOffDamageable && collision.GetComponent<Health>() != null) { return; }
-
-        float distance = (collision.transform.position - bouncyProjectile.transform.position).sqrMagnitude;
-        RaycastHit2D[] hits = Physics2D.RaycastAll(bouncyProjectile.transform.position, bouncyProjectile.transform.right, distance);
-
-        RaycastHit2D collidedHit = hits[0];
-        foreach (RaycastHit2D hit in hits)
+        Vector2 normalSum = Vector2.zero;
+        for (int i = 0; i < collision.contactCount; i++)
         {
-            if (hit.collider == collision)
-            {
-                collidedHit = hit;
-                break;
-            }
+            bouncyProjectile.transform.right = Vector2.Reflect(bouncyProjectile.transform.right, collision.GetContact(i).normal);
         }
-
-        Debug.Log(bouncyProjectile.transform.right + " off " + collidedHit.normal + " = " + Vector2.Reflect(bouncyProjectile.transform.right, collidedHit.normal));
-        bouncyProjectile.transform.right = Vector2.Reflect(bouncyProjectile.transform.right, collidedHit.normal);
-
         bouncyProjectile.CancelInvoke("DestroyOnWallHit");
+        bouncyProjectile.StartCoroutine(CheckForDoulbeBounce());
+    }
+
+    private IEnumerator CheckForDoulbeBounce()
+    {
+        List<ContactPoint2D> oldContacts = new List<ContactPoint2D>();
+        bouncyRigidbody.GetContacts(oldContacts);
+
+        yield return new WaitForSeconds(Time.fixedDeltaTime * 2f);
+
+        List<ContactPoint2D> newContacts = new List<ContactPoint2D>();
+        bouncyRigidbody.GetContacts(newContacts);
+
+        IEnumerable<ContactPoint2D> unquieContacts = newContacts
+            .Where(newContact =>
+            {
+                foreach (ContactPoint2D oldContact in oldContacts)
+                {
+                    if(oldContact.normal == newContact.normal) { return false; }
+                }
+                return true;
+            });
+
+        foreach(ContactPoint2D unquieContact in unquieContacts)
+        {
+            bouncyProjectile.transform.right = Vector2.Reflect(bouncyProjectile.transform.right, unquieContact.normal);
+        }
     }
 }
