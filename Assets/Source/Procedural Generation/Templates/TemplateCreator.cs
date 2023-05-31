@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
+/// <summary>
+/// Allows you to create templates
+/// </summary>
 public class TemplateCreator : MonoBehaviour
 {
     /// <summary>
@@ -108,7 +112,7 @@ public class TemplateCreator : MonoBehaviour
     private void InitializeHeldTileSocket()
     {
         heldTileSocket = new GameObject();
-        heldTileSocket.name = "Holded Template Socket";
+        heldTileSocket.name = "Held Template Socket";
         heldTileSocket.transform.parent = transform;
         heldTileSocket.AddComponent<SpriteRenderer>();
         heldTileSocket.GetComponent<SpriteRenderer>().enabled = false;

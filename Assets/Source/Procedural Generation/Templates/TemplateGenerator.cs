@@ -25,19 +25,33 @@ public class TemplateGenerator : MonoBehaviour
             { 
                 TemplateTile templateTile = template.tiles[i][j];
 
+                Tile createdTile = new Tile();
+
                 if (templateTile == null || templateTile.tileType == TileType.None)
                 {
-                    continue;
+                    createdTile.gridLocation = new Vector2Int(i, j);
+                    createdTile.type = TileType.None;
+                    createdTile.walkable = true;
+
+                }
+                else
+                {
+                    TemplateGenerationParameters templateGenParams = transform.parent.GetComponent<FloorGenerator>().floorGenerationParameters.templateGenerationParameters;
+                    createdTile = templateGenParams.GetRandomTile(templateTile);
+                    createdTile.gridLocation = new Vector2Int(i, j);
+                    if (createdTile.spawnedObject != null)
+                    {
+                        createdTile.spawnedObject = Instantiate(createdTile.spawnedObject);
+                        createdTile.spawnedObject.transform.parent = tileContainer.transform;
+                        createdTile.spawnedObject.transform.localPosition = new Vector2(i, j);
+                        createdTile.spawnedObject.SetActive(true);
+                    }
                 }
 
-                TemplateGenerationParameters templateGenParams = transform.parent.GetComponent<FloorGenerator>().floorGenerationParameters.templateGenerationParameters;
-                Tile createdTile = templateGenParams.GetRandomTile(templateTile);    
-                createdTile.gridLocation = new Vector2Int(i, j);
-                createdTile.spawnedObject = Instantiate(createdTile.spawnedObject);
-                createdTile.spawnedObject.transform.parent = tileContainer.transform;
-                createdTile.spawnedObject.transform.localPosition = new Vector2(i, j);
-                createdTile.spawnedObject.SetActive(true);
+                room.roomGrid[i, j] = createdTile;
             }
         }
     }
+
+    
 }
