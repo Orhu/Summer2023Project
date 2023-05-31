@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static Attack;
 
 /// <summary>
 /// An object that travels and deals an attack when it collides with an object.
@@ -16,8 +15,33 @@ public class Projectile : MonoBehaviour
     public GameObject causer;
     // The modifiers applied to this.
     public List<AttackModifier> modifiers;
+    // Invoked when this projectile hits something, passes the hit collider as a parameter.
+    public System.Action<Collider2D> onHit;
+    // Invoked when this is destroyed.
+    public System.Action onDestroyed;
+
+
+    // The rigidbody responsible for the collision of this projectile.
+    protected Rigidbody2D rigidBody;
+    // The modified attack data of this projectile.
+    public DamageData attackData;
+
+
+    public float speed;
+    public float maxSpeed;
+    public float minSpeed;
+    public float acceleration;
+    public float remainingLifetime;
+    public int remainingHits;
+    GameObject closestTarget;
+    GameObject randomTarget;
+    public float remainingHomingTime;
+    public float homingSpeed;
+    public int index;
+    public List<ProjectileSpawnInfo> spawnSequence;
+
     // The object for this to ignore.
-    public List<GameObject> IgnoredObjects
+    internal List<GameObject> IgnoredObjects
     {
         get
         {
@@ -34,29 +58,6 @@ public class Projectile : MonoBehaviour
         set { ignoredObjects = value; }
     }
     List<GameObject> ignoredObjects;
-
-    // Invoked when this projectile hits something, passes the hit collider as a parameter.
-    public System.Action<Collider2D> onHit;
-    // Invoked when this is destroyed.
-    public System.Action onDestroyed;
-
-
-    // The rigidbody responsible for the collision of this projectile.
-    protected Rigidbody2D rigidBody;
-    // The modified attack data of this projectile.
-    public DamageData attackData;
-
-    public float speed;
-    public float maxSpeed;
-    public float minSpeed;
-    public float acceleration;
-    public float remainingLifetime;
-    public int remainingHits;
-    GameObject closestTarget;
-    GameObject randomTarget;
-    public float remainingHomingTime;
-    public float homingSpeed;
-
 
     /// <summary>
     /// Initializes components based on spawner stats.
