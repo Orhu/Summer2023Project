@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles A* pathfinding for enemies
+/// </summary>
 public class Pathfinding : MonoBehaviour
 {
     // the request manager component that sends us requests

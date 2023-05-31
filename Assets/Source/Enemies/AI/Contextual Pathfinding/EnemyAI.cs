@@ -126,6 +126,10 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Gets the position of the current target
+    /// </summary>
+    /// <returns> The position </returns>
     public Vector2 GetCurrentTargetPos()
     {
         if (aiData.currentTarget != null)

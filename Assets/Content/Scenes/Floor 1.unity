@@ -587,8 +587,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4804d1e9d1cacc41b6fdbee9928c36b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomScale: {x: 11, y: 11}
   speed: 10
+  extraHeight: 0
 --- !u!1 &1845609675
 GameObject:
   m_ObjectHideFlags: 0
@@ -643,6 +643,8 @@ MonoBehaviour:
               templates:
               - {fileID: 5313591176924185987, guid: 1405fb2bd4e883d48b55f82dfb291e71, type: 3}
               - {fileID: 9053152825564546870, guid: 5ef4d7612d4d3324195b9cebd54a7d98, type: 3}
+              - {fileID: 7353064700999839816, guid: 5b9850ee4dd13d643a8f79596ab09a7a, type: 3}
+              - {fileID: 5796309492334149466, guid: d52606c2a45cd3d41b2810f9ed27ee38, type: 3}
             - difficulty: 2
               templates:
               - {fileID: 2903055439089201911, guid: 22d67a186a30d2f418059b2dabaee50f, type: 3}
@@ -672,6 +674,10 @@ MonoBehaviour:
         - tileType: 2
           possibleTiles:
             generic: {fileID: 4079167132613704304, guid: 8ca5b1c429868ff48bd32c0320125269, type: 3}
+            possibleTiles: []
+        - tileType: 6
+          possibleTiles:
+            generic: {fileID: 4157796665746939089, guid: 4c164a4ff4799be46bd4a201a61e1157, type: 3}
             possibleTiles: []
     roomSize: {x: 13, y: 9}
     roomTypesToExteriorGenerationParameters:
@@ -741,6 +747,7 @@ MonoBehaviour:
             doorClosed: {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
           nextToDoorSprites:
           - {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
+  currentRoom: {fileID: 0}
 --- !u!114 &1845609677
 MonoBehaviour:
   m_ObjectHideFlags: 0
