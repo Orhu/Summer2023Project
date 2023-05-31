@@ -108,7 +108,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.4
 --- !u!50 &2453830812017951992
 Rigidbody2D:
   serializedVersion: 4
@@ -142,12 +142,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 387d1e2e6973f634194fe95877f50051, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buffer: 0
+  buffer: 0.05
   attackRange: 0
   needsLineOfSight: 0
-  scanRadius: 5
-  scanDelay: 0
-  scanRate: 5
+  scanRadius: 10
+  scanInitialDelay: 0.25
+  delayBetweenScans: 0.5
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -242,8 +242,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 744fc462e7720f14798c279f3af2ebfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 2
-  acceleration: 50
+  maxSpeed: 3
+  acceleration: 25
   deacceleration: 100
 --- !u!114 &7613015043317099198
 MonoBehaviour:

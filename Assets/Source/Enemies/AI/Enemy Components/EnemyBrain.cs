@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using CardSystem;
 using Skaillz.EditInline;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// This class is designed to puppeteer a controller with enemy behaviors.
@@ -27,19 +29,21 @@ public class EnemyBrain : MonoBehaviour
     private float scanRadius;
 
     [Tooltip("How long of a delay before this enemy starts looking for targets?")] [SerializeField]
-    private float scanDelay;
+    private float scanInitialDelay;
 
-    [Tooltip("How often does this enemy scan for targets?")] [SerializeField]
-    private float scanRate;
+    [Tooltip("How often does this enemy scan for targets, in seconds?")] [SerializeField]
+    private float delayBetweenScans;
 
     [Tooltip("Layer containing target (probably the player layer)")] [SerializeField]
     private LayerMask targetLayer;
 
     [Header("Damage")] [Tooltip("Does this enemy deal damage to the player when it is touched?")] [SerializeField]
     private bool dealsDamageOnTouch;
+    // TODO unimplemented
 
     [Tooltip("How much damage does this enemy deal when touched?")] [SerializeField]
     private float damageOnTouch;
+    // TODO unimplemented
 
     [Header("Debug")] [Tooltip("Draw debug gizmos?")] [SerializeField]
     private bool drawGizmos;
@@ -66,8 +70,7 @@ public class EnemyBrain : MonoBehaviour
     {
         controller = GetComponent<Controller>();
         room = GetComponentInParent<Room>();
-        print(this.name + ": I have a room! It's " + room.name);
-        InvokeRepeating(nameof(UpdatePath), scanDelay, scanRate);
+        InvokeRepeating(nameof(UpdatePath), scanInitialDelay, delayBetweenScans);
     }
 
     /// <summary>
@@ -76,7 +79,10 @@ public class EnemyBrain : MonoBehaviour
     void UpdatePath()
     {
         GetTargetPosition();
-        PathRequestManager.RequestPath(transform.position, target.transform.position, OnPathFound, room);
+        if (target != null)
+        {
+            PathRequestManager.RequestPath(transform.position, target.transform.position, OnPathFound, room);
+        }
     }
 
     /// <summary>
@@ -86,11 +92,10 @@ public class EnemyBrain : MonoBehaviour
     /// <param name="success"> Whether the path was successfully found or not </param>
     public void OnPathFound(Vector2[] newPath, bool success)
     {
-        print(this.name + ": Path found callback received");
-        print(this.name + ": Success: " + success);
         if (success)
         {
             path = newPath;
+            targetIndex = 0;
             StopCoroutine(nameof(FollowPath));
             StartCoroutine(nameof(FollowPath));
         }
@@ -107,25 +112,39 @@ public class EnemyBrain : MonoBehaviour
              yield break;
         }
         
-        print(this.name + ": Following path");
         Vector2 currentWaypoint = path[0];
 
         while (true)
         {
-            if ((Vector2)transform.position == currentWaypoint)
+            if (ArrivedAtPoint(currentWaypoint))
             {
                 targetIndex++;
                 if (targetIndex >= path.Length)
                 {
+                    // reached the end of the waypoints, stop moving here
+                    controller.MovementInput = Vector2.zero;
                     yield break;
                 }
 
                 currentWaypoint = path[targetIndex];
             }
 
-            controller.MoveTowards(currentWaypoint);
+            controller.MoveTowards(currentWaypoint, buffer);
             yield return null;
         }
+    }
+
+    /// <summary>
+    /// Uses buffer to determine if we are arrived at the given vector2
+    /// </summary>
+    /// <param name="waypoint"> Waypoint we are checking </param>
+    /// <returns> True if we are within buffer (serialized) units of the given waypoint </returns>
+    bool ArrivedAtPoint(Vector2 waypoint)
+    {
+        var myPos = transform.position;
+        var withinX = Math.Abs(waypoint.x - myPos.x) < buffer;
+        var withinY = Math.Abs(waypoint.y - myPos.y) < buffer;
+        return withinX && withinY;
     }
 
     /// <summary>
@@ -160,10 +179,7 @@ public class EnemyBrain : MonoBehaviour
         {
             for (int i = targetIndex; i < path.Length; i++)
             {
-                Gizmos.color = new Color(
-                    Random.Range(0f, 1f),
-                    Random.Range(0f, 1f),
-                    Random.Range(0f, 1f));
+                Gizmos.color = Color.black;
                 Gizmos.DrawCube(path[i], Vector3.one);
 
                 if (i == targetIndex)

@@ -103,44 +103,42 @@ public class Controller : MonoBehaviour, IActor
     /// Issues a command to move towards the given Vector2. Essentially, converts a Vector2 targetPos into an input vector and sets that as our input
     /// </summary>
     /// <param name="target"> Target to move to </param>
-    /// <param name="buffer"> How close to get to a tile before being considered "arrived" </param>
-    public void MoveTowards(Vector2 target)
+    /// <param name="buffer"> How close to get before I am happy with my position </param>
+    public void MoveTowards(Vector2 target, float buffer)
     {
+        _movementInput = Vector2.zero;
+        
         var myPos = (Vector2)transform.position;
         var targetPos = target;
-        
-        var needToMoveUp = targetPos.y > myPos.y;
-        var needToMoveDown = targetPos.y < myPos.y;
-        var needToMoveRight = targetPos.x > myPos.x;
-        var needToMoveLeft = targetPos.x < myPos.x;
-        
-        print(this.name + ": Issuing movement command");
-        
+
+        var xDiff = myPos.x - targetPos.x;
+        var yDiff = myPos.y - targetPos.y;
+
         // compare the two positions to determine inputs
-        if (needToMoveUp && needToMoveDown)
+        if (xDiff > buffer)
         {
-            // we are at the right y 
-            _movementInput.y = 0;
+            _movementInput.x = -1;
+        } else if (xDiff < -buffer)
+        {
+            _movementInput.x = 1;
         }
-        else if (needToMoveUp)
+        else
+        {
+            _movementInput.x = 0;
+        }
+        
+        if (yDiff > buffer)
+        {
+            _movementInput.y = -1;
+        } else if (yDiff < -buffer)
         {
             _movementInput.y = 1;
         }
         else
         {
-            _movementInput.y = -1;
+            _movementInput.y = 0;
         }
-        
-        if (needToMoveRight && needToMoveLeft)
-        {
-            // we are at the right x 
-            _movementInput.x = 0;
-        } else if (needToMoveRight)
-        {
-            _movementInput.x = 1;
-        } else {
-            _movementInput.x = -1;
-        }
+
     }
 
     #region IActor Implementation

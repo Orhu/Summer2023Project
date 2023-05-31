@@ -23,64 +23,55 @@ public class Pathfinding : MonoBehaviour
     /// <param name="targetPos"> Target position </param>
     /// <param name="room"> The room the enemy is a part of </param>
     /// <returns> Sends a signal to the request manager that a path has been found </returns>
-    IEnumerator FindPath(Vector2 startPos, Vector2 targetPos, Room room)
-    {
+    IEnumerator FindPath(Vector2 startPos, Vector2 targetPos, Room room) {
+
         Vector2[] waypoints = new Vector2[0];
-        bool pathfindSuccess = false;
-
-        Tile startTile = room.WorldPosToTile(startPos);
-        Tile targetTile = room.WorldPosToTile(targetPos);
-
-        if (startTile.walkable && targetTile.walkable)
-        {
-            Heap<Tile> openList = new Heap<Tile>(room.maxSize);
-            HashSet<Tile> closedList = new HashSet<Tile>();
-            openList.Add(startTile);
-
-            while (openList.Count > 0)
-            {
-                // grab lowest fCost tile
-                Tile currentTile = openList.RemoveFirst();
-                closedList.Add(currentTile);
-
-                if (currentTile == targetTile)
-                {
-                    // found the target
-                    pathfindSuccess = true;
+        bool pathSuccess = false;
+		
+        Tile startNode = room.WorldPosToTile(startPos);
+        Tile targetNode = room.WorldPosToTile(targetPos);
+		
+		
+        if (startNode.walkable && targetNode.walkable) {
+            Heap<Tile> openSet = new Heap<Tile>(room.maxSize);
+            HashSet<Tile> closedSet = new HashSet<Tile>();
+            openSet.Add(startNode);
+			
+            while (openSet.Count > 0) {
+                // grab lowest fCost tile. Due to the heap data structure, this will always be the first element
+                Tile currentNode = openSet.RemoveFirst();
+                closedSet.Add(currentNode);
+				
+                if (currentNode == targetNode) {
+                    // found target
+                    pathSuccess = true;
                     break;
                 }
-
-                foreach (Tile neighbor in room.GetNeighbors(currentTile))
-                {
-                    if (!neighbor.walkable || closedList.Contains(neighbor))
-                    {
-                        // this node has already been explored, or it is not walkable, so skip
+				
+                foreach (Tile neighbor in room.GetNeighbors(currentNode)) {
+                    if (!neighbor.walkable || closedSet.Contains(neighbor)) {
+                        // this node has already been explored, or is not walkable, so skip
                         continue;
                     }
-
-                    int newCostToNeighbor = currentTile.gCost + GetDistance(currentTile, neighbor);
-                    if (newCostToNeighbor < neighbor.gCost || !openList.Contains(neighbor))
-                    {
-                        neighbor.gCost = newCostToNeighbor;
-                        neighbor.hCost = GetDistance(neighbor, targetTile);
-                        neighbor.parent = currentTile;
-
-                        if (!openList.Contains(neighbor))
-                        {
-                            openList.Add(neighbor);
-                        }
+					
+                    int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbor);
+                    if (newMovementCostToNeighbour < neighbor.gCost || !openSet.Contains(neighbor)) {
+                        neighbor.gCost = newMovementCostToNeighbour;
+                        neighbor.hCost = GetDistance(neighbor, targetNode);
+                        neighbor.parent = currentNode;
+						
+                        if (!openSet.Contains(neighbor))
+                            openSet.Add(neighbor);
                     }
                 }
             }
         }
-
         yield return null;
-        if (pathfindSuccess)
-        {
-            waypoints = RetracePath(startTile, targetTile, room);
+        if (pathSuccess) {
+            waypoints = RetracePath(startNode, targetNode, room);
         }
-
-        requestManager.FinishedProcessingPath(waypoints, pathfindSuccess);
+        requestManager.FinishedProcessingPath(waypoints,pathSuccess);
+		
     }
 
     /// <summary>
@@ -93,17 +84,16 @@ public class Pathfinding : MonoBehaviour
     Vector2[] RetracePath(Tile startTile, Tile endTile, Room room)
     {
         List<Tile> path = new List<Tile>();
-        Tile currentTile = endTile;
-
-        while (currentTile != startTile)
-        {
-            path.Add(currentTile);
-            currentTile = currentTile.parent;
+        Tile currentNode = endTile;
+		
+        while (currentNode != startTile) {
+            path.Add(currentNode);
+            currentNode = currentNode.parent;
         }
-
         Vector2[] waypoints = SimplifyPath(path, room);
         Array.Reverse(waypoints);
         return waypoints;
+		
     }
 
     /// <summary>
@@ -116,19 +106,15 @@ public class Pathfinding : MonoBehaviour
     {
         List<Vector2> waypoints = new List<Vector2>();
         Vector2 directionOld = Vector2.zero;
-
-        for (int i = 1; i < path.Count; i++)
-        {
-            Vector2 directionNew = new Vector2(path[i - 1].gridLocation.x - path[i].gridLocation.x, path[i - 1].gridLocation.y - path[i].gridLocation.y);
-            if (directionNew != directionOld)
-            {
-                // we have a change in direction, add a waypoint here
+		
+        for (int i = 1; i < path.Count; i ++) {
+            Vector2 directionNew = new Vector2(path[i-1].gridLocation.x - path[i].gridLocation.x,path[i-1].gridLocation.y - path[i].gridLocation.y);
+            if (directionNew != directionOld) {
+                // change in direction, add waypoint here
                 waypoints.Add(room.TileToWorldPos(path[i]));
             }
-
             directionOld = directionNew;
         }
-
         return waypoints.ToArray();
     }
 
@@ -140,7 +126,7 @@ public class Pathfinding : MonoBehaviour
     /// <returns> Distance, in tiles (moves), between the two tiles </returns>
     int GetDistance(Tile a, Tile b)
     {
-        int distX = Mathf.Abs(a.gridLocation.x - b.gridLocation.y);
+        int distX = Mathf.Abs(a.gridLocation.x - b.gridLocation.x);
         int distY = Mathf.Abs(a.gridLocation.y - b.gridLocation.y);
 
         if (distX > distY)

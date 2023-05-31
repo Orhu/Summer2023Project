@@ -29,7 +29,7 @@ public class Room : MonoBehaviour
 
     // Whether this room has been generated or not
     [HideInInspector] private bool generated = false;
-    
+
     /// <summary>
     /// Gets the tile at the given world position
     /// </summary>
@@ -37,7 +37,6 @@ public class Room : MonoBehaviour
     /// <returns> The tile </returns>
     public Tile WorldPosToTile(Vector2 worldPos)
     {
-        Debug.Log("first world pos: " + worldPos.ToString());
         Vector2Int gridLocation = new Vector2Int();
         gridLocation.x = Mathf.RoundToInt(worldPos.x - (transform.position.x - roomSize.x / 2));
         gridLocation.y = Mathf.RoundToInt(worldPos.y - (transform.position.y - roomSize.y / 2));
@@ -52,8 +51,8 @@ public class Room : MonoBehaviour
     public Vector2 TileToWorldPos(Tile tile)
     {
         Vector2 worldPos = new Vector2();
-        worldPos.x = tile.gridLocation.x + transform.position.x - roomSize.x / 2 + 0.5f;
-        worldPos.y = tile.gridLocation.y + transform.position.y - roomSize.y / 2 + 0.5f;
+        worldPos.x = tile.gridLocation.x + transform.position.x - roomSize.x / 2;
+        worldPos.y = tile.gridLocation.y + transform.position.y - roomSize.y / 2;
         return worldPos;
     }
 
@@ -66,17 +65,73 @@ public class Room : MonoBehaviour
     {
         List<Tile> neighbors = new List<Tile>();
 
-        for (int i = 1; i <= (int) Direction.Down; i *= 2)
+        // Loop through each adjacent tile
+        for (int x = -1; x <= 1; x++)
         {
-            Vector2Int locationOffset = new Vector2Int();
-            locationOffset.x = System.Convert.ToInt32(((Direction) i & Direction.Right) != Direction.None) - System.Convert.ToInt32(((Direction)i & Direction.Left) != Direction.None);
-            locationOffset.y = System.Convert.ToInt32(((Direction) i & Direction.Up) != Direction.None) - System.Convert.ToInt32(((Direction)i & Direction.Down) != Direction.None);
+            for (int y = -1; y <= 1; y++)
+            {
+                // Skip the current tile itself
+                if (x == 0 && y == 0)
+                    continue;
 
-            bool outOfXRange = tile.gridLocation.x + locationOffset.x < 0 || tile.gridLocation.x + locationOffset.x >= roomSize.x;
-            bool outOfYRange = tile.gridLocation.y + locationOffset.y < 0 || tile.gridLocation.y + locationOffset.y >= roomSize.y;
-            if (outOfXRange || outOfYRange) { continue; }
+                int checkX = tile.gridLocation.x + x;
+                int checkY = tile.gridLocation.y + y;
 
-            neighbors.Add(roomGrid[tile.gridLocation.x + locationOffset.x, tile.gridLocation.y + locationOffset.y]);
+                // Check if the adjacent tile is within the grid bounds
+                if (checkX >= 0 && checkX < roomSize.x && checkY >= 0 && checkY < roomSize.y)
+                {
+                    try
+                    {
+                        // Check specific cases for corner tiles
+                        if (y == -1 && x == -1)
+                        {
+                            // Bottom left corner tile
+                            // Make sure the corner is reachable by either the tile above or the tile to the right
+                            if (roomGrid[checkX + x, checkY].walkable && roomGrid[checkX, checkY - y].walkable)
+                            {
+                                neighbors.Add(roomGrid[checkX, checkY]);
+                            }
+                        }
+                        else if (y == -1 && x == 1)
+                        {
+                            // Bottom right corner tile
+                            // Make sure the corner is reachable by either the tile above or the tile to the left
+                            if (roomGrid[checkX - x, checkY].walkable && roomGrid[checkX, checkY + y].walkable)
+                            {
+                                neighbors.Add(roomGrid[checkX, checkY]);
+                            }
+                        }
+                        else if (y == 1 && x == -1)
+                        {
+                            // Top left corner tile
+                            // Make sure the corner is reachable by either the tile below or the tile to the right
+                            if (roomGrid[checkX + x, checkY].walkable && roomGrid[checkX, checkY - y].walkable)
+                            {
+                                neighbors.Add(roomGrid[checkX, checkY]);
+                            }
+                        }
+                        else if (y == 1 && x == 1)
+                        {
+                            // Top right corner tile
+                            // Make sure the corner is reachable by either the tile below or the tile to the left
+                            if (roomGrid[checkX - x, checkY].walkable && roomGrid[checkX, checkY - y].walkable)
+                            {
+                                neighbors.Add(roomGrid[checkX, checkY]);
+                            }
+                        }
+                        else
+                        {
+                            // This tile is in a cardinal direction, no need to check anything. Just add it!
+                            neighbors.Add(roomGrid[checkX, checkY]);
+                        }
+                    }
+                    catch
+                    {
+                        // Catch here in case one of the tiles being checked is out of bounds in the grid.
+                        // We don't want to cause an error, so we simply skip adding that tile to the neighbours list.
+                    }
+                }
+            }
         }
 
         return neighbors;
@@ -87,7 +142,6 @@ public class Room : MonoBehaviour
     /// </summary>
     public void OpenDoors()
     {
-
     }
 
     /// <summary>
@@ -95,7 +149,6 @@ public class Room : MonoBehaviour
     /// </summary>
     public void CloseDoors()
     {
-
     }
 
     /// <summary>
@@ -109,7 +162,8 @@ public class Room : MonoBehaviour
             FloorGenerator.floorGeneratorInstance.currentRoom = this;
             if (!generated)
             {
-                Template template = transform.parent.gameObject.GetComponent<FloorGenerator>().floorGenerationParameters.templateGenerationParameters.GetRandomTemplate(roomType);
+                Template template = transform.parent.gameObject.GetComponent<FloorGenerator>().floorGenerationParameters
+                    .templateGenerationParameters.GetRandomTemplate(roomType);
                 GetComponent<TemplateGenerator>().Generate(this, template);
                 generated = true;
             }
