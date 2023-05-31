@@ -14,22 +14,20 @@ public class Controller : MonoBehaviour, IActor
     [Tooltip("Does this agent use enemy brain components?")] 
     [SerializeField] private bool useEnemyLogic;
 
-    // Movement component to allow the agent to move
-    [HideInInspector] private Movement movementComponent;
-
     // -1 to 1 range representing current movement input, same system as built-in Input.GetAxis"
-    [HideInInspector] private Vector2 _movementInput;
-    public Vector2 MovementInput
-    {
-        get => _movementInput;
-        set => _movementInput = value;
-    }
-    
+    [HideInInspector] public Vector2 movementInput;
+
+    // Movement component to allow the agent to move
+    private Movement movementComponent;
+
     // enemy attacker component, if it exists on this agent
     private EnemyAttacker enemyAttacker;
     
     // enemy brain component, if it exists on this agent
     private EnemyBrain enemyBrain;
+    
+    // represents the inner collider of this unit
+    [HideInInspector] public Collider2D feet;
 
     /// <summary>
     /// Initialize components
@@ -41,8 +39,9 @@ public class Controller : MonoBehaviour, IActor
             enemyAttacker = GetComponent<EnemyAttacker>();
             enemyBrain = GetComponent<EnemyBrain>();
         }
-        
+
         movementComponent = GetComponent<Movement>();
+        feet = GetComponentInChildren<CircleCollider2D>();
     }
 
     /// <summary>
@@ -53,8 +52,8 @@ public class Controller : MonoBehaviour, IActor
         // if we are controllable, get inputs. otherwise, don't
         if (isControllable)
         {
-            _movementInput.x = Input.GetAxisRaw("Horizontal");
-            _movementInput.y = Input.GetAxisRaw("Vertical");
+            movementInput.x = Input.GetAxisRaw("Horizontal");
+            movementInput.y = Input.GetAxisRaw("Vertical");
         }
 
         if (!useEnemyLogic && CanAct)
@@ -71,7 +70,7 @@ public class Controller : MonoBehaviour, IActor
             }
         }
 
-        movementComponent.MovementInput = _movementInput.normalized;
+        movementComponent.MovementInput = movementInput.normalized;
     }
 
     /// <summary>
@@ -79,7 +78,8 @@ public class Controller : MonoBehaviour, IActor
     /// </summary>
     public void PerformAttack()
     {
-        enemyAttacker.PerformAttack(this);
+        var coroutine = enemyAttacker.PerformAttack(this);
+        StartCoroutine(coroutine);
     }
 
     /// <summary>
@@ -106,8 +106,6 @@ public class Controller : MonoBehaviour, IActor
     /// <param name="buffer"> How close to get before I am happy with my position </param>
     public void MoveTowards(Vector2 target, float buffer)
     {
-        _movementInput = Vector2.zero;
-        
         var myPos = (Vector2)transform.position;
         var targetPos = target;
 
@@ -117,26 +115,26 @@ public class Controller : MonoBehaviour, IActor
         // compare the two positions to determine inputs
         if (xDiff > buffer)
         {
-            _movementInput.x = -1;
+            movementInput.x = -1;
         } else if (xDiff < -buffer)
         {
-            _movementInput.x = 1;
+            movementInput.x = 1;
         }
         else
         {
-            _movementInput.x = 0;
+            movementInput.x = 0;
         }
         
         if (yDiff > buffer)
         {
-            _movementInput.y = -1;
+            movementInput.y = -1;
         } else if (yDiff < -buffer)
         {
-            _movementInput.y = 1;
+            movementInput.y = 1;
         }
         else
         {
-            _movementInput.y = 0;
+            movementInput.y = 0;
         }
 
     }
@@ -174,10 +172,10 @@ public class Controller : MonoBehaviour, IActor
     {
         if (useEnemyLogic)
         {
-            var targetPos = enemyBrain.GetTargetPosition();
-            if (targetPos != null)
+            var target = enemyBrain.target;
+            if (target != null)
             {
-                return targetPos.transform.position;
+                return target.transform.position;
             }
             else
             {

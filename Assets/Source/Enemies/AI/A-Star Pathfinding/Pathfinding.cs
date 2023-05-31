@@ -11,6 +11,9 @@ public class Pathfinding : MonoBehaviour
     // the request manager component that sends us requests
     private PathRequestManager requestManager;
 
+    // current target position
+    private Vector2 targetPosition;
+
     /// <summary>
     /// Initialize variables
     /// </summary>
@@ -26,8 +29,10 @@ public class Pathfinding : MonoBehaviour
     /// <param name="targetPos"> Target position </param>
     /// <param name="room"> The room the enemy is a part of </param>
     /// <returns> Sends a signal to the request manager that a path has been found </returns>
-    IEnumerator FindPath(Vector2 startPos, Vector2 targetPos, Room room) {
+    IEnumerator FindPath(Vector2 startPos, Vector2 targetPos, Room room)
+    {
 
+        targetPosition = targetPos;
         Vector2[] waypoints = new Vector2[0];
         bool pathSuccess = false;
 		
@@ -108,6 +113,8 @@ public class Pathfinding : MonoBehaviour
     Vector2[] SimplifyPath(List<Tile> path, Room room)
     {
         List<Vector2> waypoints = new List<Vector2>();
+        // add target destination as our final waypoint, no matter what
+        waypoints.Add(targetPosition);
         Vector2 directionOld = Vector2.zero;
 		
         for (int i = 1; i < path.Count; i ++) {

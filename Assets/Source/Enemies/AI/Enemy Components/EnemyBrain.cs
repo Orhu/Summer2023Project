@@ -37,19 +37,11 @@ public class EnemyBrain : MonoBehaviour
     [Tooltip("Layer containing target (probably the player layer)")] [SerializeField]
     private LayerMask targetLayer;
 
-    [Header("Damage")] [Tooltip("Does this enemy deal damage to the player when it is touched?")] [SerializeField]
-    private bool dealsDamageOnTouch;
-    // TODO unimplemented
-
-    [Tooltip("How much damage does this enemy deal when touched?")] [SerializeField]
-    private float damageOnTouch;
-    // TODO unimplemented
-
     [Header("Debug")] [Tooltip("Draw debug gizmos?")] [SerializeField]
     private bool drawGizmos;
 
     // current target
-    private Collider2D target;
+    [HideInInspector] public Collider2D target;
 
     // path to target 
     private Vector2[] path;
@@ -59,18 +51,70 @@ public class EnemyBrain : MonoBehaviour
 
     // controller component for issuing commands
     private Controller controller;
-    
+
     // what room this enemy is in
     private Room room;
+    
+    // what state is this enemy in
+    enum State
+    {
+        Idle,
+        Chase,
+        Attack,
+    }
+    private State currentState;
 
     /// <summary>
-    /// Requests path to target and initializes variables
+    /// Initializes variables
     /// </summary>
-    void Start()
+    void Awake()
     {
         controller = GetComponent<Controller>();
         room = GetComponentInParent<Room>();
-        InvokeRepeating(nameof(UpdatePath), scanInitialDelay, delayBetweenScans);
+    }
+
+    /// <summary>
+    /// Begins the UpdatePath repeating invoke call
+    /// </summary>
+    void Start()
+    {
+        InvokeRepeating(nameof(GetTargetPosition), scanInitialDelay, delayBetweenScans);
+    }
+
+    /// <summary>
+    /// Maintains the finite state machine and changes states/performs actions accordingly
+    /// </summary>
+    void Update()
+    {
+        var haveATarget = target != null;
+        if (haveATarget)
+        {
+            // check if we are within attack range
+            var withinAttackRange = Vector2.Distance(transform.position, target.transform.position) <= attackRange;
+            currentState = withinAttackRange ? State.Attack : State.Chase;
+        }
+        else
+        {
+            // no target scanned, go back to idle
+            currentState = State.Idle;
+        }
+
+        // state behaviors
+        switch (currentState)
+        {
+            case State.Attack:
+                controller.movementInput = Vector2.zero;
+                controller.PerformAttack();
+                break;
+            case State.Chase:
+                if (haveATarget)
+                {
+                    UpdatePath();
+                }
+                break;
+            case State.Idle:
+                break;
+        }
     }
 
     /// <summary>
@@ -78,10 +122,10 @@ public class EnemyBrain : MonoBehaviour
     /// </summary>
     void UpdatePath()
     {
-        GetTargetPosition();
-        if (target != null)
+        if (currentState == State.Chase)
         {
-            PathRequestManager.RequestPath(transform.position, target.transform.position, OnPathFound, room);
+            PathRequestManager.RequestPath(controller.feet.transform.position, target.transform.position, OnPathFound,
+                room);
         }
     }
 
@@ -102,33 +146,37 @@ public class EnemyBrain : MonoBehaviour
     }
 
     /// <summary>
-    /// Follows the path to the target, if we have one
+    /// Follows the path to the target, if we have one. If we reach attackRange of our target, then stop and attack
     /// </summary>
     /// <returns></returns>
     IEnumerator FollowPath()
     {
-        if (path.Length == 0)
+        if (path.Length == 0 || currentState != State.Chase)
         {
-             yield break;
+            // if we have no path, or we are not in the chase state, do not follow path
+            controller.movementInput = Vector2.zero;
+            yield break;
         }
-        
+
         Vector2 currentWaypoint = path[0];
 
         while (true)
         {
+            // check if we need to advance to the next checkpoint
             if (ArrivedAtPoint(currentWaypoint))
             {
                 targetIndex++;
                 if (targetIndex >= path.Length)
                 {
                     // reached the end of the waypoints, stop moving here
-                    controller.MovementInput = Vector2.zero;
+                    controller.movementInput = Vector2.zero;
                     yield break;
                 }
 
                 currentWaypoint = path[targetIndex];
             }
 
+            // if we didn't hit a break, then just keep moving to the current waypoint
             controller.MoveTowards(currentWaypoint, buffer);
             yield return null;
         }
@@ -139,9 +187,9 @@ public class EnemyBrain : MonoBehaviour
     /// </summary>
     /// <param name="waypoint"> Waypoint we are checking </param>
     /// <returns> True if we are within buffer (serialized) units of the given waypoint </returns>
-    bool ArrivedAtPoint(Vector2 waypoint)
+    public bool ArrivedAtPoint(Vector2 waypoint)
     {
-        var myPos = transform.position;
+        var myPos = controller.feet.transform.position;
         var withinX = Math.Abs(waypoint.x - myPos.x) < buffer;
         var withinY = Math.Abs(waypoint.y - myPos.y) < buffer;
         return withinX && withinY;
@@ -150,19 +198,10 @@ public class EnemyBrain : MonoBehaviour
     /// <summary>
     /// Gets a target position for this unit and updates its target accordingly
     /// </summary>
-    /// <returns> This enemy's current target </returns>
-    public Collider2D GetTargetPosition()
+    /// <returns> True if we found a target, false if none found </returns>
+    public void GetTargetPosition()
     {
         target = Physics2D.OverlapCircle(transform.position, scanRadius, targetLayer);
-        return target;
-    }
-
-    /// <summary>
-    /// Performs an attack
-    /// </summary>
-    void PerformAttack()
-    {
-        controller.PerformAttack();
     }
 
     /// <summary>
@@ -174,22 +213,27 @@ public class EnemyBrain : MonoBehaviour
         {
             return;
         }
-
-        if (path != null)
+        
+        Gizmos.color = Color.red;
+        if (target != null)
         {
-            for (int i = targetIndex; i < path.Length; i++)
-            {
-                Gizmos.color = Color.black;
-                Gizmos.DrawCube(path[i], Vector3.one);
+            // draw current target tile
+            var targetTile = room.WorldPosToTile(target.transform.position);
+            Gizmos.DrawCube(room.TileToWorldPos(targetTile), Vector3.one);
+        }
+        
+        Gizmos.color = Color.cyan;
+        var myTile = room.WorldPosToTile(controller.feet.transform.position);
+        Gizmos.DrawCube(room.TileToWorldPos(myTile), Vector3.one);
 
-                if (i == targetIndex)
-                {
-                    Gizmos.DrawLine(transform.position, path[i]);
-                }
-                else
-                {
-                    Gizmos.DrawCube(path[i - 1], path[i]);
-                }
+        Gizmos.color = Color.green;
+        if (path != null && path.Length > 0)
+        {
+            if (targetIndex < path.Length)
+            {
+                // reached the end of the waypoints
+                Gizmos.DrawLine(controller.feet.transform.position, path[targetIndex]);
+                Gizmos.DrawCube(path[targetIndex], Vector3.one * 0.5f);
             }
         }
     }

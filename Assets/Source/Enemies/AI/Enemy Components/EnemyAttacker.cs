@@ -33,22 +33,28 @@ public class EnemyAttacker : MonoBehaviour
     [Tooltip("After the cooldown ends, do you want to do anything else?")]
     public UnityEvent afterCooldown;
 
+    private bool canAttack = true;
 
     /// <summary>
     /// Performs an attack
     /// </summary>
     /// <param name="agent"> The agent performing the attack </param>
-    public void PerformAttack(IActor agent)
+    public IEnumerator PerformAttack(IActor agent)
     {
+        if (!canAttack) yield break;
+        
+        canAttack = false;
         beforeChargeUp?.Invoke();
-        // wait actionChargeUpTime
+        yield return new WaitForSeconds(actionChargeUpTime);
         beforeAction?.Invoke();
         foreach (var action in actions)
         {
             action.Play(agent);
         }
+
         afterAction?.Invoke();
-        // wait cooldown time
+        yield return new WaitForSeconds(actionCooldownTime);
         afterCooldown?.Invoke();
+        canAttack = true;
     }
 }
