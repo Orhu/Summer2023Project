@@ -186,9 +186,9 @@ public class Projectile : MonoBehaviour
         }
         else
         {
+            Invoke("DestroyOnWallHit", Time.fixedDeltaTime);
             onHit?.Invoke(collision);
             onDestroyed?.Invoke();
-            Destroy(gameObject);
         }
     }
 
@@ -280,5 +280,10 @@ public class Projectile : MonoBehaviour
         {
             transform.GetChild(0).transform.parent = null;
         }
+    }
+
+    private void DestroyOnWallHit()
+    {
+        Destroy(gameObject);
     }
 }
