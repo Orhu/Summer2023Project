@@ -12,15 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_IcicleSpray
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 1
     damageType: 0
-    knockback: 0.25
     statusEffects: []
   hitCount: 1
-  modifiers: []
+  applyDamageOnHit: 1
+  modifiers:
+  - {fileID: 11400000, guid: 650803c67de4018499ea79e9a3b59e5c, type: 2}
   shape: {fileID: 11400000, guid: 4abab9766de7042498981ac5f6ade605, type: 2}
   lifetime: 0.375
   initialSpeed: 8
@@ -31,8 +30,11 @@ MonoBehaviour:
   homingTime: 0
   homingAimMode: 0
   visualObject: {fileID: 8372843719696061205, guid: 52c86cacb8340f64da2452cbfd01e0a7, type: 3}
+  detachVisualsBeforeDestroy: 0
   spawnLocation: 0
   aimMode: 0
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   spawnSequence:
   - delay: 0
     angle: 0
