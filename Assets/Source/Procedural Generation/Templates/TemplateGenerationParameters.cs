@@ -66,7 +66,9 @@ public class TemplateGenerationParameters
 
         if (possibleTiles.possibleTiles.Count != 0)
         {
-            return possibleTiles.possibleTiles[Random.Range(0, possibleTiles.possibleTiles.Count)].GetComponent<TileComponent>().tile.ShallowCopy();
+            List<GameObject> possibleTilesWithGeneric = new List<GameObject>(possibleTiles.possibleTiles);
+            possibleTilesWithGeneric.Add(possibleTiles.generic);
+            return possibleTilesWithGeneric[Random.Range(0, possibleTilesWithGeneric.Count)].GetComponent<TileComponent>().tile.ShallowCopy();
         }
 
         return possibleTiles.generic.GetComponent<TileComponent>().tile.ShallowCopy();

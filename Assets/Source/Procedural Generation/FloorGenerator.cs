@@ -40,6 +40,7 @@ public class FloorGenerator : MonoBehaviour
     private void Start()
     {
         GetSpecialRoomsFromDeck();
+        GetTilesFromDeck();
         Deck.playerDeck.onCardAdded += OnCardAdded;
         Deck.playerDeck.onCardRemoved += OnCardRemoved;
         map = GetComponent<LayoutGenerator>().Generate(floorGenerationParameters.layoutGenerationParameters);
@@ -51,10 +52,28 @@ public class FloorGenerator : MonoBehaviour
     /// </summary>
     private void GetSpecialRoomsFromDeck()
     {
+        if (Deck.playerDeck == null || Deck.playerDeck.cards == null)
+        {
+            return;
+        }
+
         foreach (CardSystem.Card card in Deck.playerDeck.cards)
         {
+            if (card.effects == null)
+            {
+                return;
+            }
+
             foreach (DungeonEffect effect in card.effects)
             {
+                if (effect == null)
+                {
+                    continue;
+                }
+                if (effect.specialRooms == null)
+                {
+                    return;
+                }
                 foreach (GameObject specialRoom in effect.specialRooms)
                 {
                     floorGenerationParameters.layoutGenerationParameters.numSpecialRooms++;
@@ -65,16 +84,45 @@ public class FloorGenerator : MonoBehaviour
     }
 
     /// <summary>
+    /// Initializes the floor generator with tiles found in the deck
+    /// </summary>
+    private void GetTilesFromDeck()
+    {
+        if (Deck.playerDeck == null || Deck.playerDeck.cards == null)
+        {
+            return;
+        }
+
+        foreach (CardSystem.Card card in Deck.playerDeck.cards)
+        {
+            OnCardAdded(card);
+        }
+    }
+
+    /// <summary>
     /// Adds the added tiles from the card
     /// </summary>
     /// <param name="card"> The card </param>
     private void OnCardAdded(CardSystem.Card card)
     {
+        if (card.effects == null)
+        {
+            return;
+        }
+
         foreach (DungeonEffect effect in card.effects)
         {
+            if (effect == null)
+            {
+                continue;
+            }
+            if (effect.tiles == null)
+            {
+                return;
+            }
             foreach (GameObject tile in effect.tiles)
             {
-                floorGenerationParameters.templateGenerationParameters.tileTypesToPossibleTiles.At(tile.GetComponent<Tile>().type).possibleTiles.Add(tile);
+                floorGenerationParameters.templateGenerationParameters.tileTypesToPossibleTiles.At(tile.GetComponent<TileComponent>().tile.type).possibleTiles.Add(tile);
             }
         }
     }

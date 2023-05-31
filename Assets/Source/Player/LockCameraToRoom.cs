@@ -51,6 +51,11 @@ public class LockCameraToRoom : MonoBehaviour
     {
         Vector3 newPosition;
 
+        if (floorGenerator.currentRoom == null)
+        {
+            return;
+        }
+
         if (floorGenerator.currentRoom.roomType == RoomType.Boss)
         {
             Vector3 playerPos = player.transform.position;
