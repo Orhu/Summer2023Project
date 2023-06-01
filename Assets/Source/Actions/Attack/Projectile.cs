@@ -16,9 +16,9 @@ public class Projectile : MonoBehaviour
     // The modifiers applied to this.
     public List<AttackModifier> modifiers;
     // Invoked when this projectile hits a wall, passes the hit collision as a parameter.
-    public System.Action<Collision2D> onHitWall;
+    public System.Action<Collision2D> onHit;
     // Invoked when this projectile hits something damageable, passes the hit collider as a parameter.
-    public System.Action<Collider2D> onHitDamageable;
+    public System.Action<Collider2D> onOverlap;
     // Invoked when this is destroyed.
     public System.Action onDestroyed;
 
@@ -68,9 +68,9 @@ public class Projectile : MonoBehaviour
     {
         // Setup collision
         rigidBody = GetComponent<Rigidbody2D>();
+        Collider2D collider = attack.shape.CreateCollider(gameObject);
         if (actor.GetCollider() != null)
         {
-            Collider2D collider = attack.shape.CreateCollider(gameObject);
             Physics2D.IgnoreCollision(collider, actor.GetCollider());
 
             // Ignore collision on ignored objects
@@ -168,20 +168,17 @@ public class Projectile : MonoBehaviour
             return;
         }
 
+        onOverlap?.Invoke(collision);
         Health hitHealth = collision.gameObject.GetComponent<Health>();
-        if (hitHealth != null)
+        if (hitHealth != null && attack.applyDamageOnHit)
         {
-            if (attack.applyDamageOnHit)
-            {
-                hitHealth.ReceiveAttack(attackData, transform.right);
-            }
+            hitHealth.ReceiveAttack(attackData, transform.right);
+        }
 
-            onHitDamageable?.Invoke(collision);
-            if (--remainingHits <= 0)
-            {
-                onDestroyed?.Invoke();
-                Destroy(gameObject);
-            }
+        if (--remainingHits <= 0)
+        {
+            onDestroyed?.Invoke();
+            Destroy(gameObject);
         }
     }
 
@@ -192,7 +189,7 @@ public class Projectile : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Invoke("DestroyOnWallHit", Time.fixedDeltaTime);
-        onHitWall?.Invoke(collision);
+        onHit?.Invoke(collision);
         onDestroyed?.Invoke();
     }
 

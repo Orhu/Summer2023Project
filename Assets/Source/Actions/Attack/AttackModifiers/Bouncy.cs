@@ -27,9 +27,9 @@ public class Bouncy : AttackModifier
     {
         set
         {
-            if (value.onHitWall == null || !value.onHitWall.GetInvocationList().Contains((Action<Collision2D>)Bounce))
+            if (value.onHit == null || !value.onHit.GetInvocationList().Contains((Action<Collision2D>)Bounce))
             {
-                value.onHitWall += Bounce;
+                value.onHit += Bounce;
                 bouncyProjectile = value;
                 bouncyRigidbody = value.GetComponent<Rigidbody2D>();
             }

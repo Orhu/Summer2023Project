@@ -40,8 +40,8 @@ public class SpawnBomb : AttackModifier
             }
             else
             {
-                _modifiedProjectile.onHitDamageable += CreateBomb;
-                _modifiedProjectile.onHitWall += (Collision2D collision) => CreateBomb(collision.collider);
+                _modifiedProjectile.onOverlap += CreateBomb;
+                _modifiedProjectile.onHit += (Collision2D collision) => CreateBomb(collision.collider);
             }
         }
     }
