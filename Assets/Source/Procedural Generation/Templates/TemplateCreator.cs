@@ -21,11 +21,15 @@ public class TemplateCreator : MonoBehaviour
     [Tooltip("The UI for choosing the template tiles")]
     public GameObject templateTileChooser;
 
-    [Tooltip("Tile types and their associated sprites")]
-    public List<TileTypeToSprite> tileTypesToSprites;
+    [Tooltip("The generic tiles (to load into the tile holder")]
+    GenericTiles genericTiles;
 
     [Tooltip("The size of the room this template is for")]
     [field: SerializeField] private Vector2Int _roomSize;
+
+    [Tooltip("The sprite to use when the preferred object is null")]
+    public Sprite nullSprite;
+
     public Vector2Int roomSize
     {
         get { return _roomSize; }
@@ -35,9 +39,6 @@ public class TemplateCreator : MonoBehaviour
             UpdateOnRoomSizeChange();
         }
     }
-
-    // The container for template being created
-    private GameObject createdTemplateContainer;
 
     // The actual template being created
     private Template createdTemplate;
@@ -62,10 +63,6 @@ public class TemplateCreator : MonoBehaviour
         templateTileChooser = Instantiate(templateTileChooser);
         templateTileChooser.transform.parent = transform;
         templateTileChooser.SetActive(true);
-        createdTemplateContainer = new GameObject();
-        createdTemplateContainer.name = "Created Template";
-        createdTemplate = createdTemplateContainer.AddComponent<Template>();
-        createdTemplate.transform.parent = transform;
         InitializeTileHUD();
         InitializeHeldTileSocket();
         UpdateOnRoomSizeChange();
@@ -77,10 +74,10 @@ public class TemplateCreator : MonoBehaviour
     private void InitializeTileHUD()
     {
         VerticalLayoutGroup layout = templateTileChooser.GetComponentInChildren<VerticalLayoutGroup>();
-        for (int i = 0; i < tileTypesToSprites.Count; i++)
+        foreach (TileTypeToGenericTile genericTile in genericTiles.tileTypesToGenericTiles)
         {
             GameObject button = new GameObject();
-            button.name = tileTypesToSprites[i].tileType.ToString();
+            button.name = genericTile.tileType.ToString();
 
             // Add RectTransform component and set position and size
             RectTransform rectTransform = button.AddComponent<RectTransform>();
@@ -95,12 +92,21 @@ public class TemplateCreator : MonoBehaviour
 
             // Add Image component and set sprite
             Image imageComponent = button.AddComponent<Image>();
-            imageComponent.sprite = tileTypesToSprites[i].sprite;
 
             // Add click listener
             TemplateTile templateTile = new TemplateTile();
-            templateTile.sprite = tileTypesToSprites[i].sprite;
-            templateTile.tileType = tileTypesToSprites[i].tileType;
+
+            if (genericTile.genericTile.spawnedObject.GetComponent<SpriteRenderer>() != null)
+            {
+                imageComponent.sprite = genericTile.genericTile.spawnedObject.GetComponent<SpriteRenderer>().sprite;
+                templateTile.sprite = genericTile.genericTile.spawnedObject.GetComponent<SpriteRenderer>().sprite;
+            }
+            else
+            {
+                imageComponent.sprite = nullSprite;
+                templateTile.sprite = nullSprite;
+            }
+
             buttonComponent.onClick.AddListener(() => OnHoldedTileChosen(templateTile));
             button.SetActive(true);
         }
@@ -287,9 +293,13 @@ public class TemplateCreator : MonoBehaviour
             {
                 sprite = heldTile.sprite;
             }
+            else if (heldTile.preferredTile.spawnedObject.GetComponent<SpriteRenderer>().sprite != null)
+            {
+                sprite = heldTile.preferredTile.spawnedObject.GetComponent<SpriteRenderer>().sprite;
+            }
             else
             {
-                sprite = heldTile.preferredTile.gameObject.GetComponent<SpriteRenderer>().sprite;
+                sprite = nullSprite;
             }
             heldTileSocket.GetComponent<SpriteRenderer>().sprite = sprite;
             heldTileSocket.transform.position = QuantizeMousePos(Input.mousePosition);

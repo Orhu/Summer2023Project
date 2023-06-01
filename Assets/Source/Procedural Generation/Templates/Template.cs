@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// A template, to be used for generating the interior of rooms
 /// </summary>
-public class Template : MonoBehaviour
+public class Template : ScriptableObject
 {
     [Tooltip("The tiles in this template")]
     [SerializeField] public List<TilesList> tiles;
@@ -45,7 +45,7 @@ public class TemplateTile
     public TileType tileType = TileType.None;
 
     [Tooltip("The preferred tile to spawn")]
-    public GameObject preferredTile;
+    public Tile preferredTile;
 }
 
 /// <summary>

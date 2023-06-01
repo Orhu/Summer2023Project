@@ -36,7 +36,7 @@ public class TemplateGenerator : MonoBehaviour
                 }
                 else
                 {
-                    TemplateGenerationParameters templateGenParams = transform.parent.GetComponent<FloorGenerator>().floorGenerationParameters.templateGenerationParameters;
+                    TemplateGenerationParameters templateGenParams = FloorGenerator.floorGeneratorInstance.templateGenerationParameters;
                     createdTile = templateGenParams.GetRandomTile(templateTile);
                     createdTile.gridLocation = new Vector2Int(i, j);
                     if (createdTile.spawnedObject != null)
@@ -52,6 +52,4 @@ public class TemplateGenerator : MonoBehaviour
             }
         }
     }
-
-    
 }

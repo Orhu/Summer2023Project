@@ -6,7 +6,8 @@ using UnityEngine;
 /// Tiles for use in the room grid. Holds information for pathfinding and spawning the tiles
 /// </summary>
 [System.Serializable]
-public class Tile : IHeapItem<Tile>
+[CreateAssetMenu(fileName = "NewTile", menuName = "Tiles/Tile", order = 1)]
+public class Tile : ScriptableObject, IHeapItem<Tile>
 {
     [Tooltip("is this tile walkable?")]
     [SerializeField] public bool walkable = true;

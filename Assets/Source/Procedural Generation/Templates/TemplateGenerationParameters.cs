@@ -17,6 +17,9 @@ public class TemplateGenerationParameters
     [Tooltip("The tile types and the possible tiles they can spawn. Use this to specify the generics of this floor")]
     [SerializeField] public TileTypesToPossibleTiles tileTypesToPossibleTiles;
 
+    [Tooltip("The tile types and their associated generic tiles")]
+    public GenericTiles genericTiles;
+
     // The templates that have been used
     [HideInInspector] private RoomTypesToDifficultiesToTemplates usedTemplates;
 
@@ -39,7 +42,7 @@ public class TemplateGenerationParameters
             {
                 DifficultyToTemplates difficultyToTemplates = new DifficultyToTemplates();
                 difficultyToTemplates.difficulty = difficulty;
-                difficultyToTemplates.templates = new List<GameObject>();
+                difficultyToTemplates.templates = new List<Template>();
                 difficultiesToTemplates.difficultiesToTemplates.Add(difficultyToTemplates);
             }
             roomTypeToDifficultiesToTemplates.difficultiesToTemplates = difficultiesToTemplates;
@@ -55,23 +58,19 @@ public class TemplateGenerationParameters
     /// <returns> The random tile </returns>
     public Tile GetRandomTile(TemplateTile preferredTile)
     {
-        PossibleTiles possibleTiles = tileTypesToPossibleTiles.At(preferredTile.tileType);
+        List<Tile> possibleTiles = tileTypesToPossibleTiles.At(preferredTile.tileType);
 
-        Tile returnTile = new Tile();
-
-        if (possibleTiles.possibleTiles.Contains(preferredTile.preferredTile))
+        if (possibleTiles.Contains(preferredTile.preferredTile))
         {
-            return preferredTile.preferredTile.GetComponent<TileComponent>().tile.ShallowCopy();
+            return preferredTile.preferredTile.ShallowCopy();
         }
 
-        if (possibleTiles.possibleTiles.Count != 0)
+        if (possibleTiles.Count != 0)
         {
-            List<GameObject> possibleTilesWithGeneric = new List<GameObject>(possibleTiles.possibleTiles);
-            possibleTilesWithGeneric.Add(possibleTiles.generic);
-            return possibleTilesWithGeneric[Random.Range(0, possibleTilesWithGeneric.Count)].GetComponent<TileComponent>().tile.ShallowCopy();
+            return possibleTiles[Random.Range(0, possibleTiles.Count)].ShallowCopy();
         }
 
-        return possibleTiles.generic.GetComponent<TileComponent>().tile.ShallowCopy();
+        return genericTiles.At(preferredTile.tileType).ShallowCopy();
     }
     
     /// <summary>
@@ -82,14 +81,14 @@ public class TemplateGenerationParameters
     public Template GetRandomTemplate(RoomType roomType)
     {
         Difficulty difficulty;
-        List<GameObject> possibleTemplates = GetPossibleTemplates(roomType, out difficulty);
-        GameObject randomTemplate = possibleTemplates[Random.Range(0, possibleTemplates.Count)];
+        List<Template> possibleTemplates = GetPossibleTemplates(roomType, out difficulty);
+        Template randomTemplate = possibleTemplates[Random.Range(0, possibleTemplates.Count)];
         templatesPool.Remove(roomType, difficulty, randomTemplate);
         usedTemplates.At(roomType).At(difficulty).Add(randomTemplate);
 
         if (templatesPool.At(roomType).At(difficulty).Count == 0)
         {
-            List<GameObject> templates = usedTemplates.At(roomType).At(difficulty);
+            List<Template> templates = usedTemplates.At(roomType).At(difficulty);
             for (int i = 0; i < templates.Count; i++)
             {
                 templatesPool.At(roomType).At(difficulty).Add(templates[i]);
@@ -97,7 +96,7 @@ public class TemplateGenerationParameters
             usedTemplates.At(roomType).At(difficulty).Clear();
         }
 
-        return randomTemplate.GetComponent<Template>();
+        return randomTemplate;
     }
 
     /// <summary>
@@ -106,7 +105,7 @@ public class TemplateGenerationParameters
     /// <param name="roomType"> The room type </param>
     /// <param name="difficulty"> The difficulty that was chosen </param>
     /// <returns> The list of possible templates </returns>
-    private List<GameObject> GetPossibleTemplates(RoomType roomType, out Difficulty difficulty)
+    private List<Template> GetPossibleTemplates(RoomType roomType, out Difficulty difficulty)
     {
         DifficultiesToTemplates difficultiesToTemplates = templatesPool.At(roomType);
 
@@ -176,9 +175,9 @@ public class RoomTypesToDifficultiesToTemplates
     /// <param name="roomType"> The room type to remove from </param>
     /// <param name="difficulty"> The difficulty to remove from </param>
     /// <param name="template"> The template to remove </param>
-    public void Remove(RoomType roomType, Difficulty difficulty, GameObject template)
+    public void Remove(RoomType roomType, Difficulty difficulty, Template template)
     {
-        List<GameObject> templates = At(roomType).At(difficulty);
+        List<Template> templates = At(roomType).At(difficulty);
         templates.Remove(template);
     }
 }
@@ -210,7 +209,7 @@ public class DifficultiesToTemplates
     /// </summary>
     /// <param name="difficulty"> The difficulty </param>
     /// <returns> The list of templates </returns>
-    public List<GameObject> At(Difficulty difficulty)
+    public List<Template> At(Difficulty difficulty)
     {
         for (int i = 0; i < difficultiesToTemplates.Count; i++)
         {
@@ -234,7 +233,7 @@ public struct DifficultyToTemplates
     public Difficulty difficulty;
 
     [Tooltip("The associated templates of that difficulty")]
-    public List<GameObject> templates;
+    public List<Template> templates;
 }
 
 /// <summary>
@@ -251,7 +250,7 @@ public class TileTypesToPossibleTiles
     /// </summary>
     /// <param name="tileType"> The tile type </param>
     /// <returns> The possible tiles </returns>
-    public PossibleTiles At(TileType tileType)
+    public List<Tile> At(TileType tileType)
     {
         for (int i = 0; i < tileTypesToPossibleTiles.Count; i++)
         {
@@ -274,19 +273,6 @@ public struct TileTypeToPossibleTiles
     [Tooltip("The tile type")]
     public TileType tileType;
 
-    [Tooltip("The possible tiles")]
-    public PossibleTiles possibleTiles;
-}
-
-/// <summary>
-/// Holds a generic tile, and a list of possible spawnable tiles
-/// </summary>
-[System.Serializable]
-public struct PossibleTiles
-{
-    [Tooltip("The generic version of this type of tile")]
-    public GameObject generic;
-
     [Tooltip("The possible spawnable tiles (from the player deck)")]
-    public List<GameObject> possibleTiles;
+    public List<Tile> possibleTiles;
 }

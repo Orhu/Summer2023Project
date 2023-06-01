@@ -27,7 +27,7 @@ public class LockCameraToRoom : MonoBehaviour
     /// </summary>
     void Start()
     {
-        Vector2 roomScale = FloorGenerator.floorGeneratorInstance.floorGenerationParameters.roomSize;
+        Vector2 roomScale = FloorGenerator.floorGeneratorInstance.roomSize;
 
         if (roomScale.y > roomScale.x * (1 / GetComponent<Camera>().aspect))
         {
@@ -61,9 +61,9 @@ public class LockCameraToRoom : MonoBehaviour
             Vector3 playerPos = player.transform.position;
             newPosition = new Vector3();
             Vector2Int bossLocation = floorGenerator.currentRoom.roomLocation;
-            Vector2 bossWorldBottomLeftLocation = FloorGenerator.TransformMapToWorld(bossLocation, floorGenerator.map.startCell.location, floorGenerator.floorGenerationParameters.roomSize) - floorGenerator.floorGenerationParameters.roomSize / 2;
-            Vector2 bossWorldTopRightLocation = FloorGenerator.TransformMapToWorld(bossLocation + new Vector2Int(2, 2), floorGenerator.map.startCell.location, floorGenerator.floorGenerationParameters.roomSize) - floorGenerator.floorGenerationParameters.roomSize / 2 - Vector2.one;
-            bossWorldTopRightLocation = bossWorldTopRightLocation + floorGenerator.floorGenerationParameters.roomSize;
+            Vector2 bossWorldBottomLeftLocation = FloorGenerator.TransformMapToWorld(bossLocation, floorGenerator.map.startCell.location, floorGenerator.roomSize) - floorGenerator.roomSize / 2;
+            Vector2 bossWorldTopRightLocation = FloorGenerator.TransformMapToWorld(bossLocation + new Vector2Int(2, 2), floorGenerator.map.startCell.location, floorGenerator.roomSize) - floorGenerator.roomSize / 2 - Vector2.one;
+            bossWorldTopRightLocation = bossWorldTopRightLocation + floorGenerator.roomSize;
 
             if (playerPos.x - height * GetComponent<Camera>().aspect / 2 < bossWorldBottomLeftLocation.x - extraHeight * GetComponent<Camera>().aspect / 2 + 0.5f)
             {
@@ -95,7 +95,7 @@ public class LockCameraToRoom : MonoBehaviour
         }
         else
         {
-            Vector2 pos2D = FloorGenerator.TransformMapToWorld(floorGenerator.currentRoom.roomLocation, floorGenerator.map.startCell.location, floorGenerator.floorGenerationParameters.roomSize);
+            Vector2 pos2D = FloorGenerator.TransformMapToWorld(floorGenerator.currentRoom.roomLocation, floorGenerator.map.startCell.location, floorGenerator.roomSize);
             newPosition = new Vector3(pos2D.x, pos2D.y, -1);
         }
 
