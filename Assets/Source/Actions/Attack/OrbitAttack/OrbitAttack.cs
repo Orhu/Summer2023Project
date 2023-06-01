@@ -1,8 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "NewBulletAttack", menuName = "Cards/Actions/OrbitAttackAttack")]
 public class OrbitAttack : Attack
 {
     [Tooltip("The sequence of when and where to spawn bullets")]
