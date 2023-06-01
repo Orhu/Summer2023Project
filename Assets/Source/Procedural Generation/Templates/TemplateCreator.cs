@@ -22,7 +22,7 @@ public class TemplateCreator : MonoBehaviour
     public GameObject templateTileChooser;
 
     [Tooltip("The generic tiles (to load into the tile holder")]
-    GenericTiles genericTiles;
+    public GenericTiles genericTiles;
 
     [Tooltip("The size of the room this template is for")]
     [field: SerializeField] private Vector2Int _roomSize;
@@ -63,8 +63,8 @@ public class TemplateCreator : MonoBehaviour
         templateTileChooser = Instantiate(templateTileChooser);
         templateTileChooser.transform.parent = transform;
         templateTileChooser.SetActive(true);
-        InitializeTileHUD();
         InitializeHeldTileSocket();
+        InitializeTileHUD();
         UpdateOnRoomSizeChange();
     }
 
