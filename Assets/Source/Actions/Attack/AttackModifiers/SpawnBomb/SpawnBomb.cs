@@ -67,7 +67,7 @@ public class SpawnBomb : AttackModifier
             newBomb.ignoredObjects = _modifiedProjectile.IgnoredObjects;
         }
 
-        if (sticky)
+        if (sticky && collision != null)
         {
             newBomb.transform.parent = collision.transform;
         }

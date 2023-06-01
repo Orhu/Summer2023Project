@@ -156,6 +156,7 @@ public class Projectile : MonoBehaviour
         remainingHomingTime -= Time.deltaTime;
         if (remainingLifetime <= 0)
         {
+            onDestroyed?.Invoke();
             Destroy(gameObject);
         }
     }
