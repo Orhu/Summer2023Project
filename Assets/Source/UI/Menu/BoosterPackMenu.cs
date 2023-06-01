@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace CardSystem
 {
+    /// <summary>
+    /// Handles creation and maintenance of Booster Pack UI
+    /// </summary>
     public class BoosterPackMenu : MonoBehaviour
     {
         // Card gets populated by card buttons (selected in UI)
@@ -13,33 +16,44 @@ namespace CardSystem
         public List<Card> packCards = new List<Card> ();
 
         [Tooltip("Link to the card layout area game object")]
-        public GameObject cardLayoutArea;
+        public List<CardRenderer> cardRenderers = new List<CardRenderer>();
 
+        /// <summary>
+        /// Optionally populate the cards on start
+        /// </summary>
         private void Start()
         {
             PopulateBoosterPackCards(3);
         }
 
         /// <summary>
-        /// Initally populate card UI's for player to see choices
+        /// Set card containers to be active and give them cards randomly from packCards
         /// </summary>
+        /// <param name="numCards">Number of cards to spawn in pack</param>
         public void PopulateBoosterPackCards(int numCards)
         {
-            for (int i = 0; i < cardLayoutArea.transform.childCount; i++)
+            // Loop through all cardRenderers
+            for (int i = 0; i < cardRenderers.Count; i++)
             {
-                GameObject tempUICardContainer = cardLayoutArea.transform.GetChild(i).gameObject;
+                // If the current cardRenderer falls within
+                // the amount of cards we want to spawn:
                 if (i < numCards)
                 {
-                    Card tempCard = packCards[Random.Range(0, packCards.Count)];
+                    // Choose a card at random from packCards
+                    Card tempCard = packCards[Random.Range(0, packCards.Count-1)];
                     if (tempCard != null)
                     {
-                        tempUICardContainer.SetActive(true);
-                        tempUICardContainer.GetComponent<CardRenderer>().Card = tempCard;
+                        // Set the cardRenderer to active
+                        cardRenderers[i].gameObject.SetActive(true);
+                        // Assign it the random card
+                        cardRenderers[i].Card = tempCard;
                     }
                 }
                 else
                 {
-                    tempUICardContainer.SetActive(false);
+                    // If the cardRenderer is not within the number of spawned cards,
+                    // set it to inactive
+                    cardRenderers[i].gameObject.SetActive(false);
                 }
                 
             }
@@ -55,7 +69,7 @@ namespace CardSystem
         }
 
         /// <summary>
-        /// Called after confirming the card selected.
+        /// Called after confirming the card selected. Add's card to deck
         /// </summary>
         public void AddCard()
         {
