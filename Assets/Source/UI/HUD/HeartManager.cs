@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// A component for rendering Player's heart count to screen
+/// </summary>
 public class HeartManager : MonoBehaviour
 {
-    // First heart shown
-    public GameObject forwardHeartPrefab;
-    // All subsequent hearts
-    public GameObject sideHeartCounterPrefab;
+    [Tooltip("Prefab representing player hearts")]
+    public GameObject heartCounterPrefab;
     // Copy of the player health
     private Health playerHealthScript;
     // Local variable - what the UI thinks the player's health is
@@ -54,16 +55,9 @@ public class HeartManager : MonoBehaviour
     void UpdateHeartManager()
     {
         
-        for (int i = 0; i < currentPlayerHealth; i++)
+        for (int i = 0; i < currentPlayerHealth / 4; i++)
         {
-            if (i == 0)
-            {
-                Instantiate(forwardHeartPrefab, transform);
-            }
-            else
-            {
-                Instantiate(sideHeartCounterPrefab, transform);
-            }
+            Instantiate(heartCounterPrefab, transform);
         }
     }
 }
