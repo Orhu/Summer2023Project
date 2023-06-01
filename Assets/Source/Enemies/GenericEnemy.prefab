@@ -61,6 +61,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d664ad8cfe27b3e47af5a2fd8d9c47f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dealsDamageOnTouch: 0
+  delayBetweenTouchDamage: 0
+  damageOnTouch: 0
+  damageTypeOnTouch: 0
+  statusEffectsOnTouch: []
 --- !u!1 &7281680880204442677
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,7 +170,7 @@ CapsuleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -213,11 +218,6 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
-  dealsDamageOnTouch: 0
-  delayBetweenTouchDamage: 0
-  damageOnTouch: 0
-  damageTypeOnTouch: 0
-  statusEffectsOnTouch: []
   drawGizmos: 1
   target: {fileID: 0}
 --- !u!114 &7281680880204442666

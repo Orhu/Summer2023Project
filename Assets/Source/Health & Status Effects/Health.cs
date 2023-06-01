@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -40,6 +41,20 @@ public class Health : MonoBehaviour
         // set max health bar value, then update health bar to contain its current value
         onMaxHealthChanged?.Invoke(maxHealth);
         onHealthChanged?.Invoke(currentHealth);
+
+        StartCoroutine(nameof(TakeDamage));
+    }
+
+    // this function was Zak testing enemy deaths, if it's still here he made a mistake and you should tell him to delete this function 
+    IEnumerator TakeDamage()
+    {
+        if (gameObject.CompareTag("Player")) yield break;
+        while (true)
+        {
+            this.ReceiveAttack(new DamageData(1, DamageData.DamageType.Physical, new List<StatusEffect>(), GameObject.FindGameObjectWithTag("Player").GetComponent<Controller>()),
+                Vector2.zero);
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 
     /// <summary>

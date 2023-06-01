@@ -204,6 +204,7 @@ public class EnemyBrain : MonoBehaviour
         target = Physics2D.OverlapCircle(transform.position, scanRadius, targetLayer);
     }
 
+    
     /// <summary>
     /// Draw gizmos
     /// </summary>

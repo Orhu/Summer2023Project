@@ -97,7 +97,15 @@ public class PathRequestManager : MonoBehaviour
     /// <param name="success"> Whether a path was successfully found to the target </param>
     public void FinishedProcessingPath(Vector2[] path, bool success)
     {
-        currentPathRequest.callback(path, success);
+        try
+        {
+            currentPathRequest.callback(path, success);
+        }
+        catch (MissingReferenceException e)
+        {
+            print("Tried to send path to an enemy, but it seems to have died or is otherwise inaccessible");
+        }
+
         isProcessingPath = false;
         TryProcessNext();
     }
