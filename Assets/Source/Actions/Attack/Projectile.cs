@@ -131,7 +131,7 @@ public class Projectile : MonoBehaviour
     /// <param name="collision"> The collision data </param>
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.isTrigger || IgnoredObjects.Contains(collision.gameObject))
+        if (IgnoredObjects.Contains(collision.gameObject))
         {
             return;
         }
