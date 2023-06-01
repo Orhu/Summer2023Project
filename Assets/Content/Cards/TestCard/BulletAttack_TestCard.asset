@@ -17,18 +17,19 @@ MonoBehaviour:
     damageType: 0
     statusEffects:
     - {fileID: 11400000, guid: 4d24f873cabfd794093b74fa3a36ff3e, type: 2}
-  hitCount: 2
-  applyDamageOnHit: 0
+  hitCount: 4
+  applyDamageOnHit: 1
   modifiers:
-  - {fileID: 11400000, guid: 7526a72a83c97084da731dc26bcd6fac, type: 2}
+  - {fileID: 11400000, guid: 5b5e3486da398914faa2187de44f0301, type: 2}
+  - {fileID: 11400000, guid: b35a169b6528fa14d9d1985637c4b021, type: 2}
   shape: {fileID: 11400000, guid: 9009f0e272fb0964b84d5e019d3ea5b4, type: 2}
   lifetime: 10
-  initialSpeed: 0
-  acceleration: 1
+  initialSpeed: 0.5
+  acceleration: 0
   minSpeed: 0
   maxSpeed: 20
-  homingSpeed: 90
-  homingTime: 2
+  homingSpeed: 0
+  homingTime: 0
   homingAimMode: 1
   visualObject: {fileID: 815138696641318384, guid: 5a43758f167be394badf944662ecc2c3, type: 3}
   detachVisualsBeforeDestroy: 0
@@ -36,9 +37,9 @@ MonoBehaviour:
   aimMode: 0
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
-  spawnSequence:
+  _spawnSequence:
   - delay: 0
     angle: 0
     offset: {x: 0, y: 0}
-  randomAngle: 20
-  randomOffset: 0.1
+  randomAngle: 0
+  randomOffset: 0

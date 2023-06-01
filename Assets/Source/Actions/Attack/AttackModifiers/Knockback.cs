@@ -43,12 +43,15 @@ public class Knockback : AttackModifier
                     knockbackSource = value.actor.GetActionSourceTransform().gameObject;
                     break;
             }
-            value.onHit += ApplyKnockback;
+            value.onHitDamageable += ApplyKnockback;
         }
     }
 
-    private void ApplyKnockback(Collider2D collider)
+    private void ApplyKnockback(Collider2D collision)
     {
+        Rigidbody2D rigidbody = collision.GetComponent<Rigidbody2D>();
+        if (rigidbody == null) { return; }
+
         Vector2 impulse;
         if (pushDirection == PushDirection.InProjectileForwardDirection || pushDirection == PushDirection.InSpawnerForwardDirection)
         {
@@ -56,10 +59,9 @@ public class Knockback : AttackModifier
         }
         else
         {
-            impulse = (collider.transform.position - knockbackSource.transform.position).normalized;
+            impulse = (collision.transform.position - knockbackSource.transform.position).normalized;
         }
-        impulse *= knockbackVelocity;
 
-        collider.GetComponent<Rigidbody2D>().velocity += impulse;
+        rigidbody.velocity += impulse * knockbackVelocity;
     }
 }

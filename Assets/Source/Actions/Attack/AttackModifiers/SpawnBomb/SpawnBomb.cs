@@ -40,7 +40,8 @@ public class SpawnBomb : AttackModifier
             }
             else
             {
-                _modifiedProjectile.onHit += CreateBomb;
+                _modifiedProjectile.onHitDamageable += CreateBomb;
+                _modifiedProjectile.onHitWall += (Collision2D collision) => CreateBomb(collision.collider);
             }
         }
     }
@@ -49,7 +50,7 @@ public class SpawnBomb : AttackModifier
     {
         CreateBomb(null);
     }
-    private void CreateBomb(Collider2D collider)
+    private void CreateBomb(Collider2D collision)
     {
         Bomb newBomb = new GameObject().AddComponent<Bomb>();
         newBomb.explosionRadius = explosionRadius;
@@ -68,7 +69,7 @@ public class SpawnBomb : AttackModifier
 
         if (sticky)
         {
-            newBomb.transform.parent = collider.transform;
+            newBomb.transform.parent = collision.transform;
         }
 
         newBomb.transform.position = _modifiedProjectile.transform.position;

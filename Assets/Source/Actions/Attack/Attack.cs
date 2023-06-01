@@ -1,4 +1,5 @@
 using Skaillz.EditInline;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -76,7 +77,8 @@ public abstract class Attack : Action
     [Tooltip("Whether or not the player needs to aim. If false it will be aimed at the closet enemy")]
     public AimMode aimMode;
 
-
+    [Tooltip("The sequence of when and where to spawn projectiles")]
+    public abstract List<ProjectileSpawnInfo> spawnSequence { set; get; }
 
     // The projectile to spawn
     public Projectile projectilePrefab;
@@ -87,7 +89,7 @@ public abstract class Attack : Action
 
     #region Previewing
     /// <summary>
-    /// Starts rendering a preview of what this action will do.
+    /// A scriptable object data about an attack that can be used by cards and enemies.
     /// </summary>
     /// <param name="actor"> The actor that will be playing this action. </param>
     public abstract void Preview(IActor actor);
@@ -114,6 +116,7 @@ public abstract class Attack : Action
     #endregion
 
     #region Playing
+
     /// <summary>
     /// Plays this action and causes all its effects. Also cancels any relevant previews.
     /// </summary>
@@ -123,22 +126,49 @@ public abstract class Attack : Action
     /// <param name="ignoredObjects"> The objects this action will ignore. </param>
     public virtual void Play(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects = null)
     {
-        SpawnProjectile(actor, modifiers, causer, ignoredObjects);
+        actor.GetActionSourceTransform().GetComponent<MonoBehaviour>().StartCoroutine(PlaySpawnSequence(actor, modifiers, causer, ignoredObjects));
     }
-    public virtual void Play(IActor actor, GameObject causer, List<GameObject> ignoredObjects = null)
+    public void Play(IActor actor, GameObject causer, List<GameObject> ignoredObjects = null)
     {
         Play(actor, new List<AttackModifier>(), causer, ignoredObjects);
     }
-    public virtual void Play(IActor actor, List<AttackModifier> modifiers, List<GameObject> ignoredObjects = null)
+    public void Play(IActor actor, List<AttackModifier> modifiers, List<GameObject> ignoredObjects = null)
     {
         Play(actor, modifiers, actor.GetActionSourceTransform().gameObject, ignoredObjects);
     }
-    public override void Play(IActor actor, List<GameObject> ignoredObjects = null)
+    public sealed override void Play(IActor actor, List<GameObject> ignoredObjects = null)
     {
         Play(actor, new List<AttackModifier>(), actor.GetActionSourceTransform().gameObject, ignoredObjects);
     }
 
-    protected Projectile SpawnProjectile(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects)
+    /// <summary>
+    /// Spawns all of the projectiles in spawnSequence and creates delays appropriately.
+    /// </summary>
+    /// <param name="actor"> The actor that is playing this action. </param>
+    /// <param name="modifiers"> The modifiers that are applied to this attack. </param>
+    /// <param name="causer"> The causer of damage dealt by this attack. </param>
+    /// <param name="ignoredObjects"> The objects this action will ignore. </param>
+    protected IEnumerator PlaySpawnSequence(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects)
+    {
+        List<ProjectileSpawnInfo> spawnSequence = new List<ProjectileSpawnInfo>(this.spawnSequence);
+        for (int i = 0; i < spawnSequence.Count; i++)
+        {
+            if (spawnSequence[i].delay > 0)
+            {
+                yield return new WaitForSeconds(spawnSequence[i].delay);
+            }
+            SpawnProjectile(actor, modifiers, causer, ignoredObjects, i, spawnSequence);
+
+            // Wait to ensure the sequence doesn't miss new additions
+            if (i + 1 >= spawnSequence.Count)
+            {
+                yield return new WaitForEndOfFrame();
+                yield return new WaitForEndOfFrame();
+            }
+        }
+    }
+
+    protected Projectile SpawnProjectile(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects, int index, List<ProjectileSpawnInfo> spawnSequence)
     {
         Projectile projectile = Instantiate(projectilePrefab.gameObject).GetComponent<Projectile>();
         projectile.attack = this;
@@ -147,26 +177,44 @@ public abstract class Attack : Action
         projectile.modifiers.AddRange(modifiers);
         projectile.causer = causer;
         projectile.IgnoredObjects = ignoredObjects;
+        projectile.index = index;
+        projectile.spawnSequence = spawnSequence;
         return projectile;
     }
     #endregion
+}
+
+/// <summary>
+/// The different location where a projectile could spawn at.
+/// </summary>
+public enum SpawnLocation
+{
+    Actor,
+    AimPosition
+}
+
+/// <summary>
+/// The different things a projectile could be aimed at.
+/// </summary>
+public enum AimMode
+{
+    AtMouse,
+    AtClosestEnemy,
+    AtRandomEnemy
+}
+
+/// <summary>
+/// The information about a single bullet spawning event.
+/// </summary>
+[System.Serializable]
+public abstract class ProjectileSpawnInfo
+{
+    [Tooltip("The time to wait after the previous bullet to spawn this one")]
+    public float delay = 0;
 
     /// <summary>
-    /// The different location where a projectile could spawn at.
+    /// Creates a duplicate of this.
     /// </summary>
-    public enum SpawnLocation
-    {
-        Actor,
-        AimPosition
-    }
-
-    /// <summary>
-    /// The different things a projectile could be aimed at.
-    /// </summary>
-    public enum AimMode
-    {
-        AtMouse,
-        AtClosestEnemy,
-        AtRandomEnemy
-    }
+    /// <returns> The created duplicate. </returns>
+    public abstract ProjectileSpawnInfo Instantiate();
 }

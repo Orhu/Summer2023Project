@@ -18,7 +18,6 @@ public class BoxProjectileShape : ProjectileShape
     {
         BoxCollider2D collider = gameObject.AddComponent<BoxCollider2D>();
         collider.size = size;
-        collider.isTrigger = true;
         return collider;
     }
 }

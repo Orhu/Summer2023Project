@@ -1,15 +1,26 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-/// <summary>
-/// An attack that fires a bullet in a strait line.
-/// </summary>
-[CreateAssetMenu(fileName = "NewBulletAttack", menuName = "Cards/Actions/Attacks/Bullet Attack")]
 public class BulletAttack : Attack
 {
     [Tooltip("The sequence of when and where to spawn bullets")]
-    public List<BulletSpawnInfo> spawnSequence = new List<BulletSpawnInfo>() { new BulletSpawnInfo() };
+    [SerializeField] private List<BulletSpawnInfo> _spawnSequence = new List<BulletSpawnInfo>() { new BulletSpawnInfo() };
+    public override List<ProjectileSpawnInfo> spawnSequence 
+    {
+        get 
+        {
+            return _spawnSequence
+                .Select(x => x as ProjectileSpawnInfo)
+                .ToList();
+        }
+        set
+        {
+            _spawnSequence = value
+                .Select(x => x as BulletSpawnInfo)
+                .ToList();
+        }
+    }
 
     [Tooltip("The angle relative to the aim direction that this projectile will spawn at")]
     public float randomAngle = 0f;
@@ -38,54 +49,33 @@ public class BulletAttack : Attack
         throw new System.NotImplementedException();
     }
     #endregion
+}
 
-    #region Playing
-    /// <summary>
-    /// Plays this action and causes all its effects. Also cancels any relevant previews.
-    /// </summary>
-    /// <param name="actor"> The actor that will be playing this action. </param>
-    /// <param name="modifiers"> The modifiers to be applied to this attack. </param>
-    /// <param name="causer"> The causer of damage dealt by this attack. </param>
-    /// <param name="ignoredObjects"> The objects this action will ignore. </param>
-    public override void Play(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects = null)
-    {
-        actor.GetActionSourceTransform().GetComponent<MonoBehaviour>().StartCoroutine(PlaySpawnSequence(actor, modifiers, causer, ignoredObjects));
-    }
+/// <summary>
+/// The information about a single bullet spawning event.
+/// </summary>
+[System.Serializable]
+public class BulletSpawnInfo : ProjectileSpawnInfo
+{
+    [Tooltip("The angle relative to the aim direction that this projectile will spawn at")]
+    public float angle = 0;
 
-    /// <summary>
-    /// Spawns all of the projectiles in spawnSequence and creates delays appropriately.
-    /// </summary>
-    /// <param name="actor"> The actor that is playing this action. </param>
-    /// <param name="modifiers"> The modifiers that are applied to this attack. </param>
-    /// <param name="causer"> The causer of damage dealt by this attack. </param>
-    /// <param name="ignoredObjects"> The objects this action will ignore. </param>
-    IEnumerator PlaySpawnSequence(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects)
-    {
-        for (int i = 0; i < spawnSequence.Count; i++)
-        {
-            if (spawnSequence[i].delay > 0)
-            {
-                yield return new WaitForSeconds(spawnSequence[i].delay);
-            }
-            BulletProjectile bullet = SpawnProjectile(actor, modifiers, causer, ignoredObjects) as BulletProjectile;
-            bullet.bulletIndex = i;
-        }
-    }
-    #endregion
+    [Tooltip("The offset from the spawn location to spawn this bullet at")]
+    public Vector2 offset = Vector2.zero;
+
+
 
     /// <summary>
-    /// The information about a single bullet spawning event.
+    /// Creates a duplicate of this.
     /// </summary>
-    [System.Serializable]
-    public class BulletSpawnInfo
+    /// <returns> The created duplicate. </returns>
+    public override ProjectileSpawnInfo Instantiate()
     {
-        [Tooltip("The time to wait after the previous bullet to spawn this one")]
-        public float delay = 0;
+        BulletSpawnInfo newInfo = new BulletSpawnInfo();
+        newInfo.delay = delay;
+        newInfo.angle = angle;
+        newInfo.offset = offset;
 
-        [Tooltip("The angle relative to the aim direction that this projectile will spawn at")]
-        public float angle = 0;
-
-        [Tooltip("The offset from the spawn location to spawn this bullet at")]
-        public Vector2 offset = Vector2.zero;
+        return newInfo;
     }
 }

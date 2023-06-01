@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static Attack;
 
 /// <summary>
 /// An object that travels and deals an attack when it collides with an object.
@@ -16,8 +15,35 @@ public class Projectile : MonoBehaviour
     public GameObject causer;
     // The modifiers applied to this.
     public List<AttackModifier> modifiers;
+    // Invoked when this projectile hits a wall, passes the hit collision as a parameter.
+    public System.Action<Collision2D> onHitWall;
+    // Invoked when this projectile hits something damageable, passes the hit collider as a parameter.
+    public System.Action<Collider2D> onHitDamageable;
+    // Invoked when this is destroyed.
+    public System.Action onDestroyed;
+
+
+    // The rigidbody responsible for the collision of this projectile.
+    protected Rigidbody2D rigidBody;
+    // The modified attack data of this projectile.
+    public DamageData attackData;
+
+
+    public float speed;
+    public float maxSpeed;
+    public float minSpeed;
+    public float acceleration;
+    public float remainingLifetime;
+    public int remainingHits;
+    GameObject closestTarget;
+    GameObject randomTarget;
+    public float remainingHomingTime;
+    public float homingSpeed;
+    public int index;
+    public List<ProjectileSpawnInfo> spawnSequence;
+
     // The object for this to ignore.
-    public List<GameObject> IgnoredObjects
+    internal List<GameObject> IgnoredObjects
     {
         get
         {
@@ -34,29 +60,6 @@ public class Projectile : MonoBehaviour
         set { ignoredObjects = value; }
     }
     List<GameObject> ignoredObjects;
-
-    // Invoked when this projectile hits something, passes the hit collider as a parameter.
-    public System.Action<Collider2D> onHit;
-    // Invoked when this is destroyed.
-    public System.Action onDestroyed;
-
-
-    // The rigidbody responsible for the collision of this projectile.
-    protected Rigidbody2D rigidBody;
-    // The modified attack data of this projectile.
-    public DamageData attackData;
-
-    public float speed;
-    public float maxSpeed;
-    public float minSpeed;
-    public float acceleration;
-    public float remainingLifetime;
-    public int remainingHits;
-    GameObject closestTarget;
-    GameObject randomTarget;
-    public float remainingHomingTime;
-    public float homingSpeed;
-
 
     /// <summary>
     /// Initializes components based on spawner stats.
@@ -157,38 +160,39 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Applies an attack to the hit object
-    /// </summary>
-    /// <param name="collision"> The collision data </param>
-    void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.isTrigger || IgnoredObjects.Contains(collision.gameObject))
+        if (IgnoredObjects.Contains(collision.gameObject))
         {
             return;
         }
 
-        Health hitHealth = collision.GetComponent<Health>();
+        Health hitHealth = collision.gameObject.GetComponent<Health>();
         if (hitHealth != null)
         {
             if (attack.applyDamageOnHit)
             {
                 hitHealth.ReceiveAttack(attackData, transform.right);
             }
-                
-            onHit?.Invoke(collision);
+
+            onHitDamageable?.Invoke(collision);
             if (--remainingHits <= 0)
             {
                 onDestroyed?.Invoke();
                 Destroy(gameObject);
             }
         }
-        else
-        {
-            onHit?.Invoke(collision);
-            onDestroyed?.Invoke();
-            Destroy(gameObject);
-        }
+    }
+
+    /// <summary>
+    /// Applies an attack to the hit object
+    /// </summary>
+    /// <param name="collision"> The collision data </param>
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Invoke("DestroyOnWallHit", Time.fixedDeltaTime);
+        onHitWall?.Invoke(collision);
+        onDestroyed?.Invoke();
     }
 
     /// <summary>
@@ -279,5 +283,10 @@ public class Projectile : MonoBehaviour
         {
             transform.GetChild(0).transform.parent = null;
         }
+    }
+
+    private void DestroyOnWallHit()
+    {
+        Destroy(gameObject);
     }
 }

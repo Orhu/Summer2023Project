@@ -18,7 +18,6 @@ public class CircleProjectileShape : ProjectileShape
     {
         CircleCollider2D collider = gameObject.AddComponent<CircleCollider2D>();
         collider.radius = radius;
-        collider.isTrigger = true;
         return collider;
     }
 }
