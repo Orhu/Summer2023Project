@@ -10,15 +10,18 @@ public class Tile : IHeapItem<Tile>
 {
     [Tooltip("is this tile walkable?")]
     [SerializeField] public bool walkable = true;
-
+    
+    [Tooltip("How much this tile costs to walk on (higher is avoided more, lower is preferred)")]
+    [SerializeField] public int movementPenalty = 1;
+    
     // cost of reaching this node from the start node, tracking cumulative cost incurred so far
-    public int gCost;
+    [HideInInspector] public int gCost;
 
     // cost of reaching this node from the end node, tracking cumulative cost incurred so far
-    public int hCost;
+    [HideInInspector] public int hCost;
 
     // we can use hCost + gCost to get the total cost of reaching this node
-    public int fCost => gCost + hCost;
+    [HideInInspector] public int fCost => gCost + hCost;
 
     // parent of this tile, as determined by pathfinding algorithm
     [HideInInspector] public Tile parent;

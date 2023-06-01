@@ -37,9 +37,6 @@ public class EnemyBrain : MonoBehaviour
     [Tooltip("Layer containing target (probably the player layer)")] [SerializeField]
     private LayerMask targetLayer;
 
-    [Header("Debug")] [Tooltip("Draw debug gizmos?")] [SerializeField]
-    private bool drawGizmos;
-
     // current target
     [HideInInspector] public Collider2D target;
 
@@ -202,40 +199,5 @@ public class EnemyBrain : MonoBehaviour
     public void GetTargetPosition()
     {
         target = Physics2D.OverlapCircle(transform.position, scanRadius, targetLayer);
-    }
-
-    
-    /// <summary>
-    /// Draw gizmos
-    /// </summary>
-    public void OnDrawGizmos()
-    {
-        if (!drawGizmos)
-        {
-            return;
-        }
-        
-        Gizmos.color = Color.red;
-        if (target != null)
-        {
-            // draw current target tile
-            var targetTile = room.WorldPosToTile(target.transform.position);
-            Gizmos.DrawCube(room.TileToWorldPos(targetTile), Vector3.one);
-        }
-        
-        Gizmos.color = Color.cyan;
-        var myTile = room.WorldPosToTile(controller.feet.transform.position);
-        Gizmos.DrawCube(room.TileToWorldPos(myTile), Vector3.one);
-
-        Gizmos.color = Color.green;
-        if (path != null && path.Length > 0)
-        {
-            if (targetIndex < path.Length)
-            {
-                // reached the end of the waypoints
-                Gizmos.DrawLine(controller.feet.transform.position, path[targetIndex]);
-                Gizmos.DrawCube(path[targetIndex], Vector3.one * 0.5f);
-            }
-        }
     }
 }
