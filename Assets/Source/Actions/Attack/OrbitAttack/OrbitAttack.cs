@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// An attack that creates a projectile that orbits around the spawn location.
+/// </summary>
 public class OrbitAttack : Attack
 {
     [Tooltip("The sequence of when and where to spawn bullets")]

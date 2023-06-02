@@ -47,6 +47,10 @@ public class Knockback : AttackModifier
         }
     }
 
+    /// <summary>
+    /// Applies knockback to the hit collider.
+    /// </summary>
+    /// <param name="collision"> The collider that was hit. </param>
     private void ApplyKnockback(Collider2D collision)
     {
         Rigidbody2D rigidbody = collision.GetComponent<Rigidbody2D>();

@@ -14,12 +14,16 @@ public class ParticleSystemPropertyBinder : MonoBehaviour
     // The remaining lifetime of the visuals.
     private ParticleSystem.MainModule mainModule;
 
+    /// <summary>
+    /// Initializes references
+    /// </summary>
     private void Awake()
     {
         particleSystem = GetComponent<ParticleSystem>();
         mainModule = particleSystem.main;
     }
 
+    // The initial speed of particles when the Particle System first spawns them.
     public float StartSpeed
     {
         set 

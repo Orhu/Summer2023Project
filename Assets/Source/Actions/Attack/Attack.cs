@@ -168,7 +168,17 @@ public abstract class Attack : Action
         }
     }
 
-    protected Projectile SpawnProjectile(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects, int index, List<ProjectileSpawnInfo> spawnSequence)
+    /// <summary>
+    /// Spawns a single projectile from the spawn sequence.
+    /// </summary>
+    /// <param name="actor"> The actor spawning the projectile. </param>
+    /// <param name="modifiers"> The modifiers that are applied to this attack. </param>
+    /// <param name="causer"> The causer of damage dealt by this attack. </param>
+    /// <param name="ignoredObjects"> The objects this action will ignore. </param>
+    /// <param name="index"> The index in the spawn sequence that the projectile was spawned from. </param>
+    /// <param name="spawnSequence"> The spawn sequence instance that is being used. </param>
+    /// <returns> The projectile that was spawned. </returns>
+    protected virtual Projectile SpawnProjectile(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects, int index, List<ProjectileSpawnInfo> spawnSequence)
     {
         Projectile projectile = Instantiate(projectilePrefab.gameObject).GetComponent<Projectile>();
         projectile.attack = this;

@@ -8,9 +8,8 @@ using UnityEngine.UI;
 [ExecuteInEditMode]
 public class CardRenderer : MonoBehaviour
 {
-    // The card to render.
-    [SerializeField]
-    Card card;
+    [Tooltip("The card to render.")]
+    [SerializeField] private Card card;
     public Card Card
     {
         set
@@ -69,12 +68,11 @@ public class CardRenderer : MonoBehaviour
         }
     }
 
-    // The links to the necessary components for rendering.
-    [SerializeField]
-    ComponentLinks links;
-    // Whether to render the action side or the effect side of the card.
-    [SerializeField]
-    bool renderActionSide;
+    [Tooltip("The links to the necessary components for rendering.")]
+    [SerializeField] private ComponentLinks links;
+
+    [Tooltip("Whether to render the action side or the effect side of the card.")]
+    [SerializeField] private bool renderActionSide;
     bool RenderActionSide
     {
         set
@@ -99,14 +97,31 @@ public class CardRenderer : MonoBehaviour
     [System.Serializable]
     struct ComponentLinks
     {
+        [Tooltip("The text boxed used to display the name of the card.")]
         public TMP_Text nameTextBox;
+
+        [Tooltip("The text boxed used to display the description of the card.")]
         public TMP_Text descriptionTextBox;
+
+        [Tooltip("The text boxed used to display the current remaining cooldown of the card.")]
         public TMP_Text cooldownTimeTextBox;
+
+        [Tooltip("The text boxed used to display the current remaining action time of the card.")]
         public TMP_Text actionTimeTextBox;
+
+        [Tooltip("The image used to render the background of the card.")]
         public Image backgroundSprite;
+
+        [Tooltip("The image used to render the card specific sprite.")]
         public Image cardSprite;
+
+        [Tooltip("The overlay to enable when previewing this card.")]
         public Image previewOverlay;
+
+        [Tooltip("The overlay to enable when this card is on cooldown.")]
         public Image cooldownOverlay;
+
+        [Tooltip("The overlay to enable when this card is on acting.")]
         public Image actionTimeOverlay;
     }
 }

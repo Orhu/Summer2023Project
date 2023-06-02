@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// An attack that fires a bullet in a strait line.
+/// </summary>
 public class BulletAttack : Attack
 {
     [Tooltip("The sequence of when and where to spawn bullets")]

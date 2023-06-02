@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,43 +8,60 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Projectile : MonoBehaviour
 {
+    #region Variables
     // The attack this is a part of.
-    public Attack attack;
-    // The actor of the projectile.
-    public IActor actor;
-    // The actor of the projectile.
-    public GameObject causer;
-    // The modifiers applied to this.
-    public List<AttackModifier> modifiers;
-    // Invoked when this projectile hits a wall, passes the hit collision as a parameter.
-    public System.Action<Collision2D> onHit;
-    // Invoked when this projectile hits something damageable, passes the hit collider as a parameter.
-    public System.Action<Collider2D> onOverlap;
-    // Invoked when this is destroyed.
-    public System.Action onDestroyed;
+    [NonSerialized] public Attack attack;
 
+    // The actor of the projectile.
+    [NonSerialized] public IActor actor;
+
+    // The actor of the projectile.
+    [NonSerialized] public GameObject causer;
+
+    // The modifiers applied to this.
+    [NonSerialized] public List<AttackModifier> modifiers;
 
     // The rigidbody responsible for the collision of this projectile.
     protected Rigidbody2D rigidBody;
+
     // The modified attack data of this projectile.
-    public DamageData attackData;
+    [NonSerialized] public DamageData attackData;
+
+    // The index of this in the spawn sequence.
+    [NonSerialized] public int index;
 
 
-    public float speed;
-    public float maxSpeed;
-    public float minSpeed;
-    public float acceleration;
-    public float remainingLifetime;
-    public int remainingHits;
-    GameObject closestTarget;
-    GameObject randomTarget;
-    public float remainingHomingTime;
-    public float homingSpeed;
-    public int index;
-    public List<ProjectileSpawnInfo> spawnSequence;
+    #region Modifiable Properties
+    // The speed of the projectile in tiles/s.
+    [NonSerialized] public float speed;
+
+    // The max speed of the projectile in tiles/s. 
+    [NonSerialized] public float maxSpeed;
+
+    // The min speed of the projectile in tiles/s. 
+    [NonSerialized] public float minSpeed;
+
+    // The acceleration of the projectile in tiles/s². 
+    [NonSerialized] public float acceleration;
+
+    // The time until this is destroyed in seconds.
+    [NonSerialized] public float remainingLifetime;
+
+    // The number of times this can hit objects it can pass though before being destroyed.
+    [NonSerialized] public int remainingHits;
+
+    // The remaining time this will home for in seconds.
+    [NonSerialized] public float remainingHomingTime;
+
+    // The speed that this projectile will turn at.
+    [NonSerialized] public float homingSpeed;
+
+    // The sequence that spawned this.
+    [NonSerialized] public List<ProjectileSpawnInfo> spawnSequence;
 
     // The object for this to ignore.
-    internal List<GameObject> ignoredObjects
+    List<GameObject> _ignoredObjects;
+    public List<GameObject> ignoredObjects
     {
         get
         {
@@ -59,8 +77,32 @@ public class Projectile : MonoBehaviour
         }
         set { _ignoredObjects = value; }
     }
-    List<GameObject> _ignoredObjects;
+    #endregion
 
+    #region Delegates
+    // Invoked when this projectile hits a wall, passes the hit collision as a parameter.
+    public System.Action<Collision2D> onHit;
+
+    // Invoked when this projectile hits something damageable, passes the hit collider as a parameter.
+    public System.Action<Collider2D> onOverlap;
+
+    // Invoked when this is destroyed.
+    public System.Action onDestroyed;
+    #endregion
+
+
+
+    // The current closest target.
+    private GameObject closestTarget;
+
+    // The current randomly picked target.
+    private GameObject randomTarget;
+    #endregion
+
+
+
+
+    #region Initialization
     /// <summary>
     /// Initializes components based on spawner stats.
     /// </summary>
@@ -128,8 +170,10 @@ public class Projectile : MonoBehaviour
 
         modifiers = newModifiers;
     }
+    #endregion
 
 
+    #region Aiming and Projectile Movement
     /// <summary>
     /// Updates position.
     /// </summary>
@@ -156,40 +200,8 @@ public class Projectile : MonoBehaviour
         remainingHomingTime -= Time.deltaTime;
         if (remainingLifetime <= 0)
         {
-            onDestroyed?.Invoke();
             Destroy(gameObject);
         }
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (ignoredObjects.Contains(collision.gameObject))
-        {
-            return;
-        }
-
-        onOverlap?.Invoke(collision);
-        Health hitHealth = collision.gameObject.GetComponent<Health>();
-        if (hitHealth != null && attack.applyDamageOnHit)
-        {
-            hitHealth.ReceiveAttack(attackData, transform.right);
-
-            if (--remainingHits <= 0)
-            {
-                onDestroyed?.Invoke();
-                Destroy(gameObject);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Applies an attack to the hit object
-    /// </summary>
-    /// <param name="collision"> The collision data </param>
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        Invoke(nameof(DestroyOnWallHit), Time.fixedDeltaTime);
-        onHit?.Invoke(collision);
     }
 
     /// <summary>
@@ -264,7 +276,7 @@ public class Projectile : MonoBehaviour
                     }
                 }
 
-                randomTarget = possibleTargets[Random.Range(0, possibleTargets.Count)].gameObject;
+                randomTarget = possibleTargets[UnityEngine.Random.Range(0, possibleTargets.Count)].gameObject;
                 if (randomTarget == null)
                 {
                     return transform.position + transform.right;
@@ -273,18 +285,64 @@ public class Projectile : MonoBehaviour
         }
         return transform.position + transform.right;
     }
+    #endregion
 
+
+    #region Collision
+    /// <summary>
+    /// Called when the projectile hits something it can pass though.
+    /// </summary>
+    /// <param name="collision"></param>
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (ignoredObjects.Contains(collision.gameObject))
+        {
+            return;
+        }
+
+        onOverlap?.Invoke(collision);
+        Health hitHealth = collision.gameObject.GetComponent<Health>();
+        if (hitHealth != null && attack.applyDamageOnHit)
+        {
+            hitHealth.ReceiveAttack(attackData, transform.right);
+
+            if (--remainingHits <= 0)
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Called when the projectile hits something it cannot pass through.
+    /// </summary>
+    /// <param name="collision"> The collision data </param>
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        Invoke(nameof(DestroyOnWallHit), Time.fixedDeltaTime);
+        onHit?.Invoke(collision);
+    }
+
+    /// <summary>
+    /// Cancelable function for destroying self upon hitting a wall.
+    /// </summary>
+    private void DestroyOnWallHit()
+    {
+        Destroy(gameObject);
+    }
+    #endregion
+
+
+    /// <summary>
+    /// Allows for visuals to be detached and calls delegate.
+    /// </summary>
     protected void OnDestroy()
     {
+        onDestroyed?.Invoke();
         if (attack.detachVisualsBeforeDestroy)
         {
             transform.GetChild(0).transform.parent = null;
         }
     }
 
-    private void DestroyOnWallHit()
-    {
-        onDestroyed?.Invoke();
-        Destroy(gameObject);
-    }
 }

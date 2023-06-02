@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// A script that causes a game object to damage nearby things.
+/// </summary>
 public class Bomb : MonoBehaviour
 {
     // The damage dealt by this bomb.
@@ -30,6 +33,9 @@ public class Bomb : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Causes this to explode.
+    /// </summary>
     private void Explode()
     {
         onExploded?.Invoke();

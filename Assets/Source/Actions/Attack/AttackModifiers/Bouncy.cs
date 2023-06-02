@@ -36,7 +36,10 @@ public class Bouncy : AttackModifier
         }
     }
 
-
+    /// <summary>
+    /// Bounces the attacked projectile off of any hit walls.
+    /// </summary>
+    /// <param name="collision"> The collision data used to bounce. </param>
     private void Bounce(Collision2D collision)
     {
         Vector2 bounceNormal = collision.GetContact(0).normal;
@@ -56,6 +59,10 @@ public class Bouncy : AttackModifier
         }
     }
 
+    /// <summary>
+    /// Clears the last bounce normal.
+    /// </summary>
+    /// <returns> The time to wait until clearing. </returns>
     private IEnumerator ClearLastNormal()
     {
         yield return new WaitForSeconds(Time.fixedDeltaTime);

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// Plays the 1st particle system when the bomb detonates and destroys the game object after the system is finished.
+/// Sends out the appropriate unity events that may be needed by bomb VFX, and handles the lifetime of the bomb.
 /// </summary>
 public class BombVisuals : MonoBehaviour
 {
