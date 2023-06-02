@@ -66,7 +66,7 @@ public class FloorGenerator : MonoBehaviour
             return;
         }
 
-        foreach (CardSystem.Card card in Deck.playerDeck.cards)
+        foreach (Card card in Deck.playerDeck.cards)
         {
             if (card.effects == null)
             {
@@ -110,7 +110,7 @@ public class FloorGenerator : MonoBehaviour
             return;
         }
 
-        foreach (CardSystem.Card card in Deck.playerDeck.cards)
+        foreach (Card card in Deck.playerDeck.cards)
         {
             OnCardAdded(card);
         }
@@ -120,7 +120,7 @@ public class FloorGenerator : MonoBehaviour
     /// Adds the added tiles from the card
     /// </summary>
     /// <param name="card"> The card </param>
-    private void OnCardAdded(CardSystem.Card card)
+    private void OnCardAdded(Card card)
     {
         if (card.effects == null)
         {
@@ -148,7 +148,7 @@ public class FloorGenerator : MonoBehaviour
     /// Removes the added tiles from the card
     /// </summary>
     /// <param name="card"> The card </param>
-    private void OnCardRemoved(CardSystem.Card card)
+    private void OnCardRemoved(Card card)
     {
         foreach (DungeonEffect effect in card.effects)
         {
