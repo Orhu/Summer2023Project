@@ -33,6 +33,13 @@ public class EnemyAttacker : MonoBehaviour
     public UnityEvent afterCooldown;
 
     private bool canAttack = true;
+    
+    public static List<GameObject> enemies = new List<GameObject>();
+
+    void Awake()
+    {
+       enemies.Add(gameObject);
+    }
 
     /// <summary>
     /// Performs an attack
@@ -41,19 +48,24 @@ public class EnemyAttacker : MonoBehaviour
     public IEnumerator PerformAttack(IActor agent)
     {
         if (!canAttack) yield break;
-        
+
         canAttack = false;
         beforeChargeUp?.Invoke();
         yield return new WaitForSeconds(actionChargeUpTime);
         beforeAction?.Invoke();
         foreach (var action in actions)
         {
-            action.Play(agent);
+            action.Play(agent, enemies);
         }
 
         afterAction?.Invoke();
         yield return new WaitForSeconds(actionCooldownTime);
         afterCooldown?.Invoke();
         canAttack = true;
+    }
+
+    void OnDestroy()
+    {
+        enemies.Remove(gameObject);
     }
 }
