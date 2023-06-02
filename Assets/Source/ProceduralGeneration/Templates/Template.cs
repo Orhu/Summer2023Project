@@ -8,7 +8,11 @@ using UnityEngine;
 public class Template : ScriptableObject
 {
     [Tooltip("The tiles in this template")]
-    [SerializeField] public List<TilesList> tiles;
+    public List<TilesList> tiles;
+
+    // TODO: Change to enemy component? Also make them weighted, and allow "squad" spawning. This is fine for prototype though.
+    [Tooltip("The enemies that can spawn in this template")]
+    public List<GameObject> enemies;
 
     [Tooltip("The size of the room this template is for")]
     [field: SerializeField] private Vector2Int _roomSize;

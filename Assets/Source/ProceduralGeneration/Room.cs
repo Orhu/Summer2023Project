@@ -7,6 +7,9 @@ using UnityEngine;
 /// </summary>
 public class Room : MonoBehaviour
 {
+    // The template used to generate this room
+    [HideInInspector] public Template template;
+
     // The grid of tiles
     [HideInInspector] public Tile[,] roomGrid;
 
