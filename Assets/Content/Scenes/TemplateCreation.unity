@@ -160,7 +160,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_BackGroundColor: {r: 0.11320752, g: 0.11320752, b: 0.11320752, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -252,13 +252,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   templateTileChooser: {fileID: 3120288133330874955, guid: f19525368b39b3646b73bb2501c864a3, type: 3}
-  tileTypesToSprites:
-  - tileType: 2
-    sprite: {fileID: 21300000, guid: fb26a0e52a1a4f84d86fd41c56b0914e, type: 3}
-  - tileType: 6
-    sprite: {fileID: 21300000, guid: 7602bdbe1b61f87498ced532742ceb9a, type: 3}
-  _roomSize: {x: 13, y: 9}
+  genericTiles: {fileID: 11400000, guid: 618d5c00f3eff444c9f6bb0835db2bcb, type: 2}
+  templateName: Normal
   nullSprite: {fileID: 21300000, guid: b81f267f3ea133e47b89d1b25e6f06e7, type: 3}
+  _roomSize: {x: 13, y: 9}
 --- !u!4 &1401207069
 Transform:
   m_ObjectHideFlags: 0
