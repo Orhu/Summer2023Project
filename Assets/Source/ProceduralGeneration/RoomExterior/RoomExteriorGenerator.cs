@@ -65,6 +65,7 @@ public class RoomExteriorGenerator : MonoBehaviour
         BoxCollider2D roomBox = newRoom.AddComponent<BoxCollider2D>();
         roomBox.size = roomSize;
         roomBox.isTrigger = true;
+        newRoom.layer = LayerMask.NameToLayer("RoomDetector");
 
         CreateWalls(createdCell, exteriorParameters, roomSize);
 
