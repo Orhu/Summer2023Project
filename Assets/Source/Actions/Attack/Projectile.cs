@@ -43,23 +43,23 @@ public class Projectile : MonoBehaviour
     public List<ProjectileSpawnInfo> spawnSequence;
 
     // The object for this to ignore.
-    internal List<GameObject> IgnoredObjects
+    internal List<GameObject> ignoredObjects
     {
         get
         {
-            if (ignoredObjects != null)
+            if (_ignoredObjects != null)
             {
-                return ignoredObjects;
+                return _ignoredObjects;
             }
 
-            ignoredObjects = new List<GameObject>();
-            ignoredObjects.Add(actor.GetActionSourceTransform().gameObject);
-            ignoredObjects.Add(causer);
-            return ignoredObjects;
+            _ignoredObjects = new List<GameObject>();
+            _ignoredObjects.Add(actor.GetActionSourceTransform().gameObject);
+            _ignoredObjects.Add(causer);
+            return _ignoredObjects;
         }
-        set { ignoredObjects = value; }
+        set { _ignoredObjects = value; }
     }
-    List<GameObject> ignoredObjects;
+    List<GameObject> _ignoredObjects;
 
     /// <summary>
     /// Initializes components based on spawner stats.
@@ -74,9 +74,9 @@ public class Projectile : MonoBehaviour
             Physics2D.IgnoreCollision(collider, actor.GetCollider());
 
             // Ignore collision on ignored objects
-            if (IgnoredObjects != null)
+            if (ignoredObjects != null)
             {
-                foreach (GameObject ignoredObject in IgnoredObjects)
+                foreach (GameObject ignoredObject in ignoredObjects)
                 {
                     List<Collider2D> ignoredColliders = new List<Collider2D>();
                     ignoredObject.GetComponentsInChildren(ignoredColliders);
@@ -163,7 +163,7 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (IgnoredObjects.Contains(collision.gameObject))
+        if (ignoredObjects.Contains(collision.gameObject))
         {
             return;
         }
@@ -173,12 +173,12 @@ public class Projectile : MonoBehaviour
         if (hitHealth != null && attack.applyDamageOnHit)
         {
             hitHealth.ReceiveAttack(attackData, transform.right);
-        }
 
-        if (--remainingHits <= 0)
-        {
-            onDestroyed?.Invoke();
-            Destroy(gameObject);
+            if (--remainingHits <= 0)
+            {
+                onDestroyed?.Invoke();
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -188,9 +188,8 @@ public class Projectile : MonoBehaviour
     /// <param name="collision"> The collision data </param>
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Invoke("DestroyOnWallHit", Time.fixedDeltaTime);
+        Invoke(nameof(DestroyOnWallHit), Time.fixedDeltaTime);
         onHit?.Invoke(collision);
-        onDestroyed?.Invoke();
     }
 
     /// <summary>
@@ -235,7 +234,7 @@ public class Projectile : MonoBehaviour
                 foreach (Collider2D roomObject in roomObjects)
                 {
                     // If has health, is not ignored, and is the closest object.
-                    if (roomObject.GetComponent<Health>() != null && !IgnoredObjects.Contains(roomObject.gameObject) &&
+                    if (roomObject.GetComponent<Health>() != null && !ignoredObjects.Contains(roomObject.gameObject) &&
                         (closestTarget == null || (roomObject.transform.position - transform.position).sqrMagnitude < (closestTarget.transform.position - transform.position).sqrMagnitude))
                     {
                         closestTarget = roomObject.gameObject;
@@ -259,7 +258,7 @@ public class Projectile : MonoBehaviour
                 foreach (Collider2D roomCollider in roomColliders)
                 {
                     // If has health, is not ignored, and is the closest object.
-                    if (roomCollider.GetComponent<Health>() != null && !IgnoredObjects.Contains(roomCollider.gameObject))
+                    if (roomCollider.GetComponent<Health>() != null && !ignoredObjects.Contains(roomCollider.gameObject))
                     {
                         possibleTargets.Add(roomCollider.gameObject);
                     }
@@ -285,6 +284,7 @@ public class Projectile : MonoBehaviour
 
     private void DestroyOnWallHit()
     {
+        onDestroyed?.Invoke();
         Destroy(gameObject);
     }
 }

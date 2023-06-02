@@ -64,7 +64,7 @@ public class SpawnBomb : AttackModifier
 
         if (inheritIgnore)
         {
-            newBomb.ignoredObjects = _modifiedProjectile.IgnoredObjects;
+            newBomb.ignoredObjects = _modifiedProjectile.ignoredObjects;
         }
 
         if (sticky && collision != null)

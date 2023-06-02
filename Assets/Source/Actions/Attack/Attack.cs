@@ -176,7 +176,7 @@ public abstract class Attack : Action
         projectile.modifiers = new List<AttackModifier>(this.modifiers);
         projectile.modifiers.AddRange(modifiers);
         projectile.causer = causer;
-        projectile.IgnoredObjects = ignoredObjects;
+        projectile.ignoredObjects = ignoredObjects;
         projectile.index = index;
         projectile.spawnSequence = spawnSequence;
         return projectile;
