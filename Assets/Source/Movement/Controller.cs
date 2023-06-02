@@ -103,9 +103,9 @@ public class Controller : MonoBehaviour, IActor
     /// Issues a command to move towards the given Vector2. Essentially, converts a Vector2 targetPos into an input vector and sets that as our input
     /// </summary>
     /// <param name="target"> Target to move to </param>
-    /// <param name="buffer"> How close to get before I am happy with my position </param>
-    public void MoveTowards(Vector2 target, float buffer)
+    public void MoveTowards(Vector2 target)
     {
+        var buffer = 0.1f;
         var myPos = (Vector2)transform.position;
         var targetPos = target;
 

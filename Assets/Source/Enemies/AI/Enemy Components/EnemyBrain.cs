@@ -13,13 +13,12 @@ using Random = UnityEngine.Random;
 public class EnemyBrain : MonoBehaviour
 {
     [Header("Pathfinding")]
-    [Tooltip("How far from a tile can an enemy be before they are considered \"arrived\"?")]
-    [SerializeField]
-    private float buffer;
-
     [Tooltip("How close to the player does this enemy get before switching to attack state?")] [SerializeField]
     private float attackRange;
     // TODO unimplemented
+    
+    [Tooltip("How much does the player need to move before we update path?")] [SerializeField]
+    private float pathUpdateMoveThreshold = .5f;
 
     [Header("Target Scanning")] [Tooltip("Do we need line of sight to detect the target?")] [SerializeField]
     private bool needsLineOfSight;
@@ -36,12 +35,17 @@ public class EnemyBrain : MonoBehaviour
 
     [Tooltip("Layer containing target (probably the player layer)")] [SerializeField]
     private LayerMask targetLayer;
+    
+    [Header("Debug")]
+    
+    [Tooltip("Draw debug gizmos?")]
+    [SerializeField] private bool drawGizmos;
 
     // current target
     [HideInInspector] public Collider2D target;
 
     // path to target 
-    private Vector2[] path;
+    private Path path;
 
     // index of where we are in the path
     private int targetIndex;
@@ -51,7 +55,10 @@ public class EnemyBrain : MonoBehaviour
 
     // what room this enemy is in
     private Room room;
-    
+
+    public float turnDst = 5;
+    public float stoppingDst = 10;
+
     // what state is this enemy in
     enum State
     {
@@ -67,7 +74,7 @@ public class EnemyBrain : MonoBehaviour
     void Awake()
     {
         controller = GetComponent<Controller>();
-        room = GetComponentInParent<Room>();
+        room = transform.parent.GetComponentInParent<Room>();
     }
 
     /// <summary>
@@ -106,26 +113,14 @@ public class EnemyBrain : MonoBehaviour
             case State.Chase:
                 if (haveATarget)
                 {
-                    UpdatePath();
+                    StartCoroutine(nameof(UpdatePath));
                 }
                 break;
             case State.Idle:
                 break;
         }
     }
-
-    /// <summary>
-    /// Re-scans for target and updates path accordingly
-    /// </summary>
-    void UpdatePath()
-    {
-        if (currentState == State.Chase)
-        {
-            PathRequestManager.RequestPath(controller.feet.transform.position, target.transform.position, OnPathFound,
-                room);
-        }
-    }
-
+    
     /// <summary>
     /// Called when a path is successfully found
     /// </summary>
@@ -135,10 +130,39 @@ public class EnemyBrain : MonoBehaviour
     {
         if (success)
         {
-            path = newPath;
-            targetIndex = 0;
+            path = new Path(newPath, controller.feet.transform.position, turnDst, stoppingDst);
             StopCoroutine(nameof(FollowPath));
             StartCoroutine(nameof(FollowPath));
+        }
+    }
+
+    /// <summary>
+    /// Re-scans for target and updates path accordingly
+    /// </summary>
+    IEnumerator UpdatePath()
+    {
+        var feetPos = controller.feet.transform.position;
+        var targetPos = target.transform.position;
+        
+        PathRequestManager.RequestPath(feetPos, targetPos, OnPathFound,
+                room);
+
+        float sqrMoveThreshold = pathUpdateMoveThreshold * pathUpdateMoveThreshold;
+        Vector2 targetPosOld = targetPos;
+
+        while (true)
+        {
+            yield return new WaitForSeconds(delayBetweenScans);
+            if (currentState != State.Chase)
+            {
+                yield break;
+            }
+
+            if (((Vector2)targetPos - targetPosOld).sqrMagnitude > sqrMoveThreshold)
+            {
+                PathRequestManager.RequestPath(feetPos, targetPos, OnPathFound, room);
+                targetPosOld = targetPos;
+            }
         }
     }
 
@@ -148,49 +172,36 @@ public class EnemyBrain : MonoBehaviour
     /// <returns></returns>
     IEnumerator FollowPath()
     {
-        if (path.Length == 0 || currentState != State.Chase)
-        {
-            // if we have no path, or we are not in the chase state, do not follow path
-            controller.movementInput = Vector2.zero;
-            yield break;
-        }
+        bool followingPath = true;
+        int pathIndex = 0;
+        var feetPos = controller.feet.transform.position;
 
-        Vector2 currentWaypoint = path[0];
-
-        while (true)
+        while (followingPath)
         {
-            // check if we need to advance to the next checkpoint
-            if (ArrivedAtPoint(currentWaypoint))
+            Vector2 pos2D = new Vector2(feetPos.x, feetPos.y);
+
+            while (path.turnBoundaries[pathIndex].HasCrossedLine(pos2D))
             {
-                targetIndex++;
-                if (targetIndex >= path.Length)
+                if (pathIndex == path.finishLineIndex)
                 {
-                    // reached the end of the waypoints, stop moving here
-                    controller.movementInput = Vector2.zero;
-                    yield break;
+                    followingPath = false;
+                    break;
                 }
-
-                currentWaypoint = path[targetIndex];
+                else
+                {
+                    pathIndex++;
+                }
             }
 
-            // if we didn't hit a break, then just keep moving to the current waypoint
-            controller.MoveTowards(currentWaypoint, buffer);
+            if (followingPath)
+            {
+                controller.MoveTowards(path.lookPoints[pathIndex]);
+            }
+
             yield return null;
         }
     }
 
-    /// <summary>
-    /// Uses buffer to determine if we are arrived at the given vector2
-    /// </summary>
-    /// <param name="waypoint"> Waypoint we are checking </param>
-    /// <returns> True if we are within buffer (serialized) units of the given waypoint </returns>
-    public bool ArrivedAtPoint(Vector2 waypoint)
-    {
-        var myPos = controller.feet.transform.position;
-        var withinX = Math.Abs(waypoint.x - myPos.x) < buffer;
-        var withinY = Math.Abs(waypoint.y - myPos.y) < buffer;
-        return withinX && withinY;
-    }
 
     /// <summary>
     /// Gets a target position for this unit and updates its target accordingly
@@ -199,5 +210,13 @@ public class EnemyBrain : MonoBehaviour
     public void GetTargetPosition()
     {
         target = Physics2D.OverlapCircle(transform.position, scanRadius, targetLayer);
+    }
+
+    public void OnDrawGizmos()
+    {
+        if (drawGizmos && path != null)
+        {
+            path.DrawWithGizmos();
+        }
     }
 }

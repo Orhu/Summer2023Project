@@ -31,6 +31,7 @@ public class PathRequestManager : MonoBehaviour
         /// <param name="myStart"> Starting position </param>
         /// <param name="myEnd"> Target position </param>
         /// <param name="myCallback"> What function to call when path calculation is complete </param>
+        /// <param name="myRoom"> The room the request is a part of </param>
         public PathRequest(Vector2 myStart, Vector2 myEnd, Action<Vector2[], bool> myCallback, Room myRoom)
         {
             startPos = myStart;
@@ -97,16 +98,8 @@ public class PathRequestManager : MonoBehaviour
     /// <param name="success"> Whether a path was successfully found to the target </param>
     public void FinishedProcessingPath(Vector2[] path, bool success)
     {
-        try
-        {
             currentPathRequest.callback(path, success);
-        }
-        catch (MissingReferenceException e)
-        {
-            print("Tried to send path to an enemy, but it seems to have died or is otherwise inaccessible");
-        }
-
-        isProcessingPath = false;
+            isProcessingPath = false;
         TryProcessNext();
     }
 }

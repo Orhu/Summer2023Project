@@ -214,12 +214,14 @@ MonoBehaviour:
   needsLineOfSight: 0
   scanRadius: 10
   scanInitialDelay: 0.25
-  delayBetweenScans: 0.25
+  delayBetweenScans: 1
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
-  drawGizmos: 1
+  drawGizmos: 0
   target: {fileID: 0}
+  turnDst: 5
+  stoppingDst: 10
 --- !u!114 &7281680880204442666
 MonoBehaviour:
   m_ObjectHideFlags: 0
