@@ -24,7 +24,7 @@ public class TickingDamage : AttackModifier
     {
         set
         {
-            value.onHitDamageable += StartTicking;
+            value.onOverlap += StartTicking;
             tickingDamageProjectile = value;
             tickingDamageRigidbody = value.GetComponent<Rigidbody2D>();
         }

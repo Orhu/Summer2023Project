@@ -16,9 +16,9 @@ public class Projectile : MonoBehaviour
     // The modifiers applied to this.
     public List<AttackModifier> modifiers;
     // Invoked when this projectile hits a wall, passes the hit collision as a parameter.
-    public System.Action<Collision2D> onHitWall;
+    public System.Action<Collision2D> onHit;
     // Invoked when this projectile hits something damageable, passes the hit collider as a parameter.
-    public System.Action<Collider2D> onHitDamageable;
+    public System.Action<Collider2D> onOverlap;
     // Invoked when this is destroyed.
     public System.Action onDestroyed;
 
@@ -68,9 +68,9 @@ public class Projectile : MonoBehaviour
     {
         // Setup collision
         rigidBody = GetComponent<Rigidbody2D>();
+        Collider2D collider = attack.shape.CreateCollider(gameObject);
         if (actor.GetCollider() != null)
         {
-            Collider2D collider = attack.shape.CreateCollider(gameObject);
             Physics2D.IgnoreCollision(collider, actor.GetCollider());
 
             // Ignore collision on ignored objects
@@ -156,6 +156,7 @@ public class Projectile : MonoBehaviour
         remainingHomingTime -= Time.deltaTime;
         if (remainingLifetime <= 0)
         {
+            onDestroyed?.Invoke();
             Destroy(gameObject);
         }
     }
@@ -167,20 +168,17 @@ public class Projectile : MonoBehaviour
             return;
         }
 
+        onOverlap?.Invoke(collision);
         Health hitHealth = collision.gameObject.GetComponent<Health>();
-        if (hitHealth != null)
+        if (hitHealth != null && attack.applyDamageOnHit)
         {
-            if (attack.applyDamageOnHit)
-            {
-                hitHealth.ReceiveAttack(attackData, transform.right);
-            }
+            hitHealth.ReceiveAttack(attackData, transform.right);
+        }
 
-            onHitDamageable?.Invoke(collision);
-            if (--remainingHits <= 0)
-            {
-                onDestroyed?.Invoke();
-                Destroy(gameObject);
-            }
+        if (--remainingHits <= 0)
+        {
+            onDestroyed?.Invoke();
+            Destroy(gameObject);
         }
     }
 
@@ -191,7 +189,7 @@ public class Projectile : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Invoke("DestroyOnWallHit", Time.fixedDeltaTime);
-        onHitWall?.Invoke(collision);
+        onHit?.Invoke(collision);
         onDestroyed?.Invoke();
     }
 
@@ -233,7 +231,7 @@ public class Projectile : MonoBehaviour
                     return closestTarget.transform.position;
                 }
 
-                Collider2D[] roomObjects = Physics2D.OverlapBoxAll(transform.position, ProceduralGeneration.proceduralGenerationInstance.roomSize * 2, 0f);
+                Collider2D[] roomObjects = Physics2D.OverlapBoxAll(transform.position, FloorGenerator.floorGeneratorInstance.floorGenerationParameters.roomSize * 2, 0f);
                 foreach (Collider2D roomObject in roomObjects)
                 {
                     // If has health, is not ignored, and is the closest object.
@@ -256,7 +254,7 @@ public class Projectile : MonoBehaviour
                     return randomTarget.transform.position;
                 }
 
-                Collider2D[] roomColliders = Physics2D.OverlapBoxAll(transform.position, ProceduralGeneration.proceduralGenerationInstance.roomSize * 2, 0f);
+                Collider2D[] roomColliders = Physics2D.OverlapBoxAll(transform.position, FloorGenerator.floorGeneratorInstance.floorGenerationParameters.roomSize * 2, 0f);
                 List<GameObject> possibleTargets = new List<GameObject>(roomColliders.Length);
                 foreach (Collider2D roomCollider in roomColliders)
                 {

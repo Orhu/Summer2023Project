@@ -10,20 +10,26 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewBouncy", menuName = "Cards/AttackModifers/Bouncy")]
 public class Bouncy : AttackModifier
 {
+    //The cosine of the minimum angle between vectors to consider the same.
+    private const float DOUBLE_BOUNCE_PROTECTION_FACTOR = 0.9f;
+
     // The rigid body to bounce.
     private Rigidbody2D bouncyRigidbody;
 
     // The projectile to bounce.
     private Projectile bouncyProjectile;
 
+    // The normal of the last wall bounced off of this frame
+    Vector2 lastBounceNormal = Vector2.zero;
+
     // The projectile this modifies
     public override Projectile modifiedProjectile
     {
         set
         {
-            if (value.onHitWall == null || !value.onHitWall.GetInvocationList().Contains((Action<Collision2D>)Bounce))
+            if (value.onHit == null || !value.onHit.GetInvocationList().Contains((Action<Collision2D>)Bounce))
             {
-                value.onHitWall += Bounce;
+                value.onHit += Bounce;
                 bouncyProjectile = value;
                 bouncyRigidbody = value.GetComponent<Rigidbody2D>();
             }
@@ -33,38 +39,26 @@ public class Bouncy : AttackModifier
 
     private void Bounce(Collision2D collision)
     {
-        Vector2 normalSum = Vector2.zero;
-        for (int i = 0; i < collision.contactCount; i++)
-        {
-            bouncyProjectile.transform.right = Vector2.Reflect(bouncyProjectile.transform.right, collision.GetContact(i).normal);
-        }
+        Vector2 bounceNormal = collision.GetContact(0).normal;
+
         bouncyProjectile.CancelInvoke("DestroyOnWallHit");
-        bouncyProjectile.StartCoroutine(CheckForDoulbeBounce());
+        if (lastBounceNormal == Vector2.zero)
+        {
+            bouncyProjectile.StartCoroutine(ClearLastNormal());
+
+            bouncyProjectile.transform.right = Vector2.Reflect(bouncyProjectile.transform.right, bounceNormal);
+            lastBounceNormal = bounceNormal;
+        }
+        else if (Vector2.Dot(bounceNormal, lastBounceNormal) < DOUBLE_BOUNCE_PROTECTION_FACTOR)
+        {
+            bouncyProjectile.transform.right = Vector2.Reflect(bouncyProjectile.transform.right, bounceNormal);
+            lastBounceNormal = bounceNormal;
+        }
     }
 
-    private IEnumerator CheckForDoulbeBounce()
+    private IEnumerator ClearLastNormal()
     {
-        List<ContactPoint2D> oldContacts = new List<ContactPoint2D>();
-        bouncyRigidbody.GetContacts(oldContacts);
-
-        yield return new WaitForSeconds(Time.fixedDeltaTime * 2f);
-
-        List<ContactPoint2D> newContacts = new List<ContactPoint2D>();
-        bouncyRigidbody.GetContacts(newContacts);
-
-        IEnumerable<ContactPoint2D> unquieContacts = newContacts
-            .Where(newContact =>
-            {
-                foreach (ContactPoint2D oldContact in oldContacts)
-                {
-                    if(oldContact.normal == newContact.normal) { return false; }
-                }
-                return true;
-            });
-
-        foreach(ContactPoint2D unquieContact in unquieContacts)
-        {
-            bouncyProjectile.transform.right = Vector2.Reflect(bouncyProjectile.transform.right, unquieContact.normal);
-        }
+        yield return new WaitForSeconds(Time.fixedDeltaTime);
+        lastBounceNormal = Vector2.zero;
     }
 }

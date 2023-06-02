@@ -43,7 +43,7 @@ public class Knockback : AttackModifier
                     knockbackSource = value.actor.GetActionSourceTransform().gameObject;
                     break;
             }
-            value.onHitDamageable += ApplyKnockback;
+            value.onOverlap += ApplyKnockback;
         }
     }
 
