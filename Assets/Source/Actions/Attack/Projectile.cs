@@ -338,6 +338,8 @@ public class Projectile : MonoBehaviour
     /// </summary>
     protected void OnDestroy()
     {
+        if (!gameObject.scene.isLoaded) { return; }
+
         onDestroyed?.Invoke();
         if (attack.detachVisualsBeforeDestroy)
         {

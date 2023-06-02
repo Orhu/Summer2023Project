@@ -52,6 +52,7 @@ public class SpawnBomb : AttackModifier
     private void CreateBomb(Collider2D collision)
     {
         Bomb newBomb = new GameObject().AddComponent<Bomb>();
+        newBomb.name = "Bomb";
         newBomb.explosionRadius = explosionRadius;
         newBomb.fuseTime = fuseTime;
         newBomb.damageData = _modifiedProjectile.attackData;
