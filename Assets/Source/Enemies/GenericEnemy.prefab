@@ -209,19 +209,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 387d1e2e6973f634194fe95877f50051, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buffer: 0.05
   attackRange: 1
+  pathUpdateDelay: 0.25
+  pathUpdateMoveThreshold: 0.05
   needsLineOfSight: 0
-  scanRadius: 10
-  scanInitialDelay: 0.25
-  delayBetweenScans: 1
+  scanRadius: 15
+  scanInitialDelay: 0.5
+  delayBetweenScans: 0.25
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
-  drawGizmos: 0
+  drawGizmos: 1
   target: {fileID: 0}
-  turnDst: 5
-  stoppingDst: 10
 --- !u!114 &7281680880204442666
 MonoBehaviour:
   m_ObjectHideFlags: 0

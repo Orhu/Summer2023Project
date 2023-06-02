@@ -38,6 +38,8 @@ public class EnemyAI : MonoBehaviour
     // tracks whether the enemy is current following something or not
     bool following = false;
 
+    GameObject player;
+
     /// <summary>
     /// Begins the AI
     /// </summary>
@@ -45,6 +47,10 @@ public class EnemyAI : MonoBehaviour
     {
         // detecting player and obstacles around
         InvokeRepeating("PerformDetection", 0, detectionDelay);
+
+
+        // delete this code
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     /// <summary>
@@ -83,7 +89,7 @@ public class EnemyAI : MonoBehaviour
         }
 
         // moving the Agent
-        OnMovementInput?.Invoke(movementInput);
+        OnMovementInput?.Invoke((player.transform.position - transform.position).normalized);
     }
 
     /// <summary>

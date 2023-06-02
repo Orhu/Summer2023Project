@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using CardSystem;
 
 /// <summary>
 /// Makes a card renderer show the card at the top of the draw pile.

@@ -15,15 +15,12 @@ public class PathRequestManager : MonoBehaviour
     {
         // start position
         public Vector2 startPos;
-        
+
         // end position
         public Vector2 endPos;
-        
+
         // callback action
         public Action<Vector2[], bool> callback;
-
-        // the room the enemy is a part of
-        public Room room;
 
         /// <summary>
         /// Constructor for a pathfinding request
@@ -31,19 +28,17 @@ public class PathRequestManager : MonoBehaviour
         /// <param name="myStart"> Starting position </param>
         /// <param name="myEnd"> Target position </param>
         /// <param name="myCallback"> What function to call when path calculation is complete </param>
-        /// <param name="myRoom"> The room the request is a part of </param>
-        public PathRequest(Vector2 myStart, Vector2 myEnd, Action<Vector2[], bool> myCallback, Room myRoom)
+        public PathRequest(Vector2 myStart, Vector2 myEnd, Action<Vector2[], bool> myCallback)
         {
             startPos = myStart;
             endPos = myEnd;
             callback = myCallback;
-            room = myRoom;
         }
     }
 
     // The queue of requests
     private Queue<PathRequest> pathRequestQueue = new Queue<PathRequest>();
-    
+
     // The current working request
     private PathRequest currentPathRequest;
 
@@ -64,16 +59,16 @@ public class PathRequestManager : MonoBehaviour
         instance = this;
         pathfinding = GetComponent<Pathfinding>();
     }
-    
+
     /// <summary>
     /// Request a path from start to end
     /// </summary>
     /// <param name="pathStart"> Start location </param>
     /// <param name="pathEnd"> End location </param>
     /// <param name="callback"> Action that will receive the found path and a boolean saying if the path was found </param>
-    public static void RequestPath(Vector2 pathStart, Vector2 pathEnd, Action<Vector2[], bool> callback, Room myRoom)
+    public static void RequestPath(Vector2 pathStart, Vector2 pathEnd, Action<Vector2[], bool> callback)
     {
-        PathRequest newRequest = new PathRequest(pathStart, pathEnd, callback, myRoom);
+        PathRequest newRequest = new PathRequest(pathStart, pathEnd, callback);
         instance.pathRequestQueue.Enqueue(newRequest);
         instance.TryProcessNext();
     }
@@ -87,7 +82,7 @@ public class PathRequestManager : MonoBehaviour
         {
             currentPathRequest = pathRequestQueue.Dequeue();
             isProcessingPath = true;
-            pathfinding.StartFindPath(currentPathRequest.startPos, currentPathRequest.endPos, currentPathRequest.room);
+            pathfinding.StartFindPath(currentPathRequest.startPos, currentPathRequest.endPos);
         }
     }
 
@@ -98,8 +93,12 @@ public class PathRequestManager : MonoBehaviour
     /// <param name="success"> Whether a path was successfully found to the target </param>
     public void FinishedProcessingPath(Vector2[] path, bool success)
     {
+        if (currentPathRequest.callback.Target != null)
+        {
             currentPathRequest.callback(path, success);
-            isProcessingPath = false;
+        }
+
+        isProcessingPath = false;
         TryProcessNext();
     }
 }

@@ -15,10 +15,6 @@ public class EnemyBrain : MonoBehaviour
     [Header("Pathfinding")]
     [Tooltip("How close to the player does this enemy get before switching to attack state?")] [SerializeField]
     private float attackRange;
-    // TODO unimplemented
-    
-    [Tooltip("How much does the player need to move before we update path?")] [SerializeField]
-    private float pathUpdateMoveThreshold = .5f;
 
     [Header("Target Scanning")] [Tooltip("Do we need line of sight to detect the target?")] [SerializeField]
     private bool needsLineOfSight;
@@ -30,7 +26,7 @@ public class EnemyBrain : MonoBehaviour
     [Tooltip("How long of a delay before this enemy starts looking for targets?")] [SerializeField]
     private float scanInitialDelay;
 
-    [Tooltip("How often does this enemy scan for targets, in seconds?")] [SerializeField]
+    [Tooltip("How often does this enemy scan for targets and update its path, in seconds?")] [SerializeField]
     private float delayBetweenScans;
 
     [Tooltip("Layer containing target (probably the player layer)")] [SerializeField]
@@ -53,12 +49,6 @@ public class EnemyBrain : MonoBehaviour
     // controller component for issuing commands
     private Controller controller;
 
-    // what room this enemy is in
-    private Room room;
-
-    public float turnDst = 5;
-    public float stoppingDst = 10;
-
     // what state is this enemy in
     enum State
     {
@@ -67,6 +57,15 @@ public class EnemyBrain : MonoBehaviour
         Attack,
     }
     private State currentState;
+    
+    // tracks the position of the feet by caching it every frame, rather than grabbing it in multiple places every frame
+    private Vector2 feetPos;
+
+    // tracks the position of the target by caching it every scan, rather than grabbing it from the target collider manually in multiple places
+    private Vector2 targetPos;
+
+    // tracks the results of the most recent target scan
+    private bool prevTargetScanFoundTarget = false;
 
     /// <summary>
     /// Initializes variables
@@ -74,7 +73,6 @@ public class EnemyBrain : MonoBehaviour
     void Awake()
     {
         controller = GetComponent<Controller>();
-        room = transform.parent.GetComponentInParent<Room>();
     }
 
     /// <summary>
@@ -82,6 +80,7 @@ public class EnemyBrain : MonoBehaviour
     /// </summary>
     void Start()
     {
+        feetPos = controller.feet.transform.position;
         InvokeRepeating(nameof(GetTargetPosition), scanInitialDelay, delayBetweenScans);
     }
 
@@ -90,33 +89,74 @@ public class EnemyBrain : MonoBehaviour
     /// </summary>
     void Update()
     {
-        var haveATarget = target != null;
-        if (haveATarget)
+        feetPos = controller.feet.transform.position;
+        
+        // conditions for current state
+        if (prevTargetScanFoundTarget)
         {
             // check if we are within attack range
-            var withinAttackRange = Vector2.Distance(transform.position, target.transform.position) <= attackRange;
-            currentState = withinAttackRange ? State.Attack : State.Chase;
+            var withinAttackRange = Vector2.Distance(transform.position, targetPos) <= attackRange;
+            SwitchState(withinAttackRange ? State.Attack : State.Chase);
         }
         else
         {
             // no target scanned, go back to idle
-            currentState = State.Idle;
+            SwitchState(State.Idle);
         }
 
         // state behaviors
         switch (currentState)
         {
             case State.Attack:
-                controller.movementInput = Vector2.zero;
-                controller.PerformAttack();
+                AttackState();
                 break;
             case State.Chase:
-                if (haveATarget)
-                {
-                    StartCoroutine(nameof(UpdatePath));
-                }
+                ChaseState();
                 break;
             case State.Idle:
+                IdleState();
+                break;
+        }
+    }
+
+    void AttackState()
+    {
+        controller.PerformAttack();
+    }
+    
+    void ChaseState()
+    {
+        
+    }
+
+    void IdleState()
+    {
+        
+    }
+
+    /// <summary>
+    /// Performs any one-off actions needed for a state switch
+    /// </summary>
+    /// <param name="newState"> State to switch to </param>
+    void SwitchState(State newState)
+    {
+        if (currentState == newState) return;
+        
+        currentState = newState;
+        switch (newState)
+        {
+            case State.Attack:
+                controller.movementInput = Vector2.zero;
+                StopCoroutine(nameof(UpdatePath));
+                StopCoroutine(nameof(FollowPath));
+                print(name + ": Attack State Switch");
+                break;
+            case State.Chase:
+                StartCoroutine(nameof(UpdatePath));
+                print(name + ": Chase State Switch");
+                break;
+            case State.Idle:
+                print(name + ": Idle State Switch");
                 break;
         }
     }
@@ -128,9 +168,9 @@ public class EnemyBrain : MonoBehaviour
     /// <param name="success"> Whether the path was successfully found or not </param>
     public void OnPathFound(Vector2[] newPath, bool success)
     {
-        if (success)
+        if (success && currentState == State.Chase)
         {
-            path = new Path(newPath, controller.feet.transform.position, turnDst, stoppingDst);
+            path = new Path(newPath, controller.feet.transform.position);
             StopCoroutine(nameof(FollowPath));
             StartCoroutine(nameof(FollowPath));
         }
@@ -141,28 +181,13 @@ public class EnemyBrain : MonoBehaviour
     /// </summary>
     IEnumerator UpdatePath()
     {
-        var feetPos = controller.feet.transform.position;
-        var targetPos = target.transform.position;
-        
-        PathRequestManager.RequestPath(feetPos, targetPos, OnPathFound,
-                room);
-
-        float sqrMoveThreshold = pathUpdateMoveThreshold * pathUpdateMoveThreshold;
-        Vector2 targetPosOld = targetPos;
+        PathRequestManager.RequestPath(feetPos, targetPos, OnPathFound);
 
         while (true)
         {
             yield return new WaitForSeconds(delayBetweenScans);
-            if (currentState != State.Chase)
-            {
-                yield break;
-            }
 
-            if (((Vector2)targetPos - targetPosOld).sqrMagnitude > sqrMoveThreshold)
-            {
-                PathRequestManager.RequestPath(feetPos, targetPos, OnPathFound, room);
-                targetPosOld = targetPos;
-            }
+                PathRequestManager.RequestPath(feetPos, targetPos, OnPathFound);
         }
     }
 
@@ -174,7 +199,6 @@ public class EnemyBrain : MonoBehaviour
     {
         bool followingPath = true;
         int pathIndex = 0;
-        var feetPos = controller.feet.transform.position;
 
         while (followingPath)
         {
@@ -210,6 +234,8 @@ public class EnemyBrain : MonoBehaviour
     public void GetTargetPosition()
     {
         target = Physics2D.OverlapCircle(transform.position, scanRadius, targetLayer);
+        targetPos = target.transform.position;
+        prevTargetScanFoundTarget = target != null;
     }
 
     public void OnDrawGizmos()

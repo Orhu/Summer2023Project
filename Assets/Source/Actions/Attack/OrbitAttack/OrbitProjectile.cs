@@ -1,8 +1,4 @@
-using CardSystem.Effects;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static CardSystem.Effects.Attack;
 
 /// <summary>
 /// A projectile that orbits in a circle around the spawn location.
@@ -10,8 +6,7 @@ using static CardSystem.Effects.Attack;
 public class OrbitProjectile : Projectile
 {
     OrbitAttack orbitAttack;
-    // The index in the spawn sequence that this was created from.
-    internal int orbitIndex;
+    OrbitSpawnInfo orbitSpawnInfo;
 
     float radius;
     Vector3 lastSpawnLocationPosition;
@@ -22,7 +17,7 @@ public class OrbitProjectile : Projectile
     new void Start()
     {
         orbitAttack = attack as OrbitAttack;
-        OrbitAttack.OrbitSpawnInfo orbitSpawnInfo = orbitAttack.spawnSequence[orbitIndex];
+        orbitSpawnInfo = spawnSequence[index] as OrbitSpawnInfo;
         radius = orbitSpawnInfo.radius + Random.Range(orbitAttack.randomRadius / -2f, orbitAttack.randomRadius / 2f);
 
         // Position
@@ -38,7 +33,7 @@ public class OrbitProjectile : Projectile
 
         base.Start();
 
-        if (orbitSpawnInfo.orbitDirection == OrbitAttack.RotationDirection.Counterclockwise)
+        if (orbitSpawnInfo.orbitDirection == OrbitSpawnInfo.RotationDirection.Counterclockwise)
         {
             transform.GetChild(0).transform.localScale = Vector3.Scale(transform.GetChild(0).transform.localScale, new Vector3(1,-1,1));
         }
@@ -69,6 +64,6 @@ public class OrbitProjectile : Projectile
     /// <returns> -1 if clockwise, 1 if counterclockwise. </returns>
     float OrbitSign()
     {
-        return (orbitAttack.spawnSequence[orbitIndex].orbitDirection == OrbitAttack.RotationDirection.Clockwise ? -1f : 1f);
+        return (orbitSpawnInfo.orbitDirection == OrbitSpawnInfo.RotationDirection.Clockwise ? -1f : 1f);
     }
 }

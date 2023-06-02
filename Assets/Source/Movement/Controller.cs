@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Action = CardSystem.Action;
 
 /// <summary>
 /// Agent serves as the brain of any agent. Has the ability to input basic tasks, delegating them to various parts of the agent as needed.
@@ -11,7 +10,7 @@ public class Controller : MonoBehaviour, IActor
     [Tooltip("is this agent controllable by inputs?")] 
     [SerializeField] private bool isControllable;
 
-    [Tooltip("Does this agent use enemy brain components?")] 
+    [Tooltip("Does this agent use enemy brain component?")] 
     [SerializeField] private bool useEnemyLogic;
 
     // -1 to 1 range representing current movement input, same system as built-in Input.GetAxis"
@@ -28,6 +27,9 @@ public class Controller : MonoBehaviour, IActor
     
     // represents the inner collider of this unit
     [HideInInspector] public Collider2D feet;
+    
+    // can this enemy move?
+    private bool canMove = true;
 
     /// <summary>
     /// Initialize components
@@ -105,6 +107,7 @@ public class Controller : MonoBehaviour, IActor
     /// <param name="target"> Target to move to </param>
     public void MoveTowards(Vector2 target)
     {
+        if (!canMove) return;
         var buffer = 0.1f;
         var myPos = (Vector2)transform.position;
         var targetPos = target;

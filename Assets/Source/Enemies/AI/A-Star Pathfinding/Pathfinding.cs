@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using PathfindingTile = RoomInterface.PathfindingTile;
 
 /// <summary>
 /// Handles A* pathfinding for enemies
@@ -32,10 +32,9 @@ public class Pathfinding : MonoBehaviour
     /// </summary>
     /// <param name="startPos"> Starting position </param>
     /// <param name="targetPos"> Target position </param>
-    /// <param name="room"> The room this enemy is part of </param>
-    public void StartFindPath(Vector2 startPos, Vector2 targetPos, Room room)
+    public void StartFindPath(Vector2 startPos, Vector2 targetPos)
     {
-        StartCoroutine(FindPath(startPos, targetPos, room));
+        StartCoroutine(FindPath(startPos, targetPos));
     }
 
     /// <summary>
@@ -43,28 +42,27 @@ public class Pathfinding : MonoBehaviour
     /// </summary>
     /// <param name="startPos"> Starting position </param>
     /// <param name="targetPos"> Target position </param>
-    /// <param name="room"> The room the enemy is a part of </param>
     /// <returns> Sends a signal to the request manager that a path has been found </returns>
-    IEnumerator FindPath(Vector2 startPos, Vector2 targetPos, Room room)
+    IEnumerator FindPath(Vector2 startPos, Vector2 targetPos)
     { 
         targetPosition = targetPos;
-       roomInterface.UpdateRoom(room);
+        roomInterface.GrabCurrentRoom();
         Vector2[] waypoints = new Vector2[0];
         bool pathSuccess = false;
 		
-        Tile startNode = roomInterface.WorldPosToTile(startPos);
-        Tile targetNode = roomInterface.WorldPosToTile(targetPos);
-        startNode.parent = startNode;
+        PathfindingTile startNode = roomInterface.WorldPosToTile(startPos);
+        PathfindingTile targetNode = roomInterface.WorldPosToTile(targetPos);
+        startNode.retraceStep = startNode;
 		
 		
         if (startNode.walkable && targetNode.walkable) {
-            Heap<Tile> openSet = new Heap<Tile>(room.maxSize);
-            HashSet<Tile> closedSet = new HashSet<Tile>();
+            Heap<PathfindingTile> openSet = new Heap<PathfindingTile>(roomInterface.GetMaxRoomSize());
+            HashSet<PathfindingTile> closedSet = new HashSet<PathfindingTile>();
             openSet.Add(startNode);
 			
             while (openSet.Count > 0) {
                 // grab lowest fCost tile. Due to the heap data structure, this will always be the first element
-                Tile currentNode = openSet.RemoveFirst();
+                PathfindingTile currentNode = openSet.RemoveFirst();
                 closedSet.Add(currentNode);
 				
                 if (currentNode == targetNode) {
@@ -73,7 +71,7 @@ public class Pathfinding : MonoBehaviour
                     break;
                 }
 				
-                foreach (Tile neighbor in roomInterface.GetNeighbors(currentNode)) {
+                foreach (PathfindingTile neighbor in roomInterface.GetNeighbors(currentNode)) {
                     if (!neighbor.walkable || closedSet.Contains(neighbor)) {
                         // this node has already been explored, or is not walkable, so skip
                         continue;
@@ -83,7 +81,7 @@ public class Pathfinding : MonoBehaviour
                     if (newMovementCostToNeighbour < neighbor.gCost || !openSet.Contains(neighbor)) {
                         neighbor.gCost = newMovementCostToNeighbour;
                         neighbor.hCost = GetDistance(neighbor, targetNode);
-                        neighbor.parent = currentNode;
+                        neighbor.retraceStep = currentNode;
 
                         if (!openSet.Contains(neighbor))
                         {
@@ -111,14 +109,14 @@ public class Pathfinding : MonoBehaviour
     /// <param name="startTile"> Start tile </param>
     /// <param name="endTile"> End tile </param>
     /// <returns> Array containing waypoints to travel from start to end </returns>
-    Vector2[] RetracePath(Tile startTile, Tile endTile)
+    Vector2[] RetracePath(PathfindingTile startTile, PathfindingTile endTile)
     {
-        List<Tile> path = new List<Tile>();
-        Tile currentNode = endTile;
+        List<PathfindingTile> path = new List<PathfindingTile>();
+        PathfindingTile currentNode = endTile;
 		
         while (currentNode != startTile) {
             path.Add(currentNode);
-            currentNode = currentNode.parent;
+            currentNode = currentNode.retraceStep;
         }
         Vector2[] waypoints = SimplifyPath(path);
         Array.Reverse(waypoints);
@@ -131,7 +129,7 @@ public class Pathfinding : MonoBehaviour
     /// </summary>
     /// <param name="path"> Input path </param>
     /// <returns></returns>
-    Vector2[] SimplifyPath(List<Tile> path)
+    Vector2[] SimplifyPath(List<PathfindingTile> path)
     {
         List<Vector2> waypoints = new List<Vector2>();
         waypoints.Add(targetPosition);
@@ -153,7 +151,7 @@ public class Pathfinding : MonoBehaviour
     /// <param name="a"> First tile </param>
     /// <param name="b"> Second tile </param>
     /// <returns> Distance, in tiles (moves), between the two tiles </returns>
-    int GetDistance(Tile a, Tile b)
+    int GetDistance(PathfindingTile a, PathfindingTile b)
     {
         int distX = Mathf.Abs(a.gridLocation.x - b.gridLocation.x);
         int distY = Mathf.Abs(a.gridLocation.y - b.gridLocation.y);

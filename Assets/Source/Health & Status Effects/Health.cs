@@ -72,11 +72,12 @@ public class Health : MonoBehaviour
     {
         // Damage
         onRequestIncomingAttackModification?.Invoke(ref attack);
+        var prevHealth = currentHealth;
         currentHealth -= attack.damage;
 
         onHealthChanged?.Invoke(currentHealth);
         onAttacked?.Invoke(attack);
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && prevHealth > 0)
         {
             onDeath?.Invoke();
             return;
