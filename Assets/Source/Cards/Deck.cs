@@ -364,7 +364,7 @@ public class Deck : MonoBehaviour
                 break;
         }
 
-        onCardAdded(card);
+        onCardAdded?.Invoke(card);
     }
 
     /// <summary>

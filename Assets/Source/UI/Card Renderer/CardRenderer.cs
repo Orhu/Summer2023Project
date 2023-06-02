@@ -88,6 +88,14 @@ namespace CardSystem
             }
             get { return renderActionSide; }
         }
+
+        /// <summary>
+        /// Used to flip rendered card from effect to action and back
+        /// </summary>
+        public void FlipRenderActionSide()
+        {
+            renderActionSide = !renderActionSide;
+        }
         
         /// <summary>
         /// Refreshes the rendering on property change.
