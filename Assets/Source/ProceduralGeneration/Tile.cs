@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 [System.Serializable]
 [CreateAssetMenu(fileName = "NewTile", menuName = "Tiles/Tile", order = 1)]
-public class Tile : ScriptableObject, IHeapItem<Tile>
+public class Tile : ScriptableObject
 {
     [Tooltip("is this tile walkable?")]
     [SerializeField] public bool walkable = true;
