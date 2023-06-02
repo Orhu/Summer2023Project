@@ -43,7 +43,7 @@ public class Controller : MonoBehaviour, IActor
         }
 
         movementComponent = GetComponent<Movement>();
-        feet = GetComponentInChildren<CircleCollider2D>();
+        feet = GetComponentInChildren<Collider2D>();
     }
 
     /// <summary>
