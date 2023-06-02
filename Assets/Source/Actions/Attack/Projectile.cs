@@ -105,7 +105,7 @@ public class Projectile : MonoBehaviour
             Vector3 targetDirection = (GetAimTarget(attack.homingAimMode) - transform.position).normalized;
             float targetRotation = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
             float currentRotation = transform.rotation.eulerAngles.z;
-            transform.rotation = Quaternion.AngleAxis(Mathf.LerpAngle(currentRotation, targetRotation, (attack.homingSpeed * Time.fixedDeltaTime) / Mathf.Abs(targetRotation - currentRotation)), Vector3.forward);
+            transform.rotation = Quaternion.AngleAxis(Mathf.LerpAngle(currentRotation, targetRotation, attack.homingSpeed), Vector3.forward);
         }
 
         speed = Mathf.Clamp(speed + attack.acceleration * Time.fixedDeltaTime, attack.minSpeed, attack.maxSpeed);
