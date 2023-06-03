@@ -42,6 +42,7 @@ public abstract class StatusEffect : ScriptableObject
     {
         StatusEffect instance = Instantiate(this);
 
+        instance.remainingDuration = duration;
         instance.gameObject = gameObject;
 
         if (visualEffect != null)
