@@ -1,11 +1,15 @@
 using UnityEngine;
 
 /// <summary>
-/// A status effect that prevents movement entirely.
+/// A status effect that prevents an actor from acting.
 /// </summary>
-[CreateAssetMenu(fileName = "NewRooted", menuName = "Status Effects/Rooted")]
-public class Rooted : StatusEffect
+[CreateAssetMenu(fileName = "NewStuned", menuName = "Status Effects/Stuned")]
+public class Stuned : StatusEffect
 {
+    [Tooltip("The max duration of this effect.")]
+    [SerializeField] private float maxDuration = 15f;
+
+
     /// <summary>
     /// Creates a new status effect that is a copy of the caller.
     /// </summary>
@@ -13,13 +17,13 @@ public class Rooted : StatusEffect
     /// <returns> The status effect that was created. </returns>
     public override StatusEffect CreateCopy(GameObject gameObject)
     {
-        Rooted instance = (Rooted)base.CreateCopy(gameObject);
+        Stuned instance = (Stuned)base.CreateCopy(gameObject);
 
+        gameObject.GetComponent<Controller>().GetOnRequestCanAct() += instance.PreventAction;
         gameObject.GetComponent<Movement>().requestSpeedModifications += instance.PreventMovement;
 
         return instance;
     }
-
 
     /// <summary>
     /// Stacks this effect onto another status effect.
@@ -33,8 +37,17 @@ public class Rooted : StatusEffect
             return false;
         }
 
-        other.remainingDuration = Mathf.Max(duration, other.remainingDuration);
+        other.remainingDuration = Mathf.Min(duration + other.remainingDuration, maxDuration);
         return true;
+    }
+
+    /// <summary>
+    /// Responds to a actors can act request, and prevents action.
+    /// </summary>
+    /// <param name="CanAct"> The can act variable to be set to false. </param>
+    private void PreventAction(ref bool CanAct)
+    {
+        CanAct = false;
     }
 
     /// <summary>
@@ -52,9 +65,10 @@ public class Rooted : StatusEffect
     private new void OnDestroy()
     {
         base.OnDestroy();
+        
+        if(gameObject == null) { return; }
 
-        if (gameObject == null) { return; }
-
+        gameObject.GetComponent<Controller>().GetOnRequestCanAct() -= PreventAction;
         gameObject.GetComponent<Movement>().requestSpeedModifications -= PreventMovement;
     }
 }

@@ -51,6 +51,9 @@ public class Silenced : StatusEffect
     private new void OnDestroy()
     {
         base.OnDestroy();
+
+        if (gameObject == null) { return; }
+
         gameObject.GetComponent<Controller>().GetOnRequestCanAct() -= PreventAction;
     }
 }

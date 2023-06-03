@@ -58,7 +58,7 @@ public class Burning : StatusEffect
     {
         if (base.Stack(other))
         {
-            other.remainingDuration = remainingDuration;
+            other.remainingDuration = Mathf.Min(other.remainingDuration + duration, maxDuration);
             return true;
         }
         return false;
