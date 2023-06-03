@@ -129,12 +129,15 @@ public class TemplateCreator : MonoBehaviour
     /// </summary>
     private void SaveTemplate()
     {
-        string path = "Assets/Content/DungeonTemplates/" + templateName + ".asset";
+        string path = "Assets/Content/Templates/" + templateName + ".asset";
 
         #if UNITY_EDITOR
 
+        Debug.Log("path: " + path);
+
         path = AssetDatabase.GenerateUniqueAssetPath(path);
 
+        Debug.Log("path: " + path);
 
         AssetDatabase.CreateAsset(createdTemplate, path);
         AssetDatabase.Refresh();
@@ -142,7 +145,8 @@ public class TemplateCreator : MonoBehaviour
         Debug.Log("Template saved to " + path);
 
         Reload();
-#endif
+
+        #endif
     }
 
     /// <summary>

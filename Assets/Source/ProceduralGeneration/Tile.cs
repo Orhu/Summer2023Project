@@ -6,7 +6,7 @@ using UnityEngine;
 /// Tiles for use in the room grid. Holds information for pathfinding and spawning the tiles
 /// </summary>
 [System.Serializable]
-[CreateAssetMenu(fileName = "NewTile", menuName = "Tiles/Tile", order = 1)]
+[CreateAssetMenu(fileName = "NewTile", menuName = "Generation/Tile", order = 1)]
 public class Tile : ScriptableObject
 {
     [Tooltip("is this tile walkable?")]

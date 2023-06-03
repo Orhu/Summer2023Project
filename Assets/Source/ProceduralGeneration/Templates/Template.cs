@@ -10,9 +10,8 @@ public class Template : ScriptableObject
     [Tooltip("The tiles in this template")]
     public List<TilesList> tiles;
 
-    // TODO: Change to enemy component? Also make them weighted, and allow "squad" spawning. This is fine for prototype though.
-    [Tooltip("The enemies that can spawn in this template")]
-    public List<GameObject> enemies;
+    [Tooltip("The enemy pools that this template has")]
+    public EnemyPools enemyPools;
 
     [Tooltip("The size of the room this template is for")]
     [field: SerializeField] private Vector2Int _roomSize;
@@ -34,6 +33,9 @@ public class Template : ScriptableObject
             }
         }
     }
+
+    // The enemy pool that was chosen for this template
+    [HideInInspector] public EnemyPool chosenEnemyPool;
 }
 
 /// <summary>

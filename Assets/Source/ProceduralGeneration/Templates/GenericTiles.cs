@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Trakcs the generic tiles and their types
 /// </summary>
-[CreateAssetMenu(fileName = "NewGenericTiles", menuName = "Tiles/GenericTiles", order = 1)]
+[CreateAssetMenu(fileName = "NewGenericTiles", menuName = "Generation/GenericTiles", order = 1)]
 public class GenericTiles : ScriptableObject
 {
     [Tooltip("Stores a list of tile types to their generic versions")]

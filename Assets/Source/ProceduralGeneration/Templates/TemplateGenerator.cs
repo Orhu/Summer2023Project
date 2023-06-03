@@ -14,6 +14,20 @@ public class TemplateGenerator : MonoBehaviour
     /// <param name="template"> The template to generate </param>
     public void Generate(Room room, Template template)
     {
+        room.template = ScriptableObject.CreateInstance<Template>();
+        room.template.roomSize = template.roomSize;
+        room.template.tiles = template.tiles;
+
+        if (template.enemyPools != null)
+        {
+            room.template.enemyPools = ScriptableObject.CreateInstance<EnemyPools>();
+            room.template.enemyPools.enemyPools = new List<EnemyPool>();
+            foreach (EnemyPool enemyPool in template.enemyPools.enemyPools)
+            {
+                room.template.enemyPools.enemyPools.Add(enemyPool);
+            }
+            room.template.chosenEnemyPool = room.template.enemyPools.enemyPools[Random.Range(0, template.enemyPools.enemyPools.Count)];
+        }
         GameObject tileContainer = new GameObject();
         tileContainer.name = "Tile Container";
         tileContainer.transform.parent = room.transform;
