@@ -46,7 +46,7 @@ namespace CardSystem
                         // Set the cardRenderer to active
                         cardRenderers[i].gameObject.SetActive(true);
                         // Assign it the random card
-                        cardRenderers[i].Card = tempCard;
+                        cardRenderers[i].card = tempCard;
                     }
                 }
                 else
@@ -65,7 +65,7 @@ namespace CardSystem
         /// <param name="theCard">Card used for setting</param>
         public void SelectCard(CardRenderer cardRenderer)
         {
-            selectedCard = cardRenderer.Card;
+            selectedCard = cardRenderer.card;
         }
 
         /// <summary>
