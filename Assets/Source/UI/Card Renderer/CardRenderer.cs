@@ -9,13 +9,13 @@ using UnityEngine.UI;
 public class CardRenderer : MonoBehaviour
 {
     [Tooltip("The card to render.")]
-    [SerializeField] private Card card;
-    public Card Card
+    [SerializeField] private Card _card;
+    public Card card
     {
         set
         {
-            card = value;
-            bool shouldEnable = card != null;
+            _card = value;
+            bool shouldEnable = _card != null;
 
             links.nameTextBox.enabled = shouldEnable;
             links.descriptionTextBox.enabled = shouldEnable;
@@ -23,33 +23,33 @@ public class CardRenderer : MonoBehaviour
             links.cardSprite.enabled = shouldEnable;
             if (shouldEnable)
             {
-                links.nameTextBox.text = card.displayName;
-                links.descriptionTextBox.text = card.GetDescription(renderActionSide);
+                links.nameTextBox.text = _card.displayName;
+                links.descriptionTextBox.text = _card.GetDescription(renderActionSide);
 
                 if (!renderActionSide)
                 {
-                    links.cardSprite.sprite = card.effectImage;
-                    links.backgroundSprite.sprite = card.effectBackground;
+                    links.cardSprite.sprite = _card.effectImage;
+                    links.backgroundSprite.sprite = _card.effectBackground;
                 }
                 else
                 {
-                    links.cardSprite.sprite = card.actionImage;
-                    links.backgroundSprite.sprite = card.actionBackground;
+                    links.cardSprite.sprite = _card.actionImage;
+                    links.backgroundSprite.sprite = _card.actionBackground;
                 }
             }
         }
-        get { return card; }
+        get { return _card; }
     }
 
     // Whether or not the preview overlay should be enabled.
-    public bool Previewing
+    public bool previewing
     {
         set{ links.previewOverlay.enabled = value; }
         get{ return links.previewOverlay.enabled; }
     }
 
     // The cooldown time to display. If <= 0 no cooldown overlay will be rendered.
-    public float CooldownTime 
+    public float cooldownTime 
     { 
         set 
         {
@@ -60,7 +60,7 @@ public class CardRenderer : MonoBehaviour
     }
 
     // The cooldown time to display.If <= 0 no cooldown overlay will be rendered.
-    public float ActionTime
+    public float actionTime
     {
         set
         {
@@ -74,15 +74,15 @@ public class CardRenderer : MonoBehaviour
     [SerializeField] private ComponentLinks links;
 
     [Tooltip("Whether to render the action side or the effect side of the card.")]
-    [SerializeField] private bool renderActionSide;
-    bool RenderActionSide
+    [SerializeField] private bool _renderActionSide;
+    bool renderActionSide
     {
         set
         {
-            renderActionSide = value;
-            Card = card;
+            _renderActionSide = value;
+            card = _card;
         }
-        get { return renderActionSide; }
+        get { return _renderActionSide; }
     }
         
     /// <summary>
@@ -90,7 +90,15 @@ public class CardRenderer : MonoBehaviour
     /// </summary>
     public void Update()
     {
-        RenderActionSide = renderActionSide;
+        renderActionSide = _renderActionSide;
+    }
+
+    /// <summary>
+    /// Used to flip rendered card from effect to action and back
+    /// </summary>
+    public void FlipRenderActionSide()
+    {
+        renderActionSide = !renderActionSide;
     }
 
     /// <summary>

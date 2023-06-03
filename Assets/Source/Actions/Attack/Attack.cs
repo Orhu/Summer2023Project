@@ -141,6 +141,7 @@ public abstract class Attack : Action
         Play(actor, new List<AttackModifier>(), actor.GetActionSourceTransform().gameObject, ignoredObjects);
     }
 
+
     /// <summary>
     /// Spawns all of the projectiles in spawnSequence and creates delays appropriately.
     /// </summary>
@@ -167,6 +168,7 @@ public abstract class Attack : Action
             }
         }
     }
+
 
     /// <summary>
     /// Spawns a single projectile from the spawn sequence.
