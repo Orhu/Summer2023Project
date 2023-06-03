@@ -204,38 +204,6 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (IgnoredObjects.Contains(collision.gameObject))
-        {
-            return;
-        }
-
-        onOverlap?.Invoke(collision);
-        Health hitHealth = collision.gameObject.GetComponent<Health>();
-        if (hitHealth != null && attack.applyDamageOnHit)
-        {
-            hitHealth.ReceiveAttack(attackData, transform.right);
-        }
-
-        if (--remainingHits <= 0)
-        {
-            onDestroyed?.Invoke();
-            Destroy(gameObject);
-        }
-    }
-
-    /// <summary>
-    /// Applies an attack to the hit object
-    /// </summary>
-    /// <param name="collision"> The collision data </param>
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        Invoke(nameof(DestroyOnWallHit), Time.fixedDeltaTime);
-        onHit?.Invoke(collision);
-        onDestroyed?.Invoke();
-    }
-
     /// <summary>
     /// Gets the desired spawn location
     /// </summary>
