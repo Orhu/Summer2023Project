@@ -12,6 +12,10 @@ public class EnemyPools : ScriptableObject
     [Tooltip("The enemy pools")]
     public List<EnemyPool> enemyPools;
 
+    /// <summary>
+    /// Creates a deep copy of this enemy pool
+    /// </summary>
+    /// <returns> The deep copy </returns>
     public EnemyPools Copy()
     {
         EnemyPools copy = ScriptableObject.CreateInstance<EnemyPools>();
