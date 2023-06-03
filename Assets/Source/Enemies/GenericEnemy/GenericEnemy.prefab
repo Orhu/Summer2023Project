@@ -213,7 +213,7 @@ MonoBehaviour:
   needsLineOfSight: 0
   scanRadius: 15
   scanInitialDelay: 0.5
-  delayBetweenScans: 0.25
+  delayBetweenScans: 0.1
   targetLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -311,7 +311,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 2
   acceleration: 50
-  deacceleration: 100
+  deceleration: 100
+  immuneToGroundEffects: 0
 --- !u!114 &7613015043317099198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,7 +326,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actionChargeUpTime: 0
-  actionCooldownTime: 1
+  actionCooldownTime: 0
   actions: []
   beforeChargeUp:
     m_PersistentCalls:
