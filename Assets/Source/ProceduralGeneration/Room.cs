@@ -33,6 +33,9 @@ public class Room : MonoBehaviour
     // The enemies alive in this room
     public List<GameObject> livingEnemies;
 
+    // The doors of this room
+    private List<Door> doors;
+
     // Whether this room has been generated or not
     private bool generated = false;
 

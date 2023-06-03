@@ -77,27 +77,6 @@ public class RoomExteriorGenerator : MonoBehaviour
     }
 
     /// <summary>
-    /// Initializes a tilemap (do not use for walls: Only things that will not have collision
-    /// </summary>
-    /// <param name="room"> The room to create the tilemap for </param>
-    /// <param name="layer"> The layer the tilemap should have </param>
-    /// <param name="name"> The name to give the tilemap </param>
-    /// <returns> The tilemap </returns>
-    private GameObject InitializeTilemap(GameObject room, int layer, string name)
-    {
-        GameObject tilemap = new GameObject();
-        tilemap.name = name;
-        tilemap.transform.parent = room.transform;
-        tilemap.layer = layer;
-        tilemap.AddComponent<Grid>();
-        tilemap.AddComponent<Tilemap>();
-        tilemap.AddComponent<TilemapRenderer>();
-        // -0.5 to align the grid
-        tilemap.transform.localPosition = new Vector3(-0.5f, -0.5f, 0.0f);
-        return tilemap;
-    }
-
-    /// <summary>
     /// Creates walls for a normally shaped room
     /// </summary>
     /// <param name="roomCell"> The room to create the walls for </param>
@@ -219,6 +198,22 @@ public class RoomExteriorGenerator : MonoBehaviour
         tile.type = TileType.Blocker;
 
         return tile;
+    }
+
+    /// <summary>
+    /// Creates doors for the room
+    /// </summary>
+    /// <param name="roomCell"> The room to create doors for </param>
+    /// <param name="exteriorParameters"> The exterior generation parameters </param>
+    /// <param name="roomSize"> The size of the room </param>
+    private void CreateDoors(MapCell roomCell, Map map, RoomExteriorGenerationParameters exteriorParameters, Vector2Int roomSize)
+    {
+
+    }
+
+    private Tile CreateDoorTile(Sprite sprite, Vector2Int location, GameObject doorContainer)
+    {
+
     }
 
     /// <summary>
