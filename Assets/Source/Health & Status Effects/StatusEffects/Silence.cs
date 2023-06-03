@@ -11,9 +11,9 @@ public class Silence : StatusEffect
     /// </summary>
     /// <param name="gameObject"> The object to apply the status effect.</param>
     /// <returns> The status effect that was created. </returns>
-    public override StatusEffect Instantiate(GameObject gameObject)
+    public override StatusEffect CreateCopy(GameObject gameObject)
     {
-        Silence instance = (Silence)base.Instantiate(gameObject);
+        Silence instance = (Silence)base.CreateCopy(gameObject);
 
         gameObject.GetComponent<Controller>().GetOnRequestCanAct() += instance.PreventAction;
 
@@ -32,7 +32,7 @@ public class Silence : StatusEffect
             return false;
         }
 
-        other.Duration += Duration;
+        other.remainingDuration += remainingDuration;
         return true;
     }
 

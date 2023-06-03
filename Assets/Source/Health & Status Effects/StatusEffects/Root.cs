@@ -11,9 +11,9 @@ public class Root : StatusEffect
     /// </summary>
     /// <param name="gameObject"> The object to apply the status effect.</param>
     /// <returns> The status effect that was created. </returns>
-    public override StatusEffect Instantiate(GameObject gameObject)
+    public override StatusEffect CreateCopy(GameObject gameObject)
     {
-        Root instance = (Root)base.Instantiate(gameObject);
+        Root instance = (Root)base.CreateCopy(gameObject);
 
         gameObject.GetComponent<Movement>().requestSpeedModifications += instance.PreventMovement;
 
@@ -33,7 +33,7 @@ public class Root : StatusEffect
             return false;
         }
 
-        other.Duration += Duration;
+        other.remainingDuration += remainingDuration;
         return true;
     }
 

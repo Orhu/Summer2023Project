@@ -3,26 +3,28 @@ using UnityEngine;
 /// <summary>
 /// A status effect the does damage over time proportional to stacks, and who's duration is reset on each stack.
 /// </summary>
-[CreateAssetMenu(fileName = "Ignite", menuName = "Status Effects/Ignite")]
-public class Ignite : StatusEffect
+[CreateAssetMenu(fileName = "NewBurning", menuName = "Status Effects/Burning")]
+public class Burning : StatusEffect
 {
-    [SerializeField]
     [Tooltip("Damage per second per stack.")]
-    float dps = 1f;
+    [SerializeField] private float dps = 0.5f;
+
+    [Tooltip("Damage per second per stack.")]
+    [SerializeField] private float maxDuration = 4f;
 
     // The time until the next damage tick is applied
-    float timeToDamage;
+    private float timeToDamage;
+
     // The number of times this status effect has been applied.
-    int stacks = 1;
-    public override int Stacks
+    private int _stacks = 1;
+    public override int stacks
     {
         protected set
         {
-            dps *= (float)value / stacks;
-            timeToDamage = 1f / dps;
-            stacks = value;
+            remainingDuration = Mathf.Min(remainingDuration + duration, 4f);
+            _stacks = value;
         }
-        get { return stacks; }
+        get { return _stacks; }
     }
 
     /// <summary>
@@ -31,23 +33,6 @@ public class Ignite : StatusEffect
     private void Awake()
     {
         timeToDamage = 1f / dps;
-    }
-
-
-    /// <summary>
-    /// Creates a new status effect that is a copy of the caller.
-    /// </summary>
-    /// <param name="gameObject"> The object to apply the status effect.</param>
-    /// <returns> The status effect that was created. </returns>
-    public override StatusEffect Instantiate(GameObject gameObject)
-    {
-        Ignite instance = (Ignite)base.Instantiate(gameObject);
-
-        instance.Stacks = Stacks;
-        instance.Duration = Duration;
-        instance.dps = dps;
-
-        return instance;
     }
 
     /// <summary>
@@ -73,7 +58,7 @@ public class Ignite : StatusEffect
     {
         if (base.Stack(other))
         {
-            other.Duration = Duration;
+            other.remainingDuration = remainingDuration;
             return true;
         }
         return false;

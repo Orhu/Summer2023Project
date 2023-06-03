@@ -11,9 +11,9 @@ public class Invulnerable : StatusEffect
     /// </summary>
     /// <param name="gameObject"> The object to apply the status effect.</param>
     /// <returns> The status effect that was created. </returns>
-    public override StatusEffect Instantiate(GameObject gameObject)
+    public override StatusEffect CreateCopy(GameObject gameObject)
     {
-        Invulnerable instance = (Invulnerable)base.Instantiate(gameObject);
+        Invulnerable instance = (Invulnerable)base.CreateCopy(gameObject);
 
         gameObject.GetComponent<Health>().onRequestIncomingAttackModification += instance.PreventAttack;
 
@@ -32,7 +32,7 @@ public class Invulnerable : StatusEffect
             return false;
         }
 
-        other.Duration += Duration;
+        other.remainingDuration += remainingDuration;
         return true;
     }
 
