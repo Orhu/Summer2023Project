@@ -41,7 +41,7 @@ public class Projectile : MonoBehaviour
     // The min speed of the projectile in tiles/s. 
     [NonSerialized] public float minSpeed;
 
-    // The acceleration of the projectile in tiles/s². 
+    // The acceleration of the projectile in tiles/sï¿½. 
     [NonSerialized] public float acceleration;
 
     // The time until this is destroyed in seconds.
@@ -242,7 +242,7 @@ public class Projectile : MonoBehaviour
                     return closestTarget.transform.position;
                 }
 
-                Collider2D[] roomObjects = Physics2D.OverlapBoxAll(transform.position, FloorGenerator.floorGeneratorInstance.floorGenerationParameters.roomSize * 2, 0f);
+                Collider2D[] roomObjects = Physics2D.OverlapBoxAll(transform.position, FloorGenerator.floorGeneratorInstance.roomSize * 2, 0f);
                 foreach (Collider2D roomObject in roomObjects)
                 {
                     // If has health, is not ignored, and is the closest object.
@@ -265,7 +265,7 @@ public class Projectile : MonoBehaviour
                     return randomTarget.transform.position;
                 }
 
-                Collider2D[] roomColliders = Physics2D.OverlapBoxAll(transform.position, FloorGenerator.floorGeneratorInstance.floorGenerationParameters.roomSize * 2, 0f);
+                Collider2D[] roomColliders = Physics2D.OverlapBoxAll(transform.position, FloorGenerator.floorGeneratorInstance.roomSize * 2, 0f);
                 List<GameObject> possibleTargets = new List<GameObject>(roomColliders.Length);
                 foreach (Collider2D roomCollider in roomColliders)
                 {
