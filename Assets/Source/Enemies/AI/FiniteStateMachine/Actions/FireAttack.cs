@@ -8,9 +8,6 @@ using UnityEngine.Events;
 [CreateAssetMenu(menuName = "FSM/Actions/Perform Attack")]
 public class FireAttack : FSMAction
 {
-    [Tooltip("Can this enemy launch an attack?")]
-    [SerializeField] private bool canAttack;
-
     [Tooltip("After requesting an action, how long does it take for the action to be performed?")]
     public float actionChargeUpTime;
 
@@ -32,22 +29,34 @@ public class FireAttack : FSMAction
     [Tooltip("After the cooldown ends, do you want to do anything else?")]
     public UnityEvent afterCooldown;
     
-    public override void Execute(BaseStateMachine stateMachine)
+    // determines if attack is available or not
+    private bool attackReady;
+    
+    public override void OnStateUpdate(BaseStateMachine stateMachine)
     {
-        if (canAttack)
+        if (attackReady)
         {
+            attackReady = false;
             var coroutine = PerformAttack(stateMachine);
             stateMachine.StartCoroutine(coroutine);
         }
     }
-    
+
+    public override void OnStateEnter(BaseStateMachine stateMachine)
+    {
+        attackReady = true;
+    }
+
+    public override void OnStateExit(BaseStateMachine stateMachine)
+    {
+    }
+
     /// <summary>
     /// Performs an attack
     /// </summary>
     /// <param name="stateMachine"> The stateMachine performing the attack </param>
     IEnumerator PerformAttack(BaseStateMachine stateMachine)
     {
-        canAttack = false;
         beforeChargeUp?.Invoke();
         yield return new WaitForSeconds(actionChargeUpTime);
         beforeAction?.Invoke();
@@ -60,6 +69,6 @@ public class FireAttack : FSMAction
         afterAction?.Invoke();
         yield return new WaitForSeconds(actionCooldownTime);
         afterCooldown?.Invoke();
-        canAttack = true;
+        attackReady = true;
     }
 }

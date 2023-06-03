@@ -20,10 +20,15 @@
             
             if (result && trueState is not RemainInState)
             {
+                machine.currentState.OnStateExit(machine);
                 machine.currentState = trueState;
+                machine.currentState.OnStateEnter(machine);
+                
             } else if (!result && falseState is not RemainInState)
             {
+                machine.currentState.OnStateExit(machine);
                 machine.currentState = falseState;
+                machine.currentState.OnStateEnter(machine);
             }
         }
     }

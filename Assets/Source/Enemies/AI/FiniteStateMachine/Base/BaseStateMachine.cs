@@ -10,6 +10,9 @@ public class BaseStateMachine : MonoBehaviour
     
     // the target
     [HideInInspector] public GameObject currentTarget;
+    
+    // our feet position
+    [HideInInspector] public Collider2D feetCollider;
 
     // the current state this machine is in
     [HideInInspector] public BaseState currentState;
@@ -24,6 +27,7 @@ public class BaseStateMachine : MonoBehaviour
     {
         currentState = initialState;
         cachedComponents = new Dictionary<Type, Component>();
+        feetCollider = GetComponentInChildren<Collider2D>();
     }
 
     /// <summary>
@@ -41,8 +45,8 @@ public class BaseStateMachine : MonoBehaviour
     /// Execute the current state
     /// </summary>
     private void Update()
-    { 
-        currentState.Execute(this);
+    {
+        currentState.OnStateUpdate(this);
     }
 
     /// <summary>
