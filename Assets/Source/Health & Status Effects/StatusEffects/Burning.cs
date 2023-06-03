@@ -7,7 +7,7 @@ using UnityEngine;
 public class Burning : StatusEffect
 {
     [Tooltip("Damage per second per stack.")]
-    [SerializeField] private float dps = 0.5f;
+    [SerializeField] private float dps = 2f;
 
     [Tooltip("Damage per second per stack.")]
     [SerializeField] private float maxDuration = 4f;
