@@ -63,7 +63,7 @@ public class RoomExteriorGenerator : MonoBehaviour
 
         // Add the box collider component
         BoxCollider2D roomBox = newRoom.AddComponent<BoxCollider2D>();
-        roomBox.size = roomSize;
+        roomBox.size = roomSize - new Vector2Int(2, 2);
         roomBox.isTrigger = true;
         newRoom.layer = LayerMask.NameToLayer("RoomDetector");
 
