@@ -35,8 +35,6 @@ public class Intangible : StatusEffect
         {
             return false;
         }
-
-        other.remainingDuration += remainingDuration;
         return true;
     }
 

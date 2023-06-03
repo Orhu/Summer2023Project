@@ -3,9 +3,13 @@ using UnityEngine;
 /// <summary>
 /// A status effect that prevents health from receiving attacks.
 /// </summary>
-[CreateAssetMenu(fileName = "NewInvulnerable", menuName = "Status Effects/Invulnerable")]
-public class Invulnerable : StatusEffect
+[CreateAssetMenu(fileName = "NewExhausted", menuName = "Status Effects/Exhausted")]
+public class Exhausted : StatusEffect
 {
+    [Tooltip("The amount incoming damage is multiplied by.")]
+    public float damageMultiplier = 2f;
+
+
     /// <summary>
     /// Creates a new status effect that is a copy of the caller.
     /// </summary>
@@ -13,9 +17,10 @@ public class Invulnerable : StatusEffect
     /// <returns> The status effect that was created. </returns>
     public override StatusEffect CreateCopy(GameObject gameObject)
     {
-        Invulnerable instance = (Invulnerable)base.CreateCopy(gameObject);
+        Exhausted instance = (Exhausted)base.CreateCopy(gameObject);
 
-        gameObject.GetComponent<Health>().onRequestIncomingAttackModification += instance.PreventAttack;
+        gameObject.GetComponent<Health>().onRequestIncomingAttackModification += instance.MutiplyDamage;
+        gameObject.GetComponent<Movement>().requestSpeedModifications += instance.PreventMovement;
 
         return instance;
     }
@@ -31,8 +36,6 @@ public class Invulnerable : StatusEffect
         {
             return false;
         }
-
-        other.remainingDuration += remainingDuration;
         return true;
     }
 
@@ -40,10 +43,18 @@ public class Invulnerable : StatusEffect
     /// Responds to a health's incoming damage modification request, and prevents the attack from passing.
     /// </summary>
     /// <param name="attack"> The attack to prevent. </param>
-    void PreventAttack(ref DamageData attack)
+    void MutiplyDamage(ref DamageData attack)
     {
-        DamageData prevousAttack = attack;
-        attack = new DamageData(0, attack.damageType, prevousAttack.causer);
+        attack.damage = (int)(attack.damage * damageMultiplier);
+    }
+
+    /// <summary>
+    /// Responds to a movement components speed modification request, and sets the speed to 0.
+    /// </summary>
+    /// <param name="speed"> The speed variable to be modified. </param>
+    void PreventMovement(ref float speed)
+    {
+        speed = 0;
     }
 
     /// <summary>
@@ -55,6 +66,7 @@ public class Invulnerable : StatusEffect
 
         if (gameObject == null) { return; }
 
-        gameObject.GetComponent<Health>().onRequestIncomingAttackModification -= PreventAttack;
+        gameObject.GetComponent<Health>().onRequestIncomingAttackModification -= MutiplyDamage;
+        gameObject.GetComponent<Movement>().requestSpeedModifications -= PreventMovement;
     }
 }
