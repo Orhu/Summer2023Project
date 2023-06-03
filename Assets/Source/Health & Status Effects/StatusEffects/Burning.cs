@@ -9,7 +9,7 @@ public class Burning : StatusEffect
     [Tooltip("Damage per second per stack.")]
     [SerializeField] private float dps = 2f;
 
-    [Tooltip("Damage per second per stack.")]
+    [Tooltip("The max duration of this effect.")]
     [SerializeField] private float maxDuration = 4f;
 
     // The time until the next damage tick is applied
