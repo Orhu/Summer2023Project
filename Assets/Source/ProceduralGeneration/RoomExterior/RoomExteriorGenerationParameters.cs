@@ -9,20 +9,44 @@ using UnityEngine.Tilemaps;
 [System.Serializable]
 public class RoomExteriorGenerationParameters
 {
-    [Tooltip("The possible wall sprites to use (will pick randomly from these)")]
-    [SerializeField] public List<Sprite> wallSprites;
+    [Tooltip("The possible right wall sprites to use (will pick randomly from these)")]
+    public List<Sprite> rightWallSprites;
 
-    [Tooltip("The possible wall corner sprites to use")]
-    [SerializeField] public List<Sprite> wallCornerSprites;
+    [Tooltip("The possible top wall sprites to use")]
+    public List<Sprite> topWallSprites;
+
+    [Tooltip("The possible left wall sprites to use")]
+    public List<Sprite> leftWallSprites;
+
+    [Tooltip("The possible bottom wall sprites to use")]
+    public List<Sprite> bottomWallSprites;
+
+    [Tooltip("The possible top right wall corner sprites to use")]
+    public List<Sprite> topRightWallCornerSprites;
+
+    [Tooltip("The possible top left wall corner sprites to use")]
+    public List<Sprite> topLeftWallCornerSprites;
+
+    [Tooltip("The possible bottom left wall corner sprites to use")]
+    public List<Sprite> bottomLeftWallCornerSprites;
+
+    [Tooltip("The possible bottom right wall corner sprites to use")]
+    public List<Sprite> bottomRightWallCornerSprites;
+
+    [Tooltip("The possible right door sprites to use")]
+    public List<DoorSprites> rightDoorSprites;
+
+    [Tooltip("The possible top door sprites to use")]
+    public List<DoorSprites> topDoorSprites;
+
+    [Tooltip("The possible left door sprites to use")]
+    public List<DoorSprites> leftDoorSprites;
+
+    [Tooltip("The possible bottom door sprites to use")]
+    public List<DoorSprites> bottomDoorSprites;
 
     [Tooltip("The possible floor sprites to use")]
-    [SerializeField] public List<Sprite> floorSprites;
-
-    [Tooltip("The possible door sprites to use")]
-    [SerializeField] public List<DoorSprites> doorSprites;
-
-    [Tooltip("The possible next to door sprites to use")]
-    [SerializeField] public List<Sprite> nextToDoorSprites;
+    public List<Sprite> floorSprites;
 }
 
 /// <summary>

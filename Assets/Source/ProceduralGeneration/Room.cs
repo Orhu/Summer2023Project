@@ -40,55 +40,111 @@ public class Room : MonoBehaviour
     private bool generated = false;
 
     /// <summary>
-    /// TODO: Implement this
+    /// Opens all the doors
     /// </summary>
     public void OpenDoors()
     {
-    }
-
-    /// <summary>
-    /// TODO: Implement this
-    /// </summary>
-    public void CloseDoors()
-    {
-    }
-
-    /// <summary>
-    /// Handles when the player enters the room
-    /// </summary>
-    /// <param name="collision"> The collider that entered the trigger </param>
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
+        foreach (Door door in doors)
         {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                transform.GetChild(i).gameObject.SetActive(true);
-            }
-
-            FloorGenerator.floorGeneratorInstance.currentRoom = this;
-            if (!generated)
-            {
-                Template template = FloorGenerator.floorGeneratorInstance.templateGenerationParameters.GetRandomTemplate(roomType);
-
-                GetComponent<TemplateGenerator>().Generate(this, template);
-                generated = true;
-            }
+            door.Open();
         }
     }
 
     /// <summary>
-    /// Handles when the player exits the room
+    /// Closes all the doors
     /// </summary>
-    /// <param name="collision"> The collider that exited the trigger </param>
-    private void OnTriggerExit2D(Collider2D collision)
+    public void CloseDoors()
     {
-        if (collision.gameObject.CompareTag("Player"))
+        foreach (Door door in doors)
         {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                transform.GetChild(i).gameObject.SetActive(false);
-            }
+            door.Close();
+        }
+    }
+
+    /// <summary>
+    /// The function called when the room is entered
+    /// </summary>
+    /// <param name="direction"> The direction the room is being entered from </param>
+    public void Enter(Direction direction)
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(true);
+        }
+
+        FloorGenerator.floorGeneratorInstance.currentRoom = this;
+
+        bool shouldCloseDoors = !generated && template.enemyPools != null;
+
+        Generate();
+
+        // Move player into room, then close/activate doors (so player doesn't get trapped in door)
+        StartCoroutine(MovePlayer(direction));
+
+        ActivateDoors();
+        if (shouldCloseDoors)
+        {
+            CloseDoors();
+        }
+    }
+
+    /// <summary>
+    /// The function called when the room is exited
+    /// </summary>
+    public void Exit()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
+
+        DeactivateDoors();
+    }
+
+    /// <summary>
+    /// Activates the doors, making it so they can be entered and exited
+    /// </summary>
+    public void ActivateDoors()
+    {
+        foreach (Door door in doors)
+        {
+            door.enterable = true;
+        }
+    }
+
+    /// <summary>
+    /// Deactivates the doors, making it so they cannot be entered
+    /// </summary>
+    public void DeactivateDoors()
+    {
+        foreach (Door door in doors)
+        {
+            door.enterable = false;
+        }
+    }
+
+    /// <summary>
+    /// Moves the player into the room 
+    /// </summary>
+    /// <param name="direction"> The direction the player entered in </param>
+    /// <returns> Enumerator so other functions can wait for this to finish </returns>
+    public IEnumerator MovePlayer(Direction direction)
+    {
+        float movePlayerSeconds = 3;
+        yield return new WaitForSeconds(movePlayerSeconds);
+    }
+
+    /// <summary>
+    /// Generates the layout of the room
+    /// </summary>
+    public void Generate()
+    {
+        if (!generated)
+        {
+            Template template = FloorGenerator.floorGeneratorInstance.templateGenerationParameters.GetRandomTemplate(roomType);
+
+            GetComponent<TemplateGenerator>().Generate(this, template);
+            generated = true;
         }
     }
 }
