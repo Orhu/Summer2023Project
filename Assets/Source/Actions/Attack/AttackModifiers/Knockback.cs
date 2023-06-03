@@ -16,6 +16,7 @@ public class Knockback : AttackModifier
 
     [Tooltip("The force in tiles/s added to hit objects.")]
     [SerializeField] private float knockbackVelocity = 4;
+
     [Tooltip("The force in tiles/s added to hit objects.")]
     [SerializeField] private PushDirection pushDirection;
 

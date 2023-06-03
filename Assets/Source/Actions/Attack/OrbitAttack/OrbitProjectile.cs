@@ -5,11 +5,17 @@ using UnityEngine;
 /// </summary>
 public class OrbitProjectile : Projectile
 {
-    OrbitAttack orbitAttack;
-    OrbitSpawnInfo orbitSpawnInfo;
+    // The attack that spawned this.
+    private OrbitAttack orbitAttack;
 
-    float radius;
-    Vector3 lastSpawnLocationPosition;
+    // The spawn info used to spawn this.
+    private OrbitSpawnInfo orbitSpawnInfo;
+
+    // The current orbit radius.
+    private float radius;
+
+    // The last location of the spawn location of this.
+    private Vector3 lastSpawnLocationPosition;
 
     /// <summary>
     /// Handles initial position and rotation.

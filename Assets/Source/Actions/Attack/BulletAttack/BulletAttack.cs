@@ -13,15 +13,11 @@ public class BulletAttack : Attack
     {
         get 
         {
-            return _spawnSequence
-                .Select(x => x as ProjectileSpawnInfo)
-                .ToList();
+            return _spawnSequence.Cast<ProjectileSpawnInfo>().ToList();
         }
         set
         {
-            _spawnSequence = value
-                .Select(x => x as BulletSpawnInfo)
-                .ToList();
+            _spawnSequence = value.Cast<BulletSpawnInfo>().ToList();
         }
     }
 
@@ -65,7 +61,6 @@ public class BulletSpawnInfo : ProjectileSpawnInfo
 
     [Tooltip("The offset from the spawn location to spawn this bullet at")]
     public Vector2 offset = Vector2.zero;
-
 
 
     /// <summary>

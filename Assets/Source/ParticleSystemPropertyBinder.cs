@@ -11,6 +11,7 @@ public class ParticleSystemPropertyBinder : MonoBehaviour
 
     // The remaining lifetime of the visuals.
     private new ParticleSystem particleSystem;
+
     // The remaining lifetime of the visuals.
     private ParticleSystem.MainModule mainModule;
 

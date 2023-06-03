@@ -14,15 +14,11 @@ public class OrbitAttack : Attack
     {
         get
         {
-            return _spawnSequence
-                .Select(x => x as ProjectileSpawnInfo)
-                .ToList();
+            return _spawnSequence.Cast<ProjectileSpawnInfo>().ToList();
         }
         set
         {
-            _spawnSequence = value
-                .Select(x => x as OrbitSpawnInfo)
-                .ToList();
+            _spawnSequence = value.Cast<OrbitSpawnInfo>().ToList();
         }
     }
 
@@ -36,22 +32,43 @@ public class OrbitAttack : Attack
     public bool attachedToSpawnLocation = true;
 
     #region Previewing
-    public override void ApplyModifiersToPreview(IActor actor, List<AttackModifier> actionModifiers)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void CancelPreview(IActor actor)
-    {
-        throw new System.NotImplementedException();
-    }
-
+    /// <summary>
+    /// A scriptable object data about an attack that can be used by cards and enemies.
+    /// </summary>
+    /// <param name="actor"> The actor that will be playing this action. </param>
     public override void Preview(IActor actor)
     {
         throw new System.NotImplementedException();
     }
 
+
+    /// <summary>
+    /// Applies modifiers to a preview.
+    /// </summary>
+    /// <param name="actor"> The actor previewing. </param>
+    /// <param name="actionModifiers"> The modifiers to apply </param>
+    public override void ApplyModifiersToPreview(IActor actor, List<AttackModifier> actionModifiers)
+    {
+        throw new System.NotImplementedException();
+    }
+
+
+    /// <summary>
+    /// Removes modifiers from a preview.
+    /// </summary>
+    /// <param name="actor"> The actor previewing. </param>
+    /// <param name="actionModifiers"> The modifiers to remove </param>
     public override void RemoveModifiersFromPreview(IActor actor, List<AttackModifier> actionModifiers)
+    {
+        throw new System.NotImplementedException();
+    }
+
+
+    /// <summary>
+    /// Stops rendering a preview of what this action will do.
+    /// </summary>
+    /// <param name="actor"> The actor that will no longer be playing this action. </param>
+    public override void CancelPreview(IActor actor)
     {
         throw new System.NotImplementedException();
     }

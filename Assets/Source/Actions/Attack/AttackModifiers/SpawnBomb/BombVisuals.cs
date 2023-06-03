@@ -8,15 +8,24 @@ using UnityEngine.Events;
 /// </summary>
 public class BombVisuals : MonoBehaviour
 {
+    [Tooltip("Called when the explosion radius is initialized, and passes the explosion radius.")]
     public UnityEvent<float> explosionRadius;
+
+    [Tooltip("Called when the explosion radius is initialized, and passes the explosion radius as a vector 3.")]
     public UnityEvent<Vector3> explosionRadiusAsScale;
+
+    [Tooltip("Called when the when the fuse time is updated, and passes the remaining time.")]
     public UnityEvent<float> fuseTime;
+
+    [Tooltip("Called when the when the bomb explodes.")]
     public UnityEvent onExploded;
 
     // The remaining lifetime of the visuals.
     private float lifetime;
+
     // The remaining lifetime of the visuals.
     private new ParticleSystem particleSystem;
+
     // The remaining lifetime of the visuals.
     private Bomb bomb;
 

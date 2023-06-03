@@ -58,6 +58,8 @@ public class CardRenderer : MonoBehaviour
             links.cooldownTimeTextBox.enabled = value > 0;
         }
     }
+
+    // The cooldown time to display.If <= 0 no cooldown overlay will be rendered.
     public float ActionTime
     {
         set

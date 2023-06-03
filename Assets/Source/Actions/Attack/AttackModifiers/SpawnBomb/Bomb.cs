@@ -19,7 +19,6 @@ public class Bomb : MonoBehaviour
     // The objects not to damage when exploding.
     public List<GameObject> ignoredObjects = new List<GameObject>();
 
-
     // Invoked when this explodes.
     public System.Action onExploded;
 
