@@ -16,6 +16,7 @@ public class Knockback : AttackModifier
 
     [Tooltip("The force in tiles/s added to hit objects.")]
     [SerializeField] private float knockbackVelocity = 4;
+
     [Tooltip("The force in tiles/s added to hit objects.")]
     [SerializeField] private PushDirection pushDirection;
 
@@ -47,6 +48,10 @@ public class Knockback : AttackModifier
         }
     }
 
+    /// <summary>
+    /// Applies knockback to the hit collider.
+    /// </summary>
+    /// <param name="collision"> The collider that was hit. </param>
     private void ApplyKnockback(Collider2D collision)
     {
         Rigidbody2D rigidbody = collision.GetComponent<Rigidbody2D>();

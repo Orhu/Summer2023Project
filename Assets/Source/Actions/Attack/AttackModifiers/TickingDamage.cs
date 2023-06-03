@@ -30,12 +30,25 @@ public class TickingDamage : AttackModifier
         }
     }
 
-
+    /// <summary>
+    /// Starts dealing ticking damage to hit objects.
+    /// </summary>
+    /// <param name="collider"> The collider that was hit. </param>
     private void StartTicking(Collider2D collider)
     {
-        tickingDamageProjectile.StartCoroutine(DealTickingDamage(collider.GetComponent<Health>(), collider));
+        Health health = collider.GetComponent<Health>();
+        if (health != null)
+        {
+            tickingDamageProjectile.StartCoroutine(DealTickingDamage(health, collider));
+        }
     }
 
+    /// <summary>
+    /// Deals damage on an interval.
+    /// </summary>
+    /// <param name="healthToDamage"> The health being damaged. </param>
+    /// <param name="collider"> The collider of the health. </param>
+    /// <returns> The time to wait until the next tick. </returns>
     private IEnumerator DealTickingDamage(Health healthToDamage, Collider2D collider)
     {
         yield return new WaitForSeconds(damageInterval);
@@ -45,7 +58,6 @@ public class TickingDamage : AttackModifier
 
             if (--tickingDamageProjectile.remainingHits <= 0)
             {
-                tickingDamageProjectile.onDestroyed?.Invoke();
                 Destroy(tickingDamageProjectile.gameObject);
             }
 

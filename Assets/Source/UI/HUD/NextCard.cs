@@ -24,14 +24,14 @@ public class NextCard : MonoBehaviour
     {
         if (Deck.playerDeck.drawableCards.Count == 0)
         {
-            cardRenderer.Card = null;
+            cardRenderer.card = null;
             return;
         }
 
         Card card = Deck.playerDeck.drawableCards[Deck.playerDeck.drawableCards.Count - 1];
-        if (cardRenderer.Card != card)
+        if (cardRenderer.card != card)
         {
-            cardRenderer.Card = card;
+            cardRenderer.card = card;
         }
     }
 }

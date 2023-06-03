@@ -6,21 +6,21 @@ using UnityEngine;
 /// <summary>
 /// A movement component that moves towards the move input, and has acceleration and deceleration.
 /// </summary>
+[RequireComponent(typeof(Rigidbody2D))]
 public class SimpleMovement : Movement
 {
-    // TODO: add a [RequireComponent] attribute
     // The rigid body that handles collisions 
     private Rigidbody2D rb2d;
 
-    [SerializeField]
+    
     [Tooltip("The max speed in tiles/s this can accelerate to")]
-    private float maxSpeed = 2;
-    [SerializeField]
+    [SerializeField] private float maxSpeed = 2;
+    
     [Tooltip("The speed in maxSpeed/s at which this accelerates to the desired move direction")]
-    private float acceleration = 50;
-    [SerializeField]
+    [SerializeField] private float acceleration = 50;
+    
     [Tooltip("The speed in maxSpeed/s at which this accelerates to zero velocity")]
-    private float deacceleration = 100;
+    [SerializeField] private float deacceleration = 100;
 
     /// <summary>
     /// Initializes the rigid body reference.
