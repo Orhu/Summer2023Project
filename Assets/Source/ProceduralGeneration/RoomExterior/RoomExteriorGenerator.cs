@@ -59,11 +59,12 @@ public class RoomExteriorGenerator : MonoBehaviour
         roomComponent.roomType = createdCell.type;
         roomComponent.roomSize = roomSize;
         roomComponent.roomGrid = new Tile[roomSize.x, roomSize.y];
+        roomComponent.livingEnemies = new List<GameObject>();
         newRoom.AddComponent<TemplateGenerator>();
 
         // Add the box collider component
         BoxCollider2D roomBox = newRoom.AddComponent<BoxCollider2D>();
-        roomBox.size = roomSize - new Vector2Int(2, 2);
+        roomBox.size = roomSize - new Vector2Int(1, 1);
         roomBox.isTrigger = true;
         newRoom.layer = LayerMask.NameToLayer("RoomDetector");
 
@@ -187,6 +188,8 @@ public class RoomExteriorGenerator : MonoBehaviour
                 room.roomGrid[roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
             }
         }
+
+        wallContainer.SetActive(false);
     }
 
     /// <summary>
@@ -257,7 +260,7 @@ public class RoomExteriorGenerator : MonoBehaviour
 
         // Add the box collider component
         BoxCollider2D roomBox = bossRoom.AddComponent<BoxCollider2D>();
-        roomBox.size = room.roomSize;
+        roomBox.size = room.roomSize - new Vector2Int(1, 1);
         roomBox.isTrigger = true;
 
         GameObject wallContainer = new GameObject();
@@ -349,5 +352,7 @@ public class RoomExteriorGenerator : MonoBehaviour
                 map.map[centerCell.location.x + i, centerCell.location.y + j].room = bossRoom;
             }
         }
+
+        wallContainer.SetActive(false);
     }
 }

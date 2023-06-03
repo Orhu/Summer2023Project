@@ -58,6 +58,11 @@ public class Room : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                transform.GetChild(i).gameObject.SetActive(true);
+            }
+
             FloorGenerator.floorGeneratorInstance.currentRoom = this;
             if (!generated)
             {
@@ -75,10 +80,13 @@ public class Room : MonoBehaviour
     /// <param name="collision"> The collider that exited the trigger </param>
     private void OnTriggerExit2D(Collider2D collision)
     {
-        /*if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
-            GetComponent<TilemapRenderer>().enabled = false;
-        }*/
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                transform.GetChild(i).gameObject.SetActive(false);
+            }
+        }
     }
 }
 
