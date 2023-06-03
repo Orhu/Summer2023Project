@@ -11,6 +11,25 @@ public class EnemyPools : ScriptableObject
 {
     [Tooltip("The enemy pools")]
     public List<EnemyPool> enemyPools;
+
+    public EnemyPools Copy()
+    {
+        EnemyPools copy = ScriptableObject.CreateInstance<EnemyPools>();
+        copy.enemyPools = new List<EnemyPool>();
+
+        foreach (EnemyPool enemyPool in enemyPools)
+        {
+            EnemyPool poolCopy;
+            poolCopy.enemies = new List<GameObject>();
+            foreach (GameObject enemy in enemyPool.enemies)
+            {
+                poolCopy.enemies.Add(enemy);
+            }
+            copy.enemyPools.Add(poolCopy);
+        }
+
+        return copy;
+    }
 }
 
 /// <summary>

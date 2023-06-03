@@ -20,14 +20,10 @@ public class TemplateGenerator : MonoBehaviour
 
         if (template.enemyPools != null)
         {
-            room.template.enemyPools = ScriptableObject.CreateInstance<EnemyPools>();
-            room.template.enemyPools.enemyPools = new List<EnemyPool>();
-            foreach (EnemyPool enemyPool in template.enemyPools.enemyPools)
-            {
-                room.template.enemyPools.enemyPools.Add(enemyPool);
-            }
+            room.template.enemyPools = template.enemyPools.Copy();
             room.template.chosenEnemyPool = room.template.enemyPools.enemyPools[Random.Range(0, template.enemyPools.enemyPools.Count)];
         }
+
         GameObject tileContainer = new GameObject();
         tileContainer.name = "Tile Container";
         tileContainer.transform.parent = room.transform;
