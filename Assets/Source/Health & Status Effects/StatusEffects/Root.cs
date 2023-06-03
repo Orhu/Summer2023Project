@@ -11,7 +11,7 @@ public class Root : StatusEffect
     /// </summary>
     /// <param name="gameObject"> The object to apply the status effect.</param>
     /// <returns> The status effect that was created. </returns>
-    internal override StatusEffect Instantiate(GameObject gameObject)
+    public override StatusEffect Instantiate(GameObject gameObject)
     {
         Root instance = (Root)base.Instantiate(gameObject);
 
@@ -26,7 +26,7 @@ public class Root : StatusEffect
     /// </summary>
     /// <param name="other"> The other particle effect to stack this onto. </param>
     /// <returns> Whether or not this status effect was consumed by the stacking. </returns>
-    internal override bool Stack(StatusEffect other)
+    public override bool Stack(StatusEffect other)
     {
         if (other.GetType() != GetType())
         {

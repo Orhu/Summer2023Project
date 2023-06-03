@@ -1,8 +1,4 @@
-using CardSystem.Effects;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 
 /// <summary>
 /// Previews the path that a bullet will take.

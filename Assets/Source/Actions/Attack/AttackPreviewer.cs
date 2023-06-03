@@ -1,6 +1,3 @@
-using CardSystem.Effects;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -9,19 +6,7 @@ using UnityEngine;
 public class AttackPreviewer : MonoBehaviour
 {
     // The owner of the preview.
-    internal IActor actor;
+    public IActor actor;
     // The attack being previewed.
-    internal Attack attack;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Attack attack;
 }

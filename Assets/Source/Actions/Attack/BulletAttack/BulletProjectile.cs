@@ -1,8 +1,4 @@
-using CardSystem.Effects;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static CardSystem.Effects.Attack;
 
 /// <summary>
 /// A projectile that moves in a straight line.
@@ -11,8 +7,6 @@ public class BulletProjectile : Projectile
 {
     // The bullet attack that spawned this.
     BulletAttack bulletAttack;
-    // The index in the spawn sequence that this was created from.
-    internal int bulletIndex;
 
     /// <summary>
     /// Initializes position and rotation.
@@ -20,6 +14,7 @@ public class BulletProjectile : Projectile
     new void Start()
     {
         bulletAttack = attack as BulletAttack;
+        BulletSpawnInfo bulletSpawnInfo = spawnSequence[index] as BulletSpawnInfo;
 
         // Position
         switch (attack.spawnLocation)
@@ -39,10 +34,10 @@ public class BulletProjectile : Projectile
         float aimRotation = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
 
         float randomAngle = Random.Range(bulletAttack.randomAngle / -2f, bulletAttack.randomAngle / 2f);
-        transform.rotation = Quaternion.AngleAxis(aimRotation + randomAngle + bulletAttack.spawnSequence[bulletIndex].angle, Vector3.forward);
-        
+        transform.rotation = Quaternion.AngleAxis(aimRotation + randomAngle + bulletSpawnInfo.angle, Vector3.forward);
+
         // Position offset
-        transform.position += Quaternion.AngleAxis(aimRotation, Vector3.forward) * bulletAttack.spawnSequence[bulletIndex].offset;
+        transform.position += Quaternion.AngleAxis(aimRotation, Vector3.forward) * bulletSpawnInfo.offset;
 
 
         base.Start();
