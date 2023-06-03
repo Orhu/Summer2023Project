@@ -45,7 +45,7 @@ public class FireAttack : FSMAction
     /// Performs an attack
     /// </summary>
     /// <param name="stateMachine"> The stateMachine performing the attack </param>
-    public IEnumerator PerformAttack(BaseStateMachine stateMachine)
+    IEnumerator PerformAttack(BaseStateMachine stateMachine)
     {
         canAttack = false;
         beforeChargeUp?.Invoke();

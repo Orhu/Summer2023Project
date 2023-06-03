@@ -9,23 +9,21 @@ public class SplitOnDeath : MonoBehaviour
 {
     [Tooltip("How many enemies to create upon death")]
     [SerializeField] private int numToSplitInto;
-    
+
     [Tooltip("How big of a radius do we split into?")]
     [SerializeField] private float splitRadius;
 
     [Tooltip("The prefab to spawn upon death")]
     [SerializeField] private GameObject splitIntoPrefab;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
+    /// <summary>
+    /// Split by creating a number of enemies along the circumference of the circle given by the splitRadius
+    /// </summary>
     public void Split()
     {
         var step = 360 / numToSplitInto;
         var myPos = transform.position;
-        
+
         for (int i = 0; i < numToSplitInto; i++)
         {
             var degree = step * i;

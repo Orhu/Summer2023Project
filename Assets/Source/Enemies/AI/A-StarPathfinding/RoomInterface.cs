@@ -3,16 +3,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Interfacing class stands as the in-between for the actual room and the pathfinding algorithm. This allows
+/// pathfinding-related alterations remain isolated to this class and not be exposed to the rest of the room ecosystem.
+/// </summary>
 public class RoomInterface : MonoBehaviour
 {
+    /// <summary>
+    /// Represents a tile for the purposes of pathfinding
+    /// </summary>
     public class PathfindingTile : IHeapItem<PathfindingTile>
     {
         // is this tile walkable?
         public bool walkable;
-        
+
         // how much this tile cost to walk on (higher is avoided more, lower is preferred)
         public int movementPenalty;
-        
+
         // the x and y location of this tile within the 2D array grid
         public Vector2Int gridLocation;
 
@@ -28,6 +35,10 @@ public class RoomInterface : MonoBehaviour
         // parent of this tile, as determined by pathfinding algorithm. used to retrace steps in pathfinding
         public PathfindingTile retraceStep;
 
+        /// <summary>
+        /// Constructor for a PathfindingTile from a Tile
+        /// </summary>
+        /// <param name="t"> Tile to construct from </param>
         public PathfindingTile(Tile t)
         {
             walkable = t.walkable;
@@ -37,7 +48,7 @@ public class RoomInterface : MonoBehaviour
             hCost = 0;
             retraceStep = null;
         }
-        
+
         /// <summary>
         /// Compare this tile to another tile
         /// </summary>
@@ -56,14 +67,25 @@ public class RoomInterface : MonoBehaviour
             return -compare;
         }
 
+        // this tile's index within the heap (required for IHeapItem implementation)
         public int heapIndex { get; set; }
     }
-    
+
+    // the room this class represents
     private Room myRoom;
+
+    // the size of this room, in tiles
     private Vector2Int myRoomSize;
+
+    // the tile grid of this room
     private PathfindingTile[,] myRoomGrid;
+
+    // the world position of this room
     private Vector2 myWorldPosition;
-    
+
+    /// <summary>
+    /// Retrieves player's current room from the FloorGenerator singleton, updating this class' room reference
+    /// </summary>
     public void GrabCurrentRoom()
     {
         myRoom = FloorGenerator.floorGeneratorInstance.currentRoom;
@@ -72,33 +94,41 @@ public class RoomInterface : MonoBehaviour
         DeepCopyGrid(myRoom.roomGrid);
     }
 
+    /// <summary>
+    /// Get the x * y size of the room, in tiles
+    /// </summary>
+    /// <returns> The max room size </returns>
     public int GetMaxRoomSize()
     {
         return myRoomSize.x * myRoomSize.y;
     }
 
+    /// <summary>
+    /// Copies a given tile grid into a PathfindingTile grid and assigns it to this class' myRoomGrid variable
+    /// </summary>
+    /// <param name="inputArray"> The input array of tiles </param>
     void DeepCopyGrid(Tile[,] inputArray)
     {
         myRoomGrid = new PathfindingTile[myRoomSize.x, myRoomSize.y];
-        
+
         foreach (var tile in inputArray)
         {
             myRoomGrid[tile.gridLocation.x, tile.gridLocation.y] = new PathfindingTile(tile);
         }
     }
-    
-      /// <summary>
+
+    /// <summary>
     /// Gets the tile at the given world position
     /// </summary>
     /// <param name="worldPos"> The world position </param>
     /// <returns> The tile </returns>
     public PathfindingTile WorldPosToTile(Vector2 worldPos)
-      {
-          Vector2Int tilePos = new Vector2Int(
-              Mathf.RoundToInt(worldPos.x + myRoomSize.x / 2 - myWorldPosition.x),
-              Mathf.RoundToInt(worldPos.y + myRoomSize.y / 2 - myWorldPosition.y)
-          );
-          return myRoomGrid[tilePos.x, tilePos.y];
+    {
+        Vector2Int tilePos = new Vector2Int(
+            Mathf.RoundToInt(worldPos.x + myRoomSize.x / 2 - myWorldPosition.x),
+            Mathf.RoundToInt(worldPos.y + myRoomSize.y / 2 - myWorldPosition.y)
+        );
+        return myRoomGrid[tilePos.x, tilePos.y];
     }
 
     /// <summary>
