@@ -3,8 +3,8 @@ using UnityEngine;
 /// <summary>
 /// A status effect that prevents an actor from acting.
 /// </summary>
-[CreateAssetMenu(fileName = "Silence", menuName = "Status Effects/Silence")]
-public class Silence : StatusEffect
+[CreateAssetMenu(fileName = "NewSilenced", menuName = "Status Effects/Silenced")]
+public class Silenced : StatusEffect
 {
     /// <summary>
     /// Creates a new status effect that is a copy of the caller.
@@ -13,7 +13,7 @@ public class Silence : StatusEffect
     /// <returns> The status effect that was created. </returns>
     public override StatusEffect CreateCopy(GameObject gameObject)
     {
-        Silence instance = (Silence)base.CreateCopy(gameObject);
+        Silenced instance = (Silenced)base.CreateCopy(gameObject);
 
         gameObject.GetComponent<Controller>().GetOnRequestCanAct() += instance.PreventAction;
 
@@ -32,7 +32,7 @@ public class Silence : StatusEffect
             return false;
         }
 
-        other.remainingDuration += remainingDuration;
+        other.remainingDuration = Mathf.Max(duration, other.remainingDuration);
         return true;
     }
 
