@@ -3,8 +3,8 @@ using UnityEngine;
 /// <summary>
 /// A status effect that prevents movement entirely.
 /// </summary>
-[CreateAssetMenu(fileName = "Root", menuName = "Status Effects/Root")]
-public class Root : StatusEffect
+[CreateAssetMenu(fileName = "NewRooted", menuName = "Status Effects/Rooted")]
+public class Rooted : StatusEffect
 {
     /// <summary>
     /// Creates a new status effect that is a copy of the caller.
@@ -13,7 +13,7 @@ public class Root : StatusEffect
     /// <returns> The status effect that was created. </returns>
     public override StatusEffect CreateCopy(GameObject gameObject)
     {
-        Root instance = (Root)base.CreateCopy(gameObject);
+        Rooted instance = (Rooted)base.CreateCopy(gameObject);
 
         gameObject.GetComponent<Movement>().requestSpeedModifications += instance.PreventMovement;
 
@@ -33,7 +33,7 @@ public class Root : StatusEffect
             return false;
         }
 
-        other.remainingDuration += remainingDuration;
+        other.remainingDuration = Mathf.Max(duration, other.remainingDuration);
         return true;
     }
 
