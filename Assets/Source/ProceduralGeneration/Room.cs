@@ -30,8 +30,11 @@ public class Room : MonoBehaviour
     // The location of the room in the map
     [HideInInspector] public Vector2Int roomLocation;
 
+    // The enemies alive in this room
+    public List<GameObject> livingEnemies;
+
     // Whether this room has been generated or not
-    [HideInInspector] private bool generated = false;
+    private bool generated = false;
 
     /// <summary>
     /// TODO: Implement this

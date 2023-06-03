@@ -34,11 +34,9 @@ public class EnemyAttacker : MonoBehaviour
 
     private bool canAttack = true;
     
-    public static List<GameObject> enemies = new List<GameObject>();
-
     void Awake()
     {
-       enemies.Add(gameObject);
+       FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Add(gameObject);
     }
 
     /// <summary>
@@ -55,7 +53,7 @@ public class EnemyAttacker : MonoBehaviour
         beforeAction?.Invoke();
         foreach (var action in actions)
         {
-            action.Play(agent, enemies);
+            action.Play(agent, FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies);
         }
 
         afterAction?.Invoke();
@@ -66,6 +64,6 @@ public class EnemyAttacker : MonoBehaviour
 
     void OnDestroy()
     {
-        enemies.Remove(gameObject);
+        FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Remove(gameObject);
     }
 }
