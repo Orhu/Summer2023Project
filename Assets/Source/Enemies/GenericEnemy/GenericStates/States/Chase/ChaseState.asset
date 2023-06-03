@@ -9,7 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35f323c9c3caba946b45c6d1b17f1c6a, type: 3}
-  m_Name: Goblin_AttackShape
+  m_Script: {fileID: 11500000, guid: 5c5858af96344aaa9e636fdff62a26b5, type: 3}
+  m_Name: ChaseState
   m_EditorClassIdentifier: 
-  size: {x: 0.75, y: 0.15}
+  actions: []
+  transitions:
+  - {fileID: 11400000, guid: 1cedb111109716641b353706189bd7b6, type: 2}
+  - {fileID: 11400000, guid: c55a6d9739623904c9c304bedb1a7c7f, type: 2}

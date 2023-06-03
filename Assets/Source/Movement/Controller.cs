@@ -22,8 +22,8 @@ public class Controller : MonoBehaviour, IActor
     // enemy attacker component, if it exists on this agent
     private EnemyAttacker enemyAttacker;
     
-    // enemy brain component, if it exists on this agent
-    private EnemyBrain enemyBrain;
+    // state machine component, if it exists on this agent
+    private BaseStateMachine enemyStateMachine;
     
     // represents the inner collider of this unit
     [HideInInspector] public Collider2D feet;
@@ -39,7 +39,7 @@ public class Controller : MonoBehaviour, IActor
         if (useEnemyLogic)
         {
             enemyAttacker = GetComponent<EnemyAttacker>();
-            enemyBrain = GetComponent<EnemyBrain>();
+            enemyStateMachine = GetComponent<BaseStateMachine>();
         }
 
         movementComponent = GetComponent<Movement>();
@@ -174,17 +174,8 @@ public class Controller : MonoBehaviour, IActor
     public Vector3 GetActionAimPosition()
     {
         if (useEnemyLogic)
-        {
-            var target = enemyBrain.target;
-            if (target != null)
-            {
-                return target.transform.position;
-            }
-            else
-            {
-                // TODO probably think of a better fail case than just returning the zero vector
-                return Vector2.zero;
-            }
+        { 
+            return enemyStateMachine.currentTarget.transform.position;
         }
 
         return Vector3.Scale(Camera.main.ScreenToWorldPoint(Input.mousePosition), new Vector3(1, 1, 0));
