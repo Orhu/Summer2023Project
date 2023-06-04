@@ -10,7 +10,7 @@ abstract public class Action : ScriptableObject
     protected string description = "";
 
     /// <summary>
-    /// Gets the formated description of this card.
+    /// Gets the formatted description of this card.
     /// </summary>
     /// <returns> The description with any Serialized Field names that appear in [] replaced with their actual value. </returns>
     public virtual string GetFormattedDescription()

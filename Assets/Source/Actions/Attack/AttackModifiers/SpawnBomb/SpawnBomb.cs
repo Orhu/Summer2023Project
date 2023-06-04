@@ -6,8 +6,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewSpawnBomb", menuName = "Cards/AttackModifers/SpawnBomb")]
 public class SpawnBomb : AttackModifier
 {
-    public enum SpawnMode { OnHit, OnDestroyed }
-
     [Tooltip("The radius in tiles of the explosion caused by the bomb.")] [Min(0f)]
     public float explosionRadius = 2f;
 
@@ -20,8 +18,9 @@ public class SpawnBomb : AttackModifier
     [Tooltip("Whether or not this should ignore the same objects as it's parent projectile.")]
     public bool inheritIgnore = false;
 
+    private enum SpawnMode { OnHit, OnDestroyed }
     [Tooltip("When bombs are spawned.")]
-    public SpawnMode spawnMode;
+    [SerializeField] private SpawnMode spawnMode;
 
     [Tooltip("The visuals that will be attached to the bomb.")]
     public GameObject bombVisuals;
@@ -46,13 +45,14 @@ public class SpawnBomb : AttackModifier
         }
     }
 
-    private void CreateBomb()
-    {
-        CreateBomb(null);
-    }
+    /// <summary>
+    /// Spawns the bomb on a collision.
+    /// </summary>
+    /// <param name="collision"> The thing collided with. </param>
     private void CreateBomb(Collider2D collision)
     {
         Bomb newBomb = new GameObject().AddComponent<Bomb>();
+        newBomb.name = "Bomb";
         newBomb.explosionRadius = explosionRadius;
         newBomb.fuseTime = fuseTime;
         newBomb.damageData = _modifiedProjectile.attackData;
@@ -64,7 +64,7 @@ public class SpawnBomb : AttackModifier
 
         if (inheritIgnore)
         {
-            newBomb.ignoredObjects = _modifiedProjectile.IgnoredObjects;
+            newBomb.ignoredObjects = _modifiedProjectile.ignoredObjects;
         }
 
         if (sticky && collision != null)
@@ -73,5 +73,9 @@ public class SpawnBomb : AttackModifier
         }
 
         newBomb.transform.position = _modifiedProjectile.transform.position;
+    }
+    private void CreateBomb()
+    {
+        CreateBomb(null);
     }
 }

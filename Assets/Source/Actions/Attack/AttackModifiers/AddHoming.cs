@@ -8,6 +8,7 @@ public class AddHoming : AttackModifier
 {
     [Tooltip("The homing speed to add.")]
     [SerializeField] private float homingSpeed;
+
     [Tooltip("The amount of homing time to add.")]
     [SerializeField] private float homingTime;
 

@@ -8,15 +8,14 @@ using UnityEngine.UI;
 [ExecuteInEditMode]
 public class CardRenderer : MonoBehaviour
 {
-    // The card to render.
-    [SerializeField]
-    Card card;
-    public Card Card
+    [Tooltip("The card to render.")]
+    [SerializeField] private Card _card;
+    public Card card
     {
         set
         {
-            card = value;
-            bool shouldEnable = card != null;
+            _card = value;
+            bool shouldEnable = _card != null;
 
             links.nameTextBox.enabled = shouldEnable;
             links.descriptionTextBox.enabled = shouldEnable;
@@ -24,33 +23,33 @@ public class CardRenderer : MonoBehaviour
             links.cardSprite.enabled = shouldEnable;
             if (shouldEnable)
             {
-                links.nameTextBox.text = card.displayName;
-                links.descriptionTextBox.text = card.GetDescription(renderActionSide);
+                links.nameTextBox.text = _card.displayName;
+                links.descriptionTextBox.text = _card.GetDescription(renderActionSide);
 
                 if (!renderActionSide)
                 {
-                    links.cardSprite.sprite = card.effectImage;
-                    links.backgroundSprite.sprite = card.effectBackground;
+                    links.cardSprite.sprite = _card.effectImage;
+                    links.backgroundSprite.sprite = _card.effectBackground;
                 }
                 else
                 {
-                    links.cardSprite.sprite = card.actionImage;
-                    links.backgroundSprite.sprite = card.actionBackground;
+                    links.cardSprite.sprite = _card.actionImage;
+                    links.backgroundSprite.sprite = _card.actionBackground;
                 }
             }
         }
-        get { return card; }
+        get { return _card; }
     }
 
     // Whether or not the preview overlay should be enabled.
-    public bool Previewing
+    public bool previewing
     {
         set{ links.previewOverlay.enabled = value; }
         get{ return links.previewOverlay.enabled; }
     }
 
     // The cooldown time to display. If <= 0 no cooldown overlay will be rendered.
-    public float CooldownTime 
+    public float cooldownTime 
     { 
         set 
         {
@@ -59,7 +58,9 @@ public class CardRenderer : MonoBehaviour
             links.cooldownTimeTextBox.enabled = value > 0;
         }
     }
-    public float ActionTime
+
+    // The cooldown time to display.If <= 0 no cooldown overlay will be rendered.
+    public float actionTime
     {
         set
         {
@@ -69,20 +70,19 @@ public class CardRenderer : MonoBehaviour
         }
     }
 
-    // The links to the necessary components for rendering.
-    [SerializeField]
-    ComponentLinks links;
-    // Whether to render the action side or the effect side of the card.
-    [SerializeField]
-    bool renderActionSide;
-    bool RenderActionSide
+    [Tooltip("The links to the necessary components for rendering.")]
+    [SerializeField] private ComponentLinks links;
+
+    [Tooltip("Whether to render the action side or the effect side of the card.")]
+    [SerializeField] private bool _renderActionSide;
+    bool renderActionSide
     {
         set
         {
-            renderActionSide = value;
-            Card = card;
+            _renderActionSide = value;
+            card = _card;
         }
-        get { return renderActionSide; }
+        get { return _renderActionSide; }
     }
         
     /// <summary>
@@ -90,7 +90,15 @@ public class CardRenderer : MonoBehaviour
     /// </summary>
     public void Update()
     {
-        RenderActionSide = renderActionSide;
+        renderActionSide = _renderActionSide;
+    }
+
+    /// <summary>
+    /// Used to flip rendered card from effect to action and back
+    /// </summary>
+    public void FlipRenderActionSide()
+    {
+        renderActionSide = !renderActionSide;
     }
 
     /// <summary>
@@ -99,14 +107,31 @@ public class CardRenderer : MonoBehaviour
     [System.Serializable]
     struct ComponentLinks
     {
+        [Tooltip("The text boxed used to display the name of the card.")]
         public TMP_Text nameTextBox;
+
+        [Tooltip("The text boxed used to display the description of the card.")]
         public TMP_Text descriptionTextBox;
+
+        [Tooltip("The text boxed used to display the current remaining cooldown of the card.")]
         public TMP_Text cooldownTimeTextBox;
+
+        [Tooltip("The text boxed used to display the current remaining action time of the card.")]
         public TMP_Text actionTimeTextBox;
+
+        [Tooltip("The image used to render the background of the card.")]
         public Image backgroundSprite;
+
+        [Tooltip("The image used to render the card specific sprite.")]
         public Image cardSprite;
+
+        [Tooltip("The overlay to enable when previewing this card.")]
         public Image previewOverlay;
+
+        [Tooltip("The overlay to enable when this card is on cooldown.")]
         public Image cooldownOverlay;
+
+        [Tooltip("The overlay to enable when this card is on acting.")]
         public Image actionTimeOverlay;
     }
 }

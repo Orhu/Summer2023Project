@@ -30,6 +30,10 @@ public class DuplicateAttackSequence : AttackModifier
         }
     }
 
+    /// <summary>
+    /// Updates the attack sequence.
+    /// </summary>
+    /// <returns> Wait until all other modifiers have been initialized. </returns>
     private IEnumerator UpadateSpawnSequnce()
     {
         yield return new WaitForEndOfFrame();

@@ -13,28 +13,38 @@ using Skaillz.EditInline;
 public class Card : ScriptableObject
 {
     [Header("Mechanics")]
+
     [Tooltip("The amount of time this card takes to be played.")]
     public float actionTime = 1.0f;
+
     [Tooltip("The amount of time this card reserves the hand slot for after being played.")]
     public float cooldownTime = 1.0f;
-    [EditInline]
-    [Tooltip("The actions that will be taken when this card is played as the root of a combo.")]
+
+    [Tooltip("The actions that will be taken when this card is played as the root of a combo.")] [EditInline]
     public Action[] actions;
-    [Tooltip("The effects that this card will have on the dungeon while in the actor's deck.")]
-    [EditInline]
+
+    [Tooltip("The effects that this card will have on the dungeon while in the actor's deck.")] [EditInline]
     public DungeonEffect[] effects;
 
+
+
     [Header("Visuals")]
+
     [Tooltip("The name of the card as shown to the player.")]
     public string displayName = "Unnamed";
-    [Tooltip("The description where variable names inside of [] will be replaced with the variable's value when shown to the player.")]
+
+    [Tooltip("The description where variable names inside of [] will be replaced with the variable's value when shown to the player.")] [Multiline]
     public string description = "No Description";
+
     [Tooltip("The card specific sprite on the Actions side of the card.")]
     public Sprite actionImage;
+
     [Tooltip("The general background card sprite on the Actions side of the card.")]
     public Sprite actionBackground;
+
     [Tooltip("The card specific sprite on the Effects side of the card.")]
     public Sprite effectImage;
+
     [Tooltip("The general background card sprite on the Effects side of the card.")]
     public Sprite effectBackground;
 

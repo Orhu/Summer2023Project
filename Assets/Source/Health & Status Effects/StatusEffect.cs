@@ -20,13 +20,14 @@ public abstract class StatusEffect : ScriptableObject
         }
     }
 
-    [SerializeField]
+    
     [Tooltip("The game object spawned on the effected game object as a visual indicator")]
-    protected GameObject visualEffect;
+    [SerializeField] protected GameObject visualEffect;
 
 
     // The number of times this status effect has been applied.
     public virtual int Stacks { get; protected set; } = 1;
+
     // The game object this is applied to.
     protected GameObject gameObject;
 
