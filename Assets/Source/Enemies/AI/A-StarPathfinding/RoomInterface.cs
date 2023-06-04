@@ -197,55 +197,26 @@ public class RoomInterface : MonoBehaviour
                 // Check if the adjacent tile is within the grid bounds
                 if (checkX >= 0 && checkX < myRoomSize.x && checkY >= 0 && checkY < myRoomSize.y)
                 {
-                     try
+                    if (y == 0 || x == 0)
                     {
-                        // Check specific cases for corner tiles
-                        if (y == -1 && x == -1)
-                        {
-                            // Bottom left corner tile
-                            // Make sure the corner is reachable by either the tile above or the tile to the right
-                            if (myRoomGrid[checkX + x, checkY].walkable && myRoomGrid[checkX, checkY - y].walkable)
-                            {
-                                neighbors.Add(myRoomGrid[checkX, checkY]);
-                            }
-                        }
-                        else if (y == -1 && x == 1)
-                        {
-                            // Bottom right corner tile
-                            // Make sure the corner is reachable by either the tile above or the tile to the left
-                            if (myRoomGrid[checkX - x, checkY].walkable && myRoomGrid[checkX, checkY + y].walkable)
-                            {
-                                neighbors.Add(myRoomGrid[checkX, checkY]);
-                            }
-                        }
-                        else if (y == 1 && x == -1)
-                        {
-                            // Top left corner tile
-                            // Make sure the corner is reachable by either the tile below or the tile to the right
-                            if (myRoomGrid[checkX + x, checkY].walkable && myRoomGrid[checkX, checkY - y].walkable)
-                            {
-                                neighbors.Add(myRoomGrid[checkX, checkY]);
-                            }
-                        }
-                        else if (y == 1 && x == 1)
-                        {
-                            // Top right corner tile
-                            // Make sure the corner is reachable by either the tile below or the tile to the left
-                            if (myRoomGrid[checkX - x, checkY].walkable && myRoomGrid[checkX, checkY - y].walkable)
-                            {
-                                neighbors.Add(myRoomGrid[checkX, checkY]);
-                            }
-                        }
-                        else
-                        {
-                            // This tile is in a cardinal direction, no need to check anything. Just add it!
-                            neighbors.Add(myRoomGrid[checkX, checkY]);
-                        }
+                        // cardinal direction, just add it!
+                        neighbors.Add(myRoomGrid[checkX, checkY]);
                     }
-                    catch
+                    else
                     {
-                        // Catch here in case one of the tiles being checked is out of bounds in the grid.
-                        // We don't want to cause an error, so we simply skip adding that tile to the neighbours list.
+                        try
+                        {
+                            // this tile is a corner, make sure it is reachable by one of its adjacent tiles (not blocked)
+                            if (myRoomGrid[checkX - x, checkY].walkable || myRoomGrid[checkX, checkY - y].walkable)
+                            {
+                                neighbors.Add(myRoomGrid[checkX, checkY]);
+                            }
+                        }
+                        catch
+                        {
+                            // Catch here in case one of the tiles being checked is out of bounds in the grid.
+                            // We don't want to cause an error, so we simply skip adding that tile to the neighbours list.
+                        }
                     }
                 }
             }
