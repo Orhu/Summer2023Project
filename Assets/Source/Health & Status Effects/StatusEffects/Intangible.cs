@@ -1,25 +1,24 @@
 using UnityEngine;
 
 /// <summary>
-/// A status effect that prevents movement entirely.
+/// A status effect that prevents health from receiving attacks.
 /// </summary>
-[CreateAssetMenu(fileName = "Root", menuName = "Status Effects/Root")]
-public class Root : StatusEffect
+[CreateAssetMenu(fileName = "NewIntangible", menuName = "Status Effects/Intangible")]
+public class Intangible : StatusEffect
 {
     /// <summary>
     /// Creates a new status effect that is a copy of the caller.
     /// </summary>
     /// <param name="gameObject"> The object to apply the status effect.</param>
     /// <returns> The status effect that was created. </returns>
-    public override StatusEffect Instantiate(GameObject gameObject)
+    public override StatusEffect CreateCopy(GameObject gameObject)
     {
-        Root instance = (Root)base.Instantiate(gameObject);
+        Intangible instance = (Intangible)base.CreateCopy(gameObject);
 
-        gameObject.GetComponent<Movement>().requestSpeedModifications += instance.PreventMovement;
+        gameObject.GetComponent<Collider2D>().enabled = false;
 
         return instance;
     }
-
 
     /// <summary>
     /// Stacks this effect onto another status effect.
@@ -32,18 +31,7 @@ public class Root : StatusEffect
         {
             return false;
         }
-
-        other.Duration += Duration;
         return true;
-    }
-
-    /// <summary>
-    /// Responds to a movement components speed modification request, and sets the speed to 0.
-    /// </summary>
-    /// <param name="speed"> The speed variable to be modified. </param>
-    void PreventMovement(ref float speed)
-    {
-        speed = 0;
     }
 
     /// <summary>
@@ -51,10 +39,8 @@ public class Root : StatusEffect
     /// </summary>
     private new void OnDestroy()
     {
-        if (gameObject != null)
-        {
-            gameObject.GetComponent<Movement>().requestSpeedModifications -= PreventMovement;
-        }
         base.OnDestroy();
+
+        gameObject.GetComponent<Collider2D>().enabled = true;
     }
 }
