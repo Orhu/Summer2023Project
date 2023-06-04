@@ -11,9 +11,6 @@ public class DamageOnTouch : MonoBehaviour
     [Tooltip("Does this enemy deal damage to the player when it is touched?")]
     [SerializeField] private bool canDealDamageOnTouch;
 
-    [Tooltip("How often can this enemy deal damage on touch?")] 
-    [SerializeField] private int delayBetweenTouchDamage;
-
     [Tooltip("How much damage does this enemy deal when touched?")] 
     [SerializeField] private int damageOnTouch;
 
@@ -54,7 +51,7 @@ public class DamageOnTouch : MonoBehaviour
         if (hitHealth != null)
         {
             hitHealth.ReceiveAttack(attackData);
-            yield return new WaitForSeconds(delayBetweenTouchDamage);
+            yield return new WaitForSeconds(0.1f);
         }
 
         canDealDamageOnTouch = true;

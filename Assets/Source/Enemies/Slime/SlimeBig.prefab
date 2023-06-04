@@ -1,27 +1,43 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &1039305320774483987
+--- !u!1001 &4548733943835722869
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1858251274146161317, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: damageOnTouch
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1858251274146161317, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: canDealDamageOnTouch
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2871443049851868443, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Size.x
-      value: 0.4184205
+      value: 0.95
       objectReference: {fileID: 0}
     - target: {fileID: 2871443049851868443, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Size.y
-      value: 0.62881327
+      value: 0.65
       objectReference: {fileID: 0}
     - target: {fileID: 2871443049851868443, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Offset.x
-      value: 0
+      value: 0.42364377
       objectReference: {fileID: 0}
     - target: {fileID: 2871443049851868443, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Offset.y
-      value: -0.15296161
+      value: -0.14174663
+      objectReference: {fileID: 0}
+    - target: {fileID: 2871443049851868443, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Direction
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: maxHealth
+      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442667, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_RootOrder
@@ -70,38 +86,62 @@ PrefabInstance:
     - target: {fileID: 7281680880204442676, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 9f1a77f1123ece345adff60b918bba36, type: 3}
+      objectReference: {fileID: 21300000, guid: 33491148bef291c41bffe4743e881423, type: 3}
     - target: {fileID: 7281680880204442677, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Name
-      value: SnowLizard
+      value: SlimeBig
+      objectReference: {fileID: 0}
+    - target: {fileID: 7751502563386350530, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Radius
+      value: 0.37632948
+      objectReference: {fileID: 0}
+    - target: {fileID: 7751502563386350530, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.418095
+      objectReference: {fileID: 0}
+    - target: {fileID: 7751502563386350530, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.13362974
       objectReference: {fileID: 0}
     - target: {fileID: 7771620888905133544, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Size.x
-      value: 0.96736825
+      value: 1.8959215
+      objectReference: {fileID: 0}
+    - target: {fileID: 7771620888905133544, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Size.y
+      value: 0.6043472
       objectReference: {fileID: 0}
     - target: {fileID: 7771620888905133544, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Offset.x
-      value: -0.0040789843
+      value: -0.0020394563
+      objectReference: {fileID: 0}
+    - target: {fileID: 7771620888905133544, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.1978342
+      objectReference: {fileID: 0}
+    - target: {fileID: 7771620888905133544, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Direction
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
---- !u!1 &7737712479215103014 stripped
+--- !u!1 &6498099726284613696 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7281680880204442677, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
-  m_PrefabInstance: {fileID: 1039305320774483987}
+  m_PrefabInstance: {fileID: 4548733943835722869}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-888365836979537417
+--- !u!114 &-4843010171196774241
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7737712479215103014}
+  m_GameObject: {fileID: 6498099726284613696}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da38eb0bd45ef2d4da156667e67c4970, type: 3}
+  m_Script: {fileID: 11500000, guid: b6bec4ca900caaa49ac9fc2ad383acd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialDropDelay: 0.25
-  delayBetweenDrops: 1
-  dropPrefab: {fileID: 7577925804630806288, guid: c29010bdc033a1f4b8bb9602c5b38677, type: 3}
+  numToSplitInto: 2
+  splitRadius: 1
+  splitIntoPrefab: {fileID: 4890778746729502211, guid: bc1edc08fdf625c47a608356ab627b5d, type: 3}

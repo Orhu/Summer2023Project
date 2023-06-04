@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8740828266294286700}
-  - component: {fileID: 7751502563386350530}
+  - component: {fileID: 2871443049851868443}
   - component: {fileID: 1858251274146161317}
   m_Layer: 12
   m_Name: Feet
@@ -33,8 +33,8 @@ Transform:
   m_Father: {fileID: 7281680880204442667}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!58 &7751502563386350530
-CircleCollider2D:
+--- !u!70 &2871443049851868443
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -46,9 +46,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.25}
-  serializedVersion: 2
-  m_Radius: 0.25
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.5, y: 1}
+  m_Direction: 0
 --- !u!114 &1858251274146161317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,8 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d664ad8cfe27b3e47af5a2fd8d9c47f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dealsDamageOnTouch: 0
-  delayBetweenTouchDamage: 0
+  canDealDamageOnTouch: 0
   damageOnTouch: 0
   damageTypeOnTouch: 0
   statusEffectsOnTouch: []
@@ -210,6 +209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialState: {fileID: 11400000, guid: a7fd96789dd3ace489f44f39b9ea82bf, type: 2}
   currentTarget: {fileID: 0}
+  feetCollider: {fileID: 0}
   currentState: {fileID: 0}
 --- !u!114 &7281680880204442666
 MonoBehaviour:
@@ -224,6 +224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 5
+  invincibilityDuration: 0
   immuneStatusEffects: []
   onHealthChanged:
     m_PersistentCalls:

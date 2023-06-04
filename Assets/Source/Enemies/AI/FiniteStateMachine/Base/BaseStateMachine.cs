@@ -7,10 +7,13 @@ public class BaseStateMachine : MonoBehaviour
 {
     // the state this machine starts in
     [SerializeField] private BaseState initialState;
-    
+
     // the target
     [HideInInspector] public GameObject currentTarget;
     
+    // the player
+    [HideInInspector] public GameObject player;
+
     // our feet position
     [HideInInspector] public Collider2D feetCollider;
 
@@ -31,14 +34,12 @@ public class BaseStateMachine : MonoBehaviour
     }
 
     /// <summary>
-    /// If no target is provided, just use the player as the target
+    /// Grab the player gameobject and sets it to the default target
     /// </summary>
     private void Start()
     {
-        if (currentTarget == null)
-        {
-            currentTarget = GameObject.FindGameObjectWithTag("Player");
-        }
+        player = GameObject.FindGameObjectWithTag("Player");
+        currentTarget = player;
     }
 
     /// <summary>

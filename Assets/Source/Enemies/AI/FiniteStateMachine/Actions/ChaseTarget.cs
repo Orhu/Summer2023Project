@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "FSM/Actions/Chase Player")]
-public class ChasePlayer : FSMAction
+[CreateAssetMenu(menuName = "FSM/Actions/Chase Target")]
+public class ChaseTarget : FSMAction
 {
     [Tooltip("How often does this enemy update its path, in seconds?")]
     [SerializeField] private float delayBetweenPathUpdates;
