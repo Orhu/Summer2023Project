@@ -1,5 +1,3 @@
-using CardSystem;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,26 +19,26 @@ public class HandRenderer : MonoBehaviour
         for (int i = 0; i < Deck.playerDeck.handSize; i++)
         {
             Card card = Deck.playerDeck.inHandCards[i];
-            if (cardRenderers[i].Card != card)
+            if (cardRenderers[i].card != card)
             {
-                cardRenderers[i].Card = card;
+                cardRenderers[i].card = card;
             }
-            cardRenderers[i].Previewing = Deck.playerDeck.previewedCardIndices.Contains(i);
+            cardRenderers[i].previewing = Deck.playerDeck.previewedCardIndices.Contains(i);
 
             if(Deck.playerDeck.cardIndicesToActionTimes.ContainsKey(i))
             {
-                cardRenderers[i].CooldownTime = 0;
-                cardRenderers[i].ActionTime = Deck.playerDeck.cardIndicesToActionTimes[i];
+                cardRenderers[i].cooldownTime = 0;
+                cardRenderers[i].actionTime = Deck.playerDeck.cardIndicesToActionTimes[i];
             }
             else if (Deck.playerDeck.cardIndicesToCooldowns.ContainsKey(i))
             {
-                cardRenderers[i].ActionTime = 0;
-                cardRenderers[i].CooldownTime = Deck.playerDeck.cardIndicesToCooldowns[i];
+                cardRenderers[i].actionTime = 0;
+                cardRenderers[i].cooldownTime = Deck.playerDeck.cardIndicesToCooldowns[i];
             }
             else
             {
-                cardRenderers[i].CooldownTime = 0;
-                cardRenderers[i].ActionTime = 0;
+                cardRenderers[i].cooldownTime = 0;
+                cardRenderers[i].actionTime = 0;
             }
         }
     }
