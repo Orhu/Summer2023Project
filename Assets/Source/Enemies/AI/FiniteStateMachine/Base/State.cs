@@ -1,39 +1,56 @@
-﻿
-    using System.Collections.Generic;
-    using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-    [CreateAssetMenu(menuName = "FSM/State")]
-    public sealed class State : BaseState
+/// <summary>
+/// Represents a state in a finite state machine. Performs actions and transitions as needed in this state.
+/// </summary>
+[CreateAssetMenu(menuName = "FSM/State")]
+public sealed class State : BaseState
+{
+    [Tooltip("This state's actions.")]
+    public List<FSMAction> actions = new List<FSMAction>();
+    
+    [Tooltip("This state's transitions. Evaluated every frame.")]
+    public List<FSMTransition> transitions = new List<FSMTransition>();
+
+    /// <summary>
+    /// Run through all of this state's actions and transitions, executing them.
+    /// </summary>
+    /// <param name="machine"> The state machine to be used. </param>
+    public override void OnStateUpdate(BaseStateMachine machine)
     {
-        public List<FSMAction> actions = new List<FSMAction>();
-        public List<FSMTransition> transitions = new List<FSMTransition>();
-
-        public override void OnStateUpdate(BaseStateMachine machine)
+        foreach (var action in actions)
         {
-            foreach (var action in actions)
-            {
-                action.OnStateUpdate(machine);
-            }
-
-            foreach (var transition in transitions)
-            {
-                transition.Execute(machine);
-            }
+            action.OnStateUpdate(machine);
         }
-        
-        public override void OnStateEnter(BaseStateMachine stateMachine)
+
+        foreach (var transition in transitions)
         {
-            foreach (var action in actions)
-            {
-                action.OnStateEnter(stateMachine);
-            }
-        }
-        
-        public override void OnStateExit(BaseStateMachine stateMachine)
-        {
-            foreach (var action in actions)
-            {
-                action.OnStateExit(stateMachine);
-            }
+            transition.Execute(machine);
         }
     }
+
+    /// <summary>
+    /// Runs through all of this state's actions, executing their OnStateEnter methods.
+    /// </summary>
+    /// <param name="stateMachine"> The state machine to be used. </param>
+    public override void OnStateEnter(BaseStateMachine stateMachine)
+    {
+        foreach (var action in actions)
+        {
+            action.OnStateEnter(stateMachine);
+        }
+    }
+
+    /// <summary>
+    /// Runs through all of this state's actions, executing their OnStateExit methods.
+    /// </summary>
+    /// <param name="stateMachine"> The state machine to be used. </param>
+    public override void OnStateExit(BaseStateMachine stateMachine)
+    {
+        foreach (var action in actions)
+        {
+            action.OnStateExit(stateMachine);
+        }
+    }
+}
