@@ -11,16 +11,23 @@ public class SimpleMovement : Movement
 {
     // The rigid body that handles collisions 
     private Rigidbody2D rb2d;
-
     
     [Tooltip("The max speed in tiles/s this can accelerate to")]
-    [SerializeField] private float maxSpeed = 2;
+    public float maxSpeed = 2;
     
     [Tooltip("The speed in maxSpeed/s at which this accelerates to the desired move direction")]
-    [SerializeField] private float acceleration = 50;
-    
+    public float acceleration = 50;
+   
     [Tooltip("The speed in maxSpeed/s at which this accelerates to zero velocity")]
-    [SerializeField] private float deacceleration = 100;
+    public float deceleration = 100;
+    
+    [Tooltip("Is this unit immune to movement-altering grounds (eg ice)?")]
+    public bool immuneToGroundEffects = false;
+    
+    // cache original values in case they are needed
+    public float originalMaxSpeed { get; private set; }
+    public float originalAcceleration { get; private set; }
+    public float originalDeceleration { get; private set; }
 
     /// <summary>
     /// Initializes the rigid body reference.
@@ -28,6 +35,16 @@ public class SimpleMovement : Movement
     private void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
+    }
+
+    /// <summary>
+    /// Caches original values
+    /// </summary>
+    void Start()
+    {
+        originalMaxSpeed = maxSpeed;
+        originalAcceleration = acceleration;
+        originalDeceleration = deceleration;
     }
 
     /// <summary>
@@ -42,7 +59,7 @@ public class SimpleMovement : Movement
         Vector2 deltaVelocity = targetVelocity - rb2d.velocity;
 
         float currentAcceleration = Time.deltaTime * maxSpeed;
-        currentAcceleration *= MovementInput.sqrMagnitude == 0 ? deacceleration : acceleration;
+        currentAcceleration *= MovementInput.sqrMagnitude == 0 ? deceleration : acceleration;
 
         rb2d.velocity += Vector2.ClampMagnitude(deltaVelocity.normalized * currentAcceleration, deltaVelocity.magnitude);
     }
