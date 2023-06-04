@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "NewBulletAttack", menuName = "Cards/Actions/BulletAttack")]
 /// <summary>
 /// An attack that fires a bullet in a strait line.
 /// </summary>

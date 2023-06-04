@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// A status effect that prevents movement entirely.
 /// </summary>
-[CreateAssetMenu(fileName = "NewRooted", menuName = "Status Effects/Rooted")]
+[CreateAssetMenu(fileName = "NewSlowed", menuName = "Status Effects/Slowed")]
 public class Slowed : StatusEffect
 {
     [Tooltip("The percent to reduce the movement speed by per stack")] [Range(0f, 1f)]
