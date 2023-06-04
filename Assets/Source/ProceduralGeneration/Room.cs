@@ -89,7 +89,7 @@ public class Room : MonoBehaviour
 
         Generate();
 
-        bool shouldCloseDoors = !generated && template.enemyPools != null;
+        bool shouldCloseDoors = !generated && template.enemyPools != null && template.chosenEnemyPool.enemies.Count != 0;
 
         // Move player into room, then close/activate doors (so player doesn't get trapped in door)
         StartCoroutine(MovePlayer(direction, shouldCloseDoors));
