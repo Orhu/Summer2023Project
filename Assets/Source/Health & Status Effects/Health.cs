@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -13,6 +14,10 @@ public class Health : MonoBehaviour
     public int maxHealth = 5;
     // The current health of this object
     public int currentHealth { get; private set; }
+    
+    [Tooltip("How long of a duration does this unit get invincibility when hit?")]
+    public float invincibilityDuration;
+    
     // All status effects this is immune to.
     public List<StatusEffect> immuneStatusEffects = new List<StatusEffect>();
 
@@ -21,14 +26,19 @@ public class Health : MonoBehaviour
 
     // Called when health values are changed and passes the new health.
     public UnityEvent<float> onHealthChanged, onMaxHealthChanged;
+    
     // Called when this is attacked and passes the attack.
     public UnityEvent<DamageData> onAttacked;
-    // Called when this dies
+    
+    [Tooltip("Called when this dies")]
     public UnityEvent onDeath;
+
     // Called before this processes an attack and passes the incoming attack so can be modified.   
     public RequestIncomingAttackModification onRequestIncomingAttackModification;
     public delegate void RequestIncomingAttackModification(ref DamageData attack);
 
+    // is this unit currently invincible?
+    private bool invincible = false;
 
     /// <summary>
     /// Initializes current health.
@@ -69,16 +79,24 @@ public class Health : MonoBehaviour
     }
     public void ReceiveAttack(DamageData attack, Vector2 knockbackDirection)
     {
+        if (invincible) return;
+        
         // Damage
         onRequestIncomingAttackModification?.Invoke(ref attack);
+        var prevHealth = currentHealth;
         currentHealth -= attack.damage;
 
         onHealthChanged?.Invoke(currentHealth);
         onAttacked?.Invoke(attack);
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && prevHealth > 0)
         {
             onDeath?.Invoke();
             return;
+        }
+        else if (invincibilityDuration != 0)
+        {
+            invincible = true;
+            Invoke(nameof(TurnOffInvincibility), invincibilityDuration);
         }
         
         // Status effects
@@ -89,7 +107,7 @@ public class Health : MonoBehaviour
                 StatusEffect matchingEffect = statusEffects.Find(statusEffect.Stack);
                 if (matchingEffect == null)
                 {
-                    statusEffects.Add(statusEffect.Instantiate(gameObject));
+                    statusEffects.Add(statusEffect.CreateCopy(gameObject));
                 }
             }
         }
@@ -104,5 +122,13 @@ public class Health : MonoBehaviour
         currentHealth = Mathf.Min(Math.Max(healAmount, 0) + currentHealth, maxHealth);
 
         onHealthChanged?.Invoke(currentHealth);
+    }
+
+    /// <summary>
+    /// Disable invincibility
+    /// </summary>
+    void TurnOffInvincibility()
+    {
+        invincible = false;
     }
 }

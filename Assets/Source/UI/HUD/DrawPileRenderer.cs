@@ -36,14 +36,14 @@ public class DrawPileRenderer : MonoBehaviour
             if ((previewRangeEnd - 1 - i) < Deck.playerDeck.drawableCards.Count)
             {
                 Card card = Deck.playerDeck.drawableCards[Deck.playerDeck.drawableCards.Count - 1 - (previewRangeEnd - 1 - i)];
-                if (cardRenderers[i].Card != card)
+                if (cardRenderers[i].card != card)
                 {
-                    cardRenderers[i].Card = card;
+                    cardRenderers[i].card = card;
                 }
             }
             else
             {
-                cardRenderers[i].Card = null;
+                cardRenderers[i].card = null;
             }
         }
     }

@@ -6,40 +6,43 @@ using UnityEngine;
 public abstract class StatusEffect : ScriptableObject
 {
     [Tooltip("The Duration this status effect will be applied for")] [Min(0.0166666667f)]
-    [SerializeField]  private float _duration = 2f;
-    public float Duration
+    public float duration = 1f;
+
+    // The time remaining for this status effect.
+    private float _remainingDuration;
+    public float remainingDuration
     {
-        get { return _duration; }
+        get { return _remainingDuration; }
         set
         {
-            _duration = Mathf.Max(value, 0);
-            if (_duration == 0)
+            _remainingDuration = Mathf.Max(value, 0);
+            if (_remainingDuration == 0)
             {
                 Destroy(this);
             }
         }
     }
-
-    [SerializeField]
+    
     [Tooltip("The game object spawned on the effected game object as a visual indicator")]
-    protected GameObject visualEffect;
+    [SerializeField] protected GameObject visualEffect;
 
 
     // The number of times this status effect has been applied.
-    public virtual int Stacks { get; protected set; } = 1;
+    public virtual int stacks { get; protected set; } = 1;
+
     // The game object this is applied to.
     protected GameObject gameObject;
 
     /// <summary>
     /// Creates a new status effect that is a copy of the caller.
     /// </summary>
-    /// <param name="gameObject"> The object to apply the status effect.</param>
+    /// <param name="gameObject"> The object to apply the status effect. </param>
     /// <returns> The status effect that was created. </returns>
-    public virtual StatusEffect Instantiate(GameObject gameObject)
+    public virtual StatusEffect CreateCopy(GameObject gameObject)
     {
-        StatusEffect instance = (StatusEffect)CreateInstance(GetType());
+        StatusEffect instance = Instantiate(this);
 
-        instance.Duration = Duration;
+        instance.remainingDuration = duration;
         instance.gameObject = gameObject;
 
         if (visualEffect != null)
@@ -64,7 +67,7 @@ public abstract class StatusEffect : ScriptableObject
             return false;
         }
 
-        other.Stacks += Stacks;
+        other.stacks += stacks;
         return true;
     }
 
@@ -73,7 +76,7 @@ public abstract class StatusEffect : ScriptableObject
     /// </summary>
     public virtual void Update() 
     {
-        Duration -= Time.deltaTime;
+        remainingDuration -= Time.deltaTime;
     }
 
     /// <summary>

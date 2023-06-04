@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// A status effect that prevents health from receiving attacks.
 /// </summary>
-[CreateAssetMenu(fileName = "Invulnerable", menuName = "Status Effects/Invulnerable")]
+[CreateAssetMenu(fileName = "NewInvulnerable", menuName = "Status Effects/Invulnerable")]
 public class Invulnerable : StatusEffect
 {
     /// <summary>
@@ -11,9 +11,9 @@ public class Invulnerable : StatusEffect
     /// </summary>
     /// <param name="gameObject"> The object to apply the status effect.</param>
     /// <returns> The status effect that was created. </returns>
-    public override StatusEffect Instantiate(GameObject gameObject)
+    public override StatusEffect CreateCopy(GameObject gameObject)
     {
-        Invulnerable instance = (Invulnerable)base.Instantiate(gameObject);
+        Invulnerable instance = (Invulnerable)base.CreateCopy(gameObject);
 
         gameObject.GetComponent<Health>().onRequestIncomingAttackModification += instance.PreventAttack;
 
@@ -32,7 +32,7 @@ public class Invulnerable : StatusEffect
             return false;
         }
 
-        other.Duration += Duration;
+        other.remainingDuration += remainingDuration;
         return true;
     }
 
@@ -40,7 +40,7 @@ public class Invulnerable : StatusEffect
     /// Responds to a health's incoming damage modification request, and prevents the attack from passing.
     /// </summary>
     /// <param name="attack"> The attack to prevent. </param>
-    void PreventAttack(ref DamageData attack)
+    private void PreventAttack(ref DamageData attack)
     {
         DamageData prevousAttack = attack;
         attack = new DamageData(0, attack.damageType, prevousAttack.causer);
@@ -52,6 +52,9 @@ public class Invulnerable : StatusEffect
     private new void OnDestroy()
     {
         base.OnDestroy();
+
+        if (gameObject == null) { return; }
+
         gameObject.GetComponent<Health>().onRequestIncomingAttackModification -= PreventAttack;
     }
 }
