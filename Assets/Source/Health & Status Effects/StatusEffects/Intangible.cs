@@ -6,9 +6,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewIntangible", menuName = "Status Effects/Intangible")]
 public class Intangible : StatusEffect
 {
-    // The layer the affected object was in before this.
-    private int orignalLayer;
-
     /// <summary>
     /// Creates a new status effect that is a copy of the caller.
     /// </summary>
@@ -18,8 +15,7 @@ public class Intangible : StatusEffect
     {
         Intangible instance = (Intangible)base.CreateCopy(gameObject);
 
-        orignalLayer = gameObject.layer;
-        gameObject.layer = LayerMask.NameToLayer("Intangible");
+        gameObject.GetComponent<Collider2D>().enabled = false;
 
         return instance;
     }
@@ -45,6 +41,6 @@ public class Intangible : StatusEffect
     {
         base.OnDestroy();
 
-        gameObject.layer = orignalLayer;
+        gameObject.GetComponent<Collider2D>().enabled = true;
     }
 }
