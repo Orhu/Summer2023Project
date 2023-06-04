@@ -16,7 +16,7 @@ public class Intangible : StatusEffect
     /// <returns> The status effect that was created. </returns>
     public override StatusEffect CreateCopy(GameObject gameObject)
     {
-        Invulnerable instance = (Invulnerable)base.CreateCopy(gameObject);
+        Intangible instance = (Intangible)base.CreateCopy(gameObject);
 
         orignalLayer = gameObject.layer;
         gameObject.layer = LayerMask.NameToLayer("Intangible");

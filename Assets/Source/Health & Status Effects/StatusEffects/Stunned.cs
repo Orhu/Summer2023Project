@@ -3,8 +3,8 @@ using UnityEngine;
 /// <summary>
 /// A status effect that prevents an actor from acting.
 /// </summary>
-[CreateAssetMenu(fileName = "NewStuned", menuName = "Status Effects/Stuned")]
-public class Stuned : StatusEffect
+[CreateAssetMenu(fileName = "NewStunned", menuName = "Status Effects/Stunned")]
+public class Stunned : StatusEffect
 {
     [Tooltip("The max duration of this effect.")]
     [SerializeField] private float maxDuration = 15f;
@@ -17,7 +17,7 @@ public class Stuned : StatusEffect
     /// <returns> The status effect that was created. </returns>
     public override StatusEffect CreateCopy(GameObject gameObject)
     {
-        Stuned instance = (Stuned)base.CreateCopy(gameObject);
+        Stunned instance = (Stunned)base.CreateCopy(gameObject);
 
         gameObject.GetComponent<Controller>().GetOnRequestCanAct() += instance.PreventAction;
         gameObject.GetComponent<Movement>().requestSpeedModifications += instance.PreventMovement;
@@ -54,7 +54,7 @@ public class Stuned : StatusEffect
     /// Responds to a movement components speed modification request, and sets the speed to 0.
     /// </summary>
     /// <param name="speed"> The speed variable to be modified. </param>
-    void PreventMovement(ref float speed)
+    private void PreventMovement(ref float speed)
     {
         speed = 0;
     }

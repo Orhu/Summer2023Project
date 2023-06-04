@@ -41,7 +41,7 @@ public class Rooted : StatusEffect
     /// Responds to a movement components speed modification request, and sets the speed to 0.
     /// </summary>
     /// <param name="speed"> The speed variable to be modified. </param>
-    void PreventMovement(ref float speed)
+    private void PreventMovement(ref float speed)
     {
         speed = 0;
     }

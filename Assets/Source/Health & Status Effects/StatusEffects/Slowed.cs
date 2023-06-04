@@ -44,7 +44,7 @@ public class Slowed : StatusEffect
     /// Responds to a movement components speed modification request, and sets the speed to 0.
     /// </summary>
     /// <param name="speed"> The speed variable to be modified. </param>
-    void SlowMovement(ref float speed)
+    private void SlowMovement(ref float speed)
     {
         speed *= Mathf.Pow(slowAmount, stacks);
     }

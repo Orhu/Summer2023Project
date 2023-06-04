@@ -43,7 +43,7 @@ public class Exhausted : StatusEffect
     /// Responds to a health's incoming damage modification request, and prevents the attack from passing.
     /// </summary>
     /// <param name="attack"> The attack to prevent. </param>
-    void MutiplyDamage(ref DamageData attack)
+    private void MutiplyDamage(ref DamageData attack)
     {
         attack.damage = (int)(attack.damage * damageMultiplier);
     }
@@ -52,7 +52,7 @@ public class Exhausted : StatusEffect
     /// Responds to a movement components speed modification request, and sets the speed to 0.
     /// </summary>
     /// <param name="speed"> The speed variable to be modified. </param>
-    void PreventMovement(ref float speed)
+    private void PreventMovement(ref float speed)
     {
         speed = 0;
     }
