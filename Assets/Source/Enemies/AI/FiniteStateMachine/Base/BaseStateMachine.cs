@@ -8,6 +8,9 @@ public class BaseStateMachine : MonoBehaviour
     // the state this machine starts in
     [SerializeField] private BaseState initialState;
 
+    // delay after this enemy is spawned before it begins performing logic
+    [SerializeField] private float delayBeforeLogic;
+    
     // the target
     [HideInInspector] public GameObject currentTarget;
     
@@ -22,6 +25,9 @@ public class BaseStateMachine : MonoBehaviour
 
     // maintained list of components which are cached for performance
     private Dictionary<Type, Component> cachedComponents;
+    
+    // tracks the time this was initialized
+    private float timeStarted;
 
     /// <summary>
     /// Initialize variables
@@ -38,6 +44,7 @@ public class BaseStateMachine : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        timeStarted = Time.time;
         player = GameObject.FindGameObjectWithTag("Player");
         currentTarget = player;
         FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Add(gameObject);
@@ -48,6 +55,8 @@ public class BaseStateMachine : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        if (Time.time - timeStarted <= delayBeforeLogic) return;
+        
         currentState.OnStateUpdate(this);
     }
 

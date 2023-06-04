@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -97,7 +95,7 @@ public class RoomInterface : MonoBehaviour
 
     // the world position of this room
     private Vector2 myWorldPosition;
-    
+
     /// <summary>
     /// Retrieves player's current room from the FloorGenerator singleton, updating this class' room reference
     /// </summary>
@@ -201,7 +199,7 @@ public class RoomInterface : MonoBehaviour
                     {
                         // cardinal direction, just add it!
                         neighbors.Add(myRoomGrid[checkX, checkY]);
-                    }
+                    } /*
                     else
                     {
                         try
@@ -217,7 +215,7 @@ public class RoomInterface : MonoBehaviour
                             // Catch here in case one of the tiles being checked is out of bounds in the grid.
                             // We don't want to cause an error, so we simply skip adding that tile to the neighbours list.
                         }
-                    }
+                }*/
                 }
             }
         }

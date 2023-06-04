@@ -100,7 +100,7 @@ public class ChaseTarget : FSMAction
 
         path = new Path(newPath, feetPos);
         
-        if (prevCoroutine != null)
+        if (myStateMachine != null && prevCoroutine != null)
         {
             myStateMachine.StopCoroutine(prevCoroutine);
         }
