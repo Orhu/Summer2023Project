@@ -11,18 +11,16 @@ public class SimpleMovement : Movement
 {
     // The rigid body that handles collisions 
     private Rigidbody2D rb2d;
-
     
     [Tooltip("The max speed in tiles/s this can accelerate to")]
     public float maxSpeed = 2;
-    [SerializeField]
+    
     [Tooltip("The speed in maxSpeed/s at which this accelerates to the desired move direction")]
     public float acceleration = 50;
-    [SerializeField]
+   
     [Tooltip("The speed in maxSpeed/s at which this accelerates to zero velocity")]
     public float deceleration = 100;
     
-    [SerializeField]
     [Tooltip("Is this unit immune to movement-altering grounds (eg ice)?")]
     public bool immuneToGroundEffects = false;
     
