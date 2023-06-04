@@ -15,7 +15,8 @@ MonoBehaviour:
   attack:
     damage: 2
     damageType: 0
-    statusEffects: []
+    statusEffects:
+    - {fileID: 11400000, guid: e4cdde4041bd20d41b4d66f69af8313e, type: 2}
   hitCount: 999
   applyDamageOnHit: 1
   modifiers:
@@ -30,7 +31,7 @@ MonoBehaviour:
   maxSpeed: 12
   homingSpeed: 0
   homingTime: 0
-  homingAimMode: 0
+  homingAimMode: 1
   visualObject: {fileID: 2594137923943035025, guid: 3cd10615d91f45e4f83037591f6ca48b, type: 3}
   detachVisualsBeforeDestroy: 0
   spawnLocation: 0
