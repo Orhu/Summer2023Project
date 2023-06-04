@@ -1,11 +1,14 @@
 using UnityEngine;
 
 /// <summary>
-/// A status effect that prevents health from receiving attacks.
+/// A status effect that prevents movement entirely.
 /// </summary>
-[CreateAssetMenu(fileName = "NewInvulnerable", menuName = "Status Effects/Invulnerable")]
-public class Invulnerable : StatusEffect
+[CreateAssetMenu(fileName = "NewRooted", menuName = "Status Effects/Rooted")]
+public class Slowed : StatusEffect
 {
+    [Tooltip("The percent to reduce the movement speed by per stack")] [Range(0f, 1f)]
+    [SerializeField] private float slowAmount = 0.25f;
+
     /// <summary>
     /// Creates a new status effect that is a copy of the caller.
     /// </summary>
@@ -13,12 +16,13 @@ public class Invulnerable : StatusEffect
     /// <returns> The status effect that was created. </returns>
     public override StatusEffect CreateCopy(GameObject gameObject)
     {
-        Invulnerable instance = (Invulnerable)base.CreateCopy(gameObject);
+        Slowed instance = (Slowed)base.CreateCopy(gameObject);
 
-        gameObject.GetComponent<Health>().onRequestIncomingAttackModification += instance.PreventAttack;
+        gameObject.GetComponent<Movement>().requestSpeedModifications += instance.SlowMovement;
 
         return instance;
     }
+
 
     /// <summary>
     /// Stacks this effect onto another status effect.
@@ -32,18 +36,17 @@ public class Invulnerable : StatusEffect
             return false;
         }
 
-        other.remainingDuration += remainingDuration;
+        other.remainingDuration = Mathf.Max(duration, other.remainingDuration);
         return true;
     }
 
     /// <summary>
-    /// Responds to a health's incoming damage modification request, and prevents the attack from passing.
+    /// Responds to a movement components speed modification request, and sets the speed to 0.
     /// </summary>
-    /// <param name="attack"> The attack to prevent. </param>
-    private void PreventAttack(ref DamageData attack)
+    /// <param name="speed"> The speed variable to be modified. </param>
+    private void SlowMovement(ref float speed)
     {
-        DamageData prevousAttack = attack;
-        attack = new DamageData(0, attack.damageType, prevousAttack.causer);
+        speed *= Mathf.Pow(slowAmount, stacks);
     }
 
     /// <summary>
@@ -51,10 +54,10 @@ public class Invulnerable : StatusEffect
     /// </summary>
     private new void OnDestroy()
     {
+        if (gameObject != null)
+        {
+            gameObject.GetComponent<Movement>().requestSpeedModifications -= SlowMovement;
+        }
         base.OnDestroy();
-
-        if (gameObject == null) { return; }
-
-        gameObject.GetComponent<Health>().onRequestIncomingAttackModification -= PreventAttack;
     }
 }

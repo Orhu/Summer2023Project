@@ -1,10 +1,10 @@
 using UnityEngine;
 
 /// <summary>
-/// A status effect that prevents health from receiving attacks.
+/// A status effect that prevents an actor from acting.
 /// </summary>
-[CreateAssetMenu(fileName = "NewInvulnerable", menuName = "Status Effects/Invulnerable")]
-public class Invulnerable : StatusEffect
+[CreateAssetMenu(fileName = "NewSilenced", menuName = "Status Effects/Silenced")]
+public class Silenced : StatusEffect
 {
     /// <summary>
     /// Creates a new status effect that is a copy of the caller.
@@ -13,9 +13,9 @@ public class Invulnerable : StatusEffect
     /// <returns> The status effect that was created. </returns>
     public override StatusEffect CreateCopy(GameObject gameObject)
     {
-        Invulnerable instance = (Invulnerable)base.CreateCopy(gameObject);
+        Silenced instance = (Silenced)base.CreateCopy(gameObject);
 
-        gameObject.GetComponent<Health>().onRequestIncomingAttackModification += instance.PreventAttack;
+        gameObject.GetComponent<Controller>().GetOnRequestCanAct() += instance.PreventAction;
 
         return instance;
     }
@@ -32,18 +32,17 @@ public class Invulnerable : StatusEffect
             return false;
         }
 
-        other.remainingDuration += remainingDuration;
+        other.remainingDuration = Mathf.Max(duration, other.remainingDuration);
         return true;
     }
 
     /// <summary>
-    /// Responds to a health's incoming damage modification request, and prevents the attack from passing.
+    /// Responds to a actors can act request, and prevents action.
     /// </summary>
-    /// <param name="attack"> The attack to prevent. </param>
-    private void PreventAttack(ref DamageData attack)
+    /// <param name="CanAct"> The can act variable to be set to false. </param>
+    private void PreventAction(ref bool CanAct)
     {
-        DamageData prevousAttack = attack;
-        attack = new DamageData(0, attack.damageType, prevousAttack.causer);
+        CanAct = false;
     }
 
     /// <summary>
@@ -55,6 +54,6 @@ public class Invulnerable : StatusEffect
 
         if (gameObject == null) { return; }
 
-        gameObject.GetComponent<Health>().onRequestIncomingAttackModification -= PreventAttack;
+        gameObject.GetComponent<Controller>().GetOnRequestCanAct() -= PreventAction;
     }
 }
