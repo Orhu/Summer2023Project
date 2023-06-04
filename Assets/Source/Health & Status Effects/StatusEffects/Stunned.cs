@@ -3,19 +3,24 @@ using UnityEngine;
 /// <summary>
 /// A status effect that prevents an actor from acting.
 /// </summary>
-[CreateAssetMenu(fileName = "Silence", menuName = "Status Effects/Silence")]
-public class Silence : StatusEffect
+[CreateAssetMenu(fileName = "NewStunned", menuName = "Status Effects/Stunned")]
+public class Stunned : StatusEffect
 {
+    [Tooltip("The max duration of this effect.")]
+    [SerializeField] private float maxDuration = 15f;
+
+
     /// <summary>
     /// Creates a new status effect that is a copy of the caller.
     /// </summary>
     /// <param name="gameObject"> The object to apply the status effect.</param>
     /// <returns> The status effect that was created. </returns>
-    public override StatusEffect Instantiate(GameObject gameObject)
+    public override StatusEffect CreateCopy(GameObject gameObject)
     {
-        Silence instance = (Silence)base.Instantiate(gameObject);
+        Stunned instance = (Stunned)base.CreateCopy(gameObject);
 
         gameObject.GetComponent<Controller>().GetOnRequestCanAct() += instance.PreventAction;
+        gameObject.GetComponent<Movement>().requestSpeedModifications += instance.PreventMovement;
 
         return instance;
     }
@@ -32,7 +37,7 @@ public class Silence : StatusEffect
             return false;
         }
 
-        other.Duration += Duration;
+        other.remainingDuration = Mathf.Min(duration + other.remainingDuration, maxDuration);
         return true;
     }
 
@@ -46,11 +51,24 @@ public class Silence : StatusEffect
     }
 
     /// <summary>
+    /// Responds to a movement components speed modification request, and sets the speed to 0.
+    /// </summary>
+    /// <param name="speed"> The speed variable to be modified. </param>
+    private void PreventMovement(ref float speed)
+    {
+        speed = 0;
+    }
+
+    /// <summary>
     /// Cleans up binding.
     /// </summary>
     private new void OnDestroy()
     {
         base.OnDestroy();
+        
+        if(gameObject == null) { return; }
+
         gameObject.GetComponent<Controller>().GetOnRequestCanAct() -= PreventAction;
+        gameObject.GetComponent<Movement>().requestSpeedModifications -= PreventMovement;
     }
 }

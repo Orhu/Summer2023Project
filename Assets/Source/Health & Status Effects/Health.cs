@@ -91,7 +91,7 @@ public class Health : MonoBehaviour
                 StatusEffect matchingEffect = statusEffects.Find(statusEffect.Stack);
                 if (matchingEffect == null)
                 {
-                    statusEffects.Add(statusEffect.Instantiate(gameObject));
+                    statusEffects.Add(statusEffect.CreateCopy(gameObject));
                 }
             }
         }
