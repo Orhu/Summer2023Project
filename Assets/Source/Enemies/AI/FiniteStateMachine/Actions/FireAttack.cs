@@ -5,6 +5,9 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// Represents an action that fires an attack
+/// </summary>
 [CreateAssetMenu(menuName = "FSM/Actions/Perform Attack")]
 public class FireAttack : FSMAction
 {

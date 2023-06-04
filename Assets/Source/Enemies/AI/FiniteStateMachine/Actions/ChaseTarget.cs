@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
+/// <summary>
+/// Represents an action that moves towards the current target as specified by the stateMachine using this action
+/// </summary>
 [CreateAssetMenu(menuName = "FSM/Actions/Chase Target")]
 public class ChaseTarget : FSMAction
 {
