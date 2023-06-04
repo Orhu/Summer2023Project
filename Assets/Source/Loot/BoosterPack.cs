@@ -18,12 +18,19 @@ public class BoosterPack : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            // Set booster pack menu to active
-            MenuManager.instance.boosterPackMenu.gameObject.SetActive(true);
-            // Set local booster pack variable in booster pack menu to be this pack
-            MenuManager.instance.boosterPackMenu.boosterPackObject = this;
-            // Draw new cards and display them on the booster pack menu
-            MenuManager.instance.boosterPackMenu.PopulateBoosterPackCards(numCards, lootTable);
+            if (lootTable != null)
+            {
+                // Set booster pack menu to active
+                MenuManager.instance.boosterPackMenu.gameObject.SetActive(true);
+                // Set local booster pack variable in booster pack menu to be this pack
+                MenuManager.instance.boosterPackMenu.boosterPackObject = this;
+                // Draw new cards and display them on the booster pack menu
+                MenuManager.instance.boosterPackMenu.PopulateBoosterPackCards(numCards, lootTable);
+            }
+            else
+            {
+                throw new System.Exception("Loot table not assigned to BoosterPack prefab");
+            }
         }
     }
 }

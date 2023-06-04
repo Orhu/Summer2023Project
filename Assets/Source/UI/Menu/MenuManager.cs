@@ -18,5 +18,9 @@ public class MenuManager : MonoBehaviour
         {
             instance = this;
         }
+        if(boosterPackMenu == null)
+        {
+            boosterPackMenu = GetComponentInChildren<BoosterPackMenu>();
+        }
     }
 }

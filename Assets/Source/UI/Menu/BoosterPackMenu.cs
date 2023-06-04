@@ -22,32 +22,40 @@ public class BoosterPackMenu : MonoBehaviour
     /// <param name="numCards">Number of cards to spawn in pack</param>
     public void PopulateBoosterPackCards(int numCards, LootTable<Card> table)
     {
-        List<Card> packCards = table.PullMultipleFromTable(numCards);
-        // Loop through all cardRenderers
-        for (int i = 0; i < cardRenderers.Count; i++)
+        if(table != null)
         {
-            // If the current cardRenderer falls within
-            // the amount of cards we want to spawn:
-            if (i < numCards)
+            List<Card> packCards = table.PullMultipleFromTable(numCards);
+            // Loop through all cardRenderers
+            for (int i = 0; i < cardRenderers.Count; i++)
             {
-                // Choose a card at random from packCards
-                Card tempCard = packCards[Random.Range(0, packCards.Count-1)];
-                if (tempCard != null)
+                // If the current cardRenderer falls within
+                // the amount of cards we want to spawn:
+                if (i < numCards)
                 {
-                    // Set the cardRenderer to active
-                    cardRenderers[i].gameObject.SetActive(true);
-                    // Assign it the random card
-                    cardRenderers[i].card = tempCard;
+                    // Choose a card at random from packCards
+                    Card tempCard = packCards[Random.Range(0, packCards.Count - 1)];
+                    if (tempCard != null)
+                    {
+                        // Set the cardRenderer to active
+                        cardRenderers[i].gameObject.SetActive(true);
+                        // Assign it the random card
+                        cardRenderers[i].card = tempCard;
+                    }
                 }
+                else
+                {
+                    // If the cardRenderer is not within the number of spawned cards,
+                    // set it to inactive
+                    cardRenderers[i].gameObject.SetActive(false);
+                }
+
             }
-            else
-            {
-                // If the cardRenderer is not within the number of spawned cards,
-                // set it to inactive
-                cardRenderers[i].gameObject.SetActive(false);
-            }
-                
         }
+        else
+        {
+            throw new System.Exception("No loot table to populate Booster Pack UI");
+        }
+        
     }
 
     /// <summary>

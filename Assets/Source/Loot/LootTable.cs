@@ -34,17 +34,25 @@ public class LootTable<T> : ScriptableObject
     {
         float totalWeight = 0;
         T selected = default(T);
-        foreach (var loot in weightedLoot)
+        if(weightedLoot.Count > 0)
         {
-            float weight = loot.weight;
-            float rand = Random.Range(0, totalWeight + weight);
-            if (rand >= totalWeight)
+            foreach (var loot in weightedLoot)
             {
-                selected = loot.lootItem;
+                float weight = loot.weight;
+                float rand = Random.Range(0, totalWeight + weight);
+                if (rand >= totalWeight)
+                {
+                    selected = loot.lootItem;
+                }
+                totalWeight += weight;
             }
-            totalWeight += weight;
+            return selected;
         }
-        return selected;
+        else
+        {
+            throw new System.Exception("Table does not have any items in it.");
+        }
+        
     }
 
     /// <summary>
