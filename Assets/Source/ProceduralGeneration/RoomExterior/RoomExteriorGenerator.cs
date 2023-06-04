@@ -46,6 +46,8 @@ public class RoomExteriorGenerator : MonoBehaviour
 
         FloorGenerator.floorGeneratorInstance.currentRoom = startRoom;
         startRoom.ActivateDoors();
+        //startRoom.OpenDoors();
+        startRoom.CloseDoors();
     }
 
     /// <summary>

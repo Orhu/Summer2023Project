@@ -415,6 +415,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 2591183591901039891, guid: 8632f6f27e13c5a4db34ed52aaad2360, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 6351846847079443315, guid: 8632f6f27e13c5a4db34ed52aaad2360, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -926,18 +930,33 @@ MonoBehaviour:
     - roomType: 2
       roomExteriorGenerationParameters:
         rightWallSprites:
-        - {fileID: 0}
-        topWallSprites: []
-        leftWallSprites: []
-        bottomWallSprites: []
-        topRightWallCornerSprites: []
-        topLeftWallCornerSprites: []
-        bottomLeftWallCornerSprites: []
-        bottomRightWallCornerSprites: []
-        rightDoorSprites: []
-        topDoorSprites: []
-        leftDoorSprites: []
-        bottomDoorSprites: []
+        - {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
+        topWallSprites:
+        - {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
+        leftWallSprites:
+        - {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
+        bottomWallSprites:
+        - {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
+        topRightWallCornerSprites:
+        - {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
+        topLeftWallCornerSprites:
+        - {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
+        bottomLeftWallCornerSprites:
+        - {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
+        bottomRightWallCornerSprites:
+        - {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
+        rightDoorSprites:
+        - doorOpened: {fileID: 21300000, guid: 50f2344be3ac5a04bac7834886020c40, type: 3}
+          doorClosed: {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
+        topDoorSprites:
+        - doorOpened: {fileID: 21300000, guid: 50f2344be3ac5a04bac7834886020c40, type: 3}
+          doorClosed: {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
+        leftDoorSprites:
+        - doorOpened: {fileID: 21300000, guid: 50f2344be3ac5a04bac7834886020c40, type: 3}
+          doorClosed: {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
+        bottomDoorSprites:
+        - doorOpened: {fileID: 21300000, guid: 50f2344be3ac5a04bac7834886020c40, type: 3}
+          doorClosed: {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
         floorSprites:
         - {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
     - roomType: 1

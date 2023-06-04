@@ -25,7 +25,7 @@ public class Door : MonoBehaviour
     public void Open()
     {
         GetComponent<SpriteRenderer>().sprite = doorSprites.doorOpened;
-        GetComponent<BoxCollider2D>().isTrigger = true;
+        GetComponent<BoxCollider2D>().isTrigger = false;
     }
 
     /// <summary>
@@ -34,7 +34,7 @@ public class Door : MonoBehaviour
     public void Close()
     {
         GetComponent<SpriteRenderer>().sprite = doorSprites.doorClosed;
-        GetComponent<BoxCollider2D>().isTrigger = false;
+        GetComponent<BoxCollider2D>().isTrigger = true;
     }
 
     /// <summary>
@@ -61,6 +61,7 @@ public class Door : MonoBehaviour
     /// <param name="collision"> The collision that entered this door </param>
     public void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("hello?");
         if (collision.gameObject.CompareTag("Player"))
         {
             Enter();
