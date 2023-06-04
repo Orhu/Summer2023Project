@@ -40,6 +40,7 @@ public class BaseStateMachine : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         currentTarget = player;
+        FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Add(gameObject);
     }
 
     /// <summary>
@@ -67,5 +68,13 @@ public class BaseStateMachine : MonoBehaviour
         }
 
         return component;
+    }
+
+    /// <summary>
+    /// Remove me from the floor generator's list of living enemies
+    /// </summary>
+    private void OnDestroy()
+    {
+        FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Remove(gameObject);
     }
 }

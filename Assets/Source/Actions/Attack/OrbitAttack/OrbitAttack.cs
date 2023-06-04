@@ -1,8 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "NewBulletAttack", menuName = "Cards/Actions/OrbitAttackAttack")]
 /// <summary>
 /// An attack that creates a projectile that orbits around the spawn location.
 /// </summary>

@@ -18,16 +18,16 @@ public class Health : MonoBehaviour
     [Tooltip("How long of a duration does this unit get invincibility when hit?")]
     public float invincibilityDuration;
     
-    // All status effects this is immune to.
+    [Tooltip("All status effects this is immune to.")]
     public List<StatusEffect> immuneStatusEffects = new List<StatusEffect>();
 
-    // All status effects currently affecting this.
+    [Tooltip("All status effects currently affecting this.")]
     private List<StatusEffect> statusEffects = new List<StatusEffect>();
 
-    // Called when health values are changed and passes the new health.
+    [Tooltip("Called when health values are changed and passes the new health.")]
     public UnityEvent<float> onHealthChanged, onMaxHealthChanged;
     
-    // Called when this is attacked and passes the attack.
+    [Tooltip("Called when this is attacked and passes the attack.")]
     public UnityEvent<DamageData> onAttacked;
     
     [Tooltip("Called when this dies")]

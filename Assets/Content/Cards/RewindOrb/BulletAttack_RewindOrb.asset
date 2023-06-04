@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_RewindOrb
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 4
     damageType: 0
     statusEffects: []
   hitCount: 3
-  modifiers: []
+  applyDamageOnHit: 1
+  modifiers:
+  - {fileID: 11400000, guid: 778c97ac480f9bf48974337f86b16722, type: 2}
+  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
   shape: {fileID: 11400000, guid: e2bbf15f0326f054bae90f2373102dc9, type: 2}
   lifetime: 4
   initialSpeed: 8
@@ -28,12 +29,14 @@ MonoBehaviour:
   maxSpeed: 8
   homingSpeed: 0
   homingTime: 0
-  homingAimMode: 0
+  homingAimMode: 1
   visualObject: {fileID: 6866347195849778357, guid: 29e713b6fe803504d84fd4ff3e6ea3ea, type: 3}
   detachVisualsBeforeDestroy: 0
   spawnLocation: 0
   aimMode: 0
-  spawnSequence:
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  _spawnSequence:
   - delay: 0
     angle: 0
     offset: {x: 0, y: 0}

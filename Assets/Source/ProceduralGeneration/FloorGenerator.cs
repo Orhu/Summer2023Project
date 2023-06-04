@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// Handles generation for an entire floor: The layout and the external rooms. 
@@ -20,11 +21,23 @@ public class FloorGenerator : MonoBehaviour
     [Tooltip("A dictionary that holds room types and their associated exterior generation parameters for this floor")]
     [SerializeField] public RoomTypesToRoomExteriorGenerationParameters roomTypesToExteriorGenerationParameters;
 
+    [Tooltip("Event called when the room is changed")]
+    public UnityEvent onRoomChange;
+    
     // A reference to the generated map
     [HideInInspector] public Map map;
 
     // The room the player is currently in
-    [HideInInspector] public Room currentRoom;
+    private Room _currentRoom;
+    [HideInInspector] public Room currentRoom
+    {
+        get { return _currentRoom; }
+        set
+        {
+            _currentRoom = value;
+            onRoomChange?.Invoke();
+        }
+    }
 
     // The instance
     public static FloorGenerator floorGeneratorInstance { get; private set; }
