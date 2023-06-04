@@ -121,7 +121,6 @@ public class Pathfinding : MonoBehaviour
         Vector2[] waypoints = SimplifyPath(path);
         Array.Reverse(waypoints);
         return waypoints;
-		
     }
 
     /// <summary>

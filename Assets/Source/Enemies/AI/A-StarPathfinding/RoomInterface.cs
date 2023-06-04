@@ -50,6 +50,21 @@ public class RoomInterface : MonoBehaviour
         }
 
         /// <summary>
+        /// Constructor for a PathfindingTile default with a gridLocation. Currently used to mitigate the null error issue with door tiles.
+        /// </summary>
+        /// <param name="gridX"> Grid X pos </param>
+        /// <param name="gridY"> Grid Y pos </param>
+        public PathfindingTile(int gridX, int gridY)
+        {
+            walkable = false;
+            movementPenalty = 0;
+            gridLocation = new Vector2Int(gridX, gridY);
+            gCost = 0;
+            hCost = 0;
+            retraceStep = null;
+        }
+
+        /// <summary>
         /// Compare this tile to another tile
         /// </summary>
         /// <param name="other"> other tile to compare to </param>
@@ -82,7 +97,7 @@ public class RoomInterface : MonoBehaviour
 
     // the world position of this room
     private Vector2 myWorldPosition;
-
+    
     /// <summary>
     /// Retrieves player's current room from the FloorGenerator singleton, updating this class' room reference
     /// </summary>
@@ -111,9 +126,22 @@ public class RoomInterface : MonoBehaviour
     {
         myRoomGrid = new PathfindingTile[myRoomSize.x, myRoomSize.y];
 
-        foreach (var tile in inputArray)
+        for (int x = 0; x < myRoomSize.x; x++)
         {
-            myRoomGrid[tile.gridLocation.x, tile.gridLocation.y] = new PathfindingTile(tile);
+            for (int y = 0; y < myRoomSize.y; y++)
+            {
+                var curTile = inputArray[x, y];
+
+                // TODO must be a better way than foreach comparing to null. Doors return null currently, Mabel says she is working on it so update this when ready
+                if (curTile == null)
+                {
+                    myRoomGrid[x, y] = new PathfindingTile(x, y);
+                }
+                else
+                {
+                    myRoomGrid[x, y] = new PathfindingTile(curTile);
+                }
+            }
         }
     }
 
@@ -169,7 +197,56 @@ public class RoomInterface : MonoBehaviour
                 // Check if the adjacent tile is within the grid bounds
                 if (checkX >= 0 && checkX < myRoomSize.x && checkY >= 0 && checkY < myRoomSize.y)
                 {
-                    neighbors.Add(myRoomGrid[checkX, checkY]);
+                     try
+                    {
+                        // Check specific cases for corner tiles
+                        if (y == -1 && x == -1)
+                        {
+                            // Bottom left corner tile
+                            // Make sure the corner is reachable by either the tile above or the tile to the right
+                            if (myRoomGrid[checkX + x, checkY].walkable && myRoomGrid[checkX, checkY - y].walkable)
+                            {
+                                neighbors.Add(myRoomGrid[checkX, checkY]);
+                            }
+                        }
+                        else if (y == -1 && x == 1)
+                        {
+                            // Bottom right corner tile
+                            // Make sure the corner is reachable by either the tile above or the tile to the left
+                            if (myRoomGrid[checkX - x, checkY].walkable && myRoomGrid[checkX, checkY + y].walkable)
+                            {
+                                neighbors.Add(myRoomGrid[checkX, checkY]);
+                            }
+                        }
+                        else if (y == 1 && x == -1)
+                        {
+                            // Top left corner tile
+                            // Make sure the corner is reachable by either the tile below or the tile to the right
+                            if (myRoomGrid[checkX + x, checkY].walkable && myRoomGrid[checkX, checkY - y].walkable)
+                            {
+                                neighbors.Add(myRoomGrid[checkX, checkY]);
+                            }
+                        }
+                        else if (y == 1 && x == 1)
+                        {
+                            // Top right corner tile
+                            // Make sure the corner is reachable by either the tile below or the tile to the left
+                            if (myRoomGrid[checkX - x, checkY].walkable && myRoomGrid[checkX, checkY - y].walkable)
+                            {
+                                neighbors.Add(myRoomGrid[checkX, checkY]);
+                            }
+                        }
+                        else
+                        {
+                            // This tile is in a cardinal direction, no need to check anything. Just add it!
+                            neighbors.Add(myRoomGrid[checkX, checkY]);
+                        }
+                    }
+                    catch
+                    {
+                        // Catch here in case one of the tiles being checked is out of bounds in the grid.
+                        // We don't want to cause an error, so we simply skip adding that tile to the neighbours list.
+                    }
                 }
             }
         }
