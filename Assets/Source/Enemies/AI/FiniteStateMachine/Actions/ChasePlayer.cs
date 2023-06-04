@@ -30,10 +30,18 @@ public class ChasePlayer : FSMAction
     // track the previous coroutine so we can stop it later
     private Coroutine prevCoroutine;
 
+    /// <summary>
+    /// Not needed for this action, but demanded due to FSMAction inheritance
+    /// </summary>
+    /// <param name="stateMachine"> The stateMachine to be used. </param>
     public override void OnStateUpdate(BaseStateMachine stateMachine)
     {
     }
 
+    /// <summary>
+    /// Enable incoming path callbacks, assign our state machine, and start pathfinding coroutine
+    /// </summary>
+    /// <param name="stateMachine"></param>
     public override void OnStateEnter(BaseStateMachine stateMachine)
     {
         ignorePathRequests = false;
@@ -42,6 +50,10 @@ public class ChasePlayer : FSMAction
         myStateMachine.StartCoroutine(coroutine);
     }
 
+    /// <summary>
+    /// Disable any incoming path callbacks, and stop coroutines related to chasing
+    /// </summary>
+    /// <param name="stateMachine"></param>
     public override void OnStateExit(BaseStateMachine stateMachine)
     {
         ignorePathRequests = true;
@@ -63,6 +75,9 @@ public class ChasePlayer : FSMAction
         }
     }
 
+    /// <summary>
+    /// Updates our position and target position, then submits a path request
+    /// </summary>
     void UpdatePositionsAndRequestPath()
     {
         targetPos = myStateMachine.currentTarget.transform.position;

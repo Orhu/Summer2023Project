@@ -32,6 +32,10 @@ public class FireAttack : FSMAction
     // determines if attack is available or not
     private bool attackReady;
     
+    /// <summary>
+    /// Launches an attack whenever the cooldown is available
+    /// </summary>
+    /// <param name="stateMachine"> The stateMachine performing the attack </param>
     public override void OnStateUpdate(BaseStateMachine stateMachine)
     {
         if (attackReady)
@@ -42,11 +46,19 @@ public class FireAttack : FSMAction
         }
     }
 
+    /// <summary>
+    /// Sets the attack cooldown to true 
+    /// </summary>
+    /// <param name="stateMachine"> The stateMachine performing the attack </param>
     public override void OnStateEnter(BaseStateMachine stateMachine)
     {
         attackReady = true;
     }
 
+    /// <summary>
+    /// Not needed for this action, but demanded due to FSMAction inheritance
+    /// </summary>
+    /// <param name="stateMachine"> The stateMachine performing the attack </param>
     public override void OnStateExit(BaseStateMachine stateMachine)
     {
     }
