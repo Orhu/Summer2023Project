@@ -61,8 +61,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d664ad8cfe27b3e47af5a2fd8d9c47f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canDealDamageOnTouch: 0
-  damageOnTouch: 0
+  canDealDamageOnTouch: 1
+  damageOnTouch: 1
   damageTypeOnTouch: 0
   statusEffectsOnTouch: []
 --- !u!1 &7281680880204442677
@@ -209,6 +209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialState: {fileID: 11400000, guid: a7fd96789dd3ace489f44f39b9ea82bf, type: 2}
   currentTarget: {fileID: 0}
+  player: {fileID: 0}
   feetCollider: {fileID: 0}
   currentState: {fileID: 0}
 --- !u!114 &7281680880204442666
