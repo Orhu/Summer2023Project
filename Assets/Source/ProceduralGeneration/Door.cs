@@ -42,8 +42,10 @@ public class Door : MonoBehaviour
     /// </summary>
     public void Enter()
     {
+        Debug.Log("door entered");
         if (enterable)
         {
+            Debug.Log("door is enterable");
             FloorGenerator.floorGeneratorInstance.currentRoom.Exit();
 
             // Get the opposite direction (since the bottom door of this room goes to the top door of the next room)
@@ -59,10 +61,9 @@ public class Door : MonoBehaviour
     /// Enters the other room
     /// </summary>
     /// <param name="collision"> The collision that entered this door </param>
-    public void OnCollisionEnter2D(Collision2D collision)
+    public void OnTriggerEnter2D(Collider2D collider)
     {
-        Debug.Log("hello?");
-        if (collision.gameObject.CompareTag("Player") && GetComponent<BoxCollider2D>().isTrigger)
+        if (collider.gameObject.CompareTag("Player") && GetComponent<BoxCollider2D>().isTrigger)
         {
             Enter();
         }

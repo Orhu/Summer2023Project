@@ -38,6 +38,7 @@ public class Room : MonoBehaviour
         set
         {
             _livingEnemies = value;
+            Debug.Log("living enemies updated, count: " + _livingEnemies.Count);
             if (_livingEnemies.Count == 0)
             {
                 OpenDoors();
@@ -86,18 +87,12 @@ public class Room : MonoBehaviour
 
         FloorGenerator.floorGeneratorInstance.currentRoom = this;
 
-        bool shouldCloseDoors = !generated && template.enemyPools != null;
-
         Generate();
 
-        // Move player into room, then close/activate doors (so player doesn't get trapped in door)
-        StartCoroutine(MovePlayer(direction));
+        bool shouldCloseDoors = !generated && template.enemyPools != null;
 
-        ActivateDoors();
-        if (shouldCloseDoors)
-        {
-            CloseDoors();
-        }
+        // Move player into room, then close/activate doors (so player doesn't get trapped in door)
+        StartCoroutine(MovePlayer(direction, shouldCloseDoors));
     }
 
     /// <summary>
@@ -139,8 +134,9 @@ public class Room : MonoBehaviour
     /// Moves the player into the room 
     /// </summary>
     /// <param name="direction"> The direction the player entered in </param>
+    /// <param name="shouldCloseDoors"> Whether or not the doors should close </param>
     /// <returns> Enumerator so other functions can wait for this to finish </returns>
-    public IEnumerator MovePlayer(Direction direction)
+    public IEnumerator MovePlayer(Direction direction, bool shouldCloseDoors)
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
@@ -149,32 +145,54 @@ public class Room : MonoBehaviour
         
         if ((direction & Direction.Right) != Direction.None)
         {
-            location = new Vector3(roomSize.x - 2, roomSize.y / 2, 0) + transform.position;
+            location = new Vector3(roomSize.x / 2 - 1.2f, 0, 0) + transform.position;
             movementInput.x = -1;
         }
 
         if ((direction & Direction.Up) != Direction.None)
         {
-            location = new Vector3(roomSize.x / 2, roomSize.y - 2, 0) + transform.position;
+            location = new Vector3(0, roomSize.y / 2 - 1.2f, 0) + transform.position;
             movementInput.y = -1;
         }
 
         if ((direction & Direction.Left) != Direction.None)
         {
-            location = new Vector3(2, roomSize.y / 2, 0) + transform.position;
+            location = new Vector3(-roomSize.x / 2 + 1.2f, 0, 0) + transform.position;
             movementInput.x = 1;
         }
 
         if ((direction & Direction.Down) != Direction.None)
         {
-            location = new Vector3(roomSize.x / 2, 2, 0) + transform.position;
+            location = new Vector3(0, -roomSize.y / 2 + 1.2f, 0) + transform.position;
             movementInput.y = 1;
         }
 
-        while (!Mathf.Approximately(player.transform.position.x, location.x) || !Mathf.Approximately(player.transform.position.y, location.y))
+        player.GetComponent<Controller>().enabled = false;
+
+        Debug.Log("room position: " + transform.position.ToString());
+        Debug.Log("location: " + location);
+
+        float range = 0.05f;
+
+        bool inXRange = movementInput.x == 0 || ((player.transform.position.x <= location.x + range) && (player.transform.position.x >= location.x - range));
+        bool inYRange = movementInput.y == 0 || ((player.transform.position.y <= location.y + range) && (player.transform.position.y >= location.y - range));
+
+        while (!inXRange || !inYRange)
         {
+
+            inXRange = movementInput.x == 0 || ((player.transform.position.x <= location.x + range) && (player.transform.position.x >= location.x - range));
+            inYRange = movementInput.y == 0 || ((player.transform.position.y <= location.y + range) && (player.transform.position.y >= location.y - range));
+
             player.GetComponent<SimpleMovement>().MovementInput = movementInput;
             yield return null;
+        }
+
+        player.GetComponent<Controller>().enabled = true;
+
+        ActivateDoors();
+        if (true)
+        {
+            CloseDoors();
         }
     }
 

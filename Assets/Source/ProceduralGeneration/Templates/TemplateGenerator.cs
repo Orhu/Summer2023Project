@@ -21,7 +21,7 @@ public class TemplateGenerator : MonoBehaviour
         if (template.enemyPools != null)
         {
             room.template.enemyPools = template.enemyPools.Copy();
-            room.template.chosenEnemyPool = room.template.enemyPools.enemyPools[Random.Range(0, template.enemyPools.enemyPools.Count)];
+            room.template.chosenEnemyPool = room.template.enemyPools.enemyPools[Random.Range(0, room.template.enemyPools.enemyPools.Count)];
         }
 
         GameObject tileContainer = new GameObject();
