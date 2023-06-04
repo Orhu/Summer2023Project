@@ -15,6 +15,7 @@ public struct WeightedLootItems<T>
     // The RNG weight of that item
     public float weight;
 }
+
 /// <summary>
 /// Generic class for storing loot and their weighted RNG
 /// Create a new child script to create a new loot table of type T
@@ -31,7 +32,19 @@ public class LootTable<T> : ScriptableObject
     /// <returns>A single item from the table</returns>
     public T PullFromTable()
     {
-        return weightedLoot[0].lootItem;
+        float totalWeight = 0;
+        T selected = default(T);
+        foreach (var loot in weightedLoot)
+        {
+            float weight = loot.weight;
+            float rand = Random.Range(0, totalWeight + weight);
+            if (rand >= totalWeight)
+            {
+                selected = loot.lootItem;
+            }
+            totalWeight += weight;
+        }
+        return selected;
     }
 
     /// <summary>
@@ -41,6 +54,12 @@ public class LootTable<T> : ScriptableObject
     /// <returns>List of items pulled from the table</returns>
     public List<T> PullMultipleFromTable(int pullCount)
     {
-        return new List<T>();
+        List<T> itemList = new List<T>();
+        for (int i = 0; i < pullCount; i++)
+        {
+            T item = PullFromTable();
+            itemList.Add(item);
+        }
+        return itemList;
     }
 }

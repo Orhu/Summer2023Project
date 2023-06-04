@@ -12,26 +12,26 @@ namespace CardSystem
         // Card gets populated by card buttons (selected in UI)
         public Card selectedCard { get; set; }
 
-        [Tooltip("Cards to be displayed in UI - will be replaced with a call to a loot table")]
-        public List<Card> packCards = new List<Card> ();
-
         [Tooltip("Link to the card layout area game object")]
         public List<CardRenderer> cardRenderers = new List<CardRenderer>();
+
+        public CardLootTable lootTable;
 
         /// <summary>
         /// Optionally populate the cards on start
         /// </summary>
         private void Start()
         {
-            PopulateBoosterPackCards(3);
+            PopulateBoosterPackCards(3, lootTable);
         }
 
         /// <summary>
         /// Set card containers to be active and give them cards randomly from packCards
         /// </summary>
         /// <param name="numCards">Number of cards to spawn in pack</param>
-        public void PopulateBoosterPackCards(int numCards)
+        public void PopulateBoosterPackCards(int numCards, LootTable<Card> table)
         {
+            List<Card> packCards = lootTable.PullMultipleFromTable(numCards);
             // Loop through all cardRenderers
             for (int i = 0; i < cardRenderers.Count; i++)
             {
