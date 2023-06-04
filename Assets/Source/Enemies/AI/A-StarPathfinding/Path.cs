@@ -21,13 +21,15 @@ public class Path
     /// </summary>
     /// <param name="waypoints"> Array of waypoints to travel down </param>
     /// <param name="startPos"> Starting position </param>
-    public Path(Vector2[] waypoints, Vector3 startPos) {
+    public Path(Vector2[] waypoints, Vector3 startPos) 
+    {
         lookPoints = waypoints;
         turnBoundaries = new Line[lookPoints.Length];
         finishLineIndex = turnBoundaries.Length - 1;
 
         Vector2 previousPoint = startPos;
-        for (int i = 0; i < lookPoints.Length; i++) {
+        for (int i = 0; i < lookPoints.Length; i++) 
+        {
             Vector2 currentPoint = lookPoints[i];
             Vector2 dirToCurrentPoint = (currentPoint - previousPoint).normalized;
             // calculate the turn boundary point based on whether it's the finish line or not
@@ -41,8 +43,8 @@ public class Path
     /// <summary>
     /// Draw debug gizmos
     /// </summary>
-    public void DrawWithGizmos() {
-
+    public void DrawWithGizmos() 
+    {
         Gizmos.color = Color.black;
         foreach (Vector3 p in lookPoints) {
             Gizmos.DrawCube (p + Vector3.up, Vector3.one);

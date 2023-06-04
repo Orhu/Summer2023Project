@@ -21,7 +21,7 @@ public class ChangeMovementGround : MonoBehaviour
     /// If the collider has a simple movement component, set the correct speed information
     /// </summary>
     /// <param name="other"> The collider that enters the collision </param>
-    void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         // get component in parent because feet will be the collider we get here
             var simpleMovementComponent = other.GetComponentInParent<SimpleMovement>();
@@ -37,7 +37,7 @@ public class ChangeMovementGround : MonoBehaviour
     /// If the collider has a simple movement component, reset the speed information to its original values
     /// </summary>
     /// <param name="other"> The collider that enters the collision </param>
-    void OnTriggerExit2D(Collider2D other)
+    private void OnTriggerExit2D(Collider2D other)
     {
         // get component in parent because feet will be the collider we get here
         var simpleMovementComponent = other.GetComponentInParent<SimpleMovement>();

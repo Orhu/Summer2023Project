@@ -44,7 +44,7 @@ public class ChaseTarget : FSMAction
     /// <summary>
     /// Enable incoming path callbacks, assign our state machine, and start pathfinding coroutine
     /// </summary>
-    /// <param name="stateMachine"></param>
+    /// <param name="stateMachine"> The stateMachine to be used. </param>
     public override void OnStateEnter(BaseStateMachine stateMachine)
     {
         ignorePathRequests = false;
@@ -56,7 +56,7 @@ public class ChaseTarget : FSMAction
     /// <summary>
     /// Disable any incoming path callbacks, and stop coroutines related to chasing
     /// </summary>
-    /// <param name="stateMachine"></param>
+    /// <param name="stateMachine"> The stateMachine to be used. </param>
     public override void OnStateExit(BaseStateMachine stateMachine)
     {
         ignorePathRequests = true;
@@ -67,6 +67,7 @@ public class ChaseTarget : FSMAction
     /// <summary>
     /// Sends a request for a path, and continuously submits requests every delayBetweenPathUpdates seconds
     /// </summary>
+    /// <returns></returns>
     IEnumerator UpdatePath()
     {
         UpdatePositionsAndRequestPath();

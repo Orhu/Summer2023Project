@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -8,44 +6,47 @@ using UnityEngine;
 public struct Line
 {
     // constant gradient value for vertical lines to avoid division by zero
-    const float verticalLineGradient = 1e5f;
+    private const float verticalLineGradient = 1e5f;
 
     // gradient of the line
-    float gradient;
+    private float gradient;
     
     // y-intercept of the line
-    float y_intercept;
+    private float y_intercept;
     
     // first point on the line
-    Vector2 pointOnLine_1;
+    private Vector2 pointOnLine_1;
     
     // second point on the line
-    Vector2 pointOnLine_2;
+    private Vector2 pointOnLine_2;
 
     // perpendicular gradient
-    float gradientPerpendicular;
+    private float gradientPerpendicular;
 
     // indicates whether we are approaching the side
-    bool approachSide;
+    private bool approachSide;
 
     /// <summary>
     /// Initializes a new instance of the Line struct given a point on the line and a point perpendicular to the line.
     /// </summary>
     /// <param name="pointOnLine"> A point on the line. </param>
     /// <param name="pointPerpendicularToLine"> A point perpendicular to the line. </param>
-    public Line(Vector2 pointOnLine, Vector2 pointPerpendicularToLine) {
+    public Line(Vector2 pointOnLine, Vector2 pointPerpendicularToLine) 
+    {
         float dx = pointOnLine.x - pointPerpendicularToLine.x;
         float dy = pointOnLine.y - pointPerpendicularToLine.y;
 
         // calculate gradient of the perpendicular line
-        if (dx == 0) {
+        if (dx == 0) 
+        {
             gradientPerpendicular = verticalLineGradient;
         } else {
             gradientPerpendicular = dy / dx;
         }
 
         // calculate gradient of the line
-        if (gradientPerpendicular == 0) {
+        if (gradientPerpendicular == 0) 
+        {
             gradient = verticalLineGradient;
         } else {
             gradient = -1 / gradientPerpendicular;
@@ -66,7 +67,9 @@ public struct Line
     /// Determines whether the given point is on the same side as the approach side of the line.
     /// </summary>
     /// <param name="p"> The point to check. </param>
-    bool GetSide(Vector2 p) {
+    /// <returns> True if the point is on the same side as the approach side of the line, false otherwise. </returns>
+    bool GetSide(Vector2 p) 
+    {
         return (p.x - pointOnLine_1.x) * (pointOnLine_2.y - pointOnLine_1.y) > (p.y - pointOnLine_1.y) * (pointOnLine_2.x - pointOnLine_1.x);
     }
 
@@ -75,7 +78,8 @@ public struct Line
     /// </summary>
     /// <param name="p"> The point to check. </param>
     /// <returns> True if the point has crossed the line, false otherwise. </returns>
-    public bool HasCrossedLine(Vector2 p) {
+    public bool HasCrossedLine(Vector2 p) 
+    {
         return GetSide (p) != approachSide;
     }
 
@@ -84,7 +88,8 @@ public struct Line
     /// </summary>
     /// <param name="p"> The point to calculate the distance from. </param>
     /// <returns> The perpendicular distance from the point to the line. </returns>
-    public float DistanceFromPoint(Vector2 p) {
+    public float DistanceFromPoint(Vector2 p) 
+    {
         float yInterceptPerpendicular = p.y - gradientPerpendicular * p.x;
         float intersectX = (yInterceptPerpendicular - y_intercept) / (gradient - gradientPerpendicular);
         float intersectY = gradient * intersectX + y_intercept;
@@ -95,7 +100,8 @@ public struct Line
     /// Draw debug gizmos
     /// </summary>
     /// <param name="length">The length of the line to draw.</param>
-    public void DrawWithGizmos(float length) {
+    public void DrawWithGizmos(float length) 
+    {
         Vector3 lineDir = new Vector3 (1, 0, gradient).normalized;
         Vector3 lineCentre = new Vector3 (pointOnLine_1.x, 0, pointOnLine_1.y) + Vector3.up;
         Gizmos.DrawLine (lineCentre - lineDir * length / 2f, lineCentre + lineDir * length / 2f);
