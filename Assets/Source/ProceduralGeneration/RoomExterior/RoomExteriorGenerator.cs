@@ -35,6 +35,17 @@ public class RoomExteriorGenerator : MonoBehaviour
                 }
             }
         }
+
+        // Set the start room to active
+        Room startRoom = map.startCell.room.GetComponent<Room>();
+
+        for (int i = 0; i < startRoom.transform.childCount; i++)
+        {
+            startRoom.transform.GetChild(i).gameObject.SetActive(true);
+        }
+
+        FloorGenerator.floorGeneratorInstance.currentRoom = startRoom;
+        startRoom.ActivateDoors();
     }
 
     /// <summary>
@@ -67,7 +78,7 @@ public class RoomExteriorGenerator : MonoBehaviour
         CreateDoors(createdCell, map, roomSize);
 
         //CreateFloor(newRoom, roomSize);
-        
+
     }
 
     /// <summary>
@@ -178,42 +189,43 @@ public class RoomExteriorGenerator : MonoBehaviour
         doorContainer.transform.parent = roomCell.room.transform;
         doorContainer.transform.localPosition = new Vector3(-roomSize.x / 2, -roomSize.y / 2, 0);
 
-        foreach (Direction direction in System.Enum.GetValues(typeof(Direction)))
+        for (int i = 1; i <= (int) Direction.Down; i *= 2)
         {
-            if ((roomCell.direction & direction) != Direction.None)
+            if ((roomCell.direction & (Direction) i) != Direction.None)
             {
                 Vector2Int mapOffset = new Vector2Int();
-                mapOffset.x = System.Convert.ToInt32((direction & Direction.Right) != Direction.None) - System.Convert.ToInt32((direction & Direction.Left) != Direction.None);
-                mapOffset.y = System.Convert.ToInt32((direction & Direction.Up) != Direction.None) - System.Convert.ToInt32((direction & Direction.Down) != Direction.None);
-                
-                Room connectedRoom = map.map[roomCell.location.x + mapOffset.x, roomCell.location.y + mapOffset.y].room.GetComponent<Room>();
-                RoomExteriorGenerationParameters exteriorParameters = FloorGenerator.floorGeneratorInstance.roomTypesToExteriorGenerationParameters.At(connectedRoom.roomType);
+                mapOffset.x = System.Convert.ToInt32(((Direction) i & Direction.Right) != Direction.None) - System.Convert.ToInt32(((Direction) i & Direction.Left) != Direction.None);
+                mapOffset.y = System.Convert.ToInt32(((Direction) i & Direction.Up) != Direction.None) - System.Convert.ToInt32(((Direction) i & Direction.Down) != Direction.None);
 
-                Vector2Int doorLocation = mapOffset * roomSize / 2;
+                MapCell connectedCell = map.map[roomCell.location.x + mapOffset.x, roomCell.location.y + mapOffset.y];
+                RoomExteriorGenerationParameters exteriorParameters = FloorGenerator.floorGeneratorInstance.roomTypesToExteriorGenerationParameters.At(connectedCell.type);
+
+                Vector2Int doorLocation = (mapOffset * roomSize / 2) + roomSize / 2;
 
                 DoorSprites doorSprites = new DoorSprites();
 
-                if ((direction & Direction.Right) != Direction.None)
+                if (((Direction) i & Direction.Right) != Direction.None)
                 {
                     doorSprites = exteriorParameters.rightDoorSprites[Random.Range(0, exteriorParameters.rightDoorSprites.Count)];
                 }
 
-                if ((direction & Direction.Up) != Direction.None)
+                if (((Direction) i & Direction.Up) != Direction.None)
                 {
                     doorSprites = exteriorParameters.topDoorSprites[Random.Range(0, exteriorParameters.topDoorSprites.Count)];
                 }
 
-                if ((direction & Direction.Left) != Direction.None)
+                if (((Direction) i & Direction.Left) != Direction.None)
                 {
                     doorSprites = exteriorParameters.leftDoorSprites[Random.Range(0, exteriorParameters.leftDoorSprites.Count)];
                 }
 
-                if ((direction & Direction.Down) != Direction.None)
+                if (((Direction) i & Direction.Down) != Direction.None)
                 {
                     doorSprites = exteriorParameters.bottomDoorSprites[Random.Range(0, exteriorParameters.bottomDoorSprites.Count)];
                 }
 
-                room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, direction, connectedRoom, doorContainer);
+                room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, (Direction) i, connectedCell, doorContainer);
+                room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
             }
         }
 
@@ -226,10 +238,10 @@ public class RoomExteriorGenerator : MonoBehaviour
     /// <param name="doorSprites"> The sprites of the door </param>
     /// <param name="location"> The location in the room of the door </param>
     /// <param name="direction"> The direction the door is facing </param>
-    /// <param name="connectedRoom"> The room the door is connected to </param>
+    /// <param name="connectedCell"> The room the door is connected to </param>
     /// <param name="doorContainer"> The container that holds the door tiles </param>
     /// <returns> The created tile </returns>
-    private Tile CreateDoorTile(DoorSprites doorSprites, Vector2Int location, Direction direction, Room connectedRoom, GameObject doorContainer)
+    private Tile CreateDoorTile(DoorSprites doorSprites, Vector2Int location, Direction direction, MapCell connectedCell, GameObject doorContainer)
     {
         Tile tile = ScriptableObject.CreateInstance<Tile>();
         tile.spawnedObject = new GameObject();
@@ -241,7 +253,7 @@ public class RoomExteriorGenerator : MonoBehaviour
         tile.spawnedObject.AddComponent<SpriteRenderer>().sprite = doorSprites.doorOpened;
         Door door = tile.spawnedObject.AddComponent<Door>();
         door.doorSprites = doorSprites;
-        door.connectedRoom = connectedRoom;
+        door.connectedCell = connectedCell;
         door.direction = direction;
         tile.spawnedObject.SetActive(true);
         tile.spawnedObject.name = "Door";
@@ -353,5 +365,83 @@ public class RoomExteriorGenerator : MonoBehaviour
         }
 
         wallContainer.SetActive(false);
+
+        GameObject doorContainer = new GameObject();
+        doorContainer.name = "Door Container";
+        doorContainer.transform.parent = bossRoom.transform;
+        doorContainer.transform.localPosition = new Vector3(-room.roomSize.x / 2, -room.roomSize.y / 2, 0);
+
+        // liam plz don't kill me i know this is terrible, i'll fix it after prototype
+
+        if ((map.map[centerCell.location.x + 1, centerCell.location.y].direction & Direction.Right) != Direction.None)
+        {
+            Vector2Int mapOffset = new Vector2Int(2, 0);
+
+            MapCell connectedCell = map.map[centerCell.location.x + mapOffset.x, centerCell.location.y + mapOffset.y];
+            RoomExteriorGenerationParameters doorExteriorParameters = FloorGenerator.floorGeneratorInstance.roomTypesToExteriorGenerationParameters.At(connectedCell.type);
+
+            Vector2Int doorLocation = ((mapOffset / 2) * (room.roomSize / 2)) + room.roomSize / 2;;
+
+            DoorSprites doorSprites = new DoorSprites();
+
+            doorSprites = doorExteriorParameters.rightDoorSprites[Random.Range(0, exteriorParameters.rightDoorSprites.Count)];
+            
+            room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Right, connectedCell, doorContainer);
+            room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
+        }
+
+        if ((map.map[centerCell.location.x, centerCell.location.y + 1].direction & Direction.Up) != Direction.None)
+        {
+            Vector2Int mapOffset = new Vector2Int(0, 2);
+
+            MapCell connectedCell = map.map[centerCell.location.x + mapOffset.x, centerCell.location.y + mapOffset.y];
+            RoomExteriorGenerationParameters doorExteriorParameters = FloorGenerator.floorGeneratorInstance.roomTypesToExteriorGenerationParameters.At(connectedCell.type);
+
+            Vector2Int doorLocation = ((mapOffset / 2) * (room.roomSize / 2)) + room.roomSize / 2;
+
+            DoorSprites doorSprites = new DoorSprites();
+
+            doorSprites = doorExteriorParameters.topDoorSprites[Random.Range(0, exteriorParameters.topDoorSprites.Count)];
+
+            room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Up, connectedCell, doorContainer);
+            room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
+        }
+
+        if ((map.map[centerCell.location.x - 1, centerCell.location.y].direction & Direction.Left) != Direction.None)
+        {
+            Vector2Int mapOffset = new Vector2Int(-2, 0);
+
+            MapCell connectedCell = map.map[centerCell.location.x + mapOffset.x, centerCell.location.y + mapOffset.y];
+            RoomExteriorGenerationParameters doorExteriorParameters = FloorGenerator.floorGeneratorInstance.roomTypesToExteriorGenerationParameters.At(connectedCell.type);
+
+            Vector2Int doorLocation = ((mapOffset / 2) * (room.roomSize / 2)) + room.roomSize / 2;
+
+            DoorSprites doorSprites = new DoorSprites();
+
+            doorSprites = doorExteriorParameters.leftDoorSprites[Random.Range(0, exteriorParameters.leftDoorSprites.Count)];
+
+            room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Left, connectedCell, doorContainer);
+            room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
+        }
+
+        if ((map.map[centerCell.location.x, centerCell.location.y - 1].direction & Direction.Down) != Direction.None)
+        {
+            Vector2Int mapOffset = new Vector2Int(0, -2);
+
+            MapCell connectedCell = map.map[centerCell.location.x + mapOffset.x, centerCell.location.y + mapOffset.y];
+            RoomExteriorGenerationParameters doorExteriorParameters = FloorGenerator.floorGeneratorInstance.roomTypesToExteriorGenerationParameters.At(connectedCell.type);
+
+            Vector2Int doorLocation = ((mapOffset / 2) * (room.roomSize / 2)) + room.roomSize / 2;
+
+            DoorSprites doorSprites = new DoorSprites();
+
+            doorSprites = doorExteriorParameters.bottomDoorSprites[Random.Range(0, exteriorParameters.bottomDoorSprites.Count)];
+
+            room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Down, connectedCell, doorContainer);
+            room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
+        }
+
+        doorContainer.SetActive(false);
     }
+
 }

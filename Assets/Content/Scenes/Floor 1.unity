@@ -538,7 +538,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1850552611474811960, guid: 28b5fa2a0a1144941a6edd9f58792fbc, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1850552611474811960, guid: 28b5fa2a0a1144941a6edd9f58792fbc, type: 3}
       propertyPath: m_LocalPosition.x
@@ -923,71 +923,119 @@ MonoBehaviour:
   roomSize: {x: 13, y: 9}
   roomTypesToExteriorGenerationParameters:
     roomTypesToRoomExteriorGenerationParameters:
-    - roomType: 1
-      roomExteriorGenerationParameters:
-        wallSprites:
-        - {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
-        wallCornerSprites:
-        - {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
-        floorSprites:
-        - {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
-        doorSprites:
-        - doorOpened: {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
-          doorClosed: {fileID: 0}
-        nextToDoorSprites:
-        - {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
     - roomType: 2
       roomExteriorGenerationParameters:
-        wallSprites:
-        - {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
-        wallCornerSprites:
-        - {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
+        rightWallSprites:
+        - {fileID: 0}
+        topWallSprites: []
+        leftWallSprites: []
+        bottomWallSprites: []
+        topRightWallCornerSprites: []
+        topLeftWallCornerSprites: []
+        bottomLeftWallCornerSprites: []
+        bottomRightWallCornerSprites: []
+        rightDoorSprites: []
+        topDoorSprites: []
+        leftDoorSprites: []
+        bottomDoorSprites: []
         floorSprites:
         - {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
-        doorSprites:
-        - doorOpened: {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
-          doorClosed: {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
-        nextToDoorSprites:
-        - {fileID: 21300000, guid: d4aecf4cbced8224087e9a4ac711da69, type: 3}
-    - roomType: 3
+    - roomType: 1
       roomExteriorGenerationParameters:
-        wallSprites:
-        - {fileID: 21300000, guid: 1f00f264e14bbf84f92ba13ae43af0a1, type: 3}
-        wallCornerSprites:
-        - {fileID: 21300000, guid: 1f00f264e14bbf84f92ba13ae43af0a1, type: 3}
+        rightWallSprites:
+        - {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
+        topWallSprites:
+        - {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
+        leftWallSprites:
+        - {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
+        bottomWallSprites:
+        - {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
+        topRightWallCornerSprites:
+        - {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
+        topLeftWallCornerSprites:
+        - {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
+        bottomLeftWallCornerSprites:
+        - {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
+        bottomRightWallCornerSprites:
+        - {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
+        rightDoorSprites:
+        - doorOpened: {fileID: 21300000, guid: 50f2344be3ac5a04bac7834886020c40, type: 3}
+          doorClosed: {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
+        topDoorSprites:
+        - doorOpened: {fileID: 21300000, guid: 50f2344be3ac5a04bac7834886020c40, type: 3}
+          doorClosed: {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
+        leftDoorSprites:
+        - doorOpened: {fileID: 21300000, guid: 50f2344be3ac5a04bac7834886020c40, type: 3}
+          doorClosed: {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
+        bottomDoorSprites:
+        - doorOpened: {fileID: 21300000, guid: 50f2344be3ac5a04bac7834886020c40, type: 3}
+          doorClosed: {fileID: 7482667652216324306, guid: 97cdd45f91a18c8469f6d5893ee07455, type: 3}
         floorSprites:
         - {fileID: 21300000, guid: 1f00f264e14bbf84f92ba13ae43af0a1, type: 3}
-        doorSprites:
-        - doorOpened: {fileID: 21300000, guid: 1f00f264e14bbf84f92ba13ae43af0a1, type: 3}
-          doorClosed: {fileID: 21300000, guid: 1f00f264e14bbf84f92ba13ae43af0a1, type: 3}
-        nextToDoorSprites:
+    - roomType: 5
+      roomExteriorGenerationParameters:
+        rightWallSprites:
+        - {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
+        topWallSprites:
+        - {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
+        leftWallSprites:
+        - {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
+        bottomWallSprites:
+        - {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
+        topRightWallCornerSprites:
+        - {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
+        topLeftWallCornerSprites:
+        - {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
+        bottomLeftWallCornerSprites:
+        - {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
+        bottomRightWallCornerSprites:
+        - {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
+        rightDoorSprites:
+        - doorOpened: {fileID: 21300000, guid: 50f2344be3ac5a04bac7834886020c40, type: 3}
+          doorClosed: {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
+        topDoorSprites:
+        - doorOpened: {fileID: 21300000, guid: 50f2344be3ac5a04bac7834886020c40, type: 3}
+          doorClosed: {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
+        leftDoorSprites:
+        - doorOpened: {fileID: 21300000, guid: 50f2344be3ac5a04bac7834886020c40, type: 3}
+          doorClosed: {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
+        bottomDoorSprites:
+        - doorOpened: {fileID: 21300000, guid: 50f2344be3ac5a04bac7834886020c40, type: 3}
+          doorClosed: {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
+        floorSprites:
         - {fileID: 21300000, guid: 1f00f264e14bbf84f92ba13ae43af0a1, type: 3}
     - roomType: 4
       roomExteriorGenerationParameters:
-        wallSprites:
+        rightWallSprites:
         - {fileID: 21300000, guid: e48a2c9218818d24da22e7081b187947, type: 3}
-        wallCornerSprites:
+        topWallSprites:
         - {fileID: 21300000, guid: e48a2c9218818d24da22e7081b187947, type: 3}
-        floorSprites:
+        leftWallSprites:
         - {fileID: 21300000, guid: e48a2c9218818d24da22e7081b187947, type: 3}
-        doorSprites:
-        - doorOpened: {fileID: 21300000, guid: e48a2c9218818d24da22e7081b187947, type: 3}
+        bottomWallSprites:
+        - {fileID: 21300000, guid: e48a2c9218818d24da22e7081b187947, type: 3}
+        topRightWallCornerSprites:
+        - {fileID: 21300000, guid: e48a2c9218818d24da22e7081b187947, type: 3}
+        topLeftWallCornerSprites:
+        - {fileID: 21300000, guid: e48a2c9218818d24da22e7081b187947, type: 3}
+        bottomLeftWallCornerSprites:
+        - {fileID: 21300000, guid: e48a2c9218818d24da22e7081b187947, type: 3}
+        bottomRightWallCornerSprites:
+        - {fileID: 21300000, guid: e48a2c9218818d24da22e7081b187947, type: 3}
+        rightDoorSprites:
+        - doorOpened: {fileID: 21300000, guid: 50f2344be3ac5a04bac7834886020c40, type: 3}
           doorClosed: {fileID: 21300000, guid: e48a2c9218818d24da22e7081b187947, type: 3}
-        nextToDoorSprites:
-        - {fileID: 21300000, guid: e48a2c9218818d24da22e7081b187947, type: 3}
-    - roomType: 5
-      roomExteriorGenerationParameters:
-        wallSprites:
-        - {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
-        wallCornerSprites:
-        - {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
+        topDoorSprites:
+        - doorOpened: {fileID: 21300000, guid: 50f2344be3ac5a04bac7834886020c40, type: 3}
+          doorClosed: {fileID: 21300000, guid: e48a2c9218818d24da22e7081b187947, type: 3}
+        leftDoorSprites:
+        - doorOpened: {fileID: 21300000, guid: 50f2344be3ac5a04bac7834886020c40, type: 3}
+          doorClosed: {fileID: 21300000, guid: e48a2c9218818d24da22e7081b187947, type: 3}
+        bottomDoorSprites:
+        - doorOpened: {fileID: 21300000, guid: 50f2344be3ac5a04bac7834886020c40, type: 3}
+          doorClosed: {fileID: 21300000, guid: e48a2c9218818d24da22e7081b187947, type: 3}
         floorSprites:
-        - {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
-        doorSprites:
-        - doorOpened: {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
-          doorClosed: {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
-        nextToDoorSprites:
-        - {fileID: 21300000, guid: 86ed22817a899a74d8cb6994a223462e, type: 3}
+        - {fileID: 21300000, guid: 1f00f264e14bbf84f92ba13ae43af0a1, type: 3}
   currentRoom: {fileID: 0}
 --- !u!114 &1845609677
 MonoBehaviour:

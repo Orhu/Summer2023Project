@@ -14,7 +14,7 @@ public class Door : MonoBehaviour
     [HideInInspector] public Direction direction;
 
     // The room that this door connects with
-    [HideInInspector] public Room connectedRoom;
+    [HideInInspector] public MapCell connectedCell;
 
     // Whether or not this door can be entered
     [HideInInspector] public bool enterable = false;
@@ -51,7 +51,7 @@ public class Door : MonoBehaviour
             oppositeDirection *= 2;
             oppositeDirection *= 2;
             oppositeDirection = oppositeDirection % (int)Direction.All;
-            connectedRoom.Enter((Direction) oppositeDirection);
+            connectedCell.room.GetComponent<Room>().Enter((Direction) oppositeDirection);
         }
     }
 

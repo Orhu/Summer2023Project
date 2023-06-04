@@ -46,7 +46,7 @@ public class Room : MonoBehaviour
     }
 
     // The doors of this room
-    private List<Door> doors;
+    [HideInInspector] public List<Door> doors = new List<Door>();
 
     // Whether this room has been generated or not
     private bool generated = false;
@@ -142,8 +142,40 @@ public class Room : MonoBehaviour
     /// <returns> Enumerator so other functions can wait for this to finish </returns>
     public IEnumerator MovePlayer(Direction direction)
     {
-        float movePlayerSeconds = 3;
-        yield return new WaitForSeconds(movePlayerSeconds);
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        Vector3 location = new Vector3();
+        Vector2 movementInput = new Vector2(0, 0);
+        
+        if ((direction & Direction.Right) != Direction.None)
+        {
+            location = new Vector3(roomSize.x - 2, roomSize.y / 2, 0) + transform.position;
+            movementInput.x = -1;
+        }
+
+        if ((direction & Direction.Up) != Direction.None)
+        {
+            location = new Vector3(roomSize.x / 2, roomSize.y - 2, 0) + transform.position;
+            movementInput.y = -1;
+        }
+
+        if ((direction & Direction.Left) != Direction.None)
+        {
+            location = new Vector3(2, roomSize.y / 2, 0) + transform.position;
+            movementInput.x = 1;
+        }
+
+        if ((direction & Direction.Down) != Direction.None)
+        {
+            location = new Vector3(roomSize.x / 2, 2, 0) + transform.position;
+            movementInput.y = 1;
+        }
+
+        while (!Mathf.Approximately(player.transform.position.x, location.x) || !Mathf.Approximately(player.transform.position.y, location.y))
+        {
+            player.GetComponent<SimpleMovement>().MovementInput = movementInput;
+            yield return null;
+        }
     }
 
     /// <summary>
