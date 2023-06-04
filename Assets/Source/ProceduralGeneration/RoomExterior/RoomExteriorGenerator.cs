@@ -45,9 +45,8 @@ public class RoomExteriorGenerator : MonoBehaviour
         }
 
         FloorGenerator.floorGeneratorInstance.currentRoom = startRoom;
-        startRoom.ActivateDoors();
-        //startRoom.OpenDoors();
-        startRoom.CloseDoors();
+
+        //startRoom.CloseDoors();
     }
 
     /// <summary>
@@ -232,6 +231,9 @@ public class RoomExteriorGenerator : MonoBehaviour
         }
 
         doorContainer.SetActive(false);
+
+        room.OpenDoors();
+        room.DeactivateDoors();
     }
 
     /// <summary>
@@ -251,7 +253,7 @@ public class RoomExteriorGenerator : MonoBehaviour
         tile.spawnedObject.transform.localPosition = new Vector3(location.x, location.y, 0);
         BoxCollider2D doorCollision = tile.spawnedObject.AddComponent<BoxCollider2D>();
         doorCollision.size = new Vector2(1, 1);
-        doorCollision.isTrigger = true;
+        //doorCollision.isTrigger = true;
         tile.spawnedObject.AddComponent<SpriteRenderer>().sprite = doorSprites.doorOpened;
         Door door = tile.spawnedObject.AddComponent<Door>();
         door.doorSprites = doorSprites;
