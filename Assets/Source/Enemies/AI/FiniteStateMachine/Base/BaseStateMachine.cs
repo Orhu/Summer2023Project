@@ -40,7 +40,7 @@ public class BaseStateMachine : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
         currentTarget = player;
-        FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Add(gameObject);
+        FloorGenerator.floorGeneratorInstance.currentRoom.AddEnemy(gameObject);
     }
 
     /// <summary>
@@ -75,6 +75,6 @@ public class BaseStateMachine : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
-        FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Remove(gameObject);
+        FloorGenerator.floorGeneratorInstance.currentRoom.RemoveEnemy(gameObject);
     }
 }

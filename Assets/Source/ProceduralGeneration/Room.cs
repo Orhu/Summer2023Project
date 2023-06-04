@@ -31,26 +31,35 @@ public class Room : MonoBehaviour
     [HideInInspector] public Vector2Int roomLocation;
 
     // The enemies alive in this room
-    private List<GameObject> _livingEnemies;
-    public List<GameObject> livingEnemies
-    {
-        get { return _livingEnemies; }
-        set
-        {
-            _livingEnemies = value;
-            Debug.Log("living enemies updated, count: " + _livingEnemies.Count);
-            if (_livingEnemies.Count == 0)
-            {
-                OpenDoors();
-            }
-        }
-    }
+    public List<GameObject> livingEnemies;
 
     // The doors of this room
     [HideInInspector] public List<Door> doors = new List<Door>();
 
     // Whether this room has been generated or not
     private bool generated = false;
+
+    /// <summary>
+    /// Adds an enemy to the list of living enemies
+    /// </summary>
+    /// <param name="enemy"> The enemy to add </param>
+    public void AddEnemy(GameObject enemy)
+    {
+        livingEnemies.Add(enemy);
+    }
+
+    /// <summary>
+    /// Removes an enemy from the list of living enemies
+    /// </summary>
+    /// <param name="enemy"> The enemy to remove </param>
+    public void RemoveEnemy(GameObject enemy)
+    {
+        livingEnemies.Remove(enemy);
+        if (livingEnemies.Count == 0)
+        {
+            OpenDoors();
+        }
+    }
 
     /// <summary>
     /// Opens all the doors
@@ -87,9 +96,10 @@ public class Room : MonoBehaviour
 
         FloorGenerator.floorGeneratorInstance.currentRoom = this;
 
+        bool shouldCloseDoors = !generated;
         Generate();
 
-        bool shouldCloseDoors = !generated && template.enemyPools != null && template.chosenEnemyPool.enemies.Count != 0;
+        shouldCloseDoors = shouldCloseDoors && template.chosenEnemyPool.enemies != null && template.chosenEnemyPool.enemies.Count != 0;
 
         // Move player into room, then close/activate doors (so player doesn't get trapped in door)
         StartCoroutine(MovePlayer(direction, shouldCloseDoors));
@@ -169,9 +179,6 @@ public class Room : MonoBehaviour
 
         player.GetComponent<Controller>().enabled = false;
 
-        Debug.Log("room position: " + transform.position.ToString());
-        Debug.Log("location: " + location);
-
         float range = 0.05f;
 
         bool inXRange = movementInput.x == 0 || ((player.transform.position.x <= location.x + range) && (player.transform.position.x >= location.x - range));
@@ -190,7 +197,7 @@ public class Room : MonoBehaviour
         player.GetComponent<Controller>().enabled = true;
 
         ActivateDoors();
-        if (true)
+        if (shouldCloseDoors)
         {
             CloseDoors();
         }

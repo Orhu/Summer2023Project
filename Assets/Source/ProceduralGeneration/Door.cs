@@ -26,6 +26,8 @@ public class Door : MonoBehaviour
     {
         GetComponent<SpriteRenderer>().sprite = doorSprites.doorOpened;
         GetComponent<BoxCollider2D>().isTrigger = true;
+        // Make the box collider a bit smaller so the player can't get stuck on walls when trying to move through doors
+        GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f);
     }
 
     /// <summary>
@@ -35,6 +37,8 @@ public class Door : MonoBehaviour
     {
         GetComponent<SpriteRenderer>().sprite = doorSprites.doorClosed;
         GetComponent<BoxCollider2D>().isTrigger = false;
+        // Make the box collider normal sized so the door acts like a wall
+        GetComponent<BoxCollider2D>().size = new Vector2(1, 1);
     }
 
     /// <summary>
@@ -42,10 +46,8 @@ public class Door : MonoBehaviour
     /// </summary>
     public void Enter()
     {
-        Debug.Log("door entered");
         if (enterable)
         {
-            Debug.Log("door is enterable");
             FloorGenerator.floorGeneratorInstance.currentRoom.Exit();
 
             // Get the opposite direction (since the bottom door of this room goes to the top door of the next room)
