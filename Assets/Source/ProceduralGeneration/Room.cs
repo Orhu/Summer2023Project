@@ -31,7 +31,19 @@ public class Room : MonoBehaviour
     [HideInInspector] public Vector2Int roomLocation;
 
     // The enemies alive in this room
-    public List<GameObject> livingEnemies;
+    private List<GameObject> _livingEnemies;
+    public List<GameObject> livingEnemies
+    {
+        get { return _livingEnemies; }
+        set
+        {
+            _livingEnemies = value;
+            if (_livingEnemies.Count == 0)
+            {
+                OpenDoors();
+            }
+        }
+    }
 
     // The doors of this room
     private List<Door> doors;

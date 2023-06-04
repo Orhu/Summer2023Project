@@ -51,7 +51,7 @@ public class Door : MonoBehaviour
             oppositeDirection *= 2;
             oppositeDirection *= 2;
             oppositeDirection = oppositeDirection % (int)Direction.All;
-            connectedRoom.Enter((Direction)oppositeDirection);
+            connectedRoom.Enter((Direction) oppositeDirection);
         }
     }
 
@@ -59,7 +59,7 @@ public class Door : MonoBehaviour
     /// Enters the other room
     /// </summary>
     /// <param name="collision"> The collision that entered this door </param>
-    public void OnCollisionEnter2D(Collision collision)
+    public void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
