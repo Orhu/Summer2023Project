@@ -66,6 +66,14 @@ public class LootTable<T> : ScriptableObject
         for (int i = 0; i < pullCount; i++)
         {
             T item = PullFromTable();
+            // Amount of attempts to pull a non-duplicate card
+            int pullAttempts = 0;
+            while (itemList.Contains(item) || pullAttempts < 5) // Give up after 5 attempts (table does not have enough distinct cards?)
+            {
+                item = PullFromTable();
+                pullAttempts++;
+            }
+            // Item we pulled is distinct (hopefully), add it to the list
             itemList.Add(item);
         }
         return itemList;

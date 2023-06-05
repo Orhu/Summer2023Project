@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Handles creation and maintenance of Booster Pack UI
@@ -10,45 +11,66 @@ public class BoosterPackMenu : MonoBehaviour
     // Card gets populated by card buttons (selected in UI)
     public Card selectedCard { get; set; }
 
-    [Tooltip("Link to the card layout area game object")]
+    [Tooltip("List of cardRender UI elements for displaying booster pack cards")]
     public List<CardRenderer> cardRenderers = new List<CardRenderer>();
+    
+    // UI area for adding cardRenderer UI objects
+    [SerializeField] private GameObject cardLayoutArea;
+
+    // The card renderer prefab to instantiate.
+    public CardRenderer cardRendererTemplate;
 
     // Local reference to the game world booster pack object that the player collides with
-    public BoosterPack boosterPackObject { get; set; }
+    private BoosterPack _boosterPackObject;
+    public BoosterPack boosterPackObject {
+        set
+        {
+            _boosterPackObject = value;
+            PopulateBoosterPackCards(boosterPackObject.numCards, boosterPackObject.lootTable);   
+        }
+        get { return _boosterPackObject; }
+    }
+    // Reference to card confirmation window
+    public GameObject confirmationWindow;
 
     /// <summary>
     /// Set card containers to be active and give them cards randomly from packCards
     /// </summary>
     /// <param name="numCards">Number of cards to spawn in pack</param>
-    public void PopulateBoosterPackCards(int numCards, LootTable<Card> table)
+    private void PopulateBoosterPackCards(int numCards, LootTable<Card> table)
     {
         if(table != null)
         {
+            // List of cards to be displayed in UI
             List<Card> packCards = table.PullMultipleFromTable(numCards);
-            // Loop through all cardRenderers
-            for (int i = 0; i < cardRenderers.Count; i++)
-            {
-                // If the current cardRenderer falls within
-                // the amount of cards we want to spawn:
-                if (i < numCards)
+
+            // Loop through total number of spawned cards
+            for(int i = 0; i < numCards; i++) {
+                // Add more cardRenderers
+                if(cardRenderers.Count < numCards)
                 {
-                    // Choose a card at random from packCards
-                    Card tempCard = packCards[Random.Range(0, packCards.Count - 1)];
-                    if (tempCard != null)
-                    {
-                        // Set the cardRenderer to active
-                        cardRenderers[i].gameObject.SetActive(true);
-                        // Assign it the random card
-                        cardRenderers[i].card = tempCard;
-                    }
-                }
-                else
-                {
-                    // If the cardRenderer is not within the number of spawned cards,
-                    // set it to inactive
-                    cardRenderers[i].gameObject.SetActive(false);
+                    // Instantiate the cardRenderer Game Object in the cardLayout area
+                    GameObject tempCardRendererGameObject = Instantiate(cardRendererTemplate.gameObject, cardLayoutArea.transform);
+                    // Give the cardRenderer Game Object's toggle some listeners
+                    tempCardRendererGameObject.GetComponent<Toggle>().onValueChanged.AddListener(delegate {
+                        // Sets the selected card to the cardRenderer
+                        SelectCard(tempCardRendererGameObject.GetComponent<CardRenderer>());
+                        // Opens the confirmation window
+                        confirmationWindow.SetActive(true);
+                    });
+                    // Adds the cardRenderer to the list of cardRenderers
+                    cardRenderers.Add(tempCardRendererGameObject.GetComponent<CardRenderer>());
                 }
 
+                // Pick one of the pack cards
+                Card tempCard = packCards[i];
+                if(tempCard != null)
+                {
+                    // Set the cardRenderer to active
+                    cardRenderers[i].gameObject.SetActive(true);
+                    // Assign it the random card
+                    cardRenderers[i].card = tempCard;
+                }
             }
         }
         else
@@ -75,9 +97,9 @@ public class BoosterPackMenu : MonoBehaviour
         // Add selected card to the deck
         Deck.playerDeck.AddCard(selectedCard, Deck.AddCardLocation.TopOfDrawPile);
         // Destroy the game world booster pack object
-        Destroy(boosterPackObject.gameObject);
+        Destroy(_boosterPackObject.gameObject);
         // Remove the reference to the game world booster pack object
-        boosterPackObject = null;
+        _boosterPackObject = null;
     }
 }
 
