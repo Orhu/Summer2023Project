@@ -47,6 +47,18 @@ public class RoomExteriorGenerationParameters : ScriptableObject
     [Tooltip("The possible bottom door sprites to use")]
     public List<DoorSprites> bottomDoorSprites;
 
+    [Tooltip("The possible above left door sprites to use")]
+    public List<Sprite> aboveLeftDoorSprites;
+
+    [Tooltip("The possible below left door sprites to use")]
+    public List<Sprite> belowLeftDoorSprites;
+
+    [Tooltip("The possible above right door sprites to use")]
+    public List<Sprite> aboveRightDoorSprites;
+
+    [Tooltip("The possible below right door sprites to use")]
+    public List<Sprite> belowRightDoorSprites;
+
     [Tooltip("The possible floor sprites to use")]
     public List<Sprite> floorSprites;
 }
