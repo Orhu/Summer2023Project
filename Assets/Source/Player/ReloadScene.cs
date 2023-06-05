@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Script that resets the health and moves the game object to the spawn location
+/// Script that reloads the current scene.
 /// </summary>
 public class ReloadScene : MonoBehaviour
 {
     /// <summary>
-    /// Resets the health and moves the game object to the spawn location
+    /// Reloads the current scene.
     /// </summary>
     public void ReloadCurrentScene()
     {
