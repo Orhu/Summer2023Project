@@ -23,6 +23,24 @@ public class BaseStateMachine : MonoBehaviour
     // the current state this machine is in
     [HideInInspector] public BaseState currentState;
 
+    public struct PathData
+    {
+        // path to target 
+        public Path path;
+        
+        // index of where we are in the path
+        public int targetIndex;
+        
+        // do we ignore incoming path requests?
+        public bool ignorePathRequests;
+        
+        // store the path following coroutine so it can be cancelled as needed
+        public Coroutine prevFollowCoroutine;
+    }
+    
+    // stores our current path data
+    [HideInInspector] public PathData pathData;
+
     // maintained list of components which are cached for performance
     private Dictionary<Type, Component> cachedComponents;
     
