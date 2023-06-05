@@ -7,7 +7,9 @@ using UnityEngine.Tilemaps;
 /// The tiles that make up the exterior of the rooms
 /// </summary>
 [System.Serializable]
-public class RoomExteriorGenerationParameters
+[CreateAssetMenu(fileName = "NewRoomExteriorGenerationParameters", menuName = "Generation/RoomExteriorGenerationParameters", order = 1)]
+
+public class RoomExteriorGenerationParameters : ScriptableObject
 {
     [Tooltip("The possible right wall sprites to use (will pick randomly from these)")]
     public List<Sprite> rightWallSprites;
@@ -44,6 +46,18 @@ public class RoomExteriorGenerationParameters
 
     [Tooltip("The possible bottom door sprites to use")]
     public List<DoorSprites> bottomDoorSprites;
+
+    [Tooltip("The possible above left door sprites to use")]
+    public List<Sprite> aboveLeftDoorSprites;
+
+    [Tooltip("The possible below left door sprites to use")]
+    public List<Sprite> belowLeftDoorSprites;
+
+    [Tooltip("The possible above right door sprites to use")]
+    public List<Sprite> aboveRightDoorSprites;
+
+    [Tooltip("The possible below right door sprites to use")]
+    public List<Sprite> belowRightDoorSprites;
 
     [Tooltip("The possible floor sprites to use")]
     public List<Sprite> floorSprites;
