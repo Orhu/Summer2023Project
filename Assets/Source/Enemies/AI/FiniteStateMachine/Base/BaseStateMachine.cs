@@ -12,7 +12,7 @@ public class BaseStateMachine : MonoBehaviour
     [SerializeField] private float delayBeforeLogic;
     
     // the target
-    [HideInInspector] public GameObject currentTarget;
+    [HideInInspector] public Vector2 currentTarget;
     
     // the player
     [HideInInspector] public GameObject player;
@@ -22,6 +22,9 @@ public class BaseStateMachine : MonoBehaviour
 
     // the current state this machine is in
     [HideInInspector] public BaseState currentState;
+    
+    // tracks whether our destination has been reached or not
+    [HideInInspector] public bool destinationReached;
 
     public struct PathData
     {
@@ -35,11 +38,19 @@ public class BaseStateMachine : MonoBehaviour
         public bool ignorePathRequests;
         
         // store the path following coroutine so it can be cancelled as needed
-        public Coroutine prevFollowCoroutine;
+        public IEnumerator prevFollowCoroutine;
     }
     
     // stores our current path data
     [HideInInspector] public PathData pathData;
+
+    public struct CooldownData
+    {
+        // is attack cooldown available?
+        public Dictionary<FSMAction, bool> cooldownReady;
+    }
+    // stores our current attack data
+    [HideInInspector] public CooldownData cooldownData;
 
     // maintained list of components which are cached for performance
     private Dictionary<Type, Component> cachedComponents;
@@ -47,12 +58,17 @@ public class BaseStateMachine : MonoBehaviour
     // tracks the time this was initialized
     private float timeStarted;
 
+    [SerializeField] private bool drawGizmos;
+    // debug waypoint used for drawing gizmos
+    [HideInInspector] public Vector2 debugWaypoint;
+
     /// <summary>
     /// Initialize variables
     /// </summary>
     private void Awake()
     {
         currentState = initialState;
+        cooldownData.cooldownReady = new Dictionary<FSMAction, bool>();
         cachedComponents = new Dictionary<Type, Component>();
         feetCollider = GetComponentInChildren<Collider2D>();
     }
@@ -64,8 +80,8 @@ public class BaseStateMachine : MonoBehaviour
     {
         timeStarted = Time.time;
         player = GameObject.FindGameObjectWithTag("Player");
-        currentTarget = player;
         FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Add(gameObject);
+        currentState.OnStateEnter(this);
     }
 
     /// <summary>
@@ -103,5 +119,12 @@ public class BaseStateMachine : MonoBehaviour
     private void OnDestroy()
     {
         FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Remove(gameObject);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!drawGizmos) return;
+        Gizmos.color = Color.blue;
+        Gizmos.DrawCube(debugWaypoint, Vector3.one);
     }
 }

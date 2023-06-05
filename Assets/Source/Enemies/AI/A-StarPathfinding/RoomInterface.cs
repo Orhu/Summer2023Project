@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -95,6 +96,9 @@ public class RoomInterface : MonoBehaviour
 
     // the world position of this room
     private Vector2 myWorldPosition;
+    
+    // draw debug gizmos?
+    [SerializeField] private bool drawGizmos;
 
     /// <summary>
     /// Retrieves player's current room from the FloorGenerator singleton, updating this class' room reference
@@ -147,14 +151,22 @@ public class RoomInterface : MonoBehaviour
     /// Gets the tile at the given world position
     /// </summary>
     /// <param name="worldPos"> The world position </param>
-    /// <returns> The tile </returns>
-    public PathfindingTile WorldPosToTile(Vector2 worldPos)
+    /// <returns> The tile and a boolean saying whether the tile was successfully found </returns>
+    public (PathfindingTile, bool) WorldPosToTile(Vector2 worldPos)
     {
         Vector2Int tilePos = new Vector2Int(
             Mathf.RoundToInt(worldPos.x + myRoomSize.x / 2 - myWorldPosition.x),
             Mathf.RoundToInt(worldPos.y + myRoomSize.y / 2 - myWorldPosition.y)
         );
-        return myRoomGrid[tilePos.x, tilePos.y];
+        try
+        {
+            return (myRoomGrid[tilePos.x, tilePos.y], true);
+        }
+        catch
+        {
+            // if we error here, it means the requested worldPos is outside of the grid
+            return (null, false);
+        }
     }
 
     /// <summary>
@@ -167,6 +179,15 @@ public class RoomInterface : MonoBehaviour
         Vector2 worldPos = new Vector2(
             tile.gridLocation.x + myWorldPosition.x - myRoomSize.x / 2,
             tile.gridLocation.y + myWorldPosition.y - myRoomSize.y / 2
+        );
+        return worldPos;
+    }
+    
+    public static Vector2 TileToWorldPos(Tile tile, Vector2 offset, Vector2Int roomSize)
+    {
+        Vector2 worldPos = new Vector2(
+            tile.gridLocation.x + offset.x - roomSize.x / 2,
+            tile.gridLocation.y + offset.y - roomSize.y / 2
         );
         return worldPos;
     }
@@ -204,8 +225,8 @@ public class RoomInterface : MonoBehaviour
                     {
                         try
                         {
-                            // this tile is a corner, make sure it is reachable by one of its adjacent tiles (not blocked)
-                            if (myRoomGrid[checkX - x, checkY].walkable || myRoomGrid[checkX, checkY - y].walkable)
+                            // this tile is a corner, make sure it is reachable by both of its adjacent tiles (not blocked)
+                            if (myRoomGrid[checkX - x, checkY].walkable && myRoomGrid[checkX, checkY - y].walkable)
                             {
                                 neighbors.Add(myRoomGrid[checkX, checkY]);
                             }
@@ -221,5 +242,24 @@ public class RoomInterface : MonoBehaviour
         }
 
         return neighbors;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!drawGizmos) return;
+        
+        foreach(var t in myRoomGrid)
+        {
+            if (t.walkable)
+            {
+                Gizmos.color = Color.green;
+            }
+            else
+            {
+                Gizmos.color = Color.red;
+            }
+            
+            Gizmos.DrawCube(TileToWorldPos(t), Vector3.one);
+        }
     }
 }

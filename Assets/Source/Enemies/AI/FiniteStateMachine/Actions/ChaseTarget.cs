@@ -1,7 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
 /// <summary>
@@ -14,13 +11,7 @@ public class ChaseTarget : FSMAction
     [SerializeField] private float delayBetweenPathUpdates;
 
     [Tooltip("How close do we need to be to our point before we are happy?")]
-    [SerializeField] private float distanceBuffer;
-
-    // path to target 
-    //private Path path;
-
-    // index of where we are in the path
-    //private int targetIndex;
+    [SerializeField] private float distanceBuffer = 0.061f;
 
     // need to track our current data
     public struct ChaseData
@@ -103,7 +94,8 @@ public class ChaseTarget : FSMAction
         }
 
         var newCoroutine = FollowPath(stateMachine);
-        stateMachine.pathData.prevFollowCoroutine = stateMachine.StartCoroutine(newCoroutine);
+        stateMachine.pathData.prevFollowCoroutine = newCoroutine;
+        stateMachine.StartCoroutine(newCoroutine);
     }
 
     /// <summary>

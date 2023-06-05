@@ -19,6 +19,6 @@ public class TargetInRange : FSMDecision
     /// <returns> True if the target is at or below the specified range from this stateMachine, false otherwise </returns>
     public override bool Decide(BaseStateMachine state)
     {
-        return (Vector2.Distance(state.currentTarget.transform.position, state.transform.position) <= range);
+        return (Vector2.Distance(state.currentTarget, state.transform.position) <= range);
     }
 }

@@ -13,6 +13,9 @@ public class DamageOnTouch : MonoBehaviour
 
     [Tooltip("How much damage does this enemy deal when touched?")] 
     [SerializeField] private int damageOnTouch;
+    
+    [Tooltip("How long does this enemy exhaust after damaging on touch? (Disabled from dealing more attacks)")] 
+    [SerializeField] private float exhaustDuration;
 
     [Tooltip("What type of damage is dealt on touch?")] 
     [SerializeField] private DamageData.DamageType damageTypeOnTouch;
@@ -51,7 +54,7 @@ public class DamageOnTouch : MonoBehaviour
         if (hitHealth != null)
         {
             hitHealth.ReceiveAttack(attackData);
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(exhaustDuration);
         }
 
         canDealDamageOnTouch = true;

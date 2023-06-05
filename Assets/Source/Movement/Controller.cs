@@ -21,10 +21,7 @@ public class Controller : MonoBehaviour, IActor
 
     // state machine component, if it exists on this agent
     private BaseStateMachine enemyStateMachine;
-    
-    // represents the inner collider of this unit
-    [HideInInspector] public Collider2D feet;
-    
+
     // can this enemy move?
     private bool canMove = true;
 
@@ -39,7 +36,6 @@ public class Controller : MonoBehaviour, IActor
         }
 
         movementComponent = GetComponent<Movement>();
-        feet = GetComponentInChildren<Collider2D>();
     }
 
     /// <summary>
@@ -94,19 +90,20 @@ public class Controller : MonoBehaviour, IActor
     /// <param name="target"> Target to move to </param>
     public void MoveTowards(Vector2 target)
     {
-        if (!canMove) return;
-        var buffer = 0.1f;
-        var myPos = (Vector2)transform.position;
-        var targetPos = target;
+        if (!canMove || !useEnemyLogic) return;
+        
+        var myPos = (Vector2)enemyStateMachine.feetCollider.transform.position;
 
-        var xDiff = myPos.x - targetPos.x;
-        var yDiff = myPos.y - targetPos.y;
+        var xDiff = myPos.x - target.x;
+        var yDiff = myPos.y - target.y;
+
+        var buffer = 0.05;
 
         // compare the two positions to determine inputs
         if (xDiff > buffer)
         {
             movementInput.x = -1;
-        } else if (xDiff < -buffer)
+        } else if (xDiff < buffer)
         {
             movementInput.x = 1;
         }
@@ -162,7 +159,8 @@ public class Controller : MonoBehaviour, IActor
     {
         if (useEnemyLogic)
         { 
-            return enemyStateMachine.currentTarget.transform.position;
+            print("ActionAimPosition requested, giving it: " + enemyStateMachine.currentTarget);
+            return enemyStateMachine.currentTarget;
         }
 
         return Vector3.Scale(Camera.main.ScreenToWorldPoint(Input.mousePosition), new Vector3(1, 1, 0));

@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8740828266294286700}
-  - component: {fileID: 2871443049851868443}
   - component: {fileID: 1858251274146161317}
+  - component: {fileID: 3497544517795975723}
   m_Layer: 12
   m_Name: Feet
   m_TagString: Untagged
@@ -33,22 +33,6 @@ Transform:
   m_Father: {fileID: 7281680880204442667}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!70 &2871443049851868443
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5936671061499478613}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.5, y: 1}
-  m_Direction: 0
 --- !u!114 &1858251274146161317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,8 +47,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canDealDamageOnTouch: 1
   damageOnTouch: 1
+  exhaustDuration: 0.5
   damageTypeOnTouch: 0
   statusEffectsOnTouch: []
+--- !u!58 &3497544517795975723
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5936671061499478613}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!1 &7281680880204442677
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,10 +210,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialState: {fileID: 11400000, guid: a7fd96789dd3ace489f44f39b9ea82bf, type: 2}
   delayBeforeLogic: 1
-  currentTarget: {fileID: 0}
+  currentTarget: {x: 0, y: 0}
   player: {fileID: 0}
   feetCollider: {fileID: 0}
   currentState: {fileID: 0}
+  destinationReached: 0
 --- !u!114 &7281680880204442666
 MonoBehaviour:
   m_ObjectHideFlags: 0

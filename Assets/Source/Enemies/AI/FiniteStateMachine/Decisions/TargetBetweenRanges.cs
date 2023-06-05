@@ -21,7 +21,7 @@ public class TargetBetweenRanges : FSMDecision
     /// <returns> True if the target is at or below the specified range from this stateMachine, false otherwise </returns>
     public override bool Decide(BaseStateMachine state)
     {
-        var dist = Vector2.Distance(state.currentTarget.transform.position, state.transform.position);
+        var dist = Vector2.Distance(state.currentTarget, state.transform.position);
         return dist >= minRange && dist <= maxRange;
     }
 }

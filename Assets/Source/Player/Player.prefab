@@ -142,6 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 12
+  invincibilityDuration: 1
   immuneStatusEffects: []
   onHealthChanged:
     m_PersistentCalls:
@@ -221,7 +222,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 4
   acceleration: 100
-  deacceleration: 7
+  deceleration: 100
+  immuneToGroundEffects: 0
 --- !u!114 &5436055868885082538
 MonoBehaviour:
   m_ObjectHideFlags: 0
