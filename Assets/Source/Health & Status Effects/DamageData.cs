@@ -10,11 +10,15 @@ public class DamageData
 {
     [Tooltip("The damage this attack deals")]
     public int damage;
+
     [Tooltip("The type of damage that will be applied")]
     public DamageType damageType;
-    [EditInline]
-    [Tooltip("The status effects to apply when this is received")]
+    
+    [Tooltip("The status effects to apply when this is received")] [EditInline]
     public List<StatusEffect> statusEffects = new List<StatusEffect>();
+
+    [Tooltip("Makes this cause invincibility if it does no damage and not cause invincibility if it does.")]
+    public bool invertInvincibility = false;
 
     // The causer of this attack.
     [System.NonSerialized]

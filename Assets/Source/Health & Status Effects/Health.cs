@@ -16,7 +16,7 @@ public class Health : MonoBehaviour
     public int currentHealth { get; private set; }
     
     [Tooltip("How long of a duration does this unit get invincibility when hit?")]
-    public float invincibilityDuration;
+    public float invincibilityDuration = 0.25f;
     
     [Tooltip("All status effects this is immune to.")]
     public List<StatusEffect> immuneStatusEffects = new List<StatusEffect>();
@@ -33,12 +33,32 @@ public class Health : MonoBehaviour
     [Tooltip("Called when this dies")]
     public UnityEvent onDeath;
 
+    [Tooltip("Called when invincibility changes and passes the new invinviblity")]
+    public UnityEvent<bool> onInvincibilityChanged;
+
     // Called before this processes an attack and passes the incoming attack so can be modified.   
     public RequestIncomingAttackModification onRequestIncomingAttackModification;
     public delegate void RequestIncomingAttackModification(ref DamageData attack);
 
+
+
     // is this unit currently invincible?
-    private bool invincible = false;
+    private bool _invincible = false;
+    private bool invincible
+    {
+        set
+        {
+            CancelInvoke(nameof(TurnOffInvincibility));
+            if (value)
+            {
+                Invoke(nameof(TurnOffInvincibility), invincibilityDuration);
+            }
+
+            _invincible = value;
+            onInvincibilityChanged?.Invoke(value);
+        }
+        get { return _invincible;  }
+    }
 
     /// <summary>
     /// Initializes current health.
@@ -93,10 +113,9 @@ public class Health : MonoBehaviour
             onDeath?.Invoke();
             return;
         }
-        else if (invincibilityDuration != 0)
+        else if (invincibilityDuration != 0 && (attack.damage > 0 != attack.invertInvincibility))
         {
             invincible = true;
-            Invoke(nameof(TurnOffInvincibility), invincibilityDuration);
         }
         
         // Status effects
@@ -127,7 +146,7 @@ public class Health : MonoBehaviour
     /// <summary>
     /// Disable invincibility
     /// </summary>
-    void TurnOffInvincibility()
+    private void TurnOffInvincibility()
     {
         invincible = false;
     }
