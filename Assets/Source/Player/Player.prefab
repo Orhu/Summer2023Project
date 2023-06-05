@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5517008572783111348}
   - component: {fileID: 2591183591901039891}
   - component: {fileID: -8563880425545905597}
+  - component: {fileID: 7919881690814933353}
   - component: {fileID: 1503026416}
   - component: {fileID: 1503026418}
   - component: {fileID: 5436055868885082538}
@@ -142,6 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 12
+  invincibilityDuration: 0.25
   immuneStatusEffects: []
   onHealthChanged:
     m_PersistentCalls:
@@ -191,6 +193,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7919881690814933353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608508398850829056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d48e2493f81bd24c9b088a2752e252d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  invincibilityFlashColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1503026416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,7 +236,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 4
   acceleration: 100
-  deacceleration: 7
+  deceleration: 100
+  immuneToGroundEffects: 0
 --- !u!114 &5436055868885082538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,6 +313,14 @@ PrefabInstance:
     - target: {fileID: 2142107306095470444, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
       propertyPath: m_Interactable
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4700101517325140728, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4700101517325140728, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4824836972866494860, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
       propertyPath: m_Name

@@ -33,8 +33,8 @@ public class Health : MonoBehaviour
     [Tooltip("Called when this dies")]
     public UnityEvent onDeath;
 
-    [Tooltip("Called when invincibility changes and passes the new invinviblity")]
-    public UnityEvent<bool> onInvincibilityChanged;
+    // Called when invincibility changes and passes the new invincibility
+    public Action<bool> onInvincibilityChanged;
 
     // Called before this processes an attack and passes the incoming attack so can be modified.   
     public RequestIncomingAttackModification onRequestIncomingAttackModification;
