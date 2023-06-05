@@ -150,46 +150,40 @@ public class Room : MonoBehaviour
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
-        Vector3 location = new Vector3();
+        Vector3 bottomLeftLocation = new Vector3(transform.position.x - roomSize.x / 2, transform.position.y - roomSize.y / 2, 0);
+        Vector3 topRightLocation = new Vector3(transform.position.x + roomSize.x / 2, transform.position.y + roomSize.y / 2, 0);
         Vector2 movementInput = new Vector2(0, 0);
         
         if ((direction & Direction.Right) != Direction.None)
         {
-            location = new Vector3(roomSize.x / 2 - 1.2f, 0, 0) + transform.position;
             movementInput.x = -1;
         }
 
         if ((direction & Direction.Up) != Direction.None)
         {
-            location = new Vector3(0, roomSize.y / 2 - 1.2f, 0) + transform.position;
             movementInput.y = -1;
         }
 
         if ((direction & Direction.Left) != Direction.None)
         {
-            location = new Vector3(-roomSize.x / 2 + 1.2f, 0, 0) + transform.position;
             movementInput.x = 1;
         }
 
         if ((direction & Direction.Down) != Direction.None)
         {
-            location = new Vector3(0, -roomSize.y / 2 + 1.2f, 0) + transform.position;
             movementInput.y = 1;
         }
 
         player.GetComponent<Controller>().enabled = false;
 
-        float range = 0.05f;
-
-        bool inXRange = movementInput.x == 0 || ((player.transform.position.x <= location.x + range) && (player.transform.position.x >= location.x - range));
-        bool inYRange = movementInput.y == 0 || ((player.transform.position.y <= location.y + range) && (player.transform.position.y >= location.y - range));
+        bool inXRange = (player.transform.position.x >= bottomLeftLocation.x + 1 && player.transform.position.x <= topRightLocation.x - 1);
+        bool inYRange = (player.transform.position.y >= bottomLeftLocation.y + 1 && player.transform.position.y <= topRightLocation.y - 1);
 
         while (!inXRange || !inYRange)
         {
 
-            inXRange = movementInput.x == 0 || ((player.transform.position.x <= location.x + range) && (player.transform.position.x >= location.x - range));
-            inYRange = movementInput.y == 0 || ((player.transform.position.y <= location.y + range) && (player.transform.position.y >= location.y - range));
-
+            inXRange = (player.transform.position.x >= bottomLeftLocation.x + 1 && player.transform.position.x <= topRightLocation.x - 1);
+            inYRange = (player.transform.position.y >= bottomLeftLocation.y + 1 && player.transform.position.y <= topRightLocation.y - 1);
             player.GetComponent<SimpleMovement>().MovementInput = movementInput;
             yield return null;
         }
