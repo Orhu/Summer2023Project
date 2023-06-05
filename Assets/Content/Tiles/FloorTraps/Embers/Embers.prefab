@@ -51,7 +51,7 @@ MonoBehaviour:
     damageType: 1
     statusEffects:
     - {fileID: 11400000, guid: 6582cb2ec20bdde4d80f48c0c1d17bc0, type: 2}
-  damageInterval: 0
+  damageInterval: 0.25
   immediatelyDamage: 1
 --- !u!61 &4400998714463509481
 BoxCollider2D:
@@ -70,7 +70,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.56, y: 2.56}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
