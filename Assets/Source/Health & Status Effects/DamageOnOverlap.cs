@@ -9,7 +9,7 @@ public class DamageOnOverlap : MonoBehaviour
     [Tooltip("The damage that will be dealt.")]
     [SerializeField] private DamageData damageData;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         other.GetComponent<Health>()?.ReceiveAttack(damageData);
     }
