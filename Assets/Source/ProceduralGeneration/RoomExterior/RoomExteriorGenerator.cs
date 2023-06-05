@@ -446,6 +446,9 @@ public class RoomExteriorGenerator : MonoBehaviour
         }
 
         doorContainer.SetActive(false);
+
+        room.OpenDoors();
+        room.DeactivateDoors();
     }
 
 }

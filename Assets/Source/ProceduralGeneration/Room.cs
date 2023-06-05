@@ -176,14 +176,14 @@ public class Room : MonoBehaviour
 
         player.GetComponent<Controller>().enabled = false;
 
-        bool inXRange = (player.transform.position.x >= bottomLeftLocation.x + 1 && player.transform.position.x <= topRightLocation.x - 1);
-        bool inYRange = (player.transform.position.y >= bottomLeftLocation.y + 1 && player.transform.position.y <= topRightLocation.y - 1);
+        bool inXRange = (player.transform.position.x >= bottomLeftLocation.x + 0.9f && player.transform.position.x <= topRightLocation.x - 0.9f);
+        bool inYRange = (player.transform.position.y >= bottomLeftLocation.y + 0.9f && player.transform.position.y <= topRightLocation.y - 0.9f);
 
         while (!inXRange || !inYRange)
         {
 
-            inXRange = (player.transform.position.x >= bottomLeftLocation.x + 1 && player.transform.position.x <= topRightLocation.x - 1);
-            inYRange = (player.transform.position.y >= bottomLeftLocation.y + 1 && player.transform.position.y <= topRightLocation.y - 1);
+            inXRange = (player.transform.position.x >= bottomLeftLocation.x + 0.9f && player.transform.position.x <= topRightLocation.x - 0.9f);
+            inYRange = (player.transform.position.y >= bottomLeftLocation.y + 0.9f && player.transform.position.y <= topRightLocation.y - 0.9f);
             player.GetComponent<SimpleMovement>().MovementInput = movementInput;
             yield return null;
         }
