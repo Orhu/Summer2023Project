@@ -19,9 +19,6 @@ public class Controller : MonoBehaviour, IActor
     // Movement component to allow the agent to move
     private Movement movementComponent;
 
-    // enemy attacker component, if it exists on this agent
-    private EnemyAttacker enemyAttacker;
-    
     // state machine component, if it exists on this agent
     private BaseStateMachine enemyStateMachine;
     
@@ -38,7 +35,6 @@ public class Controller : MonoBehaviour, IActor
     {
         if (useEnemyLogic)
         {
-            enemyAttacker = GetComponent<EnemyAttacker>();
             enemyStateMachine = GetComponent<BaseStateMachine>();
         }
 
@@ -73,15 +69,6 @@ public class Controller : MonoBehaviour, IActor
         }
 
         movementComponent.MovementInput = movementInput.normalized;
-    }
-
-    /// <summary>
-    /// Launch an action from this agent
-    /// </summary>
-    public void PerformAttack()
-    {
-        var coroutine = enemyAttacker.PerformAttack(this);
-        StartCoroutine(coroutine);
     }
 
     /// <summary>

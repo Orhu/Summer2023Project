@@ -13,26 +13,21 @@ public class PathRequestManager : MonoBehaviour
     /// </summary>
     struct PathRequest
     {
-        // start position
-        public Vector2 startPos;
-
-        // end position
-        public Vector2 endPos;
-
         // callback action
-        public Action<Vector2[], bool> callback;
+        public Action<Vector2[], bool, BaseStateMachine> callback;
+        
+        // store the state machine
+        public BaseStateMachine stateMachine;
 
         /// <summary>
         /// Constructor for a pathfinding request
         /// </summary>
-        /// <param name="myStart"> Starting position </param>
-        /// <param name="myEnd"> Target position </param>
+        /// <param name="myStateMachine"> The state machine that is requesting a path </param>
         /// <param name="myCallback"> What function to call when path calculation is complete </param>
-        public PathRequest(Vector2 myStart, Vector2 myEnd, Action<Vector2[], bool> myCallback)
+        public PathRequest(BaseStateMachine myStateMachine, Action<Vector2[], bool, BaseStateMachine> myCallback)
         {
-            startPos = myStart;
-            endPos = myEnd;
             callback = myCallback;
+            stateMachine = myStateMachine;
         }
     }
 
@@ -63,12 +58,11 @@ public class PathRequestManager : MonoBehaviour
     /// <summary>
     /// Request a path from start to end
     /// </summary>
-    /// <param name="pathStart"> Start location </param>
-    /// <param name="pathEnd"> End location </param>
+    /// <param name="stateMachine"> The state machine that is requesting a path </param>
     /// <param name="callback"> Action that will receive the found path and a boolean saying if the path was found </param>
-    public static void RequestPath(Vector2 pathStart, Vector2 pathEnd, Action<Vector2[], bool> callback)
+    public static void RequestPath(BaseStateMachine stateMachine, Action<Vector2[], bool, BaseStateMachine> callback)
     {
-        PathRequest newRequest = new PathRequest(pathStart, pathEnd, callback);
+        PathRequest newRequest = new PathRequest(stateMachine, callback);
         instance.pathRequestQueue.Enqueue(newRequest);
         instance.TryProcessNext();
     }
@@ -82,7 +76,7 @@ public class PathRequestManager : MonoBehaviour
         {
             currentPathRequest = pathRequestQueue.Dequeue();
             isProcessingPath = true;
-            pathfinding.StartFindPath(currentPathRequest.startPos, currentPathRequest.endPos);
+            pathfinding.StartFindPath(currentPathRequest.stateMachine);
         }
     }
 
@@ -91,11 +85,12 @@ public class PathRequestManager : MonoBehaviour
     /// </summary>
     /// <param name="path"> The new path </param>
     /// <param name="success"> Whether a path was successfully found to the target </param>
-    public void FinishedProcessingPath(Vector2[] path, bool success)
+    /// <param name="stateMachine"> The stateMachine to be used. </param>
+    public void FinishedProcessingPath(Vector2[] path, bool success, BaseStateMachine stateMachine)
     {
         if (currentPathRequest.callback.Target != null)
         {
-            currentPathRequest.callback(path, success);
+            currentPathRequest.callback(path, success, stateMachine);
         }
 
         isProcessingPath = false;

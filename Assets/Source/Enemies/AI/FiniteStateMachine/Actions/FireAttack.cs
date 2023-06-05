@@ -77,9 +77,7 @@ public class FireAttack : FSMAction
         beforeAction?.Invoke();
         foreach (var action in actions)
         {
-            // TODO when merged with Mabel's branch use this commented out code
-           // action.Play(stateMachine.GetComponent<Controller>(), FloorGenerator.instance.ListOfEnemies);
-            action.Play(stateMachine.GetComponent<Controller>());
+           action.Play(stateMachine.GetComponent<Controller>(), FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies);
         }
         afterAction?.Invoke();
         yield return new WaitForSeconds(actionCooldownTime);
