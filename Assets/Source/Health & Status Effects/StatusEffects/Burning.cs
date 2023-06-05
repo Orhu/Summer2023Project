@@ -44,7 +44,7 @@ public class Burning : StatusEffect
         timeToDamage -= Time.deltaTime;
         if (timeToDamage <= 0)
         {
-            gameObject.GetComponent<Health>().ReceiveAttack(new DamageData(1, DamageData.DamageType.Special, this));
+            gameObject.GetComponent<Health>().ReceiveAttack(new DamageData(1, DamageData.DamageType.Special, this, true));
             timeToDamage += 1f / dps;
         }
     }

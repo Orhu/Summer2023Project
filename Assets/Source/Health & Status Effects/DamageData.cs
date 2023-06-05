@@ -34,6 +34,7 @@ public class DamageData
         damage = attack.damage;
         damageType = attack.damageType;
         statusEffects = attack.statusEffects;
+        this.invertInvincibility = attack.invertInvincibility;
         this.causer = causer;
     }
 
@@ -43,11 +44,13 @@ public class DamageData
     /// <param name="damage"> The damage it will deal. </param>
     /// <param name="damageType"> The type of damage dealt. </param>
     /// <param name="causer"> The causer of the damage </param>
-    public DamageData(int damage, DamageType damageType, Object causer)
+    /// <param name="invertInvincibility"> Whether or not this should cause invincibility if it does no damage and not cause invincibility if it does. </param>
+    public DamageData(int damage, DamageType damageType, Object causer, bool invertInvincibility = false)
     {
         this.damage = damage;
         this.damageType = damageType;
         this.causer = causer;
+        this.invertInvincibility = invertInvincibility;
     }
 
     /// <summary>
@@ -57,7 +60,8 @@ public class DamageData
     /// <param name="damageType"> The type of damage dealt. </param>
     /// <param name="statusEffects"> The status effects applied. </param>
     /// <param name="causer"> The causer of the damage </param>
-    public DamageData(int damage, DamageType damageType, List<StatusEffect> statusEffects, Object causer) : this(damage, damageType, causer)
+    /// <param name="invertInvincibility"> Whether or not this should cause invincibility if it does no damage and not cause invincibility if it does. </param>
+    public DamageData(int damage, DamageType damageType, List<StatusEffect> statusEffects, Object causer, bool invertInvincibility = false) : this(damage, damageType, causer, invertInvincibility)
     {
         this.statusEffects = statusEffects;
     }
@@ -67,10 +71,12 @@ public class DamageData
     /// </summary>
     /// <param name="statusEffects"> The status effects applied. </param>
     /// <param name="causer"> The causer of the damage. </param>
-    public DamageData(List<StatusEffect> statusEffects, Object causer)
+    /// <param name="invertInvincibility"> Whether or not this should cause invincibility if it does no damage and not cause invincibility if it does. </param>
+    public DamageData(List<StatusEffect> statusEffects, Object causer, bool invertInvincibility = false)
     {
         this.statusEffects = statusEffects;
         this.causer = causer;
+        this.invertInvincibility = invertInvincibility;
     }
 
     /// <summary>
