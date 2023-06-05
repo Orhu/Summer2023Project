@@ -64,11 +64,6 @@ public class Deck : MonoBehaviour
         {
             playerDeck = this;
             playerDeck.actor = GameObject.FindGameObjectWithTag("Player").GetComponent<Controller>();
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
         }
     }
 
