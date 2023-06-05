@@ -12,14 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_PoisonBlade
   m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 2
     damageType: 0
-    statusEffects: []
+    statusEffects:
+    - {fileID: 11400000, guid: e5a4a835d3beb474eacc03bdf5cfe4a2, type: 2}
   hitCount: 1
-  modifiers: []
+  applyDamageOnHit: 1
+  modifiers:
+  - {fileID: 11400000, guid: b616835d7cce79a42955edb14086a0ec, type: 2}
   shape: {fileID: 11400000, guid: ab81ad971c03ce34bb2e26a52c530bee, type: 2}
   lifetime: 0.9166667
   initialSpeed: 12
@@ -28,12 +29,14 @@ MonoBehaviour:
   maxSpeed: 12
   homingSpeed: 0
   homingTime: 0
-  homingAimMode: 0
+  homingAimMode: 1
   visualObject: {fileID: 5429226520074857060, guid: 4b30524aa2b4ea449b50103a4bbf7463, type: 3}
   detachVisualsBeforeDestroy: 0
   spawnLocation: 0
   aimMode: 0
-  spawnSequence:
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  _spawnSequence:
   - delay: 0
     angle: 0
     offset: {x: 0, y: 0}

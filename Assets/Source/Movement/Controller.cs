@@ -19,11 +19,8 @@ public class Controller : MonoBehaviour, IActor
     // Movement component to allow the agent to move
     private Movement movementComponent;
 
-    // enemy attacker component, if it exists on this agent
-    private EnemyAttacker enemyAttacker;
-    
-    // enemy brain component, if it exists on this agent
-    private EnemyBrain enemyBrain;
+    // state machine component, if it exists on this agent
+    private BaseStateMachine enemyStateMachine;
     
     // represents the inner collider of this unit
     [HideInInspector] public Collider2D feet;
@@ -38,12 +35,11 @@ public class Controller : MonoBehaviour, IActor
     {
         if (useEnemyLogic)
         {
-            enemyAttacker = GetComponent<EnemyAttacker>();
-            enemyBrain = GetComponent<EnemyBrain>();
+            enemyStateMachine = GetComponent<BaseStateMachine>();
         }
 
         movementComponent = GetComponent<Movement>();
-        feet = GetComponentInChildren<CircleCollider2D>();
+        feet = GetComponentInChildren<Collider2D>();
     }
 
     /// <summary>
@@ -73,15 +69,6 @@ public class Controller : MonoBehaviour, IActor
         }
 
         movementComponent.MovementInput = movementInput.normalized;
-    }
-
-    /// <summary>
-    /// Launch an action from this agent
-    /// </summary>
-    public void PerformAttack()
-    {
-        var coroutine = enemyAttacker.PerformAttack(this);
-        StartCoroutine(coroutine);
     }
 
     /// <summary>
@@ -174,17 +161,8 @@ public class Controller : MonoBehaviour, IActor
     public Vector3 GetActionAimPosition()
     {
         if (useEnemyLogic)
-        {
-            var target = enemyBrain.target;
-            if (target != null)
-            {
-                return target.transform.position;
-            }
-            else
-            {
-                // TODO probably think of a better fail case than just returning the zero vector
-                return Vector2.zero;
-            }
+        { 
+            return enemyStateMachine.currentTarget.transform.position;
         }
 
         return Vector3.Scale(Camera.main.ScreenToWorldPoint(Input.mousePosition), new Vector3(1, 1, 0));
