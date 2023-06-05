@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -11,6 +12,9 @@ public class ChaseTarget : FSMAction
 {
     [Tooltip("How often does this enemy update its path, in seconds?")]
     [SerializeField] private float delayBetweenPathUpdates;
+
+    [Tooltip("How close do we need to be to our point before we are happy?")]
+    [SerializeField] private float distanceBuffer;
 
     // path to target 
     private Path path;
@@ -115,33 +119,39 @@ public class ChaseTarget : FSMAction
     /// <returns></returns>
     IEnumerator FollowPath()
     {
-        bool followingPath = true;
-        int pathIndex = 0;
-
-        while (followingPath)
+        if (path.lookPoints.Length == 0)
         {
-            feetPos = myStateMachine.feetCollider.transform.position;
-            Vector2 pos2D = new Vector2(feetPos.x, feetPos.y);
-            
-            while (path.turnBoundaries[pathIndex].HasCrossedLine(pos2D))
+            yield break;
+        }
+
+        Vector2 currentWaypoint = path.lookPoints[0];
+
+        while (true)
+        {
+            if (ArrivedAtPoint(currentWaypoint))
             {
-                if (pathIndex == path.finishLineIndex)
+                targetIndex++;
+                if (targetIndex >= path.lookPoints.Length)
                 {
-                    followingPath = false;
-                    break;
+                    // reached the end of the waypoints, stop moving here
+                    myStateMachine.GetComponent<Controller>().movementInput = Vector2.zero;
+                    yield break;
                 }
-                else
-                {
-                    pathIndex++;
-                }
+
+                currentWaypoint = path.lookPoints[targetIndex];
             }
 
-            if (followingPath)
-            {
-                myStateMachine.GetComponent<Controller>().MoveTowards(path.lookPoints[pathIndex]);
-            }
-
+            myStateMachine.GetComponent<Controller>().MoveTowards(currentWaypoint);
             yield return null;
         }
+    }
+
+    /// <summary>
+    /// Determines if we are "arrived" at a given point based on the serialized buffer variable
+    /// </summary>
+    /// <param name="point"> Point to check against </param>
+    private bool ArrivedAtPoint(Vector2 point)
+    {
+        return Vector2.Distance(point, myStateMachine.feetCollider.transform.position) <= distanceBuffer;
     }
 }

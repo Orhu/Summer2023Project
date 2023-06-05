@@ -199,7 +199,7 @@ public class RoomInterface : MonoBehaviour
                     {
                         // cardinal direction, just add it!
                         neighbors.Add(myRoomGrid[checkX, checkY]);
-                    } /*
+                    }
                     else
                     {
                         try
@@ -215,7 +215,7 @@ public class RoomInterface : MonoBehaviour
                             // Catch here in case one of the tiles being checked is out of bounds in the grid.
                             // We don't want to cause an error, so we simply skip adding that tile to the neighbours list.
                         }
-                }*/
+                    }
                 }
             }
         }

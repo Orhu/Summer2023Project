@@ -21,7 +21,7 @@ public class Path
     /// </summary>
     /// <param name="waypoints"> Array of waypoints to travel down </param>
     /// <param name="startPos"> Starting position </param>
-    public Path(Vector2[] waypoints, Vector3 startPos) 
+    public Path(Vector2[] waypoints, Vector3 startPos)
     {
         lookPoints = waypoints;
         turnBoundaries = new Line[lookPoints.Length];

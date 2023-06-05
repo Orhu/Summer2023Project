@@ -129,7 +129,7 @@ public class Pathfinding : MonoBehaviour
     /// <param name="path"> Input path </param>
     /// <returns></returns>
     Vector2[] SimplifyPath(List<PathfindingTile> path)
-    {
+    {/*
         List<Vector2> waypoints = new List<Vector2>();
         waypoints.Add(targetPosition);
         Vector2 directionOld = Vector2.zero;
@@ -140,6 +140,11 @@ public class Pathfinding : MonoBehaviour
                 waypoints.Add(roomInterface.TileToWorldPos(path[i]));
             }
             directionOld = directionNew;
+        }*/
+        List<Vector2> waypoints = new List<Vector2>();
+        foreach (var tile in path)
+        {
+            waypoints.Add(roomInterface.TileToWorldPos(tile));
         }
         return waypoints.ToArray();
     }
