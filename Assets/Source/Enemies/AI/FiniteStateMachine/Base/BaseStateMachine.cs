@@ -119,7 +119,7 @@ public class BaseStateMachine : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
-        FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Remove(gameObject);
+        FloorGenerator.floorGeneratorInstance.currentRoom.RemoveEnemy(gameObject);
     }
 
     private void OnDrawGizmos()
