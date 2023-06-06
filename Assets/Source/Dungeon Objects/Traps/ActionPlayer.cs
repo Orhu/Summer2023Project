@@ -8,8 +8,12 @@ public class ActionPlayer : MonoBehaviour, IActor
 {
     [Tooltip("The action to play.")]
     public Action action;
+
     [Tooltip("The time between playing the action.")]
     public float playRate = 1f;
+
+    [Tooltip("Whether or not to keep acting after all enemies have been killed.")]
+    public bool playAfterClear = false;
 
     /// <summary>
     /// Initializes timer.

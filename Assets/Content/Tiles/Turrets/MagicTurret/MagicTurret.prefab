@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 860082101686434170}
   - component: {fileID: 2759759123646735000}
   - component: {fileID: 5578896164721008092}
+  - component: {fileID: -4027430177745459568}
   m_Layer: 0
   m_Name: MagicTurret
   m_TagString: Untagged
@@ -111,3 +112,17 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-4027430177745459568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5057262088729758849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdab3df6fb6293c4589dd8d17a3ac3da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  action: {fileID: 11400000, guid: 51a2ce96893e09244bbdefb5a3a96dc2, type: 2}
+  playRate: 1

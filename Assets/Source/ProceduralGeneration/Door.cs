@@ -53,7 +53,7 @@ public class Door : MonoBehaviour
             // Get the opposite direction (since the bottom door of this room goes to the top door of the next room)
             int oppositeDirection = (int)direction;
             oppositeDirection *= 2;
-            oppositeDirection *= 2;
+            oppositeDirection *= 2; // wait a second why not just *= 4
             oppositeDirection = oppositeDirection % (int)Direction.All;
             connectedCell.room.GetComponent<Room>().Enter((Direction) oppositeDirection);
         }
