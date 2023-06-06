@@ -34,6 +34,7 @@ public class SetTargetToRandomTile : FSMAction
     {
         stateMachine.cooldownData.cooldownReady.Add(this, true);
         stateMachine.destinationReached = true;
+        RoomInterface.instance.GrabCurrentRoom();
         stateMachine.StartCoroutine(SetRandomTilePos(stateMachine));
     }
 
