@@ -309,7 +309,7 @@ public class RoomExteriorGenerator : MonoBehaviour
         floorContainer.transform.parent = room.transform;
         floorContainer.transform.localPosition = new Vector3(0, 0, 0);
         floorContainer.AddComponent<SpriteRenderer>().sprite = exteriorGenerationParameters.floorSprites[Random.Range(0, exteriorGenerationParameters.floorSprites.Count)];
-        floorContainer.GetComponent<SpriteRenderer>().sortingLayerName = "Floor";
+        floorContainer.GetComponent<SpriteRenderer>().sortingLayerName = "Floors";
         floorContainer.SetActive(false);
     }
     /// <summary>
