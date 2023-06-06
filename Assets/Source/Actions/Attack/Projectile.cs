@@ -304,7 +304,7 @@ public class Projectile : MonoBehaviour
         Health hitHealth = collision.gameObject.GetComponent<Health>();
         if (hitHealth != null && attack.applyDamageOnHit)
         {
-            hitHealth.ReceiveAttack(attackData, transform.right);
+            hitHealth.ReceiveAttack(attackData);
 
             if (--remainingHits <= 0)
             {
