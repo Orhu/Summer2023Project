@@ -19,12 +19,19 @@ public class DamageOnOverlap : MonoBehaviour
     // The collider used for overlap detection.
     private new Collider2D collider;
 
+    /// <summary>
+    /// Get references
+    /// </summary>
     private void Awake()
     {
         collider = GetComponent<Collider2D>();
     }
 
 
+    /// <summary>
+    /// Start damaging.
+    /// </summary>
+    /// <param name="other"> The overlaped thing. </param>
     private void OnTriggerEnter2D(Collider2D other)
     {
         Health health = other.GetComponent<Health>();
@@ -33,6 +40,12 @@ public class DamageOnOverlap : MonoBehaviour
         StartCoroutine(DealDamage(other, health));
     }
 
+    /// <summary>
+    /// Deal damage on an interval.
+    /// </summary>
+    /// <param name="other"> The collider of the thing to damage. </param>
+    /// <param name="health"> The health to damage. </param>
+    /// <returns></returns>
     private IEnumerator DealDamage(Collider2D other, Health health)
     {
         if (immediatelyDamage)
