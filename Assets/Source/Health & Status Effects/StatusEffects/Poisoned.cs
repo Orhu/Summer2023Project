@@ -51,7 +51,7 @@ public class Poisoned : StatusEffect
         timeToDamage -= Time.deltaTime;
         if (timeToDamage <= 0)
         {
-            gameObject.GetComponent<Health>().ReceiveAttack(new DamageData(damage, DamageData.DamageType.Special, this));
+            gameObject.GetComponent<Health>().ReceiveAttack(new DamageData(damage, DamageData.DamageType.Special, this, false), true);
             timeToDamage += tickInterval;
         }
     }
