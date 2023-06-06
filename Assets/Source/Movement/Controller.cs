@@ -21,6 +21,9 @@ public class Controller : MonoBehaviour, IActor
 
     // state machine component, if it exists on this agent
     private BaseStateMachine enemyStateMachine;
+
+    // animator component to make the pretty animations do their thing
+    private Animator animatorComponent;
     
     // represents the inner collider of this unit
     [HideInInspector] public Collider2D feet;
@@ -40,6 +43,7 @@ public class Controller : MonoBehaviour, IActor
 
         movementComponent = GetComponent<Movement>();
         feet = GetComponentInChildren<Collider2D>();
+        animatorComponent = GetComponent<Animator>();
     }
 
     /// <summary>
@@ -54,6 +58,29 @@ public class Controller : MonoBehaviour, IActor
             movementInput.y = Input.GetAxisRaw("Vertical");
         }
 
+        // Animator Junk
+        // check direction player should be facing
+        Vector3 aimPos = GetActionAimPosition();
+        
+        if (aimPos.x < transform.position.x)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else if (aimPos.x > transform.position.x)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+
+        // set player running/idle animation state
+        if (movementInput.x != 0 || movementInput.y != 0)
+        {
+            animatorComponent.SetFloat("isMoving", 1f);
+        }
+        else
+        {
+            animatorComponent.SetFloat("isMoving", 0f);
+        }
+
         if (!useEnemyLogic && CanAct)
         {
             int pressedPreview = GetPressedPreviewButton();
@@ -64,9 +91,10 @@ public class Controller : MonoBehaviour, IActor
 
             if (Input.GetButtonDown("Fire1"))
             {
+                animatorComponent.SetTrigger("onCast"); // play casting animation
                 Deck.playerDeck.PlayChord();
             }
-        }
+        }        
 
         movementComponent.MovementInput = movementInput.normalized;
     }
