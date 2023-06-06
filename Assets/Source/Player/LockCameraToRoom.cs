@@ -47,7 +47,7 @@ public class LockCameraToRoom : MonoBehaviour
     /// <summary>
     /// Updates the position.
     /// </summary>
-    void Update()
+    void FixedUpdate()
     {
         Vector3 newPosition;
 
@@ -99,6 +99,6 @@ public class LockCameraToRoom : MonoBehaviour
             newPosition = new Vector3(pos2D.x, pos2D.y, -1);
         }
 
-        transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * speed);
+        transform.position = Vector3.Lerp(transform.position, newPosition, Time.fixedDeltaTime * speed);
     }
 }
