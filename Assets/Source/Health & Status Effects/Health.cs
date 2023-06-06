@@ -16,7 +16,7 @@ public class Health : MonoBehaviour
     public int currentHealth { get; private set; }
     
     [Tooltip("How long of a duration does this unit get invincibility when hit?")]
-    public float invincibilityDuration;
+    public float invincibilityDuration = 0.25f;
     
     [Tooltip("All status effects this is immune to.")]
     public List<StatusEffect> immuneStatusEffects = new List<StatusEffect>();
@@ -33,12 +33,32 @@ public class Health : MonoBehaviour
     [Tooltip("Called when this dies")]
     public UnityEvent onDeath;
 
+    // Called when invincibility changes and passes the new invincibility
+    public Action<bool> onInvincibilityChanged;
+
     // Called before this processes an attack and passes the incoming attack so can be modified.   
     public RequestIncomingAttackModification onRequestIncomingAttackModification;
     public delegate void RequestIncomingAttackModification(ref DamageData attack);
 
+
+
     // is this unit currently invincible?
-    private bool invincible = false;
+    private bool _invincible = false;
+    private bool invincible
+    {
+        set
+        {
+            CancelInvoke(nameof(TurnOffInvincibility));
+            if (value)
+            {
+                Invoke(nameof(TurnOffInvincibility), invincibilityDuration);
+            }
+
+            _invincible = value;
+            onInvincibilityChanged?.Invoke(value);
+        }
+        get { return _invincible;  }
+    }
 
     /// <summary>
     /// Initializes current health.
@@ -73,13 +93,10 @@ public class Health : MonoBehaviour
     /// Receive an attack and kill the owner if out of health.
     /// </summary>
     /// <param name="attack"> The attack being received. </param>
-    public void ReceiveAttack(DamageData attack)
+    /// <param name="ignoreInvincibility"> Whether or not invincibility frames should effect this attack. </param>
+    public void ReceiveAttack(DamageData attack, bool ignoreInvincibility = false)
     {
-        ReceiveAttack(attack, Vector2.zero);
-    }
-    public void ReceiveAttack(DamageData attack, Vector2 knockbackDirection)
-    {
-        if (invincible) return;
+        if (invincible && !ignoreInvincibility) return;
         
         // Damage
         onRequestIncomingAttackModification?.Invoke(ref attack);
@@ -93,10 +110,9 @@ public class Health : MonoBehaviour
             onDeath?.Invoke();
             return;
         }
-        else if (invincibilityDuration != 0)
+        else if (invincibilityDuration != 0 && (attack.damage > 0 != attack.invertInvincibility))
         {
             invincible = true;
-            Invoke(nameof(TurnOffInvincibility), invincibilityDuration);
         }
         
         // Status effects
@@ -127,7 +143,7 @@ public class Health : MonoBehaviour
     /// <summary>
     /// Disable invincibility
     /// </summary>
-    void TurnOffInvincibility()
+    private void TurnOffInvincibility()
     {
         invincible = false;
     }

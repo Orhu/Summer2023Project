@@ -183,6 +183,7 @@ public class RoomExteriorGenerator : MonoBehaviour
         tile.spawnedObject.AddComponent<SpriteRenderer>().sprite = sprite;
         tile.spawnedObject.SetActive(true);
         tile.spawnedObject.name = "Wall";
+        tile.spawnedObject.GetComponent<SpriteRenderer>().sortingOrder = 0;
 
         // TODO: Set tile cost
 
@@ -276,6 +277,7 @@ public class RoomExteriorGenerator : MonoBehaviour
         doorCollision.size = new Vector2(1, 1);
         //doorCollision.isTrigger = true;
         tile.spawnedObject.AddComponent<SpriteRenderer>().sprite = doorSprites.doorOpened;
+        tile.spawnedObject.GetComponent<SpriteRenderer>().sortingOrder = 0;
         Door door = tile.spawnedObject.AddComponent<Door>();
         door.doorSprites = doorSprites;
         door.connectedCell = connectedCell;
@@ -307,7 +309,7 @@ public class RoomExteriorGenerator : MonoBehaviour
         floorContainer.transform.parent = room.transform;
         floorContainer.transform.localPosition = new Vector3(0, 0, 0);
         floorContainer.AddComponent<SpriteRenderer>().sprite = exteriorGenerationParameters.floorSprites[Random.Range(0, exteriorGenerationParameters.floorSprites.Count)];
-        floorContainer.GetComponent<SpriteRenderer>().sortingOrder = -1;
+        floorContainer.GetComponent<SpriteRenderer>().sortingOrder = -100;
         floorContainer.SetActive(false);
     }
     /// <summary>
