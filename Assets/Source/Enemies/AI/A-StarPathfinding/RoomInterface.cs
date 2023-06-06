@@ -96,15 +96,18 @@ public class RoomInterface : MonoBehaviour
 
     // the world position of this room
     private Vector2 myWorldPosition;
-    
+
     // this instance
     public static RoomInterface instance;
 
+    /// <summary>
+    /// Sets the instance to this instance
+    /// </summary>
     void Awake()
     {
         instance = this;
     }
-    
+
     // draw debug gizmos?
     [SerializeField] private bool drawGizmos;
 
@@ -243,11 +246,14 @@ public class RoomInterface : MonoBehaviour
         return neighbors;
     }
 
+    /// <summary>
+    /// Draw debug gizmos
+    /// </summary>
     private void OnDrawGizmos()
     {
         if (!drawGizmos) return;
-        
-        foreach(var t in myRoomGrid)
+
+        foreach (var t in myRoomGrid)
         {
             if (t.walkable)
             {
@@ -257,7 +263,7 @@ public class RoomInterface : MonoBehaviour
             {
                 Gizmos.color = Color.red;
             }
-            
+
             Gizmos.DrawCube(TileToWorldPos(t), Vector3.one);
         }
     }

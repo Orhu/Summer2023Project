@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 /// <summary>
-/// Represents an action that fires an attack
+/// Represents an action that fires an attack if a certain condition is true
 /// </summary>
 [CreateAssetMenu(menuName = "FSM/Actions/Perform Attack With Condition")]
 public class FireAttackWithCondition : FSMAction

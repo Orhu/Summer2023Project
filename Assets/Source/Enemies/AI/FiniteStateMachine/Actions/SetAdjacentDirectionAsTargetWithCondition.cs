@@ -11,6 +11,10 @@ public class SetAdjacentDirectionAsTargetWithCondition : FSMAction
     [Tooltip("Condition to evaluate before executing the action")]
     [SerializeField] private FSMDecision decision;
     
+    /// <summary>
+    /// Every frame, if cooldown is ready and condition is true, selects a random adjacent target
+    /// </summary>
+    /// <param name="stateMachine"></param>
     public override void OnStateUpdate(BaseStateMachine stateMachine)
     {
         if (stateMachine.cooldownData.cooldownReady[this] && decision.Decide(stateMachine))
@@ -21,6 +25,10 @@ public class SetAdjacentDirectionAsTargetWithCondition : FSMAction
         }
     }
 
+    /// <summary>
+    /// Adds to cooldown list in state machine if necessary
+    /// </summary>
+    /// <param name="stateMachine"> The state machine to use </param>
     public override void OnStateEnter(BaseStateMachine stateMachine)
     {
         // sometimes, because transitions can occur every frame, rapid transitions cause the key not to be deleted properly and error. this check prevents that error
@@ -36,10 +44,19 @@ public class SetAdjacentDirectionAsTargetWithCondition : FSMAction
         }
     }
 
+    /// <summary>
+    /// Not needed for this but required for FSMAction implementation
+    /// </summary>
+    /// <param name="stateMachine"></param>
     public override void OnStateExit(BaseStateMachine stateMachine)
     {
     }
 
+    /// <summary>
+    /// Retrieves a random neighbor tile that is walkable, and sets it as the current target
+    /// </summary>
+    /// <param name="stateMachine"></param>
+    /// <returns></returns>
     private IEnumerator SetAdjacentDirectionAsTarget(BaseStateMachine stateMachine)
     {
         var tileResult = RoomInterface.instance.WorldPosToTile(stateMachine.feetCollider.transform.position);

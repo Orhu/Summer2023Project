@@ -2,7 +2,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Represents an action to update our target to be the player
+/// Represents an action to update our target to be the player when the state is exited
 /// </summary>
 [CreateAssetMenu(menuName = "FSM/Actions/Set Target To Player On Exit")]
 public class SetTargetToPlayerOnExit : FSMAction
@@ -32,6 +32,10 @@ public class SetTargetToPlayerOnExit : FSMAction
         SetPlayerTarget(stateMachine);
     }
 
+    /// <summary>
+    /// Set the current target to be the player
+    /// </summary>
+    /// <param name="stateMachine"> The stateMachine to use </param>
     void SetPlayerTarget(BaseStateMachine stateMachine)
     {
         stateMachine.currentTarget = stateMachine.player.transform.position;

@@ -5,9 +5,19 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Animations;
 
-[CreateAssetMenu(menuName = "FSM/Actions/Set Target To Farthest Tile From Player")]
-public class SetTargetToFarthestTile : FSMAction
+/// <summary>
+/// Represents an action that sets target to the farthest tile in the room
+/// </summary>
+[CreateAssetMenu(menuName = "FSM/Actions/Set Target To Radius Tile From Player")]
+public class SetTargetToRadiusTileFromPlayer : FSMAction
 {
+    [Tooltip("Radius from the player to set the target to")]
+    [SerializeField] private int radius = 4;
+    
+    /// <summary>
+    /// Starts the set farthest tile pos coroutine if cooldown is ready
+    /// </summary>
+    /// <param name="stateMachine"> The stateMachine to use </param>
     public override void OnStateUpdate(BaseStateMachine stateMachine)
     {
         if (stateMachine.cooldownData.cooldownReady[this])
@@ -17,6 +27,10 @@ public class SetTargetToFarthestTile : FSMAction
         }
     }
 
+    /// <summary>
+    /// Adds to cooldown list in state machine if necessary
+    /// </summary>
+    /// <param name="stateMachine"> The stateMachine to use </param>
     public override void OnStateEnter(BaseStateMachine stateMachine)
     {
         // sometimes, because transitions can occur every frame, rapid transitions cause the key not to be deleted properly and error. this check prevents that error
@@ -31,10 +45,19 @@ public class SetTargetToFarthestTile : FSMAction
         }
     }
 
+    /// <summary>
+    /// Nothing to do here, required for FSMAction implementation
+    /// </summary>
+    /// <param name="stateMachine"> The stateMachine to use </param>
     public override void OnStateExit(BaseStateMachine stateMachine)
     {
     }
 
+    /// <summary>
+    /// Picks a random tile position that is within a certain number of tiles
+    /// </summary>
+    /// <param name="stateMachine"> The stateMachine to use </param>
+    /// <returns></returns>
     private IEnumerator SetFarthestTilePos(BaseStateMachine stateMachine)
     {
         var curRoom = FloorGenerator.floorGeneratorInstance.currentRoom;
@@ -53,9 +76,9 @@ public class SetTargetToFarthestTile : FSMAction
         float greatestDistance = 0f;
         RoomInterface.PathfindingTile tileWithGreatestDistance = null;
 
-        for (int x = playerTile.gridLocation.x - 4; x <= playerTile.gridLocation.x + 4; x++)
+        for (int x = playerTile.gridLocation.x - radius; x <= playerTile.gridLocation.x + radius; x++)
         {
-            for (int y = playerTile.gridLocation.y - 4; y <= playerTile.gridLocation.y + 4; y++)
+            for (int y = playerTile.gridLocation.y - radius; y <= playerTile.gridLocation.y + radius; y++)
             {
                 if (x < 1 || x >= roomMaxSize.x - 1 || y < 1 || y >= roomMaxSize.y - 1)
                     continue; // Skip tiles outside the room bounds

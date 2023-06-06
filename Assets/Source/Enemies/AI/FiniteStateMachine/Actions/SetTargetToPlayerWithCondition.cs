@@ -7,10 +7,11 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "FSM/Actions/Set Target To Player With Condition")]
 public class SetTargetToPlayerWithCondition : FSMAction
 {
+    [Tooltip("The condition when to pick a new target")]
     [SerializeField] private FSMDecision whenToPickNewTile;
     
     /// <summary>
-    /// Nothing to do here, required for FSMAction implementation
+    /// When condition is met and cooldown is ready, set player target
     /// </summary>
     /// <param name="stateMachine"> The stateMachine to use </param>
     public override void OnStateUpdate(BaseStateMachine stateMachine)
@@ -41,6 +42,11 @@ public class SetTargetToPlayerWithCondition : FSMAction
         stateMachine.cooldownData.cooldownReady.Remove(this);
     }
 
+    /// <summary>
+    /// Sets the current target to player
+    /// </summary>
+    /// <param name="stateMachine"> The stateMachine to use </param>
+    /// <returns></returns>
     IEnumerator SetPlayerTarget(BaseStateMachine stateMachine)
     {
         stateMachine.currentTarget = stateMachine.player.transform.position;

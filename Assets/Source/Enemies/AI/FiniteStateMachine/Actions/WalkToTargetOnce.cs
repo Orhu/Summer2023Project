@@ -20,7 +20,6 @@ public class WalkToTargetOnce : FSMAction
         private Coroutine prevUpdateCoroutine;
         private Coroutine prevFollowCoroutine;
     }
-
     private ChaseData chaseData;
 
     /// <summary>

@@ -8,7 +8,7 @@ using UnityEngine;
 public class SetTargetToPlayer : FSMAction
 {
     /// <summary>
-    /// Nothing to do here, required for FSMAction implementation
+    /// Updates the currentTarget to be the player when cooldown is ready
     /// </summary>
     /// <param name="stateMachine"> The stateMachine to use </param>
     public override void OnStateUpdate(BaseStateMachine stateMachine)
