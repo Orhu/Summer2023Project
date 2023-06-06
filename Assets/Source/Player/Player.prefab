@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 1503026418}
   - component: {fileID: 5436055868885082538}
   - component: {fileID: 4731582400512514557}
+  - component: {fileID: 2075822649}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -75,8 +76,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.042829275, y: 0}
-  m_Size: {x: 0.60433924, y: 1}
+  m_Offset: {x: 0.03063476, y: -0.01760614}
+  m_Size: {x: 0.6287283, y: 0.9647877}
   m_Direction: 0
 --- !u!212 &2591183591901039891
 SpriteRenderer:
@@ -119,7 +120,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: fb84889920ff8a14b926a9db5dd4a26f, type: 3}
+  m_Sprite: {fileID: 1560023224, guid: 2b03cd84f7df25f489c413e84e872b1f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -250,6 +251,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invincibilityFlashColor: {r: 1, g: 0, b: 0, a: 1}
+--- !u!95 &2075822649
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608508398850829056}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 07833e07c480fed489ffce290e5a430b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3334315805312791787
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,9 +317,9 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.050000012, y: -0.21748415}
-  m_Size: {x: 0.5, y: 0.5650317}
-  m_Direction: 0
+  m_Offset: {x: 0.018323803, y: -0.32127276}
+  m_Size: {x: 0.5633549, y: 0.35745457}
+  m_Direction: 1
 --- !u!1001 &1510892456516161432
 PrefabInstance:
   m_ObjectHideFlags: 0
