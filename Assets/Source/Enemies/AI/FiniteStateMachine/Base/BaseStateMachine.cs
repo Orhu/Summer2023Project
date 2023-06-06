@@ -8,6 +8,9 @@ public class BaseStateMachine : MonoBehaviour
     // the state this machine starts in
     [SerializeField] private BaseState initialState;
 
+    // delay after this enemy is spawned before it begins performing logic
+    [SerializeField] private float delayBeforeLogic;
+    
     // the target
     [HideInInspector] public GameObject currentTarget;
     
@@ -20,8 +23,29 @@ public class BaseStateMachine : MonoBehaviour
     // the current state this machine is in
     [HideInInspector] public BaseState currentState;
 
+    public struct PathData
+    {
+        // path to target 
+        public Path path;
+        
+        // index of where we are in the path
+        public int targetIndex;
+        
+        // do we ignore incoming path requests?
+        public bool ignorePathRequests;
+        
+        // store the path following coroutine so it can be cancelled as needed
+        public Coroutine prevFollowCoroutine;
+    }
+    
+    // stores our current path data
+    [HideInInspector] public PathData pathData;
+
     // maintained list of components which are cached for performance
     private Dictionary<Type, Component> cachedComponents;
+    
+    // tracks the time this was initialized
+    private float timeStarted;
 
     /// <summary>
     /// Initialize variables
@@ -38,9 +62,10 @@ public class BaseStateMachine : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        timeStarted = Time.time;
         player = GameObject.FindGameObjectWithTag("Player");
         currentTarget = player;
-        FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Add(gameObject);
+        FloorGenerator.floorGeneratorInstance.currentRoom.AddEnemy(gameObject);
     }
 
     /// <summary>
@@ -48,6 +73,8 @@ public class BaseStateMachine : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        if (Time.time - timeStarted <= delayBeforeLogic) return;
+        
         currentState.OnStateUpdate(this);
     }
 
@@ -75,6 +102,6 @@ public class BaseStateMachine : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
-        FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Remove(gameObject);
+        FloorGenerator.floorGeneratorInstance.currentRoom.RemoveEnemy(gameObject);
     }
 }

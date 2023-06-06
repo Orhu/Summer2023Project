@@ -15,9 +15,6 @@ public class Pathfinding : MonoBehaviour
     // the room interface that allows us to mess with room properties without having to mess with the room itself
     private RoomInterface roomInterface;
 
-    // current target position
-    private Vector2 targetPosition;
-
     /// <summary>
     /// Initialize variables
     /// </summary>
@@ -30,28 +27,25 @@ public class Pathfinding : MonoBehaviour
     /// <summary>
     /// Starts the FindPath coroutine from start to target pos
     /// </summary>
-    /// <param name="startPos"> Starting position </param>
-    /// <param name="targetPos"> Target position </param>
-    public void StartFindPath(Vector2 startPos, Vector2 targetPos)
+    /// <param name="stateMachine"> The state machine that is requesting a path </param>
+    public void StartFindPath(BaseStateMachine stateMachine)
     {
-        StartCoroutine(FindPath(startPos, targetPos));
+        StartCoroutine(FindPath(stateMachine));
     }
 
     /// <summary>
     /// Find a path from a given pos to a target pos
     /// </summary>
-    /// <param name="startPos"> Starting position </param>
-    /// <param name="targetPos"> Target position </param>
+    /// <param name="stateMachine"> The state machine that is requesting a path </param>
     /// <returns> Sends a signal to the request manager that a path has been found </returns>
-    IEnumerator FindPath(Vector2 startPos, Vector2 targetPos)
+    IEnumerator FindPath(BaseStateMachine stateMachine)
     { 
-        targetPosition = targetPos;
         roomInterface.GrabCurrentRoom();
         Vector2[] waypoints = new Vector2[0];
         bool pathSuccess = false;
 		
-        PathfindingTile startNode = roomInterface.WorldPosToTile(startPos);
-        PathfindingTile targetNode = roomInterface.WorldPosToTile(targetPos);
+        PathfindingTile startNode = roomInterface.WorldPosToTile(stateMachine.feetCollider.transform.position);
+        PathfindingTile targetNode = roomInterface.WorldPosToTile(stateMachine.currentTarget.transform.position);
         startNode.retraceStep = startNode;
 		
 		
@@ -99,7 +93,7 @@ public class Pathfinding : MonoBehaviour
         if (pathSuccess) {
             waypoints = RetracePath(startNode, targetNode);
         }
-        requestManager.FinishedProcessingPath(waypoints,pathSuccess);
+        requestManager.FinishedProcessingPath(waypoints,pathSuccess,stateMachine);
 		
     }
 
@@ -129,7 +123,7 @@ public class Pathfinding : MonoBehaviour
     /// <param name="path"> Input path </param>
     /// <returns></returns>
     Vector2[] SimplifyPath(List<PathfindingTile> path)
-    {
+    {/*
         List<Vector2> waypoints = new List<Vector2>();
         waypoints.Add(targetPosition);
         Vector2 directionOld = Vector2.zero;
@@ -140,6 +134,11 @@ public class Pathfinding : MonoBehaviour
                 waypoints.Add(roomInterface.TileToWorldPos(path[i]));
             }
             directionOld = directionNew;
+        }*/
+        List<Vector2> waypoints = new List<Vector2>();
+        foreach (var tile in path)
+        {
+            waypoints.Add(roomInterface.TileToWorldPos(tile));
         }
         return waypoints.ToArray();
     }
