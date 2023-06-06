@@ -8,15 +8,43 @@ public class ActionPlayer : MonoBehaviour, IActor
 {
     [Tooltip("The action to play.")]
     public Action action;
+
     [Tooltip("The time between playing the action.")]
     public float playRate = 1f;
+
+    [Tooltip("Whether or not to keep acting after all enemies have been killed.")]
+    public bool playAfterClear = false;
+
+    [Tooltip("Whether or not to keep acting after all enemies have been killed.")]
+    public bool fireImmediately = false;
+
+    [Tooltip("When to play the action")]
+    [SerializeField] private PlayTime playTime;
+    private enum PlayTime
+    {
+        AlwaysShooting,
+        WhenOverlaping
+    }
+
+
+    // The coroutine responsible for playing actions.
+    private Coroutine coroutine;
+
 
     /// <summary>
     /// Initializes timer.
     /// </summary>
-    void Start()
+    private void Start()
     {
-        StartCoroutine(PlayAction());
+        if (playTime == PlayTime.AlwaysShooting)
+        {
+            coroutine = StartCoroutine(PlayAction());
+        }
+
+        if (!playAfterClear)
+        {
+            FloorGenerator.floorGeneratorInstance.currentRoom.onCleared += () => { StopAllCoroutines(); };
+        }
     }
     
     /// <summary>
@@ -25,13 +53,43 @@ public class ActionPlayer : MonoBehaviour, IActor
     /// <returns> The time to wait for the next action. </returns>
     private IEnumerator PlayAction()
     {
-        while(true)
+        if (!fireImmediately)
         {
             yield return new WaitForSeconds(playRate);
+        }
+
+        while (true)
+        {
             if (CanAct)
             {
                 action.Play(this);
             }
+            yield return new WaitForSeconds(playRate);
+        }
+    }
+
+    /// <summary>
+    /// Starts acting if set to act when overlapping.
+    /// </summary>
+    /// <param name="collision"> The thing that was overlapped. </param>
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (playTime == PlayTime.WhenOverlaping && collision.CompareTag("Player") && !collision.isTrigger)
+        {
+            coroutine = StartCoroutine(PlayAction());
+        }
+    }
+
+    /// <summary>
+    /// Starts acting if set to act when overlapping.
+    /// </summary>
+    /// <param name="collision"> The thing that was overlapped. </param>
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (playTime == PlayTime.WhenOverlaping && collision.CompareTag("Player") && !collision.isTrigger)
+        {
+            StopAllCoroutines();
+            coroutine = null;
         }
     }
 

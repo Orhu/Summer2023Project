@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
+  m_Name: FireballTurret_BulletAttack
+  m_EditorClassIdentifier: 
+  attack:
+    damage: 2
+    damageType: 0
+    statusEffects:
+    - {fileID: 11400000, guid: c5c4ce2a12d9c5348b8370640b950f21, type: 2}
+  hitCount: 1
+  applyDamageOnHit: 1
+  modifiers:
+  - {fileID: 11400000, guid: c57a114063ffad74a823dce35cf5df9c, type: 2}
+  shape: {fileID: 11400000, guid: 590d9bb12309e1049bb373d6c311ea2b, type: 2}
+  lifetime: 1.375
+  initialSpeed: 10
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 8
+  homingSpeed: 0
+  homingTime: 0
+  homingAimMode: 1
+  visualObject: {fileID: 2809569760718847691, guid: 4ce4d31298fcbb14cac0e0c99844d2e7, type: 3}
+  detachVisualsBeforeDestroy: 0
+  spawnLocation: 0
+  aimMode: 0
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  _spawnSequence:
+  - delay: 0
+    angle: 0
+    offset: {x: 0, y: 0}
+  randomAngle: 0
+  randomOffset: 0
