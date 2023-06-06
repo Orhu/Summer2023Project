@@ -37,16 +37,16 @@ public class LineOfSightOnPlayer : FSMDecision
             if (hit.collider.CompareTag("Player"))
             {
                 // Line of sight is unobstructed and player is hit
-                return true;
+                return invert? false : true;
             }
             else
             {
                 // Obstacle or other object hit
-                return false;
+                return invert? true : false;
             }
         }
 
         // No objects hit
-        return false;
+        return invert? true : false;
     }
 }

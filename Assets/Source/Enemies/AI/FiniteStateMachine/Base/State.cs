@@ -11,7 +11,7 @@ public sealed class State : BaseState
     public List<FSMAction> actions = new List<FSMAction>();
     
     [Tooltip("This state's transitions. Evaluated every frame.")]
-    public List<FSMTransition> transitions = new List<FSMTransition>();
+    public List<BaseFSMTransition> transitions = new List<BaseFSMTransition>();
 
     /// <summary>
     /// Run through all of this state's actions and transitions, executing them.

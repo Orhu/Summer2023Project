@@ -7,6 +7,6 @@ public class DestinationReached : FSMDecision
 {
     public override bool Decide(BaseStateMachine stateMachine)
     {
-        return stateMachine.destinationReached;
+        return invert ? !stateMachine.destinationReached : stateMachine.destinationReached;
     }
 }

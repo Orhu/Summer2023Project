@@ -7,8 +7,6 @@ using UnityEngine.Animations;
 [CreateAssetMenu(menuName = "FSM/Actions/Set Target To Random Tile")]
 public class SetTargetToRandomTile : FSMAction
 {
-    
-    
     [SerializeField] private FSMDecision whenToPickNewTile;
     
     public override void OnStateUpdate(BaseStateMachine stateMachine)

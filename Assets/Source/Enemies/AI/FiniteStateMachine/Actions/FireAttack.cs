@@ -55,11 +55,12 @@ public class FireAttack : FSMAction
         // sometimes, because transitions can occur every frame, rapid transitions cause the key not to be deleted properly and error. this check prevents that error
         if (!stateMachine.cooldownData.cooldownReady.ContainsKey(this))
         {
+            // if the key has not yet been added, add it with 0 cooldown
             stateMachine.cooldownData.cooldownReady.Add(this, true);
         }
         else
         {
-            stateMachine.cooldownData.cooldownReady[this] = true;
+            // in this case, there may be a cooldown still running from a previous state exit/re-entry so don't set the value at all
         }
     }
 

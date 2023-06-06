@@ -6,6 +6,8 @@
     /// </summary>
     public abstract class FSMDecision : ScriptableObject
     {
+        [Tooltip("Indicates whether to invert the result of this decision as the final result")]
+        [SerializeField] protected bool invert;
         /// <summary>
         /// Given a state machine, returns whether the transition should be true or false
         /// </summary>

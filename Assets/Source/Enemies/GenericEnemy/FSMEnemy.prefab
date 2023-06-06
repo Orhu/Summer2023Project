@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canDealDamageOnTouch: 1
   damageOnTouch: 1
-  exhaustDuration: 0.5
+  delayBetweenDamageOnTouch: 0.5
   damageTypeOnTouch: 0
   statusEffectsOnTouch: []
 --- !u!58 &3497544517795975723
@@ -215,6 +215,8 @@ MonoBehaviour:
   feetCollider: {fileID: 0}
   currentState: {fileID: 0}
   destinationReached: 0
+  drawGizmos: 0
+  debugWaypoint: {x: 0, y: 0}
 --- !u!114 &7281680880204442666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,7 +295,6 @@ MonoBehaviour:
   isControllable: 0
   useEnemyLogic: 1
   movementInput: {x: 0, y: 0}
-  feet: {fileID: 0}
 --- !u!114 &5097362261395317995
 MonoBehaviour:
   m_ObjectHideFlags: 0
