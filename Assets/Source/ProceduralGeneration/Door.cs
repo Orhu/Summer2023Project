@@ -25,9 +25,30 @@ public class Door : MonoBehaviour
     public void Open()
     {
         GetComponent<SpriteRenderer>().sprite = doorSprites.doorOpened;
-        GetComponent<BoxCollider2D>().isTrigger = true;
+        GetComponentInChildren<BoxCollider2D>().isTrigger = true;
         // Make the box collider a bit smaller so the player can't get stuck on walls when trying to move through doors
-        GetComponent<BoxCollider2D>().size = new Vector2(0.6f, 0.6f);
+        Vector2 doorSize = new Vector2();
+        if ((direction & Direction.Right) != Direction.None)
+        {
+            doorSize = new Vector2(0.1f, 1.0f);
+            transform.GetChild(0).localPosition = new Vector3(0.45f, 0);
+        }
+        else if ((direction & Direction.Up) != Direction.None)
+        {
+            doorSize = new Vector2(1f, 0.1f);
+            transform.GetChild(0).localPosition = new Vector3(0, 0.45f);
+        }
+        else if ((direction & Direction.Left) != Direction.None)
+        {
+            doorSize = new Vector2(0.1f, 1.0f);
+            transform.GetChild(0).localPosition = new Vector3(-0.45f, 0);
+        }
+        else if ((direction & Direction.Down) != Direction.None)
+        {
+            doorSize = new Vector2(1.0f, 0.1f);
+            transform.GetChild(0).localPosition = new Vector3(0, -0.45f);
+        }
+        GetComponentInChildren<BoxCollider2D>().size = doorSize;
     }
 
     /// <summary>
@@ -36,9 +57,10 @@ public class Door : MonoBehaviour
     public void Close()
     {
         GetComponent<SpriteRenderer>().sprite = doorSprites.doorClosed;
-        GetComponent<BoxCollider2D>().isTrigger = false;
+        GetComponentInChildren<BoxCollider2D>().isTrigger = false;
         // Make the box collider normal sized so the door acts like a wall
-        GetComponent<BoxCollider2D>().size = new Vector2(1, 1);
+        transform.GetChild(0).localPosition = new Vector3(0, 0);
+        GetComponentInChildren<BoxCollider2D>().size = new Vector2(1, 1);
     }
 
     /// <summary>
@@ -65,7 +87,7 @@ public class Door : MonoBehaviour
     /// <param name="collision"> The collision that entered this door </param>
     public void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.CompareTag("Player") && GetComponent<BoxCollider2D>().isTrigger)
+        if (collider.gameObject.CompareTag("Player") && GetComponentInChildren<BoxCollider2D>().isTrigger)
         {
             Enter();
         }
