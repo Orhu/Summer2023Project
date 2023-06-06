@@ -21,6 +21,8 @@ public class ActionPlayer : MonoBehaviour, IActor
     void Start()
     {
         StartCoroutine(PlayAction());
+
+        FloorGenerator.floorGeneratorInstance.currentRoom.onCleared += () => { StopAllCoroutines(); };
     }
     
     /// <summary>

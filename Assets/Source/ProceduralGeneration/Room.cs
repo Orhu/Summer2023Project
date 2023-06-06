@@ -39,6 +39,10 @@ public class Room : MonoBehaviour
     // Whether this room has been generated or not
     private bool generated = false;
 
+    // Called when all enemies in this room are killed.
+    public System.Action onCleared;
+
+
     /// <summary>
     /// Adds an enemy to the list of living enemies
     /// </summary>
@@ -58,6 +62,7 @@ public class Room : MonoBehaviour
         if (livingEnemies.Count == 0)
         {
             OpenDoors();
+            onCleared?.Invoke();
         }
     }
 

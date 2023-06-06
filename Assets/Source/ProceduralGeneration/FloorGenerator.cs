@@ -39,6 +39,9 @@ public class FloorGenerator : MonoBehaviour
         }
     }
 
+    // Called when all enemies in this room are killed.
+    Action onRoomCleared;
+
     // The instance
     public static FloorGenerator floorGeneratorInstance { get; private set; }
 
