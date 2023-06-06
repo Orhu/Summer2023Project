@@ -273,11 +273,15 @@ public class RoomExteriorGenerator : MonoBehaviour
         tile.spawnedObject = new GameObject();
         tile.spawnedObject.transform.parent = doorContainer.transform;
         tile.spawnedObject.transform.localPosition = new Vector3(location.x, location.y, 0);
-        BoxCollider2D doorCollision = tile.spawnedObject.AddComponent<BoxCollider2D>();
+        GameObject doorCollisionContainer = new GameObject();
+        doorCollisionContainer.name = "Collision Container";
+        doorCollisionContainer.transform.parent = tile.spawnedObject.transform;
+        doorCollisionContainer.transform.localPosition = new Vector3(0, 0);
+        BoxCollider2D doorCollision = doorCollisionContainer.AddComponent<BoxCollider2D>();
         doorCollision.size = new Vector2(1, 1);
-        //doorCollision.isTrigger = true;
         tile.spawnedObject.AddComponent<SpriteRenderer>().sprite = doorSprites.doorOpened;
         tile.spawnedObject.GetComponent<SpriteRenderer>().sortingLayerName = "Walls";
+        tile.spawnedObject.AddComponent<Rigidbody2D>().isKinematic = true;
         Door door = tile.spawnedObject.AddComponent<Door>();
         door.doorSprites = doorSprites;
         door.connectedCell = connectedCell;
