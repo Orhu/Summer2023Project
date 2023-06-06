@@ -169,6 +169,27 @@ public class RoomInterface : MonoBehaviour
         }
     }
 
+    public static (Tile, bool) WorldPosToTileStatic(Vector2 worldPos)
+    {
+        var curRoom = FloorGenerator.floorGeneratorInstance.currentRoom;
+        var offset = curRoom.transform.position;
+        var roomSize = curRoom.roomSize;
+
+        Vector2Int tilePos = new Vector2Int(
+            Mathf.RoundToInt(worldPos.x + roomSize.x / 2 - offset.x),
+            Mathf.RoundToInt(worldPos.y + roomSize.y / 2 - offset.y)
+        );
+        try
+        {
+            return (curRoom.roomGrid[tilePos.x, tilePos.y], true);
+        }
+        catch
+        {
+            // if we error here, it means the requested worldPos is outside of the grid
+            return (null, false);
+        }
+    }
+
     /// <summary>
     /// Gets the world position of the given tile
     /// </summary>
@@ -183,8 +204,12 @@ public class RoomInterface : MonoBehaviour
         return worldPos;
     }
     
-    public static Vector2 TileToWorldPos(Tile tile, Vector2 offset, Vector2Int roomSize)
+    public static Vector2 TileToWorldPos(Tile tile)
     {
+        var curRoom = FloorGenerator.floorGeneratorInstance.currentRoom;
+        var offset = curRoom.transform.position;
+        var roomSize = curRoom.roomSize;
+        
         Vector2 worldPos = new Vector2(
             tile.gridLocation.x + offset.x - roomSize.x / 2,
             tile.gridLocation.y + offset.y - roomSize.y / 2

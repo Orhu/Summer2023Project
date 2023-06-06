@@ -40,8 +40,7 @@ public class SetTargetToRandomTile : FSMAction
         {
             if (newTile.walkable)
             {
-                stateMachine.currentTarget = RoomInterface.TileToWorldPos(curRoom.roomGrid[tileX, tileY],
-                    curRoom.transform.position, curRoom.roomSize);
+                stateMachine.currentTarget = RoomInterface.TileToWorldPos(curRoom.roomGrid[tileX, tileY]);
                 stateMachine.cooldownData.cooldownReady[this] = true;
                 yield break;
             }

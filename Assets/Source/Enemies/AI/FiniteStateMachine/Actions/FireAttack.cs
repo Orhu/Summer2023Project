@@ -17,6 +17,9 @@ public class FireAttack : FSMAction
     [Tooltip("After the action is performed, what is the delay before the action can be performed again?")]
     public float actionCooldownTime;
 
+    [Tooltip("How many seconds to apply the Exhaust status effect")]
+    public float exhaustDuration;
+
     [Tooltip("The actions that will be taken when the enemy attempts to issue an action.")] [EditInline]
     public Action[] actions;
 
@@ -88,6 +91,11 @@ public class FireAttack : FSMAction
         }
 
         afterAction?.Invoke(stateMachine);
+        var exhaustableComponent = stateMachine.GetComponent<Exhaustable>();
+        if (exhaustableComponent != null)
+        {
+            exhaustableComponent.ExhaustMe(exhaustDuration);
+        }
         yield return new WaitForSeconds(actionCooldownTime);
         afterCooldown?.Invoke(stateMachine);
         stateMachine.cooldownData.cooldownReady[this] = true;

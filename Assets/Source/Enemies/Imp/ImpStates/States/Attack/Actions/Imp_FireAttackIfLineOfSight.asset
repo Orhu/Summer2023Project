@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07ed30c21f687b740a372b1fabf0366d, type: 3}
   m_Name: Imp_FireAttackIfLineOfSight
   m_EditorClassIdentifier: 
-  decision: {fileID: 0}
+  decision: {fileID: 11400000, guid: 391ef14404755db41bb0287da6b5843c, type: 2}
   actionChargeUpTime: 0
-  actionCooldownTime: 0
-  actions: []
+  actionCooldownTime: 8
+  actions:
+  - {fileID: 11400000, guid: 9f4905fe51ffda443861db23dfef60cc, type: 2}
   beforeChargeUp:
     m_PersistentCalls:
       m_Calls: []
@@ -24,7 +25,19 @@ MonoBehaviour:
       m_Calls: []
   afterAction:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 9072109449128709392, guid: 98959c630debc5b4b8c3ac26b66791ff, type: 3}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   afterCooldown:
     m_PersistentCalls:
       m_Calls: []

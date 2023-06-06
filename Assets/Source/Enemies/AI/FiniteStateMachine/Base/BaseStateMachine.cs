@@ -25,6 +25,9 @@ public class BaseStateMachine : MonoBehaviour
     
     // tracks whether our destination has been reached or not
     [HideInInspector] public bool destinationReached;
+    
+    // tracks whether we are currently exhausted
+    [HideInInspector] public bool exhausted;
 
     public struct PathData
     {
@@ -90,8 +93,14 @@ public class BaseStateMachine : MonoBehaviour
     private void Update()
     {
         if (Time.time - timeStarted <= delayBeforeLogic) return;
-        
-        print(currentState);
+
+        if (exhausted)
+        {
+            print("I am exhausted!");
+            GetComponent<Controller>().movementInput = Vector2.zero;
+            return;
+        }
+        print("I am not exhausted!");
         currentState.OnStateUpdate(this);
     }
 
