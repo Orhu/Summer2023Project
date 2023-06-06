@@ -183,7 +183,7 @@ public class RoomExteriorGenerator : MonoBehaviour
         tile.spawnedObject.AddComponent<SpriteRenderer>().sprite = sprite;
         tile.spawnedObject.SetActive(true);
         tile.spawnedObject.name = "Wall";
-        tile.spawnedObject.GetComponent<SpriteRenderer>().sortingOrder = 0;
+        tile.spawnedObject.GetComponent<SpriteRenderer>().sortingLayerName = "Walls";
 
         // TODO: Set tile cost
 
@@ -273,11 +273,15 @@ public class RoomExteriorGenerator : MonoBehaviour
         tile.spawnedObject = new GameObject();
         tile.spawnedObject.transform.parent = doorContainer.transform;
         tile.spawnedObject.transform.localPosition = new Vector3(location.x, location.y, 0);
-        BoxCollider2D doorCollision = tile.spawnedObject.AddComponent<BoxCollider2D>();
+        GameObject doorCollisionContainer = new GameObject();
+        doorCollisionContainer.name = "Collision Container";
+        doorCollisionContainer.transform.parent = tile.spawnedObject.transform;
+        doorCollisionContainer.transform.localPosition = new Vector3(0, 0);
+        BoxCollider2D doorCollision = doorCollisionContainer.AddComponent<BoxCollider2D>();
         doorCollision.size = new Vector2(1, 1);
-        //doorCollision.isTrigger = true;
         tile.spawnedObject.AddComponent<SpriteRenderer>().sprite = doorSprites.doorOpened;
-        tile.spawnedObject.GetComponent<SpriteRenderer>().sortingOrder = 0;
+        tile.spawnedObject.GetComponent<SpriteRenderer>().sortingLayerName = "Walls";
+        tile.spawnedObject.AddComponent<Rigidbody2D>().isKinematic = true;
         Door door = tile.spawnedObject.AddComponent<Door>();
         door.doorSprites = doorSprites;
         door.connectedCell = connectedCell;
@@ -309,7 +313,7 @@ public class RoomExteriorGenerator : MonoBehaviour
         floorContainer.transform.parent = room.transform;
         floorContainer.transform.localPosition = new Vector3(0, 0, 0);
         floorContainer.AddComponent<SpriteRenderer>().sprite = exteriorGenerationParameters.floorSprites[Random.Range(0, exteriorGenerationParameters.floorSprites.Count)];
-        floorContainer.GetComponent<SpriteRenderer>().sortingOrder = -100;
+        floorContainer.GetComponent<SpriteRenderer>().sortingLayerName = "Floors";
         floorContainer.SetActive(false);
     }
     /// <summary>
