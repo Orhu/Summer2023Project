@@ -22,6 +22,10 @@ public class InvincibilityFlash : MonoBehaviour
     }
 
     
+    /// <summary>
+    /// Enables or disables tinting of the sprite.
+    /// </summary>
+    /// <param name="tintEnabled"> Whether or not the tint should be shown. </param>
     private void SetTintEnable(bool tintEnabled)
     {
         spriteRenderer.color = tintEnabled ? invincibilityFlashColor : Color.white;

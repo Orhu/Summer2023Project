@@ -34,7 +34,7 @@ public class DamageData
         damage = attack.damage;
         damageType = attack.damageType;
         statusEffects = attack.statusEffects;
-        this.invertInvincibility = attack.invertInvincibility;
+        invertInvincibility = attack.invertInvincibility;
         this.causer = causer;
     }
 
