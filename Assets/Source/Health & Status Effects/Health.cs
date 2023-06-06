@@ -93,13 +93,10 @@ public class Health : MonoBehaviour
     /// Receive an attack and kill the owner if out of health.
     /// </summary>
     /// <param name="attack"> The attack being received. </param>
-    public void ReceiveAttack(DamageData attack)
+    /// <param name="ignoreInvincibility"> Whether or not invincibility frames should effect this attack. </param>
+    public void ReceiveAttack(DamageData attack, bool ignoreInvincibility = false)
     {
-        ReceiveAttack(attack, Vector2.zero);
-    }
-    public void ReceiveAttack(DamageData attack, Vector2 knockbackDirection)
-    {
-        if (invincible) return;
+        if (invincible && !ignoreInvincibility) return;
         
         // Damage
         onRequestIncomingAttackModification?.Invoke(ref attack);
