@@ -19,20 +19,26 @@ public class SetTargetToFarthestTile : FSMAction
 
     public override void OnStateEnter(BaseStateMachine stateMachine)
     {
-        stateMachine.cooldownData.cooldownReady.Add(this, true);
-        stateMachine.destinationReached = true;
-        stateMachine.StartCoroutine(SetFarthestTilePos(stateMachine));
+        // sometimes, because transitions can occur every frame, rapid transitions cause the key not to be deleted properly and error. this check prevents that error
+        if (!stateMachine.cooldownData.cooldownReady.ContainsKey(this))
+        {
+            // if the key has not yet been added, add it with 0 cooldown
+            stateMachine.cooldownData.cooldownReady.Add(this, true);
+        }
+        else
+        {
+            // in this case, there may be a cooldown still running from a previous state exit/re-entry so don't set the value at all
+        }
     }
 
     public override void OnStateExit(BaseStateMachine stateMachine)
     {
-        stateMachine.cooldownData.cooldownReady.Remove(this);
     }
 
     private IEnumerator SetFarthestTilePos(BaseStateMachine stateMachine)
     {
         var curRoom = FloorGenerator.floorGeneratorInstance.currentRoom;
-        var playerTileResult = RoomInterface.WorldPosToTileStatic(stateMachine.player.transform.position);
+        var playerTileResult = RoomInterface.instance.WorldPosToTile(stateMachine.player.transform.position);
 
         if (!playerTileResult.Item2)
         {
@@ -43,9 +49,9 @@ public class SetTargetToFarthestTile : FSMAction
 
         // TODO: Replace this algorithm with a more robust one in the future.
         Vector2Int roomMaxSize = curRoom.roomSize;
-        Tile playerTile = playerTileResult.Item1;
+        RoomInterface.PathfindingTile playerTile = playerTileResult.Item1;
         float greatestDistance = 0f;
-        Tile tileWithGreatestDistance = null;
+        RoomInterface.PathfindingTile tileWithGreatestDistance = null;
 
         for (int x = playerTile.gridLocation.x - 4; x <= playerTile.gridLocation.x + 4; x++)
         {
@@ -54,7 +60,7 @@ public class SetTargetToFarthestTile : FSMAction
                 if (x < 1 || x >= roomMaxSize.x - 1 || y < 1 || y >= roomMaxSize.y - 1)
                     continue; // Skip tiles outside the room bounds
 
-                Tile tile = curRoom.roomGrid[x, y];
+                RoomInterface.PathfindingTile tile = RoomInterface.instance.myRoomGrid[x, y];
                 if (!tile.walkable)
                     continue; // Skip non-walkable tiles
 
@@ -69,7 +75,7 @@ public class SetTargetToFarthestTile : FSMAction
 
         if (tileWithGreatestDistance != null)
         {
-            stateMachine.currentTarget = RoomInterface.TileToWorldPos(tileWithGreatestDistance);
+            stateMachine.currentTarget = RoomInterface.instance.TileToWorldPos(tileWithGreatestDistance);
         }
 
         stateMachine.cooldownData.cooldownReady[this] = true;

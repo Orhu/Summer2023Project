@@ -32,15 +32,15 @@ public class SetTargetToRandomTile : FSMAction
 
     private IEnumerator SetRandomTilePos(BaseStateMachine stateMachine)
     {
-        var curRoom = FloorGenerator.floorGeneratorInstance.currentRoom;
-        var tileX = Random.Range(0, curRoom.roomSize.x);
-        var tileY = Random.Range(0, curRoom.roomSize.y);
-        var newTile = curRoom.roomGrid[tileX, tileY];
+        var curRoomSize = RoomInterface.instance.myRoomSize;
+        var tileX = Random.Range(0, curRoomSize.x);
+        var tileY = Random.Range(0, curRoomSize.y);
+        var newTile = RoomInterface.instance.myRoomGrid[tileX, tileY];
         if (newTile != null)
         {
             if (newTile.walkable)
             {
-                stateMachine.currentTarget = RoomInterface.TileToWorldPos(curRoom.roomGrid[tileX, tileY]);
+                stateMachine.currentTarget = RoomInterface.instance.TileToWorldPos(RoomInterface.instance.myRoomGrid[tileX, tileY]);
                 stateMachine.cooldownData.cooldownReady[this] = true;
                 yield break;
             }

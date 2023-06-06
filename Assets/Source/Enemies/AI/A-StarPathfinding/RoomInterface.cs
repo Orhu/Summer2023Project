@@ -89,13 +89,21 @@ public class RoomInterface : MonoBehaviour
     private Room myRoom;
 
     // the size of this room, in tiles
-    private Vector2Int myRoomSize;
+    [HideInInspector] public Vector2Int myRoomSize;
 
     // the tile grid of this room
-    private PathfindingTile[,] myRoomGrid;
+    [HideInInspector] public PathfindingTile[,] myRoomGrid;
 
     // the world position of this room
     private Vector2 myWorldPosition;
+    
+    // this instance
+    public static RoomInterface instance;
+
+    void Awake()
+    {
+        instance = this;
+    }
     
     // draw debug gizmos?
     [SerializeField] private bool drawGizmos;
@@ -151,7 +159,7 @@ public class RoomInterface : MonoBehaviour
     /// Gets the tile at the given world position
     /// </summary>
     /// <param name="worldPos"> The world position </param>
-    /// <returns> The tile and a boolean saying whether the tile was successfully found </returns>
+    /// <returns> The tile and boolean saying whether the tile was successfully found </returns>
     public (PathfindingTile, bool) WorldPosToTile(Vector2 worldPos)
     {
         Vector2Int tilePos = new Vector2Int(
@@ -161,27 +169,6 @@ public class RoomInterface : MonoBehaviour
         try
         {
             return (myRoomGrid[tilePos.x, tilePos.y], true);
-        }
-        catch
-        {
-            // if we error here, it means the requested worldPos is outside of the grid
-            return (null, false);
-        }
-    }
-
-    public static (Tile, bool) WorldPosToTileStatic(Vector2 worldPos)
-    {
-        var curRoom = FloorGenerator.floorGeneratorInstance.currentRoom;
-        var offset = curRoom.transform.position;
-        var roomSize = curRoom.roomSize;
-
-        Vector2Int tilePos = new Vector2Int(
-            Mathf.RoundToInt(worldPos.x + roomSize.x / 2 - offset.x),
-            Mathf.RoundToInt(worldPos.y + roomSize.y / 2 - offset.y)
-        );
-        try
-        {
-            return (curRoom.roomGrid[tilePos.x, tilePos.y], true);
         }
         catch
         {
@@ -203,25 +190,12 @@ public class RoomInterface : MonoBehaviour
         );
         return worldPos;
     }
-    
-    public static Vector2 TileToWorldPos(Tile tile)
-    {
-        var curRoom = FloorGenerator.floorGeneratorInstance.currentRoom;
-        var offset = curRoom.transform.position;
-        var roomSize = curRoom.roomSize;
-        
-        Vector2 worldPos = new Vector2(
-            tile.gridLocation.x + offset.x - roomSize.x / 2,
-            tile.gridLocation.y + offset.y - roomSize.y / 2
-        );
-        return worldPos;
-    }
 
     /// <summary>
     /// Gets the neighbors of a given tile
     /// </summary>
     /// <param name="tile"> The tile </param>
-    /// <returns> The neighbors </returns>
+    /// <returns> The neighbors. </returns>
     public List<PathfindingTile> GetNeighbors(PathfindingTile tile)
     {
         List<PathfindingTile> neighbors = new List<PathfindingTile>();

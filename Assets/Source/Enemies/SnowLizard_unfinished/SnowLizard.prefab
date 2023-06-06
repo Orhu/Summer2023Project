@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1858251274146161317, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: damageOnTouch
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2871443049851868443, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Size.x
       value: 0.4184205
@@ -22,6 +26,34 @@ PrefabInstance:
     - target: {fileID: 2871443049851868443, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Offset.y
       value: -0.15296161
+      objectReference: {fileID: 0}
+    - target: {fileID: 3497544517795975723, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Radius
+      value: 0.31264693
+      objectReference: {fileID: 0}
+    - target: {fileID: 3497544517795975723, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.18735307
+      objectReference: {fileID: 0}
+    - target: {fileID: 5097362261395317995, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: maxSpeed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5097362261395317995, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: acceleration
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5097362261395317995, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: deceleration
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5097362261395317995, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: immuneToGroundEffects
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: maxHealth
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442667, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_RootOrder
@@ -83,6 +115,10 @@ PrefabInstance:
       propertyPath: m_Offset.x
       value: -0.0040789843
       objectReference: {fileID: 0}
+    - target: {fileID: 8941374239524879921, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: initialState
+      value: 
+      objectReference: {fileID: 11400000, guid: 791106e6c0a0a264f9dbc6c8bd9b48d8, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
 --- !u!1 &7737712479215103014 stripped
@@ -102,6 +138,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da38eb0bd45ef2d4da156667e67c4970, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialDropDelay: 0.25
+  initialDropDelay: 1
   delayBetweenDrops: 1
   dropPrefab: {fileID: 7577925804630806288, guid: c29010bdc033a1f4b8bb9602c5b38677, type: 3}
