@@ -10,26 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
-  m_Name: MagicTurret_BulletAttack
+  m_Name: FireballTurret_BulletAttack
   m_EditorClassIdentifier: 
   attack:
     damage: 2
     damageType: 0
-    statusEffects: []
+    statusEffects:
+    - {fileID: 11400000, guid: c5c4ce2a12d9c5348b8370640b950f21, type: 2}
   hitCount: 1
   applyDamageOnHit: 1
   modifiers:
-  - {fileID: 11400000, guid: 75d07f07c906ca848a41527872e63ecc, type: 2}
-  shape: {fileID: 11400000, guid: cc6312df37c2a6c41816344189201bcd, type: 2}
-  lifetime: 0.75
+  - {fileID: 11400000, guid: c57a114063ffad74a823dce35cf5df9c, type: 2}
+  shape: {fileID: 11400000, guid: 590d9bb12309e1049bb373d6c311ea2b, type: 2}
+  lifetime: 1.375
   initialSpeed: 10
   acceleration: 0
-  minSpeed: 2.5
-  maxSpeed: 20
+  minSpeed: 0
+  maxSpeed: 8
   homingSpeed: 0
   homingTime: 0
   homingAimMode: 1
-  visualObject: {fileID: 2238662938685823967, guid: 9c8ac9f8c780fe142bd868e34a52e8c4, type: 3}
+  visualObject: {fileID: 2809569760718847691, guid: 4ce4d31298fcbb14cac0e0c99844d2e7, type: 3}
   detachVisualsBeforeDestroy: 0
   spawnLocation: 0
   aimMode: 0
