@@ -7,10 +7,10 @@ using UnityEngine;
 /// </summary>
 public class Controller : MonoBehaviour, IActor
 {
-    [Tooltip("is this agent controllable by inputs?")] 
+    [Tooltip("is this agent controllable by inputs?")]
     [SerializeField] private bool isControllable;
 
-    [Tooltip("Does this agent use enemy brain component?")] 
+    [Tooltip("Does this agent use enemy brain component?")]
     [SerializeField] private bool useEnemyLogic;
 
     // -1 to 1 range representing current movement input, same system as built-in Input.GetAxis"
@@ -91,7 +91,7 @@ public class Controller : MonoBehaviour, IActor
     public void MoveTowards(Vector2 target)
     {
         if (!canMove || !useEnemyLogic) return;
-        
+
         var myPos = (Vector2)enemyStateMachine.feetCollider.transform.position;
 
         var xDiff = myPos.x - target.x;
@@ -103,7 +103,8 @@ public class Controller : MonoBehaviour, IActor
         if (xDiff > buffer)
         {
             movementInput.x = -1;
-        } else if (xDiff < buffer)
+        }
+        else if (xDiff < buffer)
         {
             movementInput.x = 1;
         }
@@ -111,11 +112,12 @@ public class Controller : MonoBehaviour, IActor
         {
             movementInput.x = 0;
         }
-        
+
         if (yDiff > buffer)
         {
             movementInput.y = -1;
-        } else if (yDiff < -buffer)
+        }
+        else if (yDiff < -buffer)
         {
             movementInput.y = 1;
         }
@@ -123,7 +125,6 @@ public class Controller : MonoBehaviour, IActor
         {
             movementInput.y = 0;
         }
-
     }
 
     #region IActor Implementation
@@ -158,7 +159,7 @@ public class Controller : MonoBehaviour, IActor
     public Vector3 GetActionAimPosition()
     {
         if (useEnemyLogic)
-        { 
+        {
             print("ActionAimPosition requested, giving it: " + enemyStateMachine.currentTarget);
             return enemyStateMachine.currentTarget;
         }

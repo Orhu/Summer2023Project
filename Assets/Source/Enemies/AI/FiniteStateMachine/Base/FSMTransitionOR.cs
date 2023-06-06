@@ -2,7 +2,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Represents a transition between states in a finite state machine
+/// Represents a transition between states in a finite state machine, where there are more than one condition and one must be true for the decision to be true
 /// </summary>
 [CreateAssetMenu(menuName = "FSM/Transitions/OR")]
 public class FSMTransitionOR : BaseFSMTransition

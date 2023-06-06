@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Represents an action that sets an adjacent direction as the target when a condition is met
+/// </summary>
 [CreateAssetMenu(menuName = "FSM/Actions/Set Random Adjacent Direction As Target With Condition")]
 public class SetAdjacentDirectionAsTargetWithCondition : FSMAction
 {

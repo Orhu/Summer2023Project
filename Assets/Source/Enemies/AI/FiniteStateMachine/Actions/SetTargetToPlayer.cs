@@ -39,6 +39,11 @@ public class SetTargetToPlayer : FSMAction
         stateMachine.cooldownData.cooldownReady.Remove(this);
     }
 
+    /// <summary>
+    /// Sets the current target to the player
+    /// </summary>
+    /// <param name="stateMachine"> The stateMachine to use </param>
+    /// <returns></returns>
     IEnumerator SetPlayerTarget(BaseStateMachine stateMachine)
     {
         stateMachine.currentTarget = stateMachine.player.transform.position;

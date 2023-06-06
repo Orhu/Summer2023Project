@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Represents the state machine that manages and switches between states. Essentially serves as the "brain" and logic of an enemy.
+/// </summary>
 public class BaseStateMachine : MonoBehaviour
 {
     // the state this machine starts in
@@ -29,6 +32,7 @@ public class BaseStateMachine : MonoBehaviour
     // tracks whether we are currently exhausted
     [HideInInspector] public bool exhausted;
 
+    // struct used to store path data with this state machine instance, so we can remember pathfinding data on scriptableobjects where we cannot store them in-object
     public struct PathData
     {
         // path to target 
@@ -47,9 +51,10 @@ public class BaseStateMachine : MonoBehaviour
     // stores our current path data
     [HideInInspector] public PathData pathData;
 
+    // struct to store cooldown data
     public struct CooldownData
     {
-        // is attack cooldown available?
+        // is action cooldown available?
         public Dictionary<FSMAction, bool> cooldownReady;
     }
     // stores our current attack data
@@ -61,6 +66,7 @@ public class BaseStateMachine : MonoBehaviour
     // tracks the time this was initialized
     private float timeStarted;
 
+    // draw debug gizmos?
     [SerializeField] private bool drawGizmos;
     // debug waypoint used for drawing gizmos
     [HideInInspector] public Vector2 debugWaypoint;
@@ -96,11 +102,9 @@ public class BaseStateMachine : MonoBehaviour
 
         if (exhausted)
         {
-            print("I am exhausted!");
             GetComponent<Controller>().movementInput = Vector2.zero;
             return;
         }
-        print("I am not exhausted!");
         currentState.OnStateUpdate(this);
     }
 
@@ -131,6 +135,9 @@ public class BaseStateMachine : MonoBehaviour
         FloorGenerator.floorGeneratorInstance.currentRoom.RemoveEnemy(gameObject);
     }
 
+    /// <summary>
+    /// Draw debug gizmos
+    /// </summary>
     private void OnDrawGizmos()
     {
         if (!drawGizmos) return;
