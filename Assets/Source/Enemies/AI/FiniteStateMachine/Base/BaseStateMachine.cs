@@ -91,6 +91,7 @@ public class BaseStateMachine : MonoBehaviour
     {
         if (Time.time - timeStarted <= delayBeforeLogic) return;
         
+        print(currentState);
         currentState.OnStateUpdate(this);
     }
 

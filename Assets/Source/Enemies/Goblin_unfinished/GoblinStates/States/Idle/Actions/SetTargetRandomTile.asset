@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d133cc8f80838bb46bd910d849bb8254, type: 3}
-  m_Name: WalkToTarget
+  m_Script: {fileID: 11500000, guid: 8fb81fca3c0f2f04b8084fed1e15fbf9, type: 3}
+  m_Name: SetTargetRandomTile
   m_EditorClassIdentifier: 
-  delayBetweenPathUpdates: 0.25
-  distanceBuffer: 0.061
+  delayBetweenTargetUpdates: 0.1
+  whenToPickNewTile: {fileID: 11400000, guid: 5061e3252d114034d9e24b08d92dbce5, type: 2}

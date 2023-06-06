@@ -8,7 +8,7 @@ using UnityEngine;
 public class ChaseTarget : FSMAction
 {
     [Tooltip("How often does this enemy update its path, in seconds?")]
-    [SerializeField] private float delayBetweenPathUpdates;
+    [SerializeField] private float delayBetweenPathUpdates = 0.25f;
 
     [Tooltip("How close do we need to be to our point before we are happy?")]
     [SerializeField] private float distanceBuffer = 0.061f;

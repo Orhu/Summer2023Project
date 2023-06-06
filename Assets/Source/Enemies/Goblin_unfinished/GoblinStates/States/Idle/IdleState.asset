@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d133cc8f80838bb46bd910d849bb8254, type: 3}
-  m_Name: WalkToTarget
+  m_Script: {fileID: 11500000, guid: 5c5858af96344aaa9e636fdff62a26b5, type: 3}
+  m_Name: IdleState
   m_EditorClassIdentifier: 
-  delayBetweenPathUpdates: 0.25
-  distanceBuffer: 0.061
+  actions:
+  - {fileID: 11400000, guid: 290a9cf3cee0a414dbf2d73c254a277c, type: 2}
+  - {fileID: 11400000, guid: 44bbadaef0cc21143a392fd148501381, type: 2}
+  transitions: []

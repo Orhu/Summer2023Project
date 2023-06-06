@@ -52,7 +52,15 @@ public class FireAttack : FSMAction
     /// <param name="stateMachine"> The stateMachine performing the attack </param>
     public override void OnStateEnter(BaseStateMachine stateMachine)
     {
-        stateMachine.cooldownData.cooldownReady.Add(this, true);
+        // sometimes, because transitions can occur every frame, rapid transitions cause the key not to be deleted properly and error. this check prevents that error
+        if (!stateMachine.cooldownData.cooldownReady.ContainsKey(this))
+        {
+            stateMachine.cooldownData.cooldownReady.Add(this, true);
+        }
+        else
+        {
+            stateMachine.cooldownData.cooldownReady[this] = true;
+        }
     }
 
     /// <summary>
@@ -61,7 +69,6 @@ public class FireAttack : FSMAction
     /// <param name="stateMachine"> The stateMachine performing the attack </param>
     public override void OnStateExit(BaseStateMachine stateMachine)
     {
-        stateMachine.cooldownData.cooldownReady.Remove(this);
     }
 
     /// <summary>

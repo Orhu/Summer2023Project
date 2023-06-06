@@ -8,7 +8,7 @@ using UnityEngine;
 public class WalkToTargetOnce : FSMAction
 {
     [Tooltip("How often does this enemy update its path, in seconds?")]
-    [SerializeField] private float delayBetweenPathUpdates;
+    [SerializeField] private float delayBetweenPathUpdates = 0.25f;
     
     [Tooltip("How close do we need to be to our point before we are happy?")]
     [SerializeField] private float distanceBuffer = 0.061f;
@@ -44,7 +44,15 @@ public class WalkToTargetOnce : FSMAction
     public override void OnStateEnter(BaseStateMachine stateMachine)
     {
         stateMachine.pathData.ignorePathRequests = false;
-        stateMachine.cooldownData.cooldownReady.Add(this, true);
+        // sometimes, because transitions can occur every frame, rapid transitions cause the key not to be deleted properly and error. this check prevents that error
+        if (!stateMachine.cooldownData.cooldownReady.ContainsKey(this))
+        {
+            stateMachine.cooldownData.cooldownReady.Add(this, true);
+        }
+        else
+        {
+            stateMachine.cooldownData.cooldownReady[this] = true;
+        }
     }
 
     /// <summary>
@@ -54,7 +62,6 @@ public class WalkToTargetOnce : FSMAction
     public override void OnStateExit(BaseStateMachine stateMachine)
     {
         stateMachine.pathData.ignorePathRequests = true;
-        stateMachine.cooldownData.cooldownReady.Remove(this);
     }
 
     /// <summary>
