@@ -8,20 +8,26 @@ using UnityEngine;
 /// </summary>
 public static class SaveManager
 {
+    // Call to clear all save data
+    static System.Action ClearData;
+
+
     // The player's deck as it is saved to disk.
-    private static SaveData<List<Card>> _savedPlayerDeck = new SaveData<List<Card>>("PlayerDeck");
+    private static SaveData<List<Card>> _savedPlayerDeck = new SaveData<List<Card>>("PlayerDeck", false);
     public static List<Card> savedPlayerDeck
     {
         get => _savedPlayerDeck.data;
         set => _savedPlayerDeck.data = value;
     }
 
-    private static SaveData<Vector2> _savedPlayerPosition = new SaveData<Vector2>("PlayerData");
+    // The player's position as it is saved to the disk.
+    private static SaveData<Vector2> _savedPlayerPosition = new SaveData<Vector2>("PlayerData", false);
     public static Vector2 savedPlayerPosition
     {
         get => _savedPlayerPosition.data;
         set => _savedPlayerPosition.data = value;
     }
+
 
 
     /// <summary>
@@ -49,19 +55,38 @@ public static class SaveManager
             }
         }
 
-        /// <summary>
-        /// Creates a new save data.
-        /// </summary>
-        /// <param name="fileName"> The filename of the save to store. </param>
-        public SaveData(string fileName)
-        {
-            this.fileName = fileName;
-        }
-
         // The filename for the player deck.
         private readonly string fileName;
 
         // The file path this is saved at.
         private string filePath => System.IO.Path.Combine(Application.persistentDataPath, fileName);
+
+        /// <summary>
+        /// Creates a new save data.
+        /// </summary>
+        /// <param name="fileName"> The filename of the save to store. </param>
+        /// <param name="persistent"> Whether or not this will ignore clear data requests. </param>
+        public SaveData(string fileName, bool persistent)
+        {
+            this.fileName = fileName;
+
+            if (!persistent)
+            {
+                SaveManager.ClearData += ClearData;
+            }
+        }
+
+        /// <summary>
+        /// Clears the saved data.
+        /// </summary>
+        private void ClearData()
+        {
+            _data = default;
+
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+        }
     }
 }
