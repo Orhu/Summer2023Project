@@ -41,7 +41,7 @@ public class LockCameraToRoom : MonoBehaviour
         height += extraHeight;
         GetComponent<Camera>().orthographicSize = height / 2;
         floorGenerator = FloorGenerator.floorGeneratorInstance;
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = Player.Get();
     }
 
     /// <summary>

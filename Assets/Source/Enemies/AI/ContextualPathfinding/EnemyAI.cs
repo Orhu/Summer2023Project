@@ -50,7 +50,7 @@ public class EnemyAI : MonoBehaviour
 
 
         // delete this code
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = Player.Get();
     }
 
     /// <summary>
