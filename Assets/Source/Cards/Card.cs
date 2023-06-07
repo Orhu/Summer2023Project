@@ -48,6 +48,9 @@ public class Card : ScriptableObject
     [Tooltip("The general background card sprite on the Effects side of the card.")]
     public Sprite effectBackground;
 
+    [Tooltip("The card specific rune sprite to be displayed on UI")]
+    public Sprite runeImage;
+
 
     /// <summary>
     /// Gets the description of this card by collecting all the formated descriptions from the card's mechanics.
