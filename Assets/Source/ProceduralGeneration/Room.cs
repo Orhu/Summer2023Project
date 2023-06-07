@@ -145,7 +145,7 @@ public class Room : MonoBehaviour
     /// <returns> Enumerator so other functions can wait for this to finish </returns>
     public IEnumerator MovePlayer(Direction direction, bool shouldCloseDoors)
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        GameObject player = Player.Get();
 
         Vector3 bottomLeftLocation = new Vector3(transform.position.x - roomSize.x / 2, transform.position.y - roomSize.y / 2, 0);
         Vector3 topRightLocation = new Vector3(transform.position.x + roomSize.x / 2, transform.position.y + roomSize.y / 2, 0);
