@@ -11,10 +11,6 @@ using UnityEngine;
 /// </summary>
 public static class SaveManager
 {
-    // Call to clear all save data
-    static System.Action ClearData;
-
-
     // The player's deck as it is saved to disk.
     private static SaveData<List<Card>> _savedPlayerDeck = new SaveData<List<Card>>("PlayerDeck", false);
     public static List<Card> savedPlayerDeck
@@ -31,7 +27,18 @@ public static class SaveManager
         set => _savedPlayerPosition.data = value;
     }
 
+    #region Save Clearing
+    // Called when a save clear is requested.
+    private static System.Action ClearData;
 
+    /// <summary>
+    /// Clears all non persistent save data.
+    /// </summary>
+    public static void ClearTransientSaves()
+    {
+        ClearData?.Invoke();
+    }
+    #endregion
 
     /// <summary>
     /// Class for storing any kinda of data, and handling loading and storing of that data as needed.
