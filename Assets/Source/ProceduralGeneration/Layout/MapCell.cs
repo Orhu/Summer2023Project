@@ -19,7 +19,6 @@ public enum Direction
 /// <summary>
 /// The cell that is stored in the room grid, to keep track of room generation
 /// </summary>
-[System.Serializable]
 public class MapCell
 {
     // The directions that this cell has
@@ -35,7 +34,7 @@ public class MapCell
     public Vector2Int location;
 
     // The room at this location
-    [System.NonSerialized] public GameObject room;
+    public GameObject room;
 }
 
 /// <summary>

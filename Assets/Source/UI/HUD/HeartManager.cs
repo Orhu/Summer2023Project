@@ -19,7 +19,7 @@ public class HeartManager : MonoBehaviour
     /// </summary>
     void Start()
     {
-        playerHealthScript = Player.Get().GetComponent<Health>();
+        playerHealthScript = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
         currentPlayerHealth = playerHealthScript.maxHealth;
         UpdateHeartManager();
     }

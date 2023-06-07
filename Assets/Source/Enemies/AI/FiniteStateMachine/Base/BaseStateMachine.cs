@@ -88,7 +88,7 @@ public class BaseStateMachine : MonoBehaviour
     private void Start()
     {
         timeStarted = Time.time;
-        player = Player.Get();
+        player = GameObject.FindGameObjectWithTag("Player");
         FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Add(gameObject);
         currentState.OnStateEnter(this);
     }

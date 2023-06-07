@@ -63,7 +63,7 @@ public class Deck : MonoBehaviour
         if (playerDeck == null)
         {
             playerDeck = this;
-            playerDeck.actor = Player.Get().GetComponent<Controller>();
+            playerDeck.actor = GameObject.FindGameObjectWithTag("Player").GetComponent<Controller>();
         }
     }
 

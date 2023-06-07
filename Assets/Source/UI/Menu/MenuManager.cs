@@ -22,7 +22,7 @@ public class MenuManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            playerGameObject = Player.Get();
+            playerGameObject = GameObject.FindGameObjectWithTag("Player");
             if (boosterPackMenu == null)
             {
                 boosterPackMenu = GetComponentInChildren<BoosterPackMenu>();
