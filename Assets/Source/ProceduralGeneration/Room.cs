@@ -16,14 +16,6 @@ public class Room : MonoBehaviour
     // The size of the room
     [HideInInspector] public Vector2Int roomSize;
 
-    // Returns the size of the room, x * y
-    [HideInInspector]
-    public int maxSize
-    {
-        // TODO not sure if this is right
-        get => roomSize.x * roomSize.y;
-    }
-
     // The type of the room
     [HideInInspector] public RoomType roomType;
 

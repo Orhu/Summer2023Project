@@ -16,34 +16,34 @@ public class FireAttack : FSMAction
 
     [Tooltip("After the action is performed, what is the delay before the action can be performed again?")]
     public float actionCooldownTime;
-    
+
+    [Tooltip("How many seconds to apply the Exhaust status effect")]
+    public float exhaustDuration;
+
     [Tooltip("The actions that will be taken when the enemy attempts to issue an action.")] [EditInline]
     public Action[] actions;
 
     [Tooltip("Before the action charge up is started, do you want to do anything else?")]
-    public UnityEvent beforeChargeUp;
-    
+    public UnityEvent<BaseStateMachine> beforeChargeUp;
+
     [Tooltip("Before the action is performed, do you want to do anything else?")]
-    public UnityEvent beforeAction;
-    
+    public UnityEvent<BaseStateMachine> beforeAction;
+
     [Tooltip("Immediately after the action is performed, do you want to do anything else?")]
-    public UnityEvent afterAction;
-    
+    public UnityEvent<BaseStateMachine> afterAction;
+
     [Tooltip("After the cooldown ends, do you want to do anything else?")]
-    public UnityEvent afterCooldown;
-    
-    // determines if attack is available or not
-    private bool attackReady;
-    
+    public UnityEvent<BaseStateMachine> afterCooldown;
+
     /// <summary>
     /// Launches an attack whenever the cooldown is available
     /// </summary>
     /// <param name="stateMachine"> The stateMachine performing the attack </param>
     public override void OnStateUpdate(BaseStateMachine stateMachine)
     {
-        if (attackReady)
+        if (stateMachine.cooldownData.cooldownReady[this])
         {
-            attackReady = false;
+            stateMachine.cooldownData.cooldownReady[this] = false;
             var coroutine = PerformAttack(stateMachine);
             stateMachine.StartCoroutine(coroutine);
         }
@@ -55,7 +55,16 @@ public class FireAttack : FSMAction
     /// <param name="stateMachine"> The stateMachine performing the attack </param>
     public override void OnStateEnter(BaseStateMachine stateMachine)
     {
-        attackReady = true;
+        // sometimes, because transitions can occur every frame, rapid transitions cause the key not to be deleted properly and error. this check prevents that error
+        if (!stateMachine.cooldownData.cooldownReady.ContainsKey(this))
+        {
+            // if the key has not yet been added, add it with 0 cooldown
+            stateMachine.cooldownData.cooldownReady.Add(this, true);
+        }
+        else
+        {
+            // in this case, there may be a cooldown still running from a previous state exit/re-entry so don't set the value at all
+        }
     }
 
     /// <summary>
@@ -72,16 +81,23 @@ public class FireAttack : FSMAction
     /// <param name="stateMachine"> The stateMachine performing the attack </param>
     IEnumerator PerformAttack(BaseStateMachine stateMachine)
     {
-        beforeChargeUp?.Invoke();
+        beforeChargeUp?.Invoke(stateMachine);
         yield return new WaitForSeconds(actionChargeUpTime);
-        beforeAction?.Invoke();
+        beforeAction?.Invoke(stateMachine);
         foreach (var action in actions)
         {
-           action.Play(stateMachine.GetComponent<Controller>(), FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies);
+            BaseStateMachine.print(name + ": Firing!");
+            action.Play(stateMachine.GetComponent<Controller>(), FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies);
         }
-        afterAction?.Invoke();
+
+        afterAction?.Invoke(stateMachine);
+        var exhaustableComponent = stateMachine.GetComponent<Exhaustable>();
+        if (exhaustableComponent != null)
+        {
+            exhaustableComponent.ExhaustMe(exhaustDuration);
+        }
         yield return new WaitForSeconds(actionCooldownTime);
-        afterCooldown?.Invoke();
-        attackReady = true;
+        afterCooldown?.Invoke(stateMachine);
+        stateMachine.cooldownData.cooldownReady[this] = true;
     }
 }

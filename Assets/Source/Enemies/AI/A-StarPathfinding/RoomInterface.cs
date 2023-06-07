@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -88,13 +89,27 @@ public class RoomInterface : MonoBehaviour
     private Room myRoom;
 
     // the size of this room, in tiles
-    private Vector2Int myRoomSize;
+    [HideInInspector] public Vector2Int myRoomSize;
 
     // the tile grid of this room
-    private PathfindingTile[,] myRoomGrid;
+    [HideInInspector] public PathfindingTile[,] myRoomGrid;
 
     // the world position of this room
     private Vector2 myWorldPosition;
+
+    // this instance
+    public static RoomInterface instance;
+
+    /// <summary>
+    /// Sets the instance to this instance
+    /// </summary>
+    void Awake()
+    {
+        instance = this;
+    }
+
+    // draw debug gizmos?
+    [SerializeField] private bool drawGizmos;
 
     /// <summary>
     /// Retrieves player's current room from the FloorGenerator singleton, updating this class' room reference
@@ -147,14 +162,22 @@ public class RoomInterface : MonoBehaviour
     /// Gets the tile at the given world position
     /// </summary>
     /// <param name="worldPos"> The world position </param>
-    /// <returns> The tile </returns>
-    public PathfindingTile WorldPosToTile(Vector2 worldPos)
+    /// <returns> The tile and boolean saying whether the tile was successfully found </returns>
+    public (PathfindingTile, bool) WorldPosToTile(Vector2 worldPos)
     {
         Vector2Int tilePos = new Vector2Int(
             Mathf.RoundToInt(worldPos.x + myRoomSize.x / 2 - myWorldPosition.x),
             Mathf.RoundToInt(worldPos.y + myRoomSize.y / 2 - myWorldPosition.y)
         );
-        return myRoomGrid[tilePos.x, tilePos.y];
+        try
+        {
+            return (myRoomGrid[tilePos.x, tilePos.y], true);
+        }
+        catch
+        {
+            // if we error here, it means the requested worldPos is outside of the grid
+            return (null, false);
+        }
     }
 
     /// <summary>
@@ -175,7 +198,7 @@ public class RoomInterface : MonoBehaviour
     /// Gets the neighbors of a given tile
     /// </summary>
     /// <param name="tile"> The tile </param>
-    /// <returns> The neighbors </returns>
+    /// <returns> The neighbors. </returns>
     public List<PathfindingTile> GetNeighbors(PathfindingTile tile)
     {
         List<PathfindingTile> neighbors = new List<PathfindingTile>();
@@ -204,8 +227,8 @@ public class RoomInterface : MonoBehaviour
                     {
                         try
                         {
-                            // this tile is a corner, make sure it is reachable by one of its adjacent tiles (not blocked)
-                            if (myRoomGrid[checkX - x, checkY].walkable || myRoomGrid[checkX, checkY - y].walkable)
+                            // this tile is a corner, make sure it is reachable by both of its adjacent tiles (not blocked)
+                            if (myRoomGrid[checkX - x, checkY].walkable && myRoomGrid[checkX, checkY - y].walkable)
                             {
                                 neighbors.Add(myRoomGrid[checkX, checkY]);
                             }
@@ -221,5 +244,27 @@ public class RoomInterface : MonoBehaviour
         }
 
         return neighbors;
+    }
+
+    /// <summary>
+    /// Draw debug gizmos
+    /// </summary>
+    private void OnDrawGizmos()
+    {
+        if (!drawGizmos) return;
+
+        foreach (var t in myRoomGrid)
+        {
+            if (t.walkable)
+            {
+                Gizmos.color = Color.green;
+            }
+            else
+            {
+                Gizmos.color = Color.red;
+            }
+
+            Gizmos.DrawCube(TileToWorldPos(t), Vector3.one);
+        }
     }
 }
