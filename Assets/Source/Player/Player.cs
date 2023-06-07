@@ -17,6 +17,10 @@ public static class Player
         if (player != null) { return player; }
 
         player = GameObject.FindGameObjectWithTag("Player");
+
+        //player.transform.position = SaveManager.savedPlayerPosition;
+        //FloorGenerator.floorGeneratorInstance.onRoomChange.AddListener(() => { SaveManager.savedPlayerPosition = player.transform.position; });
+
         return player;
     }
 
