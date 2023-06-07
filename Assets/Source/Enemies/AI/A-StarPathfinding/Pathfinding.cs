@@ -44,6 +44,13 @@ public class Pathfinding : MonoBehaviour
         Vector2[] waypoints = new Vector2[0];
         bool pathSuccess = false;
 
+        if (stateMachine == null)
+        {
+            // if we are in here, the enemy died sometime between submitting a path request and this point.
+            // do not send a callback as that will just error, instead just do nothing.
+            yield break;
+        }
+        
         var startNodeResult = roomInterface.WorldPosToTile(stateMachine.feetCollider.transform.position);
         var targetNodeResult = roomInterface.WorldPosToTile(stateMachine.currentTarget);
 
