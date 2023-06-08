@@ -8,7 +8,7 @@ public class CardStealer : MonoBehaviour
     {
         if (collision.CompareTag("Player") && Deck.playerDeck.cards.Count > 0)
         {
-            Deck.playerDeck.RemoveCard(Deck.playerDeck.cards[Random.Range(0, Deck.playerDeck.cards.Count - 1)]);
+            Deck.playerDeck.RemoveCard(Deck.playerDeck.cards[FloorGenerator.random.Next(0, Deck.playerDeck.cards.Count - 1)]);
         }
     }
 }

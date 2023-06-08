@@ -83,7 +83,7 @@ public class Room : MonoBehaviour
     /// The function called when the room is entered
     /// </summary>
     /// <param name="direction"> The direction the room is being entered from </param>
-    public void Enter(Direction direction)
+    public void Enter(Direction direction = Direction.None)
     {
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -96,7 +96,6 @@ public class Room : MonoBehaviour
         Generate();
 
         shouldCloseDoors = shouldCloseDoors && template.chosenEnemyPool.enemies != null && template.chosenEnemyPool.enemies.Count != 0;
-
         // Move player into room, then close/activate doors (so player doesn't get trapped in door)
         StartCoroutine(MovePlayer(direction, shouldCloseDoors));
     }
@@ -175,7 +174,7 @@ public class Room : MonoBehaviour
         bool inXRange = (player.transform.position.x >= bottomLeftLocation.x + 0.9f && player.transform.position.x <= topRightLocation.x - 0.9f);
         bool inYRange = (player.transform.position.y >= bottomLeftLocation.y + 0.9f && player.transform.position.y <= topRightLocation.y - 0.9f);
 
-        while (!inXRange || !inYRange)
+        while ((!inXRange || !inYRange) && !(direction == Direction.None))
         {
 
             inXRange = (player.transform.position.x >= bottomLeftLocation.x + 0.9f && player.transform.position.x <= topRightLocation.x - 0.9f);
@@ -196,13 +195,14 @@ public class Room : MonoBehaviour
     /// <summary>
     /// Generates the layout of the room
     /// </summary>
-    public void Generate()
+    /// <param name="spawnEnemies"> Whether or not to spawn enemies </param>
+    public void Generate(bool spawnEnemies = true)
     {
         if (!generated)
         {
             Template template = FloorGenerator.floorGeneratorInstance.templateGenerationParameters.GetRandomTemplate(roomType);
 
-            GetComponent<TemplateGenerator>().Generate(this, template);
+            GetComponent<TemplateGenerator>().Generate(this, template, spawnEnemies);
             generated = true;
         }
     }
