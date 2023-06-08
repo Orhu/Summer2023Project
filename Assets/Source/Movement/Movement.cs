@@ -6,6 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Base class for all components that move game objects
 /// </summary>
+[RequireComponent(typeof(AnimatorController))]
 public abstract class Movement : MonoBehaviour
 {
     // The desired movement direction.
@@ -17,7 +18,7 @@ public abstract class Movement : MonoBehaviour
         {
             _movementInput = value;
             animatorComponent.SetBool("moving", value.sqrMagnitude > 0);
-            transform.localScale = new Vector3(1, 1, value.x < 0 ? -1 : 1);
+            animatorComponent.SetMirror("runLeft", value.x < 0);
         }
     }
 
@@ -26,10 +27,10 @@ public abstract class Movement : MonoBehaviour
     public ModifySpeed requestSpeedModifications;
 
     // animator component to make the pretty animations do their thing
-    private Animator animatorComponent;
+    private AnimatorController animatorComponent;
 
     protected void Awake()
     {
-        animatorComponent = GetComponent<Animator>();
+        animatorComponent = GetComponent<AnimatorController>();
     }
 }

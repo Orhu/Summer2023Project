@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Agent serves as the brain of any agent. Has the ability to input basic tasks, delegating them to various parts of the agent as needed.
 /// </summary>
+[RequireComponent(typeof(Movement), typeof(AnimatorController))]
 public class InputHandler : MonoBehaviour, IActor
 {
 
@@ -12,7 +13,7 @@ public class InputHandler : MonoBehaviour, IActor
     private Movement movementComponent;
 
     // animator component to make the pretty animations do their thing
-    private Animator animatorComponent;
+    private AnimatorController animatorComponent;
 
     /// <summary>
     /// Initialize components
@@ -20,7 +21,7 @@ public class InputHandler : MonoBehaviour, IActor
     private void Awake()
     { 
         movementComponent = GetComponent<Movement>();
-        animatorComponent = GetComponent<Animator>();
+        animatorComponent = GetComponent<AnimatorController>();
     }
 
     /// <summary>
@@ -45,7 +46,7 @@ public class InputHandler : MonoBehaviour, IActor
                     animatorComponent.SetTrigger("cast");
                 }
             }
-            animatorComponent.SetBool("castMirror", GetActionAimPosition().x - transform.position.x < 0);
+            animatorComponent.SetMirror("castLeft", GetActionAimPosition().x - transform.position.x < 0);
         }
     }
 
