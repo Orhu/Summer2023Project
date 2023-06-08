@@ -63,7 +63,20 @@ public class Deck : MonoBehaviour
         if (playerDeck == null)
         {
             playerDeck = this;
+
             playerDeck.actor = Player.Get().GetComponent<InputHandler>();
+
+            if (SaveManager.savedPlayerDeck == null)
+            {
+                SaveManager.savedPlayerDeck = playerDeck.cards;
+            }
+            else
+            {
+                playerDeck.cards = SaveManager.savedPlayerDeck;
+            }
+
+            playerDeck.onCardAdded += x => SaveManager.savedPlayerDeck = playerDeck.cards;
+            playerDeck.onCardRemoved += x => SaveManager.savedPlayerDeck = playerDeck.cards;
         }
     }
 

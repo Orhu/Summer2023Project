@@ -34,7 +34,6 @@ public class Room : MonoBehaviour
     // Called when all enemies in this room are killed.
     public System.Action onCleared;
 
-
     /// <summary>
     /// Adds an enemy to the list of living enemies
     /// </summary>

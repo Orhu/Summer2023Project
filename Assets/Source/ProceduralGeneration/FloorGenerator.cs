@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -67,6 +68,12 @@ public class FloorGenerator : MonoBehaviour
         Deck.playerDeck.onCardRemoved += OnCardRemoved;
         map = GetComponent<LayoutGenerator>().Generate(layoutGenerationParameters);
         GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, roomSize);
+
+        // Find Closest room.
+        //currentRoom = Object.FindObjectsOfType<Room>().Aggregate((Room closest, Room next) =>
+        //{
+        //    return (closest.transform.position - Player.Get().transform.position).sqrMagnitude <= (next.transform.position - Player.Get().transform.position).sqrMagnitude ? closest : next;
+        //});
     }
 
     /// <summary>
