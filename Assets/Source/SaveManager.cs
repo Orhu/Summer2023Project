@@ -12,11 +12,18 @@ using UnityEngine;
 public static class SaveManager
 {
     // The player's deck as it is saved to disk.
-    private static SaveData<List<Card>> _savedPlayerDeck = new SaveData<List<Card>>("PlayerDeck", false);
+    private static SaveData<SavableList<Card>> _savedPlayerDeck = new SaveData<SavableList<Card>>("PlayerDeck", false);
     public static List<Card> savedPlayerDeck
     {
-        get => _savedPlayerDeck.data;
-        set => _savedPlayerDeck.data = value;
+        get
+        {
+            if (_savedPlayerDeck.data == null) { return null; }
+            return _savedPlayerDeck.data.value;
+        }
+        set
+        {
+            _savedPlayerDeck.data = new SavableList<Card>(value);
+        }
     }
 
     // The player's position as it is saved to the disk.
@@ -99,46 +106,61 @@ public static class SaveManager
             }
         }
     }
-}
 
-#region The dumb savable primitive squad
-/// <summary>
-/// A dumb class for saving a single int.
-/// </summary>
-[System.Serializable]
-public class SavableInt
-{
-    [Tooltip("The dumb value of the dumb savable int")]
-    public int value;
-}
+    #region The dumb savable primitive squad
+    /// <summary>
+    /// A dumb class for saving a single int.
+    /// </summary>
+    [System.Serializable]
+    private class SavableList<T>
+    {
+        [Tooltip("The dumb value of the dumb savable list")]
+        public List<T> value;
 
-/// <summary>
-/// A dumb class for saving a single float.
-/// </summary>
-[System.Serializable]
-public class SavableFloat
-{
-    [Tooltip("The dumb value of the dumb savable float")]
-    public float value;
-}
+        public SavableList(List<T> value)
+        {
+            this.value = value;
+        }
+    }
 
-/// <summary>
-/// A dumb class for saving single bool.
-/// </summary>
-[System.Serializable]
-public class SavableBool
-{
-    [Tooltip("The dumb value of the dumb savable bool")]
-    public bool value;
-}
+    /// <summary>
+    /// A dumb class for saving a single int.
+    /// </summary>
+    [System.Serializable]
+    private class SavableInt
+    {
+        [Tooltip("The dumb value of the dumb savable int")]
+        public int value;
+    }
 
-/// <summary>
-/// A dumb class for saving a single string.
-/// </summary>
-[System.Serializable]
-public class SavableString
-{
-    [Tooltip("The dumb value of the dumb savable string")]
-    public string value;
+    /// <summary>
+    /// A dumb class for saving a single float.
+    /// </summary>
+    [System.Serializable]
+    private class SavableFloat
+    {
+        [Tooltip("The dumb value of the dumb savable float")]
+        public float value;
+    }
+
+    /// <summary>
+    /// A dumb class for saving single bool.
+    /// </summary>
+    [System.Serializable]
+    private class SavableBool
+    {
+        [Tooltip("The dumb value of the dumb savable bool")]
+        public bool value;
+    }
+
+    /// <summary>
+    /// A dumb class for saving a single string.
+    /// </summary>
+    [System.Serializable]
+    private class SavableString
+    {
+        [Tooltip("The dumb value of the dumb savable string")]
+        public string value;
+    }
+    #endregion
 }
-#endregion
