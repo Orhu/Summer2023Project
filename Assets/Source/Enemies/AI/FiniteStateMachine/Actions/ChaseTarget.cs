@@ -120,14 +120,14 @@ public class ChaseTarget : FSMAction
                 if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.lookPoints.Length)
                 {
                     // reached the end of the waypoints, stop moving here
-                    stateMachine.GetComponent<Controller>().movementInput = Vector2.zero;
+                    stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
                     yield break;
                 }
 
                 currentWaypoint = stateMachine.pathData.path.lookPoints[stateMachine.pathData.targetIndex];
             }
 
-            stateMachine.GetComponent<Controller>().MoveTowards(currentWaypoint);
+            stateMachine.GetComponent<Movement>().movementInput = (currentWaypoint - (Vector2)stateMachine.transform.position).normalized;
             yield return null;
         }
     }

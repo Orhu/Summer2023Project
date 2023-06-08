@@ -171,7 +171,7 @@ public class Room : MonoBehaviour
             movementInput.y = 1;
         }
 
-        player.GetComponent<Controller>().enabled = false;
+        player.GetComponent<InputHandler>().enabled = false;
 
         bool inXRange = (player.transform.position.x >= bottomLeftLocation.x + 0.9f && player.transform.position.x <= topRightLocation.x - 0.9f);
         bool inYRange = (player.transform.position.y >= bottomLeftLocation.y + 0.9f && player.transform.position.y <= topRightLocation.y - 0.9f);
@@ -181,11 +181,11 @@ public class Room : MonoBehaviour
 
             inXRange = (player.transform.position.x >= bottomLeftLocation.x + 0.9f && player.transform.position.x <= topRightLocation.x - 0.9f);
             inYRange = (player.transform.position.y >= bottomLeftLocation.y + 0.9f && player.transform.position.y <= topRightLocation.y - 0.9f);
-            player.GetComponent<SimpleMovement>().MovementInput = movementInput;
+            player.GetComponent<SimpleMovement>().movementInput = movementInput;
             yield return null;
         }
 
-        player.GetComponent<Controller>().enabled = true;
+        player.GetComponent<InputHandler>().enabled = true;
 
         ActivateDoors();
         if (shouldCloseDoors)

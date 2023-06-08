@@ -102,7 +102,7 @@ public class BaseStateMachine : MonoBehaviour
 
         if (exhausted)
         {
-            GetComponent<Controller>().movementInput = Vector2.zero;
+            GetComponent<Movement>().movementInput = Vector2.zero;
             return;
         }
         currentState.OnStateUpdate(this);
