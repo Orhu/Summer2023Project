@@ -97,12 +97,12 @@ public class FloorGenerator : MonoBehaviour
     /// </summary>
     private void GetSpecialRoomsFromDeck()
     {
-        if (Deck.playerDeck == null || Deck.playerDeck.cards == null)
+        if (SaveManager.savedPlayerDeck == null)
         {
             return;
         }
 
-        foreach (Card card in Deck.playerDeck.cards)
+        foreach (Card card in SaveManager.savedPlayerDeck)
         {
             if (card.effects == null)
             {
@@ -141,12 +141,12 @@ public class FloorGenerator : MonoBehaviour
             templateGenerationParameters.tileTypesToPossibleTiles.tileTypesToPossibleTiles.Add(tileTypeToPossibleTiles);
         }
 
-        if (Deck.playerDeck == null || Deck.playerDeck.cards == null)
+        if (SaveManager.savedPlayerDeck == null)
         {
             return;
         }
 
-        foreach (Card card in Deck.playerDeck.cards)
+        foreach (Card card in SaveManager.savedPlayerDeck)
         {
             OnCardAdded(card);
         }
