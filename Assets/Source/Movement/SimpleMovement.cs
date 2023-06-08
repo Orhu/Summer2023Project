@@ -32,7 +32,7 @@ public class SimpleMovement : Movement
     /// <summary>
     /// Initializes the rigid body reference.
     /// </summary>
-    private void Awake()
+    private new void Awake()
     {
         base.Awake();
         rb2d = GetComponent<Rigidbody2D>();

@@ -1,7 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Handles mirroring based on state of animations.
+/// </summary>
 [RequireComponent(typeof(Animator))]
 public class AnimatorController : MonoBehaviour
 {
@@ -30,6 +32,9 @@ public class AnimatorController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates the transform to mirror appropriately
+    /// </summary>
     private void Update()
     {
         AnimationClip currentClip = animator.GetCurrentAnimatorClipInfo(0)[0].clip;
@@ -66,6 +71,9 @@ public class AnimatorController : MonoBehaviour
         animator.SetTrigger(name);
     }
 
+    /// <summary>
+    /// A animation clip and a parameter name.
+    /// </summary>
     [System.Serializable]
     private class ClipToParameter
     {
