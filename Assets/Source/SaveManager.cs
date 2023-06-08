@@ -61,7 +61,7 @@ public static class SaveManager
             set
             {
                 _data = value;
-                File.WriteAllText(filePath, JsonUtility.ToJson(data, true));
+                File.WriteAllText(filePath, JsonUtility.ToJson(_data, true));
             }
         }
 
