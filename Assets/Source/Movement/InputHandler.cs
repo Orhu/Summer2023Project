@@ -29,7 +29,7 @@ public class InputHandler : MonoBehaviour, IActor
     /// </summary>
     private void Update()
     {
-        movementComponent.movementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        movementComponent.movementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
         if (canAct)
         {

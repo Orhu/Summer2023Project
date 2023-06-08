@@ -18,6 +18,7 @@ public abstract class Movement : MonoBehaviour
         {
             _movementInput = value;
             animatorComponent.SetBool("moving", value.sqrMagnitude > 0);
+            if (value.x == 0) { return; }
             animatorComponent.SetMirror("runLeft", value.x < 0);
         }
     }

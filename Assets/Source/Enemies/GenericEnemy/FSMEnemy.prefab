@@ -81,11 +81,11 @@ GameObject:
   - component: {fileID: 8941374239524879921}
   - component: {fileID: 7281680880204442666}
   - component: {fileID: 156754919104867910}
-  - component: {fileID: 906744410}
   - component: {fileID: 5097362261395317995}
   - component: {fileID: 2939038239829249596}
   - component: {fileID: 4814359745885439631}
   - component: {fileID: 542899057510882649}
+  - component: {fileID: 7400328270181020654}
   m_Layer: 7
   m_Name: FSMEnemy
   m_TagString: Untagged
@@ -309,21 +309,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invincibilityFlashColor: {r: 1, g: 0, b: 0, a: 1}
---- !u!114 &906744410
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7281680880204442677}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a1596c94b00af84eb76193c1fec2790, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isControllable: 0
-  useEnemyLogic: 1
-  movementInput: {x: 0, y: 0}
 --- !u!114 &5097362261395317995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -386,6 +371,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7400328270181020654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7281680880204442677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 059485bb3fc502f49928b10a7bfc2323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animactionClipsToMirrorParameters: []
 --- !u!1001 &4824836971328898898
 PrefabInstance:
   m_ObjectHideFlags: 0

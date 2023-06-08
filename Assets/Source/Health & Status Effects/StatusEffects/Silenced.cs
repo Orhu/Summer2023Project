@@ -15,7 +15,7 @@ public class Silenced : StatusEffect
     {
         Silenced instance = (Silenced)base.CreateCopy(gameObject);
 
-        gameObject.GetComponent<InputHandler>().GetOnRequestCanAct() += instance.PreventAction;
+        gameObject.GetComponent<IActor>().GetOnRequestCanAct() += instance.PreventAction;
 
         return instance;
     }
@@ -54,6 +54,6 @@ public class Silenced : StatusEffect
 
         if (gameObject == null) { return; }
 
-        gameObject.GetComponent<InputHandler>().GetOnRequestCanAct() -= PreventAction;
+        gameObject.GetComponent<IActor>().GetOnRequestCanAct() -= PreventAction;
     }
 }
