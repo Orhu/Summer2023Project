@@ -100,3 +100,49 @@ public static class SaveManager
         }
     }
 }
+
+#region The dumb squad
+/// <summary>
+/// A dumb class for saving single int.
+/// Totally wont get deleted someday.
+/// </summary>
+[System.Serializable]
+public class DumbInt
+{
+    [Tooltip("The dumb value of the dumb int")]
+    public int value;
+}
+
+/// <summary>
+/// A dumb class for saving single float.
+/// Totally wont get deleted someday.
+/// </summary>
+[System.Serializable]
+public class DumbFloat
+{
+    [Tooltip("The dumb value of the dumb int")]
+    public float value;
+}
+
+/// <summary>
+/// A dumb class for saving single bool.
+/// Totally wont get deleted someday.
+/// </summary>
+[System.Serializable]
+public class DumbBool
+{
+    [Tooltip("The dumb value of the dumb int")]
+    public bool value;
+}
+
+/// <summary>
+/// A dumb class for saving single string.
+/// Totally wont get deleted someday.
+/// </summary>
+[System.Serializable]
+public class DumbString
+{
+    [Tooltip("The dumb value of the dumb int")]
+    public string value;
+}
+#endregion
