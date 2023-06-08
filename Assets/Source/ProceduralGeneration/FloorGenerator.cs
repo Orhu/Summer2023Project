@@ -10,20 +10,29 @@ using UnityEngine.Events;
 public class FloorGenerator : MonoBehaviour
 {
     [Tooltip("The generation parameters for the layout of this floor")]
-    [SerializeField] public LayoutGenerationParameters layoutGenerationParameters;
+    public LayoutGenerationParameters layoutGenerationParameters;
 
     [Tooltip("The template generation parameters for this floor")]
-    [SerializeField] public TemplateGenerationParameters templateGenerationParameters;
+    public TemplateGenerationParameters templateGenerationParameters;
 
     [Tooltip("The size of a room on this floor")]
-    [SerializeField] public Vector2Int roomSize;
+    public Vector2Int roomSize;
 
     [Tooltip("A dictionary that holds room types and their associated exterior generation parameters for this floor")]
-    [SerializeField] public RoomTypesToRoomExteriorGenerationParameters roomTypesToExteriorGenerationParameters;
+    public RoomTypesToRoomExteriorGenerationParameters roomTypesToExteriorGenerationParameters;
+
+    [Tooltip("The seed to use for generation")]
+    public int seed = 0;
+
+    [Tooltip("Whether or not to randomize the seed on start")]
+    public bool randomizeSeed;
 
     [Tooltip("Event called when the room is changed")]
     public UnityEvent onRoomChange;
-    
+
+    // The random instance
+    [HideInInspector] static public System.Random random;
+
     // A reference to the generated map
     [HideInInspector] public Map map;
 
@@ -61,6 +70,13 @@ public class FloorGenerator : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        if (randomizeSeed)
+        {
+            seed = Random.Range(0, System.Int32.MaxValue);
+        }
+
+        random = new System.Random();
+
         GetSpecialRoomsFromDeck();
         GetTilesFromDeck();
         Deck.playerDeck.onCardAdded += OnCardAdded;

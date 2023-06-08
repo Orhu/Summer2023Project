@@ -67,7 +67,7 @@ public class TemplateGenerationParameters
 
         if (possibleTiles.Count != 0)
         {
-            return possibleTiles[Random.Range(0, possibleTiles.Count)].ShallowCopy();
+            return possibleTiles[FloorGenerator.random.Next(0, possibleTiles.Count)].ShallowCopy();
         }
 
         return genericTiles.At(preferredTile.tileType).ShallowCopy();
@@ -82,7 +82,7 @@ public class TemplateGenerationParameters
     {
         Difficulty difficulty;
         List<Template> possibleTemplates = GetPossibleTemplates(roomType, out difficulty);
-        Template randomTemplate = possibleTemplates[Random.Range(0, possibleTemplates.Count)];
+        Template randomTemplate = possibleTemplates[FloorGenerator.random.Next(0, possibleTemplates.Count)];
         templatesPool.Remove(roomType, difficulty, randomTemplate);
         usedTemplates.At(roomType).At(difficulty).Add(randomTemplate);
 
