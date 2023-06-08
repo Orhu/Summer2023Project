@@ -101,48 +101,44 @@ public static class SaveManager
     }
 }
 
-#region The dumb squad
+#region The dumb savable primitive squad
 /// <summary>
-/// A dumb class for saving single int.
-/// Totally wont get deleted someday.
+/// A dumb class for saving a single int.
 /// </summary>
 [System.Serializable]
-public class DumbInt
+public class SavableInt
 {
-    [Tooltip("The dumb value of the dumb int")]
+    [Tooltip("The dumb value of the dumb savable int")]
     public int value;
 }
 
 /// <summary>
-/// A dumb class for saving single float.
-/// Totally wont get deleted someday.
+/// A dumb class for saving a single float.
 /// </summary>
 [System.Serializable]
-public class DumbFloat
+public class SavableFloat
 {
-    [Tooltip("The dumb value of the dumb int")]
+    [Tooltip("The dumb value of the dumb savable float")]
     public float value;
 }
 
 /// <summary>
 /// A dumb class for saving single bool.
-/// Totally wont get deleted someday.
 /// </summary>
 [System.Serializable]
-public class DumbBool
+public class SavableBool
 {
-    [Tooltip("The dumb value of the dumb int")]
+    [Tooltip("The dumb value of the dumb savable bool")]
     public bool value;
 }
 
 /// <summary>
-/// A dumb class for saving single string.
-/// Totally wont get deleted someday.
+/// A dumb class for saving a single string.
 /// </summary>
 [System.Serializable]
-public class DumbString
+public class SavableString
 {
-    [Tooltip("The dumb value of the dumb int")]
+    [Tooltip("The dumb value of the dumb savable string")]
     public string value;
 }
 #endregion
