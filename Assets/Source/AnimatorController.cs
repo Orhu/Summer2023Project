@@ -54,7 +54,7 @@ public class AnimatorController : MonoBehaviour
     /// <param name="value"> The new parameter value. </param>
     public void SetBool(string name, bool value)
     {
-        animator.SetBool(name, value);
+        animator.SetFloat(name, value ? 1f : 0f);
     }
 
     /// <summary>
