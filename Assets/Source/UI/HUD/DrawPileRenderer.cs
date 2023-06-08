@@ -17,7 +17,7 @@ public class DrawPileRenderer : MonoBehaviour
     /// <summary>
     /// Creates the necessary card renderers.
     /// </summary>
-    void Start()
+    private void Start()
     {
         for (int i = 0; i < previewRangeEnd - previewRangeStart; i++)
         {
@@ -29,7 +29,7 @@ public class DrawPileRenderer : MonoBehaviour
     /// <summary>
     /// Updates the displayed cards when a card is drawn.
     /// </summary>
-    void OnCardDrawn()
+    private void OnCardDrawn()
     {
         for (int i = 0; i < previewRangeEnd - previewRangeStart; i++)
         {
