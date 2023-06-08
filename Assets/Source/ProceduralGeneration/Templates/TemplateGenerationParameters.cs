@@ -112,7 +112,7 @@ public class TemplateGenerationParameters
         // Normal is the only type of room that difficulty matters for
         if (roomType == RoomType.Normal)
         {
-            if (hardRoomPercentage / 100 > Random.value)
+            if (hardRoomPercentage / 100 > FloorGenerator.random.NextDouble())
             {
                 difficulty = Difficulty.Hard;
                 hardRoomPercentage = 0;

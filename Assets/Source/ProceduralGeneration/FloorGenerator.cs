@@ -75,7 +75,7 @@ public class FloorGenerator : MonoBehaviour
             seed = Random.Range(0, System.Int32.MaxValue);
         }
 
-        random = new System.Random();
+        random = new System.Random(seed);
 
         GetSpecialRoomsFromDeck();
         GetTilesFromDeck();

@@ -229,22 +229,22 @@ public class RoomExteriorGenerator : MonoBehaviour
 
                 if (((Direction) i & Direction.Right) != Direction.None)
                 {
-                    doorSprites = exteriorParameters.rightDoorSprites[Random.Range(0, exteriorParameters.rightDoorSprites.Count)];
+                    doorSprites = exteriorParameters.rightDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.rightDoorSprites.Count)];
                 }
 
                 if (((Direction) i & Direction.Up) != Direction.None)
                 {
-                    doorSprites = exteriorParameters.topDoorSprites[Random.Range(0, exteriorParameters.topDoorSprites.Count)];
+                    doorSprites = exteriorParameters.topDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.topDoorSprites.Count)];
                 }
 
                 if (((Direction) i & Direction.Left) != Direction.None)
                 {
-                    doorSprites = exteriorParameters.leftDoorSprites[Random.Range(0, exteriorParameters.leftDoorSprites.Count)];
+                    doorSprites = exteriorParameters.leftDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.leftDoorSprites.Count)];
                 }
 
                 if (((Direction) i & Direction.Down) != Direction.None)
                 {
-                    doorSprites = exteriorParameters.bottomDoorSprites[Random.Range(0, exteriorParameters.bottomDoorSprites.Count)];
+                    doorSprites = exteriorParameters.bottomDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.bottomDoorSprites.Count)];
                 }
 
                 room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, (Direction) i, connectedCell, doorContainer);

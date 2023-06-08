@@ -13,7 +13,7 @@ public class LayoutGenerator : MonoBehaviour
     public Map Generate(LayoutGenerationParameters layoutParameters)
     {
         // Get the number of normal cells
-        int numNormalCells = layoutParameters.numNormalRooms + Random.Range(0, layoutParameters.numNormalRoomsVariance * 2 + 1) - layoutParameters.numNormalRoomsVariance;
+        int numNormalCells = layoutParameters.numNormalRooms + FloorGenerator.random.Next(0, layoutParameters.numNormalRoomsVariance * 2 + 1) - layoutParameters.numNormalRoomsVariance;
 
         // Initialize the gen map
         Vector2Int mapSize = DetermineMapSize(numNormalCells + layoutParameters.numSpecialRooms);
@@ -105,7 +105,7 @@ public class LayoutGenerator : MonoBehaviour
         List<MapCell> initialNeighbors = GetUnvisitedNeighbors(genMap, startCell, true);
         while (initialNeighbors.Count != 0)
         {
-            MapCell randomInitialNeighbor = initialNeighbors[Random.Range(0, initialNeighbors.Count)];
+            MapCell randomInitialNeighbor = initialNeighbors[FloorGenerator.random.Next(0, initialNeighbors.Count)];
             randomInitialNeighbor.visited = true;
             cellsToGenerate.Enqueue(randomInitialNeighbor);
             initialNeighbors.Remove(randomInitialNeighbor);
@@ -131,7 +131,7 @@ public class LayoutGenerator : MonoBehaviour
             List<MapCell> neighbors = GetUnvisitedNeighbors(genMap, currentCell, true);
             while (neighbors.Count != 0)
             {
-                MapCell randomNeighbor = neighbors[Random.Range(0, neighbors.Count)];
+                MapCell randomNeighbor = neighbors[FloorGenerator.random.Next(0, neighbors.Count)];
                 randomNeighbor.visited = true;
                 cellsToGenerate.Enqueue(randomNeighbor);
                 neighbors.Remove(randomNeighbor);
@@ -212,7 +212,7 @@ public class LayoutGenerator : MonoBehaviour
             }
 
             // Choose a random possible direction
-            Direction randomDirection = possibleDirections[Random.Range(0, possibleDirections.Count)];
+            Direction randomDirection = possibleDirections[FloorGenerator.random.Next(0, possibleDirections.Count)];
 
             // If this room must not have this direction, then remove it from the possible directions and try again
             if ((constraint.mustNotHave & randomDirection) != Direction.None)
@@ -225,7 +225,7 @@ public class LayoutGenerator : MonoBehaviour
             int distance = preferredNumDoors - numDirections;
 
             // Using the likelyhood from the distance, determine whether or not to add this direction            
-            if (CalculateLikelyhoodOfAddingDirection(distance, strictnessNumDoors) > Random.value)
+            if (CalculateLikelyhoodOfAddingDirection(distance, strictnessNumDoors) > FloorGenerator.random.NextDouble())
             {
                 direction |= randomDirection;
                 numDirections++;
@@ -342,7 +342,7 @@ public class LayoutGenerator : MonoBehaviour
             }
 
             // Choose a random cell to branch off of
-            MapCell branchCell = branchableCells[Random.Range(0, branchableCells.Count)];
+            MapCell branchCell = branchableCells[FloorGenerator.random.Next(0, branchableCells.Count)];
 
             List<Direction> directions = new List<Direction>();
             directions.Add(Direction.Right);
@@ -353,7 +353,7 @@ public class LayoutGenerator : MonoBehaviour
             // See if the boss room can fit in any of the directions
             while (directions.Count > 0)
             {
-                Direction randomDirection = directions[Random.Range(0, directions.Count)];
+                Direction randomDirection = directions[FloorGenerator.random.Next(0, directions.Count)];
 
                 // Check directions (yes yes it's hard coded and 1000% terrible I know)
 
@@ -479,7 +479,7 @@ public class LayoutGenerator : MonoBehaviour
                 }
 
                 // Choose a random cell to branch off of
-                MapCell branchCell = branchableCells[Random.Range(0, branchableCells.Count)];
+                MapCell branchCell = branchableCells[FloorGenerator.random.Next(0, branchableCells.Count)];
 
                 // Get its unvisited neighbors
                 List<MapCell> neighbors = GetUnvisitedNeighbors(genMap, branchCell, false);
@@ -492,7 +492,7 @@ public class LayoutGenerator : MonoBehaviour
                 }
 
                 // Choose a random neighbor to be the special room
-                MapCell specialCell = neighbors[Random.Range(0, neighbors.Count)];
+                MapCell specialCell = neighbors[FloorGenerator.random.Next(0, neighbors.Count)];
                 specialCell.visited = true;
                 specialCell.type = RoomType.Special;
 

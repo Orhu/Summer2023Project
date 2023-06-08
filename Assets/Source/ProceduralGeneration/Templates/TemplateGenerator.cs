@@ -12,7 +12,8 @@ public class TemplateGenerator : MonoBehaviour
     /// </summary>
     /// <param name="room"> The room that is having the template generated </param>
     /// <param name="template"> The template to generate </param>
-    public void Generate(Room room, Template template)
+    /// <param name="spawnEnemies"> Whether or not to spawn enemies </param>
+    public void Generate(Room room, Template template, bool spawnEnemies = true)
     {
         room.template = ScriptableObject.CreateInstance<Template>();
         room.template.roomSize = template.roomSize;
@@ -49,7 +50,7 @@ public class TemplateGenerator : MonoBehaviour
                     TemplateGenerationParameters templateGenParams = FloorGenerator.floorGeneratorInstance.templateGenerationParameters;
                     createdTile = templateGenParams.GetRandomTile(templateTile);
                     createdTile.gridLocation = new Vector2Int(i, j);
-                    if (createdTile.spawnedObject != null)
+                    if (createdTile.spawnedObject != null && !(createdTile.type == TileType.EnemySpawner && !spawnEnemies))
                     {
                         createdTile.spawnedObject = Instantiate(createdTile.spawnedObject);
                         createdTile.spawnedObject.transform.parent = tileContainer.transform;
