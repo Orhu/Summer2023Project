@@ -118,7 +118,7 @@ public class Deck : MonoBehaviour
             {
                 SaveManager.savedPlayerDeck.LoadInto(this);
             }
-            playerDeck.actor = Player.Get().GetComponent<Controller>();
+            playerDeck.actor = Player.Get().GetComponent<InputHandler>();
         }
 
     }
@@ -339,10 +339,11 @@ public class Deck : MonoBehaviour
     /// Plays a cord consisting of cards from the hand.
     /// </summary>
     /// <param name="handIndices"> The indices of the cards to play. Index 0 will be the root of the chord. </param>
-    public void PlayChord(List<int> handIndices)
+    public bool PlayChord(List<int> handIndices)
     {
         AttackCard cardToPlay = null;
         List<AttackCard> chordedCards = new List<AttackCard>();
+        bool returnValue = false;
 
         foreach (int handIndex in handIndices)
         {
@@ -352,6 +353,7 @@ public class Deck : MonoBehaviour
                 continue;
             }
 
+            returnValue = true;
             cardIndicesToActionTimes.Add(handIndex, card.actionTime);
             if (cardToPlay == null && card is AttackCard)
             {
@@ -370,21 +372,20 @@ public class Deck : MonoBehaviour
         }
 
         cardToPlay?.PlayActions(actor, chordedCards);
+        return returnValue;
     }
 
     /// <summary>
     /// Plays a cord consisting of the cards being previewed.
     /// </summary>
-    public void PlayChord()
+    public bool PlayChord()
     {
-        if (previewedCardIndices.Count == 0)
-        {
-            return;
-        }
+        if (previewedCardIndices.Count == 0) { return false; }
 
         PlayChord(previewedCardIndices);
 
         previewedCardIndices.Clear();
+        return true;
     }
     #endregion
 
