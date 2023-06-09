@@ -93,12 +93,19 @@ public class FloorGenerator : MonoBehaviour
         if (SaveManager.savedVisitedRooms == null) { return; }
 
         List<Vector3Int> vistedRooms = SaveManager.savedVisitedRooms;
-        //foreach((Vector2Int, int) vistedRoom in SaveManager.savedVisitedRooms)
-        //{
-        //    map.map[vistedRoom.Item1.x, vistedRoom.Item1.y].room.GetComponent<Room>().Generate(false);
-        //}
-        Vector3Int lastRoom = vistedRooms[vistedRooms.Count - 1];
-        map.map[lastRoom.x, lastRoom.y].room.GetComponent<Room>().Enter();
+        Room lastRoom = map.startCell.room.GetComponent<Room>();
+        int nextCardIndex = vistedRooms[0].z;
+        foreach (Vector3Int vistedRoom in vistedRooms)
+        {
+            lastRoom = map.map[vistedRoom.x, vistedRoom.y].room.GetComponent<Room>();
+            lastRoom.Generate(false);
+            while (nextCardIndex < vistedRoom.z)
+            {
+                OnCardAdded(Deck.playerDeck.cards[nextCardIndex]);
+                nextCardIndex++;
+            }
+        }
+        currentRoom = lastRoom;
     }
 
     /// <summary>

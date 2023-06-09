@@ -83,7 +83,7 @@ public class Room : MonoBehaviour
     /// The function called when the room is entered
     /// </summary>
     /// <param name="direction"> The direction the room is being entered from </param>
-    public void Enter(Direction direction = Direction.None)
+    public void Enter(Direction direction = Direction.None, bool spawnEnemies = true)
     {
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -93,7 +93,7 @@ public class Room : MonoBehaviour
         FloorGenerator.floorGeneratorInstance.currentRoom = this;
 
         bool shouldCloseDoors = !generated;
-        Generate();
+        Generate(spawnEnemies);
 
         shouldCloseDoors = shouldCloseDoors && template.chosenEnemyPool.enemies != null && template.chosenEnemyPool.enemies.Count != 0;
         // Move player into room, then close/activate doors (so player doesn't get trapped in door)
