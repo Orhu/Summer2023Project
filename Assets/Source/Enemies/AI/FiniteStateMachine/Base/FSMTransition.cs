@@ -4,23 +4,23 @@ using UnityEngine.Serialization;
 /// <summary>
 /// Represents a transition between states in a finite state machine
 /// </summary>
-[CreateAssetMenu(menuName = "FSM/Transition")]
-public class FSMTransition : ScriptableObject
+[CreateAssetMenu(menuName = "FSM/Transitions/One Condition")]
+public class FSMTransition : BaseFSMTransition
 {
-    // the condition to evaluate
-    public FSMDecision decision;
-
     // what state to enter on true
     public BaseState trueState;
 
     // what state to enter on false
     public BaseState falseState;
-
+    
+    // the condition to evaluate
+    public FSMDecision decision;
+    
     /// <summary>
     /// Evaluate the decision, then change state depending on result
     /// </summary>
     /// <param name="machine"> The state machine to be used. </param>
-    public void Execute(BaseStateMachine machine)
+    public override void Execute(BaseStateMachine machine)
     {
         var result = decision.Decide(machine);
 

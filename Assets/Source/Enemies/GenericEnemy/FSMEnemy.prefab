@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8740828266294286700}
-  - component: {fileID: 2871443049851868443}
   - component: {fileID: 1858251274146161317}
+  - component: {fileID: 3497544517795975723}
   m_Layer: 12
   m_Name: Feet
   m_TagString: Untagged
@@ -33,22 +33,6 @@ Transform:
   m_Father: {fileID: 7281680880204442667}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!70 &2871443049851868443
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5936671061499478613}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.5, y: 1}
-  m_Direction: 0
 --- !u!114 &1858251274146161317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,8 +47,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canDealDamageOnTouch: 1
   damageOnTouch: 1
+  delayBetweenDamageOnTouch: 0.5
   damageTypeOnTouch: 0
   statusEffectsOnTouch: []
+--- !u!58 &3497544517795975723
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5936671061499478613}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!1 &7281680880204442677
 GameObject:
   m_ObjectHideFlags: 0
@@ -83,6 +84,8 @@ GameObject:
   - component: {fileID: 906744410}
   - component: {fileID: 5097362261395317995}
   - component: {fileID: 2939038239829249596}
+  - component: {fileID: 4814359745885439631}
+  - component: {fileID: 542899057510882649}
   m_Layer: 7
   m_Name: FSMEnemy
   m_TagString: Untagged
@@ -210,10 +213,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialState: {fileID: 11400000, guid: a7fd96789dd3ace489f44f39b9ea82bf, type: 2}
   delayBeforeLogic: 1
-  currentTarget: {fileID: 0}
+  currentTarget: {x: 0, y: 0}
   player: {fileID: 0}
   feetCollider: {fileID: 0}
   currentState: {fileID: 0}
+  destinationReached: 0
+  exhausted: 0
+  drawGizmos: 0
+  debugWaypoint: {x: 0, y: 0}
 --- !u!114 &7281680880204442666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,6 +246,18 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 156754919104867910}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -305,7 +324,6 @@ MonoBehaviour:
   isControllable: 0
   useEnemyLogic: 1
   movementInput: {x: 0, y: 0}
-  feet: {fileID: 0}
 --- !u!114 &5097362261395317995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -335,6 +353,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destructionDelay: 0
+--- !u!114 &4814359745885439631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7281680880204442677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98cf0851209e7a54499c32f489013d98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &542899057510882649
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7281680880204442677}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &4824836971328898898
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -344,11 +395,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4700101517325140728, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4700101517325140728, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4824836972866494860, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
       propertyPath: m_Name
@@ -396,6 +447,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4824836972866494861, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5871833512059775950, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5871833512059775951, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}

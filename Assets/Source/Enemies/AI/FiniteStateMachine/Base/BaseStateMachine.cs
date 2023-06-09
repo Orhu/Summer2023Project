@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Represents the state machine that manages and switches between states. Essentially serves as the "brain" and logic of an enemy.
+/// </summary>
 public class BaseStateMachine : MonoBehaviour
 {
     // the state this machine starts in
@@ -12,7 +15,7 @@ public class BaseStateMachine : MonoBehaviour
     [SerializeField] private float delayBeforeLogic;
     
     // the target
-    [HideInInspector] public GameObject currentTarget;
+    [HideInInspector] public Vector2 currentTarget;
     
     // the player
     [HideInInspector] public GameObject player;
@@ -22,7 +25,14 @@ public class BaseStateMachine : MonoBehaviour
 
     // the current state this machine is in
     [HideInInspector] public BaseState currentState;
+    
+    // tracks whether our destination has been reached or not
+    [HideInInspector] public bool destinationReached;
+    
+    // tracks whether we are currently exhausted
+    [HideInInspector] public bool exhausted;
 
+    // struct used to store path data with this state machine instance, so we can remember pathfinding data on scriptableobjects where we cannot store them in-object
     public struct PathData
     {
         // path to target 
@@ -35,11 +45,20 @@ public class BaseStateMachine : MonoBehaviour
         public bool ignorePathRequests;
         
         // store the path following coroutine so it can be cancelled as needed
-        public Coroutine prevFollowCoroutine;
+        public IEnumerator prevFollowCoroutine;
     }
     
     // stores our current path data
     [HideInInspector] public PathData pathData;
+
+    // struct to store cooldown data
+    public struct CooldownData
+    {
+        // is action cooldown available?
+        public Dictionary<FSMAction, bool> cooldownReady;
+    }
+    // stores our current attack data
+    [HideInInspector] public CooldownData cooldownData;
 
     // maintained list of components which are cached for performance
     private Dictionary<Type, Component> cachedComponents;
@@ -47,12 +66,18 @@ public class BaseStateMachine : MonoBehaviour
     // tracks the time this was initialized
     private float timeStarted;
 
+    // draw debug gizmos?
+    [SerializeField] private bool drawGizmos;
+    // debug waypoint used for drawing gizmos
+    [HideInInspector] public Vector2 debugWaypoint;
+
     /// <summary>
     /// Initialize variables
     /// </summary>
     private void Awake()
     {
         currentState = initialState;
+        cooldownData.cooldownReady = new Dictionary<FSMAction, bool>();
         cachedComponents = new Dictionary<Type, Component>();
         feetCollider = GetComponentInChildren<Collider2D>();
     }
@@ -63,9 +88,9 @@ public class BaseStateMachine : MonoBehaviour
     private void Start()
     {
         timeStarted = Time.time;
-        player = GameObject.FindGameObjectWithTag("Player");
-        currentTarget = player;
-        FloorGenerator.floorGeneratorInstance.currentRoom.AddEnemy(gameObject);
+        player = Player.Get();
+        FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Add(gameObject);
+        currentState.OnStateEnter(this);
     }
 
     /// <summary>
@@ -74,7 +99,12 @@ public class BaseStateMachine : MonoBehaviour
     private void Update()
     {
         if (Time.time - timeStarted <= delayBeforeLogic) return;
-        
+
+        if (exhausted)
+        {
+            GetComponent<Controller>().movementInput = Vector2.zero;
+            return;
+        }
         currentState.OnStateUpdate(this);
     }
 
@@ -103,5 +133,15 @@ public class BaseStateMachine : MonoBehaviour
     private void OnDestroy()
     {
         FloorGenerator.floorGeneratorInstance.currentRoom.RemoveEnemy(gameObject);
+    }
+
+    /// <summary>
+    /// Draw debug gizmos
+    /// </summary>
+    private void OnDrawGizmos()
+    {
+        if (!drawGizmos) return;
+        Gizmos.color = Color.blue;
+        Gizmos.DrawCube(debugWaypoint, Vector3.one);
     }
 }

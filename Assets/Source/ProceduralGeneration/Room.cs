@@ -16,14 +16,6 @@ public class Room : MonoBehaviour
     // The size of the room
     [HideInInspector] public Vector2Int roomSize;
 
-    // Returns the size of the room, x * y
-    [HideInInspector]
-    public int maxSize
-    {
-        // TODO not sure if this is right
-        get => roomSize.x * roomSize.y;
-    }
-
     // The type of the room
     [HideInInspector] public RoomType roomType;
 
@@ -41,7 +33,6 @@ public class Room : MonoBehaviour
 
     // Called when all enemies in this room are killed.
     public System.Action onCleared;
-
 
     /// <summary>
     /// Adds an enemy to the list of living enemies
@@ -92,7 +83,7 @@ public class Room : MonoBehaviour
     /// The function called when the room is entered
     /// </summary>
     /// <param name="direction"> The direction the room is being entered from </param>
-    public void Enter(Direction direction)
+    public void Enter(Direction direction = Direction.None)
     {
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -105,7 +96,6 @@ public class Room : MonoBehaviour
         Generate();
 
         shouldCloseDoors = shouldCloseDoors && template.chosenEnemyPool.enemies != null && template.chosenEnemyPool.enemies.Count != 0;
-
         // Move player into room, then close/activate doors (so player doesn't get trapped in door)
         StartCoroutine(MovePlayer(direction, shouldCloseDoors));
     }
@@ -153,7 +143,7 @@ public class Room : MonoBehaviour
     /// <returns> Enumerator so other functions can wait for this to finish </returns>
     public IEnumerator MovePlayer(Direction direction, bool shouldCloseDoors)
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        GameObject player = Player.Get();
 
         Vector3 bottomLeftLocation = new Vector3(transform.position.x - roomSize.x / 2, transform.position.y - roomSize.y / 2, 0);
         Vector3 topRightLocation = new Vector3(transform.position.x + roomSize.x / 2, transform.position.y + roomSize.y / 2, 0);
@@ -184,7 +174,7 @@ public class Room : MonoBehaviour
         bool inXRange = (player.transform.position.x >= bottomLeftLocation.x + 0.9f && player.transform.position.x <= topRightLocation.x - 0.9f);
         bool inYRange = (player.transform.position.y >= bottomLeftLocation.y + 0.9f && player.transform.position.y <= topRightLocation.y - 0.9f);
 
-        while (!inXRange || !inYRange)
+        while ((!inXRange || !inYRange) && !(direction == Direction.None))
         {
 
             inXRange = (player.transform.position.x >= bottomLeftLocation.x + 0.9f && player.transform.position.x <= topRightLocation.x - 0.9f);
@@ -205,13 +195,14 @@ public class Room : MonoBehaviour
     /// <summary>
     /// Generates the layout of the room
     /// </summary>
-    public void Generate()
+    /// <param name="spawnEnemies"> Whether or not to spawn enemies </param>
+    public void Generate(bool spawnEnemies = true)
     {
         if (!generated)
         {
             Template template = FloorGenerator.floorGeneratorInstance.templateGenerationParameters.GetRandomTemplate(roomType);
 
-            GetComponent<TemplateGenerator>().Generate(this, template);
+            GetComponent<TemplateGenerator>().Generate(this, template, spawnEnemies);
             generated = true;
         }
     }
