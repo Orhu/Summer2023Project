@@ -59,7 +59,7 @@ public class FloorGenerator : MonoBehaviour
     {
         if (floorGeneratorInstance != null && floorGeneratorInstance != this)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             return;
         }
         floorGeneratorInstance = this;
@@ -71,7 +71,11 @@ public class FloorGenerator : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        if (randomizeSeed)
+        if (SaveManager.savedFloorSeed != 0)
+        {
+            seed = SaveManager.savedFloorSeed;
+        }
+        else if (randomizeSeed)
         {
             seed = Random.Range(0, System.Int32.MaxValue);
         }
@@ -84,12 +88,17 @@ public class FloorGenerator : MonoBehaviour
         Deck.playerDeck.onCardRemoved += OnCardRemoved;
         map = GetComponent<LayoutGenerator>().Generate(layoutGenerationParameters);
         GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, roomSize);
+        currentRoom.Generate();
 
-        // Find Closest room.
-        //currentRoom = Object.FindObjectsOfType<Room>().Aggregate((Room closest, Room next) =>
+        if (SaveManager.savedVisitedRooms == null) { return; }
+
+        List<Vector3Int> vistedRooms = SaveManager.savedVisitedRooms;
+        //foreach((Vector2Int, int) vistedRoom in SaveManager.savedVisitedRooms)
         //{
-        //    return (closest.transform.position - Player.Get().transform.position).sqrMagnitude <= (next.transform.position - Player.Get().transform.position).sqrMagnitude ? closest : next;
-        //});
+        //    map.map[vistedRoom.Item1.x, vistedRoom.Item1.y].room.GetComponent<Room>().Generate(false);
+        //}
+        Vector3Int lastRoom = vistedRooms[vistedRooms.Count - 1];
+        map.map[lastRoom.x, lastRoom.y].room.GetComponent<Room>().Enter();
     }
 
     /// <summary>
@@ -102,7 +111,7 @@ public class FloorGenerator : MonoBehaviour
             return;
         }
 
-        foreach (Card card in SaveManager.savedPlayerDeck)
+        foreach (Card card in SaveManager.savedPlayerDeck.cards)
         {
             if (card.effects == null)
             {
@@ -141,14 +150,10 @@ public class FloorGenerator : MonoBehaviour
             templateGenerationParameters.tileTypesToPossibleTiles.tileTypesToPossibleTiles.Add(tileTypeToPossibleTiles);
         }
 
-        if (SaveManager.savedPlayerDeck == null)
+        int max = SaveManager.savedVisitedRooms != null ? SaveManager.savedVisitedRooms[0].z : Deck.playerDeck.cards.Count;
+        for (int i = 0; i < max; i++)
         {
-            return;
-        }
-
-        foreach (Card card in SaveManager.savedPlayerDeck)
-        {
-            OnCardAdded(card);
+            OnCardAdded(Deck.playerDeck.cards[i]);
         }
     }
 

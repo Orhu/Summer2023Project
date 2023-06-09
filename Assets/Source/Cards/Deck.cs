@@ -5,39 +5,40 @@ using System;
 /// <summary>
 /// Represents a deck of cards and a hand that cards can be previewed and played from.
 /// </summary>
+[System.Serializable]
 public class Deck : MonoBehaviour
 {
     #region Variables
     [Tooltip("All the cards in the deck.")]
     public List<Card> cards;
+
     [Tooltip("The side of this deck's hand.")]
     public int handSize = 3;
 
     #region Hidden in Inspector Variables
     // Global singleton for the actor's deck.
-    public static Deck playerDeck;
+    [NonSerialized] public static Deck playerDeck;
 
     // The actor that plays cards from this deck.
-    [HideInInspector]
-    public IActor actor;
+    [NonSerialized] public IActor actor;
+
     // The cards in the draw pile.
-    [HideInInspector]
-    public List<Card> drawableCards;
+    [HideInInspector] public List<Card> drawableCards;
+
     // The cards in hand.
-    [HideInInspector]
-    public List<Card> inHandCards = new List<Card>();
+    [HideInInspector] public List<Card> inHandCards = new List<Card>();
+
     // The cards in the discard pile.
-    [HideInInspector]
-    public List<Card> discardedCards = new List<Card>();
+    [HideInInspector] public List<Card> discardedCards = new List<Card>();
+
     // The indices in the hand of the cards currently being previewed.
-    [HideInInspector]
-    public List<int> previewedCardIndices = new List<int>();
+    [NonSerialized] public List<int> previewedCardIndices = new List<int>();
+
     // The indices of the cards on being acted mapped to the remaining action time.
-    [HideInInspector]
-    public Dictionary<int, float> cardIndicesToActionTimes = new Dictionary<int, float>();
+    [HideInInspector] public Dictionary<int, float> cardIndicesToActionTimes = new Dictionary<int, float>();
+
     // The indices of the cards on cooldown mapped to the time remaining on the cooldown.
-    [HideInInspector]
-    public Dictionary<int, float> cardIndicesToCooldowns = new Dictionary<int, float>();
+    [HideInInspector] public Dictionary<int, float> cardIndicesToCooldowns = new Dictionary<int, float>();
     #endregion
 
     #region Delegates
@@ -54,36 +55,82 @@ public class Deck : MonoBehaviour
     #endregion
     #endregion
 
-    #region Initialization
     /// <summary>
-    /// Initializes Singleton
+    /// Utility for storing the state of a deck.
     /// </summary>
-    void Awake()
+    [Serializable]
+    public class State
+    {
+        // All the cards in the deck
+        public List<Card> cards;
+
+        // The cards in the draw pile.
+        public List<Card> drawableCards;
+
+        // The cards in hand.
+        public List<Card> inHandCards;
+
+        // The cards in the discard pile.
+        public List<Card> discardedCards;
+
+        // The indices of the cards on being acted mapped to the remaining action time.
+        public Dictionary<int, float> cardIndicesToActionTimes;
+
+        // The indices of the cards on cooldown mapped to the time remaining on the cooldown.
+        public Dictionary<int, float> cardIndicesToCooldowns;
+
+        /// <summary>
+        /// Copies the state from a deck
+        /// </summary>
+        /// <param name="deck"> The deck to copy. </param>
+        public State(Deck deck)
+        {
+            cards = deck.cards;
+            drawableCards = deck.drawableCards;
+            inHandCards = deck.inHandCards;
+            discardedCards = deck.discardedCards;
+            cardIndicesToActionTimes = deck.cardIndicesToActionTimes;
+            cardIndicesToCooldowns = deck.cardIndicesToCooldowns;
+        }
+
+        /// <summary>
+        /// Loads this state into a deck.
+        /// </summary>
+        /// <param name="deck"> The deck to load into. </param>
+        public void LoadInto(Deck deck)
+        {
+            deck.cards = cards;
+            deck.drawableCards = drawableCards;
+            deck.inHandCards = inHandCards;
+            deck.discardedCards = discardedCards;
+            deck.cardIndicesToActionTimes = cardIndicesToActionTimes;
+            deck.cardIndicesToCooldowns = cardIndicesToCooldowns;
+        }
+    }
+
+    #region Initialization
+    private void Awake()
     {
         if (playerDeck == null)
         {
             playerDeck = this;
+            if (SaveManager.savedPlayerDeck != null)
+            {
+                SaveManager.savedPlayerDeck.LoadInto(this);
+            }
             playerDeck.actor = Player.Get().GetComponent<Controller>();
-
-            if (SaveManager.savedPlayerDeck == null)
-            {
-                SaveManager.savedPlayerDeck = playerDeck.cards;
-            }
-            else
-            {
-                playerDeck.cards = SaveManager.savedPlayerDeck;
-            }
-
-            playerDeck.onCardAdded += x => SaveManager.savedPlayerDeck = playerDeck.cards;
-            playerDeck.onCardRemoved += x => SaveManager.savedPlayerDeck = playerDeck.cards;
         }
+
     }
+
 
     /// <summary>
     /// Initializes the draw pile and hand.
     /// </summary>
     void Start()
     {
+        if (inHandCards.Count == handSize) { return; }
+
         drawableCards = new List<Card>(cards);
 
         ReshuffleDrawPile();

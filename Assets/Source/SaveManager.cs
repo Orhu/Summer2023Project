@@ -9,22 +9,169 @@ using UnityEngine;
 /// To use just add a new property and SaveData backing field of the type you want to save. NOTE: Type must be serializable.
 /// Inside the constructor of the save data is the name of the save file, and whether or not it should persist through save clears.
 /// </summary>
+/// <example>
+/// // The player's position as it is saved to the disk.
+/// private static SaveData<Vector2> _savedPlayerPosition = new SaveData<Vector2>("PlayerData", false);
+/// public static Vector2 savedPlayerPosition
+/// {
+///     get => _savedPlayerPosition.data;
+///     set => _savedPlayerPosition.data = value;
+/// }
+/// </example>
 public static class SaveManager
 {
-    // The player's deck as it is saved to disk.
-    private static SaveData<List<Card>> _savedPlayerDeck = new SaveData<List<Card>>("PlayerDeck", false);
-    public static List<Card> savedPlayerDeck
+    // The currently saved player deck. Saving handled by autosaves.
+    public static Deck.State savedPlayerDeck
     {
-        get => _savedPlayerDeck.data;
-        set => _savedPlayerDeck.data = value;
+        get
+        {
+            if (autosaver.latestAutosave == null) { return null; }
+            return autosaver.latestAutosave.deckState;
+        }
     }
 
-    // The player's position as it is saved to the disk.
-    private static SaveData<Vector2> _savedPlayerPosition = new SaveData<Vector2>("PlayerData", false);
+    // The currently saved floor seed. Saving handled by autosaves.
+    public static int savedFloorSeed
+    {
+        get
+        {
+            if (autosaver.latestAutosave == null) { return 0; }
+            return autosaver.latestAutosave.floorSeed;
+        }
+    }
+
+    // The currently saved visited room data. X,Y = room location, Z = size of deck at the time of clearing. Saving handled by autosaves.
+    public static List<Vector3Int> savedVisitedRooms
+    {
+        get
+        {
+            if (autosaver.latestAutosave == null) { return null; }
+            return autosaver.latestAutosave.visedRooms;
+        }
+    }
+
+    // The currently saved player position. Saving handled by autosaves.
     public static Vector2 savedPlayerPosition
     {
-        get => _savedPlayerPosition.data;
-        set => _savedPlayerPosition.data = value;
+        get
+        {
+            if (autosaver.latestAutosave == null) { return Vector2.zero; }
+            return autosaver.latestAutosave.playerPos;
+        }
+    }
+
+    // Stores a reference to the current autosaver
+    private static Autosaver _autosaver;
+    private static Autosaver autosaver
+    {
+        get
+        {
+            if (_autosaver != null) { return _autosaver; }
+            _autosaver = new GameObject().AddComponent<Autosaver>();
+            return _autosaver;
+        }
+    }
+
+    /// <summary>
+    /// Class for managing storing and loading autosaves.
+    /// </summary>
+    private class Autosaver : MonoBehaviour
+    {
+        [Tooltip("The number of autosaves to keep.")] [Min(1)]
+        [SerializeField] private int NumberOfAutosaves = 5;
+
+        // Stores references to all the autosaves
+        private SaveData<AutosaveData>[] autosaves;
+
+        // The currently active autosave.
+        private SaveData<int> _latestAutosaveIndex = new SaveData<int>("AutosaveIndex", false);
+        public AutosaveData latestAutosave
+        {
+            get
+            {
+                return autosaves[_latestAutosaveIndex.data].data;
+            }
+            set
+            {
+                _latestAutosaveIndex.data = (_latestAutosaveIndex.data + 1) % NumberOfAutosaves;
+                autosaves[_latestAutosaveIndex.data].data = value;
+            }
+        }
+
+        private void Awake()
+        {
+            FloorGenerator.floorGeneratorInstance.onRoomChange.AddListener(() =>
+            {
+                FloorGenerator.floorGeneratorInstance.currentRoom.onCleared += Autosave;
+            });
+
+            Player.Get().GetComponent<Health>().onDeath.AddListener(SaveManager.ClearTransientSaves);
+
+            autosaves = new SaveData<AutosaveData>[NumberOfAutosaves];
+            for (int i = 0; i < NumberOfAutosaves; i++)
+            {
+                autosaves[i] = new SaveData<AutosaveData>("Autosave_" + (i + 1), false);
+            }
+        }
+
+        private void Start()
+        {
+            Invoke("Autosave", 0.5f);
+        }
+
+        // Update is called once per frame
+        private void Autosave()
+        {
+            AutosaveData saveData = latestAutosave == null ? new AutosaveData() : latestAutosave;
+            saveData.playerPos = Player.Get().transform.position;
+            saveData.deckState = new Deck.State(Deck.playerDeck);
+            saveData.floorSeed = FloorGenerator.floorGeneratorInstance.seed;
+
+            if (saveData.visedRooms == null)
+            {
+                saveData.visedRooms = new List<Vector3Int>();
+                saveData.visedRooms.Add(new Vector3Int(0, 0, Deck.playerDeck.cards.Count));
+                return;
+            }
+            if (FloorGenerator.floorGeneratorInstance.currentRoom == null) { return; }
+            Vector2Int loc = FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation;
+            saveData.visedRooms.Add(new Vector3Int(loc.x, loc.y, Deck.playerDeck.cards.Count));
+
+            latestAutosave = saveData;
+        }
+
+        [System.Serializable]
+        public class AutosaveData
+        {
+            // The seed of the current floor.
+            public int floorSeed;
+
+            // The last position of the player.
+            public Vector2 playerPos;
+
+            // The locations and current card count of visited rooms
+            public List<Vector3Int> visedRooms = new List<Vector3Int>();
+
+            // The current state of the deck.
+            public Deck.State deckState;
+
+            /// <summary>
+            /// Default constructor.
+            /// </summary>
+            public AutosaveData() {}
+
+            /// <summary>
+            /// Copy constructor.
+            /// </summary>
+            /// <param name="other"> The instance to copy. </param>
+            public AutosaveData(AutosaveData other)
+            {
+                floorSeed = other.floorSeed;
+                playerPos = other.playerPos;
+                visedRooms = other.visedRooms;
+                deckState = other.deckState;
+            }
+        }
     }
 
     #region Save Clearing
@@ -102,3 +249,4 @@ public static class SaveManager
     }
 
 }
+
