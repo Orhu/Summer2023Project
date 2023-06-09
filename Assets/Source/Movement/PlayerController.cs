@@ -60,6 +60,13 @@ public class PlayerController : MonoBehaviour, IActor
             }
             animatorComponent.SetMirror("castLeft", GetActionAimPosition().x - transform.position.x < 0);
         }
+
+        // DELETE IN BUILDS
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SaveManager.ClearTransientSaves();
+            GetComponent<ReloadScene>().ReloadCurrentScene();
+        }
     }
 
     /// <summary>
