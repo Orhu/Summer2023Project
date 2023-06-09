@@ -30,6 +30,9 @@ public abstract class Movement : MonoBehaviour
     // animator component to make the pretty animations do their thing
     private AnimatorController animatorComponent;
 
+    /// <summary>
+    /// Initialize Reference
+    /// </summary>
     protected void Awake()
     {
         animatorComponent = GetComponent<AnimatorController>();
