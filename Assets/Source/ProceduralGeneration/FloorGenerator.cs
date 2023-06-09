@@ -97,6 +97,7 @@ public class FloorGenerator : MonoBehaviour
         int nextCardIndex = vistedRooms[0].z;
         foreach (Vector3Int vistedRoom in vistedRooms)
         {
+            lastRoom.Exit();
             lastRoom = map.map[vistedRoom.x, vistedRoom.y].room.GetComponent<Room>();
             lastRoom.Generate(false);
             while (nextCardIndex < vistedRoom.z)
@@ -105,7 +106,6 @@ public class FloorGenerator : MonoBehaviour
                 nextCardIndex++;
             }
         }
-        currentRoom.Exit();
         lastRoom.Enter();
     }
 

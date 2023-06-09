@@ -98,7 +98,7 @@ public class Room : MonoBehaviour
         bool enemiesPresent = template.chosenEnemyPool.enemies != null && template.chosenEnemyPool.enemies.Count != 0;
 
         // Move player into room, then close/activate doors (so player doesn't get trapped in door)
-        StartCoroutine(MovePlayer(direction, shouldCloseDoors && enemiesPresent, !enemiesPresent));
+        StartCoroutine(MovePlayer(direction, shouldCloseDoors && enemiesPresent, !enemiesPresent && shouldCloseDoors));
     }
 
     /// <summary>
@@ -206,6 +206,7 @@ public class Room : MonoBehaviour
     {
         if (!generated)
         {
+            Debug.Log("Generated: " + roomLocation);
             Template template = FloorGenerator.floorGeneratorInstance.templateGenerationParameters.GetRandomTemplate(roomType);
 
             GetComponent<TemplateGenerator>().Generate(this, template, spawnEnemies);
