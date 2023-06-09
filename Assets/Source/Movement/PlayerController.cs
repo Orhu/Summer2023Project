@@ -6,7 +6,7 @@ using UnityEngine;
 /// Agent serves as the brain of any agent. Has the ability to input basic tasks, delegating them to various parts of the agent as needed.
 /// </summary>
 [RequireComponent(typeof(Movement), typeof(AnimatorController))]
-public class InputHandler : MonoBehaviour, IActor
+public class PlayerController : MonoBehaviour, IActor
 {
 
     // Movement component to allow the agent to move
@@ -22,6 +22,16 @@ public class InputHandler : MonoBehaviour, IActor
     { 
         movementComponent = GetComponent<Movement>();
         animatorComponent = GetComponent<AnimatorController>();
+    }
+
+    /// <summary>
+    /// Lost last position.
+    /// </summary>
+    private void Start()
+    {
+        if (!SaveManager.autosaveExists) { return; }
+        transform.position = SaveManager.savedPlayerPosition;
+        GetComponent<Health>().currentHealth = SaveManager.savedPlayerHealth;
     }
 
     /// <summary>

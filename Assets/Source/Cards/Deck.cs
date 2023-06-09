@@ -73,12 +73,6 @@ public class Deck : MonoBehaviour
         // The cards in the discard pile.
         public List<Card> discardedCards;
 
-        // The indices of the cards on being acted mapped to the remaining action time.
-        public Dictionary<int, float> cardIndicesToActionTimes;
-
-        // The indices of the cards on cooldown mapped to the time remaining on the cooldown.
-        public Dictionary<int, float> cardIndicesToCooldowns;
-
         /// <summary>
         /// Copies the state from a deck
         /// </summary>
@@ -89,8 +83,6 @@ public class Deck : MonoBehaviour
             drawableCards = deck.drawableCards;
             inHandCards = deck.inHandCards;
             discardedCards = deck.discardedCards;
-            cardIndicesToActionTimes = deck.cardIndicesToActionTimes;
-            cardIndicesToCooldowns = deck.cardIndicesToCooldowns;
         }
 
         /// <summary>
@@ -103,8 +95,6 @@ public class Deck : MonoBehaviour
             deck.drawableCards = drawableCards;
             deck.inHandCards = inHandCards;
             deck.discardedCards = discardedCards;
-            deck.cardIndicesToActionTimes = cardIndicesToActionTimes;
-            deck.cardIndicesToCooldowns = cardIndicesToCooldowns;
         }
     }
 
@@ -114,11 +104,11 @@ public class Deck : MonoBehaviour
         if (playerDeck == null)
         {
             playerDeck = this;
-            if (SaveManager.savedPlayerDeck != null)
+            if (SaveManager.autosaveExists)
             {
                 SaveManager.savedPlayerDeck.LoadInto(this);
             }
-            playerDeck.actor = Player.Get().GetComponent<InputHandler>();
+            playerDeck.actor = Player.Get().GetComponent<PlayerController>();
         }
 
     }
@@ -129,7 +119,13 @@ public class Deck : MonoBehaviour
     /// </summary>
     void Start()
     {
-        if (inHandCards.Count == handSize) { return; }
+        if (inHandCards.Count == handSize)
+        {
+            onDrawPileChanged?.Invoke();
+            onHandChanged?.Invoke();
+            onDiscardPileChanged?.Invoke();
+            return; 
+        }
 
         drawableCards = new List<Card>(cards);
 

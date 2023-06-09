@@ -20,44 +20,64 @@ using UnityEngine;
 /// </example>
 public static class SaveManager
 {
-    // The currently saved player deck. Saving handled by autosaves.
+    // The currently saved player deck. Saving handled by autosaves. Use autosaveExists to check if data Valid.
     public static Deck.State savedPlayerDeck
     {
         get
         {
-            if (autosaver.latestAutosave == null) { return null; }
+            if (!autosaveExists) { return null; }
             return autosaver.latestAutosave.deckState;
         }
     }
 
-    // The currently saved floor seed. Saving handled by autosaves.
+    // The currently saved player health. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+    public static int savedPlayerHealth
+    {
+        get
+        {
+            if (!autosaveExists) { return 0; }
+            return autosaver.latestAutosave.playerHealth;
+        }
+    }
+
+    // The currently saved floor seed. Saving handled by autosaves. Use autosaveExists to check if data Valid.
     public static int savedFloorSeed
     {
         get
         {
-            if (autosaver.latestAutosave == null) { return 0; }
+            if (!autosaveExists) { return 0; }
             return autosaver.latestAutosave.floorSeed;
         }
     }
 
-    // The currently saved visited room data. X,Y = room location, Z = size of deck at the time of clearing. Saving handled by autosaves.
+    // The currently saved visited room data. X,Y = room location, Z = size of deck at the time of clearing. Saving handled by autosaves. Use autosaveExists to check if data Valid.
     public static List<Vector3Int> savedVisitedRooms
     {
         get
         {
-            if (autosaver.latestAutosave == null) { return null; }
+            if (!autosaveExists) { return null; }
             return autosaver.latestAutosave.visedRooms;
         }
     }
 
-    // The currently saved player position. Saving handled by autosaves.
+    // The currently saved player position. Saving handled by autosaves. Use autosaveExists to check if data Valid.
     public static Vector2 savedPlayerPosition
     {
         get
         {
-            if (autosaver.latestAutosave == null) { return Vector2.zero; }
+            if (!autosaveExists) { return Vector2.zero; }
             return autosaver.latestAutosave.playerPos;
         }
+    }
+
+    #region Autosaves
+    // The number of autosaves to keep.
+    private const int NUMBER_OF_AUTOSAVES = 10;
+
+    // Whether or not an autosave currently exists.
+    public static bool autosaveExists
+    {
+        get => autosaver.latestAutosave != null;
     }
 
     // Stores a reference to the current autosaver
@@ -77,9 +97,6 @@ public static class SaveManager
     /// </summary>
     private class Autosaver : MonoBehaviour
     {
-        [Tooltip("The number of autosaves to keep.")] [Min(1)]
-        [SerializeField] private int NumberOfAutosaves = 5;
-
         // Stores references to all the autosaves
         private SaveData<AutosaveData>[] autosaves;
 
@@ -93,11 +110,14 @@ public static class SaveManager
             }
             set
             {
-                _latestAutosaveIndex.data = (_latestAutosaveIndex.data + 1) % NumberOfAutosaves;
+                _latestAutosaveIndex.data = (_latestAutosaveIndex.data + 1) % NUMBER_OF_AUTOSAVES;
                 autosaves[_latestAutosaveIndex.data].data = value;
             }
         }
 
+        /// <summary>
+        /// Initializes listeners, and the save data structure.
+        /// </summary>
         private void Awake()
         {
             FloorGenerator.floorGeneratorInstance.onRoomChange.AddListener(() =>
@@ -107,15 +127,19 @@ public static class SaveManager
 
             Player.Get().GetComponent<Health>().onDeath.AddListener(SaveManager.ClearTransientSaves);
 
-            autosaves = new SaveData<AutosaveData>[NumberOfAutosaves];
-            for (int i = 0; i < NumberOfAutosaves; i++)
+            autosaves = new SaveData<AutosaveData>[NUMBER_OF_AUTOSAVES];
+            for (int i = 0; i < NUMBER_OF_AUTOSAVES; i++)
             {
-                autosaves[i] = new SaveData<AutosaveData>("Autosave_" + (i + 1), false);
+                autosaves[i] = new SaveData<AutosaveData>("Autosave_" + i, false);
             }
         }
 
+        /// <summary>
+        /// Creates an autosave if non exist.
+        /// </summary>
         private void Start()
         {
+            if (autosaveExists) { return; }
             Invoke("Autosave", 0.5f);
         }
 
@@ -124,6 +148,7 @@ public static class SaveManager
         {
             AutosaveData saveData = latestAutosave == null ? new AutosaveData() : latestAutosave;
             saveData.playerPos = Player.Get().transform.position;
+            saveData.playerHealth = Player.Get().GetComponent<Health>().currentHealth;
             saveData.deckState = new Deck.State(Deck.playerDeck);
             saveData.floorSeed = FloorGenerator.floorGeneratorInstance.seed;
 
@@ -140,6 +165,9 @@ public static class SaveManager
             latestAutosave = saveData;
         }
 
+        /// <summary>
+        /// All the data stored in a single autosave.
+        /// </summary>
         [System.Serializable]
         public class AutosaveData
         {
@@ -148,6 +176,9 @@ public static class SaveManager
 
             // The last position of the player.
             public Vector2 playerPos;
+
+            // The last health of the player.
+            public int playerHealth;
 
             // The locations and current card count of visited rooms
             public List<Vector3Int> visedRooms = new List<Vector3Int>();
@@ -173,6 +204,7 @@ public static class SaveManager
             }
         }
     }
+    #endregion
 
     #region Save Clearing
     // Called when a save clear is requested.
@@ -195,7 +227,7 @@ public static class SaveManager
     private class SaveData<T> 
     {
         // The currently saved data, set this value to override the old save file.
-        [SerializeField] private T _data = default;
+        [SerializeField] private T _data;
         public T data
         {
             get
@@ -219,12 +251,15 @@ public static class SaveManager
         // The file path this is saved at.
         private string filePath => System.IO.Path.Combine(Application.persistentDataPath, fileName);
 
+        private T initialValue;
+
         /// <summary>
         /// Creates a new save data.
         /// </summary>
         /// <param name="fileName"> The filename of the save to store. </param>
         /// <param name="persistent"> Whether or not this will ignore clear data requests. </param>
-        public SaveData(string fileName, bool persistent)
+        /// <param name="initialValue"> The value returned if no save file exists. </param>
+        public SaveData(string fileName, bool persistent, T initialValue = default)
         {
             this.fileName = fileName;
 
@@ -232,6 +267,9 @@ public static class SaveManager
             {
                 SaveManager.ClearData += ClearData;
             }
+
+            this.initialValue = initialValue;
+            _data = initialValue;
         }
 
         /// <summary>
@@ -239,7 +277,7 @@ public static class SaveManager
         /// </summary>
         private void ClearData()
         {
-            _data = default;
+            _data = initialValue;
 
             if (File.Exists(filePath))
             {

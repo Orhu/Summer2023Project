@@ -95,9 +95,10 @@ public class Room : MonoBehaviour
         bool shouldCloseDoors = !generated;
         Generate(spawnEnemies);
 
-        shouldCloseDoors = shouldCloseDoors && template.chosenEnemyPool.enemies != null && template.chosenEnemyPool.enemies.Count != 0;
+        bool enemiesPresent = template.chosenEnemyPool.enemies != null && template.chosenEnemyPool.enemies.Count != 0;
+
         // Move player into room, then close/activate doors (so player doesn't get trapped in door)
-        StartCoroutine(MovePlayer(direction, shouldCloseDoors));
+        StartCoroutine(MovePlayer(direction, shouldCloseDoors && enemiesPresent, !enemiesPresent));
     }
 
     /// <summary>
@@ -141,7 +142,7 @@ public class Room : MonoBehaviour
     /// <param name="direction"> The direction the player entered in </param>
     /// <param name="shouldCloseDoors"> Whether or not the doors should close </param>
     /// <returns> Enumerator so other functions can wait for this to finish </returns>
-    public IEnumerator MovePlayer(Direction direction, bool shouldCloseDoors)
+    public IEnumerator MovePlayer(Direction direction, bool shouldCloseDoors, bool clearRoom)
     {
         GameObject player = Player.Get();
 
@@ -169,7 +170,7 @@ public class Room : MonoBehaviour
             movementInput.y = 1;
         }
 
-        player.GetComponent<InputHandler>().enabled = false;
+        player.GetComponent<PlayerController>().enabled = false;
 
         bool inXRange = (player.transform.position.x >= bottomLeftLocation.x + 0.9f && player.transform.position.x <= topRightLocation.x - 0.9f);
         bool inYRange = (player.transform.position.y >= bottomLeftLocation.y + 0.9f && player.transform.position.y <= topRightLocation.y - 0.9f);
@@ -183,12 +184,17 @@ public class Room : MonoBehaviour
             yield return null;
         }
 
-        player.GetComponent<InputHandler>().enabled = true;
+        player.GetComponent<PlayerController>().enabled = true;
 
         ActivateDoors();
         if (shouldCloseDoors)
         {
             CloseDoors();
+        }
+
+        if (clearRoom)
+        {
+            onCleared?.Invoke();
         }
     }
 

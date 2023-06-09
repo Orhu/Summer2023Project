@@ -71,7 +71,7 @@ public class FloorGenerator : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        if (SaveManager.savedFloorSeed != 0)
+        if (SaveManager.autosaveExists)
         {
             seed = SaveManager.savedFloorSeed;
         }
@@ -90,7 +90,7 @@ public class FloorGenerator : MonoBehaviour
         GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, roomSize);
         currentRoom.Generate();
 
-        if (SaveManager.savedVisitedRooms == null) { return; }
+        if (!SaveManager.autosaveExists) { return; }
 
         List<Vector3Int> vistedRooms = SaveManager.savedVisitedRooms;
         Room lastRoom = map.startCell.room.GetComponent<Room>();
@@ -105,7 +105,8 @@ public class FloorGenerator : MonoBehaviour
                 nextCardIndex++;
             }
         }
-        currentRoom = lastRoom;
+        currentRoom.Exit();
+        lastRoom.Enter();
     }
 
     /// <summary>
@@ -113,13 +114,10 @@ public class FloorGenerator : MonoBehaviour
     /// </summary>
     private void GetSpecialRoomsFromDeck()
     {
-        if (SaveManager.savedPlayerDeck == null)
+        int max = SaveManager.autosaveExists ? SaveManager.savedVisitedRooms[0].z : Deck.playerDeck.cards.Count;
+        for (int i = 0; i < max; i++)
         {
-            return;
-        }
-
-        foreach (Card card in SaveManager.savedPlayerDeck.cards)
-        {
+            Card card = Deck.playerDeck.cards[i];
             if (card.effects == null)
             {
                 return;
@@ -157,7 +155,7 @@ public class FloorGenerator : MonoBehaviour
             templateGenerationParameters.tileTypesToPossibleTiles.tileTypesToPossibleTiles.Add(tileTypeToPossibleTiles);
         }
 
-        int max = SaveManager.savedVisitedRooms != null ? SaveManager.savedVisitedRooms[0].z : Deck.playerDeck.cards.Count;
+        int max = SaveManager.autosaveExists ? SaveManager.savedVisitedRooms[0].z : Deck.playerDeck.cards.Count;
         for (int i = 0; i < max; i++)
         {
             OnCardAdded(Deck.playerDeck.cards[i]);
