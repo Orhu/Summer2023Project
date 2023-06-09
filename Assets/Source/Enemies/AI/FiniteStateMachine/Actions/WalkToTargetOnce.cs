@@ -121,7 +121,7 @@ public class WalkToTargetOnce : FSMAction
                 if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.lookPoints.Length)
                 {
                     // reached the end of the waypoints, stop moving here
-                    stateMachine.GetComponent<Controller>().movementInput = Vector2.zero;
+                    stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
                     stateMachine.destinationReached = true;
                     yield break;
                 }
@@ -130,7 +130,7 @@ public class WalkToTargetOnce : FSMAction
                 stateMachine.debugWaypoint = currentWaypoint;
             }
 
-            stateMachine.GetComponent<Controller>().MoveTowards(currentWaypoint);
+            stateMachine.GetComponent<Movement>().movementInput = (currentWaypoint - (Vector2)stateMachine.transform.position).normalized;
             yield return null;
         }
     }

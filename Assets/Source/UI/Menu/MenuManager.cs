@@ -42,7 +42,7 @@ public class MenuManager : MonoBehaviour
         instance.boosterPackMenu.gameObject.SetActive(true);
         instance.boosterPackMenu.boosterPackObject = boosterPack;
         // Disable player movement
-        instance.playerGameObject.GetComponent<Controller>().enabled = false;
+        instance.playerGameObject.GetComponent<InputHandler>().enabled = false;
     }
 
     /// <summary>
@@ -53,7 +53,7 @@ public class MenuManager : MonoBehaviour
         // "Resume the game", resumes all time related function
         Time.timeScale = 1;
         // Re-enable player movement
-        playerGameObject.GetComponent<Controller>().enabled = true;
+        playerGameObject.GetComponent<InputHandler>().enabled = true;
 
         // close all menus
         for(int i = 0; i < transform.childCount; i++)

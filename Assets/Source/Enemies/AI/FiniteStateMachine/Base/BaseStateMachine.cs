@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Represents the state machine that manages and switches between states. Essentially serves as the "brain" and logic of an enemy.
 /// </summary>
-public class BaseStateMachine : MonoBehaviour
+public class BaseStateMachine : MonoBehaviour, IActor
 {
     // the state this machine starts in
     [SerializeField] private BaseState initialState;
@@ -102,7 +102,7 @@ public class BaseStateMachine : MonoBehaviour
 
         if (exhausted)
         {
-            GetComponent<Controller>().movementInput = Vector2.zero;
+            GetComponent<Movement>().movementInput = Vector2.zero;
             return;
         }
         currentState.OnStateUpdate(this);
@@ -144,4 +144,57 @@ public class BaseStateMachine : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawCube(debugWaypoint, Vector3.one);
     }
+
+    #region IActor Implementation
+    // Gets whether or not this actor can act.
+    IActor.CanActRequest _canAct;
+    bool canAct
+    {
+        get
+        {
+            bool shouldAct = true;
+            _canAct?.Invoke(ref shouldAct);
+            return shouldAct;
+        }
+    }
+
+    /// <summary>
+    /// Get the transform that the action should be played from.
+    /// </summary>
+    /// <returns> The actor transform. </returns>
+    public Transform GetActionSourceTransform()
+    {
+        return transform;
+    }
+
+
+    /// <summary>
+    /// Get the position that the action should be aimed at.
+    /// </summary>
+    /// <returns> The mouse position in world space. </returns>
+    public Vector3 GetActionAimPosition()
+    {
+        return currentTarget;
+    }
+
+
+    /// <summary>
+    /// Gets the collider of this actor.
+    /// </summary>
+    /// <returns> The collider. </returns>
+    public Collider2D GetCollider()
+    {
+        return GetComponent<Collider2D>();
+    }
+
+
+    /// <summary>
+    /// Gets the delegate that will fetch whether this actor can act.
+    /// </summary>
+    /// <returns> A delegate with a out parameter, that allows any subscribed objects to determine whether or not this actor can act. </returns>
+    public ref IActor.CanActRequest GetOnRequestCanAct()
+    {
+        return ref _canAct;
+    }
+    #endregion
 }

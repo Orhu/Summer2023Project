@@ -32,8 +32,9 @@ public class SimpleMovement : Movement
     /// <summary>
     /// Initializes the rigid body reference.
     /// </summary>
-    private void Awake()
+    private new void Awake()
     {
+        base.Awake();
         rb2d = GetComponent<Rigidbody2D>();
     }
 
@@ -54,12 +55,12 @@ public class SimpleMovement : Movement
     {
         float targetSpeed = maxSpeed;
         requestSpeedModifications?.Invoke(ref targetSpeed);
-        Vector2 targetVelocity = MovementInput * targetSpeed;
+        Vector2 targetVelocity = movementInput * targetSpeed;
 
         Vector2 deltaVelocity = targetVelocity - rb2d.velocity;
 
         float currentAcceleration = Time.deltaTime * maxSpeed;
-        currentAcceleration *= MovementInput.sqrMagnitude == 0 ? deceleration : acceleration;
+        currentAcceleration *= movementInput.sqrMagnitude == 0 ? deceleration : acceleration;
 
         rb2d.velocity += Vector2.ClampMagnitude(deltaVelocity.normalized * currentAcceleration, deltaVelocity.magnitude);
     }
