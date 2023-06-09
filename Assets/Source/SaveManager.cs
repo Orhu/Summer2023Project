@@ -125,7 +125,7 @@ public static class SaveManager
                 FloorGenerator.floorGeneratorInstance.currentRoom.onCleared += Autosave;
             });
 
-            Player.Get().GetComponent<Health>().onDeath.AddListener(SaveManager.ClearTransientSaves);
+            Player.Get().GetComponent<Health>().onDeath.AddListener(ClearTransientSaves);
 
             autosaves = new SaveData<AutosaveData>[NUMBER_OF_AUTOSAVES];
             for (int i = 0; i < NUMBER_OF_AUTOSAVES; i++)
@@ -146,6 +146,8 @@ public static class SaveManager
         // Update is called once per frame
         private void Autosave()
         {
+            if (!gameObject.scene.isLoaded) { return; }
+
             AutosaveData saveData = latestAutosave == null ? new AutosaveData() : latestAutosave;
             saveData.playerPos = Player.Get().transform.position;
             saveData.playerHealth = Player.Get().GetComponent<Health>().currentHealth;
@@ -208,14 +210,14 @@ public static class SaveManager
 
     #region Save Clearing
     // Called when a save clear is requested.
-    private static System.Action ClearData;
+    private static System.Action clearData;
 
     /// <summary>
     /// Clears all non persistent save data.
     /// </summary>
     public static void ClearTransientSaves()
     {
-        ClearData?.Invoke();
+        clearData?.Invoke();
     }
     #endregion
 
@@ -265,7 +267,7 @@ public static class SaveManager
 
             if (!persistent)
             {
-                SaveManager.ClearData += ClearData;
+                SaveManager.clearData += ClearData;
             }
 
             this.initialValue = initialValue;
