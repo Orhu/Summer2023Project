@@ -31,7 +31,9 @@ public class PlayerController : MonoBehaviour, IActor
     {
         if (!SaveManager.autosaveExists) { return; }
         transform.position = SaveManager.savedPlayerPosition;
-        GetComponent<Health>().currentHealth = SaveManager.savedPlayerHealth;
+        Health health = GetComponent<Health>();
+        health.maxHealth = health.maxHealth;
+        health.currentHealth = SaveManager.savedPlayerHealth;
     }
 
     /// <summary>

@@ -11,11 +11,11 @@ using UnityEngine.Events;
 public class Health : MonoBehaviour
 {
     [Tooltip("The Max health of this object")]
-    public int _maxHealth = 5;
+    [SerializeField] private int _maxHealth = 5;
     public int maxHealth
     {
         get => _maxHealth;
-        private set
+        set
         {
             _maxHealth = value;
             onMaxHealthChanged?.Invoke(value);

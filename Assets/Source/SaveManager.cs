@@ -153,14 +153,6 @@ public static class SaveManager
             saveData.playerHealth = Player.Get().GetComponent<Health>().currentHealth;
             saveData.deckState = new Deck.State(Deck.playerDeck);
             saveData.floorSeed = FloorGenerator.floorGeneratorInstance.seed;
-
-            if (saveData.visedRooms == null)
-            {
-                saveData.visedRooms = new List<Vector3Int>();
-                saveData.visedRooms.Add(new Vector3Int(0, 0, Deck.playerDeck.cards.Count));
-                return;
-            }
-            if (FloorGenerator.floorGeneratorInstance.currentRoom == null) { return; }
             Vector2Int loc = FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation;
             saveData.visedRooms.Add(new Vector3Int(loc.x, loc.y, Deck.playerDeck.cards.Count));
 

@@ -132,6 +132,7 @@ public class BaseStateMachine : MonoBehaviour, IActor
     /// </summary>
     private void OnDestroy()
     {
+        if (!gameObject.scene.isLoaded) { return; }
         FloorGenerator.floorGeneratorInstance.currentRoom.RemoveEnemy(gameObject);
     }
 
