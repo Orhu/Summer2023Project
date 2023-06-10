@@ -52,15 +52,22 @@ public class HandRenderer : MonoBehaviour
             {
                 runeRenderers[i].card = card;
             }
-            // Anything that's currently in the player's hand is not greyed out
+            // Set runeRenderers that are currently in the hand to not be greyed out
             runeRenderers[i].greyedOut = false;
-            if (!runeRenderers[i].previewing)
+
+            // If rune renderer at index i is not previewing, but it should be
+            if (!runeRenderers[i].previewing && Deck.playerDeck.previewedCardIndices.Contains(i))
             {
-                runeRenderers[i].previewing = Deck.playerDeck.previewedCardIndices.Contains(i);
-                if (runeRenderers[i].previewing)
-                {
-                    runeRenderers[i].gameObject.GetComponent<Animator>().Play("A_RuneRenderer_Enlarge");
-                }
+                // Set it to be previewing
+                runeRenderers[i].previewing = true;
+                // Play the enlarge animation
+                runeRenderers[i].gameObject.GetComponent<Animator>().Play("A_RuneRenderer_Enlarge");
+            }
+            // If rune renderer at index i is previewing and it shouldn't be
+            else if (runeRenderers[i].previewing && !Deck.playerDeck.previewedCardIndices.Contains(i))
+            {
+                // Set previewing to false
+                runeRenderers[i].previewing = false;
             }
 
             // Check for previewing for chording
