@@ -38,6 +38,13 @@ public class RuneRenderer : MonoBehaviour
         get { return links.previewOverlay.enabled; }
     }
 
+    // Whether the rune is usable / visible or its greyed out
+    public bool greyedOut
+    {
+        set { links.greyedOutOverlay.enabled = value; }
+        get { return links.greyedOutOverlay.enabled; }
+    }
+
     // The cooldown time to display. If <= 0 no cooldown overlay will be rendered.
     public float cooldownTime
     {
@@ -67,22 +74,25 @@ public class RuneRenderer : MonoBehaviour
     struct ComponentLinks
     {
 
-        [Tooltip("The text boxed used to display the current remaining cooldown of the card.")]
+        [Tooltip("The text boxed used to display the current remaining cooldown of the crune.")]
         public TMP_Text cooldownTimeTextBox;
 
-        [Tooltip("The text boxed used to display the current remaining action time of the card.")]
+        [Tooltip("The text boxed used to display the current remaining action time of the rune.")]
         public TMP_Text actionTimeTextBox;
 
-        [Tooltip("The image used to render the card specific sprite.")]
+        [Tooltip("The image used to render the rune specific sprite.")]
         public Image runeSprite;
 
-        [Tooltip("The overlay to enable when previewing this card.")]
+        [Tooltip("The overlay to enable when previewing this rune.")]
         public Image previewOverlay;
 
-        [Tooltip("The overlay to enable when this card is on cooldown.")]
+        [Tooltip("The overlay to enable when this rune is on cooldown.")]
         public Image cooldownOverlay;
 
-        [Tooltip("The overlay to enable when this card is on acting.")]
+        [Tooltip("The overlay to enable when this rune is on acting.")]
         public Image actionTimeOverlay;
+
+        [Tooltip("The overlay to enable when this rune is inactive")]
+        public Image greyedOutOverlay;
     }
 }

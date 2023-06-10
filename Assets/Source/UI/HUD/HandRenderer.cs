@@ -8,29 +8,34 @@ using UnityEngine.UI;
 /// </summary>
 public class HandRenderer : MonoBehaviour
 {
-    // The rune renderers tp display the hand.
+    [Tooltip("The rune renderers to display the hand.")]
     public List<RuneRenderer> runeRenderers = new List<RuneRenderer>();
 
-    // The rune renderer prefab to instantiate.
-    public RuneRenderer runeRendererTemplate;
+    [Tooltip("The rune renderer prefab to instantiate.")]
+    [SerializeField] private RuneRenderer runeRendererTemplate;
 
-    // The image representing the root card's Rune
-    [SerializeField] private Image rootRuneImage;
+    [Tooltip("The container holding the runes")]
+    [SerializeField] private GameObject runeContainer;
 
-    // Card that is the "root"
-    private Card rootChordCard;
+    [Tooltip("The container / renderer for the chord root rune")]
+    [SerializeField] private ChordRenderer chordContainer;
 
-    // Default image to revert root image back to
-    [SerializeField] private Sprite defaultRootImage;
+    
+
+    
+
+    [Tooltip("Max number of runes to generate")]
+    [SerializeField] private int maxHandSize;
 
     /// <summary>
     /// Instantiate RuneRenderers
     /// </summary>
     private void Start()
     {
-        for (int i = 0; i < Deck.playerDeck.handSize; i++)
+        chordContainer = GetComponentInChildren<ChordRenderer>();
+        for (int i = 0; i < maxHandSize; i++)
         {
-            runeRenderers.Add(Instantiate(runeRendererTemplate, transform).GetComponent<RuneRenderer>());
+            runeRenderers.Add(Instantiate(runeRendererTemplate, runeContainer.transform).GetComponent<RuneRenderer>());
         }
     }
 
@@ -39,7 +44,7 @@ public class HandRenderer : MonoBehaviour
     /// </summary>
     void Update()
     {
-
+        // loop through current deck hand size
         for (int i = 0; i < Deck.playerDeck.handSize; i++)
         {
             Card card = Deck.playerDeck.inHandCards[i];
@@ -47,29 +52,39 @@ public class HandRenderer : MonoBehaviour
             {
                 runeRenderers[i].card = card;
             }
-            if(!runeRenderers[i].previewing && Deck.playerDeck.previewedCardIndices.Contains(i))
-            {
-                runeRenderers[i].previewing = true;
-                print(runeRenderers[i].gameObject.GetComponent<Animator>());
-                runeRenderers[i].gameObject.GetComponent<Animator>().Play("A_RuneRenderer_Enlarge");
-            }
+            // Anything that's currently in the player's hand is not greyed out
+            runeRenderers[i].greyedOut = false;
             runeRenderers[i].previewing = Deck.playerDeck.previewedCardIndices.Contains(i);
 
-            // Crude way to check for root of a chord. Need to review with Liam!
-            if(Deck.playerDeck.previewedCardIndices.Count > 0 && Deck.playerDeck.previewedCardIndices[0] == i)
+            // Check for previewing
+            if (Deck.playerDeck.previewedCardIndices.Count > 0)
             {
-                if(rootChordCard != runeRenderers[i].card)
+                if (!runeRenderers[i].previewing && Deck.playerDeck.previewedCardIndices.Contains(i))
                 {
-                    rootChordCard = runeRenderers[i].card;
-                    rootRuneImage.sprite = rootChordCard.runeImage;
-                    rootRuneImage.gameObject.GetComponent<Animator>().Play("A_RuneRenderer_Spin");
+                    runeRenderers[i].gameObject.GetComponent<Animator>().Play("A_RuneRenderer_Enlarge");
+                }
+
+                // Obtain the first card of the chord
+                if (Deck.playerDeck.previewedCardIndices.Count == 1 && Deck.playerDeck.previewedCardIndices[0] == i )
+                {
+                    chordContainer.DisplayChordLevelOne(runeRenderers[i].card);
+                }
+                // Obtain the second card of the chord
+                else if (Deck.playerDeck.previewedCardIndices.Count == 2 && Deck.playerDeck.previewedCardIndices[1] == i)
+                {
+                    chordContainer.DisplayChordLevelTwo(runeRenderers[i].card);
+                }
+                // Obtain the third card of the chord
+                else if (Deck.playerDeck.previewedCardIndices.Count == 3 && Deck.playerDeck.previewedCardIndices[2] == i)
+                {
+                    chordContainer.DisplayChordLevelThree(runeRenderers[i].card);
                 }
                 
             }
+            // Reset chord
             else if(Deck.playerDeck.previewedCardIndices.Count <= 0)
             {
-                rootChordCard = null;
-                rootRuneImage.sprite = defaultRootImage;
+                chordContainer.ResetChord();
             }
 
             if(Deck.playerDeck.cardIndicesToActionTimes.ContainsKey(i))
