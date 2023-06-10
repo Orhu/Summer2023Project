@@ -13,11 +13,13 @@ GameObject:
   - component: {fileID: 5517008572783111348}
   - component: {fileID: 2075822659}
   - component: {fileID: 2591183591901039891}
+  - component: {fileID: 107912168563067167}
   - component: {fileID: -8563880425545905597}
   - component: {fileID: 1503026418}
   - component: {fileID: 5436055868885082538}
   - component: {fileID: 4731582400512514557}
   - component: {fileID: 2075822649}
+  - component: {fileID: 4131509149270325233}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -146,6 +148,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &107912168563067167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608508398850829056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a1596c94b00af84eb76193c1fec2790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-8563880425545905597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,6 +285,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4131509149270325233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608508398850829056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 059485bb3fc502f49928b10a7bfc2323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animactionClipsToMirrorParameters: []
 --- !u!1001 &1510892456516161432
 PrefabInstance:
   m_ObjectHideFlags: 0
