@@ -19,7 +19,7 @@ public class SetMovementInputToTargetWithCondition : FSMAction
     {
         if (decision.Decide(stateMachine))
         {
-            stateMachine.GetComponent<Controller>().MoveTowards(stateMachine.currentTarget);
+            stateMachine.GetComponent<Movement>().movementInput = (stateMachine.currentTarget - (Vector2)stateMachine.transform.position).normalized;
         }
     }
 

@@ -19,7 +19,7 @@ public class Stunned : StatusEffect
     {
         Stunned instance = (Stunned)base.CreateCopy(gameObject);
 
-        gameObject.GetComponent<Controller>().GetOnRequestCanAct() += instance.PreventAction;
+        gameObject.GetComponent<InputHandler>().GetOnRequestCanAct() += instance.PreventAction;
         gameObject.GetComponent<Movement>().requestSpeedModifications += instance.PreventMovement;
 
         return instance;
@@ -68,7 +68,7 @@ public class Stunned : StatusEffect
         
         if(gameObject == null) { return; }
 
-        gameObject.GetComponent<Controller>().GetOnRequestCanAct() -= PreventAction;
+        gameObject.GetComponent<InputHandler>().GetOnRequestCanAct() -= PreventAction;
         gameObject.GetComponent<Movement>().requestSpeedModifications -= PreventMovement;
     }
 }

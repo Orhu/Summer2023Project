@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 5436055868885082538}
   - component: {fileID: 4731582400512514557}
   - component: {fileID: 2075822649}
+  - component: {fileID: 2092352605084689065}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -206,10 +207,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a1596c94b00af84eb76193c1fec2790, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isControllable: 1
-  useEnemyLogic: 0
-  movementInput: {x: 0, y: 0}
-  feet: {fileID: 0}
 --- !u!114 &1503026418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,6 +269,25 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2092352605084689065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608508398850829056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 059485bb3fc502f49928b10a7bfc2323, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _statesToMirrorParameters:
+  - stateName: Run
+    parameterName: runLeft
+  - stateName: Run Cast
+    parameterName: castLeft
+  - stateName: Idle Cast
+    parameterName: castLeft
 --- !u!1 &3334315805312791787
 GameObject:
   m_ObjectHideFlags: 0
