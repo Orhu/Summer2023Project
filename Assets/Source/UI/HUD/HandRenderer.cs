@@ -15,7 +15,7 @@ public class HandRenderer : MonoBehaviour
     public RuneRenderer runeRendererTemplate;
 
     // The image representing the root card's Rune
-    private Image rootRuneImage;
+    [SerializeField] private Image rootRuneImage;
 
     // Card that is the "root"
     private Card rootChordCard;
@@ -24,11 +24,10 @@ public class HandRenderer : MonoBehaviour
     [SerializeField] private Sprite defaultRootImage;
 
     /// <summary>
-    /// Instantiate RuneRenderers and get Image component
+    /// Instantiate RuneRenderers
     /// </summary>
     private void Start()
     {
-        rootRuneImage = GetComponent<Image>();
         for (int i = 0; i < Deck.playerDeck.handSize; i++)
         {
             runeRenderers.Add(Instantiate(runeRendererTemplate, transform).GetComponent<RuneRenderer>());
@@ -48,13 +47,24 @@ public class HandRenderer : MonoBehaviour
             {
                 runeRenderers[i].card = card;
             }
+            if(!runeRenderers[i].previewing && Deck.playerDeck.previewedCardIndices.Contains(i))
+            {
+                runeRenderers[i].previewing = true;
+                print(runeRenderers[i].gameObject.GetComponent<Animator>());
+                runeRenderers[i].gameObject.GetComponent<Animator>().Play("A_RuneRenderer_Enlarge");
+            }
             runeRenderers[i].previewing = Deck.playerDeck.previewedCardIndices.Contains(i);
 
             // Crude way to check for root of a chord. Need to review with Liam!
             if(Deck.playerDeck.previewedCardIndices.Count > 0 && Deck.playerDeck.previewedCardIndices[0] == i)
             {
-                rootChordCard = runeRenderers[i].card;
-                rootRuneImage.sprite = rootChordCard.runeImage;
+                if(rootChordCard != runeRenderers[i].card)
+                {
+                    rootChordCard = runeRenderers[i].card;
+                    rootRuneImage.sprite = rootChordCard.runeImage;
+                    rootRuneImage.gameObject.GetComponent<Animator>().Play("A_RuneRenderer_Spin");
+                }
+                
             }
             else if(Deck.playerDeck.previewedCardIndices.Count <= 0)
             {
