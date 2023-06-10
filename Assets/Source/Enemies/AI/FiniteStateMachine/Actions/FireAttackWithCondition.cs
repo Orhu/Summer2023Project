@@ -90,7 +90,7 @@ public class FireAttackWithCondition : FSMAction
         foreach (var action in actions)
         {
             BaseStateMachine.print(name + ": Firing!");
-            action.Play(stateMachine.GetComponent<Controller>(), FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies);
+            action.Play(stateMachine, FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies);
         }
 
         afterAction?.Invoke(stateMachine);
