@@ -54,16 +54,18 @@ public class HandRenderer : MonoBehaviour
             }
             // Anything that's currently in the player's hand is not greyed out
             runeRenderers[i].greyedOut = false;
-            runeRenderers[i].previewing = Deck.playerDeck.previewedCardIndices.Contains(i);
-
-            // Check for previewing
-            if (Deck.playerDeck.previewedCardIndices.Count > 0)
+            if (!runeRenderers[i].previewing)
             {
-                if (!runeRenderers[i].previewing && Deck.playerDeck.previewedCardIndices.Contains(i))
+                runeRenderers[i].previewing = Deck.playerDeck.previewedCardIndices.Contains(i);
+                if (runeRenderers[i].previewing)
                 {
                     runeRenderers[i].gameObject.GetComponent<Animator>().Play("A_RuneRenderer_Enlarge");
                 }
+            }
 
+            // Check for previewing for chording
+            if (Deck.playerDeck.previewedCardIndices.Count > 0)
+            {
                 // Obtain the first card of the chord
                 if (Deck.playerDeck.previewedCardIndices.Count == 1 && Deck.playerDeck.previewedCardIndices[0] == i )
                 {
