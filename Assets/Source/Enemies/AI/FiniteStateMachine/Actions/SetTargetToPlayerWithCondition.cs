@@ -7,9 +7,12 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "FSM/Actions/Set Target To Player With Condition")]
 public class SetTargetToPlayerWithCondition : FSMAction
 {
+    [Tooltip("Target feet? Should be set to true if this target is used for pathfinding. Should be set to false if this target is used for shooting an attack.")]
+    [SerializeField] private bool targetFeet;
+    
     [Tooltip("The condition when to pick a new target")]
     [SerializeField] private FSMDecision whenToPickNewTile;
-    
+
     /// <summary>
     /// When condition is met and cooldown is ready, set player target
     /// </summary>
@@ -49,7 +52,15 @@ public class SetTargetToPlayerWithCondition : FSMAction
     /// <returns></returns>
     IEnumerator SetPlayerTarget(BaseStateMachine stateMachine)
     {
-        stateMachine.currentTarget = stateMachine.player.transform.position;
+        if (targetFeet)
+        {
+            stateMachine.currentTarget = Player.GetFeet().transform.position;
+        }
+        else
+        {
+            stateMachine.currentTarget = Player.Get().transform.position;
+        }
+        
         stateMachine.cooldownData.cooldownReady[this] = true;
         yield break;
     }
