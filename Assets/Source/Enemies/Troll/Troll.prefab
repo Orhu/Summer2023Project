@@ -7,6 +7,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 786805950645070149, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Size.x
+      value: 2.20481
+      objectReference: {fileID: 0}
+    - target: {fileID: 786805950645070149, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Size.y
+      value: 1.416913
+      objectReference: {fileID: 0}
+    - target: {fileID: 786805950645070149, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.10558652
+      objectReference: {fileID: 0}
+    - target: {fileID: 786805950645070149, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.18759373
+      objectReference: {fileID: 0}
     - target: {fileID: 3497544517795975723, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Radius
       value: 0.85132504
@@ -26,6 +42,10 @@ PrefabInstance:
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: maxHealth
       value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: immuneStatusEffects.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442667, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_RootOrder
@@ -106,24 +126,3 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 3497544517795975723, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
---- !u!1 &353970044774835202 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5936671061499478613, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
-  m_PrefabInstance: {fileID: 6236015442010990167}
-  m_PrefabAsset: {fileID: 0}
---- !u!70 &5425700483782691710
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 353970044774835202}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.03887274, y: -0.14941992}
-  m_Size: {x: 2.482646, y: 1.4644197}
-  m_Direction: 1

@@ -7,6 +7,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "FSM/Actions/Set Target To Player")]
 public class SetTargetToPlayer : FSMAction
 {
+    [Tooltip("Target feet? Should be set to true if this target is used for pathfinding. Should be set to false if this target is used for shooting an attack.")]
+    [SerializeField] private bool targetFeet;
+    
     /// <summary>
     /// Updates the currentTarget to be the player when cooldown is ready
     /// </summary>
@@ -46,7 +49,15 @@ public class SetTargetToPlayer : FSMAction
     /// <returns></returns>
     IEnumerator SetPlayerTarget(BaseStateMachine stateMachine)
     {
-        stateMachine.currentTarget = stateMachine.player.transform.position;
+        if (targetFeet)
+        {
+            stateMachine.currentTarget = Player.GetFeet().transform.position;
+        }
+        else
+        {
+            stateMachine.currentTarget = Player.Get().transform.position;
+        }
+
         stateMachine.cooldownData.cooldownReady[this] = true;
         yield break;
     }

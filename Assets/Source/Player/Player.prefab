@@ -11,14 +11,15 @@ GameObject:
   - component: {fileID: 6351846847079443315}
   - component: {fileID: 3562107043912131769}
   - component: {fileID: 5517008572783111348}
+  - component: {fileID: 2075822659}
   - component: {fileID: 2591183591901039891}
+  - component: {fileID: 107912168563067167}
   - component: {fileID: -8563880425545905597}
-  - component: {fileID: 1503026416}
   - component: {fileID: 1503026418}
   - component: {fileID: 5436055868885082538}
   - component: {fileID: 4731582400512514557}
   - component: {fileID: 2075822649}
-  - component: {fileID: 2092352605084689065}
+  - component: {fileID: 4131509149270325233}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -38,7 +39,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1551362436557145000}
   - {fileID: 5011158208702063703}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -80,6 +80,22 @@ CapsuleCollider2D:
   m_Offset: {x: 0.03063476, y: -0.01760614}
   m_Size: {x: 0.6287283, y: 0.9647877}
   m_Direction: 0
+--- !u!70 &2075822659
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608508398850829056}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.018323803, y: -0.32127276}
+  m_Size: {x: 0.5633549, y: 0.35745457}
+  m_Direction: 1
 --- !u!212 &2591183591901039891
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -132,6 +148,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &107912168563067167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608508398850829056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a1596c94b00af84eb76193c1fec2790, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &-8563880425545905597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,18 +223,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1503026416
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 608508398850829056}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a1596c94b00af84eb76193c1fec2790, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1503026418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,7 +285,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &2092352605084689065
+--- !u!114 &4131509149270325233
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -281,61 +297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 059485bb3fc502f49928b10a7bfc2323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _statesToMirrorParameters:
-  - stateName: Run
-    parameterName: runLeft
-  - stateName: Run Cast
-    parameterName: castLeft
-  - stateName: Idle Cast
-    parameterName: castLeft
---- !u!1 &3334315805312791787
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1551362436557145000}
-  - component: {fileID: 123284094579445804}
-  m_Layer: 12
-  m_Name: Feet
-  m_TagString: Player
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1551362436557145000
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3334315805312791787}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6351846847079443315}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!70 &123284094579445804
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3334315805312791787}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.018323803, y: -0.32127276}
-  m_Size: {x: 0.5633549, y: 0.35745457}
-  m_Direction: 1
+  _animactionClipsToMirrorParameters: []
 --- !u!1001 &1510892456516161432
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -357,7 +319,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5871833512059775951, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5871833512059775951, guid: 6e82bf22b5bd4414cb1e909d7b3c40f1, type: 3}
       propertyPath: m_LocalPosition.x
