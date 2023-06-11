@@ -11,6 +11,8 @@ public class MenuManager : MonoBehaviour
     [HideInInspector]public static MenuManager instance;
     // Booster pack menu reference, assigned in inspector
     [SerializeField]private BoosterPackMenu boosterPackMenu;
+    // Pause Menu reference, assigned in inspector
+    [SerializeField] private PauseMenu pauseMenu;
     // Reference to the player's game object
     private GameObject playerGameObject;
 
@@ -27,6 +29,10 @@ public class MenuManager : MonoBehaviour
             {
                 boosterPackMenu = GetComponentInChildren<BoosterPackMenu>();
             }
+            if(pauseMenu == null)
+            {
+                pauseMenu = GetComponentInChildren<PauseMenu>();
+            }
         } 
     }
 
@@ -41,6 +47,19 @@ public class MenuManager : MonoBehaviour
         Time.timeScale = 0;
         instance.boosterPackMenu.gameObject.SetActive(true);
         instance.boosterPackMenu.boosterPackObject = boosterPack;
+        // Disable player movement
+        instance.playerGameObject.GetComponent<InputHandler>().enabled = false;
+    }
+
+    /// <summary>
+    /// Opens the pause menu
+    /// </summary>
+    public static void OpenPauseMenu()
+    {
+        // "Pause the game", should probably be replaced with a more effective method
+        // Sets timeScale to 0, so all time related functions are stopped
+        Time.timeScale = 0;
+        instance.boosterPackMenu.gameObject.SetActive(true);
         // Disable player movement
         instance.playerGameObject.GetComponent<InputHandler>().enabled = false;
     }
