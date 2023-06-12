@@ -202,7 +202,8 @@ public abstract class Attack : Action
 public enum SpawnLocation
 {
     Actor,
-    AimPosition
+    AimPosition,
+    RoomCenter,
 }
 
 /// <summary>
