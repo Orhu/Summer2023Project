@@ -90,6 +90,7 @@ public class FloorGenerator : MonoBehaviour
         GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, roomSize);
         currentRoom.Generate();
 
+        // Autosave loading
         if (!SaveManager.autosaveExists) { return; }
 
         List<Vector3Int> vistedRooms = SaveManager.savedVisitedRooms;
