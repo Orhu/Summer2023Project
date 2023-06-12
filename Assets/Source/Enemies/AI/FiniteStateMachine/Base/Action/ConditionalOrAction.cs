@@ -1,0 +1,40 @@
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+/// <summary>
+/// Represents an action that executes only if one of several conditions return true
+/// </summary>
+[CreateAssetMenu(menuName = "FSM/Actions/Conditional OR Action")]
+public class ConditionalOrAction : FSMAction
+{
+    [Tooltip("Decisions to evaluate with OR condition.")]
+    [SerializeField] private List<FSMDecision> decisions;
+        
+    [Tooltip("Action to perform if decision is true.")]
+    [SerializeField] private FSMAction trueAction;
+    
+    [Tooltip("Action to perform if decision is false.")]
+    [SerializeField] private FSMAction falseAction;
+    
+    /// <summary>
+    /// Evaluate the condition and execute the action if one of the listed conditions is true.
+    /// </summary>
+    /// <param name="stateMachine"> The state machine to be used. </param>
+    public override void Execute(BaseStateMachine stateMachine)
+    {
+        var result = false;
+        foreach (var decision in decisions)
+        {
+            result = result || decision.Decide(stateMachine);
+        }
+            
+        if (result)
+        {
+            trueAction.Execute(stateMachine);
+        }
+        else
+        {
+            falseAction.Execute(stateMachine);
+        }
+    }
+}

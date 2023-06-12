@@ -7,8 +7,14 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "FSM/State")]
 public sealed class State : BaseState
 {
-    [Tooltip("This state's actions.")]
-    public List<FSMAction> actions = new List<FSMAction>();
+    [Tooltip("Actions run when the state is entered.")]
+    public List<FSMAction> enterActions = new List<FSMAction>();
+    
+    [Tooltip("Actions run when the state is exited.")]
+    public List<FSMAction> exitActions = new List<FSMAction>();
+    
+    [Tooltip("Actions run every frame when in this state.")]
+    public List<FSMAction> updateActions = new List<FSMAction>();
     
     [Tooltip("This state's transitions. Evaluated every frame.")]
     public List<BaseFSMTransition> transitions = new List<BaseFSMTransition>();
@@ -19,9 +25,9 @@ public sealed class State : BaseState
     /// <param name="machine"> The state machine to be used. </param>
     public override void OnStateUpdate(BaseStateMachine machine)
     {
-        foreach (var action in actions)
+        foreach (var action in updateActions)
         {
-            action.OnStateUpdate(machine);
+            action.Execute(machine);
         }
 
         foreach (var transition in transitions)
@@ -36,9 +42,9 @@ public sealed class State : BaseState
     /// <param name="stateMachine"> The state machine to be used. </param>
     public override void OnStateEnter(BaseStateMachine stateMachine)
     {
-        foreach (var action in actions)
+        foreach (var action in enterActions)
         {
-            action.OnStateEnter(stateMachine);
+            action.Execute(stateMachine);
         }
     }
 
@@ -48,9 +54,9 @@ public sealed class State : BaseState
     /// <param name="stateMachine"> The state machine to be used. </param>
     public override void OnStateExit(BaseStateMachine stateMachine)
     {
-        foreach (var action in actions)
+        foreach (var action in exitActions)
         {
-            action.OnStateExit(stateMachine);
+            action.Execute(stateMachine);
         }
     }
 }

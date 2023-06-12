@@ -11,8 +11,5 @@ public abstract class BaseFSMTransition : ScriptableObject
     /// Execute this transition
     /// </summary>
     /// <param name="machine"> The stateMachine to use </param>
-    public virtual void Execute(BaseStateMachine machine)
-    {
-        
-    }
+    public abstract void Execute(BaseStateMachine machine);
 }
