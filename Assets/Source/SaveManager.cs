@@ -11,29 +11,6 @@ using UnityEngine;
 /// </summary>
 public static class SaveManager
 {
-    // The player's deck as it is saved to disk.
-    private static SaveData<SavableList<Card>> _savedPlayerDeck = new SaveData<SavableList<Card>>("PlayerDeck", false);
-    public static List<Card> savedPlayerDeck
-    {
-        get
-        {
-            if (_savedPlayerDeck.data == null) { return null; }
-            return _savedPlayerDeck.data.value;
-        }
-        set
-        {
-            _savedPlayerDeck.data = new SavableList<Card>(value);
-        }
-    }
-
-    // The player's position as it is saved to the disk.
-    private static SaveData<Vector2> _savedPlayerPosition = new SaveData<Vector2>("PlayerData", false);
-    public static Vector2 savedPlayerPosition
-    {
-        get => _savedPlayerPosition.data;
-        set => _savedPlayerPosition.data = value;
-    }
-
     #region Save Clearing
     // Called when a save clear is requested.
     private static System.Action ClearData;
