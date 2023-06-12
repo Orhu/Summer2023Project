@@ -282,6 +282,9 @@ public class Projectile : MonoBehaviour
                     return transform.position + transform.right;
                 }
                 return randomTarget.transform.position;
+
+            case AimMode.Right:
+                return transform.position + transform.right;
         }
         return transform.position + transform.right;
     }

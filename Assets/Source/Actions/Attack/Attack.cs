@@ -212,7 +212,8 @@ public enum AimMode
 {
     AtMouse,
     AtClosestEnemy,
-    AtRandomEnemy
+    AtRandomEnemy,
+    Right,
 }
 
 /// <summary>
