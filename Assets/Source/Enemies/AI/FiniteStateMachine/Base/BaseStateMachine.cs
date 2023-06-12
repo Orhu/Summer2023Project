@@ -14,11 +14,11 @@ public class BaseStateMachine : MonoBehaviour, IActor
     // delay after this enemy is spawned before it begins performing logic
     [SerializeField] private float delayBeforeLogic;
     
-    // the target
-    [HideInInspector] public Vector2 currentTarget;
+    // the pathfinding target
+    [HideInInspector] public Vector2 currentPathfindingTarget;
     
-    // the player
-    [HideInInspector] public GameObject player;
+    // the attack target
+    [HideInInspector] public Vector2 currentAttackTarget;
 
     // our feet position
     [HideInInspector] public Collider2D feetCollider;
@@ -90,7 +90,7 @@ public class BaseStateMachine : MonoBehaviour, IActor
         var colliders = GetComponents<Collider2D>();
         foreach (var thisCollider in colliders)
         {
-            if (thisCollider.isTrigger)
+            if (!thisCollider.isTrigger)
             {
                 return thisCollider;
             }
@@ -105,7 +105,6 @@ public class BaseStateMachine : MonoBehaviour, IActor
     private void Start()
     {
         timeStarted = Time.time;
-        player = Player.Get();
         FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Add(gameObject);
         currentState.OnStateEnter(this);
     }
@@ -191,7 +190,7 @@ public class BaseStateMachine : MonoBehaviour, IActor
     /// <returns> The mouse position in world space. </returns>
     public Vector3 GetActionAimPosition()
     {
-        return currentTarget;
+        return currentAttackTarget;
     }
 
 

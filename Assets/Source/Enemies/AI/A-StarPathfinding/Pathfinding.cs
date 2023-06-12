@@ -52,7 +52,7 @@ public class Pathfinding : MonoBehaviour
         }
         
         var startNodeResult = roomInterface.WorldPosToTile(stateMachine.feetCollider.transform.position);
-        var targetNodeResult = roomInterface.WorldPosToTile(stateMachine.currentTarget);
+        var targetNodeResult = roomInterface.WorldPosToTile(stateMachine.currentPathfindingTarget);
 
         PathfindingTile startNode;
         PathfindingTile targetNode;

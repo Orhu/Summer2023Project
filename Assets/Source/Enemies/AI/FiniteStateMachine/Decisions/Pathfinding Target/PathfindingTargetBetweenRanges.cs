@@ -6,8 +6,8 @@ using UnityEngine;
 /// <summary>
 /// Represents a decision checking whether our target is in a certain range
 /// </summary>
-[CreateAssetMenu(menuName = "FSM/Decisions/Target Between Ranges")]
-public class TargetBetweenRanges : FSMDecision
+[CreateAssetMenu(menuName = "FSM/Decisions/Pathfinding Target/Pathfinding Target Between Ranges")]
+public class PathfindingTargetBetweenRanges : FSMDecision
 {
     [Tooltip("What min range for our target?")]
     [SerializeField] private float minRange;
@@ -20,11 +20,9 @@ public class TargetBetweenRanges : FSMDecision
     /// </summary>
     /// <param name="state"> The stateMachine to use </param>
     /// <returns> True if the target is at or below the specified range from this stateMachine, false otherwise </returns>
-    public override bool Decide(BaseStateMachine state)
+    public override bool Evaluate(BaseStateMachine state)
     {
-        var dist = Vector2.Distance(state.currentTarget, state.transform.position);
-        return invert
-            ? !(dist >= minRange && dist <= maxRange)
-            : (dist >= minRange && dist <= maxRange);
+        var dist = Vector2.Distance(state.currentPathfindingTarget, state.transform.position);
+        return dist >= minRange && dist <= maxRange;
     }
 }
