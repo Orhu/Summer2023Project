@@ -41,9 +41,6 @@ public class Health : MonoBehaviour
     [Tooltip("All status effects this is immune to.")]
     public List<StatusEffect> immuneStatusEffects = new List<StatusEffect>();
 
-    [Tooltip("All status effects currently affecting this.")]
-    private List<StatusEffect> statusEffects = new List<StatusEffect>();
-
     [Tooltip("Called when health values are changed and passes the new health.")]
     public UnityEvent<float> onHealthChanged, onMaxHealthChanged;
     
@@ -79,6 +76,9 @@ public class Health : MonoBehaviour
         }
         get { return _invincible;  }
     }
+    
+    // All status effects currently affecting this
+    private List<StatusEffect> statusEffects = new List<StatusEffect>();
 
     /// <summary>
     /// Initializes current health.

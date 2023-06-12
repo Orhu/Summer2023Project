@@ -79,7 +79,24 @@ public class BaseStateMachine : MonoBehaviour, IActor
         currentState = initialState;
         cooldownData.cooldownReady = new Dictionary<FSMAction, bool>();
         cachedComponents = new Dictionary<Type, Component>();
-        feetCollider = GetComponentInChildren<Collider2D>();
+        feetCollider = FindMyFeet();
+    }
+
+    /// <summary>
+    /// Grab both colliders and return the feet collider
+    /// </summary>
+    Collider2D FindMyFeet()
+    {
+        var colliders = GetComponents<Collider2D>();
+        foreach (var thisCollider in colliders)
+        {
+            if (thisCollider.isTrigger)
+            {
+                return thisCollider;
+            }
+        }
+        Debug.LogWarning("No feet collider found! Make sure you have a non-trigger collider attached to this game object.");
+        return null;
     }
 
     /// <summary>

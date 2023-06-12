@@ -7,6 +7,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "FSM/Actions/Set Target To Player On Exit")]
 public class SetTargetToPlayerOnExit : FSMAction
 {
+    [Tooltip("Target feet? Should be set to true if this target is used for pathfinding. Should be set to false if this target is used for shooting an attack.")]
+    [SerializeField] private bool targetFeet;
+    
     /// <summary>
     /// Nothing to do here, required for FSMAction implementation
     /// </summary>
@@ -38,7 +41,15 @@ public class SetTargetToPlayerOnExit : FSMAction
     /// <param name="stateMachine"> The stateMachine to use </param>
     void SetPlayerTarget(BaseStateMachine stateMachine)
     {
-        stateMachine.currentTarget = stateMachine.player.transform.position;
+        if (targetFeet)
+        {
+            stateMachine.currentTarget = Player.GetFeet().transform.position;
+        }
+        else
+        {
+            stateMachine.currentTarget = Player.Get().transform.position;
+        }
+        
         stateMachine.cooldownData.cooldownReady[this] = true;
     }
 }
