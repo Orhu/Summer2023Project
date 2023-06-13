@@ -79,7 +79,7 @@ public class PlayAction : AttackModifier, IActor
                         value.onDestroyed += () =>
                         {
                             // Create runner object since the projectile will be null.
-                            GameObject coroutineRunner = new GameObject("PlayAction");
+                            GameObject coroutineRunner = new GameObject(value.name + " Play " + action.name + " Source");
                             coroutineRunner.transform.position = sourceTransform.position;
                             coroutineRunner.transform.rotation = sourceTransform.rotation;
                             sourceTransform = coroutineRunner.transform;
@@ -123,7 +123,7 @@ public class PlayAction : AttackModifier, IActor
                 action.Play(this, ignoredObjects);
             }
 
-            //yield return null;
+            yield return null;
         } while (playTime == PlayTime.Repeately);
     }
 
@@ -181,5 +181,8 @@ public class PlayAction : AttackModifier, IActor
     }
     #endregion
 
+    /// <summary>
+    /// Empty MonoComponent class since MonoComponent can't be instantiated.
+    /// </summary>
     private class Empty : MonoBehaviour { }
 }
