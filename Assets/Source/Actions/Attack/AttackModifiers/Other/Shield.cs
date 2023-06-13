@@ -21,7 +21,7 @@ public class Shield : AttackModifier
             shieldObject.transform.localPosition = Vector2.zero;
             shieldObject.transform.localRotation = Quaternion.identity;
             shieldObject.layer = LayerMask.NameToLayer("Shield");
-            value.attack.shape.CreateCollider(shieldObject).isTrigger = true;
+            value.shape.CreateCollider(shieldObject).isTrigger = true;
 
             value.onOverlap += destroyProjectiles;
             projectile = value;
