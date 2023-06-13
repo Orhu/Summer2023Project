@@ -108,6 +108,7 @@ public class Deck : MonoBehaviour
             {
                 SaveManager.savedPlayerDeck.LoadInto(this);
             }
+
             playerDeck.actor = Player.Get().GetComponent<PlayerController>();
         }
 

@@ -214,8 +214,12 @@ public class Projectile : MonoBehaviour
         {
             case SpawnLocation.Actor:
                 return actor.GetActionSourceTransform().position;
+
             case SpawnLocation.AimPosition:
                 return actor.GetActionAimPosition();
+
+            case SpawnLocation.RoomCenter:
+                return FloorGenerator.floorGeneratorInstance.currentRoom.transform.position;
         }
         return Vector3.zero;
     }
@@ -282,6 +286,9 @@ public class Projectile : MonoBehaviour
                     return transform.position + transform.right;
                 }
                 return randomTarget.transform.position;
+
+            case AimMode.Right:
+                return transform.position + transform.right;
         }
         return transform.position + transform.right;
     }

@@ -23,6 +23,7 @@ public class AnimatorController : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+
         foreach (ClipToParameter animactionClipToMirrorParameter in _animactionClipsToMirrorParameters)
         {
             animactionClipsToMirrorParameters.Add(animactionClipToMirrorParameter.clip, animactionClipToMirrorParameter.parameterName);
@@ -37,6 +38,8 @@ public class AnimatorController : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        if (!animator.hasBoundPlayables) { return; }
+
         AnimationClip currentClip = animator.GetCurrentAnimatorClipInfo(0)[0].clip;
         if (currentClip == null || !animactionClipsToMirrorParameters.ContainsKey(currentClip)) { return; }
         transform.localScale = new Vector3(mirrorParametersToValues[animactionClipsToMirrorParameters[currentClip]] ? -1 : 1, 1, 1);
@@ -49,6 +52,8 @@ public class AnimatorController : MonoBehaviour
     /// <param name="value"> The new parameter value. </param>
     public void SetMirror(string name, bool value)
     {
+        if (!animator.hasBoundPlayables) { return; }
+
         mirrorParametersToValues[name] = value;
     }
 
@@ -59,6 +64,8 @@ public class AnimatorController : MonoBehaviour
     /// <param name="value"> The new parameter value. </param>
     public void SetBool(string name, bool value)
     {
+        if (!animator.hasBoundPlayables) { return; }
+
         animator.SetFloat(name, value ? 1f : 0f);
     }
 
@@ -68,6 +75,8 @@ public class AnimatorController : MonoBehaviour
     /// <param name="name"> The parameter name. </param>
     public void SetTrigger(string name)
     {
+        if (!animator.hasBoundPlayables) { return; }
+
         animator.SetTrigger(name);
     }
 
