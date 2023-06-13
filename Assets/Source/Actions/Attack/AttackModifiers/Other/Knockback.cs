@@ -15,7 +15,7 @@ public class Knockback : AttackModifier
     }
 
     [Tooltip("The force in tiles/s added to hit objects.")]
-    [SerializeField] private float knockbackVelocity = 4;
+    [SerializeField] private KnockbackInfo knockback;
 
     [Tooltip("The force in tiles/s added to hit objects.")]
     [SerializeField] private PushDirection pushDirection;
@@ -54,19 +54,18 @@ public class Knockback : AttackModifier
     /// <param name="collision"> The collider that was hit. </param>
     private void ApplyKnockback(Collider2D collision)
     {
-        Rigidbody2D rigidbody = collision.GetComponent<Rigidbody2D>();
-        if (rigidbody == null) { return; }
-
-        Vector2 impulse;
-        if (pushDirection == PushDirection.InProjectileForwardDirection || pushDirection == PushDirection.InSpawnerForwardDirection)
+        if (collision.GetComponent<Movement>() is Movement movementComponent)
         {
-            impulse = knockbackSource.transform.right;
+            Vector2 direction;
+            if (pushDirection == PushDirection.InProjectileForwardDirection || pushDirection == PushDirection.InSpawnerForwardDirection)
+            {
+                direction = knockbackSource.transform.right;
+            }
+            else
+            {
+                direction = (collision.transform.position - knockbackSource.transform.position).normalized;
+            }
+            movementComponent.Knockback(direction, knockback);
         }
-        else
-        {
-            impulse = (collision.transform.position - knockbackSource.transform.position).normalized;
-        }
-
-        rigidbody.velocity += impulse * knockbackVelocity;
     }
 }
