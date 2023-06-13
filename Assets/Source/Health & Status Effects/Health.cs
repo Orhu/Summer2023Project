@@ -32,7 +32,7 @@ public class Health : MonoBehaviour
         get => _currentHealth;
         set
         {
-            if (_maxHealth == value) { return; }
+            if (_currentHealth == value) { return; }
 
             _currentHealth = value;
             onHealthChanged?.Invoke(value);
@@ -90,7 +90,6 @@ public class Health : MonoBehaviour
     void Start()
     {
         onMaxHealthChanged?.Invoke(maxHealth);
-        onHealthChanged?.Invoke(currentHealth);
 
         if (currentHealth != 0) { return; }
         currentHealth = maxHealth;

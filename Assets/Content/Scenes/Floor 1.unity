@@ -407,6 +407,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8563880425545905597, guid: 8632f6f27e13c5a4db34ed52aaad2360, type: 3}
+      propertyPath: _maxHealth
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: -8563880425545905597, guid: 8632f6f27e13c5a4db34ed52aaad2360, type: 3}
+      propertyPath: invincibilityDuration
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 608508398850829056, guid: 8632f6f27e13c5a4db34ed52aaad2360, type: 3}
       propertyPath: m_Name
       value: Player
@@ -586,7 +594,6 @@ MonoBehaviour:
   drawableCards: []
   inHandCards: []
   discardedCards: []
-  previewedCardIndices: 
 --- !u!1001 &857155969
 PrefabInstance:
   m_ObjectHideFlags: 0
