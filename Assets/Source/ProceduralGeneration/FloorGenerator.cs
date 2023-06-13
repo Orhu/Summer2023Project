@@ -59,7 +59,7 @@ public class FloorGenerator : MonoBehaviour
     {
         if (floorGeneratorInstance != null && floorGeneratorInstance != this)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             return;
         }
         floorGeneratorInstance = this;
@@ -71,7 +71,11 @@ public class FloorGenerator : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        if (randomizeSeed)
+        if (SaveManager.autosaveExists)
+        {
+            seed = SaveManager.savedFloorSeed;
+        }
+        else if (randomizeSeed)
         {
             seed = Random.Range(0, System.Int32.MaxValue);
         }
@@ -84,12 +88,26 @@ public class FloorGenerator : MonoBehaviour
         Deck.playerDeck.onCardRemoved += OnCardRemoved;
         map = GetComponent<LayoutGenerator>().Generate(layoutGenerationParameters);
         GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, roomSize);
+        currentRoom.Generate();
 
-        // Find Closest room.
-        //currentRoom = Object.FindObjectsOfType<Room>().Aggregate((Room closest, Room next) =>
-        //{
-        //    return (closest.transform.position - Player.Get().transform.position).sqrMagnitude <= (next.transform.position - Player.Get().transform.position).sqrMagnitude ? closest : next;
-        //});
+        // Autosave loading
+        if (!SaveManager.autosaveExists) { return; }
+
+        List<Vector3Int> vistedRooms = SaveManager.savedVisitedRooms;
+        Room lastRoom = map.startCell.room.GetComponent<Room>();
+        int nextCardIndex = vistedRooms[0].z;
+        foreach (Vector3Int vistedRoom in vistedRooms)
+        {
+            lastRoom.Exit();
+            lastRoom = map.map[vistedRoom.x, vistedRoom.y].room.GetComponent<Room>();
+            lastRoom.Generate(false);
+            while (nextCardIndex < vistedRoom.z)
+            {
+                OnCardAdded(Deck.playerDeck.cards[nextCardIndex]);
+                nextCardIndex++;
+            }
+        }
+        lastRoom.Enter();
     }
 
     /// <summary>
@@ -97,8 +115,10 @@ public class FloorGenerator : MonoBehaviour
     /// </summary>
     private void GetSpecialRoomsFromDeck()
     {
-        foreach (Card card in Deck.playerDeck.cards)
+        int max = SaveManager.autosaveExists ? SaveManager.savedVisitedRooms[0].z : Deck.playerDeck.cards.Count;
+        for (int i = 0; i < max; i++)
         {
+            Card card = Deck.playerDeck.cards[i];
             if (card.effects == null)
             {
                 return;
@@ -136,9 +156,10 @@ public class FloorGenerator : MonoBehaviour
             templateGenerationParameters.tileTypesToPossibleTiles.tileTypesToPossibleTiles.Add(tileTypeToPossibleTiles);
         }
 
-        foreach (Card card in Deck.playerDeck.cards)
+        int max = SaveManager.autosaveExists ? SaveManager.savedVisitedRooms[0].z : Deck.playerDeck.cards.Count;
+        for (int i = 0; i < max; i++)
         {
-            OnCardAdded(card);
+            OnCardAdded(Deck.playerDeck.cards[i]);
         }
     }
 

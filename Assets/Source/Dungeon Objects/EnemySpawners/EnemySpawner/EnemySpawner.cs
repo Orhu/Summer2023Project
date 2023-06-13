@@ -27,7 +27,7 @@ public class EnemySpawner : MonoBehaviour
     private void SpawnEnemy()
     {
         List<GameObject> enemies = FloorGenerator.floorGeneratorInstance.currentRoom.template.chosenEnemyPool.enemies;
-        GameObject randomEnemy = enemies[FloorGenerator.random.Next(0, enemies.Count)];
+        GameObject randomEnemy = enemies[Random.Range(0, enemies.Count)];
         FloorGenerator.floorGeneratorInstance.currentRoom.template.chosenEnemyPool.enemies.Remove(randomEnemy);
         randomEnemy = Instantiate(randomEnemy, transform);
         randomEnemy.SetActive(true);
