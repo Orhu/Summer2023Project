@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Skaillz.EditInline;
+using System.Linq;
 
 /// <summary>
 /// A scriptable object for containing data about a card type including:
@@ -152,7 +153,7 @@ public class AttackCard : Card
     {
         if (modifingCard == this)
         {
-            return modifingCard.duplicateModifiers;
+            return modifingCard.duplicateModifiers.Cast<AttackModifier>().ToList();
         }
         else
         {
