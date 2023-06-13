@@ -74,21 +74,28 @@ public class PlayAction : AttackModifier, IActor
                     break;
 
                 case PlayTime.OnDestroyed:
-                    value.onDestroyed += () => 
+                    if (delay > 0)
                     {
-                        // Create runner object since the projectile will be null.
-                        GameObject coroutineRunner = new GameObject("PlayAction");
-                        coroutineRunner.transform.position = sourceTransform.position;
-                        coroutineRunner.transform.rotation = sourceTransform.rotation;
-                        sourceTransform = coroutineRunner.transform;
-                        MonoBehaviour mono = sourceTransform.gameObject.AddComponent<Empty>();
-                        FloorGenerator.floorGeneratorInstance.onRoomChange.AddListener(() =>
+                        value.onDestroyed += () =>
                         {
-                            Destroy(coroutineRunner);
-                        });
+                            // Create runner object since the projectile will be null.
+                            GameObject coroutineRunner = new GameObject("PlayAction");
+                            coroutineRunner.transform.position = sourceTransform.position;
+                            coroutineRunner.transform.rotation = sourceTransform.rotation;
+                            sourceTransform = coroutineRunner.transform;
+                            MonoBehaviour mono = sourceTransform.gameObject.AddComponent<Empty>();
+                            FloorGenerator.floorGeneratorInstance.onRoomChange.AddListener(() =>
+                            {
+                                Destroy(coroutineRunner);
+                            });
 
-                        causer.GetComponent<MonoBehaviour>().StartCoroutine(DelayedPlayAction()); 
-                    };
+                            causer.GetComponent<MonoBehaviour>().StartCoroutine(DelayedPlayAction());
+                        };
+                    }
+                    else
+                    {
+                        value.onDestroyed += () => DelayedPlayAction();
+                    }
                     break;
             }
         }
