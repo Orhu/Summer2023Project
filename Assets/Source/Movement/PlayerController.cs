@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour, IActor
     private AnimatorController animatorComponent;
 
     /// <summary>
-    /// Initialize components
+    /// Initialize components.
     /// </summary>
     private void Awake()
     { 
@@ -25,11 +25,12 @@ public class PlayerController : MonoBehaviour, IActor
     }
 
     /// <summary>
-    /// Lost last position.
+    /// Load autosave.
     /// </summary>
     private void Start()
     {
         if (!SaveManager.autosaveExists) { return; }
+
         transform.position = SaveManager.savedPlayerPosition;
         Health health = GetComponent<Health>();
         health.maxHealth = health.maxHealth;
@@ -61,12 +62,14 @@ public class PlayerController : MonoBehaviour, IActor
             animatorComponent.SetMirror("castLeft", GetActionAimPosition().x - transform.position.x < 0);
         }
 
-        // DELETE IN BUILDS
+#if UNITY_EDITOR
+        // TODO: DELETE IN BUILDS
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SaveManager.ClearTransientSaves();
             GetComponent<ReloadScene>().ReloadCurrentScene();
         }
+#endif
     }
 
     /// <summary>

@@ -17,6 +17,8 @@ public class Health : MonoBehaviour
         get => _maxHealth;
         set
         {
+            if(_maxHealth == value) { return; }
+
             _maxHealth = value;
             onMaxHealthChanged?.Invoke(value);
         }
@@ -30,6 +32,8 @@ public class Health : MonoBehaviour
         get => _currentHealth;
         set
         {
+            if (_maxHealth == value) { return; }
+
             _currentHealth = value;
             onHealthChanged?.Invoke(value);
         }
@@ -85,7 +89,9 @@ public class Health : MonoBehaviour
     /// </summary>
     void Start()
     {
-        maxHealth = maxHealth;
+        onMaxHealthChanged?.Invoke(maxHealth);
+        onHealthChanged?.Invoke(currentHealth);
+
         if (currentHealth != 0) { return; }
         currentHealth = maxHealth;
     }
