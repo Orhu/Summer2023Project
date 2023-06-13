@@ -1,11 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// An action modifier that changes the attack of an action modifier.
+/// Causes attacks to turn hit objects into some other game object.
 /// </summary>
 [CreateAssetMenu(fileName = "NewPolymorph", menuName = "Cards/AttackModifers/Polymorph")]
 public class Polymorph : AttackModifier
@@ -27,7 +23,7 @@ public class Polymorph : AttackModifier
     /// <summary>
     /// Morphs a game object into a different game object.
     /// </summary>
-    /// <param name="component"></param>
+    /// <param name="component"> A component on the game object to morph. </param>
     private void MorphObject(Component component)
     {
         if (component.CompareTag("Boss") || component.CompareTag("Inanimate")) { return; } 
