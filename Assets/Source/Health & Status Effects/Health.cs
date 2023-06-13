@@ -119,7 +119,7 @@ public class Health : MonoBehaviour
     /// <param name="ignoreInvincibility"> Whether or not invincibility frames should effect this attack. </param>
     public void ReceiveAttack(DamageData attack, bool ignoreInvincibility = false)
     {
-        if (invincible && !ignoreInvincibility) return;
+        if (currentHealth <= 0 || (invincible && !ignoreInvincibility)) { return; }
         
         // Damage
         onRequestIncomingAttackModification?.Invoke(ref attack);
