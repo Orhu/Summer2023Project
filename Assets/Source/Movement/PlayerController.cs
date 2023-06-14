@@ -6,7 +6,7 @@ using UnityEngine;
 /// Agent serves as the brain of any agent. Has the ability to input basic tasks, delegating them to various parts of the agent as needed.
 /// </summary>
 [RequireComponent(typeof(Movement), typeof(AnimatorController))]
-public class InputHandler : MonoBehaviour, IActor
+public class PlayerController : MonoBehaviour, IActor
 {
 
     // Movement component to allow the agent to move
@@ -16,12 +16,25 @@ public class InputHandler : MonoBehaviour, IActor
     private AnimatorController animatorComponent;
 
     /// <summary>
-    /// Initialize components
+    /// Initialize components.
     /// </summary>
     private void Awake()
     { 
         movementComponent = GetComponent<Movement>();
         animatorComponent = GetComponent<AnimatorController>();
+    }
+
+    /// <summary>
+    /// Load autosave.
+    /// </summary>
+    private void Start()
+    {
+        if (!SaveManager.autosaveExists) { return; }
+
+        transform.position = SaveManager.savedPlayerPosition;
+        Health health = GetComponent<Health>();
+        health.maxHealth = health.maxHealth;
+        health.currentHealth = SaveManager.savedPlayerHealth;
     }
 
     /// <summary>
@@ -48,6 +61,15 @@ public class InputHandler : MonoBehaviour, IActor
             }
             animatorComponent.SetMirror("castLeft", GetActionAimPosition().x - transform.position.x < 0);
         }
+
+#if UNITY_EDITOR
+        // TODO: DELETE IN BUILDS
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SaveManager.ClearTransientSaves();
+            GetComponent<ReloadScene>().ReloadCurrentScene();
+        }
+#endif
     }
 
     /// <summary>

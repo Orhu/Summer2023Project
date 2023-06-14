@@ -20,7 +20,7 @@ public class BaseStateMachine : MonoBehaviour, IActor
     // the player
     [HideInInspector] public GameObject player;
 
-    // our feet position
+    // cached feet collider
     [HideInInspector] public Collider2D feetCollider;
 
     // the current state this machine is in
@@ -87,16 +87,18 @@ public class BaseStateMachine : MonoBehaviour, IActor
     /// </summary>
     Collider2D FindMyFeet()
     {
-        var colliders = GetComponents<Collider2D>();
-        foreach (var thisCollider in colliders)
+        var collider = GetComponentInChildren<Collider2D>();
+
+        if (collider != null)
         {
-            if (thisCollider.isTrigger)
-            {
-                return thisCollider;
-            }
+            return collider;
         }
-        Debug.LogWarning("No feet collider found! Make sure you have a non-trigger collider attached to this game object.");
-        return null;
+        else
+        {
+            Debug.LogError(
+                "No feet collider found! Make sure you have a non-trigger collider attached to this game object.");
+            return null;
+        }
     }
 
     /// <summary>
@@ -149,6 +151,7 @@ public class BaseStateMachine : MonoBehaviour, IActor
     /// </summary>
     private void OnDestroy()
     {
+        if (!gameObject.scene.isLoaded) { return; }
         FloorGenerator.floorGeneratorInstance.currentRoom.RemoveEnemy(gameObject);
     }
 

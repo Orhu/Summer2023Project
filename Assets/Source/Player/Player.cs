@@ -21,9 +21,6 @@ public static class Player
 
         player = GameObject.FindGameObjectWithTag("Player");
 
-        //player.transform.position = SaveManager.savedPlayerPosition;
-        //FloorGenerator.floorGeneratorInstance.onRoomChange.AddListener(() => { SaveManager.savedPlayerPosition = player.transform.position; });
-
         return player;
     }
 
@@ -34,18 +31,18 @@ public static class Player
             return playerFeet; 
         }
         
-        var playerColliders = Get().GetComponents<Collider2D>();
-        foreach (var thisCollider in playerColliders)
+        var playerCollider = Get().GetComponentInChildren<Collider2D>();
+        if (playerCollider != null)
         {
-            if (!thisCollider.isTrigger)
-            {
-                playerFeet = thisCollider;
-                return playerFeet;
-            }
+            playerFeet = playerCollider;
+            return playerFeet;
         }
-        Debug.LogWarning("No feet collider found! Make sure you have a non-trigger collider attached to the player.");
-        return null;
-
+        else
+        {
+            Debug.LogError(
+                "No feet collider found! Make sure you have a non-trigger collider attached to the player.");
+            return null;
+        }
     }
 
 }

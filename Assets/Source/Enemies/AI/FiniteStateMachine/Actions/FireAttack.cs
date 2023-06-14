@@ -86,7 +86,7 @@ public class FireAttack : FSMAction
         beforeAction?.Invoke(stateMachine);
         foreach (var action in actions)
         {
-            BaseStateMachine.print(name + ": Firing!");
+            //BaseStateMachine.print(name + ": Firing!");
             action.Play(stateMachine, FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies);
         }
 
