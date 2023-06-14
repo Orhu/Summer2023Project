@@ -48,6 +48,15 @@ public class Card : ScriptableObject
     [Tooltip("The general background card sprite on the Effects side of the card.")]
     public Sprite effectBackground;
 
+    [Tooltip("The card specific rune sprite to be displayed on UI")]
+    public Sprite runeImage;
+
+    [Tooltip("The card specific sprite to be displayed as the root of a chord in the UI")]
+    public Sprite chordImage;
+
+    [Tooltip("The chord specific color of the rune, to be displayed with the chord in the UI")]
+    public Color chordColor;
+
 
     /// <summary>
     /// Gets the description of this card by collecting all the formated descriptions from the card's mechanics.
