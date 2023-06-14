@@ -15,6 +15,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private PauseMenu pauseMenu;
     // Reference to the player's game object
     private GameObject playerGameObject;
+    // Know whether we currently have a menu open or not
+    public bool menuOpen { get; private set; }
 
     /// <summary>
     /// Assign singleton variable
@@ -42,13 +44,17 @@ public class MenuManager : MonoBehaviour
     /// <param name="boosterPack">Booster pack prefab used in populating cards</param>
     public static void OpenBoosterPackMenu(BoosterPack boosterPack)
     {
-        // "Pause the game", should probably be replaced with a more effective method
-        // Sets timeScale to 0, so all time related functions are stopped
-        Time.timeScale = 0;
-        instance.boosterPackMenu.gameObject.SetActive(true);
-        instance.boosterPackMenu.boosterPackObject = boosterPack;
-        // Disable player movement
-        instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+        if (!instance.menuOpen)
+        {
+            // "Pause the game", should probably be replaced with a more effective method
+            // Sets timeScale to 0, so all time related functions are stopped
+            Time.timeScale = 0;
+            instance.boosterPackMenu.gameObject.SetActive(true);
+            instance.boosterPackMenu.boosterPackObject = boosterPack;
+            // Disable player movement
+            instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+            instance.menuOpen = true;
+        }
     }
 
     /// <summary>
@@ -56,12 +62,16 @@ public class MenuManager : MonoBehaviour
     /// </summary>
     public static void OpenPauseMenu()
     {
-        // "Pause the game", should probably be replaced with a more effective method
-        // Sets timeScale to 0, so all time related functions are stopped
-        Time.timeScale = 0;
-        instance.boosterPackMenu.gameObject.SetActive(true);
-        // Disable player movement
-        instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+        if (!instance.menuOpen)
+        {
+            // "Pause the game", should probably be replaced with a more effective method
+            // Sets timeScale to 0, so all time related functions are stopped
+            Time.timeScale = 0;
+            instance.pauseMenu.gameObject.SetActive(true);
+            // Disable player movement
+            instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+            instance.menuOpen = true;
+        }
     }
 
     /// <summary>
@@ -69,15 +79,19 @@ public class MenuManager : MonoBehaviour
     /// </summary>
     public void CloseMenu()
     {
-        // "Resume the game", resumes all time related function
-        Time.timeScale = 1;
-        // Re-enable player movement
-        playerGameObject.GetComponent<PlayerController>().enabled = true;
-
-        // close all menus
-        for(int i = 0; i < transform.childCount; i++)
+        if (menuOpen)
         {
-            transform.GetChild(i).gameObject.SetActive(false);
+            // "Resume the game", resumes all time related function
+            Time.timeScale = 1;
+            // Re-enable player movement
+            playerGameObject.GetComponent<PlayerController>().enabled = true;
+
+            // close all menus
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                transform.GetChild(i).gameObject.SetActive(false);
+            }
+            menuOpen = false;
         }
     }
 }

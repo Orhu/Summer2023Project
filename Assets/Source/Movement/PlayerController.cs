@@ -69,6 +69,14 @@ public class PlayerController : MonoBehaviour, IActor
             SaveManager.ClearTransientSaves();
             GetComponent<ReloadScene>().ReloadCurrentScene();
         }
+        print(MenuManager.instance.menuOpen);
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (!MenuManager.instance.menuOpen)
+            {
+                MenuManager.OpenPauseMenu();
+            }
+        }
 #endif
     }
 
