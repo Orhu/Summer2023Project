@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// This code is not currently in use due to the enemy rework, but it may be useful for making a future action.
+// Hence, it will remain here until I deem it delete-worthy or not.
+
+/*
 /// <summary>
 /// Represents an action that sets an adjacent direction as the target when a condition is met
 /// </summary>
@@ -97,3 +101,4 @@ public class SetAdjacentDirectionAsTargetWithCondition : FSMAction
         }
     }
 }
+*/

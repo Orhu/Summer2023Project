@@ -5,6 +5,10 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Animations;
 
+// This code is not currently in use due to the enemy rework, but it may be useful for making a future action.
+// Hence, it will remain here until I deem it delete-worthy or not.
+
+/*
 /// <summary>
 /// Represents an action that sets target to the farthest tile in the room
 /// </summary>
@@ -104,4 +108,4 @@ public class SetTargetToRadiusTileFromPlayer : FSMAction
         stateMachine.cooldownData.cooldownReady[this] = true;
         yield break;
     }
-}
+}*/

@@ -4,6 +4,10 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Animations;
 
+// This code is not currently in use due to the enemy rework, but it may be useful for making a future action.
+// Hence, it will remain here until I deem it delete-worthy or not.
+
+/*
 /// <summary>
 /// Represents an action to set our target to a random tile
 /// </summary>
@@ -76,3 +80,4 @@ public class SetTargetToRandomTile : FSMAction
         yield break;
     }
 }
+*/

@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// Represents an action that executes only if a condition returns true
 /// </summary>
 [CreateAssetMenu(menuName = "FSM/Actions/Conditional Single Action")]
-public class ConditionalSingleAction : FSMAction
+public class ConditionalSingleAction : BaseAction
 {
     [Tooltip("Decision to evaluate.")]
     [SerializeField] private FSMDecision decision;

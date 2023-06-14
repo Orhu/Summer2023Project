@@ -44,6 +44,7 @@ public sealed class State : BaseState
     {
         foreach (var action in enterActions)
         {
+            stateMachine.cooldownData.cooldownReady.TryAdd(action, true);
             action.Execute(stateMachine);
         }
     }

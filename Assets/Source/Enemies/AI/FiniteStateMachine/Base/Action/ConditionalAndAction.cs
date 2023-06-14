@@ -5,7 +5,7 @@ using UnityEngine;
 /// Represents an action that executes only if several conditions return true
 /// </summary>
 [CreateAssetMenu(menuName = "FSM/Actions/Conditional AND Action")]
-public class ConditionalAndAction : FSMAction
+public class ConditionalAndAction : BaseAction
 {
     [Tooltip("Decisions to evaluate with AND condition.")]
     [SerializeField] private List<FSMDecision> decisions;

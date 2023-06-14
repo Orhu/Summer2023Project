@@ -66,6 +66,15 @@ public class BaseStateMachine : MonoBehaviour, IActor
     // tracks the time this was initialized
     private float timeStarted;
 
+    // chase data struct used to store chase data as it is passed to the pathfinding singleton from pathing scriptable objects.
+    // never need to actually cache the data in the state machine, just declaring the struct here so it is only declared once
+    public struct ChaseData
+    {
+        private BaseStateMachine stateMachine;
+        private Coroutine prevUpdateCoroutine;
+        private Coroutine prevFollowCoroutine;
+    }
+    
     // draw debug gizmos?
     [SerializeField] private bool drawGizmos;
     // debug waypoint used for drawing gizmos
@@ -164,8 +173,8 @@ public class BaseStateMachine : MonoBehaviour, IActor
     #region IActor Implementation
     // Gets whether or not this actor can act.
     IActor.CanActRequest _canAct;
-    bool canAct
-    {
+    public bool canAct
+    { 
         get
         {
             bool shouldAct = true;

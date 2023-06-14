@@ -5,7 +5,7 @@ using UnityEngine;
 /// Represents an action that executes only if one of several conditions return true
 /// </summary>
 [CreateAssetMenu(menuName = "FSM/Actions/Conditional OR Action")]
-public class ConditionalOrAction : FSMAction
+public class ConditionalOrAction : BaseAction
 {
     [Tooltip("Decisions to evaluate with OR condition.")]
     [SerializeField] private List<FSMDecision> decisions;

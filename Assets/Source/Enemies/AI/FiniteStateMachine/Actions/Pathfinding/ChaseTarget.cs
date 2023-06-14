@@ -1,10 +1,12 @@
 using System.Collections;
 using UnityEngine;
+using ChaseData = BaseStateMachine.ChaseData;
 
 /// <summary>
-/// Represents an action that moves towards the current target as specified by the stateMachine using this action
+/// Represents an action that moves towards the current pathfinding target as specified by the stateMachine using this action.
+/// This action will continuously update its path so it should only be run once. 
 /// </summary>
-[CreateAssetMenu(menuName = "FSM/Actions/Chase Target")]
+[CreateAssetMenu(menuName = "FSM/Actions/Pathfinding/Initialize Chase Target Loop")]
 public class ChaseTarget : FSMAction
 {
     [Tooltip("How often does this enemy update its path, in seconds?")]
@@ -14,41 +16,12 @@ public class ChaseTarget : FSMAction
     [SerializeField] private float distanceBuffer = 0.061f;
 
     // need to track our current data
-    public struct ChaseData
-    {
-        private BaseStateMachine stateMachine;
-        private Coroutine prevUpdateCoroutine;
-        private Coroutine prevFollowCoroutine;
-    }
-
     private ChaseData chaseData;
 
-    /// <summary>
-    /// Not needed for this action, but demanded due to FSMAction inheritance
-    /// </summary>
-    /// <param name="stateMachine"> The stateMachine to be used. </param>
-    public override void OnStateUpdate(BaseStateMachine stateMachine)
+    public override IEnumerator PlayAction(BaseStateMachine stateMachine)
     {
-    }
-
-    /// <summary>
-    /// Enable incoming path callbacks, assign our state machine, and start pathfinding coroutine
-    /// </summary>
-    /// <param name="stateMachine"> The stateMachine to be used. </param>
-    public override void OnStateEnter(BaseStateMachine stateMachine)
-    {
-        stateMachine.pathData.ignorePathRequests = false;
-        var coroutine = UpdatePath(stateMachine);
-        stateMachine.StartCoroutine(coroutine);
-    }
-
-    /// <summary>
-    /// Disable any incoming path callbacks, and stop coroutines related to chasing
-    /// </summary>
-    /// <param name="stateMachine"> The stateMachine to be used. </param>
-    public override void OnStateExit(BaseStateMachine stateMachine)
-    {
-        stateMachine.pathData.ignorePathRequests = true;
+        stateMachine.StartCoroutine(UpdatePath(stateMachine));
+        yield break;
     }
 
     /// <summary>

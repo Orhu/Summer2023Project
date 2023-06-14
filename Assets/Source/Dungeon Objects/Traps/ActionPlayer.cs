@@ -60,7 +60,7 @@ public class ActionPlayer : MonoBehaviour, IActor
 
         while (true)
         {
-            if (CanAct)
+            if (canAct)
             {
                 action.Play(this);
             }
@@ -120,23 +120,24 @@ public class ActionPlayer : MonoBehaviour, IActor
     {
         return GetComponent<Collider2D>();
     }
-
+    
     // Whether or not this can act.
-    bool CanAct 
+    IActor.CanActRequest _canAct;
+    public bool canAct 
     { 
         get 
         {
             bool shouldAct = true;
-            canAct?.Invoke(ref shouldAct);
+            _canAct?.Invoke(ref shouldAct);
             return shouldAct;
         } 
     }
-    IActor.CanActRequest canAct;
 
     /// <summary>
     /// Gets the delegate that will fetch whether this actor can act.
     /// </summary>
     /// <returns> A delegate with a out parameter, that allows any subscribed objects to determine whether or not this actor can act. </returns>
-    public ref IActor.CanActRequest GetOnRequestCanAct() { return ref canAct; }
+    public ref IActor.CanActRequest GetOnRequestCanAct() { return ref _canAct; }
+
     #endregion
 }
