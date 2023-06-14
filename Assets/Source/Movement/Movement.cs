@@ -10,7 +10,7 @@ using UnityEngine;
 public abstract class Movement : MonoBehaviour
 {
     [Tooltip("The amount knockback will be multiplied by.")] [Min(0f)]
-    [SerializeField] private float knockbackMultiplier = 1f;
+    [SerializeField] protected float knockbackMultiplier = 1f;
 
     // The desired movement direction.
     private Vector2 _movementInput;

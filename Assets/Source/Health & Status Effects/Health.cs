@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -158,6 +159,11 @@ public class Health : MonoBehaviour
     public void Heal(int healAmount)
     {
         currentHealth = Mathf.Min(Math.Max(healAmount, 0) + currentHealth, maxHealth);
+    }
+
+    public bool HasStatusEffect(StatusEffect statusEffect)
+    {
+        return statusEffects.FirstOrDefault((StatusEffect eachEffect) => { return eachEffect.GetType() == statusEffect.GetType(); }) != null;
     }
 
     /// <summary>

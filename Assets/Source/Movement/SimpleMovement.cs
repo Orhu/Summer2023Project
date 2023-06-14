@@ -111,7 +111,7 @@ public class SimpleMovement : Movement
             rigidBody.velocity = Vector2.zero;
         }
 
-        ActiveKnockbacks.Add(new ActiveKnockback(direction * info.amount / info.duration, info.duration));
+        ActiveKnockbacks.Add(new ActiveKnockback(direction * knockbackMultiplier * info.amount / info.duration, info.duration));
     }
     #endregion
 }
