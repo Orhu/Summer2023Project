@@ -10,18 +10,18 @@ using UnityEngine.Events;
 /// </summary>
 public class Health : MonoBehaviour
 {
-    [Tooltip("The Max health of this object")]
+    [Tooltip("The Max health of this object")] [Min(1)]
     [SerializeField] private int _maxHealth = 5;
     public int maxHealth
     {
-        get => _maxHealth;
         set
         {
-            if(_maxHealth == value) { return; }
+            if (_maxHealth == value) { return; }
 
             _maxHealth = value;
             onMaxHealthChanged?.Invoke(value);
         }
+        get => _maxHealth;
     }
 
 

@@ -121,7 +121,7 @@ public static class SaveManager
 
             if (!persistent)
             {
-                SaveManager.clearData += ClearData;
+                clearData += ClearData;
             }
 
             this.initialValue = initialValue;
