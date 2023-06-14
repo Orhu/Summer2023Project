@@ -66,6 +66,8 @@ public class HandRenderer : MonoBehaviour
             // If rune renderer at index i is previewing and it shouldn't be
             else if (runeRenderers[i].previewing && !Deck.playerDeck.previewedCardIndices.Contains(i))
             {
+                // Play the base animation
+                runeRenderers[i].gameObject.GetComponent<Animator>().Play("A_RuneRenderer_Base");
                 // Set previewing to false
                 runeRenderers[i].previewing = false;
             }

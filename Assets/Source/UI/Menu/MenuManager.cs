@@ -61,7 +61,7 @@ public class MenuManager : MonoBehaviour
         Time.timeScale = 0;
         instance.boosterPackMenu.gameObject.SetActive(true);
         // Disable player movement
-        instance.playerGameObject.GetComponent<InputHandler>().enabled = false;
+        instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
     }
 
     /// <summary>

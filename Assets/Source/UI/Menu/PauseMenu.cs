@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void Map()
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Cards()
     {
-        
+
+    }
+
+
+    public void Options()
+    {
+
+    }
+
+    public void SaveAndQuit()
+    {
+
     }
 }
