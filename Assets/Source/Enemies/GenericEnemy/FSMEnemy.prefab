@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3245013398548236268}
   - component: {fileID: 8576139625026935080}
+  - component: {fileID: 3842827378455965579}
   m_Layer: 12
   m_Name: Feet
   m_TagString: Enemy
@@ -48,6 +49,27 @@ CapsuleCollider2D:
   m_Offset: {x: -0.0015931126, y: -0.24526826}
   m_Size: {x: 0.8630366, y: 0.5094698}
   m_Direction: 1
+--- !u!114 &3842827378455965579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3413457293059694498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44f1bd772b104d946a7d0f37bf98684d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageData:
+    damage: 2
+    damageType: 0
+    statusEffects: []
+    invertInvincibility: 0
+  damageInterval: 0.5
+  immediatelyDamage: 1
+  noTriggerDamage: 1
+  noCollisionDamage: 0
 --- !u!1 &7281680880204442677
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,7 +237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccaee7cb219bc7b43bdeb72aa48e7a12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 5
+  _maxHealth: 5
   invincibilityDuration: 0
   immuneStatusEffects: []
   onHealthChanged:
