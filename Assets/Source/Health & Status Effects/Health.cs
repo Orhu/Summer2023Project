@@ -154,7 +154,7 @@ public class Health : MonoBehaviour
     /// <summary>
     /// Increases the current health by the given amount, maxed out at the max health
     /// </summary>
-    /// <param name="healAmount"> The amount to heal by</param>
+    /// <param name="healAmount"> The amount to heal by. </param>
     public void Heal(int healAmount)
     {
         currentHealth = Mathf.Min(Math.Max(healAmount, 0) + currentHealth, maxHealth);

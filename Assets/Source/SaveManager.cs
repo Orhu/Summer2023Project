@@ -214,9 +214,9 @@ public static class SaveManager
     #endregion
 
     /// <summary>
-    /// Class for storing any kinda of data, and handling loading and storing of that data as needed.
+    /// Class for storing any kinda of data persistently, and handling loading and storing of that data as needed.
     /// </summary>
-    /// <typeparam name="T"> The type of data to load. Must be Serializable. </typeparam>
+    /// <typeparam name="T"> The type of data to store. Must be Serializable. </typeparam>
     [System.Serializable]
     private class SaveData<T> 
     {
