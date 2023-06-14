@@ -70,9 +70,84 @@ public static class SaveManager
         }
     }
 
+
+
+    /// <summary>
+    /// Class for storing any kinda of data persistently, and handling loading and storing of that data as needed.
+    /// </summary>
+    /// <typeparam name="T"> The type of data to store. Must be Serializable. </typeparam>
+    [System.Serializable]
+    private class SaveData<T>
+    {
+        // The currently saved data, set this value to override the old save file.
+        [SerializeField] private T _data;
+        public T data
+        {
+            get
+            {
+                if (!EqualityComparer<T>.Default.Equals(_data, default)) { return _data; }
+                if (!File.Exists(filePath)) { return default; }
+
+                JsonUtility.FromJsonOverwrite(File.ReadAllText(filePath), this);
+                return _data;
+            }
+            set
+            {
+                _data = value;
+                File.WriteAllText(filePath, JsonUtility.ToJson(this, true));
+            }
+        }
+
+        // The filename for the player deck.
+        private readonly string fileName;
+
+        // The file path this is saved at.
+        private string filePath => System.IO.Path.Combine(Application.persistentDataPath, fileName);
+
+        // The initial value this file will hold if never set.
+        private T initialValue;
+
+
+
+        /// <summary>
+        /// Creates a new save data.
+        /// </summary>
+        /// <param name="fileName"> The filename of the save to store. </param>
+        /// <param name="persistent"> Whether or not this will ignore clear data requests. </param>
+        /// <param name="initialValue"> The value returned if no save file exists. </param>
+        public SaveData(string fileName, bool persistent, T initialValue = default)
+        {
+            this.fileName = fileName;
+
+            if (!persistent)
+            {
+                SaveManager.clearData += ClearData;
+            }
+
+            this.initialValue = initialValue;
+            _data = initialValue;
+        }
+
+        /// <summary>
+        /// Clears the saved data.
+        /// </summary>
+        private void ClearData()
+        {
+            _data = initialValue;
+
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+        }
+    }
+
+
+
     #region Autosaves
     // The number of autosaves to keep.
     private const int NUMBER_OF_AUTOSAVES = 10;
+
 
     // Whether or not an autosave currently exists.
     public static bool autosaveExists
@@ -115,6 +190,49 @@ public static class SaveManager
             }
         }
 
+
+
+        /// <summary>
+        /// All the data stored in a single autosave.
+        /// </summary>
+        [System.Serializable]
+        public class AutosaveData
+        {
+            // The seed of the current floor.
+            public int floorSeed;
+
+            // The last position of the player.
+            public Vector2 playerPos;
+
+            // The last health of the player.
+            public int playerHealth;
+
+            // The locations and current card count of visited rooms
+            public List<Vector3Int> visedRooms = new List<Vector3Int>();
+
+            // The current state of the deck.
+            public Deck.State deckState;
+
+            /// <summary>
+            /// Default constructor.
+            /// </summary>
+            public AutosaveData() { }
+
+            /// <summary>
+            /// Copy constructor.
+            /// </summary>
+            /// <param name="other"> The instance to copy. </param>
+            public AutosaveData(AutosaveData other)
+            {
+                floorSeed = other.floorSeed;
+                playerPos = other.playerPos;
+                visedRooms = other.visedRooms;
+                deckState = other.deckState;
+            }
+        }
+
+
+
         /// <summary>
         /// Initializes listeners, and the save data structure.
         /// </summary>
@@ -143,7 +261,9 @@ public static class SaveManager
             Invoke("Autosave", 0.5f);
         }
 
-        // Update is called once per frame
+        /// <summary>
+        /// Saves all data needed to reload the game after a room was cleared.
+        /// </summary>
         private void Autosave()
         {
             if (!gameObject.scene.isLoaded) { return; }
@@ -158,51 +278,14 @@ public static class SaveManager
 
             latestAutosave = saveData;
         }
-
-        /// <summary>
-        /// All the data stored in a single autosave.
-        /// </summary>
-        [System.Serializable]
-        public class AutosaveData
-        {
-            // The seed of the current floor.
-            public int floorSeed;
-
-            // The last position of the player.
-            public Vector2 playerPos;
-
-            // The last health of the player.
-            public int playerHealth;
-
-            // The locations and current card count of visited rooms
-            public List<Vector3Int> visedRooms = new List<Vector3Int>();
-
-            // The current state of the deck.
-            public Deck.State deckState;
-
-            /// <summary>
-            /// Default constructor.
-            /// </summary>
-            public AutosaveData() {}
-
-            /// <summary>
-            /// Copy constructor.
-            /// </summary>
-            /// <param name="other"> The instance to copy. </param>
-            public AutosaveData(AutosaveData other)
-            {
-                floorSeed = other.floorSeed;
-                playerPos = other.playerPos;
-                visedRooms = other.visedRooms;
-                deckState = other.deckState;
-            }
-        }
     }
     #endregion
 
     #region Save Clearing
     // Called when a save clear is requested.
     private static System.Action clearData;
+
+
 
     /// <summary>
     /// Clears all non persistent save data.
@@ -212,73 +295,5 @@ public static class SaveManager
         clearData?.Invoke();
     }
     #endregion
-
-    /// <summary>
-    /// Class for storing any kinda of data persistently, and handling loading and storing of that data as needed.
-    /// </summary>
-    /// <typeparam name="T"> The type of data to store. Must be Serializable. </typeparam>
-    [System.Serializable]
-    private class SaveData<T> 
-    {
-        // The currently saved data, set this value to override the old save file.
-        [SerializeField] private T _data;
-        public T data
-        {
-            get
-            {
-                if (!EqualityComparer<T>.Default.Equals(_data, default)) { return _data; }
-                if (!File.Exists(filePath)) { return default; }
-
-                JsonUtility.FromJsonOverwrite(File.ReadAllText(filePath), this);
-                return _data;
-            }
-            set
-            {
-                _data = value;
-                File.WriteAllText(filePath, JsonUtility.ToJson(this, true));
-            }
-        }
-
-        // The filename for the player deck.
-        private readonly string fileName;
-
-        // The file path this is saved at.
-        private string filePath => System.IO.Path.Combine(Application.persistentDataPath, fileName);
-
-        private T initialValue;
-
-        /// <summary>
-        /// Creates a new save data.
-        /// </summary>
-        /// <param name="fileName"> The filename of the save to store. </param>
-        /// <param name="persistent"> Whether or not this will ignore clear data requests. </param>
-        /// <param name="initialValue"> The value returned if no save file exists. </param>
-        public SaveData(string fileName, bool persistent, T initialValue = default)
-        {
-            this.fileName = fileName;
-
-            if (!persistent)
-            {
-                SaveManager.clearData += ClearData;
-            }
-
-            this.initialValue = initialValue;
-            _data = initialValue;
-        }
-
-        /// <summary>
-        /// Clears the saved data.
-        /// </summary>
-        private void ClearData()
-        {
-            _data = initialValue;
-
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
-        }
-    }
-
 }
 
