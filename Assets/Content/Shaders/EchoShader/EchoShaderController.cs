@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 ///  Script for Echoing Shout's shader. It just animates the ripple on the shader when you cast Echoing Shout.
 /// </summary>
-public class EchoManager : MonoBehaviour
+public class EchoShaderController : MonoBehaviour
 {
     // smack this bad boy on the gameobject you instantiate when casting echoing shout as a child of the player
 
