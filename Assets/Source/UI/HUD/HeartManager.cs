@@ -56,27 +56,33 @@ public class HeartManager : MonoBehaviour
     /// </summary>
     void UpdateHeartManager()
     {
+        // Number of totally full hearts, no half or quarter hearts
         int fullHearts = currentPlayerHealth / 4;
+        // How much left over from a multiple of 4
         int remainder = currentPlayerHealth % 4;
 
+        // Create all full hearts
         for (int i = 0; i < fullHearts; i++)
         {
             Instantiate(heartCounterPrefab, transform);
         }
 
+        // If there is some remainder leftover
         if (remainder > 0)
         {
             GameObject lastHeart = Instantiate(heartCounterPrefab, transform);
             // Adjust the fill amount of the last heart based on the remainder
             int spriteIndex = Mathf.Clamp(remainder-1, 0, heartSpriteVariations.Length - 1);
+            // Set the image of the last heart based on the remainder
             lastHeart.GetComponent<Image>().sprite = heartSpriteVariations[spriteIndex];
         }
 
-        if (currentPlayerHealth > playerHealthScript.maxHealth / 2)
+        // Play animation on the last heart
+        if (currentPlayerHealth > playerHealthScript.maxHealth / 2) // When the health is normal
         {
             transform.GetChild(transform.childCount - 1).GetComponent<Animator>().Play("A_Heart_Enlarge");
         }
-        else if (currentPlayerHealth <= playerHealthScript.maxHealth / 2)
+        else if (currentPlayerHealth <= playerHealthScript.maxHealth / 2) // When the player is close to death
         {
             transform.GetChild(transform.childCount - 1).GetComponent<Animator>().Play("A_Heart_Danger");
         }

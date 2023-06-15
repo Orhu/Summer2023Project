@@ -9,10 +9,14 @@ public class MenuManager : MonoBehaviour
 {
     // Singleton for the menu manager
     [HideInInspector]public static MenuManager instance;
-    // Booster pack menu reference, assigned in inspector
+    [Tooltip("Booster pack menu reference, assigned in inspector")]
     [SerializeField]private BoosterPackMenu boosterPackMenu;
-    // Pause Menu reference, assigned in inspector
+    [Tooltip("Pause Menu reference, assigned in inspector")]
     [SerializeField] private PauseMenu pauseMenu;
+    [Tooltip("Map Menu reference, assigned in inspector")]
+    [SerializeField] private MapMenu mapMenu;
+    [Tooltip("Card Menu reference, assigned in inspector")]
+    [SerializeField] private CardMenu cardMenu;
     // Reference to the player's game object
     private GameObject playerGameObject;
     // Know whether we currently have a menu open or not
@@ -36,14 +40,6 @@ public class MenuManager : MonoBehaviour
                 pauseMenu = GetComponentInChildren<PauseMenu>();
             }
         } 
-    }
-
-    private void Update()
-    {
-        if(menuOpen && Input.GetKeyDown(KeyCode.I))
-        {
-            CloseMenu();
-        }
     }
 
     /// <summary>
@@ -76,6 +72,34 @@ public class MenuManager : MonoBehaviour
             // Sets timeScale to 0, so all time related functions are stopped
             Time.timeScale = 0;
             instance.pauseMenu.gameObject.SetActive(true);
+            // Disable player movement
+            instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+            instance.menuOpen = true;
+        }
+    }
+
+    public static void OpenMapMenu()
+    {
+        if (!instance.menuOpen)
+        {
+            // "Pause the game", should probably be replaced with a more effective method
+            // Sets timeScale to 0, so all time related functions are stopped
+            Time.timeScale = 0;
+            instance.mapMenu.gameObject.SetActive(true);
+            // Disable player movement
+            instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+            instance.menuOpen = true;
+        }
+    }
+
+    public static void OpenCardMenu()
+    {
+        if (!instance.menuOpen)
+        {
+            // "Pause the game", should probably be replaced with a more effective method
+            // Sets timeScale to 0, so all time related functions are stopped
+            Time.timeScale = 0;
+            instance.cardMenu.gameObject.SetActive(true);
             // Disable player movement
             instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
             instance.menuOpen = true;
