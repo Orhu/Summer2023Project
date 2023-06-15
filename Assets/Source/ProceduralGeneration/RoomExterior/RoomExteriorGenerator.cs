@@ -309,9 +309,10 @@ public class RoomExteriorGenerator : MonoBehaviour
     {
         Room room = createdCell.room.GetComponent<Room>();
 
-        GameObject floorContainer = new GameObject();
+        GameObject floorContainer = new GameObject("Floor");
         floorContainer.transform.parent = room.transform;
         floorContainer.transform.localPosition = new Vector3(0, 0, 0);
+        floorContainer.transform.localScale = new Vector3(1.616838f, 1.444166f, 0f); // TODO: Remove this line.
         floorContainer.AddComponent<SpriteRenderer>().sprite = exteriorGenerationParameters.floorSprites[FloorGenerator.random.Next(0, exteriorGenerationParameters.floorSprites.Count)];
         floorContainer.GetComponent<SpriteRenderer>().sortingLayerName = "Floors";
         floorContainer.SetActive(false);

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,8 +8,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewApplyStatusEffect", menuName = "Cards/Actions/ApplyStatusEffect")]
 public class ApplyStatusEffect : Action
 {
-    [Tooltip("The status effect to apply")][SerializeField]
-    private List<StatusEffect> statusEffects;
+    [Tooltip("The status effect to apply")]
+    [SerializeField] private List<StatusEffect> statusEffects;
+
+    [Tooltip("The delay before it is applied")] [Min(0f)]
+    [SerializeField] private float delay = 0f;
 
     /// <summary>
     /// Plays this action and causes all its effects.
@@ -17,6 +21,22 @@ public class ApplyStatusEffect : Action
     /// <param name="ignoredObjects"> The objects this action will ignore. </param>
     public override void Play(IActor actor, List<GameObject> ignoredObjects)
     {
+        if (delay <= 0)
+        {
+            actor.GetActionSourceTransform().GetComponent<Health>().ReceiveAttack(new DamageData(statusEffects, actor.GetActionSourceTransform().gameObject));
+        }
+        else
+        {
+            actor.GetActionSourceTransform().GetComponent<MonoBehaviour>().StartCoroutine(DelayedApply(actor));
+        }
+    }
+
+    /// <summary>
+    /// Applies the status effect.
+    /// </summary>
+    private IEnumerator DelayedApply(IActor actor)
+    {
+        yield return new WaitForSeconds(delay);
         actor.GetActionSourceTransform().GetComponent<Health>().ReceiveAttack(new DamageData(statusEffects, actor.GetActionSourceTransform().gameObject));
     }
 }

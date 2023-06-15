@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6351846847079443315}
   - component: {fileID: 3562107043912131769}
   - component: {fileID: 5517008572783111348}
-  - component: {fileID: 2075822659}
   - component: {fileID: 2591183591901039891}
   - component: {fileID: 107912168563067167}
   - component: {fileID: -8563880425545905597}
@@ -40,6 +39,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5011158208702063703}
+  - {fileID: 2526645731703428551}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -80,22 +80,6 @@ CapsuleCollider2D:
   m_Offset: {x: 0.03063476, y: -0.01760614}
   m_Size: {x: 0.6287283, y: 0.9647877}
   m_Direction: 0
---- !u!70 &2075822659
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 608508398850829056}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.018323803, y: -0.32127276}
-  m_Size: {x: 0.5633549, y: 0.35745457}
-  m_Direction: 1
 --- !u!212 &2591183591901039891
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -172,8 +156,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccaee7cb219bc7b43bdeb72aa48e7a12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 12
-  invincibilityDuration: 1
+  _maxHealth: 12
+  invincibilityDuration: 0.25
   immuneStatusEffects: []
   onHealthChanged:
     m_PersistentCalls:
@@ -298,6 +282,54 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animactionClipsToMirrorParameters: []
+--- !u!1 &4235891105401400328
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2526645731703428551}
+  - component: {fileID: 3586952506838634694}
+  m_Layer: 12
+  m_Name: Feet
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2526645731703428551
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4235891105401400328}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6351846847079443315}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &3586952506838634694
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4235891105401400328}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.018323803, y: -0.32127276}
+  m_Size: {x: 0.5633549, y: 0.35745457}
+  m_Direction: 1
 --- !u!1001 &1510892456516161432
 PrefabInstance:
   m_ObjectHideFlags: 0

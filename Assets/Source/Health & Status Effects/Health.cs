@@ -10,10 +10,34 @@ using UnityEngine.Events;
 /// </summary>
 public class Health : MonoBehaviour
 {
-    [Tooltip("The Max health of this object")]
-    public int maxHealth = 5;
+    [Tooltip("The Max health of this object")] [Min(1)]
+    [SerializeField] private int _maxHealth = 5;
+    public int maxHealth
+    {
+        set
+        {
+            if (_maxHealth == value) { return; }
+
+            _maxHealth = value;
+            onMaxHealthChanged?.Invoke(value);
+        }
+        get => _maxHealth;
+    }
+
+
     // The current health of this object
-    public int currentHealth { get; private set; }
+    private int _currentHealth = 0;
+    public int currentHealth 
+    {
+        get => _currentHealth;
+        set
+        {
+            if (_currentHealth == value) { return; }
+
+            _currentHealth = value;
+            onHealthChanged?.Invoke(value);
+        }
+    }
     
     [Tooltip("How long of a duration does this unit get invincibility when hit?")]
     public float invincibilityDuration = 0.25f;
@@ -65,11 +89,10 @@ public class Health : MonoBehaviour
     /// </summary>
     void Start()
     {
-        currentHealth = maxHealth;
-
-        // set max health bar value, then update health bar to contain its current value
         onMaxHealthChanged?.Invoke(maxHealth);
-        onHealthChanged?.Invoke(currentHealth);
+
+        if (currentHealth != 0) { return; }
+        currentHealth = maxHealth;
     }
 
     /// <summary>
@@ -103,7 +126,6 @@ public class Health : MonoBehaviour
         var prevHealth = currentHealth;
         currentHealth -= attack.damage;
 
-        onHealthChanged?.Invoke(currentHealth);
         onAttacked?.Invoke(attack);
         if (currentHealth <= 0 && prevHealth > 0)
         {
@@ -132,12 +154,10 @@ public class Health : MonoBehaviour
     /// <summary>
     /// Increases the current health by the given amount, maxed out at the max health
     /// </summary>
-    /// <param name="healAmount"> The amount to heal by</param>
+    /// <param name="healAmount"> The amount to heal by. </param>
     public void Heal(int healAmount)
     {
         currentHealth = Mathf.Min(Math.Max(healAmount, 0) + currentHealth, maxHealth);
-
-        onHealthChanged?.Invoke(currentHealth);
     }
 
     /// <summary>
