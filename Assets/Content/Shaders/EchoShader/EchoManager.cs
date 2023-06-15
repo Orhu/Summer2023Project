@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-///  Script for Echoing Shout's shader.
+///  Script for Echoing Shout's shader. It just animates the ripple on the shader when you cast Echoing Shout.
 /// </summary>
 public class EchoManager : MonoBehaviour
 {
