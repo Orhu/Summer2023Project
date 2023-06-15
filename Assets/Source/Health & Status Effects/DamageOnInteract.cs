@@ -57,7 +57,7 @@ public class DamageOnInteract : MonoBehaviour
     {
         if (noCollisionDamage || other.collider.CompareTag(tag)) { return; }
         
-        Health health = other.collider.GetComponent<Health>();
+        Health health = other.collider.GetComponentInParent<Health>();
         if (health == null) { return; }
 
         StartCoroutine(DealDamage(other.collider, health));
