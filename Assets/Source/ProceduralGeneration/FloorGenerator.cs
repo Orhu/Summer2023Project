@@ -169,7 +169,7 @@ public class FloorGenerator : MonoBehaviour
     /// <param name="card"> The card </param>
     private void OnCardAdded(Card card)
     {
-        if (card.effects == null)
+        if (card == null || card.effects == null)
         {
             return;
         }
