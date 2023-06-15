@@ -21,7 +21,7 @@ public class EchoManager : MonoBehaviour
     private Material material;
 
     // shader property conversion
-    private static int _waveDistanceFromCenter = Shader.PropertyToID("_WaveDistanceFromCenter"); 
+    private static int waveDistanceFromCenter = Shader.PropertyToID("_WaveDistanceFromCenter"); 
 
     /// <summary>
     /// triggers the echo
@@ -48,7 +48,7 @@ public class EchoManager : MonoBehaviour
     /// <returns>cool effect idk</returns>    
     private IEnumerator EchoAction(float startPos, float endPos)
     {
-        material.SetFloat(_waveDistanceFromCenter, startPos);
+        material.SetFloat(waveDistanceFromCenter, startPos);
 
         float lerpedAmount = 0f;
 
@@ -58,7 +58,7 @@ public class EchoManager : MonoBehaviour
             elapsedTime += Time.deltaTime;
 
             lerpedAmount = Mathf.Lerp(startPos, endPos, (elapsedTime / echoTime));
-            material.SetFloat(_waveDistanceFromCenter, lerpedAmount); // use lerp amount to set progress of ripple effect
+            material.SetFloat(waveDistanceFromCenter, lerpedAmount); // use lerp amount to set progress of ripple effect
 
             yield return null;
         }
