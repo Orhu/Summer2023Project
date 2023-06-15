@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour, IActor
 
     // Gets whether or not this actor can act.
     IActor.CanActRequest _canAct;
-    bool canAct
+    public bool canAct
     {
         get
         {
