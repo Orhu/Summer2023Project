@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-///  Script for Echoing Shout's shader. TOUCH THIS AND YOU DIE!!!!!!!!!!
-///  Also I'm not serializing this because it shouldn't be serialized :)
+///  Script for Echoing Shout's shader.
 /// </summary>
 public class EchoManager : MonoBehaviour
 {
     // smack this bad boy on the gameobject you instantiate when casting echoing shout as a child of the player
 
-    [Tooltip("Length of echo shader animation")]
+    [Tooltip("Length of echo shader animation (in seconds)")]
     // length of echo in seconds
     [SerializeField] private float echoTime = 3.5f; // should be constant and roughly equal to the lifetime of echoing shout so that the ripple moves with the bullets (21 tiles / 6 tiles/s = 3.5s)
     
@@ -43,9 +42,9 @@ public class EchoManager : MonoBehaviour
     /// <summary>
     /// echo effect controlling subroutine
     /// </summary>
-    /// <param name="startPos"> start val (ALWAYS -0.1f)</param>
-    /// <param name="endPos"> end val (ALWAYS 1f)</param>
-    /// <returns>cool effect idk</returns>    
+    /// <param name="startPos"> start position in WaveDistanceFromCenter slider (ECHOING SHOUT IS ALWAYS -0.1f)</param>
+    /// <param name="endPos"> end position in WaveDistanceFromCenter slider (ECHOING SHOUT IS ALWAYS 1f)</param>
+    /// <returns></returns>    
     private IEnumerator EchoAction(float startPos, float endPos)
     {
         material.SetFloat(_waveDistanceFromCenter, startPos);
