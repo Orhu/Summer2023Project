@@ -12,15 +12,15 @@ public class EchoManager : MonoBehaviour
 
     [Tooltip("Length of echo shader animation")]
     // length of echo in seconds
-    [SerializeField] private float _echoTime = 3.5f; // should be constant and roughly equal to the lifetime of echoing shout so that the ripple moves with the bullets (21 tiles / 6 tiles/s = 3.5s)
+    [SerializeField] private float echoTime = 3.5f; // should be constant and roughly equal to the lifetime of echoing shout so that the ripple moves with the bullets (21 tiles / 6 tiles/s = 3.5s)
     
     // reference to coroutine that controls the echo effect
-    private Coroutine _echoCoroutine;
+    private Coroutine echoCoroutine;
 
     // material on game object
-    private Material _material;
+    private Material material;
 
-    // shader property conversion (unnecessary comment tbh)
+    // shader property conversion
     private static int _waveDistanceFromCenter = Shader.PropertyToID("_WaveDistanceFromCenter"); 
 
     /// <summary>
@@ -28,7 +28,7 @@ public class EchoManager : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        _material = GetComponent<SpriteRenderer>().material;
+        material = GetComponent<SpriteRenderer>().material;
         CallEcho();
     }
 
@@ -37,7 +37,7 @@ public class EchoManager : MonoBehaviour
     /// </summary>
     public void CallEcho()
     {
-        _echoCoroutine = StartCoroutine(EchoAction(-0.1f, 1f));
+        echoCoroutine = StartCoroutine(EchoAction(-0.1f, 1f));
     }
 
     /// <summary>
@@ -48,17 +48,17 @@ public class EchoManager : MonoBehaviour
     /// <returns>cool effect idk</returns>    
     private IEnumerator EchoAction(float startPos, float endPos)
     {
-        _material.SetFloat(_waveDistanceFromCenter, startPos);
+        material.SetFloat(_waveDistanceFromCenter, startPos);
 
         float lerpedAmount = 0f;
 
         float elapsedTime = 0f;
-        while (elapsedTime < _echoTime)
+        while (elapsedTime < echoTime)
         {
             elapsedTime += Time.deltaTime;
 
-            lerpedAmount = Mathf.Lerp(startPos, endPos, (elapsedTime / _echoTime));
-            _material.SetFloat(_waveDistanceFromCenter, lerpedAmount); // use lerp amount to set progress of ripple effect
+            lerpedAmount = Mathf.Lerp(startPos, endPos, (elapsedTime / echoTime));
+            material.SetFloat(_waveDistanceFromCenter, lerpedAmount); // use lerp amount to set progress of ripple effect
 
             yield return null;
         }
