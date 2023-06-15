@@ -17,6 +17,7 @@ MonoBehaviour:
     damageType: 0
     statusEffects:
     - {fileID: 11400000, guid: e4cdde4041bd20d41b4d66f69af8313e, type: 2}
+    invertInvincibility: 0
   hitCount: 999
   applyDamageOnHit: 1
   modifiers:
@@ -24,9 +25,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: baf259c345bafbd4fa263fa37bdbf4ce, type: 2}
   - {fileID: 11400000, guid: ca1ca5c908abfa847804e1e805337ce1, type: 2}
   shape: {fileID: 11400000, guid: f36ebaa9e81c7c24699e5c0670444548, type: 2}
-  lifetime: 0.083333336
-  initialSpeed: 12
-  acceleration: 0
+  lifetime: 0.5
+  initialSpeed: 0
+  acceleration: 12
   minSpeed: 0
   maxSpeed: 12
   homingSpeed: 0
