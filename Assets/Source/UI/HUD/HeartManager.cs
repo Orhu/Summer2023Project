@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// A component for rendering Player's heart count to screen
@@ -13,6 +12,9 @@ public class HeartManager : MonoBehaviour
     private Health playerHealthScript;
     // Local variable - what the UI thinks the player's health is
     private int currentPlayerHealth;
+
+    [Tooltip("Collection of heart sprite variants, remainder of heart based on index")]
+    [SerializeField] private Sprite[] heartSpriteVariations;
 
     /// <summary>
     /// First time initialize UI hearts
@@ -54,10 +56,31 @@ public class HeartManager : MonoBehaviour
     /// </summary>
     void UpdateHeartManager()
     {
-        
-        for (int i = 0; i < currentPlayerHealth / 4; i++)
+        int fullHearts = currentPlayerHealth / 4;
+        int remainder = currentPlayerHealth % 4;
+
+        for (int i = 0; i < fullHearts; i++)
         {
             Instantiate(heartCounterPrefab, transform);
         }
+
+        if (remainder > 0)
+        {
+            GameObject lastHeart = Instantiate(heartCounterPrefab, transform);
+            // Adjust the fill amount of the last heart based on the remainder
+            int spriteIndex = Mathf.Clamp(remainder-1, 0, heartSpriteVariations.Length - 1);
+            print(currentPlayerHealth);
+            lastHeart.GetComponent<Image>().sprite = heartSpriteVariations[spriteIndex];
+        }
+
+        if (currentPlayerHealth > playerHealthScript.maxHealth / 2)
+        {
+            transform.GetChild(transform.childCount - 1).GetComponent<Animator>().Play("A_Heart_Enlarge");
+        }
+        else if (currentPlayerHealth <= playerHealthScript.maxHealth / 2)
+        {
+            transform.GetChild(transform.childCount - 1).GetComponent<Animator>().Play("A_Heart_Danger");
+        }
+        
     }
 }

@@ -38,6 +38,14 @@ public class MenuManager : MonoBehaviour
         } 
     }
 
+    private void Update()
+    {
+        if(menuOpen && Input.GetKeyDown(KeyCode.I))
+        {
+            CloseMenu();
+        }
+    }
+
     /// <summary>
     /// Opens the booster pack menu and populates the cards
     /// </summary>
