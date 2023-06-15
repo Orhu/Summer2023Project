@@ -69,7 +69,6 @@ public class HeartManager : MonoBehaviour
             GameObject lastHeart = Instantiate(heartCounterPrefab, transform);
             // Adjust the fill amount of the last heart based on the remainder
             int spriteIndex = Mathf.Clamp(remainder-1, 0, heartSpriteVariations.Length - 1);
-            print(currentPlayerHealth);
             lastHeart.GetComponent<Image>().sprite = heartSpriteVariations[spriteIndex];
         }
 
