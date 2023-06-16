@@ -98,16 +98,16 @@ public class RoomExteriorGenerator : MonoBehaviour
         wallContainer.name = "Wall Container";
 
         // Add the corners
-        Sprite randomCornerSprite = exteriorParameters.bottomLeftWallCornerSprites[FloorGenerator.random.Next(0, exteriorParameters.bottomLeftWallCornerSprites.Count)];
+        Sprite randomCornerSprite = exteriorParameters.bottomLeftWallCornerSprites.GetRandomThing(FloorGenerator.random);
         room.roomGrid[0, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(0, 0), wallContainer);
 
-        randomCornerSprite = exteriorParameters.topLeftWallCornerSprites[FloorGenerator.random.Next(0, exteriorParameters.topLeftWallCornerSprites.Count)];
+        randomCornerSprite = exteriorParameters.topLeftWallCornerSprites.GetRandomThing(FloorGenerator.random);
         room.roomGrid[0, roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(0, roomSize.y - 1), wallContainer);
 
-        randomCornerSprite = exteriorParameters.bottomRightWallCornerSprites[FloorGenerator.random.Next(0, exteriorParameters.bottomRightWallCornerSprites.Count)];
+        randomCornerSprite = exteriorParameters.bottomRightWallCornerSprites.GetRandomThing(FloorGenerator.random);
         room.roomGrid[roomSize.x - 1, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(roomSize.x - 1, 0), wallContainer);
 
-        randomCornerSprite = exteriorParameters.topRightWallCornerSprites[FloorGenerator.random.Next(0, exteriorParameters.topRightWallCornerSprites.Count)];
+        randomCornerSprite = exteriorParameters.topRightWallCornerSprites.GetRandomThing(FloorGenerator.random);
         room.roomGrid[roomSize.x - 1, roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(roomSize.x - 1, roomSize.y - 1), wallContainer);
 
         // Add the top and bottom walls
@@ -115,13 +115,13 @@ public class RoomExteriorGenerator : MonoBehaviour
         {
             if (i != roomSize.x / 2 || (roomCell.direction & Direction.Down) == Direction.None)
             {
-                Sprite randomWallSprite = exteriorParameters.bottomWallSprites[FloorGenerator.random.Next(0, exteriorParameters.bottomWallSprites.Count)];
+                Sprite randomWallSprite = exteriorParameters.bottomWallSprites.GetRandomThing(FloorGenerator.random);
                 room.roomGrid[i, 0] = CreateWallTile(randomWallSprite, new Vector2Int(i, 0), wallContainer);
             }
 
             if (i != roomSize.x / 2 || (roomCell.direction & Direction.Up) == Direction.None)
             {
-                Sprite randomWallSprite = exteriorParameters.topWallSprites[FloorGenerator.random.Next(0, exteriorParameters.topWallSprites.Count)];
+                Sprite randomWallSprite = exteriorParameters.topWallSprites.GetRandomThing(FloorGenerator.random);
                 room.roomGrid[i, roomSize.y - 1] = CreateWallTile(randomWallSprite, new Vector2Int(i, roomSize.y - 1), wallContainer);
             }
         }
@@ -131,34 +131,34 @@ public class RoomExteriorGenerator : MonoBehaviour
         {
             if ((j == roomSize.y / 2 - 1) && (roomCell.direction & Direction.Left) != Direction.None)
             {
-                Sprite randomWallSprite = exteriorParameters.belowLeftDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.belowLeftDoorSprites.Count)];
+                Sprite randomWallSprite = exteriorParameters.belowLeftDoorSprites.GetRandomThing(FloorGenerator.random);
                 room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), wallContainer);
             }
             else if ((j == roomSize.y / 2 + 1) && (roomCell.direction & Direction.Left) != Direction.None)
             {
-                Sprite randomWallSprite = exteriorParameters.aboveLeftDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.aboveLeftDoorSprites.Count)];
+                Sprite randomWallSprite = exteriorParameters.aboveLeftDoorSprites.GetRandomThing(FloorGenerator.random);
                 room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), wallContainer);
             }
             else if (j != roomSize.y / 2 || (roomCell.direction & Direction.Left) == Direction.None)
             {
-                Sprite randomWallSprite = exteriorParameters.leftWallSprites[FloorGenerator.random.Next(0, exteriorParameters.leftWallSprites.Count)];
+                Sprite randomWallSprite = exteriorParameters.leftWallSprites.GetRandomThing(FloorGenerator.random);
                 room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), wallContainer);
             }
 
 
             if ((j == roomSize.y / 2 - 1) && (roomCell.direction & Direction.Right) != Direction.None)
             {
-                Sprite randomWallSprite = exteriorParameters.belowRightDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.belowRightDoorSprites.Count)];
+                Sprite randomWallSprite = exteriorParameters.belowRightDoorSprites.GetRandomThing(FloorGenerator.random);
                 room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
             }
             else if ((j == roomSize.y / 2 + 1) && (roomCell.direction & Direction.Right) != Direction.None)
             {
-                Sprite randomWallSprite = exteriorParameters.aboveRightDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.aboveRightDoorSprites.Count)];
+                Sprite randomWallSprite = exteriorParameters.aboveRightDoorSprites.GetRandomThing(FloorGenerator.random);
                 room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
             }
             else if (j != roomSize.y / 2 || (roomCell.direction & Direction.Right) == Direction.None)
             {
-                Sprite randomWallSprite = exteriorParameters.rightWallSprites[FloorGenerator.random.Next(0, exteriorParameters.rightWallSprites.Count)];
+                Sprite randomWallSprite = exteriorParameters.rightWallSprites.GetRandomThing(FloorGenerator.random);
                 room.roomGrid[roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
             }
         }
@@ -227,22 +227,22 @@ public class RoomExteriorGenerator : MonoBehaviour
 
                 if (((Direction) i & Direction.Right) != Direction.None)
                 {
-                    doorSprites = exteriorParameters.rightDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.rightDoorSprites.Count)];
+                    doorSprites = exteriorParameters.rightDoorSprites.GetRandomThing(FloorGenerator.random);
                 }
 
                 if (((Direction) i & Direction.Up) != Direction.None)
                 {
-                    doorSprites = exteriorParameters.topDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.topDoorSprites.Count)];
+                    doorSprites = exteriorParameters.topDoorSprites.GetRandomThing(FloorGenerator.random);
                 }
 
                 if (((Direction) i & Direction.Left) != Direction.None)
                 {
-                    doorSprites = exteriorParameters.leftDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.leftDoorSprites.Count)];
+                    doorSprites = exteriorParameters.leftDoorSprites.GetRandomThing(FloorGenerator.random);
                 }
 
                 if (((Direction) i & Direction.Down) != Direction.None)
                 {
-                    doorSprites = exteriorParameters.bottomDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.bottomDoorSprites.Count)];
+                    doorSprites = exteriorParameters.bottomDoorSprites.GetRandomThing(FloorGenerator.random);
                 }
 
                 room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, (Direction) i, connectedCell, doorContainer);
@@ -315,7 +315,7 @@ public class RoomExteriorGenerator : MonoBehaviour
         {
             for (int j = 0; j < roomSize.y; j++)
             {
-                Sprite floorSprite = exteriorGenerationParameters.floorSprites[FloorGenerator.random.Next(0, exteriorGenerationParameters.floorSprites.Count)];
+                Sprite floorSprite = exteriorGenerationParameters.floorSprites.GetRandomThing(FloorGenerator.random);
                 CreateFloorTile(floorSprite, new Vector2Int(i, j), floorContainer);
             }
         }
@@ -323,13 +323,13 @@ public class RoomExteriorGenerator : MonoBehaviour
         // Add the tiles under the left and right doors if they exist
         if ((createdCell.direction & Direction.Left) != Direction.None)
         {
-            Sprite floorSprite = exteriorGenerationParameters.floorSprites[FloorGenerator.random.Next(0, exteriorGenerationParameters.floorSprites.Count)];
+            Sprite floorSprite = exteriorGenerationParameters.floorSprites.GetRandomThing(FloorGenerator.random);
             CreateFloorTile(floorSprite, new Vector2Int(0, roomSize.y / 2), floorContainer);
         }
 
         if ((createdCell.direction & Direction.Right) != Direction.None)
         {
-            Sprite floorSprite = exteriorGenerationParameters.floorSprites[FloorGenerator.random.Next(0, exteriorGenerationParameters.floorSprites.Count)];
+            Sprite floorSprite = exteriorGenerationParameters.floorSprites.GetRandomThing(FloorGenerator.random);
             CreateFloorTile(floorSprite, new Vector2Int(roomSize.x - 1, roomSize.y / 2), floorContainer);
         }
 
@@ -399,16 +399,16 @@ public class RoomExteriorGenerator : MonoBehaviour
         wallContainer.name = "Wall Container";
 
         // Add the corners
-        Sprite randomCornerSprite = exteriorParameters.bottomLeftWallCornerSprites[FloorGenerator.random.Next(0, exteriorParameters.bottomLeftWallCornerSprites.Count)];
+        Sprite randomCornerSprite = exteriorParameters.bottomLeftWallCornerSprites.GetRandomThing(FloorGenerator.random);
         room.roomGrid[0, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(0, 0), wallContainer);
 
-        randomCornerSprite = exteriorParameters.topLeftWallCornerSprites[FloorGenerator.random.Next(0, exteriorParameters.topLeftWallCornerSprites.Count)];
+        randomCornerSprite = exteriorParameters.topLeftWallCornerSprites.GetRandomThing(FloorGenerator.random);
         room.roomGrid[0, room.roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(0, room.roomSize.y - 1), wallContainer);
 
-        randomCornerSprite = exteriorParameters.bottomRightWallCornerSprites[FloorGenerator.random.Next(0, exteriorParameters.bottomRightWallCornerSprites.Count)];
+        randomCornerSprite = exteriorParameters.bottomRightWallCornerSprites.GetRandomThing(FloorGenerator.random);
         room.roomGrid[room.roomSize.x - 1, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(room.roomSize.x - 1, 0), wallContainer);
 
-        randomCornerSprite = exteriorParameters.topRightWallCornerSprites[FloorGenerator.random.Next(0, exteriorParameters.topRightWallCornerSprites.Count)];
+        randomCornerSprite = exteriorParameters.topRightWallCornerSprites.GetRandomThing(FloorGenerator.random);
         room.roomGrid[room.roomSize.x - 1, room.roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(room.roomSize.x - 1, room.roomSize.y - 1), wallContainer);
 
         // Add the top and bottom walls
@@ -416,13 +416,13 @@ public class RoomExteriorGenerator : MonoBehaviour
         {
             if (i != room.roomSize.x / 2 || (map.map[centerCell.location.x, centerCell.location.y - 1].direction & Direction.Down) == Direction.None)
             {
-                Sprite randomWallSprite = exteriorParameters.bottomWallSprites[FloorGenerator.random.Next(0, exteriorParameters.bottomWallSprites.Count)];
+                Sprite randomWallSprite = exteriorParameters.bottomWallSprites.GetRandomThing(FloorGenerator.random);
                 room.roomGrid[i, 0] = CreateWallTile(randomWallSprite, new Vector2Int(i, 0), wallContainer);
             }
 
             if (i != room.roomSize.x / 2 || (map.map[centerCell.location.x, centerCell.location.y + 1].direction & Direction.Up) == Direction.None)
             {
-                Sprite randomWallSprite = exteriorParameters.topWallSprites[FloorGenerator.random.Next(0, exteriorParameters.topWallSprites.Count)];
+                Sprite randomWallSprite = exteriorParameters.topWallSprites.GetRandomThing(FloorGenerator.random);
                 room.roomGrid[i, room.roomSize.y - 1] = CreateWallTile(randomWallSprite, new Vector2Int(i, room.roomSize.y - 1), wallContainer);
             }
         }
@@ -433,33 +433,33 @@ public class RoomExteriorGenerator : MonoBehaviour
 
             if ((j == room.roomSize.y / 2 - 1) && (map.map[centerCell.location.x - 1, centerCell.location.y].direction & Direction.Left) != Direction.None)
             {
-                Sprite randomWallSprite = exteriorParameters.belowLeftDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.belowLeftDoorSprites.Count)];
+                Sprite randomWallSprite = exteriorParameters.belowLeftDoorSprites.GetRandomThing(FloorGenerator.random);
                 room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), wallContainer);
             }
             else if ((j == room.roomSize.y / 2 + 1) && (map.map[centerCell.location.x - 1, centerCell.location.y].direction & Direction.Left) != Direction.None)
             {
-                Sprite randomWallSprite = exteriorParameters.aboveLeftDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.aboveLeftDoorSprites.Count)];
+                Sprite randomWallSprite = exteriorParameters.aboveLeftDoorSprites.GetRandomThing(FloorGenerator.random);
                 room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), wallContainer);
             }
             else if (j != room.roomSize.y / 2 || (map.map[centerCell.location.x - 1, centerCell.location.y].direction & Direction.Left) == Direction.None)
             {
-                Sprite randomWallSprite = exteriorParameters.leftWallSprites[FloorGenerator.random.Next(0, exteriorParameters.leftWallSprites.Count)];
+                Sprite randomWallSprite = exteriorParameters.leftWallSprites.GetRandomThing(FloorGenerator.random);
                 room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), wallContainer);
             }
 
             if ((j == room.roomSize.y / 2 - 1) && (map.map[centerCell.location.x + 1, centerCell.location.y].direction & Direction.Right) != Direction.None)
             {
-                Sprite randomWallSprite = exteriorParameters.belowRightDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.belowRightDoorSprites.Count)];
+                Sprite randomWallSprite = exteriorParameters.belowRightDoorSprites.GetRandomThing(FloorGenerator.random);
                 room.roomGrid[room.roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(room.roomSize.x - 1, j), wallContainer);
             }
             else if ((j == room.roomSize.y / 2 + 1) && (map.map[centerCell.location.x + 1, centerCell.location.y].direction & Direction.Right) != Direction.None)
             {
-                Sprite randomWallSprite = exteriorParameters.aboveRightDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.aboveRightDoorSprites.Count)];
+                Sprite randomWallSprite = exteriorParameters.aboveRightDoorSprites.GetRandomThing(FloorGenerator.random);
                 room.roomGrid[room.roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(room.roomSize.x - 1, j), wallContainer);
             }
             else if (j != room.roomSize.y / 2 || (map.map[centerCell.location.x + 1, centerCell.location.y].direction & Direction.Right) == Direction.None)
             {
-                Sprite randomWallSprite = exteriorParameters.rightWallSprites[FloorGenerator.random.Next(0, exteriorParameters.rightWallSprites.Count)];
+                Sprite randomWallSprite = exteriorParameters.rightWallSprites.GetRandomThing(FloorGenerator.random);
                 room.roomGrid[room.roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(room.roomSize.x - 1, j), wallContainer);
             }
         }
@@ -492,7 +492,7 @@ public class RoomExteriorGenerator : MonoBehaviour
 
             DoorSprites doorSprites = new DoorSprites();
 
-            doorSprites = doorExteriorParameters.rightDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.rightDoorSprites.Count)];
+            doorSprites = doorExteriorParameters.rightDoorSprites.GetRandomThing(FloorGenerator.random);
             
             room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Right, connectedCell, doorContainer);
             room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
@@ -509,7 +509,7 @@ public class RoomExteriorGenerator : MonoBehaviour
 
             DoorSprites doorSprites = new DoorSprites();
 
-            doorSprites = doorExteriorParameters.topDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.topDoorSprites.Count)];
+            doorSprites = doorExteriorParameters.topDoorSprites.GetRandomThing(FloorGenerator.random);
 
             room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Up, connectedCell, doorContainer);
             room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
@@ -526,7 +526,7 @@ public class RoomExteriorGenerator : MonoBehaviour
 
             DoorSprites doorSprites = new DoorSprites();
 
-            doorSprites = doorExteriorParameters.leftDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.leftDoorSprites.Count)];
+            doorSprites = doorExteriorParameters.leftDoorSprites.GetRandomThing(FloorGenerator.random);
 
             room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Left, connectedCell, doorContainer);
             room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
@@ -543,7 +543,7 @@ public class RoomExteriorGenerator : MonoBehaviour
 
             DoorSprites doorSprites = new DoorSprites();
 
-            doorSprites = doorExteriorParameters.bottomDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.bottomDoorSprites.Count)];
+            doorSprites = doorExteriorParameters.bottomDoorSprites.GetRandomThing(FloorGenerator.random);
 
             room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Down, connectedCell, doorContainer);
             room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
