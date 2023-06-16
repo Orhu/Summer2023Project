@@ -156,7 +156,7 @@ public class GenericWeightedThings<T>
             if (percentCounter >= randomPercent)
             {
                 thing.timesChosen++;
-                if (thing.maxChosen == thing.timesChosen)
+                if ((thing.maxChosen == thing.timesChosen) && (thing.maxChosen >= 0))
                 {
                     Remove(thing);
                 }
