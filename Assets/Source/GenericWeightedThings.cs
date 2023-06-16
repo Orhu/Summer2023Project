@@ -66,7 +66,7 @@ public class GenericWeightedThings<T>
         foreach (GenericWeightedThing<T> thing in things)
         {
             GenericWeightedThing<T> newThing = new GenericWeightedThing<T>(thing.thing, thing.weight, thing.maxChosen);
-            Add(newThing);
+            Add(newThing, true);
         }
     }
 
@@ -89,22 +89,26 @@ public class GenericWeightedThings<T>
     /// <param name="newThing"> The new thing </param>
     /// <param name="weight"> The weight of this new thing </param>
     /// <param name="maxChosen"> The maximum number of times this new thing can be chosen (Set it to less than 0 for no max) </param>
-    public void Add(T newThing, float weight, int maxChosen = -1)
+    public void Add(T newThing, float weight, int maxChosen = -1, bool addOnlyToChoosableThings = false)
     {
-        Add(new GenericWeightedThing<T>(newThing, weight, maxChosen));
+        Add(new GenericWeightedThing<T>(newThing, weight, maxChosen), addOnlyToChoosableThings);
     }
 
     /// <summary>
     /// Adds another thing to the list of things that can be chosen
     /// </summary>
     /// <param name="newThing"> The new thing </param>
-    public void Add(GenericWeightedThing<T> newThing)
+    public void Add(GenericWeightedThing<T> newThing, bool addOnlyToChoosableThings = false)
     {
         if (choosableThings == null)
         {
             choosableThings = new List<GenericWeightedThing<T>>();
         }
         choosableThings.Add(newThing);
+        if (!addOnlyToChoosableThings)
+        {
+            things.Add(newThing);
+        }
         totalWeight += newThing.weight;
     }
 
@@ -171,5 +175,15 @@ public class GenericWeightedThings<T>
         }
 
         return lastThing.thing;
+    }
+
+    /// <summary>
+    /// Resets the choosable things list
+    /// </summary>
+    public void Reset()
+    {
+        choosableThings.Clear();
+        totalWeight = 0;
+        AddThingsToChoosableThings();
     }
 }
