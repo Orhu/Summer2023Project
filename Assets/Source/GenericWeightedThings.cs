@@ -71,7 +71,8 @@ public class GenericWeightedThings<T>
         }
         foreach (GenericWeightedThing<T> thing in things)
         {
-            Add(thing);
+            GenericWeightedThing<T> newThing = new GenericWeightedThing<T>(thing.thing, thing.weight, thing.maxChosen);
+            Add(newThing);
         }
     }
 
@@ -106,6 +107,7 @@ public class GenericWeightedThings<T>
     public void Add(GenericWeightedThing<T> newThing)
     {
         choosableThings.Add(newThing);
+        Debug.Log("New thing weight: " + newThing.ToString());
         totalWeight += newThing.weight;
     }
 
