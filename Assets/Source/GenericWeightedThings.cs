@@ -182,7 +182,10 @@ public class GenericWeightedThings<T>
     /// </summary>
     public void Reset()
     {
-        choosableThings.Clear();
+        if (choosableThings != null)
+        {
+            choosableThings.Clear();
+        }
         totalWeight = 0;
         AddThingsToChoosableThings();
     }
