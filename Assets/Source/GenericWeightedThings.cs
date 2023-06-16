@@ -133,7 +133,7 @@ public class GenericWeightedThings<T>
     {
         if (choosableThings == null || choosableThings.Count == 0)
         {
-            AddThingsToChoosableThings();
+            Reset();
             if (choosableThings == null || choosableThings.Count == 0)
             {
                 throw new System.Exception("Attempted to get a random thing when there are no choosable things");
