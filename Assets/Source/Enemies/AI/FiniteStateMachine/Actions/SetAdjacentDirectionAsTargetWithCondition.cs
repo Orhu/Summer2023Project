@@ -62,14 +62,14 @@ public class SetAdjacentDirectionAsTargetWithCondition : FSMAction
     /// <returns></returns>
     private IEnumerator SetAdjacentDirectionAsTarget(BaseStateMachine stateMachine)
     {
-        var tileResult = RoomInterface.instance.WorldPosToTile(stateMachine.feetCollider.transform.position);
+        var tileResult = RoomInterface.instance.WorldPosToTile(stateMachine.feetCollider.transform.position, stateMachine.currentMovementType);
         if (tileResult.Item2)
         {
-            List<RoomInterface.PathfindingTile> viableMovementNeighbors = new List<RoomInterface.PathfindingTile>();
-            var neighbors = RoomInterface.instance.GetNeighbors(tileResult.Item1);
+            List<PathfindingTile> viableMovementNeighbors = new List<PathfindingTile>();
+            var neighbors = RoomInterface.instance.GetNeighbors(tileResult.Item1, stateMachine.currentMovementType);
             foreach (var tile in neighbors)
             {
-                if (tile.walkable)
+                if (tile.moveable)
                 {
                     viableMovementNeighbors.Add(tile);
                 }

@@ -61,7 +61,7 @@ public class SetTargetToRadiusTileFromPlayer : FSMAction
     private IEnumerator SetFarthestTilePos(BaseStateMachine stateMachine)
     {
         var curRoom = FloorGenerator.floorGeneratorInstance.currentRoom;
-        var playerTileResult = RoomInterface.instance.WorldPosToTile(stateMachine.player.transform.position);
+        var playerTileResult = RoomInterface.instance.WorldPosToTile(stateMachine.player.transform.position, stateMachine.currentMovementType);
 
         if (!playerTileResult.Item2)
         {
@@ -72,9 +72,9 @@ public class SetTargetToRadiusTileFromPlayer : FSMAction
 
         // TODO: Replace this algorithm with a more robust one in the future.
         Vector2Int roomMaxSize = curRoom.roomSize;
-        RoomInterface.PathfindingTile playerTile = playerTileResult.Item1;
+       PathfindingTile playerTile = playerTileResult.Item1;
         float greatestDistance = 0f;
-        RoomInterface.PathfindingTile tileWithGreatestDistance = null;
+        PathfindingTile tileWithGreatestDistance = null;
 
         for (int x = playerTile.gridLocation.x - radius; x <= playerTile.gridLocation.x + radius; x++)
         {
@@ -83,8 +83,24 @@ public class SetTargetToRadiusTileFromPlayer : FSMAction
                 if (x < 1 || x >= roomMaxSize.x - 1 || y < 1 || y >= roomMaxSize.y - 1)
                     continue; // Skip tiles outside the room bounds
 
-                RoomInterface.PathfindingTile tile = RoomInterface.instance.myRoomGrid[x, y];
-                if (!tile.walkable)
+                PathfindingTile tile;
+                switch (stateMachine.currentMovementType)
+                {
+                    case RoomInterface.MovementType.Walk:
+                        tile = RoomInterface.instance.walkRoomGrid[x, y];
+                        break;
+                    case RoomInterface.MovementType.Burrow:
+                        tile = RoomInterface.instance.burrowRoomGrid[x, y];
+                        break;
+                    case RoomInterface.MovementType.Fly:
+                        tile = RoomInterface.instance.flyRoomGrid[x, y];
+                        break;
+                    default:
+                        Debug.LogError("Attempting to select a tile with invalid movement type!");
+                        tile = null;
+                        break;
+                }
+                if (!tile.moveable)
                     continue; // Skip non-walkable tiles
 
                 float distance = Vector2.Distance(playerTile.gridLocation, tile.gridLocation);

@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using PathfindingTile = RoomInterface.PathfindingTile;
 
 /// <summary>
 /// Handles A* pathfinding for enemies
@@ -51,8 +50,8 @@ public class Pathfinding : MonoBehaviour
             yield break;
         }
         
-        var startNodeResult = roomInterface.WorldPosToTile(stateMachine.feetCollider.transform.position);
-        var targetNodeResult = roomInterface.WorldPosToTile(stateMachine.currentTarget);
+        var startNodeResult = roomInterface.WorldPosToTile(stateMachine.feetCollider.transform.position, stateMachine.currentMovementType);
+        var targetNodeResult = roomInterface.WorldPosToTile(stateMachine.currentTarget, stateMachine.currentMovementType);
 
         PathfindingTile startNode;
         PathfindingTile targetNode;
@@ -70,7 +69,7 @@ public class Pathfinding : MonoBehaviour
         }
 
 
-        if (startNode.walkable && targetNode.walkable)
+        if (startNode.moveable && targetNode.moveable)
         {
             Heap<PathfindingTile> openSet = new Heap<PathfindingTile>(roomInterface.GetMaxRoomSize());
             HashSet<PathfindingTile> closedSet = new HashSet<PathfindingTile>();
@@ -89,19 +88,19 @@ public class Pathfinding : MonoBehaviour
                     break;
                 }
 
-                foreach (PathfindingTile neighbor in roomInterface.GetNeighbors(currentNode))
+                foreach (PathfindingTile neighbor in roomInterface.GetNeighbors(currentNode, stateMachine.currentMovementType))
                 {
-                    if (!neighbor.walkable || closedSet.Contains(neighbor))
+                    if (!neighbor.moveable || closedSet.Contains(neighbor))
                     {
                         // this node has already been explored, or is not walkable, so skip
                         continue;
                     }
 
-                    int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbor) +
+                    int newMovementCostToNeighbor = currentNode.gCost + GetDistance(currentNode, neighbor) +
                                                      neighbor.movementPenalty;
-                    if (newMovementCostToNeighbour < neighbor.gCost || !openSet.Contains(neighbor))
+                    if (newMovementCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor))
                     {
-                        neighbor.gCost = newMovementCostToNeighbour;
+                        neighbor.gCost = newMovementCostToNeighbor;
                         neighbor.hCost = GetDistance(neighbor, targetNode);
                         neighbor.retraceStep = currentNode;
 

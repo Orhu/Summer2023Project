@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MovementType = RoomInterface.MovementType;
 
 /// <summary>
 /// Represents the state machine that manages and switches between states. Essentially serves as the "brain" and logic of an enemy.
@@ -65,6 +66,12 @@ public class BaseStateMachine : MonoBehaviour, IActor
     
     // tracks the time this was initialized
     private float timeStarted;
+    
+    [Tooltip("Movement type this enemy begins in")]
+    [SerializeField] private MovementType startingMovementType;
+    
+    // current movement type of this enemy
+    [HideInInspector] public MovementType currentMovementType;
 
     // draw debug gizmos?
     [SerializeField] private bool drawGizmos;
@@ -80,6 +87,7 @@ public class BaseStateMachine : MonoBehaviour, IActor
         cooldownData.cooldownReady = new Dictionary<FSMAction, bool>();
         cachedComponents = new Dictionary<Type, Component>();
         feetCollider = FindMyFeet();
+        currentMovementType = startingMovementType;
     }
 
     /// <summary>

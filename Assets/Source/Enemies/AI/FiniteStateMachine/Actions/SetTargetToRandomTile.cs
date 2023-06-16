@@ -57,12 +57,29 @@ public class SetTargetToRandomTile : FSMAction
         var curRoomSize = RoomInterface.instance.myRoomSize;
         var tileX = Random.Range(0, curRoomSize.x);
         var tileY = Random.Range(0, curRoomSize.y);
-        var newTile = RoomInterface.instance.myRoomGrid[tileX, tileY];
+        PathfindingTile newTile;
+        
+        switch (stateMachine.currentMovementType)
+        {
+            case RoomInterface.MovementType.Walk:
+                newTile = RoomInterface.instance.walkRoomGrid[tileX, tileY];
+                break;
+            case RoomInterface.MovementType.Fly:
+                newTile = RoomInterface.instance.flyRoomGrid[tileX, tileY];
+                break;
+            case RoomInterface.MovementType.Burrow:
+                newTile = RoomInterface.instance.burrowRoomGrid[tileX, tileY];
+                break;
+            default:
+                Debug.LogError("Attempting to select a tile with invalid movement type!");
+                newTile = null;
+                break;
+        }
         if (newTile != null)
         {
-            if (newTile.walkable)
+            if (newTile.moveable)
             {
-                stateMachine.currentTarget = RoomInterface.instance.TileToWorldPos(RoomInterface.instance.myRoomGrid[tileX, tileY]);
+                stateMachine.currentTarget = RoomInterface.instance.TileToWorldPos(newTile);
                 stateMachine.cooldownData.cooldownReady[this] = true;
                 yield break;
             }

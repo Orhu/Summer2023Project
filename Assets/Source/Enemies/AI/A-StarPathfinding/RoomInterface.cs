@@ -8,81 +8,11 @@ using UnityEngine;
 /// </summary>
 public class RoomInterface : MonoBehaviour
 {
-    /// <summary>
-    /// Represents a tile for the purposes of pathfinding
-    /// </summary>
-    public class PathfindingTile : IHeapItem<PathfindingTile>
+    public enum MovementType
     {
-        // is this tile walkable?
-        public bool walkable;
-
-        // how much this tile cost to walk on (higher is avoided more, lower is preferred)
-        public int movementPenalty;
-
-        // the x and y location of this tile within the 2D array grid
-        public Vector2Int gridLocation;
-
-        // cost of reaching this node from the start node, tracking cumulative cost incurred so far
-        public int gCost;
-
-        // cost of reaching this node from the end node, tracking cumulative cost incurred so far
-        public int hCost;
-
-        // we can use hCost + gCost to get the total cost of reaching this node
-        public int fCost => gCost + hCost;
-
-        // parent of this tile, as determined by pathfinding algorithm. used to retrace steps in pathfinding
-        public PathfindingTile retraceStep;
-
-        /// <summary>
-        /// Constructor for a PathfindingTile from a Tile
-        /// </summary>
-        /// <param name="t"> Tile to construct from </param>
-        public PathfindingTile(Tile t)
-        {
-            walkable = t.walkable;
-            movementPenalty = t.movementPenalty;
-            gridLocation = t.gridLocation;
-            gCost = 0;
-            hCost = 0;
-            retraceStep = null;
-        }
-
-        /// <summary>
-        /// Constructor for a PathfindingTile default with a gridLocation. Currently used to mitigate the null error issue with door tiles.
-        /// </summary>
-        /// <param name="gridX"> Grid X pos </param>
-        /// <param name="gridY"> Grid Y pos </param>
-        public PathfindingTile(int gridX, int gridY)
-        {
-            walkable = false;
-            movementPenalty = 0;
-            gridLocation = new Vector2Int(gridX, gridY);
-            gCost = 0;
-            hCost = 0;
-            retraceStep = null;
-        }
-
-        /// <summary>
-        /// Compare this tile to another tile
-        /// </summary>
-        /// <param name="other"> other tile to compare to </param>
-        /// <returns> 1 if this tile has a lower fCost, -1 if this tile has a higher fCost, 0 if they are equal </returns>
-        public int CompareTo(PathfindingTile other)
-        {
-            int compare = fCost.CompareTo(other.fCost);
-            if (compare == 0)
-            {
-                // tiebreakers decided based on hCost
-                compare = hCost.CompareTo(other.hCost);
-            }
-
-            // heap comparison is in reverse order from int comparison
-            return -compare;
-        }
-
-        // this tile's index within the heap (required for IHeapItem implementation)
-        public int heapIndex { get; set; }
+        Walk,
+        Fly,
+        Burrow
     }
 
     // the room this class represents
@@ -91,8 +21,14 @@ public class RoomInterface : MonoBehaviour
     // the size of this room, in tiles
     [HideInInspector] public Vector2Int myRoomSize;
 
-    // the tile grid of this room
-    [HideInInspector] public PathfindingTile[,] myRoomGrid;
+    // the walking tile grid of this room
+    [HideInInspector] public PathfindingTile[,] walkRoomGrid;
+
+    // the flying tile grid of this room
+    [HideInInspector] public PathfindingTile[,] flyRoomGrid;
+
+    // the burrowing tile grid of this room
+    [HideInInspector] public PathfindingTile[,] burrowRoomGrid;
 
     // the world position of this room
     private Vector2 myWorldPosition;
@@ -109,7 +45,10 @@ public class RoomInterface : MonoBehaviour
     }
 
     // draw debug gizmos?
-    [SerializeField] private bool drawGizmos;
+    [SerializeField] private bool drawWalkTiles;
+    [SerializeField] private bool drawFlyTiles;
+    [SerializeField] private bool drawBurrowTiles;
+    private List<Vector2> debugNullTiles = new List<Vector2>();
 
     /// <summary>
     /// Retrieves player's current room from the FloorGenerator singleton, updating this class' room reference
@@ -137,7 +76,9 @@ public class RoomInterface : MonoBehaviour
     /// <param name="inputArray"> The input array of tiles </param>
     void DeepCopyGrid(Tile[,] inputArray)
     {
-        myRoomGrid = new PathfindingTile[myRoomSize.x, myRoomSize.y];
+        walkRoomGrid = new PathfindingTile[myRoomSize.x, myRoomSize.y];
+        flyRoomGrid = new PathfindingTile[myRoomSize.x, myRoomSize.y];
+        burrowRoomGrid = new PathfindingTile[myRoomSize.x, myRoomSize.y];
 
         for (int x = 0; x < myRoomSize.x; x++)
         {
@@ -148,11 +89,30 @@ public class RoomInterface : MonoBehaviour
                 // TODO must be a better way than foreach comparing to null. Doors return null currently, Mabel says she is working on it so update this when ready
                 if (curTile == null)
                 {
-                    myRoomGrid[x, y] = new PathfindingTile(x, y);
+                    // in this case the tile was null. Make an impassable tile at this spot
+                    Debug.LogWarning("Null tile at " + x + ", " + y);
+                    walkRoomGrid[x, y] = new PathfindingTile(x, y);
+                    flyRoomGrid[x, y] = new PathfindingTile(x, y);
+                    burrowRoomGrid[x, y] = new PathfindingTile(x, y);
+                    debugNullTiles.Add(new Vector2(x, y));
                 }
                 else
                 {
-                    myRoomGrid[x, y] = new PathfindingTile(curTile);
+                    // add to appropriate lists
+                    if (curTile.walkable)
+                    {
+                        walkRoomGrid[x, y] = new PathfindingTile(curTile, curTile.walkable, curTile.walkMovementPenalty);
+                    }
+
+                    if (curTile.flyable)
+                    {
+                        flyRoomGrid[x, y] = new PathfindingTile(curTile, curTile.flyable, curTile.flyMovementPenalty);
+                    }
+
+                    if (curTile.burrowable)
+                    {
+                        burrowRoomGrid[x, y] = new PathfindingTile(curTile, curTile.burrowable, curTile.burrowMovementPenalty);
+                    }
                 }
             }
         }
@@ -162,8 +122,9 @@ public class RoomInterface : MonoBehaviour
     /// Gets the tile at the given world position
     /// </summary>
     /// <param name="worldPos"> The world position </param>
+    /// <param name="movementType"> The movement type to search for </param>
     /// <returns> The tile and boolean saying whether the tile was successfully found </returns>
-    public (PathfindingTile, bool) WorldPosToTile(Vector2 worldPos)
+    public (PathfindingTile, bool) WorldPosToTile(Vector2 worldPos, MovementType movementType)
     {
         Vector2Int tilePos = new Vector2Int(
             Mathf.RoundToInt(worldPos.x + myRoomSize.x / 2 - myWorldPosition.x),
@@ -171,7 +132,18 @@ public class RoomInterface : MonoBehaviour
         );
         try
         {
-            return (myRoomGrid[tilePos.x, tilePos.y], true);
+            switch (movementType)
+            {
+                case MovementType.Walk:
+                    return (walkRoomGrid[tilePos.x, tilePos.y], true);
+                case MovementType.Fly:
+                    return (flyRoomGrid[tilePos.x, tilePos.y], true);
+                case MovementType.Burrow:
+                    return (burrowRoomGrid[tilePos.x, tilePos.y], true);
+                default:
+                    Debug.LogError("Attempted to get tile from invalid movement type");
+                    return (null, false);
+            }
         }
         catch
         {
@@ -198,8 +170,9 @@ public class RoomInterface : MonoBehaviour
     /// Gets the neighbors of a given tile
     /// </summary>
     /// <param name="tile"> The tile </param>
+    /// <param name="movementType"> The movement type to search for </param>
     /// <returns> The neighbors. </returns>
-    public List<PathfindingTile> GetNeighbors(PathfindingTile tile)
+    public List<PathfindingTile> GetNeighbors(PathfindingTile tile, MovementType movementType)
     {
         List<PathfindingTile> neighbors = new List<PathfindingTile>();
 
@@ -221,16 +194,50 @@ public class RoomInterface : MonoBehaviour
                     if (y == 0 || x == 0)
                     {
                         // cardinal direction, just add it!
-                        neighbors.Add(myRoomGrid[checkX, checkY]);
+                        switch (movementType)
+                        {
+                            case MovementType.Walk:
+                                neighbors.Add(walkRoomGrid[checkX, checkY]);
+                                break;
+                            case MovementType.Fly:
+                                neighbors.Add(flyRoomGrid[checkX, checkY]);
+                                break;
+                            case MovementType.Burrow:
+                                neighbors.Add(burrowRoomGrid[checkX, checkY]);
+                                break;
+                        }
                     }
                     else
                     {
                         try
                         {
-                            // this tile is a corner, make sure it is reachable by both of its adjacent tiles (not blocked)
-                            if (myRoomGrid[checkX - x, checkY].walkable && myRoomGrid[checkX, checkY - y].walkable)
+                            // this tile is a corner, make sure it is reachable by both of its adjacent tiles (not blocked) (prevents enemies getting stuck on corners)
+                            switch (movementType)
                             {
-                                neighbors.Add(myRoomGrid[checkX, checkY]);
+                                case MovementType.Walk:
+                                    if (walkRoomGrid[checkX - x, checkY].moveable &&
+                                        walkRoomGrid[checkX, checkY - y].moveable)
+                                    {
+                                        neighbors.Add(walkRoomGrid[checkX, checkY]);
+                                    }
+
+                                    break;
+                                case MovementType.Fly:
+                                    if (flyRoomGrid[checkX - x, checkY].moveable &&
+                                        flyRoomGrid[checkX, checkY - y].moveable)
+                                    {
+                                        neighbors.Add(flyRoomGrid[checkX, checkY]);
+                                    }
+
+                                    break;
+                                case MovementType.Burrow:
+                                    if (burrowRoomGrid[checkX - x, checkY].moveable &&
+                                        burrowRoomGrid[checkX, checkY - y].moveable)
+                                    {
+                                        neighbors.Add(burrowRoomGrid[checkX, checkY]);
+                                    }
+
+                                    break;
                             }
                         }
                         catch
@@ -251,20 +258,35 @@ public class RoomInterface : MonoBehaviour
     /// </summary>
     private void OnDrawGizmos()
     {
-        if (!drawGizmos) return;
-
-        foreach (var t in myRoomGrid)
+        if (drawWalkTiles)
         {
-            if (t.walkable)
+            foreach (var v2 in debugNullTiles)
             {
-                Gizmos.color = Color.green;
+                Gizmos.color = Color.blue;
+                Vector2 worldPos = new Vector2(
+                    v2.x + myWorldPosition.x - myRoomSize.x / 2,
+                    v2.y + myWorldPosition.y - myRoomSize.y / 2
+                );
+                Gizmos.DrawCube(worldPos, Vector3.one);
             }
-            else
+        }
+        else if (drawBurrowTiles)
+        {
+            foreach (var t in burrowRoomGrid)
             {
-                Gizmos.color = Color.red;
-            }
+                Gizmos.color = t.moveable ? Color.green : Color.red;
 
-            Gizmos.DrawCube(TileToWorldPos(t), Vector3.one);
+                Gizmos.DrawCube(TileToWorldPos(t), Vector3.one);
+            }
+        }
+        else if (drawFlyTiles)
+        {
+            foreach (var t in flyRoomGrid)
+            {
+                Gizmos.color = t.moveable ? Color.green : Color.red;
+
+                Gizmos.DrawCube(TileToWorldPos(t), Vector3.one);
+            }
         }
     }
 }
