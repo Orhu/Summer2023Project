@@ -66,7 +66,7 @@ public class GenericWeightedThings<T>
         foreach (GenericWeightedThing<T> thing in things)
         {
             GenericWeightedThing<T> newThing = new GenericWeightedThing<T>(thing.thing, thing.weight, thing.maxChosen);
-            Add(newThing, true);
+            Add(newThing, false);
         }
     }
 
@@ -89,23 +89,25 @@ public class GenericWeightedThings<T>
     /// <param name="newThing"> The new thing </param>
     /// <param name="weight"> The weight of this new thing </param>
     /// <param name="maxChosen"> The maximum number of times this new thing can be chosen (Set it to less than 0 for no max) </param>
-    public void Add(T newThing, float weight, int maxChosen = -1, bool addOnlyToChoosableThings = false)
+    /// <param name="addToPermanentListOfThings"> Whether or not to add to the permanent list of things </param>
+    public void Add(T newThing, float weight, int maxChosen = -1, bool addToPermanentListOfThings = true)
     {
-        Add(new GenericWeightedThing<T>(newThing, weight, maxChosen), addOnlyToChoosableThings);
+        Add(new GenericWeightedThing<T>(newThing, weight, maxChosen), addToPermanentListOfThings);
     }
 
     /// <summary>
     /// Adds another thing to the list of things that can be chosen
     /// </summary>
     /// <param name="newThing"> The new thing </param>
-    public void Add(GenericWeightedThing<T> newThing, bool addOnlyToChoosableThings = false)
+    /// <param name="addToPermanentListOfThings"> Whether or not to add to the permanent list of things </param>
+    public void Add(GenericWeightedThing<T> newThing, bool addToPermanentListOfThings = true)
     {
         if (choosableThings == null)
         {
             choosableThings = new List<GenericWeightedThing<T>>();
         }
         choosableThings.Add(newThing);
-        if (!addOnlyToChoosableThings)
+        if (addToPermanentListOfThings)
         {
             things.Add(newThing);
         }
@@ -178,7 +180,7 @@ public class GenericWeightedThings<T>
     }
 
     /// <summary>
-    /// Resets the choosable things list
+    /// Resets the choosable things list, initializing it with the list of permanent things
     /// </summary>
     public void Reset()
     {
