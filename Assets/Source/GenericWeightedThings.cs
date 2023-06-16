@@ -57,6 +57,14 @@ public class GenericWeightedThings<T>
     /// </summary>
     public GenericWeightedThings()
     {
+        AddThingsToChoosableThings();
+    }
+
+    /// <summary>
+    /// Adds the things in the things list to the choosable things list
+    /// </summary>
+    private void AddThingsToChoosableThings()
+    {
         if (things == null)
         {
             return;
@@ -120,6 +128,15 @@ public class GenericWeightedThings<T>
     /// <returns> A random thing </returns>
     public T GetRandomThing(System.Random random = null)
     {
+        if (choosableThings.Count == 0)
+        {
+            AddThingsToChoosableThings();
+            if (choosableThings.Count == 0)
+            {
+                throw new System.Exception("Attempted to get a random thing when there are no choosable things");
+            }
+        }
+
         float randomPercent;
         if (random == null)
         {
