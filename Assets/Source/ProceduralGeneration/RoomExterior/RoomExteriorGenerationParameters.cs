@@ -61,6 +61,30 @@ public class RoomExteriorGenerationParameters : ScriptableObject
 
     [Tooltip("The possible floor sprites to use")]
     public GenericWeightedThings<Sprite> floorSprites;
+
+    /// <summary>
+    /// Resets all the GenericWeightedThings lists
+    /// </summary>
+    public void Reset()
+    {
+        rightWallSprites.Reset();
+        topWallSprites.Reset();
+        leftWallSprites.Reset();
+        bottomWallSprites.Reset();
+        topRightWallCornerSprites.Reset();
+        topLeftWallCornerSprites.Reset();
+        bottomLeftWallCornerSprites.Reset();
+        bottomRightWallCornerSprites.Reset();
+        rightDoorSprites.Reset();
+        topDoorSprites.Reset();
+        leftDoorSprites.Reset();
+        bottomDoorSprites.Reset();
+        aboveLeftDoorSprites.Reset();
+        belowLeftDoorSprites.Reset();
+        aboveRightDoorSprites.Reset();
+        belowRightDoorSprites.Reset();
+        floorSprites.Reset();
+    }
 }
 
 /// <summary>

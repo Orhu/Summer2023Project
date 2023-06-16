@@ -80,6 +80,8 @@ public class RoomExteriorGenerator : MonoBehaviour
 
         CreateFloor(createdCell, exteriorParameters, roomSize);
 
+        // Reset the exterior parameters (leave things as they were)
+        exteriorParameters.Reset();
     }
 
     /// <summary>
