@@ -19,7 +19,7 @@ public class GenericWeightedThing<T>
     public int maxChosen = -1;
 
     // The number of times this thing has been chosen
-    [HideInInspector] public int timesChosen;
+    [System.NonSerialized] public int timesChosen = 0;
 
     /// <summary>
     /// Constructor that initializes the generic weighted thing
@@ -32,6 +32,7 @@ public class GenericWeightedThing<T>
         thing = weightedThing;
         weight = weightOfThing;
         maxChosen = maxChosenOfThing;
+        timesChosen = 0;
     }
 }
 
@@ -47,18 +48,10 @@ public class GenericWeightedThings<T>
     public List<GenericWeightedThing<T>> things;
 
     // The list of things that can be chosen, with the things that have reached their maximum allotted amount removed
-    [HideInInspector] public List<GenericWeightedThing<T>> choosableThings;
+    [System.NonSerialized] public List<GenericWeightedThing<T>> choosableThings;
 
     // The total weight of all the things
-    private float totalWeight;
-
-    /// <summary>
-    /// Initializes the choosable things list with the things list
-    /// </summary>
-    public GenericWeightedThings()
-    {
-        AddThingsToChoosableThings();
-    }
+    [System.NonSerialized] private float totalWeight = 0;
 
     /// <summary>
     /// Adds the things in the things list to the choosable things list
@@ -69,6 +62,7 @@ public class GenericWeightedThings<T>
         {
             return;
         }
+
         foreach (GenericWeightedThing<T> thing in things)
         {
             GenericWeightedThing<T> newThing = new GenericWeightedThing<T>(thing.thing, thing.weight, thing.maxChosen);
@@ -106,8 +100,11 @@ public class GenericWeightedThings<T>
     /// <param name="newThing"> The new thing </param>
     public void Add(GenericWeightedThing<T> newThing)
     {
+        if (choosableThings == null)
+        {
+            choosableThings = new List<GenericWeightedThing<T>>();
+        }
         choosableThings.Add(newThing);
-        Debug.Log("New thing weight: " + newThing.ToString());
         totalWeight += newThing.weight;
     }
 
@@ -130,10 +127,10 @@ public class GenericWeightedThings<T>
     /// <returns> A random thing </returns>
     public T GetRandomThing(System.Random random = null)
     {
-        if (choosableThings.Count == 0)
+        if (choosableThings == null || choosableThings.Count == 0)
         {
             AddThingsToChoosableThings();
-            if (choosableThings.Count == 0)
+            if (choosableThings == null || choosableThings.Count == 0)
             {
                 throw new System.Exception("Attempted to get a random thing when there are no choosable things");
             }
