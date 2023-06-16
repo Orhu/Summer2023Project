@@ -4,20 +4,11 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
 {
-    /// <summary>
-    /// Render the Map portion of the Pause Menu
-    /// </summary>
-    public void Map()
+    public void Reset()
     {
-
-    }
-
-    /// <summary>
-    /// Render the Card List portion of the Pause Menu
-    /// </summary>
-    public void Cards()
-    {
-
+        MenuManager.instance.CloseMenu();
+        SaveManager.ClearTransientSaves();
+        Player.Get().GetComponent<ReloadScene>().ReloadCurrentScene();
     }
 
     /// <summary>
