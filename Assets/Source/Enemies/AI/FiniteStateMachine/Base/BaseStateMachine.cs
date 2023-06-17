@@ -15,11 +15,11 @@ public class BaseStateMachine : MonoBehaviour, IActor
     // delay after this enemy is spawned before it begins performing logic
     [SerializeField] private float delayBeforeLogic;
     
-    // the target
-    [HideInInspector] public Vector2 currentTarget;
+    // the pathfinding target
+    [HideInInspector] public Vector2 currentPathfindingTarget;
     
-    // the player
-    [HideInInspector] public GameObject player;
+    // the attack target
+    [HideInInspector] public Vector2 currentAttackTarget;
 
     // cached feet collider
     [HideInInspector] public Collider2D feetCollider;
@@ -73,6 +73,15 @@ public class BaseStateMachine : MonoBehaviour, IActor
     // current movement type of this enemy
     [HideInInspector] public MovementType currentMovementType;
 
+    // chase data struct used to store chase data as it is passed to the pathfinding singleton from pathing scriptable objects.
+    // never need to actually cache the data in the state machine, just declaring the struct here so it is only declared once
+    public struct ChaseData
+    {
+        private BaseStateMachine stateMachine;
+        private Coroutine prevUpdateCoroutine;
+        private Coroutine prevFollowCoroutine;
+    }
+    
     // draw debug gizmos?
     [SerializeField] private bool drawGizmos;
     // debug waypoint used for drawing gizmos
@@ -91,20 +100,25 @@ public class BaseStateMachine : MonoBehaviour, IActor
     }
 
     /// <summary>
-    /// Grab both colliders and return the feet collider
+    /// Retrieves feet collider
     /// </summary>
     Collider2D FindMyFeet()
     {
-        var collider = GetComponentInChildren<Collider2D>();
-
-        if (collider != null)
+        if (feetCollider != null)
         {
-            return collider;
+            return feetCollider;
+        }
+        
+        var thisCollider = GetComponentInChildren<Collider2D>();
+
+        if (thisCollider != null && !thisCollider.isTrigger)
+        {
+            feetCollider = thisCollider;
+            return thisCollider;
         }
         else
         {
-            Debug.LogError(
-                "No feet collider found! Make sure you have a non-trigger collider attached to this game object.");
+            Debug.LogError("No feet collider found! Make sure the enemy has a non-trigger collider component attached to one of its children.");
             return null;
         }
     }
@@ -115,7 +129,6 @@ public class BaseStateMachine : MonoBehaviour, IActor
     private void Start()
     {
         timeStarted = Time.time;
-        player = Player.Get();
         FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Add(gameObject);
         currentState.OnStateEnter(this);
     }
@@ -176,8 +189,8 @@ public class BaseStateMachine : MonoBehaviour, IActor
     #region IActor Implementation
     // Gets whether or not this actor can act.
     IActor.CanActRequest _canAct;
-    bool canAct
-    {
+    public bool canAct
+    { 
         get
         {
             bool shouldAct = true;
@@ -202,7 +215,7 @@ public class BaseStateMachine : MonoBehaviour, IActor
     /// <returns> The mouse position in world space. </returns>
     public Vector3 GetActionAimPosition()
     {
-        return currentTarget;
+        return currentAttackTarget;
     }
 
 

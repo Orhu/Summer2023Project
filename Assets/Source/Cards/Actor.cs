@@ -31,4 +31,6 @@ public interface IActor
     /// <returns> A delegate with a out parameter, that allows any subscribed objects to determine whether or not this actor can act. </returns>
     public ref CanActRequest GetOnRequestCanAct();
     delegate void CanActRequest(ref bool canAct);
+    
+    public abstract bool canAct { get; }
 }

@@ -16,10 +16,8 @@ public class VelocityBelowAmount : FSMDecision
     /// </summary>
     /// <param name="stateMachine"> The stateMachine to use </param>
     /// <returns> True if the velocity is below the provided threshold, false otherwise </returns>
-    public override bool Decide(BaseStateMachine stateMachine)
+    public override bool Evaluate(BaseStateMachine stateMachine)
     {
-        return invert
-            ? !(stateMachine.GetComponent<Rigidbody2D>().velocity.magnitude <= velocityThreshold)
-            : stateMachine.GetComponent<Rigidbody2D>().velocity.magnitude <= velocityThreshold;
+        return stateMachine.GetComponent<Rigidbody2D>().velocity.magnitude <= velocityThreshold;
     }
 }
