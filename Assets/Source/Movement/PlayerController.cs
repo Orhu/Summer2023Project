@@ -62,21 +62,19 @@ public class PlayerController : MonoBehaviour, IActor
             animatorComponent.SetMirror("castLeft", GetActionAimPosition().x - transform.position.x < 0);
         }
 
-#if UNITY_EDITOR
-        // TODO: DELETE IN BUILDS
+        // Open Pause Menu
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SaveManager.ClearTransientSaves();
-            GetComponent<ReloadScene>().ReloadCurrentScene();
+            MenuManager.OpenPauseMenu();
         }
-        if (Input.GetKeyDown(KeyCode.I))
+        else if (Input.GetKeyDown(KeyCode.C))
         {
-            if (!MenuManager.instance.menuOpen)
-            {
-                MenuManager.OpenPauseMenu();
-            }
+            MenuManager.OpenCardMenu();
         }
-#endif
+        else if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            MenuManager.OpenMapMenu();
+        }
     }
 
     /// <summary>

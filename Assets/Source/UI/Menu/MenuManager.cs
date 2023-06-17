@@ -22,6 +22,18 @@ public class MenuManager : MonoBehaviour
     // Know whether we currently have a menu open or not
     public bool menuOpen { get; private set; }
 
+    // Enum for each of the menu types
+    private enum MenuTypes
+    {
+        Pause,
+        Booster,
+        Map,
+        Card
+    }
+
+    // Internally know which menu is open
+    private MenuTypes currentMenu;
+
     /// <summary>
     /// Assign singleton variable
     /// </summary>
@@ -39,7 +51,58 @@ public class MenuManager : MonoBehaviour
             {
                 pauseMenu = GetComponentInChildren<PauseMenu>();
             }
+            if(cardMenu == null)
+            {
+                cardMenu = GetComponentInChildren<CardMenu>();
+            }
+            if(mapMenu == null)
+            {
+                mapMenu = GetComponentInChildren<MapMenu>();
+            }
+
+            currentMenu = MenuTypes.Pause;
         } 
+    }
+
+    /// <summary>
+    /// Handles the changing and closing of menus when menus are open
+    /// </summary>
+    private void Update()
+    {
+        if (instance.menuOpen)
+        {
+            // Always close menus with escape
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                CloseMenu();
+            }
+            // Closes card menu if its open, if not, open card menu
+            else if (Input.GetKeyDown(KeyCode.C))
+            {
+                if (instance.currentMenu == MenuTypes.Card)
+                {
+                    CloseMenu();
+                }
+                else
+                {
+                    CloseMenu();
+                    OpenCardMenu();
+                }
+            }
+            // Closes Map menu if its open, if not, open map menu
+            else if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                if (instance.currentMenu == MenuTypes.Map)
+                {
+                    CloseMenu();
+                }
+                else
+                {
+                    CloseMenu();
+                    OpenMapMenu();
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -57,6 +120,7 @@ public class MenuManager : MonoBehaviour
             instance.boosterPackMenu.boosterPackObject = boosterPack;
             // Disable player movement
             instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+            instance.currentMenu = MenuTypes.Booster;
             instance.menuOpen = true;
         }
     }
@@ -74,6 +138,7 @@ public class MenuManager : MonoBehaviour
             instance.pauseMenu.gameObject.SetActive(true);
             // Disable player movement
             instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+            instance.currentMenu = MenuTypes.Pause;
             instance.menuOpen = true;
         }
     }
@@ -88,6 +153,7 @@ public class MenuManager : MonoBehaviour
             instance.mapMenu.gameObject.SetActive(true);
             // Disable player movement
             instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+            instance.currentMenu = MenuTypes.Map;
             instance.menuOpen = true;
         }
     }
@@ -102,6 +168,7 @@ public class MenuManager : MonoBehaviour
             instance.cardMenu.gameObject.SetActive(true);
             // Disable player movement
             instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+            instance.currentMenu = MenuTypes.Card;
             instance.menuOpen = true;
         }
     }
