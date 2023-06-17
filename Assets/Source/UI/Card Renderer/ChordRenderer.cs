@@ -66,6 +66,7 @@ public class ChordRenderer : MonoBehaviour
     /// </summary>
     public void ResetChord()
     {
+        chordRootCard = null;
         chordRootImage.enabled = false;
         chordStarImage.enabled = false;
         chordBackgroundImage.color = Color.white;
