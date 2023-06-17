@@ -496,6 +496,8 @@ public class RoomExteriorGenerator : MonoBehaviour
             
             room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Right, connectedCell, doorContainer);
             room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
+
+            centerCell.direction |= Direction.Right;
         }
 
         if ((map.map[centerCell.location.x, centerCell.location.y + 1].direction & Direction.Up) != Direction.None)
@@ -513,6 +515,8 @@ public class RoomExteriorGenerator : MonoBehaviour
 
             room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Up, connectedCell, doorContainer);
             room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
+
+            centerCell.direction |= Direction.Up;
         }
 
         if ((map.map[centerCell.location.x - 1, centerCell.location.y].direction & Direction.Left) != Direction.None)
@@ -530,6 +534,8 @@ public class RoomExteriorGenerator : MonoBehaviour
 
             room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Left, connectedCell, doorContainer);
             room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
+
+            centerCell.direction |= Direction.Left;
         }
 
         if ((map.map[centerCell.location.x, centerCell.location.y - 1].direction & Direction.Down) != Direction.None)
@@ -547,6 +553,8 @@ public class RoomExteriorGenerator : MonoBehaviour
 
             room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Down, connectedCell, doorContainer);
             room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
+
+            centerCell.direction |= Direction.Down;
         }
 
         doorContainer.SetActive(false);
