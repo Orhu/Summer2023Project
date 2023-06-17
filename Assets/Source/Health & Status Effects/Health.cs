@@ -11,18 +11,18 @@ using UnityEngine.Events;
 /// </summary>
 public class Health : MonoBehaviour
 {
-    [Tooltip("The Max health of this object")]
+    [Tooltip("The Max health of this object")] [Min(1)]
     [SerializeField] private int _maxHealth = 5;
     public int maxHealth
     {
-        get => _maxHealth;
         set
         {
-            if(_maxHealth == value) { return; }
+            if (_maxHealth == value) { return; }
 
             _maxHealth = value;
             onMaxHealthChanged?.Invoke(value);
         }
+        get => _maxHealth;
     }
 
 
@@ -155,7 +155,7 @@ public class Health : MonoBehaviour
     /// <summary>
     /// Increases the current health by the given amount, maxed out at the max health
     /// </summary>
-    /// <param name="healAmount"> The amount to heal by</param>
+    /// <param name="healAmount"> The amount to heal by. </param>
     public void Heal(int healAmount)
     {
         currentHealth = Mathf.Min(Math.Max(healAmount, 0) + currentHealth, maxHealth);
