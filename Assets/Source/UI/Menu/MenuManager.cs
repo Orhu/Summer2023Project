@@ -22,7 +22,9 @@ public class MenuManager : MonoBehaviour
     // Know whether we currently have a menu open or not
     public bool menuOpen { get; private set; }
 
-    // Enum for each of the menu types
+    /// <summary>
+    /// Enum for each of the menu types
+    /// </summary>
     private enum MenuTypes
     {
         Pause,

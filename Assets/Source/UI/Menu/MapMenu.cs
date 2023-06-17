@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Map manager script for handling rendering and logic
+/// for the map menu UI object
+/// </summary>
 public class MapMenu : MonoBehaviour
 {
     // Start is called before the first frame update

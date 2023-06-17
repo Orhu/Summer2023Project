@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Pause manager script for handling rendering and logic
+/// for the pause menu UI object
+/// </summary>
 public class PauseMenu : MonoBehaviour
 {
     public void Reset()
