@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -23,7 +22,7 @@ public class Shield : AttackModifier
             shieldObject.layer = LayerMask.NameToLayer("Shield");
             value.shape.CreateCollider(shieldObject).isTrigger = true;
 
-            value.onOverlap += destroyProjectiles;
+            value.onOverlap += DestroyProjectiles;
             projectile = value;
         }
     }
@@ -32,7 +31,7 @@ public class Shield : AttackModifier
     /// Destroys any projectiles that collide with the shield.
     /// </summary>
     /// <param name="collider"> The collided object. </param>
-    private void destroyProjectiles(Collider2D collider)
+    private void DestroyProjectiles(Collider2D collider)
     {
         Projectile hitProjectile = collider.GetComponent<Projectile>();
         if (hitProjectile != null && !projectile.ignoredObjects.Contains(hitProjectile.causer))
