@@ -56,6 +56,12 @@ public class Projectile : MonoBehaviour
     // The speed that this projectile will turn at.
     [NonSerialized] public float homingSpeed;
 
+    // The shape of the projectile.
+    [NonSerialized] public ProjectileShape shape;
+
+    // The visual object of this.
+    [NonSerialized] public GameObject visualObject;
+
     // The sequence that spawned this.
     [NonSerialized] public List<ProjectileSpawnInfo> spawnSequence;
 
@@ -108,9 +114,31 @@ public class Projectile : MonoBehaviour
     /// </summary>
     protected void Start()
     {
+
+        // Set up visuals
+        visualObject = Instantiate(attack.visualObject);
+        visualObject.transform.parent = transform;
+        visualObject.transform.localPosition = Vector2.zero;
+        visualObject.transform.localRotation = Quaternion.identity;
+
+        // Set up vars
+        speed = attack.initialSpeed;
+        remainingLifetime = attack.lifetime;
+        remainingHits = attack.hitCount;
+        remainingHomingTime = attack.homingTime;
+        homingSpeed = attack.homingSpeed;
+        maxSpeed = attack.maxSpeed;
+        minSpeed = attack.minSpeed;
+        acceleration = attack.acceleration;
+        shape = Instantiate(attack.shape);
+
+        attackData = new DamageData(attack.attack, causer);
+
+        InitializeModifiers();
+
         // Setup collision
         rigidBody = GetComponent<Rigidbody2D>();
-        Collider2D collider = attack.shape.CreateCollider(gameObject);
+        Collider2D collider = shape.CreateCollider(gameObject);
         if (actor.GetCollider() != null)
         {
             Physics2D.IgnoreCollision(collider, actor.GetCollider());
@@ -133,26 +161,6 @@ public class Projectile : MonoBehaviour
                 }
             }
         }
-
-        // Set up visuals
-        GameObject visuals = Instantiate(attack.visualObject);
-        visuals.transform.parent = transform;
-        visuals.transform.localPosition = Vector2.zero;
-        visuals.transform.localRotation = Quaternion.identity;
-
-        // Set up vars
-        speed = attack.initialSpeed;
-        remainingLifetime = attack.lifetime;
-        remainingHits = attack.hitCount;
-        remainingHomingTime = attack.homingTime;
-        homingSpeed = attack.homingSpeed;
-        maxSpeed = attack.maxSpeed;
-        minSpeed = attack.minSpeed;
-        acceleration = attack.acceleration;
-
-        attackData = new DamageData(attack.attack, causer);
-
-        InitializeModifiers();
     }
 
     /// <summary>
@@ -210,6 +218,8 @@ public class Projectile : MonoBehaviour
     /// <returns> The position in world space of the spawn location. </returns>
     protected Vector3 GetSpawnLocation()
     {
+        if(actor == null) { return transform.position; }
+
         switch (attack.spawnLocation)
         {
             case SpawnLocation.Actor:

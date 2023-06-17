@@ -207,7 +207,6 @@ public class Room : MonoBehaviour
         if (!generated)
         {
             Template template = FloorGenerator.floorGeneratorInstance.templateGenerationParameters.GetRandomTemplate(roomType);
-
             GetComponent<TemplateGenerator>().Generate(this, template, spawnEnemies);
             generated = true;
         }

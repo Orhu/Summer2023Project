@@ -78,7 +78,7 @@ public class RoomExteriorGenerator : MonoBehaviour
 
         CreateDoors(createdCell, map, roomSize);
 
-        CreateFloor(createdCell, exteriorParameters);
+        CreateFloor(createdCell, exteriorParameters, roomSize);
 
     }
 
@@ -149,12 +149,12 @@ public class RoomExteriorGenerator : MonoBehaviour
             if ((j == roomSize.y / 2 - 1) && (roomCell.direction & Direction.Right) != Direction.None)
             {
                 Sprite randomWallSprite = exteriorParameters.belowRightDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.belowRightDoorSprites.Count)];
-                room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
+                room.roomGrid[roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
             }
             else if ((j == roomSize.y / 2 + 1) && (roomCell.direction & Direction.Right) != Direction.None)
             {
                 Sprite randomWallSprite = exteriorParameters.aboveRightDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.aboveRightDoorSprites.Count)];
-                room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
+                room.roomGrid[roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
             }
             else if (j != roomSize.y / 2 || (roomCell.direction & Direction.Right) == Direction.None)
             {
@@ -184,8 +184,6 @@ public class RoomExteriorGenerator : MonoBehaviour
         tile.spawnedObject.SetActive(true);
         tile.spawnedObject.name = "Wall";
         tile.spawnedObject.GetComponent<SpriteRenderer>().sortingLayerName = "Walls";
-
-        // TODO: Set tile cost
 
         tile.gridLocation = location;
         tile.walkable = false;
@@ -305,18 +303,59 @@ public class RoomExteriorGenerator : MonoBehaviour
     /// </summary>
     /// <param name="createdCell"></param>
     /// <param name="exteriorGenerationParameters"></param>
-    private void CreateFloor(MapCell createdCell, RoomExteriorGenerationParameters exteriorGenerationParameters)
+    private void CreateFloor(MapCell createdCell, RoomExteriorGenerationParameters exteriorGenerationParameters, Vector2Int roomSize)
     {
         Room room = createdCell.room.GetComponent<Room>();
 
         GameObject floorContainer = new GameObject("Floor");
         floorContainer.transform.parent = room.transform;
-        floorContainer.transform.localPosition = new Vector3(0, 0, 0);
-        floorContainer.transform.localScale = new Vector3(1.616838f, 1.444166f, 0f); // TODO: Remove this line.
-        floorContainer.AddComponent<SpriteRenderer>().sprite = exteriorGenerationParameters.floorSprites[FloorGenerator.random.Next(0, exteriorGenerationParameters.floorSprites.Count)];
-        floorContainer.GetComponent<SpriteRenderer>().sortingLayerName = "Floors";
+        floorContainer.transform.localPosition = new Vector3(-roomSize.x / 2, -roomSize.y / 2, 0);
+
+        for (int i = 1; i < roomSize.x - 1; i++)
+        {
+            for (int j = 0; j < roomSize.y; j++)
+            {
+                Sprite floorSprite = exteriorGenerationParameters.floorSprites[FloorGenerator.random.Next(0, exteriorGenerationParameters.floorSprites.Count)];
+                CreateFloorTile(floorSprite, new Vector2Int(i, j), floorContainer);
+            }
+        }
+
+        // Add the tiles under the left and right doors if they exist
+        if ((createdCell.direction & Direction.Left) != Direction.None)
+        {
+            Sprite floorSprite = exteriorGenerationParameters.floorSprites[FloorGenerator.random.Next(0, exteriorGenerationParameters.floorSprites.Count)];
+            CreateFloorTile(floorSprite, new Vector2Int(0, roomSize.y / 2), floorContainer);
+        }
+
+        if ((createdCell.direction & Direction.Right) != Direction.None)
+        {
+            Sprite floorSprite = exteriorGenerationParameters.floorSprites[FloorGenerator.random.Next(0, exteriorGenerationParameters.floorSprites.Count)];
+            CreateFloorTile(floorSprite, new Vector2Int(roomSize.x - 1, roomSize.y / 2), floorContainer);
+        }
+
         floorContainer.SetActive(false);
     }
+
+    /// <summary>
+    /// Creates a floor tile
+    /// </summary>
+    /// <param name="sprite"> The sprite to create the tile with </param>
+    /// <param name="location"> The location within in the room to create the tile at </param>
+    /// <param name="floorContainer"> The container to hold the tiles </param>
+    /// <returns> The created floor tile </returns>
+    private GameObject CreateFloorTile(Sprite sprite, Vector2Int location, GameObject floorContainer)
+    {
+        GameObject floorTile = new GameObject();
+        floorTile.transform.parent = floorContainer.transform;
+        floorTile.transform.localPosition = new Vector3(location.x, location.y, 0);
+        floorTile.AddComponent<SpriteRenderer>().sprite = sprite;
+        floorTile.SetActive(true);
+        floorTile.name = "Floor";
+        floorTile.GetComponent<SpriteRenderer>().sortingLayerName = "Floors";
+
+        return floorTile;
+    }
+
     /// <summary>
     /// Creates walls, doors, and floors for a boss room (which is not normally sized)
     /// </summary>
@@ -457,6 +496,8 @@ public class RoomExteriorGenerator : MonoBehaviour
             
             room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Right, connectedCell, doorContainer);
             room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
+
+            centerCell.direction |= Direction.Right;
         }
 
         if ((map.map[centerCell.location.x, centerCell.location.y + 1].direction & Direction.Up) != Direction.None)
@@ -474,6 +515,8 @@ public class RoomExteriorGenerator : MonoBehaviour
 
             room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Up, connectedCell, doorContainer);
             room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
+
+            centerCell.direction |= Direction.Up;
         }
 
         if ((map.map[centerCell.location.x - 1, centerCell.location.y].direction & Direction.Left) != Direction.None)
@@ -491,6 +534,8 @@ public class RoomExteriorGenerator : MonoBehaviour
 
             room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Left, connectedCell, doorContainer);
             room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
+
+            centerCell.direction |= Direction.Left;
         }
 
         if ((map.map[centerCell.location.x, centerCell.location.y - 1].direction & Direction.Down) != Direction.None)
@@ -508,6 +553,8 @@ public class RoomExteriorGenerator : MonoBehaviour
 
             room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Down, connectedCell, doorContainer);
             room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
+
+            centerCell.direction |= Direction.Down;
         }
 
         doorContainer.SetActive(false);
@@ -515,7 +562,7 @@ public class RoomExteriorGenerator : MonoBehaviour
         room.OpenDoors();
         room.DeactivateDoors();
 
-        CreateFloor(centerCell, exteriorParameters);
+        CreateFloor(centerCell, exteriorParameters, room.roomSize);
     }
 
 }
