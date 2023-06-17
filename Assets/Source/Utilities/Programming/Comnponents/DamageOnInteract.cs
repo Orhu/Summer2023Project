@@ -81,7 +81,7 @@ namespace Cardificer
             }
 
             yield return new WaitForSeconds(damageInterval);
-            while (collider.IsTouching(other))
+            while (other != null && collider.IsTouching(other))
             {
                 health.ReceiveAttack(damageData);
                 yield return new WaitForSeconds(damageInterval);

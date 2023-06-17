@@ -173,6 +173,8 @@ namespace Cardificer
             List<AttackModifier> newModifiers = new List<AttackModifier>(modifiers.Count);
             foreach (AttackModifier modifier in modifiers)
             {
+                if (modifier == null) { continue; }
+
                 AttackModifier instance = Instantiate(modifier);
                 instance.modifiedProjectile = this;
                 newModifiers.Add(Instantiate(modifier));
