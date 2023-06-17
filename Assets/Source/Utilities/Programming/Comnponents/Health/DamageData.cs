@@ -2,182 +2,186 @@ using Skaillz.EditInline;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// The data relating to a single damage event.
-/// </summary>
-[System.Serializable]
-public class DamageData
+namespace Cardificer
 {
-    [Tooltip("The damage this attack deals")]
-    public int damage;
-
-    [Tooltip("The type of damage that will be applied")]
-    public DamageType damageType;
-    
-    [Tooltip("The status effects to apply when this is received")] [EditInline]
-    public List<StatusEffect> statusEffects = new List<StatusEffect>();
-
-    [Tooltip("Makes this cause invincibility if it does no damage and not cause invincibility if it does.")]
-    public bool invertInvincibility = false;
-
-    // The causer of this attack.
-    [System.NonSerialized]
-    public Object causer;
-
     /// <summary>
-    /// Copy Constructor for an attack.
+    /// The data relating to a single damage event.
     /// </summary>
-    /// <param name="attack"> The attack to copy </param>
-    /// <param name="causer"> The new causer </param>
-    public DamageData(DamageData attack, Object causer)
+    [System.Serializable]
+    public class DamageData
     {
-        damage = attack.damage;
-        damageType = attack.damageType;
-        statusEffects = attack.statusEffects;
-        invertInvincibility = attack.invertInvincibility;
-        this.causer = causer;
-    }
+        [Tooltip("The damage this attack deals")]
+        public int damage;
 
-    /// <summary>
-    /// Create a new damage data.
-    /// </summary>
-    /// <param name="damage"> The damage it will deal. </param>
-    /// <param name="damageType"> The type of damage dealt. </param>
-    /// <param name="causer"> The causer of the damage </param>
-    /// <param name="invertInvincibility"> Whether or not this should cause invincibility if it does no damage and not cause invincibility if it does. </param>
-    public DamageData(int damage, DamageType damageType, Object causer, bool invertInvincibility = false)
-    {
-        this.damage = damage;
-        this.damageType = damageType;
-        this.causer = causer;
-        this.invertInvincibility = invertInvincibility;
-    }
+        [Tooltip("The type of damage that will be applied")]
+        public DamageType damageType;
 
-    /// <summary>
-    /// Create a new damage data.
-    /// </summary>
-    /// <param name="damage"> The damage it will deal. </param>
-    /// <param name="damageType"> The type of damage dealt. </param>
-    /// <param name="statusEffects"> The status effects applied. </param>
-    /// <param name="causer"> The causer of the damage </param>
-    /// <param name="invertInvincibility"> Whether or not this should cause invincibility if it does no damage and not cause invincibility if it does. </param>
-    public DamageData(int damage, DamageType damageType, List<StatusEffect> statusEffects, Object causer, bool invertInvincibility = false) : this(damage, damageType, causer, invertInvincibility)
-    {
-        this.statusEffects = statusEffects;
-    }
+        [Tooltip("The status effects to apply when this is received")]
+        [EditInline]
+        public List<StatusEffect> statusEffects = new List<StatusEffect>();
 
-    /// <summary>
-    /// Create a new damage data.
-    /// </summary>
-    /// <param name="statusEffects"> The status effects applied. </param>
-    /// <param name="causer"> The causer of the damage. </param>
-    /// <param name="invertInvincibility"> Whether or not this should cause invincibility if it does no damage and not cause invincibility if it does. </param>
-    public DamageData(List<StatusEffect> statusEffects, Object causer, bool invertInvincibility = false)
-    {
-        this.statusEffects = statusEffects;
-        this.causer = causer;
-        this.invertInvincibility = invertInvincibility;
-    }
+        [Tooltip("Makes this cause invincibility if it does no damage and not cause invincibility if it does.")]
+        public bool invertInvincibility = false;
 
-    /// <summary>
-    /// Multiplies an attack so it is applied a certain number of times.
-    /// </summary>
-    /// <param name="attack"> The original attack. </param>
-    /// <param name="integer"> The number of times to apply it. </param>
-    /// <returns> The multiplied attack </returns>
-    public static DamageData operator *(DamageData attack, int integer)
-    {
-        if (integer > 1)
+        // The causer of this attack.
+        [System.NonSerialized]
+        public Object causer;
+
+        /// <summary>
+        /// Copy Constructor for an attack.
+        /// </summary>
+        /// <param name="attack"> The attack to copy </param>
+        /// <param name="causer"> The new causer </param>
+        public DamageData(DamageData attack, Object causer)
         {
-            List<StatusEffect> newStatusEffects = new List<StatusEffect>(attack.statusEffects.Count * integer);
-            for (int i = 0; i < integer; i++)
+            damage = attack.damage;
+            damageType = attack.damageType;
+            statusEffects = attack.statusEffects;
+            invertInvincibility = attack.invertInvincibility;
+            this.causer = causer;
+        }
+
+        /// <summary>
+        /// Create a new damage data.
+        /// </summary>
+        /// <param name="damage"> The damage it will deal. </param>
+        /// <param name="damageType"> The type of damage dealt. </param>
+        /// <param name="causer"> The causer of the damage </param>
+        /// <param name="invertInvincibility"> Whether or not this should cause invincibility if it does no damage and not cause invincibility if it does. </param>
+        public DamageData(int damage, DamageType damageType, Object causer, bool invertInvincibility = false)
+        {
+            this.damage = damage;
+            this.damageType = damageType;
+            this.causer = causer;
+            this.invertInvincibility = invertInvincibility;
+        }
+
+        /// <summary>
+        /// Create a new damage data.
+        /// </summary>
+        /// <param name="damage"> The damage it will deal. </param>
+        /// <param name="damageType"> The type of damage dealt. </param>
+        /// <param name="statusEffects"> The status effects applied. </param>
+        /// <param name="causer"> The causer of the damage </param>
+        /// <param name="invertInvincibility"> Whether or not this should cause invincibility if it does no damage and not cause invincibility if it does. </param>
+        public DamageData(int damage, DamageType damageType, List<StatusEffect> statusEffects, Object causer, bool invertInvincibility = false) : this(damage, damageType, causer, invertInvincibility)
+        {
+            this.statusEffects = statusEffects;
+        }
+
+        /// <summary>
+        /// Create a new damage data.
+        /// </summary>
+        /// <param name="statusEffects"> The status effects applied. </param>
+        /// <param name="causer"> The causer of the damage. </param>
+        /// <param name="invertInvincibility"> Whether or not this should cause invincibility if it does no damage and not cause invincibility if it does. </param>
+        public DamageData(List<StatusEffect> statusEffects, Object causer, bool invertInvincibility = false)
+        {
+            this.statusEffects = statusEffects;
+            this.causer = causer;
+            this.invertInvincibility = invertInvincibility;
+        }
+
+        /// <summary>
+        /// Multiplies an attack so it is applied a certain number of times.
+        /// </summary>
+        /// <param name="attack"> The original attack. </param>
+        /// <param name="integer"> The number of times to apply it. </param>
+        /// <returns> The multiplied attack </returns>
+        public static DamageData operator *(DamageData attack, int integer)
+        {
+            if (integer > 1)
             {
-                foreach (StatusEffect statusEffect in attack.statusEffects)
+                List<StatusEffect> newStatusEffects = new List<StatusEffect>(attack.statusEffects.Count * integer);
+                for (int i = 0; i < integer; i++)
                 {
-                    newStatusEffects.Add(statusEffect);
+                    foreach (StatusEffect statusEffect in attack.statusEffects)
+                    {
+                        newStatusEffects.Add(statusEffect);
+                    }
                 }
+                return new DamageData(attack.damage * integer, attack.damageType, new List<StatusEffect>(newStatusEffects), attack.causer);
             }
-            return new DamageData(attack.damage * integer, attack.damageType, new List<StatusEffect>(newStatusEffects), attack.causer);
+
+            return new DamageData(attack, attack.causer);
         }
 
-        return new DamageData(attack, attack.causer);
-    }
-
-    /// <summary>
-    /// Reverses the multiplication of an attack.
-    /// </summary>
-    /// <param name="attack"> The original attack. </param>
-    /// <param name="integer"> The number of times it was applied. </param>
-    /// <returns> The divided attack </returns>
-    public static DamageData operator /(DamageData attack, int integer)
-    {
-        if (integer > 1)
+        /// <summary>
+        /// Reverses the multiplication of an attack.
+        /// </summary>
+        /// <param name="attack"> The original attack. </param>
+        /// <param name="integer"> The number of times it was applied. </param>
+        /// <returns> The divided attack </returns>
+        public static DamageData operator /(DamageData attack, int integer)
         {
-            List<StatusEffect> newStatusEffects = new List<StatusEffect>(attack.statusEffects.Count / integer);
-            for (int i = 0; i < newStatusEffects.Count; i++)
+            if (integer > 1)
             {
-                foreach (StatusEffect statusEffect in attack.statusEffects)
+                List<StatusEffect> newStatusEffects = new List<StatusEffect>(attack.statusEffects.Count / integer);
+                for (int i = 0; i < newStatusEffects.Count; i++)
                 {
-                    newStatusEffects.Add(statusEffect);
+                    foreach (StatusEffect statusEffect in attack.statusEffects)
+                    {
+                        newStatusEffects.Add(statusEffect);
+                    }
                 }
+                return new DamageData(attack.damage / integer, attack.damageType, new List<StatusEffect>(newStatusEffects), attack.causer);
             }
-            return new DamageData(attack.damage / integer, attack.damageType, new List<StatusEffect>(newStatusEffects), attack.causer);
+
+            return new DamageData(attack, attack.causer);
         }
 
-        return new DamageData(attack, attack.causer);
-    }
-
-    /// <summary>
-    /// Adds damage to an attack.
-    /// </summary>
-    /// <param name="attack"> The original attack. </param>
-    /// <param name="damage"> The damage to add. </param>
-    /// <returns> A copy of the modified attack </returns>
-    public static DamageData operator +(DamageData attack, int damage)
-    {
-        return new DamageData(attack.damage + damage, attack.damageType, attack.statusEffects, attack.causer);
-    }
-    /// <summary>
-    /// Removes damage from an attack.
-    /// </summary>
-    /// <param name="attack"> The original attack. </param>
-    /// <param name="integer"> The damage to remove. </param>
-    /// <returns> A copy of the modified attack </returns>
-    public static DamageData operator -(DamageData attack, int damage)
-    {
-        return new DamageData(attack.damage - damage, attack.damageType, attack.statusEffects, attack.causer);
-    }
-
-    /// <summary>
-    /// Adds status effects to an attack.
-    /// </summary>
-    /// <param name="attack"> The original attack. </param>
-    /// <param name="effects"> The status effects to add. </param>
-    /// <returns> A copy of the modified attack </returns>
-    public static DamageData operator +(DamageData attack, List<StatusEffect> effects)
-    {
-        effects.AddRange(attack.statusEffects);
-        return new DamageData(attack.damage, attack.damageType, effects, attack.causer);
-    }
-
-    /// <summary>
-    /// Removes status effects to an attack.
-    /// </summary>
-    /// <param name="attack"> The original attack. </param>
-    /// <param name="effects"> The status effects to remove. </param>
-    /// <returns> A copy of the modified attack </returns>
-    public static DamageData operator -(DamageData attack, List<StatusEffect> effects)
-    {
-        foreach (StatusEffect statusEffect in attack.statusEffects)
+        /// <summary>
+        /// Adds damage to an attack.
+        /// </summary>
+        /// <param name="attack"> The original attack. </param>
+        /// <param name="damage"> The damage to add. </param>
+        /// <returns> A copy of the modified attack </returns>
+        public static DamageData operator +(DamageData attack, int damage)
         {
-            effects.Remove(statusEffect);
+            return new DamageData(attack.damage + damage, attack.damageType, attack.statusEffects, attack.causer);
         }
-        return new DamageData(attack.damage, attack.damageType, effects, attack.causer);
-    }
+        /// <summary>
+        /// Removes damage from an attack.
+        /// </summary>
+        /// <param name="attack"> The original attack. </param>
+        /// <param name="integer"> The damage to remove. </param>
+        /// <returns> A copy of the modified attack </returns>
+        public static DamageData operator -(DamageData attack, int damage)
+        {
+            return new DamageData(attack.damage - damage, attack.damageType, attack.statusEffects, attack.causer);
+        }
 
-    public enum DamageType
-    {
-        Physical,
-        Special,
+        /// <summary>
+        /// Adds status effects to an attack.
+        /// </summary>
+        /// <param name="attack"> The original attack. </param>
+        /// <param name="effects"> The status effects to add. </param>
+        /// <returns> A copy of the modified attack </returns>
+        public static DamageData operator +(DamageData attack, List<StatusEffect> effects)
+        {
+            effects.AddRange(attack.statusEffects);
+            return new DamageData(attack.damage, attack.damageType, effects, attack.causer);
+        }
+
+        /// <summary>
+        /// Removes status effects to an attack.
+        /// </summary>
+        /// <param name="attack"> The original attack. </param>
+        /// <param name="effects"> The status effects to remove. </param>
+        /// <returns> A copy of the modified attack </returns>
+        public static DamageData operator -(DamageData attack, List<StatusEffect> effects)
+        {
+            foreach (StatusEffect statusEffect in attack.statusEffects)
+            {
+                effects.Remove(statusEffect);
+            }
+            return new DamageData(attack.damage, attack.damageType, effects, attack.causer);
+        }
+
+        public enum DamageType
+        {
+            Physical,
+            Special,
+        }
     }
 }

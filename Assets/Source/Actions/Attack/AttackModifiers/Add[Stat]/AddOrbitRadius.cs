@@ -1,26 +1,29 @@
 using UnityEngine;
 
-/// <summary>
-/// Makes an attack orbit further.
-/// </summary>
-[CreateAssetMenu(fileName = "NewAddOrbitRadius", menuName = "Cards/AttackModifers/Add[Stat]/AddOrbitRadius [Duplicate Only]", order = 1)]
-public class AddOrbitRadius : DuplicateAttackSequence
+namespace Cardificer
 {
-    [Tooltip("The additional radius")]
-    [SerializeField] private float radius;
-
-    // The projectile this modifies
-    public override Projectile modifiedProjectile
+    /// <summary>
+    /// Makes an attack orbit further.
+    /// </summary>
+    [CreateAssetMenu(fileName = "NewAddOrbitRadius", menuName = "Cards/AttackModifers/Add[Stat]/AddOrbitRadius [Duplicate Only]", order = 1)]
+    public class AddOrbitRadius : DuplicateAttackSequence
     {
-        set
+        [Tooltip("The additional radius")]
+        [SerializeField] private float radius;
+
+        // The projectile this modifies
+        public override Projectile modifiedProjectile
         {
-            if (value is OrbitProjectile orbitProjectile)
+            set
             {
-                orbitProjectile.radius += radius;
-            }
-            else
-            {
-                Debug.LogWarning("Tried to modify radius on " + value.name + ", which does not use a CircleProjectileShape");
+                if (value is OrbitProjectile orbitProjectile)
+                {
+                    orbitProjectile.radius += radius;
+                }
+                else
+                {
+                    Debug.LogWarning("Tried to modify radius on " + value.name + ", which does not use a CircleProjectileShape");
+                }
             }
         }
     }

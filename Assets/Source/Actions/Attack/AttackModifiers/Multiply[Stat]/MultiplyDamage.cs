@@ -1,21 +1,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Makes an attack deal additional damage.
-/// </summary>
-[CreateAssetMenu(fileName = "NewMultiplyDamage", menuName = "Cards/AttackModifers/Multiply[Stat]/MultiplyDamage")]
-public class MultiplyDamage : AttackModifier
-{
-    [Tooltip("The amount damage will be multiplied by.")]
-    [SerializeField] private float damageFactor = 1f;
 
-    // The projectile this modifies
-    public override Projectile modifiedProjectile
+namespace Cardificer
+{
+    /// <summary>
+    /// Makes an attack deal additional damage.
+    /// </summary>
+    [CreateAssetMenu(fileName = "NewMultiplyDamage", menuName = "Cards/AttackModifers/Multiply[Stat]/MultiplyDamage")]
+    public class MultiplyDamage : AttackModifier
     {
-        set
+        [Tooltip("The amount damage will be multiplied by.")]
+        [SerializeField] private float damageFactor = 1f;
+
+        // The projectile this modifies
+        public override Projectile modifiedProjectile
         {
-            value.attackData.damage = (int)(value.attackData.damage * damageFactor);
+            set
+            {
+                value.attackData.damage = (int)(value.attackData.damage * damageFactor);
+            }
         }
     }
 }

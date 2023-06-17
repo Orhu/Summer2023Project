@@ -1,33 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Health), typeof(SpriteRenderer))]
-public class InvincibilityFlash : MonoBehaviour
+namespace Cardificer
 {
-    [Tooltip("The color to make the sprite when invincible.")]
-    [SerializeField] private Color invincibilityFlashColor;
-
-
-
-    private SpriteRenderer spriteRenderer;
-
-    /// <summary>
-    /// Initializes references
-    /// </summary>
-    private void Awake()
+    [RequireComponent(typeof(Health), typeof(SpriteRenderer))]
+    public class InvincibilityFlash : MonoBehaviour
     {
-        GetComponent<Health>().onInvincibilityChanged += SetTintEnable;
-        spriteRenderer = GetComponent<SpriteRenderer>();
-    }
+        [Tooltip("The color to make the sprite when invincible.")]
+        [SerializeField] private Color invincibilityFlashColor;
 
-    
-    /// <summary>
-    /// Enables or disables tinting of the sprite.
-    /// </summary>
-    /// <param name="tintEnabled"> Whether or not the tint should be shown. </param>
-    private void SetTintEnable(bool tintEnabled)
-    {
-        spriteRenderer.color = tintEnabled ? invincibilityFlashColor : Color.white;
+
+
+        private SpriteRenderer spriteRenderer;
+
+        /// <summary>
+        /// Initializes references
+        /// </summary>
+        private void Awake()
+        {
+            GetComponent<Health>().onInvincibilityChanged += SetTintEnable;
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
+
+        /// <summary>
+        /// Enables or disables tinting of the sprite.
+        /// </summary>
+        /// <param name="tintEnabled"> Whether or not the tint should be shown. </param>
+        private void SetTintEnable(bool tintEnabled)
+        {
+            spriteRenderer.color = tintEnabled ? invincibilityFlashColor : Color.white;
+        }
     }
 }

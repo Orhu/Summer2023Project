@@ -2,38 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// A component for exposing particle system properties to unity events.
-/// </summary>
-[RequireComponent(typeof(ParticleSystem))]
-public class ParticleSystemPropertyBinder : MonoBehaviour
+
+namespace Cardificer
 {
-
-    // The remaining lifetime of the visuals.
-    private new ParticleSystem particleSystem;
-
-    // The remaining lifetime of the visuals.
-    private ParticleSystem.MainModule mainModule;
-
     /// <summary>
-    /// Initializes references
+    /// A component for exposing particle system properties to unity events.
     /// </summary>
-    private void Awake()
+    [RequireComponent(typeof(ParticleSystem))]
+    public class ParticleSystemPropertyBinder : MonoBehaviour
     {
-        particleSystem = GetComponent<ParticleSystem>();
-        mainModule = particleSystem.main;
-    }
 
-    // The initial speed of particles when the Particle System first spawns them.
-    public float StartSpeed
-    {
-        set 
+        // The remaining lifetime of the visuals.
+        private new ParticleSystem particleSystem;
+
+        // The remaining lifetime of the visuals.
+        private ParticleSystem.MainModule mainModule;
+
+        /// <summary>
+        /// Initializes references
+        /// </summary>
+        private void Awake()
         {
-            mainModule.startSpeed = value;
+            particleSystem = GetComponent<ParticleSystem>();
+            mainModule = particleSystem.main;
         }
-        get
+
+        // The initial speed of particles when the Particle System first spawns them.
+        public float StartSpeed
         {
-            return mainModule.startSpeed.constant;
+            set
+            {
+                mainModule.startSpeed = value;
+            }
+            get
+            {
+                return mainModule.startSpeed.constant;
+            }
         }
     }
 }

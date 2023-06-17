@@ -1,22 +1,25 @@
 using UnityEngine;
 
-/// <summary>
-/// Allows an object to spawn items based off of a loot table.
-/// </summary>
-public class DropLoot : MonoBehaviour
+namespace Cardificer
 {
-    [Tooltip("The loot table pull the loot from.")]
-    [SerializeField] private GameObjectLootTable lootTable;
-
     /// <summary>
-    /// Drops a single item pulled from the loot table.
+    /// Allows an object to spawn items based off of a loot table.
     /// </summary>
-    public void Drop()
+    public class DropLoot : MonoBehaviour
     {
-        GameObject loot = lootTable.PullFromTable();
+        [Tooltip("The loot table pull the loot from.")]
+        [SerializeField] private GameObjectLootTable lootTable;
 
-        if (loot == null) { return; }
+        /// <summary>
+        /// Drops a single item pulled from the loot table.
+        /// </summary>
+        public void Drop()
+        {
+            GameObject loot = lootTable.PullFromTable();
 
-        Instantiate(loot).transform.position = transform.position; 
+            if (loot == null) { return; }
+
+            Instantiate(loot).transform.position = transform.position;
+        }
     }
 }

@@ -1,10 +1,14 @@
 using UnityEngine;
 
-/// <summary>
-/// An the base for all modifier that effect projectiles
-/// </summary>
-public abstract class AttackModifier : ScriptableObject
+
+namespace Cardificer
 {
-    // The projectile this modifies
-    public abstract Projectile modifiedProjectile { set; }
+    /// <summary>
+    /// An the base for all modifier that effect projectiles
+    /// </summary>
+    public abstract class AttackModifier : ScriptableObject
+    {
+        // The projectile this modifies
+        public abstract Projectile modifiedProjectile { set; }
+    }
 }
