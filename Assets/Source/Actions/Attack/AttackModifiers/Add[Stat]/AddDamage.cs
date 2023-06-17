@@ -1,23 +1,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Makes an attack deal additional damage and status effects.
-/// </summary>
-[CreateAssetMenu(fileName = "NewAddDamage", menuName = "Cards/AttackModifers/Add[Stat]/AddDamage")]
-public class AddDamage : AttackModifier
-{
-    [Tooltip("The additional damage")]
-    [SerializeField] private int damage;
-    [Tooltip("The additional status effects to apply")]
-    [SerializeField] private List<StatusEffect> statusEffects;
 
-    // The projectile this modifies
-    public override Projectile modifiedProjectile
+namespace Cardificer
+{
+    /// <summary>
+    /// Makes an attack deal additional damage and status effects.
+    /// </summary>
+    [CreateAssetMenu(fileName = "NewAddDamage", menuName = "Cards/AttackModifers/Add[Stat]/AddDamage")]
+    public class AddDamage : AttackModifier
     {
-        set
+        [Tooltip("The additional damage")]
+        [SerializeField] private int damage;
+        [Tooltip("The additional status effects to apply")]
+        [SerializeField] private List<StatusEffect> statusEffects;
+
+        // The projectile this modifies
+        public override Projectile modifiedProjectile
         {
-            value.attackData = value.attackData + damage + statusEffects;
+            set
+            {
+                value.attackData = value.attackData + damage + statusEffects;
+            }
         }
     }
 }

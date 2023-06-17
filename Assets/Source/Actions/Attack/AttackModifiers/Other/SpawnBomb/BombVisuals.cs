@@ -3,62 +3,65 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-/// <summary>
-/// Sends out the appropriate unity events that may be needed by bomb VFX, and handles the lifetime of the bomb.
-/// </summary>
-public class BombVisuals : MonoBehaviour
+namespace Cardificer
 {
-    [Tooltip("Called when the explosion radius is initialized, and passes the explosion radius.")]
-    public UnityEvent<float> explosionRadius;
-
-    [Tooltip("Called when the explosion radius is initialized, and passes the explosion radius as a vector 3.")]
-    public UnityEvent<Vector3> explosionRadiusAsScale;
-
-    [Tooltip("Called when the when the fuse time is updated, and passes the remaining time.")]
-    public UnityEvent<float> fuseTime;
-
-    [Tooltip("Called when the when the bomb explodes.")]
-    public UnityEvent onExploded;
-
-    // The remaining lifetime of the visuals.
-    private float lifetime;
-
-    // The remaining lifetime of the visuals.
-    private new ParticleSystem particleSystem;
-
-    // The remaining lifetime of the visuals.
-    private Bomb bomb;
-
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// Sends out the appropriate unity events that may be needed by bomb VFX, and handles the lifetime of the bomb.
+    /// </summary>
+    public class BombVisuals : MonoBehaviour
     {
-        particleSystem = GetComponent<ParticleSystem>();
-        lifetime = particleSystem.main.duration;
-        bomb = GetComponentInParent<Bomb>();
+        [Tooltip("Called when the explosion radius is initialized, and passes the explosion radius.")]
+        public UnityEvent<float> explosionRadius;
 
-        explosionRadius?.Invoke(bomb.explosionRadius);
-        explosionRadiusAsScale?.Invoke(new Vector3(bomb.explosionRadius, bomb.explosionRadius, bomb.explosionRadius));
+        [Tooltip("Called when the explosion radius is initialized, and passes the explosion radius as a vector 3.")]
+        public UnityEvent<Vector3> explosionRadiusAsScale;
 
-        if (onExploded != null)
+        [Tooltip("Called when the when the fuse time is updated, and passes the remaining time.")]
+        public UnityEvent<float> fuseTime;
+
+        [Tooltip("Called when the when the bomb explodes.")]
+        public UnityEvent onExploded;
+
+        // The remaining lifetime of the visuals.
+        private float lifetime;
+
+        // The remaining lifetime of the visuals.
+        private new ParticleSystem particleSystem;
+
+        // The remaining lifetime of the visuals.
+        private Bomb bomb;
+
+        // Start is called before the first frame update
+        void Start()
         {
-            bomb.onExploded += onExploded.Invoke;
-        }
-    }
+            particleSystem = GetComponent<ParticleSystem>();
+            lifetime = particleSystem.main.duration;
+            bomb = GetComponentInParent<Bomb>();
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (particleSystem.isEmitting)
-        {
-            lifetime -= Time.deltaTime;
-            if (lifetime <= 0)
+            explosionRadius?.Invoke(bomb.explosionRadius);
+            explosionRadiusAsScale?.Invoke(new Vector3(bomb.explosionRadius, bomb.explosionRadius, bomb.explosionRadius));
+
+            if (onExploded != null)
             {
-                Destroy(gameObject);
+                bomb.onExploded += onExploded.Invoke;
             }
         }
-        else
+
+        // Update is called once per frame
+        void Update()
         {
-            fuseTime?.Invoke(bomb.fuseTime);
+            if (particleSystem.isEmitting)
+            {
+                lifetime -= Time.deltaTime;
+                if (lifetime <= 0)
+                {
+                    Destroy(gameObject);
+                }
+            }
+            else
+            {
+                fuseTime?.Invoke(bomb.fuseTime);
+            }
         }
     }
 }

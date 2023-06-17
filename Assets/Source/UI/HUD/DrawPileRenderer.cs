@@ -1,49 +1,52 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// A UI element for rendering the actor's draw pile.
-/// </summary>
-public class DrawPileRenderer : MonoBehaviour
+namespace Cardificer
 {
-    // The card renderer prefab to instantiate.
-    public CardRenderer cardRendererTemplate;
-    // The start (inclusive) of the range of indices from the top of the draw pile to preview.
-    public int previewRangeStart = 0;
-    // The end (inclusive) of the range of indices from the top of the draw pile to preview.
-    public int previewRangeEnd = 4;
-    List<CardRenderer> cardRenderers = new List<CardRenderer>();
-
     /// <summary>
-    /// Creates the necessary card renderers.
+    /// A UI element for rendering the actor's draw pile.
     /// </summary>
-    private void Start()
+    public class DrawPileRenderer : MonoBehaviour
     {
-        for (int i = 0; i < previewRangeEnd - previewRangeStart; i++)
-        {
-            cardRenderers.Add(Instantiate(cardRendererTemplate.gameObject, transform).GetComponent<CardRenderer>());
-        }
-        Deck.playerDeck.onDrawPileChanged += OnCardDrawn;
-    }
+        // The card renderer prefab to instantiate.
+        public CardRenderer cardRendererTemplate;
+        // The start (inclusive) of the range of indices from the top of the draw pile to preview.
+        public int previewRangeStart = 0;
+        // The end (inclusive) of the range of indices from the top of the draw pile to preview.
+        public int previewRangeEnd = 4;
+        List<CardRenderer> cardRenderers = new List<CardRenderer>();
 
-    /// <summary>
-    /// Updates the displayed cards when a card is drawn.
-    /// </summary>
-    private void OnCardDrawn()
-    {
-        for (int i = 0; i < previewRangeEnd - previewRangeStart; i++)
+        /// <summary>
+        /// Creates the necessary card renderers.
+        /// </summary>
+        private void Start()
         {
-            if ((previewRangeEnd - 1 - i) < Deck.playerDeck.drawableCards.Count)
+            for (int i = 0; i < previewRangeEnd - previewRangeStart; i++)
             {
-                Card card = Deck.playerDeck.drawableCards[Deck.playerDeck.drawableCards.Count - 1 - (previewRangeEnd - 1 - i)];
-                if (cardRenderers[i].card != card)
-                {
-                    cardRenderers[i].card = card;
-                }
+                cardRenderers.Add(Instantiate(cardRendererTemplate.gameObject, transform).GetComponent<CardRenderer>());
             }
-            else
+            Deck.playerDeck.onDrawPileChanged += OnCardDrawn;
+        }
+
+        /// <summary>
+        /// Updates the displayed cards when a card is drawn.
+        /// </summary>
+        private void OnCardDrawn()
+        {
+            for (int i = 0; i < previewRangeEnd - previewRangeStart; i++)
             {
-                cardRenderers[i].card = null;
+                if ((previewRangeEnd - 1 - i) < Deck.playerDeck.drawableCards.Count)
+                {
+                    Card card = Deck.playerDeck.drawableCards[Deck.playerDeck.drawableCards.Count - 1 - (previewRangeEnd - 1 - i)];
+                    if (cardRenderers[i].card != card)
+                    {
+                        cardRenderers[i].card = card;
+                    }
+                }
+                else
+                {
+                    cardRenderers[i].card = null;
+                }
             }
         }
     }

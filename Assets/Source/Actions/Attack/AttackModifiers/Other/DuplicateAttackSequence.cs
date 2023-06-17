@@ -2,46 +2,49 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// An action modifier that changes the attack of an action modifier.
-/// </summary>
-[CreateAssetMenu(fileName = "NewDuplicateAttackSequence", menuName = "Cards/AttackModifers/DuplicateAttackSequence")]
-public class DuplicateAttackSequence : AttackModifier
+namespace Cardificer
 {
-    [Tooltip("The time in seconds to delay the duplicate attack sequence by.")]
-    public float duplicateDelay = 1; 
-
-    // The initial length of the attack sequence.
-    int sequenceLength;
-    // The initial length of the attack sequence.
-    List<ProjectileSpawnInfo> spawnSequence;
-
-    // The projectile this modifies
-    public override Projectile modifiedProjectile
+    /// <summary>
+    /// An action modifier that changes the attack of an action modifier.
+    /// </summary>
+    [CreateAssetMenu(fileName = "NewDuplicateAttackSequence", menuName = "Cards/AttackModifers/DuplicateAttackSequence")]
+    public class DuplicateAttackSequence : AttackModifier
     {
-        set
+        [Tooltip("The time in seconds to delay the duplicate attack sequence by.")]
+        public float duplicateDelay = 1;
+
+        // The initial length of the attack sequence.
+        int sequenceLength;
+        // The initial length of the attack sequence.
+        List<ProjectileSpawnInfo> spawnSequence;
+
+        // The projectile this modifies
+        public override Projectile modifiedProjectile
         {
-            if (value.index == 0)
+            set
             {
-                spawnSequence = value.spawnSequence;
-                sequenceLength = spawnSequence.Count;
-                value.StartCoroutine(UpadateSpawnSequnce());
+                if (value.index == 0)
+                {
+                    spawnSequence = value.spawnSequence;
+                    sequenceLength = spawnSequence.Count;
+                    value.StartCoroutine(UpadateSpawnSequnce());
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// Updates the attack sequence.
-    /// </summary>
-    /// <returns> Wait until all other modifiers have been initialized. </returns>
-    private IEnumerator UpadateSpawnSequnce()
-    {
-        yield return new WaitForEndOfFrame();
-        for (int i = 0; i < sequenceLength; i++)
+        /// <summary>
+        /// Updates the attack sequence.
+        /// </summary>
+        /// <returns> Wait until all other modifiers have been initialized. </returns>
+        private IEnumerator UpadateSpawnSequnce()
         {
-            spawnSequence.Add(spawnSequence[i].Instantiate());
-        }
+            yield return new WaitForEndOfFrame();
+            for (int i = 0; i < sequenceLength; i++)
+            {
+                spawnSequence.Add(spawnSequence[i].Instantiate());
+            }
 
-        spawnSequence[spawnSequence.Count - sequenceLength].delay += duplicateDelay;
+            spawnSequence[spawnSequence.Count - sequenceLength].delay += duplicateDelay;
+        }
     }
 }

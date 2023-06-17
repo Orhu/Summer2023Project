@@ -2,46 +2,49 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// The obstacle detector detects obstacles
-/// </summary>
-public class ObstacleDetector : Detector
+namespace Cardificer
 {
-    // radius to detect obstacles
-    [SerializeField]
-    private float detectionRadius = 2;
-
-    // layer mask that has obstacles on it
-    [SerializeField]
-    private LayerMask obstacleLayerMask;
-    
-    // show gizmos?
-    [SerializeField]
-    private bool showGizmos = true;
-
-    // tracks colliders
-    Collider2D[] colliders;
-
     /// <summary>
-    /// Detects nearby obstacles
+    /// The obstacle detector detects obstacles
     /// </summary>
-    /// <param name="aiData">AI data structure to write to</param>
-    public override void Detect(AIData aiData)
+    public class ObstacleDetector : Detector
     {
-        colliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius, obstacleLayerMask);
-        aiData.obstacles = colliders;
-    }
+        // radius to detect obstacles
+        [SerializeField]
+        private float detectionRadius = 2;
 
-    private void OnDrawGizmos()
-    {
-        if (showGizmos == false)
-            return;
-        if (Application.isPlaying && colliders != null)
+        // layer mask that has obstacles on it
+        [SerializeField]
+        private LayerMask obstacleLayerMask;
+
+        // show gizmos?
+        [SerializeField]
+        private bool showGizmos = true;
+
+        // tracks colliders
+        Collider2D[] colliders;
+
+        /// <summary>
+        /// Detects nearby obstacles
+        /// </summary>
+        /// <param name="aiData">AI data structure to write to</param>
+        public override void Detect(AIData aiData)
         {
-            Gizmos.color = Color.red;
-            foreach (Collider2D obstacleCollider in colliders)
+            colliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius, obstacleLayerMask);
+            aiData.obstacles = colliders;
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (showGizmos == false)
+                return;
+            if (Application.isPlaying && colliders != null)
             {
-                Gizmos.DrawSphere(obstacleCollider.transform.position, 0.2f);
+                Gizmos.color = Color.red;
+                foreach (Collider2D obstacleCollider in colliders)
+                {
+                    Gizmos.DrawSphere(obstacleCollider.transform.position, 0.2f);
+                }
             }
         }
     }
