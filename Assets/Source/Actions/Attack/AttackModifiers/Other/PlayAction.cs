@@ -73,9 +73,9 @@ public class PlayAction : AttackModifier, IActor
                     break;
 
                 case PlayTime.OnDestroyed:
-                    if (delay > 0)
-                    {
-                        value.onDestroyed += () =>
+                    value.onDestroyed += 
+                        // Creates a new game object to act as the source of the played action
+                        () =>
                         {
                             // Create runner object since the projectile will be null.
                             GameObject coroutineRunner = new GameObject(value.name + " Play " + action.name + " Source");
@@ -88,13 +88,8 @@ public class PlayAction : AttackModifier, IActor
                                 Destroy(coroutineRunner);
                             });
 
-                            causer.GetComponent<MonoBehaviour>().StartCoroutine(DelayedPlayAction());
+                            mono.GetComponent<MonoBehaviour>().StartCoroutine(DelayedPlayAction());
                         };
-                    }
-                    else
-                    {
-                        value.onDestroyed += () => DelayedPlayAction();
-                    }
                     break;
             }
         }
