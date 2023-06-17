@@ -149,12 +149,12 @@ public class RoomExteriorGenerator : MonoBehaviour
             if ((j == roomSize.y / 2 - 1) && (roomCell.direction & Direction.Right) != Direction.None)
             {
                 Sprite randomWallSprite = exteriorParameters.belowRightDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.belowRightDoorSprites.Count)];
-                room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
+                room.roomGrid[roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
             }
             else if ((j == roomSize.y / 2 + 1) && (roomCell.direction & Direction.Right) != Direction.None)
             {
                 Sprite randomWallSprite = exteriorParameters.aboveRightDoorSprites[FloorGenerator.random.Next(0, exteriorParameters.aboveRightDoorSprites.Count)];
-                room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
+                room.roomGrid[roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
             }
             else if (j != roomSize.y / 2 || (roomCell.direction & Direction.Right) == Direction.None)
             {
