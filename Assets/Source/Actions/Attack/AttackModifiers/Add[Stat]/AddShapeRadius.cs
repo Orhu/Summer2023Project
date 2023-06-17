@@ -3,11 +3,11 @@ using UnityEngine;
 /// <summary>
 /// Makes an attack's projectile bigger.
 /// </summary>
-[CreateAssetMenu(fileName = "NewAddSize", menuName = "Cards/AttackModifers/Add[Stat]/AddSize [Duplicate Only]", order = 1)]
-public class AddSize : DuplicateAttackModifier
+[CreateAssetMenu(fileName = "NewAddShapeRadius", menuName = "Cards/AttackModifers/Add[Stat]/AddShapeRadius [Duplicate Only]", order = 1)]
+public class AddShapeRadius : DuplicateAttackModifier
 {
     [Tooltip("The additional radius in tiles.")]
-    [SerializeField] private Vector2 size;
+    [SerializeField] private float radius;
 
     [Tooltip("The amount to scale up the visuals by.")]
     [SerializeField] private float visualsScale;
@@ -17,14 +17,14 @@ public class AddSize : DuplicateAttackModifier
     {
         set
         {
-            if (value.shape is BoxProjectileShape box)
+            if (value.shape is CircleProjectileShape circle)
             {
-                box.size += size;
+                circle.radius += radius;
                 value.visualObject.transform.localScale = value.visualObject.transform.localScale + new Vector3(visualsScale, visualsScale, visualsScale);
             }
             else
             {
-                Debug.LogWarning("Tried to modify radius on " + value.name + ", which does not use a BoxProjectileShape");
+                Debug.LogWarning("Tried to modify radius on " + value.name + ", which does not use a CircleProjectileShape");
             }
         }
     }

@@ -30,7 +30,7 @@ public class Lifesteal : AttackModifier
     /// <param name="collision"> The collider that was hit. </param>
     private void HealCauser(Collider2D collision)
     {
-        if (collision.GetComponent<Health>() == null) { return; }
+        if (collision.GetComponent<Health>() == null || !collision.CompareTag("Inanimate")) { return; }
 
         causerHealth.Heal((int)(lifestealingProjectile.attackData.damage * healAmount));
     }

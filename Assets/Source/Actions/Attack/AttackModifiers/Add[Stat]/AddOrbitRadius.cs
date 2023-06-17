@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// Makes an attack orbit further.
 /// </summary>
-[CreateAssetMenu(fileName = "NewAddOrbitRadius", menuName = "Cards/AttackModifers/Add[Stat]/AddOrbitRadius [Duplicate Only]")]
+[CreateAssetMenu(fileName = "NewAddOrbitRadius", menuName = "Cards/AttackModifers/Add[Stat]/AddOrbitRadius [Duplicate Only]", order = 1)]
 public class AddOrbitRadius : DuplicateAttackSequence
 {
     [Tooltip("The additional radius")]

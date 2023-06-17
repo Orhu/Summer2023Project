@@ -218,6 +218,8 @@ public class Projectile : MonoBehaviour
     /// <returns> The position in world space of the spawn location. </returns>
     protected Vector3 GetSpawnLocation()
     {
+        if(actor == null) { return transform.position; }
+
         switch (attack.spawnLocation)
         {
             case SpawnLocation.Actor:
