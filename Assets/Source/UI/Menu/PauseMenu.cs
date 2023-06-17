@@ -8,6 +8,10 @@ using UnityEngine;
 /// </summary>
 public class PauseMenu : MonoBehaviour
 {
+    /// <summary>
+    /// Debug ability to reset the game.
+    /// Clears saves and reloads the current scene
+    /// </summary>
     public void Reset()
     {
         MenuManager.instance.CloseMenu();
