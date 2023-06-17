@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// A box projectile shape a serialized size.
@@ -7,7 +8,23 @@
 public class BoxProjectileShape : ProjectileShape
 {
     [Tooltip("The side lengths of the collider.")]
-    public Vector2 size = new Vector2(0.5f, 0.5f);
+    [SerializeField] private Vector2 _size = new Vector2(0.5f, 0.5f);
+    public Vector2 size
+    {
+        set
+        {
+            _size = value;
+            foreach (BoxCollider2D collider in colliders)
+            {
+                collider.size = value;
+            }
+        }
+        get => _size;
+    }
+
+    // All the colliders that have been created by this.
+    private List<BoxCollider2D> colliders = new List<BoxCollider2D>();
+
 
     /// <summary>
     /// Gets the collider form of this shape.

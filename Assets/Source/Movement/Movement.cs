@@ -9,6 +9,9 @@ using UnityEngine;
 [RequireComponent(typeof(AnimatorController))]
 public abstract class Movement : MonoBehaviour
 {
+    [Tooltip("The amount knockback will be multiplied by.")] [Min(0f)]
+    [SerializeField] protected float knockbackMultiplier = 1f;
+
     // The desired movement direction.
     private Vector2 _movementInput;
     public virtual Vector2 movementInput 
@@ -37,4 +40,27 @@ public abstract class Movement : MonoBehaviour
     {
         animatorComponent = GetComponent<AnimatorController>();
     }
+
+    /// <summary>
+    /// Causes knockback to this moment component.
+    /// </summary>
+    /// <param name="direction"> The direction to apply the knockback in. Should be normalized. </param>
+    /// <param name="info"> The knockback info. </param>
+    public abstract void Knockback(Vector2 direction, KnockbackInfo info);
+}
+
+/// <summary>
+/// The info needed to apply knockback to something.
+/// </summary>
+[System.Serializable]
+public class KnockbackInfo
+{
+    [Tooltip("The distance this will move in tiles.")] 
+    public float amount = 1f;
+    
+    [Tooltip("The time it will take to reach the target destination.")]
+    public float duration = 0.2f;
+
+    [Tooltip("Whether or not this should lose all its momentum when hit")]
+    public bool resetMomentum = true;
 }
