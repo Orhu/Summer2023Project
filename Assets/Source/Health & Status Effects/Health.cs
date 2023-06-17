@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -119,7 +120,7 @@ public class Health : MonoBehaviour
     /// <param name="ignoreInvincibility"> Whether or not invincibility frames should effect this attack. </param>
     public void ReceiveAttack(DamageData attack, bool ignoreInvincibility = false)
     {
-        if (invincible && !ignoreInvincibility) return;
+        if (currentHealth <= 0 || (invincible && !ignoreInvincibility)) { return; }
         
         // Damage
         onRequestIncomingAttackModification?.Invoke(ref attack);
@@ -159,6 +160,11 @@ public class Health : MonoBehaviour
     public void Heal(int healAmount)
     {
         currentHealth = Mathf.Min(Math.Max(healAmount, 0) + currentHealth, maxHealth);
+    }
+
+    public bool HasStatusEffect(StatusEffect statusEffect)
+    {
+        return statusEffects.FirstOrDefault((StatusEffect eachEffect) => { return eachEffect.GetType() == statusEffect.GetType(); }) != null;
     }
 
     /// <summary>
