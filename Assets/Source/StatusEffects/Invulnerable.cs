@@ -1,60 +1,63 @@
 using UnityEngine;
 
-/// <summary>
-/// A status effect that prevents health from receiving attacks.
-/// </summary>
-[CreateAssetMenu(fileName = "NewInvulnerable", menuName = "Status Effects/Invulnerable")]
-public class Invulnerable : StatusEffect
+namespace Cardificer
 {
     /// <summary>
-    /// Creates a new status effect that is a copy of the caller.
+    /// A status effect that prevents health from receiving attacks.
     /// </summary>
-    /// <param name="gameObject"> The object to apply the status effect.</param>
-    /// <returns> The status effect that was created. </returns>
-    public override StatusEffect CreateCopy(GameObject gameObject)
+    [CreateAssetMenu(fileName = "NewInvulnerable", menuName = "Status Effects/Invulnerable")]
+    public class Invulnerable : StatusEffect
     {
-        Invulnerable instance = (Invulnerable)base.CreateCopy(gameObject);
-
-        gameObject.GetComponent<Health>().onRequestIncomingAttackModification += instance.PreventAttack;
-
-        return instance;
-    }
-
-    /// <summary>
-    /// Stacks this effect onto another status effect.
-    /// </summary>
-    /// <param name="other"> The other particle effect to stack this onto. </param>
-    /// <returns> Whether or not this status effect was consumed by the stacking. </returns>
-    public override bool Stack(StatusEffect other)
-    {
-        if (other.GetType() != GetType())
+        /// <summary>
+        /// Creates a new status effect that is a copy of the caller.
+        /// </summary>
+        /// <param name="gameObject"> The object to apply the status effect.</param>
+        /// <returns> The status effect that was created. </returns>
+        public override StatusEffect CreateCopy(GameObject gameObject)
         {
-            return false;
+            Invulnerable instance = (Invulnerable)base.CreateCopy(gameObject);
+
+            gameObject.GetComponent<Health>().onRequestIncomingAttackModification += instance.PreventAttack;
+
+            return instance;
         }
 
-        other.remainingDuration += remainingDuration;
-        return true;
-    }
+        /// <summary>
+        /// Stacks this effect onto another status effect.
+        /// </summary>
+        /// <param name="other"> The other particle effect to stack this onto. </param>
+        /// <returns> Whether or not this status effect was consumed by the stacking. </returns>
+        public override bool Stack(StatusEffect other)
+        {
+            if (other.GetType() != GetType())
+            {
+                return false;
+            }
 
-    /// <summary>
-    /// Responds to a health's incoming damage modification request, and prevents the attack from passing.
-    /// </summary>
-    /// <param name="attack"> The attack to prevent. </param>
-    private void PreventAttack(ref DamageData attack)
-    {
-        DamageData prevousAttack = attack;
-        attack = new DamageData(0, attack.damageType, prevousAttack.causer);
-    }
+            other.remainingDuration += remainingDuration;
+            return true;
+        }
 
-    /// <summary>
-    /// Cleans up binding.
-    /// </summary>
-    private new void OnDestroy()
-    {
-        base.OnDestroy();
+        /// <summary>
+        /// Responds to a health's incoming damage modification request, and prevents the attack from passing.
+        /// </summary>
+        /// <param name="attack"> The attack to prevent. </param>
+        private void PreventAttack(ref DamageData attack)
+        {
+            DamageData prevousAttack = attack;
+            attack = new DamageData(0, attack.damageType, prevousAttack.causer);
+        }
 
-        if (gameObject == null) { return; }
+        /// <summary>
+        /// Cleans up binding.
+        /// </summary>
+        private new void OnDestroy()
+        {
+            base.OnDestroy();
 
-        gameObject.GetComponent<Health>().onRequestIncomingAttackModification -= PreventAttack;
+            if (gameObject == null) { return; }
+
+            gameObject.GetComponent<Health>().onRequestIncomingAttackModification -= PreventAttack;
+        }
     }
 }

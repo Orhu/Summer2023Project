@@ -1,74 +1,77 @@
 using UnityEngine;
 
-/// <summary>
-/// A status effect that prevents an actor from acting.
-/// </summary>
-[CreateAssetMenu(fileName = "NewStunned", menuName = "Status Effects/Stunned")]
-public class Stunned : StatusEffect
+namespace Cardificer
 {
-    [Tooltip("The max duration of this effect.")]
-    [SerializeField] private float maxDuration = 15f;
-
-
     /// <summary>
-    /// Creates a new status effect that is a copy of the caller.
+    /// A status effect that prevents an actor from acting.
     /// </summary>
-    /// <param name="gameObject"> The object to apply the status effect.</param>
-    /// <returns> The status effect that was created. </returns>
-    public override StatusEffect CreateCopy(GameObject gameObject)
+    [CreateAssetMenu(fileName = "NewStunned", menuName = "Status Effects/Stunned")]
+    public class Stunned : StatusEffect
     {
-        Stunned instance = (Stunned)base.CreateCopy(gameObject);
+        [Tooltip("The max duration of this effect.")]
+        [SerializeField] private float maxDuration = 15f;
 
-        gameObject.GetComponent<PlayerController>().GetOnRequestCanAct() += instance.PreventAction;
-        gameObject.GetComponent<Movement>().requestSpeedModifications += instance.PreventMovement;
 
-        return instance;
-    }
-
-    /// <summary>
-    /// Stacks this effect onto another status effect.
-    /// </summary>
-    /// <param name="other"> The other particle effect to stack this onto. </param>
-    /// <returns> Whether or not this status effect was consumed by the stacking. </returns>
-    public override bool Stack(StatusEffect other)
-    {
-        if (other.GetType() != GetType())
+        /// <summary>
+        /// Creates a new status effect that is a copy of the caller.
+        /// </summary>
+        /// <param name="gameObject"> The object to apply the status effect.</param>
+        /// <returns> The status effect that was created. </returns>
+        public override StatusEffect CreateCopy(GameObject gameObject)
         {
-            return false;
+            Stunned instance = (Stunned)base.CreateCopy(gameObject);
+
+            gameObject.GetComponent<PlayerController>().GetOnRequestCanAct() += instance.PreventAction;
+            gameObject.GetComponent<Movement>().requestSpeedModifications += instance.PreventMovement;
+
+            return instance;
         }
 
-        other.remainingDuration = Mathf.Min(duration + other.remainingDuration, maxDuration);
-        return true;
-    }
+        /// <summary>
+        /// Stacks this effect onto another status effect.
+        /// </summary>
+        /// <param name="other"> The other particle effect to stack this onto. </param>
+        /// <returns> Whether or not this status effect was consumed by the stacking. </returns>
+        public override bool Stack(StatusEffect other)
+        {
+            if (other.GetType() != GetType())
+            {
+                return false;
+            }
 
-    /// <summary>
-    /// Responds to a actors can act request, and prevents action.
-    /// </summary>
-    /// <param name="CanAct"> The can act variable to be set to false. </param>
-    private void PreventAction(ref bool CanAct)
-    {
-        CanAct = false;
-    }
+            other.remainingDuration = Mathf.Min(duration + other.remainingDuration, maxDuration);
+            return true;
+        }
 
-    /// <summary>
-    /// Responds to a movement components speed modification request, and sets the speed to 0.
-    /// </summary>
-    /// <param name="speed"> The speed variable to be modified. </param>
-    private void PreventMovement(ref float speed)
-    {
-        speed = 0;
-    }
+        /// <summary>
+        /// Responds to a actors can act request, and prevents action.
+        /// </summary>
+        /// <param name="CanAct"> The can act variable to be set to false. </param>
+        private void PreventAction(ref bool CanAct)
+        {
+            CanAct = false;
+        }
 
-    /// <summary>
-    /// Cleans up binding.
-    /// </summary>
-    private new void OnDestroy()
-    {
-        base.OnDestroy();
-        
-        if(gameObject == null) { return; }
+        /// <summary>
+        /// Responds to a movement components speed modification request, and sets the speed to 0.
+        /// </summary>
+        /// <param name="speed"> The speed variable to be modified. </param>
+        private void PreventMovement(ref float speed)
+        {
+            speed = 0;
+        }
 
-        gameObject.GetComponent<PlayerController>().GetOnRequestCanAct() -= PreventAction;
-        gameObject.GetComponent<Movement>().requestSpeedModifications -= PreventMovement;
+        /// <summary>
+        /// Cleans up binding.
+        /// </summary>
+        private new void OnDestroy()
+        {
+            base.OnDestroy();
+
+            if (gameObject == null) { return; }
+
+            gameObject.GetComponent<PlayerController>().GetOnRequestCanAct() -= PreventAction;
+            gameObject.GetComponent<Movement>().requestSpeedModifications -= PreventMovement;
+        }
     }
 }

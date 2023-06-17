@@ -1,6 +1,7 @@
-﻿
-    using UnityEngine;
+﻿    using UnityEngine;
 
+namespace Cardificer
+{
     /// <summary>
     /// Represents a condition to evaluate whether a transition should be true or false
     /// </summary>
@@ -15,3 +16,4 @@
         /// <returns> True if the expression evaluates to true, false otherwise </returns>
         public abstract bool Decide(BaseStateMachine state);
     }
+}
