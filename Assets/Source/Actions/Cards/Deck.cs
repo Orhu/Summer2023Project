@@ -55,6 +55,11 @@ namespace Cardificer
         // Called when a card is removed
         public Action<Card> onCardRemoved;
         #endregion
+
+        public bool isActing
+        {
+            get => cardIndicesToActionTimes.Count > 0;
+        }
         #endregion
 
         /// <summary>
@@ -184,6 +189,8 @@ namespace Cardificer
         /// <param name="handIndex"> The index in the hand of the card to discard. </param>
         public void DiscardCard(int handIndex)
         {
+            if (cardIndicesToActionTimes.ContainsKey(handIndex)) { return; }
+
             discardedCards.Add(inHandCards[handIndex]);
             inHandCards[handIndex] = null;
             onDiscardPileChanged?.Invoke();
@@ -212,11 +219,18 @@ namespace Cardificer
             onDrawPileChanged?.Invoke();
         }
 
+        public void ClearCooldowns()
+        {
+            if (!isActing)
+            {
+                cardIndicesToCooldowns.Clear();
+            }
+        }
 
         /// <summary>
         /// Updates all action times and cooldowns, and it draws new cards when needed.
         /// </summary>
-        void Update()
+        private void Update()
         {
             foreach (KeyValuePair<int, float> cardIndexToCooldown in new Dictionary<int, float>(cardIndicesToCooldowns))
             {
@@ -224,7 +238,6 @@ namespace Cardificer
                 if (newValue <= 0)
                 {
                     cardIndicesToCooldowns.Remove(cardIndexToCooldown.Key);
-                    DiscardCard(cardIndexToCooldown.Key);
                 }
                 else
                 {
@@ -238,6 +251,7 @@ namespace Cardificer
                 if (newValue <= 0)
                 {
                     cardIndicesToActionTimes.Remove(cardIndexToActionTime.Key);
+                    DiscardCard(cardIndexToActionTime.Key);
                     cardIndicesToCooldowns.Add(cardIndexToActionTime.Key, inHandCards[cardIndexToActionTime.Key].cooldownTime);
                 }
                 else

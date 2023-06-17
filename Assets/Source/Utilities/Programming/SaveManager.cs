@@ -245,7 +245,7 @@ namespace Cardificer
                     FloorGenerator.floorGeneratorInstance.currentRoom.onCleared += Autosave;
                 });
 
-                Player.Get().GetComponent<Health>().onDeath.AddListener(ClearTransientSaves);
+                Player.health.onDeath.AddListener(ClearTransientSaves);
 
                 autosaves = new SaveData<AutosaveData>[NUMBER_OF_AUTOSAVES];
                 for (int i = 0; i < NUMBER_OF_AUTOSAVES; i++)
@@ -272,7 +272,7 @@ namespace Cardificer
 
                 AutosaveData saveData = latestAutosave == null ? new AutosaveData() : latestAutosave;
                 saveData.playerPos = Player.Get().transform.position;
-                saveData.playerHealth = Player.Get().GetComponent<Health>().currentHealth;
+                saveData.playerHealth = Player.health.currentHealth;
                 saveData.deckState = new Deck.State(Deck.playerDeck);
                 saveData.floorSeed = FloorGenerator.floorGeneratorInstance.seed;
                 Vector2Int loc = FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation;
