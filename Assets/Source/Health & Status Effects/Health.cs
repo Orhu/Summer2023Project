@@ -138,6 +138,7 @@ public class Health : MonoBehaviour
         }
         
         // Status effects
+        if (CompareTag("Inanimate")) { return; }
         foreach (StatusEffect statusEffect in attack.statusEffects)
         {
             if (!immuneStatusEffects.Contains(statusEffect))
