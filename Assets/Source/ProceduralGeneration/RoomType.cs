@@ -13,7 +13,7 @@ public class RoomType : ScriptableObject
     [Tooltip("Whether or not this room type determines it's room size explicitly (only allowed for rooms that are dead ends)")]
     public bool useExplicitRoomSize { get; private set; }
 
-    [Tooltip("Whether or not this room is a normal room (this might not be needed)")]
+    [Tooltip("Whether or not this room counts as a normal room")]
     public bool normalRoom { get; private set; }
 
     [Tooltip("The size multiplier of this room: What size is this room compared to the size of a normal room?")]
@@ -21,7 +21,4 @@ public class RoomType : ScriptableObject
 
     [Tooltip("The explicit room size of this room type")]
     public Vector2Int explicitRoomSize { get; private set; }
-
-    [Tooltip("The acceptable cells doors can appear in")]
-    public List<Vector2Int> acceptableDoorCells { get; private set; }
 }
