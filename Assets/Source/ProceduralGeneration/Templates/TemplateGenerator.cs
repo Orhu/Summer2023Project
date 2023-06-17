@@ -30,11 +30,16 @@ public class TemplateGenerator : MonoBehaviour
         tileContainer.transform.parent = room.transform;
         tileContainer.transform.localPosition = new Vector3(-room.roomSize.x / 2, -room.roomSize.y / 2, 0);
 
-        for (int i = 1; i < template.roomSize.x- 1; i++)
+        for (int i = 1; i < room.roomSize.x - 1; i++)
         {
-            for (int j = 1; j < template.roomSize.y - 1; j++)
-            { 
-                TemplateTile templateTile = template.tiles[i][j];
+            for (int j = 1; j < room.roomSize.y - 1; j++)
+            {
+                TemplateTile templateTile = null;
+
+                if (i < template.roomSize.x && j < template.roomSize.y)
+                {
+                    templateTile = template.tiles[i][j];
+                }
 
                 Tile createdTile = ScriptableObject.CreateInstance<Tile>();
 
