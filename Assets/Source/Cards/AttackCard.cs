@@ -21,7 +21,7 @@ public class AttackCard : Card
     public List<AttackModifier> chordModifiers;
     [EditInline]
     [Tooltip("The how this card will modify actions when used in a combo with itself.")]
-    public List<DuplicateAttackModifier> duplicateModifiers;
+    public List<AttackModifier> duplicateModifiers;
 
     #region Previewing
     /// <summary>

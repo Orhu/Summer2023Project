@@ -4,7 +4,7 @@ using UnityEngine;
 /// Makes an attack's projectile bigger.
 /// </summary>
 [CreateAssetMenu(fileName = "NewAddShapeRadius", menuName = "Cards/AttackModifers/Add[Stat]/AddShapeRadius [Duplicate Only]", order = 1)]
-public class AddShapeRadius : DuplicateAttackModifier
+public class AddShapeRadius : AttackModifier
 {
     [Tooltip("The additional radius in tiles.")]
     [SerializeField] private float radius;
