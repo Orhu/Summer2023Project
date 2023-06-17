@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// A circle projectile shape a serialized radius.
@@ -7,7 +8,23 @@
 public class CircleProjectileShape : ProjectileShape
 {
     [Tooltip("The radius of the collider")]
-    public float radius = 0.25f;
+    [SerializeField] private float _radius = 0.25f;
+    public float radius
+    {
+        set
+        {
+            _radius = value;
+            foreach(CircleCollider2D collider in colliders)
+            {
+                collider.radius = value;
+            }
+        }
+        get => _radius;
+    }
+
+
+    // All the colliders that have been created by this.
+    private List<CircleCollider2D> colliders = new List<CircleCollider2D>();
 
     /// <summary>
     /// Gets the collider form of this shape.
@@ -18,6 +35,7 @@ public class CircleProjectileShape : ProjectileShape
     {
         CircleCollider2D collider = gameObject.AddComponent<CircleCollider2D>();
         collider.radius = radius;
+        colliders.Add(collider);
         return collider;
     }
 }

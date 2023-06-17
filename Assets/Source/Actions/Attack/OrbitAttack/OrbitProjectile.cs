@@ -12,7 +12,7 @@ public class OrbitProjectile : Projectile
     private OrbitSpawnInfo orbitSpawnInfo;
 
     // The current orbit radius.
-    private float radius;
+    public float radius;
 
     // The last location of the spawn location of this.
     private Vector3 lastSpawnLocationPosition;
