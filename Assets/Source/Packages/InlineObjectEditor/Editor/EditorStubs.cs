@@ -1,4 +1,6 @@
 //This is a generated file - do not modify.
+using Cardificer;
+
 [UnityEditor.CustomEditor(typeof(AttackCard))]
 public partial class AttackCardEditorStub : UnityEditor.Editor { }
 
