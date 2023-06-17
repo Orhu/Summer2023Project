@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Cardificer
@@ -31,7 +32,28 @@ namespace Cardificer
     [System.Serializable]
     public class RoomTypesToLayoutParameters
     {
-        
+        /// <summary>
+        /// A list of room types to layout parameters
+        /// </summary>
+        public List<RoomTypeToLayoutParameters> roomTypesToLayoutParameters;
+
+        /// <summary>
+        /// Gets the layout parameters associated with a given room type
+        /// </summary>
+        /// <param name="roomType"> The room type </param>
+        /// <returns> The layout parameters </returns>
+        public RoomTypeToLayoutParameters At(RoomType roomType)
+        {
+            foreach (RoomTypeToLayoutParameters roomTypeToLayoutParameters in roomTypesToLayoutParameters)
+            {
+                if (roomTypeToLayoutParameters.roomType == roomType)
+                {
+                    return roomTypeToLayoutParameters;
+                }
+            }
+
+            throw new System.Exception("No room type of " + roomType.displayName + " in room types to layout parameters");
+        }
     }
 
     /// <summary>

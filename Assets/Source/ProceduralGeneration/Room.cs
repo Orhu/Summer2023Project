@@ -216,20 +216,6 @@ namespace Cardificer
     }
 
     /// <summary>
-    /// Stores the type of a room
-    /// </summary>
-    [System.Serializable]
-    public enum RoomType
-    {
-        None,
-        Normal,
-        Start,
-        Special,
-        Boss,
-        Exit
-    }
-
-    /// <summary>
     /// A dictionary that maps room types to exterior generation parameters
     /// </summary>
     [System.Serializable]
