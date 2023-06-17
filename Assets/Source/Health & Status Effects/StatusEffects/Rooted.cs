@@ -15,7 +15,10 @@ public class Rooted : StatusEffect
     {
         Rooted instance = (Rooted)base.CreateCopy(gameObject);
 
-        gameObject.GetComponent<Movement>().requestSpeedModifications += instance.PreventMovement;
+        if (gameObject.GetComponent<Movement>() is Movement movment)
+        {
+            movment.requestSpeedModifications += instance.PreventMovement;
+        }
 
         return instance;
     }
@@ -55,6 +58,9 @@ public class Rooted : StatusEffect
 
         if (gameObject == null) { return; }
 
-        gameObject.GetComponent<Movement>().requestSpeedModifications -= PreventMovement;
+        if (gameObject.GetComponent<Movement>() is Movement movment)
+        {
+            movment.requestSpeedModifications -= PreventMovement;
+        }        
     }
 }

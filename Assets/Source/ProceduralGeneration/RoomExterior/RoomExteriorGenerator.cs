@@ -151,12 +151,12 @@ public class RoomExteriorGenerator : MonoBehaviour
             if ((j == roomSize.y / 2 - 1) && (roomCell.direction & Direction.Right) != Direction.None)
             {
                 Sprite randomWallSprite = exteriorParameters.belowRightDoorSprites.GetRandomThing(FloorGenerator.random);
-                room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
+                room.roomGrid[roomSize.x - 10, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
             }
             else if ((j == roomSize.y / 2 + 1) && (roomCell.direction & Direction.Right) != Direction.None)
             {
                 Sprite randomWallSprite = exteriorParameters.aboveRightDoorSprites.GetRandomThing(FloorGenerator.random);
-                room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
+                room.roomGrid[roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
             }
             else if (j != roomSize.y / 2 || (roomCell.direction & Direction.Right) == Direction.None)
             {
@@ -498,6 +498,8 @@ public class RoomExteriorGenerator : MonoBehaviour
             
             room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Right, connectedCell, doorContainer);
             room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
+
+            centerCell.direction |= Direction.Right;
         }
 
         if ((map.map[centerCell.location.x, centerCell.location.y + 1].direction & Direction.Up) != Direction.None)
@@ -515,6 +517,8 @@ public class RoomExteriorGenerator : MonoBehaviour
 
             room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Up, connectedCell, doorContainer);
             room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
+
+            centerCell.direction |= Direction.Up;
         }
 
         if ((map.map[centerCell.location.x - 1, centerCell.location.y].direction & Direction.Left) != Direction.None)
@@ -532,6 +536,8 @@ public class RoomExteriorGenerator : MonoBehaviour
 
             room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Left, connectedCell, doorContainer);
             room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
+
+            centerCell.direction |= Direction.Left;
         }
 
         if ((map.map[centerCell.location.x, centerCell.location.y - 1].direction & Direction.Down) != Direction.None)
@@ -549,6 +555,8 @@ public class RoomExteriorGenerator : MonoBehaviour
 
             room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Down, connectedCell, doorContainer);
             room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
+
+            centerCell.direction |= Direction.Down;
         }
 
         doorContainer.SetActive(false);

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Skaillz.EditInline;
+using System.Linq;
 
 /// <summary>
 /// A scriptable object for containing data about a card type including:
@@ -20,7 +21,7 @@ public class AttackCard : Card
     public List<AttackModifier> chordModifiers;
     [EditInline]
     [Tooltip("The how this card will modify actions when used in a combo with itself.")]
-    public List<AttackModifier> duplicateModifiers;
+    public List<DuplicateAttackModifier> duplicateModifiers;
 
     #region Previewing
     /// <summary>
@@ -152,7 +153,7 @@ public class AttackCard : Card
     {
         if (modifingCard == this)
         {
-            return modifingCard.duplicateModifiers;
+            return modifingCard.duplicateModifiers.Cast<AttackModifier>().ToList();
         }
         else
         {
