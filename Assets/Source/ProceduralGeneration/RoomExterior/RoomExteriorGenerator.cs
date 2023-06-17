@@ -186,6 +186,8 @@ public class RoomExteriorGenerator : MonoBehaviour
         tile.spawnedObject.SetActive(true);
         tile.spawnedObject.name = "Wall";
         tile.spawnedObject.GetComponent<SpriteRenderer>().sortingLayerName = "Walls";
+        tile.spawnedObject.layer = LayerMask.NameToLayer("Walls");
+        tile.spawnedObject.tag = "Inanimate";
 
         tile.gridLocation = location;
         tile.walkable = false;
@@ -273,21 +275,26 @@ public class RoomExteriorGenerator : MonoBehaviour
         tile.spawnedObject = new GameObject();
         tile.spawnedObject.transform.parent = doorContainer.transform;
         tile.spawnedObject.transform.localPosition = new Vector3(location.x, location.y, 0);
+        tile.spawnedObject.AddComponent<SpriteRenderer>().sprite = doorSprites.doorOpened;
+        tile.spawnedObject.GetComponent<SpriteRenderer>().sortingLayerName = "Walls";
+        tile.spawnedObject.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+        tile.spawnedObject.SetActive(true);
+        tile.spawnedObject.name = "Door";
+
         GameObject doorCollisionContainer = new GameObject();
         doorCollisionContainer.name = "Collision Container";
         doorCollisionContainer.transform.parent = tile.spawnedObject.transform;
         doorCollisionContainer.transform.localPosition = new Vector3(0, 0);
+        doorCollisionContainer.layer = LayerMask.NameToLayer("Walls");
+        doorCollisionContainer.tag = "Inanimate";
+
         BoxCollider2D doorCollision = doorCollisionContainer.AddComponent<BoxCollider2D>();
         doorCollision.size = new Vector2(1, 1);
-        tile.spawnedObject.AddComponent<SpriteRenderer>().sprite = doorSprites.doorOpened;
-        tile.spawnedObject.GetComponent<SpriteRenderer>().sortingLayerName = "Walls";
-        tile.spawnedObject.AddComponent<Rigidbody2D>().isKinematic = true;
+
         Door door = tile.spawnedObject.AddComponent<Door>();
         door.doorSprites = doorSprites;
         door.connectedCell = connectedCell;
         door.direction = direction;
-        tile.spawnedObject.SetActive(true);
-        tile.spawnedObject.name = "Door";
 
         // TODO: Set tile cost
 

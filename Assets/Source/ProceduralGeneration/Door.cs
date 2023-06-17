@@ -20,6 +20,15 @@ public class Door : MonoBehaviour
     [HideInInspector] public bool enterable = false;
 
     /// <summary>
+    /// Initialize Collision
+    /// </summary>
+    private void Awake()
+    {
+        gameObject.layer = LayerMask.NameToLayer("Walls");
+        gameObject.tag =  "Inanimate";
+    }
+
+    /// <summary>
     /// Sets the door to the open state
     /// </summary>
     public void Open()
