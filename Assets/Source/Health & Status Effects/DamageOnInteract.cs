@@ -77,7 +77,7 @@ public class DamageOnInteract : MonoBehaviour
         }
 
         yield return new WaitForSeconds(damageInterval);
-        while (collider.IsTouching(other))
+        while (collider != null && collider.IsTouching(other))
         {
             health.ReceiveAttack(damageData);
             yield return new WaitForSeconds(damageInterval);
