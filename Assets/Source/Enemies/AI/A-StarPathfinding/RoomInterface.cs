@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Tile = Cardificer.Tile;
 
 namespace Cardificer
 {
@@ -103,23 +101,12 @@ namespace Cardificer
                     else
                     {
                         // add to appropriate lists
-                        if (curTile.walkable)
-                        {
-                            walkRoomGrid[x, y] =
-                                new PathfindingTile(curTile, curTile.walkable, curTile.walkMovementPenalty);
-                        }
-
-                        if (curTile.flyable)
-                        {
-                            flyRoomGrid[x, y] =
-                                new PathfindingTile(curTile, curTile.flyable, curTile.flyMovementPenalty);
-                        }
-
-                        if (curTile.burrowable)
-                        {
-                            burrowRoomGrid[x, y] = new PathfindingTile(curTile, curTile.burrowable,
-                                curTile.burrowMovementPenalty);
-                        }
+                        walkRoomGrid[x, y] =
+                            new PathfindingTile(curTile, curTile.walkable, curTile.walkMovementPenalty);
+                        flyRoomGrid[x, y] =
+                            new PathfindingTile(curTile, curTile.flyable, curTile.flyMovementPenalty);
+                        burrowRoomGrid[x, y] = new PathfindingTile(curTile, curTile.burrowable,
+                            curTile.burrowMovementPenalty);
                     }
                 }
             }
@@ -276,31 +263,83 @@ namespace Cardificer
                     );
                     Gizmos.DrawCube(worldPos, Vector3.one);
                 }
-            } else if (drawWalkTiles)
+            }
+            else if (drawWalkTiles)
             {
-                foreach (var t in walkRoomGrid)
+                for (int x = 0; x < walkRoomGrid.GetLength(0); x++)
                 {
-                    Gizmos.color = t.moveable ? Color.green : Color.red;
+                    for (int y = 0; y < walkRoomGrid.GetLength(1); y++)
+                    {
+                        var t = walkRoomGrid[x, y];
 
-                    Gizmos.DrawCube(TileToWorldPos(t), Vector3.one);
+                        if (t == null)
+                        {
+                            Gizmos.color = Color.blue;
+                            Vector2 worldPos = new Vector2(
+                                x + myWorldPosition.x - myRoomSize.x / 2,
+                                y + myWorldPosition.y - myRoomSize.y / 2
+                            );
+                            Gizmos.DrawCube(worldPos, Vector3.one);
+                        }
+                        else
+                        {
+                            Gizmos.color = t.moveable ? Color.green : Color.red;
+
+                            Gizmos.DrawCube(TileToWorldPos(t), Vector3.one);
+                        }
+                    }
                 }
             }
             else if (drawBurrowTiles)
             {
-                foreach (var t in burrowRoomGrid)
+                for (int x = 0; x < burrowRoomGrid.GetLength(0); x++)
                 {
-                    Gizmos.color = t.moveable ? Color.green : Color.red;
+                    for (int y = 0; y < burrowRoomGrid.GetLength(1); y++)
+                    {
+                        var t = burrowRoomGrid[x, y];
 
-                    Gizmos.DrawCube(TileToWorldPos(t), Vector3.one);
+                        if (t == null)
+                        {
+                            Gizmos.color = Color.blue;
+                            Vector2 worldPos = new Vector2(
+                                x + myWorldPosition.x - myRoomSize.x / 2,
+                                y + myWorldPosition.y - myRoomSize.y / 2
+                            );
+                            Gizmos.DrawCube(worldPos, Vector3.one);
+                        }
+                        else
+                        {
+                            Gizmos.color = t.moveable ? Color.green : Color.red;
+
+                            Gizmos.DrawCube(TileToWorldPos(t), Vector3.one);
+                        }
+                    }
                 }
             }
             else if (drawFlyTiles)
             {
-                foreach (var t in flyRoomGrid)
+                for (int x = 0; x < flyRoomGrid.GetLength(0); x++)
                 {
-                    Gizmos.color = t.moveable ? Color.green : Color.red;
+                    for (int y = 0; y < flyRoomGrid.GetLength(1); y++)
+                    {
+                        var t = flyRoomGrid[x, y];
 
-                    Gizmos.DrawCube(TileToWorldPos(t), Vector3.one);
+                        if (t == null)
+                        {
+                            Gizmos.color = Color.blue;
+                            Vector2 worldPos = new Vector2(
+                                x + myWorldPosition.x - myRoomSize.x / 2,
+                                y + myWorldPosition.y - myRoomSize.y / 2
+                            );
+                            Gizmos.DrawCube(worldPos, Vector3.one);
+                        }
+                        else
+                        {
+                            Gizmos.color = t.moveable ? Color.green : Color.red;
+
+                            Gizmos.DrawCube(TileToWorldPos(t), Vector3.one);
+                        }
+                    }
                 }
             }
         }
