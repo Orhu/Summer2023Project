@@ -87,8 +87,6 @@ GameObject:
   - component: {fileID: 156754919104867910}
   - component: {fileID: 5097362261395317995}
   - component: {fileID: 2939038239829249596}
-  - component: {fileID: 4814359745885439631}
-  - component: {fileID: 8407350766937384033}
   - component: {fileID: 542899057510882649}
   - component: {fileID: 7400328270181020654}
   m_Layer: 7
@@ -215,14 +213,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af611a0591bda784ca1ea39c0913459f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialState: {fileID: 11400000, guid: a7fd96789dd3ace489f44f39b9ea82bf, type: 2}
+  initialState: {fileID: 11400000, guid: 477429be3bb41214fa176b7272192a89, type: 2}
   delayBeforeLogic: 1
-  currentTarget: {x: 0, y: 0}
-  player: {fileID: 0}
+  currentPathfindingTarget: {x: 0, y: 0}
+  currentAttackTarget: {x: 0, y: 0}
   feetCollider: {fileID: 0}
   currentState: {fileID: 0}
   destinationReached: 0
   exhausted: 0
+  startingMovementType: 0
+  currentMovementType: 0
   drawGizmos: 0
   debugWaypoint: {x: 0, y: 0}
 --- !u!114 &7281680880204442666
@@ -307,39 +307,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destructionDelay: 0
---- !u!114 &4814359745885439631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7281680880204442677}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98cf0851209e7a54499c32f489013d98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8407350766937384033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7281680880204442677}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44f1bd772b104d946a7d0f37bf98684d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damageData:
-    damage: 2
-    damageType: 0
-    statusEffects: []
-    invertInvincibility: 0
-  damageInterval: 0.5
-  immediatelyDamage: 1
-  noTriggerDamage: 1
-  noCollisionDamage: 0
 --- !u!95 &542899057510882649
 Animator:
   serializedVersion: 5

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-namespace Cardificer
+namespace Cardificer.FiniteStateMachine
 {
     /// <summary>
     /// Represents a transition between states in a finite state machine

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Cardificer
+namespace Cardificer.FiniteStateMachine
 {
     /// <summary>
     /// Represents a state in a finite state machine that simply says "Remain in whatever state you are in" when a transition specifies this class

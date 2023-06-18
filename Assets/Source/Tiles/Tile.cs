@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Cardificer
@@ -13,7 +15,19 @@ namespace Cardificer
         [SerializeField] public bool walkable = true;
 
         [Tooltip("How much this tile costs to walk on (higher is avoided more, lower is preferred)")]
-        [SerializeField] public int movementPenalty;
+        [SerializeField] public int walkMovementPenalty;
+
+        [Tooltip("is this tile able to be flown over?")]
+        public bool flyable = true;
+
+        [Tooltip("How much this tile costs to fly over (higher is avoided more, lower is preferred)")]
+        public int flyMovementPenalty;
+
+        [Tooltip("is this tile able to be burrowed below?")]
+        public bool burrowable = true;
+
+        [Tooltip("How much this tile costs to burrow below (higher is avoided more, lower is preferred)")]
+        public int burrowMovementPenalty;
 
         // the x and y location of this tile within the 2D array grid
         [HideInInspector] public Vector2Int gridLocation;
@@ -32,6 +46,11 @@ namespace Cardificer
         {
             Tile copiedTile = ScriptableObject.CreateInstance<Tile>();
             copiedTile.walkable = walkable;
+            copiedTile.walkMovementPenalty = walkMovementPenalty;
+            copiedTile.flyable = flyable;
+            copiedTile.flyMovementPenalty = flyMovementPenalty;
+            copiedTile.burrowable = burrowable;
+            copiedTile.burrowMovementPenalty = burrowMovementPenalty;
             copiedTile.gridLocation = gridLocation;
             copiedTile.type = type;
             copiedTile.spawnedObject = spawnedObject;

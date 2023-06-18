@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Cardificer
+namespace Cardificer.FiniteStateMachine
 {
     /// <summary>
     /// Represents a transition between states in a finite state machine, where there are more than one condition and all must be true for the decision to be true

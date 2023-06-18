@@ -1,4 +1,6 @@
+using Cardificer;
 using UnityEngine;
+using Tile = Cardificer.Tile;
 
 /// <summary>
 /// Represents a tile for the purposes of pathfinding
@@ -34,7 +36,7 @@ public class PathfindingTile : IHeapItem<PathfindingTile>
     /// This param is needed because Tiles have multiple "moveable" variables for walking, flying, and burrowing </param>
     /// <param name="newMovementPenalty"> How much this tile costs to walk on (higher is avoided more, lower is preferred).
     /// This param is needed because Tiles have multiple movementPenalty variables for walking, flying, and burrowing </param>
-    public PathfindingTile(Tile t, bool newMoveable, int newMovementPenalty)
+    public PathfindingTile(Cardificer.Tile t, bool newMoveable, int newMovementPenalty)
     {
         moveable = newMoveable;
         movementPenalty = newMovementPenalty;

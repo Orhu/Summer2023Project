@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Cardificer
+namespace Cardificer.FiniteStateMachine
 {
     /// <summary>
     /// Represents a state in a finite state machine
