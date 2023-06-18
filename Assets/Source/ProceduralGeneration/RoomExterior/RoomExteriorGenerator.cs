@@ -36,18 +36,6 @@ namespace Cardificer
                     }
                 }
             }
-
-            // Set the start room to active
-            Room startRoom = map.startCell.room.GetComponent<Room>();
-
-            for (int i = 0; i < startRoom.transform.childCount; i++)
-            {
-                startRoom.transform.GetChild(i).gameObject.SetActive(true);
-            }
-
-            FloorGenerator.floorGeneratorInstance.currentRoom = startRoom;
-
-            startRoom.ActivateDoors();
         }
 
         /// <summary>
