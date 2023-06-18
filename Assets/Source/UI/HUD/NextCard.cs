@@ -1,37 +1,40 @@
 using UnityEngine;
 
-/// <summary>
-/// Makes a card renderer show the card at the top of the draw pile.
-/// </summary>
-public class NextCard : MonoBehaviour
+namespace Cardificer
 {
-    // The card renderer to update.
-    CardRenderer cardRenderer;
-
     /// <summary>
-    /// Initializes reference and binding.
+    /// Makes a card renderer show the card at the top of the draw pile.
     /// </summary>
-    void Start()
+    public class NextCard : MonoBehaviour
     {
-        cardRenderer = GetComponent<CardRenderer>();
-        Deck.playerDeck.onDrawPileChanged += OnCardDrawn;
-    }
+        // The card renderer to update.
+        CardRenderer cardRenderer;
 
-    /// <summary>
-    /// Updates the renderer when a card is drawn.
-    /// </summary>
-    void OnCardDrawn()
-    {
-        if (Deck.playerDeck.drawableCards.Count == 0)
+        /// <summary>
+        /// Initializes reference and binding.
+        /// </summary>
+        void Start()
         {
-            cardRenderer.card = null;
-            return;
+            cardRenderer = GetComponent<CardRenderer>();
+            Deck.playerDeck.onDrawPileChanged += OnCardDrawn;
         }
 
-        Card card = Deck.playerDeck.drawableCards[Deck.playerDeck.drawableCards.Count - 1];
-        if (cardRenderer.card != card)
+        /// <summary>
+        /// Updates the renderer when a card is drawn.
+        /// </summary>
+        void OnCardDrawn()
         {
-            cardRenderer.card = card;
+            if (Deck.playerDeck.drawableCards.Count == 0)
+            {
+                cardRenderer.card = null;
+                return;
+            }
+
+            Card card = Deck.playerDeck.drawableCards[Deck.playerDeck.drawableCards.Count - 1];
+            if (cardRenderer.card != card)
+            {
+                cardRenderer.card = card;
+            }
         }
     }
 }

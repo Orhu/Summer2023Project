@@ -2,22 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Represents a decision checking whether our current velocity is below a certain amount
-/// </summary>
-[CreateAssetMenu(menuName = "FSM/Decisions/Velocity Below Amount")]
-public class VelocityBelowAmount : FSMDecision
+namespace Cardificer.FiniteStateMachine
 {
-    [Tooltip("Velocity threshold to check against")]
-    [SerializeField] private float velocityThreshold;
-    
     /// <summary>
-    /// Returns true if the velocity is below the provided threshold
+    /// Represents a decision checking whether our current velocity is below a certain amount
     /// </summary>
-    /// <param name="stateMachine"> The stateMachine to use </param>
-    /// <returns> True if the velocity is below the provided threshold, false otherwise </returns>
-    public override bool Evaluate(BaseStateMachine stateMachine)
+    [CreateAssetMenu(menuName = "FSM/Decisions/Velocity Below Amount")]
+    public class VelocityBelowAmount : FSMDecision
     {
-        return stateMachine.GetComponent<Rigidbody2D>().velocity.magnitude <= velocityThreshold;
+        [Tooltip("Velocity threshold to check against")]
+        [SerializeField] private float velocityThreshold;
+
+        /// <summary>
+        /// Returns true if the velocity is below the provided threshold
+        /// </summary>
+        /// <param name="stateMachine"> The stateMachine to use </param>
+        /// <returns> True if the velocity is below the provided threshold, false otherwise </returns>
+        public override bool Evaluate(BaseStateMachine stateMachine)
+        {
+            return stateMachine.GetComponent<Rigidbody2D>().velocity.magnitude <= velocityThreshold;
+        }
     }
 }
