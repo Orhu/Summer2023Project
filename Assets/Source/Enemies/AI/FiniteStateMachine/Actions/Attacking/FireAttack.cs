@@ -7,7 +7,6 @@ using UnityEngine.Events;
 
 namespace Cardificer.FiniteStateMachine
 {
-
     /// <summary>
     /// Represents an action that fires an attack
     /// </summary>
@@ -68,11 +67,11 @@ namespace Cardificer.FiniteStateMachine
             }
 
             // afterAction?.Invoke(stateMachine);
-            var exhaustableComponent = stateMachine.GetComponent<Exhaustable>();
-            if (exhaustableComponent != null)
-            {
-                exhaustableComponent.ExhaustMe(exhaustDuration);
-            }
+            // var exhaustableComponent = stateMachine.GetComponent<Exhaustable>();
+            // if (exhaustableComponent != null)
+            // {
+            //     exhaustableComponent.ExhaustMe(exhaustDuration);
+            // }
 
             yield return new WaitForSeconds(actionCooldownTime);
             // afterCooldown?.Invoke(stateMachine);
