@@ -202,7 +202,7 @@ namespace Cardificer
                     // Find most recent autosave
                     if (!_latestAutosaveIndex.Exists())
                     {
-                        Debug.LogWarning("AutosaveIndex missing, regenerating data");
+                        bool autosaveFound = false;
                         int autosaveIndex = 0;
                         while (
                             autosaveIndex < NUMBER_OF_AUTOSAVES - 1
@@ -211,8 +211,19 @@ namespace Cardificer
                             )
                         {
                             autosaveIndex++;
+                            autosaveFound = true;
                         }
-                        _latestAutosaveIndex.data = autosaveIndex;
+
+                        if (autosaveFound)
+                        {
+                            Debug.LogWarning("AutosaveIndex missing, regenerating data");
+                            _latestAutosaveIndex.data = autosaveIndex;
+                        }
+                        else
+                        {
+                            // No valid autosaves
+                            return null;
+                        }
                     }
 
                     // Try loading autosaves in order
@@ -244,7 +255,7 @@ namespace Cardificer
 
                     // No valid autosaves
                     _latestAutosaveIndex.data = 0;
-                    return autosaves[0].data;
+                    return null;
                 }
                 set
                 {
