@@ -8,14 +8,14 @@ namespace Cardificer
     [CreateAssetMenu(fileName = "NewCursed", menuName = "Status Effects/Cursed")]
     public class Cursed : StatusEffect
     {
-        [Tooltip("The amount incoming damage is multiplied by.")]
-        public float damageMultiplier = 2f;
+        [Tooltip("The number of extra stacks that are applied every time a status effect is applied.")]
+        public int additionalStacks = 1;
 
         [Tooltip("The amount of time to add when stacked in seconds.")]
-        public float additionalStackTime = 1f;
+        public float additionalStackTime = 2f;
 
         [Tooltip("The max duration of this effect.")]
-        public float maxDuration = 5f;
+        public float maxDuration = 10f;
 
         /// <summary>
         /// Creates a new status effect that is a copy of the caller.
@@ -26,7 +26,7 @@ namespace Cardificer
         {
             Cursed instance = (Cursed)base.CreateCopy(gameObject);
 
-            gameObject.GetComponent<Health>().onRequestIncomingAttackModification += instance.MutiplyDamage;
+            gameObject.GetComponent<Health>().onRequestIncomingAttackModification += instance.MutiplyStatusEffects;
 
             return instance;
         }
@@ -51,9 +51,13 @@ namespace Cardificer
         /// Responds to a health's incoming damage modification request, and prevents the attack from passing.
         /// </summary>
         /// <param name="attack"> The attack to prevent. </param>
-        private void MutiplyDamage(ref DamageData attack)
+        private void MutiplyStatusEffects(ref DamageData attack)
         {
-            attack.damage = (int)(attack.damage * damageMultiplier);
+            DamageData orignalAttack = new DamageData(attack, attack.causer);
+            for (int i = 0; i < additionalStacks; i++)
+            {
+                attack += orignalAttack.statusEffects;
+            }
         }
 
         /// <summary>
@@ -65,7 +69,7 @@ namespace Cardificer
 
             if (gameObject == null) { return; }
 
-            gameObject.GetComponent<Health>().onRequestIncomingAttackModification -= MutiplyDamage;
+            gameObject.GetComponent<Health>().onRequestIncomingAttackModification -= MutiplyStatusEffects;
         }
     }
 }
