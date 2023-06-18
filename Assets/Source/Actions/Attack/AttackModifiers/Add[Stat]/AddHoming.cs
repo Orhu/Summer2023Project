@@ -1,24 +1,28 @@
 using UnityEngine;
 
-/// <summary>
-/// Adds to homing stats of a projectile.
-/// </summary>
-[CreateAssetMenu(fileName = "NewAddHoming", menuName = "Cards/AttackModifers/Add[Stat]/AddHoming")]
-public class AddHoming : AttackModifier
+
+namespace Cardificer
 {
-    [Tooltip("The homing speed to add.")]
-    [SerializeField] private float homingSpeed;
-
-    [Tooltip("The amount of homing time to add.")]
-    [SerializeField] private float homingTime;
-
-    // The projectile this modifies
-    public override Projectile modifiedProjectile
+    /// <summary>
+    /// Adds to homing stats of a projectile.
+    /// </summary>
+    [CreateAssetMenu(fileName = "NewAddHoming", menuName = "Cards/AttackModifers/Add[Stat]/AddHoming")]
+    public class AddHoming : AttackModifier
     {
-        set
+        [Tooltip("The homing speed to add.")]
+        [SerializeField] private float homingSpeed;
+
+        [Tooltip("The amount of homing time to add.")]
+        [SerializeField] private float homingTime;
+
+        // The projectile this modifies
+        public override Projectile modifiedProjectile
         {
-            value.homingSpeed += homingSpeed;
-            value.remainingHomingTime += homingTime;
+            set
+            {
+                value.homingSpeed += homingSpeed;
+                value.remainingHomingTime += homingTime;
+            }
         }
     }
 }

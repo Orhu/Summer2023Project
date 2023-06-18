@@ -2,21 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Map manager script for handling rendering and logic
-/// for the map menu UI object
-/// </summary>
-public class MapMenu : MonoBehaviour
+namespace Cardificer
 {
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// Map manager script for handling rendering and logic
+    /// for the map menu UI object
+    /// </summary>
+    public class MapMenu : MonoBehaviour
     {
-        
-    }
+        // Start is called before the first frame update
+        void Start()
+        {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
     }
 }

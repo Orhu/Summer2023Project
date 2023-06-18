@@ -2,79 +2,83 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewBulletAttack", menuName = "Cards/Actions/BulletAttack")]
-/// <summary>
-/// An attack that fires a bullet in a strait line.
-/// </summary>
-public class BulletAttack : Attack
+
+namespace Cardificer
 {
-    [Tooltip("The sequence of when and where to spawn bullets")]
-    [SerializeField] private List<BulletSpawnInfo> _spawnSequence = new List<BulletSpawnInfo>() { new BulletSpawnInfo() };
-    public override List<ProjectileSpawnInfo> spawnSequence 
+    [CreateAssetMenu(fileName = "NewBulletAttack", menuName = "Cards/Actions/BulletAttack")]
+    /// <summary>
+    /// An attack that fires a bullet in a strait line.
+    /// </summary>
+    public class BulletAttack : Attack
     {
-        get 
+        [Tooltip("The sequence of when and where to spawn bullets")]
+        [SerializeField] private List<BulletSpawnInfo> _spawnSequence = new List<BulletSpawnInfo>() { new BulletSpawnInfo() };
+        public override List<ProjectileSpawnInfo> spawnSequence
         {
-            return _spawnSequence.Cast<ProjectileSpawnInfo>().ToList();
+            get
+            {
+                return _spawnSequence.Cast<ProjectileSpawnInfo>().ToList();
+            }
+            set
+            {
+                _spawnSequence = value.Cast<BulletSpawnInfo>().ToList();
+            }
         }
-        set
+
+        [Tooltip("The angle relative to the aim direction that this projectile will spawn at")]
+        public float randomAngle = 0f;
+
+        [Tooltip("The radius of the circle to randomly pick a point to spawn projectiles within.")]
+        public float randomOffset = 0f;
+
+        #region Previewing
+        public override void ApplyModifiersToPreview(IActor actor, List<AttackModifier> actionModifiers)
         {
-            _spawnSequence = value.Cast<BulletSpawnInfo>().ToList();
+            throw new System.NotImplementedException();
         }
+
+        public override void CancelPreview(IActor actor)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Preview(IActor actor)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void RemoveModifiersFromPreview(IActor actor, List<AttackModifier> actionModifiers)
+        {
+            throw new System.NotImplementedException();
+        }
+        #endregion
     }
-
-    [Tooltip("The angle relative to the aim direction that this projectile will spawn at")]
-    public float randomAngle = 0f;
-
-    [Tooltip("The radius of the circle to randomly pick a point to spawn projectiles within.")]
-    public float randomOffset = 0f;
-
-    #region Previewing
-    public override void ApplyModifiersToPreview(IActor actor, List<AttackModifier> actionModifiers)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void CancelPreview(IActor actor)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void Preview(IActor actor)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void RemoveModifiersFromPreview(IActor actor, List<AttackModifier> actionModifiers)
-    {
-        throw new System.NotImplementedException();
-    }
-    #endregion
-}
-
-/// <summary>
-/// The information about a single bullet spawning event.
-/// </summary>
-[System.Serializable]
-public class BulletSpawnInfo : ProjectileSpawnInfo
-{
-    [Tooltip("The angle relative to the aim direction that this projectile will spawn at")]
-    public float angle = 0;
-
-    [Tooltip("The offset from the spawn location to spawn this bullet at")]
-    public Vector2 offset = Vector2.zero;
-
 
     /// <summary>
-    /// Creates a duplicate of this.
+    /// The information about a single bullet spawning event.
     /// </summary>
-    /// <returns> The created duplicate. </returns>
-    public override ProjectileSpawnInfo Instantiate()
+    [System.Serializable]
+    public class BulletSpawnInfo : ProjectileSpawnInfo
     {
-        BulletSpawnInfo newInfo = new BulletSpawnInfo();
-        newInfo.delay = delay;
-        newInfo.angle = angle;
-        newInfo.offset = offset;
+        [Tooltip("The angle relative to the aim direction that this projectile will spawn at")]
+        public float angle = 0;
 
-        return newInfo;
+        [Tooltip("The offset from the spawn location to spawn this bullet at")]
+        public Vector2 offset = Vector2.zero;
+
+
+        /// <summary>
+        /// Creates a duplicate of this.
+        /// </summary>
+        /// <returns> The created duplicate. </returns>
+        public override ProjectileSpawnInfo Instantiate()
+        {
+            BulletSpawnInfo newInfo = new BulletSpawnInfo();
+            newInfo.delay = delay;
+            newInfo.angle = angle;
+            newInfo.offset = offset;
+
+            return newInfo;
+        }
     }
 }

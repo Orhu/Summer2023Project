@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5147736872089338880}
   - component: {fileID: -4312951206435015734}
   - component: {fileID: 4314439275753330728}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: BulletProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,22 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6455aa31786d6fb48b08c35d8a752fa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attack: {fileID: 0}
-  causer: {fileID: 0}
-  modifiers: []
-  attackData:
-    damage: 0
-    damageType: 0
-    statusEffects: []
-  speed: 0
-  maxSpeed: 0
-  minSpeed: 0
-  acceleration: 0
-  remainingLifetime: 0
-  remainingHits: 0
-  remainingHomingTime: 0
-  homingSpeed: 0
-  index: 0
 --- !u!50 &4314439275753330728
 Rigidbody2D:
   serializedVersion: 4

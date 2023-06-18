@@ -1,18 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// Script that reloads the current scene.
-/// </summary>
-public class ReloadScene : MonoBehaviour
+namespace Cardificer
 {
     /// <summary>
-    /// Reloads the current scene.
+    /// Script that reloads the current scene.
     /// </summary>
-    public void ReloadCurrentScene()
+    public class ReloadScene : MonoBehaviour
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        /// <summary>
+        /// Reloads the current scene.
+        /// </summary>
+        public void ReloadCurrentScene()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 }

@@ -1,101 +1,101 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
-/// <summary>
-/// The tiles that make up the exterior of the rooms
-/// </summary>
-[System.Serializable]
-[CreateAssetMenu(fileName = "NewRoomExteriorGenerationParameters", menuName = "Generation/RoomExteriorGenerationParameters", order = 1)]
-
-public class RoomExteriorGenerationParameters : ScriptableObject
+namespace Cardificer
 {
-    [Tooltip("The possible right wall sprites to use (will pick randomly from these)")]
-    public GenericWeightedThings<Sprite> rightWallSprites;
+    /// <summary>
+    /// The tiles that make up the exterior of the rooms
+    /// </summary>
+    [System.Serializable]
+    [CreateAssetMenu(fileName = "NewRoomExteriorGenerationParameters", menuName = "Generation/RoomExteriorGenerationParameters", order = 1)]
 
-    [Tooltip("The possible top wall sprites to use")]
-    public GenericWeightedThings<Sprite> topWallSprites;
+    public class RoomExteriorGenerationParameters : ScriptableObject
+    {
+        [Tooltip("The possible right wall sprites to use (will pick randomly from these)")]
+        public GenericWeightedThings<Sprite> rightWallSprites;
 
-    [Tooltip("The possible left wall sprites to use")]
-    public GenericWeightedThings<Sprite> leftWallSprites;
+        [Tooltip("The possible top wall sprites to use")]
+        public GenericWeightedThings<Sprite> topWallSprites;
 
-    [Tooltip("The possible bottom wall sprites to use")]
-    public GenericWeightedThings<Sprite> bottomWallSprites;
+        [Tooltip("The possible left wall sprites to use")]
+        public GenericWeightedThings<Sprite> leftWallSprites;
 
-    [Tooltip("The possible top right wall corner sprites to use")]
-    public GenericWeightedThings<Sprite> topRightWallCornerSprites;
+        [Tooltip("The possible bottom wall sprites to use")]
+        public GenericWeightedThings<Sprite> bottomWallSprites;
 
-    [Tooltip("The possible top left wall corner sprites to use")]
-    public GenericWeightedThings<Sprite> topLeftWallCornerSprites;
+        [Tooltip("The possible top right wall corner sprites to use")]
+        public GenericWeightedThings<Sprite> topRightWallCornerSprites;
 
-    [Tooltip("The possible bottom left wall corner sprites to use")]
-    public GenericWeightedThings<Sprite> bottomLeftWallCornerSprites;
+        [Tooltip("The possible top left wall corner sprites to use")]
+        public GenericWeightedThings<Sprite> topLeftWallCornerSprites;
 
-    [Tooltip("The possible bottom right wall corner sprites to use")]
-    public GenericWeightedThings<Sprite> bottomRightWallCornerSprites;
+        [Tooltip("The possible bottom left wall corner sprites to use")]
+        public GenericWeightedThings<Sprite> bottomLeftWallCornerSprites;
 
-    [Tooltip("The possible right door sprites to use")]
-    public GenericWeightedThings<DoorSprites> rightDoorSprites;
+        [Tooltip("The possible bottom right wall corner sprites to use")]
+        public GenericWeightedThings<Sprite> bottomRightWallCornerSprites;
 
-    [Tooltip("The possible top door sprites to use")]
-    public GenericWeightedThings<DoorSprites> topDoorSprites;
+        [Tooltip("The possible right door sprites to use")]
+        public GenericWeightedThings<DoorSprites> rightDoorSprites;
 
-    [Tooltip("The possible left door sprites to use")]
-    public GenericWeightedThings<DoorSprites> leftDoorSprites;
+        [Tooltip("The possible top door sprites to use")]
+        public GenericWeightedThings<DoorSprites> topDoorSprites;
 
-    [Tooltip("The possible bottom door sprites to use")]
-    public GenericWeightedThings<DoorSprites> bottomDoorSprites;
+        [Tooltip("The possible left door sprites to use")]
+        public GenericWeightedThings<DoorSprites> leftDoorSprites;
 
-    [Tooltip("The possible above left door sprites to use")]
-    public GenericWeightedThings<Sprite> aboveLeftDoorSprites;
+        [Tooltip("The possible bottom door sprites to use")]
+        public GenericWeightedThings<DoorSprites> bottomDoorSprites;
 
-    [Tooltip("The possible below left door sprites to use")]
-    public GenericWeightedThings<Sprite> belowLeftDoorSprites;
+        [Tooltip("The possible above left door sprites to use")]
+        public GenericWeightedThings<Sprite> aboveLeftDoorSprites;
 
-    [Tooltip("The possible above right door sprites to use")]
-    public GenericWeightedThings<Sprite> aboveRightDoorSprites;
+        [Tooltip("The possible below left door sprites to use")]
+        public GenericWeightedThings<Sprite> belowLeftDoorSprites;
 
-    [Tooltip("The possible below right door sprites to use")]
-    public GenericWeightedThings<Sprite> belowRightDoorSprites;
+        [Tooltip("The possible above right door sprites to use")]
+        public GenericWeightedThings<Sprite> aboveRightDoorSprites;
 
-    [Tooltip("The possible floor sprites to use")]
-    public GenericWeightedThings<Sprite> floorSprites;
+        [Tooltip("The possible below right door sprites to use")]
+        public GenericWeightedThings<Sprite> belowRightDoorSprites;
+
+        [Tooltip("The possible floor sprites to use")]
+        public GenericWeightedThings<Sprite> floorSprites;
+
+        /// <summary>
+        /// Resets all the GenericWeightedThings lists
+        /// </summary>
+        public void Reset()
+        {
+            rightWallSprites.Reset();
+            topWallSprites.Reset();
+            leftWallSprites.Reset();
+            bottomWallSprites.Reset();
+            topRightWallCornerSprites.Reset();
+            topLeftWallCornerSprites.Reset();
+            bottomLeftWallCornerSprites.Reset();
+            bottomRightWallCornerSprites.Reset();
+            rightDoorSprites.Reset();
+            topDoorSprites.Reset();
+            leftDoorSprites.Reset();
+            bottomDoorSprites.Reset();
+            aboveLeftDoorSprites.Reset();
+            belowLeftDoorSprites.Reset();
+            aboveRightDoorSprites.Reset();
+            belowRightDoorSprites.Reset();
+            floorSprites.Reset();
+        }
+    }
 
     /// <summary>
-    /// Resets all the GenericWeightedThings lists
+    /// Holds two sprites for a door, an opened one and a closed one
     /// </summary>
-    public void Reset()
+    [System.Serializable]
+    public class DoorSprites
     {
-        rightWallSprites.Reset();
-        topWallSprites.Reset();
-        leftWallSprites.Reset();
-        bottomWallSprites.Reset();
-        topRightWallCornerSprites.Reset();
-        topLeftWallCornerSprites.Reset();
-        bottomLeftWallCornerSprites.Reset();
-        bottomRightWallCornerSprites.Reset();
-        rightDoorSprites.Reset();
-        topDoorSprites.Reset();
-        leftDoorSprites.Reset();
-        bottomDoorSprites.Reset();
-        aboveLeftDoorSprites.Reset();
-        belowLeftDoorSprites.Reset();
-        aboveRightDoorSprites.Reset();
-        belowRightDoorSprites.Reset();
-        floorSprites.Reset();
+        [Tooltip("The door opened tile to use")]
+        [SerializeField] public Sprite doorOpened;
+
+        [Tooltip("The door closed tile")]
+        [SerializeField] public Sprite doorClosed;
     }
-}
-
-/// <summary>
-/// Holds two sprites for a door, an opened one and a closed one
-/// </summary>
-[System.Serializable]
-public class DoorSprites
-{
-    [Tooltip("The door opened tile to use")]
-    [SerializeField] public Sprite doorOpened;
-
-    [Tooltip("The door closed tile")]
-    [SerializeField] public Sprite doorClosed;
 }

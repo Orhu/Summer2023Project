@@ -1,12 +1,16 @@
 using UnityEngine;
 
-/// <summary>
-/// Base class for attack previewers
-/// </summary>
-public class AttackPreviewer : MonoBehaviour
+
+namespace Cardificer
 {
-    // The owner of the preview.
-    public IActor actor;
-    // The attack being previewed.
-    public Attack attack;
+    /// <summary>
+    /// Base class for attack previewers
+    /// </summary>
+    public class AttackPreviewer : MonoBehaviour
+    {
+        // The owner of the preview.
+        public IActor actor;
+        // The attack being previewed.
+        public Attack attack;
+    }
 }

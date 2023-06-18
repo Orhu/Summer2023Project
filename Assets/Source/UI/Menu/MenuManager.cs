@@ -2,197 +2,200 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Singleton manager class for UI menus
-/// </summary>
-public class MenuManager : MonoBehaviour
+namespace Cardificer
 {
-    // Singleton for the menu manager
-    [HideInInspector]public static MenuManager instance;
-    [Tooltip("Booster pack menu reference, assigned in inspector")]
-    [SerializeField]private BoosterPackMenu boosterPackMenu;
-    [Tooltip("Pause Menu reference, assigned in inspector")]
-    [SerializeField] private PauseMenu pauseMenu;
-    [Tooltip("Map Menu reference, assigned in inspector")]
-    [SerializeField] private MapMenu mapMenu;
-    [Tooltip("Card Menu reference, assigned in inspector")]
-    [SerializeField] private CardMenu cardMenu;
-    // Reference to the player's game object
-    private GameObject playerGameObject;
-    // Know whether we currently have a menu open or not
-    public bool menuOpen { get; private set; }
-
     /// <summary>
-    /// Enum for each of the menu types
+    /// Singleton manager class for UI menus
     /// </summary>
-    private enum MenuTypes
+    public class MenuManager : MonoBehaviour
     {
-        Pause,
-        Booster,
-        Map,
-        Card
-    }
+        // Singleton for the menu manager
+        [HideInInspector] public static MenuManager instance;
+        [Tooltip("Booster pack menu reference, assigned in inspector")]
+        [SerializeField] private BoosterPackMenu boosterPackMenu;
+        [Tooltip("Pause Menu reference, assigned in inspector")]
+        [SerializeField] private PauseMenu pauseMenu;
+        [Tooltip("Map Menu reference, assigned in inspector")]
+        [SerializeField] private MapMenu mapMenu;
+        [Tooltip("Card Menu reference, assigned in inspector")]
+        [SerializeField] private CardMenu cardMenu;
+        // Reference to the player's game object
+        private GameObject playerGameObject;
+        // Know whether we currently have a menu open or not
+        public bool menuOpen { get; private set; }
 
-    // Internally know which menu is open
-    private MenuTypes currentMenu;
-
-    /// <summary>
-    /// Assign singleton variable
-    /// </summary>
-    private void Awake()
-    {
-        if (instance == null)
+        /// <summary>
+        /// Enum for each of the menu types
+        /// </summary>
+        private enum MenuTypes
         {
-            instance = this;
-            playerGameObject = Player.Get();
-            if (boosterPackMenu == null)
-            {
-                boosterPackMenu = GetComponentInChildren<BoosterPackMenu>();
-            }
-            if(pauseMenu == null)
-            {
-                pauseMenu = GetComponentInChildren<PauseMenu>();
-            }
-            if(cardMenu == null)
-            {
-                cardMenu = GetComponentInChildren<CardMenu>();
-            }
-            if(mapMenu == null)
-            {
-                mapMenu = GetComponentInChildren<MapMenu>();
-            }
+            Pause,
+            Booster,
+            Map,
+            Card
+        }
 
-            currentMenu = MenuTypes.Pause;
-        } 
-    }
+        // Internally know which menu is open
+        private MenuTypes currentMenu;
 
-    /// <summary>
-    /// Handles the changing and closing of menus when menus are open
-    /// </summary>
-    private void Update()
-    {
-        if (instance.menuOpen)
+        /// <summary>
+        /// Assign singleton variable
+        /// </summary>
+        private void Awake()
         {
-            // Always close menus with escape
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (instance == null)
             {
-                CloseMenu();
+                instance = this;
+                playerGameObject = Player.Get();
+                if (boosterPackMenu == null)
+                {
+                    boosterPackMenu = GetComponentInChildren<BoosterPackMenu>();
+                }
+                if (pauseMenu == null)
+                {
+                    pauseMenu = GetComponentInChildren<PauseMenu>();
+                }
+                if (cardMenu == null)
+                {
+                    cardMenu = GetComponentInChildren<CardMenu>();
+                }
+                if (mapMenu == null)
+                {
+                    mapMenu = GetComponentInChildren<MapMenu>();
+                }
+
+                currentMenu = MenuTypes.Pause;
             }
-            // Closes card menu if its open, if not, open card menu
-            else if (Input.GetKeyDown(KeyCode.C))
+        }
+
+        /// <summary>
+        /// Handles the changing and closing of menus when menus are open
+        /// </summary>
+        private void Update()
+        {
+            if (instance.menuOpen)
             {
-                if (instance.currentMenu == MenuTypes.Card)
+                // Always close menus with escape
+                if (Input.GetKeyDown(KeyCode.Escape))
                 {
                     CloseMenu();
                 }
-                else
+                // Closes card menu if its open, if not, open card menu
+                else if (Input.GetKeyDown(KeyCode.C))
                 {
-                    CloseMenu();
-                    OpenCardMenu();
+                    if (instance.currentMenu == MenuTypes.Card)
+                    {
+                        CloseMenu();
+                    }
+                    else
+                    {
+                        CloseMenu();
+                        OpenCardMenu();
+                    }
+                }
+                // Closes Map menu if its open, if not, open map menu
+                else if (Input.GetKeyDown(KeyCode.Tab))
+                {
+                    if (instance.currentMenu == MenuTypes.Map)
+                    {
+                        CloseMenu();
+                    }
+                    else
+                    {
+                        CloseMenu();
+                        OpenMapMenu();
+                    }
                 }
             }
-            // Closes Map menu if its open, if not, open map menu
-            else if (Input.GetKeyDown(KeyCode.Tab))
+        }
+
+        /// <summary>
+        /// Opens the booster pack menu and populates the cards
+        /// </summary>
+        /// <param name="boosterPack">Booster pack prefab used in populating cards</param>
+        public static void OpenBoosterPackMenu(BoosterPack boosterPack)
+        {
+            if (!instance.menuOpen)
             {
-                if (instance.currentMenu == MenuTypes.Map)
-                {
-                    CloseMenu();
-                }
-                else
-                {
-                    CloseMenu();
-                    OpenMapMenu();
-                }
+                // "Pause the game", should probably be replaced with a more effective method
+                // Sets timeScale to 0, so all time related functions are stopped
+                Time.timeScale = 0;
+                instance.boosterPackMenu.gameObject.SetActive(true);
+                instance.boosterPackMenu.boosterPackObject = boosterPack;
+                // Disable player movement
+                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+                instance.currentMenu = MenuTypes.Booster;
+                instance.menuOpen = true;
             }
         }
-    }
 
-    /// <summary>
-    /// Opens the booster pack menu and populates the cards
-    /// </summary>
-    /// <param name="boosterPack">Booster pack prefab used in populating cards</param>
-    public static void OpenBoosterPackMenu(BoosterPack boosterPack)
-    {
-        if (!instance.menuOpen)
+        /// <summary>
+        /// Opens the pause menu
+        /// </summary>
+        public static void OpenPauseMenu()
         {
-            // "Pause the game", should probably be replaced with a more effective method
-            // Sets timeScale to 0, so all time related functions are stopped
-            Time.timeScale = 0;
-            instance.boosterPackMenu.gameObject.SetActive(true);
-            instance.boosterPackMenu.boosterPackObject = boosterPack;
-            // Disable player movement
-            instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
-            instance.currentMenu = MenuTypes.Booster;
-            instance.menuOpen = true;
-        }
-    }
-
-    /// <summary>
-    /// Opens the pause menu
-    /// </summary>
-    public static void OpenPauseMenu()
-    {
-        if (!instance.menuOpen)
-        {
-            // "Pause the game", should probably be replaced with a more effective method
-            // Sets timeScale to 0, so all time related functions are stopped
-            Time.timeScale = 0;
-            instance.pauseMenu.gameObject.SetActive(true);
-            // Disable player movement
-            instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
-            instance.currentMenu = MenuTypes.Pause;
-            instance.menuOpen = true;
-        }
-    }
-
-    public static void OpenMapMenu()
-    {
-        if (!instance.menuOpen)
-        {
-            // "Pause the game", should probably be replaced with a more effective method
-            // Sets timeScale to 0, so all time related functions are stopped
-            Time.timeScale = 0;
-            instance.mapMenu.gameObject.SetActive(true);
-            // Disable player movement
-            instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
-            instance.currentMenu = MenuTypes.Map;
-            instance.menuOpen = true;
-        }
-    }
-
-    public static void OpenCardMenu()
-    {
-        if (!instance.menuOpen)
-        {
-            // "Pause the game", should probably be replaced with a more effective method
-            // Sets timeScale to 0, so all time related functions are stopped
-            Time.timeScale = 0;
-            instance.cardMenu.gameObject.SetActive(true);
-            // Disable player movement
-            instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
-            instance.currentMenu = MenuTypes.Card;
-            instance.menuOpen = true;
-        }
-    }
-
-    /// <summary>
-    /// Called when any menu needs to be closed
-    /// </summary>
-    public void CloseMenu()
-    {
-        if (menuOpen)
-        {
-            // "Resume the game", resumes all time related function
-            Time.timeScale = 1;
-            // Re-enable player movement
-            playerGameObject.GetComponent<PlayerController>().enabled = true;
-
-            // close all menus
-            for (int i = 0; i < transform.childCount; i++)
+            if (!instance.menuOpen)
             {
-                transform.GetChild(i).gameObject.SetActive(false);
+                // "Pause the game", should probably be replaced with a more effective method
+                // Sets timeScale to 0, so all time related functions are stopped
+                Time.timeScale = 0;
+                instance.pauseMenu.gameObject.SetActive(true);
+                // Disable player movement
+                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+                instance.currentMenu = MenuTypes.Pause;
+                instance.menuOpen = true;
             }
-            menuOpen = false;
+        }
+
+        public static void OpenMapMenu()
+        {
+            if (!instance.menuOpen)
+            {
+                // "Pause the game", should probably be replaced with a more effective method
+                // Sets timeScale to 0, so all time related functions are stopped
+                Time.timeScale = 0;
+                instance.mapMenu.gameObject.SetActive(true);
+                // Disable player movement
+                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+                instance.currentMenu = MenuTypes.Map;
+                instance.menuOpen = true;
+            }
+        }
+
+        public static void OpenCardMenu()
+        {
+            if (!instance.menuOpen)
+            {
+                // "Pause the game", should probably be replaced with a more effective method
+                // Sets timeScale to 0, so all time related functions are stopped
+                Time.timeScale = 0;
+                instance.cardMenu.gameObject.SetActive(true);
+                // Disable player movement
+                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+                instance.currentMenu = MenuTypes.Card;
+                instance.menuOpen = true;
+            }
+        }
+
+        /// <summary>
+        /// Called when any menu needs to be closed
+        /// </summary>
+        public void CloseMenu()
+        {
+            if (menuOpen)
+            {
+                // "Resume the game", resumes all time related function
+                Time.timeScale = 1;
+                // Re-enable player movement
+                playerGameObject.GetComponent<PlayerController>().enabled = true;
+
+                // close all menus
+                for (int i = 0; i < transform.childCount; i++)
+                {
+                    transform.GetChild(i).gameObject.SetActive(false);
+                }
+                menuOpen = false;
+            }
         }
     }
 }
