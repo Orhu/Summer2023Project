@@ -46,7 +46,7 @@ namespace Cardificer
             if (noTriggerDamage || other.CompareTag(tag)) { return; }
             if (other.CompareTag("Inanimate")) { return; }
 
-            Health health = other.GetComponent<Health>();
+            Health health = other.GetComponentInParent<Health>();
             if (health == null) { return; }
 
             StartCoroutine(DealDamage(other, health));
