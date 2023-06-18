@@ -48,6 +48,7 @@ namespace Cardificer
         }
 
         // draw debug gizmos?
+        [SerializeField] private bool drawNullTiles;
         [SerializeField] private bool drawWalkTiles;
         [SerializeField] private bool drawFlyTiles;
         [SerializeField] private bool drawBurrowTiles;
@@ -77,7 +78,7 @@ namespace Cardificer
         /// Copies a given tile grid into a PathfindingTile grid and assigns it to this class' myRoomGrid variable
         /// </summary>
         /// <param name="inputArray"> The input array of tiles </param>
-        void DeepCopyGrid(Cardificer.Tile[,] inputArray)
+        void DeepCopyGrid(Tile[,] inputArray)
         {
             walkRoomGrid = new PathfindingTile[myRoomSize.x, myRoomSize.y];
             flyRoomGrid = new PathfindingTile[myRoomSize.x, myRoomSize.y];
@@ -264,7 +265,7 @@ namespace Cardificer
         /// </summary>
         private void OnDrawGizmos()
         {
-            if (drawWalkTiles)
+            if (drawNullTiles)
             {
                 foreach (var v2 in debugNullTiles)
                 {
@@ -274,6 +275,14 @@ namespace Cardificer
                         v2.y + myWorldPosition.y - myRoomSize.y / 2
                     );
                     Gizmos.DrawCube(worldPos, Vector3.one);
+                }
+            } else if (drawWalkTiles)
+            {
+                foreach (var t in walkRoomGrid)
+                {
+                    Gizmos.color = t.moveable ? Color.green : Color.red;
+
+                    Gizmos.DrawCube(TileToWorldPos(t), Vector3.one);
                 }
             }
             else if (drawBurrowTiles)

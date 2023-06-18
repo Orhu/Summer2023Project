@@ -100,35 +100,11 @@ namespace Cardificer.FiniteStateMachine
             currentState = initialState;
             cooldownData.cooldownReady = new Dictionary<FSMAction, bool>();
             cachedComponents = new Dictionary<Type, Component>();
-            feetCollider = FindMyFeet();
             currentMovementType = startingMovementType;
+            feetCollider = GetComponentInChildren<Collider2D>();;
         }
-
-        /// <summary>
-        /// Retrieves feet collider
-        /// </summary>
-        Collider2D FindMyFeet()
-        {
-            if (feetCollider != null)
-            {
-                return feetCollider;
-            }
-
-            var thisCollider = GetComponentInChildren<Collider2D>();
-
-            if (thisCollider != null && !thisCollider.isTrigger)
-            {
-                feetCollider = thisCollider;
-                return thisCollider;
-            }
-            else
-            {
-                Debug.LogError(
-                    "No feet collider found! Make sure the enemy has a non-trigger collider component attached to one of its children.");
-                return null;
-            }
-        }
-
+        
+        
         /// <summary>
         /// Grab the player gameobject and sets it to the default target
         /// </summary>
