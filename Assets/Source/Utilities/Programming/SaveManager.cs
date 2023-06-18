@@ -91,6 +91,13 @@ namespace Cardificer
                     if (!File.Exists(filePath)) { return default; }
 
                     JsonUtility.FromJsonOverwrite(File.ReadAllText(filePath), this);
+
+                    Debug.Log(File.ReadAllText(filePath) + "!=" + JsonUtility.ToJson(this, true));
+                    if (File.ReadAllText(filePath) != JsonUtility.ToJson(this, true)) 
+                    { 
+                        throw new FileLoadException("Failed to load save data", fileName); 
+                    }
+
                     return _data;
                 }
                 set
@@ -133,7 +140,7 @@ namespace Cardificer
             /// <summary>
             /// Clears the saved data.
             /// </summary>
-            private void ClearData()
+            public void ClearData()
             {
                 _data = initialValue;
 
@@ -183,7 +190,24 @@ namespace Cardificer
             {
                 get
                 {
-                    return autosaves[_latestAutosaveIndex.data].data;
+                    int startingIndex = _latestAutosaveIndex.data;
+                    int index = startingIndex;
+                    do
+                    {
+                        try
+                        {
+                            _latestAutosaveIndex.data = index;
+                            return autosaves[index].data;
+                        }
+                        catch
+                        {
+                            Debug.LogError("Autosave corrupted reverting to previous autosave");
+                            autosaves[index].ClearData();
+                            index = (index > 0 ? index : NUMBER_OF_AUTOSAVES) - 1;
+                        }
+                    } while (index != startingIndex);
+                    _latestAutosaveIndex.data = 0;
+                    return autosaves[0].data;
                 }
                 set
                 {

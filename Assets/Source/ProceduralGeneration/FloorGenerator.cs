@@ -119,11 +119,10 @@ namespace Cardificer
             int max = SaveManager.autosaveExists ? SaveManager.savedVisitedRooms[0].z : Deck.playerDeck.cards.Count;
             for (int i = 0; i < max; i++)
             {
+                if (i >= Deck.playerDeck.cards.Count) { continue; }
+
                 Card card = Deck.playerDeck.cards[i];
-                if (card.effects == null)
-                {
-                    return;
-                }
+                if (card == null || card.effects == null) { continue; }
 
                 foreach (DungeonEffect effect in card.effects)
                 {
@@ -160,6 +159,7 @@ namespace Cardificer
             int max = SaveManager.autosaveExists ? SaveManager.savedVisitedRooms[0].z : Deck.playerDeck.cards.Count;
             for (int i = 0; i < max; i++)
             {
+                if (i >= Deck.playerDeck.cards.Count) { continue; }
                 OnCardAdded(Deck.playerDeck.cards[i]);
             }
         }
