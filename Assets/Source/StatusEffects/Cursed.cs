@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Cardificer
 {
     /// <summary>
-    /// A status effect that prevents health from receiving attacks.
+    /// A status effect that increases incoming damage.
     /// </summary>
     [CreateAssetMenu(fileName = "NewCursed", menuName = "Status Effects/Cursed")]
     public class Cursed : StatusEffect
