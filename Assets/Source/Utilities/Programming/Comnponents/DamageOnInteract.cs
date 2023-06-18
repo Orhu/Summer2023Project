@@ -44,7 +44,7 @@ namespace Cardificer
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (noTriggerDamage || other.CompareTag(tag)) { return; }
-            if (other.GetComponent<Collider>().CompareTag("Inanimate")) { return; }
+            if (other.GetComponent<Collider2D>().CompareTag("Inanimate")) { return; }
 
             Health health = other.GetComponent<Health>();
             if (health == null) { return; }
