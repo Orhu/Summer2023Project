@@ -102,16 +102,16 @@ namespace Cardificer
 
             // Add the corners
             Sprite randomCornerSprite = exteriorParameters.bottomLeftWallCornerSprites.GetRandomThing(FloorGenerator.random);
-            room.roomGrid[0, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(0, 0), wallContainer);
+            room.roomGrid[0, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(0, 0), exteriorParameters.wallTile, wallContainer);
 
             randomCornerSprite = exteriorParameters.topLeftWallCornerSprites.GetRandomThing(FloorGenerator.random);
-            room.roomGrid[0, roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(0, roomSize.y - 1), wallContainer);
+            room.roomGrid[0, roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(0, roomSize.y - 1), exteriorParameters.wallTile, wallContainer);
 
             randomCornerSprite = exteriorParameters.bottomRightWallCornerSprites.GetRandomThing(FloorGenerator.random);
-            room.roomGrid[roomSize.x - 1, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(roomSize.x - 1, 0), wallContainer);
+            room.roomGrid[roomSize.x - 1, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(roomSize.x - 1, 0), exteriorParameters.wallTile, wallContainer);
 
             randomCornerSprite = exteriorParameters.topRightWallCornerSprites.GetRandomThing(FloorGenerator.random);
-            room.roomGrid[roomSize.x - 1, roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(roomSize.x - 1, roomSize.y - 1), wallContainer);
+            room.roomGrid[roomSize.x - 1, roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(roomSize.x - 1, roomSize.y - 1), exteriorParameters.wallTile, wallContainer);
 
             // Add the top and bottom walls
             for (int i = 1; i < roomSize.x - 1; i++)
@@ -119,13 +119,13 @@ namespace Cardificer
                 if (i != roomSize.x / 2 || (roomCell.direction & Direction.Down) == Direction.None)
                 {
                     Sprite randomWallSprite = exteriorParameters.bottomWallSprites.GetRandomThing(FloorGenerator.random);
-                    room.roomGrid[i, 0] = CreateWallTile(randomWallSprite, new Vector2Int(i, 0), wallContainer);
+                    room.roomGrid[i, 0] = CreateWallTile(randomWallSprite, new Vector2Int(i, 0), exteriorParameters.wallTile, wallContainer);
                 }
 
                 if (i != roomSize.x / 2 || (roomCell.direction & Direction.Up) == Direction.None)
                 {
                     Sprite randomWallSprite = exteriorParameters.topWallSprites.GetRandomThing(FloorGenerator.random);
-                    room.roomGrid[i, roomSize.y - 1] = CreateWallTile(randomWallSprite, new Vector2Int(i, roomSize.y - 1), wallContainer);
+                    room.roomGrid[i, roomSize.y - 1] = CreateWallTile(randomWallSprite, new Vector2Int(i, roomSize.y - 1), exteriorParameters.wallTile, wallContainer);
                 }
             }
 
@@ -135,34 +135,34 @@ namespace Cardificer
                 if ((j == roomSize.y / 2 - 1) && (roomCell.direction & Direction.Left) != Direction.None)
                 {
                     Sprite randomWallSprite = exteriorParameters.belowLeftDoorSprites.GetRandomThing(FloorGenerator.random);
-                    room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), wallContainer);
+                    room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), exteriorParameters.wallTile, wallContainer);
                 }
                 else if ((j == roomSize.y / 2 + 1) && (roomCell.direction & Direction.Left) != Direction.None)
                 {
                     Sprite randomWallSprite = exteriorParameters.aboveLeftDoorSprites.GetRandomThing(FloorGenerator.random);
-                    room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), wallContainer);
+                    room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), exteriorParameters.wallTile, wallContainer);
                 }
                 else if (j != roomSize.y / 2 || (roomCell.direction & Direction.Left) == Direction.None)
                 {
                     Sprite randomWallSprite = exteriorParameters.leftWallSprites.GetRandomThing(FloorGenerator.random);
-                    room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), wallContainer);
+                    room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), exteriorParameters.wallTile, wallContainer);
                 }
 
 
                 if ((j == roomSize.y / 2 - 1) && (roomCell.direction & Direction.Right) != Direction.None)
                 {
                     Sprite randomWallSprite = exteriorParameters.belowRightDoorSprites.GetRandomThing(FloorGenerator.random);
-                    room.roomGrid[roomSize.x - 10, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
+                    room.roomGrid[roomSize.x - 10, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), exteriorParameters.wallTile, wallContainer);
                 }
                 else if ((j == roomSize.y / 2 + 1) && (roomCell.direction & Direction.Right) != Direction.None)
                 {
                     Sprite randomWallSprite = exteriorParameters.aboveRightDoorSprites.GetRandomThing(FloorGenerator.random);
-                    room.roomGrid[roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
+                    room.roomGrid[roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), exteriorParameters.wallTile, wallContainer);
                 }
                 else if (j != roomSize.y / 2 || (roomCell.direction & Direction.Right) == Direction.None)
                 {
                     Sprite randomWallSprite = exteriorParameters.rightWallSprites.GetRandomThing(FloorGenerator.random);
-                    room.roomGrid[roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
+                    room.roomGrid[roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), exteriorParameters.wallTile, wallContainer);
                 }
             }
 
@@ -174,28 +174,18 @@ namespace Cardificer
         /// </summary>
         /// <param name="sprite"> The wall sprite </param>
         /// <param name="location"> The location of the tile (in the wall container frame) </param>
+        /// <param name="wallTile"> The tile to instantiate </param>
         /// <param name="wallContainer"> The game object container that holds all the walls </param>
         /// <returns> The created wall </returns>
-        private Tile CreateWallTile(Sprite sprite, Vector2Int location, GameObject wallContainer)
+        private Tile CreateWallTile(Sprite sprite, Vector2Int location, Tile wallTile, GameObject wallContainer)
         {
-            Tile tile = ScriptableObject.CreateInstance<Tile>();
-            tile.spawnedObject = new GameObject();
+            Tile tile = wallTile.ShallowCopy();
+            tile.spawnedObject = Instantiate(tile.spawnedObject);
             tile.spawnedObject.transform.parent = wallContainer.transform;
             tile.spawnedObject.transform.localPosition = new Vector3(location.x, location.y, 0);
-            tile.spawnedObject.AddComponent<BoxCollider2D>().size = new Vector2(1, 1);
-            tile.spawnedObject.AddComponent<SpriteRenderer>().sprite = sprite;
+            tile.spawnedObject.GetComponent<SpriteRenderer>().sprite = sprite;
             tile.spawnedObject.SetActive(true);
-            tile.spawnedObject.name = "Wall";
-            tile.spawnedObject.GetComponent<SpriteRenderer>().sortingLayerName = "Walls";
-            tile.spawnedObject.layer = LayerMask.NameToLayer("Walls");
-            tile.spawnedObject.tag = "Inanimate";
-
             tile.gridLocation = location;
-            tile.walkable = false;
-
-            // Set the type as blocker for no particular reason
-            tile.type = TileType.Blocker;
-
             return tile;
         }
 
@@ -250,7 +240,7 @@ namespace Cardificer
                         doorSprites = exteriorParameters.bottomDoorSprites.GetRandomThing(FloorGenerator.random);
                     }
 
-                    room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, (Direction)i, connectedCell, doorContainer);
+                    room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, (Direction)i, connectedCell, exteriorParameters.doorTile, doorContainer);
                     room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
                 }
             }
@@ -268,42 +258,21 @@ namespace Cardificer
         /// <param name="location"> The location in the room of the door </param>
         /// <param name="direction"> The direction the door is facing </param>
         /// <param name="connectedCell"> The room the door is connected to </param>
+        /// <param name="doorTile"> The door tile to instantiate </param>
         /// <param name="doorContainer"> The container that holds the door tiles </param>
         /// <returns> The created tile </returns>
-        private Tile CreateDoorTile(DoorSprites doorSprites, Vector2Int location, Direction direction, MapCell connectedCell, GameObject doorContainer)
+        private Tile CreateDoorTile(DoorSprites doorSprites, Vector2Int location, Direction direction, MapCell connectedCell, Tile doorTile, GameObject doorContainer)
         {
-            Tile tile = ScriptableObject.CreateInstance<Tile>();
-            tile.spawnedObject = new GameObject();
+            Tile tile = doorTile.ShallowCopy();
+            tile.spawnedObject = Instantiate(tile.spawnedObject);
             tile.spawnedObject.transform.parent = doorContainer.transform;
             tile.spawnedObject.transform.localPosition = new Vector3(location.x, location.y, 0);
-            tile.spawnedObject.AddComponent<SpriteRenderer>().sprite = doorSprites.doorOpened;
-            tile.spawnedObject.GetComponent<SpriteRenderer>().sortingLayerName = "Walls";
-            tile.spawnedObject.AddComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+
+            Door door = tile.spawnedObject.GetComponent<Door>();
+            door.Initialize(doorSprites, connectedCell, direction);
+
             tile.spawnedObject.SetActive(true);
-            tile.spawnedObject.name = "Door";
-
-            GameObject doorCollisionContainer = new GameObject();
-            doorCollisionContainer.name = "Collision Container";
-            doorCollisionContainer.transform.parent = tile.spawnedObject.transform;
-            doorCollisionContainer.transform.localPosition = new Vector3(0, 0);
-            doorCollisionContainer.layer = LayerMask.NameToLayer("Walls");
-            doorCollisionContainer.tag = "Inanimate";
-
-            BoxCollider2D doorCollision = doorCollisionContainer.AddComponent<BoxCollider2D>();
-            doorCollision.size = new Vector2(1, 1);
-
-            Door door = tile.spawnedObject.AddComponent<Door>();
-            door.doorSprites = doorSprites;
-            door.connectedCell = connectedCell;
-            door.direction = direction;
-
-            // TODO: Set tile cost
-
             tile.gridLocation = location;
-            tile.walkable = false;
-
-            // Set the type as blocker for no particular reason
-            tile.type = TileType.Blocker;
 
             return tile;
         }
@@ -410,16 +379,16 @@ namespace Cardificer
 
             // Add the corners
             Sprite randomCornerSprite = exteriorParameters.bottomLeftWallCornerSprites.GetRandomThing(FloorGenerator.random);
-            room.roomGrid[0, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(0, 0), wallContainer);
+            room.roomGrid[0, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(0, 0), exteriorParameters.wallTile, wallContainer);
 
             randomCornerSprite = exteriorParameters.topLeftWallCornerSprites.GetRandomThing(FloorGenerator.random);
-            room.roomGrid[0, room.roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(0, room.roomSize.y - 1), wallContainer);
+            room.roomGrid[0, room.roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(0, room.roomSize.y - 1), exteriorParameters.wallTile, wallContainer);
 
             randomCornerSprite = exteriorParameters.bottomRightWallCornerSprites.GetRandomThing(FloorGenerator.random);
-            room.roomGrid[room.roomSize.x - 1, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(room.roomSize.x - 1, 0), wallContainer);
+            room.roomGrid[room.roomSize.x - 1, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(room.roomSize.x - 1, 0), exteriorParameters.wallTile, wallContainer);
 
             randomCornerSprite = exteriorParameters.topRightWallCornerSprites.GetRandomThing(FloorGenerator.random);
-            room.roomGrid[room.roomSize.x - 1, room.roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(room.roomSize.x - 1, room.roomSize.y - 1), wallContainer);
+            room.roomGrid[room.roomSize.x - 1, room.roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(room.roomSize.x - 1, room.roomSize.y - 1), exteriorParameters.wallTile, wallContainer);
 
             // Add the top and bottom walls
             for (int i = 1; i < room.roomSize.x - 1; i++)
@@ -427,13 +396,13 @@ namespace Cardificer
                 if (i != room.roomSize.x / 2 || (map.map[centerCell.location.x, centerCell.location.y - 1].direction & Direction.Down) == Direction.None)
                 {
                     Sprite randomWallSprite = exteriorParameters.bottomWallSprites.GetRandomThing(FloorGenerator.random);
-                    room.roomGrid[i, 0] = CreateWallTile(randomWallSprite, new Vector2Int(i, 0), wallContainer);
+                    room.roomGrid[i, 0] = CreateWallTile(randomWallSprite, new Vector2Int(i, 0), exteriorParameters.wallTile, wallContainer);
                 }
 
                 if (i != room.roomSize.x / 2 || (map.map[centerCell.location.x, centerCell.location.y + 1].direction & Direction.Up) == Direction.None)
                 {
                     Sprite randomWallSprite = exteriorParameters.topWallSprites.GetRandomThing(FloorGenerator.random);
-                    room.roomGrid[i, room.roomSize.y - 1] = CreateWallTile(randomWallSprite, new Vector2Int(i, room.roomSize.y - 1), wallContainer);
+                    room.roomGrid[i, room.roomSize.y - 1] = CreateWallTile(randomWallSprite, new Vector2Int(i, room.roomSize.y - 1), exteriorParameters.wallTile, wallContainer);
                 }
             }
 
@@ -444,33 +413,33 @@ namespace Cardificer
                 if ((j == room.roomSize.y / 2 - 1) && (map.map[centerCell.location.x - 1, centerCell.location.y].direction & Direction.Left) != Direction.None)
                 {
                     Sprite randomWallSprite = exteriorParameters.belowLeftDoorSprites.GetRandomThing(FloorGenerator.random);
-                    room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), wallContainer);
+                    room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), exteriorParameters.wallTile, wallContainer);
                 }
                 else if ((j == room.roomSize.y / 2 + 1) && (map.map[centerCell.location.x - 1, centerCell.location.y].direction & Direction.Left) != Direction.None)
                 {
                     Sprite randomWallSprite = exteriorParameters.aboveLeftDoorSprites.GetRandomThing(FloorGenerator.random);
-                    room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), wallContainer);
+                    room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), exteriorParameters.wallTile, wallContainer);
                 }
                 else if (j != room.roomSize.y / 2 || (map.map[centerCell.location.x - 1, centerCell.location.y].direction & Direction.Left) == Direction.None)
                 {
                     Sprite randomWallSprite = exteriorParameters.leftWallSprites.GetRandomThing(FloorGenerator.random);
-                    room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), wallContainer);
+                    room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), exteriorParameters.wallTile, wallContainer);
                 }
 
                 if ((j == room.roomSize.y / 2 - 1) && (map.map[centerCell.location.x + 1, centerCell.location.y].direction & Direction.Right) != Direction.None)
                 {
                     Sprite randomWallSprite = exteriorParameters.belowRightDoorSprites.GetRandomThing(FloorGenerator.random);
-                    room.roomGrid[room.roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(room.roomSize.x - 1, j), wallContainer);
+                    room.roomGrid[room.roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(room.roomSize.x - 1, j), exteriorParameters.wallTile, wallContainer);
                 }
                 else if ((j == room.roomSize.y / 2 + 1) && (map.map[centerCell.location.x + 1, centerCell.location.y].direction & Direction.Right) != Direction.None)
                 {
                     Sprite randomWallSprite = exteriorParameters.aboveRightDoorSprites.GetRandomThing(FloorGenerator.random);
-                    room.roomGrid[room.roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(room.roomSize.x - 1, j), wallContainer);
+                    room.roomGrid[room.roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(room.roomSize.x - 1, j), exteriorParameters.wallTile, wallContainer);
                 }
                 else if (j != room.roomSize.y / 2 || (map.map[centerCell.location.x + 1, centerCell.location.y].direction & Direction.Right) == Direction.None)
                 {
                     Sprite randomWallSprite = exteriorParameters.rightWallSprites.GetRandomThing(FloorGenerator.random);
-                    room.roomGrid[room.roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(room.roomSize.x - 1, j), wallContainer);
+                    room.roomGrid[room.roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(room.roomSize.x - 1, j), exteriorParameters.wallTile, wallContainer);
                 }
             }
 
@@ -504,7 +473,7 @@ namespace Cardificer
 
                 doorSprites = doorExteriorParameters.rightDoorSprites.GetRandomThing(FloorGenerator.random);
 
-                room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Right, connectedCell, doorContainer);
+                room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Right, connectedCell, exteriorParameters.doorTile, doorContainer);
                 room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
 
                 centerCell.direction |= Direction.Right;
@@ -523,7 +492,7 @@ namespace Cardificer
 
                 doorSprites = doorExteriorParameters.topDoorSprites.GetRandomThing(FloorGenerator.random);
 
-                room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Up, connectedCell, doorContainer);
+                room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Up, connectedCell, exteriorParameters.doorTile, doorContainer);
                 room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
 
                 centerCell.direction |= Direction.Up;
@@ -542,7 +511,7 @@ namespace Cardificer
 
                 doorSprites = doorExteriorParameters.leftDoorSprites.GetRandomThing(FloorGenerator.random);
 
-                room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Left, connectedCell, doorContainer);
+                room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Left, connectedCell, exteriorParameters.doorTile, doorContainer);
                 room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
 
                 centerCell.direction |= Direction.Left;
@@ -561,7 +530,7 @@ namespace Cardificer
 
                 doorSprites = doorExteriorParameters.bottomDoorSprites.GetRandomThing(FloorGenerator.random);
 
-                room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Down, connectedCell, doorContainer);
+                room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, Direction.Down, connectedCell, exteriorParameters.doorTile, doorContainer);
                 room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
 
                 centerCell.direction |= Direction.Down;
