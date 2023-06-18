@@ -152,7 +152,7 @@ namespace Cardificer
                 if ((j == roomSize.y / 2 - 1) && (roomCell.direction & Direction.Right) != Direction.None)
                 {
                     Sprite randomWallSprite = exteriorParameters.belowRightDoorSprites.GetRandomThing(FloorGenerator.random);
-                    room.roomGrid[roomSize.x - 10, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
+                    room.roomGrid[roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallContainer);
                 }
                 else if ((j == roomSize.y / 2 + 1) && (roomCell.direction & Direction.Right) != Direction.None)
                 {
