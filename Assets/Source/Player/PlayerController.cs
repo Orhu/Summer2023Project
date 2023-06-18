@@ -68,7 +68,7 @@ namespace Cardificer
                 animatorComponent.SetMirror("castLeft", GetActionAimPosition().x - transform.position.x < 0);
 
                 // Channeling
-                if (Input.GetButtonDown("Fire2"))
+                if (Input.GetButtonDown("Fire2") && !Deck.playerDeck.isActing)
                 {
                     channelAbility.StartChanneling();
                 }
