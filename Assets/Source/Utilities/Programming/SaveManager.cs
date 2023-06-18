@@ -92,7 +92,7 @@ namespace Cardificer
 
                     JsonUtility.FromJsonOverwrite(File.ReadAllText(filePath), this);
 
-                    Debug.Log(File.ReadAllText(filePath) + "!=" + JsonUtility.ToJson(this, true));
+                    // Check for corruption
                     if (File.ReadAllText(filePath) != JsonUtility.ToJson(this, true)) 
                     { 
                         throw new FileLoadException("Failed to load save data", fileName); 
@@ -149,6 +149,15 @@ namespace Cardificer
                     File.Delete(filePath);
                 }
             }
+
+            /// <summary>
+            /// Whether or not this save data exists on disc.
+            /// </summary>
+            /// <returns> True if the file exists. </returns>
+            public bool Exists()
+            {
+                return File.Exists(filePath);
+            }
         }
 
 
@@ -190,10 +199,36 @@ namespace Cardificer
             {
                 get
                 {
+                    // Find most recent autosave
+                    if (!_latestAutosaveIndex.Exists())
+                    {
+                        Debug.LogWarning("AutosaveIndex missing, regenerating data");
+                        int autosaveIndex = 0;
+                        while (
+                            autosaveIndex < NUMBER_OF_AUTOSAVES - 1
+                            && autosaves[autosaveIndex].Exists() && autosaves[autosaveIndex + 1].Exists()
+                            && autosaves[autosaveIndex].data.saveTime < autosaves[autosaveIndex + 1].data.saveTime
+                            )
+                        {
+                            autosaveIndex++;
+                        }
+                        _latestAutosaveIndex.data = autosaveIndex;
+                    }
+
+                    // Try loading autosaves in order
                     int startingIndex = _latestAutosaveIndex.data;
                     int index = startingIndex;
                     do
                     {
+                        // Check for deleted autosaves
+                        if (!autosaves[index].Exists())
+                        {
+                            Debug.LogError("Autosave missing, reverting to previous autosave");
+                            index = (index > 0 ? index : NUMBER_OF_AUTOSAVES) - 1;
+                            continue;
+                        }
+
+                        // Check for corrupted autosaves
                         try
                         {
                             _latestAutosaveIndex.data = index;
@@ -201,17 +236,20 @@ namespace Cardificer
                         }
                         catch
                         {
-                            Debug.LogError("Autosave corrupted reverting to previous autosave");
+                            Debug.LogError("Autosave corrupted, reverting to previous autosave");
                             autosaves[index].ClearData();
                             index = (index > 0 ? index : NUMBER_OF_AUTOSAVES) - 1;
                         }
                     } while (index != startingIndex);
+
+                    // No valid autosaves
                     _latestAutosaveIndex.data = 0;
                     return autosaves[0].data;
                 }
                 set
                 {
                     _latestAutosaveIndex.data = (_latestAutosaveIndex.data + 1) % NUMBER_OF_AUTOSAVES;
+                    value.saveTime = System.DateTime.Now;
                     autosaves[_latestAutosaveIndex.data].data = value;
                 }
             }
@@ -224,6 +262,9 @@ namespace Cardificer
             [System.Serializable]
             public class AutosaveData
             {
+                // The time at which this was saved.
+                public System.DateTime saveTime;
+
                 // The seed of the current floor.
                 public int floorSeed;
 
