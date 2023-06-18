@@ -13,23 +13,25 @@ MonoBehaviour:
   m_Name: BulletAttack_WaveCrash
   m_EditorClassIdentifier: 
   attack:
-    damage: 0
+    damage: 8
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
   hitCount: 1
   applyDamageOnHit: 1
-  modifiers: []
-  shape: {fileID: 0}
-  lifetime: 10
-  initialSpeed: 10
-  acceleration: -1
-  minSpeed: 5
-  maxSpeed: 10
+  modifiers:
+  - {fileID: 11400000, guid: 9658f6f592e54704796611a69b3d9214, type: 2}
+  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
+  shape: {fileID: 11400000, guid: 0e19e8cd20fbdf741874a39bdd1d96ec, type: 2}
+  lifetime: 5
+  initialSpeed: 5
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 5
   homingSpeed: 0
   homingTime: 0
   homingAimMode: 0
-  visualObject: {fileID: 0}
+  visualObject: {fileID: 8620634852343186422, guid: 31176fd83f8f4d44a97512b053cf9b1b, type: 3}
   detachVisualsBeforeDestroy: 0
   spawnLocation: 0
   aimMode: 0

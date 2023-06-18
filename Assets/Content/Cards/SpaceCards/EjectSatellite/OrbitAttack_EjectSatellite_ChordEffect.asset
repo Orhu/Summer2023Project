@@ -10,49 +10,38 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
-  m_Name: OrbitAttack_AsteroidRainMain
+  m_Name: OrbitAttack_EjectSatellite_ChordEffect
   m_EditorClassIdentifier: 
   attack:
-    damage: 0
+    damage: 4
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
-  hitCount: 999
-  applyDamageOnHit: 0
+  hitCount: 1
+  applyDamageOnHit: 1
   modifiers:
-  - {fileID: 11400000, guid: b8fddc4562349084e8199bc27eced318, type: 2}
-  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
-  shape: {fileID: 11400000, guid: 2d518888c7a7ab247a3208585fb1afc0, type: 2}
-  lifetime: 0.01
-  initialSpeed: 0
-  acceleration: 0
+  - {fileID: 11400000, guid: ca1ca5c908abfa847804e1e805337ce1, type: 2}
+  - {fileID: 11400000, guid: c10c4eea0e70fcf45a90c17019b46004, type: 2}
+  - {fileID: 11400000, guid: d3b5a797c781d4144b70f303206f0484, type: 2}
+  shape: {fileID: 11400000, guid: d66dacfc75790ed46b50cf2b04725031, type: 2}
+  lifetime: 5
+  initialSpeed: 1
+  acceleration: 3
   minSpeed: 0
-  maxSpeed: 0
+  maxSpeed: 16
   homingSpeed: 0
   homingTime: 0
   homingAimMode: 0
-  visualObject: {fileID: 5678426477218678071, guid: 0af2668acb1ae1447bb5fd6087c3d817, type: 3}
+  visualObject: {fileID: 5228815503458858761, guid: 1ec6b52aea4e5c640938c3f792053e96, type: 3}
   detachVisualsBeforeDestroy: 0
-  spawnLocation: 1
+  spawnLocation: 0
   aimMode: 3
   projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
   previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   _spawnSequence:
   - delay: 0
     startingAngle: 0
-    radius: 0
-    orbitDirection: 0
-  - delay: 0.4
-    startingAngle: 0
-    radius: 0
-    orbitDirection: 0
-  - delay: 0.4
-    startingAngle: 0
-    radius: 0
-    orbitDirection: 0
-  - delay: 0.4
-    startingAngle: 0
-    radius: 0
+    radius: 1
     orbitDirection: 0
   randomStartingAngle: 0
   randomRadius: 0
