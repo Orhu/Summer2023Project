@@ -55,6 +55,9 @@ namespace Cardificer
         // The remaining time this will home for in seconds.
         [NonSerialized] public float remainingHomingTime;
 
+        // The remaining time until this will home in seconds.
+        [NonSerialized] public float remainingHomingDelay;
+
         // The speed that this projectile will turn at.
         [NonSerialized] public float homingSpeed;
 
@@ -97,6 +100,9 @@ namespace Cardificer
         // Invoked when this is destroyed.
         public System.Action onDestroyed;
         #endregion
+
+        // The current velocity of this projectile.
+        protected Vector2 velocity;
 
         // The current closest target to the actor.
         private GameObject closestTargetToActor;
@@ -156,7 +162,6 @@ namespace Cardificer
 
             // Setup collision
             rigidBody = GetComponent<Rigidbody2D>();
-            rigidBody.velocity = speed * transform.right;
             Collider2D collider = shape.CreateCollider(gameObject);
             if (actor.GetCollider() != null)
             {
@@ -208,30 +213,32 @@ namespace Cardificer
         /// </summary>
         protected void FixedUpdate()
         {
-            rigidBody.velocity += (Vector2)transform.right * acceleration * Time.fixedDeltaTime;
+            velocity += (Vector2)transform.right * acceleration * Time.fixedDeltaTime;
 
-            if (remainingHomingTime > 0 && homingSpeed > 0)
+            if (remainingHomingDelay <= 0 && remainingHomingTime > 0 && homingSpeed > 0)
             {
                 Vector2 targetVelocity = (GetAimTarget(attack.homingAimMode) - transform.position).normalized * maxSpeed;
                 if (targetVelocity.sqrMagnitude > Vector2.kEpsilon)
                 {
-                    rigidBody.velocity += (targetVelocity - rigidBody.velocity).normalized * homingSpeed * Time.fixedDeltaTime;
+                    velocity += (targetVelocity - velocity).normalized * homingSpeed * Time.fixedDeltaTime;
                 }
             }
 
-            speed = Mathf.Clamp(rigidBody.velocity.magnitude, minSpeed, maxSpeed);
-            rigidBody.velocity = rigidBody.velocity.normalized * speed;
+            speed = Mathf.Clamp(velocity.magnitude, minSpeed, maxSpeed);
+            rigidBody.velocity = velocity.normalized * speed;
         }
 
         /// <summary>
         /// Handles lifetime
         /// </summary>
-        void Update()
+        protected void Update()
         {
-            visualObject.transform.right = rigidBody.velocity;
-
             remainingLifetime -= Time.deltaTime;
-            remainingHomingTime -= Time.deltaTime;
+            if (remainingHomingDelay <= 0)
+            {
+                remainingHomingTime -= Time.deltaTime;
+            }
+            remainingHomingDelay -= Time.deltaTime;
             if (remainingLifetime <= 0)
             {
                 Destroy(gameObject);

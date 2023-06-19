@@ -59,6 +59,9 @@ namespace Cardificer
         [Tooltip("The duration that this will home for.")] [Min(0)]
         public float homingTime = 0;
 
+        [Tooltip("The time to wait before homing begins, in seconds")] [Min(0)]
+        public float homingDelay = 0;
+
         [Tooltip("What the homing will rotate the projectile towards")]
         public AimMode homingAimMode;
 

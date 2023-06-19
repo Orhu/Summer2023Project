@@ -16,8 +16,11 @@ namespace Cardificer
         // The current orbit radius.
         public float radius;
 
-        // The last location of the spawn location of this.
-        private Vector3 lastSpawnLocationPosition;
+        // The time this has existed for.
+        private float timeAlive;
+
+        // The velocity of the center of the orbit
+        private Vector2 centerPosition;
 
         /// <summary>
         /// Handles initial position and rotation.
@@ -30,7 +33,10 @@ namespace Cardificer
 
             // Position
             transform.position = GetSpawnLocation();
-            lastSpawnLocationPosition = transform.position;
+            if (!orbitAttack.attachedToSpawnLocation)
+            {
+                centerPosition = transform.position;
+            }
 
             Vector3 aimDirection = (GetAimTarget(attack.aimMode) - actor.GetActionSourceTransform().position).normalized;
             float aimRotation = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
@@ -52,16 +58,29 @@ namespace Cardificer
         /// </summary>
         new void FixedUpdate()
         {
-            transform.rotation *= Quaternion.AngleAxis(OrbitSign() * Mathf.Rad2Deg * speed * Time.fixedDeltaTime / radius, Vector3.forward);
-            rigidBody.velocity = speed * transform.right;
+            timeAlive += Time.fixedDeltaTime;
+            speed += acceleration * Time.fixedDeltaTime;
 
-            base.FixedUpdate();
+            transform.rotation = Quaternion.AngleAxis(OrbitSign() * Mathf.Rad2Deg * speed * timeAlive / radius, Vector3.forward);
+            
 
+            if (remainingHomingDelay <= 0 && remainingHomingTime > 0 && homingSpeed > 0)
+            {
+                Vector2 targetVelocity = (GetAimTarget(attack.homingAimMode) - transform.position).normalized * maxSpeed;
+                if (targetVelocity.sqrMagnitude > Vector2.kEpsilon)
+                {
+                    velocity += (targetVelocity - velocity).normalized * homingSpeed * Time.fixedDeltaTime;
+                    velocity = velocity.normalized * Mathf.Clamp(velocity.magnitude, minSpeed, maxSpeed); 
+                }
+            }
+
+            centerPosition += velocity * Time.fixedDeltaTime;
+            Vector2 offset = centerPosition + (Vector2)transform.up * radius;
             if (orbitAttack.attachedToSpawnLocation)
             {
-                rigidBody.MovePosition(transform.position + GetSpawnLocation() - lastSpawnLocationPosition + (Vector3)rigidBody.velocity * Time.fixedDeltaTime);
-                lastSpawnLocationPosition = GetSpawnLocation();
+                offset += (Vector2)GetSpawnLocation();
             }
+            rigidBody.MovePosition(offset);
         }
 
         /// <summary>
