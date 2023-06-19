@@ -199,6 +199,8 @@ namespace Cardificer
             {
                 get
                 {
+                    bool errorLogged = false;
+
                     // Find most recent autosave
                     if (!_latestAutosaveIndex.Exists())
                     {
@@ -234,7 +236,11 @@ namespace Cardificer
                         // Check for deleted autosaves
                         if (!autosaves[index].Exists())
                         {
-                            Debug.LogError("Autosave missing, reverting to previous autosave");
+                            if (!errorLogged)
+                            {
+                                Debug.LogWarning("Autosave missing, reverting to previous autosave");
+                                errorLogged = true;
+                            }
                             index = (index > 0 ? index : NUMBER_OF_AUTOSAVES) - 1;
                             continue;
                         }
@@ -247,14 +253,19 @@ namespace Cardificer
                         }
                         catch
                         {
-                            Debug.LogError("Autosave corrupted, reverting to previous autosave");
+                            if (!errorLogged)
+                            {
+                                Debug.LogWarning("Autosave corrupted, reverting to previous autosave");
+                                errorLogged = true;
+                            }
                             autosaves[index].ClearData();
                             index = (index > 0 ? index : NUMBER_OF_AUTOSAVES) - 1;
                         }
                     } while (index != startingIndex);
 
                     // No valid autosaves
-                    _latestAutosaveIndex.data = 0;
+                    Debug.LogWarning("No valid autosaves found, deleting corrupt data");
+                    _latestAutosaveIndex.ClearData();
                     return null;
                 }
                 set
