@@ -177,6 +177,12 @@ namespace Cardificer
         {
             return ref _canAct;
         }
+
+        public AudioSource GetAudioSource()
+        {
+            return sourceTransform.GetComponent<AudioSource>();
+        }        
+
         #endregion
 
         /// <summary>

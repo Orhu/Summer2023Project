@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Cardificer
-{
+namespace Cardificer {
+
+    
     /// <summary>
     /// A scriptable object that serves as the base of any action a card can have when played.
     /// </summary>
@@ -10,6 +11,9 @@ namespace Cardificer
     {
         // The description of this action. Any Serialized Field names that appear in [] will be replaced with their actual value.
         protected string description = "";
+
+        //Action Audio Clip variable. 
+        [SerializeField] protected AudioClip actionAudioClip;
 
         /// <summary>
         /// Gets the formatted description of this card.
