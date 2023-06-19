@@ -9,7 +9,7 @@ namespace Cardificer.FiniteStateMachine
     /// Represents a decision checking whether our target is in a certain range
     /// </summary>
     [CreateAssetMenu(menuName = "FSM/Decisions/Player/Player In Range")]
-    public class PlayerInRange : FSMDecision
+    public class PlayerInRange : Decision
     {
         [Tooltip("What range to check?")]
         [SerializeField] private float range;
@@ -19,7 +19,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         /// <param name="state"> The stateMachine to use </param>
         /// <returns> True if the target is at or below the specified range from this stateMachine, false otherwise </returns>
-        public override bool Evaluate(BaseStateMachine state)
+        protected override bool Evaluate(BaseStateMachine state)
         {
             return Vector2.Distance(Player.Get().transform.position, state.transform.position) <= range;
         }

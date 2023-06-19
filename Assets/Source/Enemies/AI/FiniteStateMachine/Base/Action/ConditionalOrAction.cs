@@ -11,13 +11,13 @@ namespace Cardificer.FiniteStateMachine
     public class ConditionalOrAction : BaseAction
     {
         [Tooltip("Decisions to evaluate with OR condition.")]
-        [SerializeField] private List<FSMDecision> decisions;
+        [SerializeField] private List<BaseDecision> decisions;
 
         [Tooltip("Action to perform if decision is true.")]
-        [SerializeField] private FSMAction trueAction;
+        [SerializeField] private Action trueAction;
 
         [Tooltip("Action to perform if decision is false.")]
-        [SerializeField] private FSMAction falseAction;
+        [SerializeField] private Action falseAction;
 
         /// <summary>
         /// Evaluate the condition and execute the action if one of the listed conditions is true.

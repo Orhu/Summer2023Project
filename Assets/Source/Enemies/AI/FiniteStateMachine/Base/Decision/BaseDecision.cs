@@ -3,14 +3,14 @@
 namespace Cardificer.FiniteStateMachine
 {
     /// <summary>
-    /// Represents an action in a Finite State Machine
+    /// Represents a decision in a Finite State Machine
     /// </summary>
-    public abstract class BaseAction : ScriptableObject
+    public abstract class BaseDecision : ScriptableObject
     {
         /// <summary>
-        /// Run this action
+        /// Decide this decision
         /// </summary>
         /// <param name="stateMachine"> The state machine to be used. </param>
-        public abstract void Execute(BaseStateMachine stateMachine);
+        public abstract bool Decide(BaseStateMachine stateMachine);
     }
 }

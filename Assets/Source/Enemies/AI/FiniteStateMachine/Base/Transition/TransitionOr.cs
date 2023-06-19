@@ -4,19 +4,20 @@ using UnityEngine;
 namespace Cardificer.FiniteStateMachine
 {
     /// <summary>
-    /// Represents a transition between states in a finite state machine, where there are more than one condition and all must be true for the decision to be true
+    /// Represents a transition between states in a finite state machine, where there are more than one condition and one must be true for the decision to be true
     /// </summary>
-    [CreateAssetMenu(menuName = "FSM/Transitions/AND")]
-    public class FSMTransitionAND : BaseFSMTransition
+    [CreateAssetMenu(menuName = "FSM/Transitions/OR")]
+    public class TransitionOr : BaseTransition
     {
-        // what state to enter on true
+        [Tooltip("Conditions to evaluate")]
+        public List<BaseDecision> decisions;
+        
+        [Tooltip("What state to enter on true")]
         public BaseState trueState;
 
-        // what state to enter on false
+        [Tooltip("What state to enter on false")]
         public BaseState falseState;
 
-        // the condition to evaluate
-        public List<FSMDecision> decisions;
 
         /// <summary>
         /// Evaluate the decision, then change state depending on result
@@ -24,11 +25,11 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="machine"> The state machine to be used. </param>
         public override void Execute(BaseStateMachine machine)
         {
-            var result = true;
+            var result = false;
 
             foreach (var d in decisions)
             {
-                result = result && d.Decide(machine);
+                result = result || d.Decide(machine);
             }
 
             // if the condition evaluates to true and true isn't just "remain in same state"

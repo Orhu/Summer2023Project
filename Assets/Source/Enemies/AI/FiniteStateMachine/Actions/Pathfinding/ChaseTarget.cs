@@ -6,10 +6,11 @@ namespace Cardificer.FiniteStateMachine
 {
     /// <summary>
     /// Represents an action that moves towards the current pathfinding target as specified by the stateMachine using this action.
-    /// This action will continuously update its path so it should only be run once. 
+    /// This action will continuously update its path so it should only be run once.
+    /// When leaving this state, enemies should stop the FollowPath and UpdatePath coroutines, as well as enabling stateMachine.pathData.ignorePathRequests
     /// </summary>
     [CreateAssetMenu(menuName = "FSM/Actions/Pathfinding/Initialize Chase Target Loop")]
-    public class ChaseTarget : FSMAction
+    public class ChaseTarget : Action
     {
         [Tooltip("How often does this enemy update its path, in seconds?")]
         [SerializeField] private float delayBetweenPathUpdates = 0.25f;
@@ -20,7 +21,12 @@ namespace Cardificer.FiniteStateMachine
         // need to track our current data
         private ChaseData chaseData;
 
-        public override IEnumerator PlayAction(BaseStateMachine stateMachine)
+        /// <summary>
+        /// Starts chase action
+        /// </summary>
+        /// <param name="stateMachine"> stateMachine to be used </param>
+        /// <returns></returns>
+        protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             stateMachine.StartCoroutine(UpdatePath(stateMachine));
             yield break;
@@ -86,6 +92,7 @@ namespace Cardificer.FiniteStateMachine
             }
 
             Vector2 currentWaypoint = stateMachine.pathData.path.lookPoints[0];
+            stateMachine.currentWaypoint = currentWaypoint;
 
             while (true)
             {

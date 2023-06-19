@@ -1,22 +1,22 @@
-﻿using UnityEngine;
-
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Cardificer.FiniteStateMachine
 {
     /// <summary>
-    /// Represents a transition between states in a finite state machine
+    /// Represents a transition between states in a finite state machine, where there are more than one condition and all must be true for the decision to be true
     /// </summary>
-    [CreateAssetMenu(menuName = "FSM/Transitions/One Condition")]
-    public class FSMTransition : BaseFSMTransition
+    [CreateAssetMenu(menuName = "FSM/Transitions/AND")]
+    public class TransitionAnd : BaseTransition
     {
-        // what state to enter on true
+        [Tooltip("Conditions to evaluate")]
+        public List<BaseDecision> decisions;
+        
+        [Tooltip("What state to enter on true")]
         public BaseState trueState;
 
-        // what state to enter on false
+        [Tooltip("What state to enter on false")]
         public BaseState falseState;
-
-        // the condition to evaluate
-        public FSMDecision decision;
 
         /// <summary>
         /// Evaluate the decision, then change state depending on result
@@ -24,7 +24,12 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="machine"> The state machine to be used. </param>
         public override void Execute(BaseStateMachine machine)
         {
-            var result = decision.Decide(machine);
+            var result = true;
+
+            foreach (var d in decisions)
+            {
+                result = result && d.Decide(machine);
+            }
 
             // if the condition evaluates to true and true isn't just "remain in same state"
             if (result && trueState is not RemainInState)

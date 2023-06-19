@@ -8,9 +8,14 @@
         /// Represents an action that disables the follow path coroutine
         /// </summary>
         [CreateAssetMenu(menuName = "FSM/Actions/State Variables/Stop Following Path")]
-        public class StopFollowingPath : FSMAction
+        public class StopFollowingPath : Action
         {
-            public override IEnumerator PlayAction(BaseStateMachine stateMachine)
+            /// <summary>
+            /// Stops the follow path coroutine 
+            /// </summary>
+            /// <param name="stateMachine"> The state machine to be used. </param>
+            /// <returns></returns>
+            protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
             {
                 stateMachine.StopCoroutine(stateMachine.pathData.prevFollowCoroutine);
                 yield break;

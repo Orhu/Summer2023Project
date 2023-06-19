@@ -9,7 +9,7 @@ namespace Cardificer.FiniteStateMachine
     /// Represents a decision checking whether our target is in a certain range
     /// </summary>
     [CreateAssetMenu(menuName = "FSM/Decisions/Pathfinding Target/Pathfinding Target Between Ranges")]
-    public class PathfindingTargetBetweenRanges : FSMDecision
+    public class PathfindingTargetBetweenRanges : Decision
     {
         [Tooltip("What min range for our target?")]
         [SerializeField] private float minRange;
@@ -22,7 +22,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         /// <param name="state"> The stateMachine to use </param>
         /// <returns> True if the target is at or below the specified range from this stateMachine, false otherwise </returns>
-        public override bool Evaluate(BaseStateMachine state)
+        protected override bool Evaluate(BaseStateMachine state)
         {
             var dist = Vector2.Distance(state.currentPathfindingTarget, state.transform.position);
             return dist >= minRange && dist <= maxRange;

@@ -7,7 +7,7 @@ namespace Cardificer.FiniteStateMachine
     /// <summary>
     /// Represents the base class of a finite state machine transition
     /// </summary>
-    public abstract class BaseFSMTransition : ScriptableObject
+    public abstract class BaseTransition : ScriptableObject
     {
         /// <summary>
         /// Execute this transition

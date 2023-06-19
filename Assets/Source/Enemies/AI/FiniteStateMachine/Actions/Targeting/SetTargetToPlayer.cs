@@ -7,7 +7,7 @@ namespace Cardificer.FiniteStateMachine
     /// Represents an action to update our target to be the player
     /// </summary>
     [CreateAssetMenu(menuName = "FSM/Actions/Set Target To Player")]
-    public class SetTargetToPlayer : FSMAction
+    public class SetTargetToPlayer : Action
     {
         /// <summary>
         /// Enum representing targeting modes for setting a target
@@ -15,14 +15,19 @@ namespace Cardificer.FiniteStateMachine
         enum TargetType
         {
             Pathfinding,
-            Shooting,
+            Attack,
             Both
         }
 
         [Tooltip("Target type to use. Should we set the pathfinding target, attack target, or both for this unit?")]
         [SerializeField] private TargetType targetType;
 
-        public override IEnumerator PlayAction(BaseStateMachine stateMachine)
+        /// <summary>
+        /// Sets pathfinding and/or attack target depending on the requested targeting type
+        /// </summary>
+        /// <param name="stateMachine"> The state machine to be used. </param>
+        /// <returns></returns>
+        protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             switch (targetType)
             {
@@ -33,7 +38,7 @@ namespace Cardificer.FiniteStateMachine
                 case TargetType.Pathfinding:
                     stateMachine.currentPathfindingTarget = Player.GetFeet().transform.position;
                     break;
-                case TargetType.Shooting:
+                case TargetType.Attack:
                     stateMachine.currentAttackTarget = Player.Get().transform.position;
                     break;
             }

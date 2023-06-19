@@ -11,13 +11,13 @@ namespace Cardificer.FiniteStateMachine
     public class ConditionalSingleAction : BaseAction
     {
         [Tooltip("Decision to evaluate.")]
-        [SerializeField] private FSMDecision decision;
+        [SerializeField] private BaseDecision decision;
 
         [Tooltip("Action to perform if decision is true.")]
-        [SerializeField] private FSMAction trueAction;
+        [SerializeField] private Action trueAction;
 
         [Tooltip("Action to perform if decision is false.")]
-        [SerializeField] private FSMAction falseAction;
+        [SerializeField] private Action falseAction;
 
         /// <summary>
         /// Evaluate the condition and execute the action if the condition is true.

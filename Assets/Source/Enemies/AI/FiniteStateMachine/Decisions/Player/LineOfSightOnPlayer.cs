@@ -9,12 +9,12 @@ namespace Cardificer.FiniteStateMachine
     /// Represents a decision checking if we currently have line of sight on the player
     /// </summary>
     [CreateAssetMenu(menuName = "FSM/Decisions/Player/Line of Sight on Player")]
-    public class LineOfSightOnPlayer : FSMDecision
+    public class LineOfSightOnPlayer : Decision
     {
-        [Tooltip("What range to check?")]
+        [Tooltip("Maximum raycast range?")]
         [SerializeField] private float range = 4.0f;
 
-        [Tooltip("Which layers to raycast, by their integer identifier")]
+        [Tooltip("Which layers the raycast can hit, by their integer identifier")]
         [SerializeField] private List<int> raycastLayers;
 
         /// <summary>
@@ -22,9 +22,9 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         /// <param name="state"> The stateMachine to use </param>
         /// <returns> True if the target is at or below the specified range from this stateMachine, false otherwise </returns>
-        public override bool Evaluate(BaseStateMachine state)
+        protected override bool Evaluate(BaseStateMachine state)
         {
-            // use layer mask to exclude provided int layers from the raycast
+            // use layer mask to include provided int layers in the raycast
             int layerMask = 0;
             foreach (int layer in raycastLayers)
             {

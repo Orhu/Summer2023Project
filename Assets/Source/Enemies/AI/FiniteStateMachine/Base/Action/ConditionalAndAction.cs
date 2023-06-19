@@ -11,13 +11,13 @@ namespace Cardificer.FiniteStateMachine
     public class ConditionalAndAction : BaseAction
     {
         [Tooltip("Decisions to evaluate with AND condition.")]
-        [SerializeField] private List<FSMDecision> decisions;
+        [SerializeField] private List<BaseDecision> decisions;
 
         [Tooltip("Action to perform if decision is true.")]
-        [SerializeField] private FSMAction trueAction;
+        [SerializeField] private Action trueAction;
 
         [Tooltip("Action to perform if decision is false.")]
-        [SerializeField] private FSMAction falseAction;
+        [SerializeField] private Action falseAction;
 
         /// <summary>
         /// Evaluate the condition and execute the action if all listed conditions are true.

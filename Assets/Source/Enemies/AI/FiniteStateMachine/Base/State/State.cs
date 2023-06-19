@@ -11,16 +11,16 @@
      public sealed class State : BaseState
      {
          [Tooltip("Actions run when the state is entered.")]
-         public List<FSMAction> enterActions = new List<FSMAction>();
+         public List<BaseAction> enterActions = new List<BaseAction>();
 
          [Tooltip("Actions run when the state is exited.")]
-         public List<FSMAction> exitActions = new List<FSMAction>();
+         public List<BaseAction> exitActions = new List<BaseAction>();
 
          [Tooltip("Actions run every frame when in this state.")]
-         public List<FSMAction> updateActions = new List<FSMAction>();
+         public List<BaseAction> updateActions = new List<BaseAction>();
 
          [Tooltip("This state's transitions. Evaluated every frame.")]
-         public List<BaseFSMTransition> transitions = new List<BaseFSMTransition>();
+         public List<BaseTransition> transitions = new List<BaseTransition>();
 
          /// <summary>
          /// Run through all of this state's actions and transitions, executing them.

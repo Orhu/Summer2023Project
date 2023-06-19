@@ -40,7 +40,7 @@ namespace Cardificer.FiniteStateMachine
         public struct PathData
         {
             // path to target 
-            public Cardificer.Path path;
+            public Path path;
 
             // index of where we are in the path
             public int targetIndex;
@@ -59,7 +59,7 @@ namespace Cardificer.FiniteStateMachine
         public struct CooldownData
         {
             // is action cooldown available?
-            public Dictionary<FSMAction, bool> cooldownReady;
+            public Dictionary<BaseAction, bool> cooldownReady;
         }
 
         // stores our current attack data
@@ -86,11 +86,9 @@ namespace Cardificer.FiniteStateMachine
             private Coroutine prevFollowCoroutine;
         }
 
-        // draw debug gizmos?
+        [Tooltip("Draw debug gizmos? Pathfinding target is magenta, attack target is yellow, current waypoint is cyan")]
         [SerializeField] private bool drawGizmos;
-
-        // debug waypoint used for drawing gizmos
-        [HideInInspector] public Vector2 debugWaypoint;
+        [HideInInspector] public Vector2 currentWaypoint = Vector2.zero;
 
         /// <summary>
         /// Initialize variables
@@ -98,7 +96,7 @@ namespace Cardificer.FiniteStateMachine
         private void Awake()
         {
             currentState = initialState;
-            cooldownData.cooldownReady = new Dictionary<FSMAction, bool>();
+            cooldownData.cooldownReady = new Dictionary<BaseAction, bool>();
             cachedComponents = new Dictionary<Type, Component>();
             currentMovementType = startingMovementType;
             feetCollider = GetComponentInChildren<Collider2D>();;
@@ -169,8 +167,12 @@ namespace Cardificer.FiniteStateMachine
         private void OnDrawGizmos()
         {
             if (!drawGizmos) return;
-            Gizmos.color = Color.blue;
-            Gizmos.DrawCube(debugWaypoint, Vector3.one);
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawCube(currentPathfindingTarget, Vector3.one);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawCube(currentAttackTarget, Vector3.one);
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawCube(currentWaypoint, Vector3.one);
         }
 
         #region IActor Implementation

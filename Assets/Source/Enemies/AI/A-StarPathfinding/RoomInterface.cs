@@ -9,6 +9,9 @@ namespace Cardificer
     /// </summary>
     public class RoomInterface : MonoBehaviour
     {
+        /// <summary>
+        /// Represents a type of movement
+        /// </summary>
         public enum MovementType
         {
             Walk,
@@ -23,13 +26,13 @@ namespace Cardificer
         [HideInInspector] public Vector2Int myRoomSize;
 
         // the walking tile grid of this room
-        [HideInInspector] public PathfindingTile[,] walkRoomGrid;
+        private PathfindingTile[,] walkRoomGrid;
 
         // the flying tile grid of this room
-        [HideInInspector] public PathfindingTile[,] flyRoomGrid;
+        private PathfindingTile[,] flyRoomGrid;
 
         // the burrowing tile grid of this room
-        [HideInInspector] public PathfindingTile[,] burrowRoomGrid;
+        private PathfindingTile[,] burrowRoomGrid;
 
         // the world position of this room
         private Vector2 myWorldPosition;
@@ -45,10 +48,16 @@ namespace Cardificer
             instance = this;
         }
 
-        // draw debug gizmos?
+        [Tooltip("Draw Tiles detected as \"null\" during room-grid copying")]
         [SerializeField] private bool drawNullTiles;
+        
+        [Tooltip("Draw Tiles detected as \"walk\" during room-grid copying")]
         [SerializeField] private bool drawWalkTiles;
+        
+        [Tooltip("Draw Tiles detected as \"fly\" during room-grid copying")]
         [SerializeField] private bool drawFlyTiles;
+        
+        [Tooltip("Draw Tiles detected as \"burrow\" during room-grid copying")]
         [SerializeField] private bool drawBurrowTiles;
         private List<Vector2> debugNullTiles = new List<Vector2>();
 
@@ -86,30 +95,57 @@ namespace Cardificer
             {
                 for (int y = 0; y < myRoomSize.y; y++)
                 {
-                    Cardificer.Tile curTile = inputArray[x, y];
+                    Tile curTile = inputArray[x, y];
 
                     // TODO must be a better way than foreach comparing to null. Doors return null currently, Mabel says she is working on it so update this when ready
                     if (curTile == null)
                     {
                         // in this case the tile was null. Make an impassable tile at this spot
                         Debug.LogWarning("Null tile at " + x + ", " + y);
-                        walkRoomGrid[x, y] = new PathfindingTile(x, y);
-                        flyRoomGrid[x, y] = new PathfindingTile(x, y);
-                        burrowRoomGrid[x, y] = new PathfindingTile(x, y);
+                        AddGenericTiles(x, y);
                         debugNullTiles.Add(new Vector2(x, y));
                     }
                     else
                     {
-                        // add to appropriate lists
-                        walkRoomGrid[x, y] =
-                            new PathfindingTile(curTile, curTile.walkable, curTile.walkMovementPenalty);
-                        flyRoomGrid[x, y] =
-                            new PathfindingTile(curTile, curTile.flyable, curTile.flyMovementPenalty);
-                        burrowRoomGrid[x, y] = new PathfindingTile(curTile, curTile.burrowable,
-                            curTile.burrowMovementPenalty);
+                        AddTiles(curTile, x, y);
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Responsible for properly subdividing and adding tiles at proper locations 
+        /// </summary>
+        /// <param name="x"> X position of original tile </param>
+        /// <param name="y"> Y position of original tile </param>
+        void AddGenericTiles(int x, int y)
+        {
+            // TODO subdividing unimplemented
+            // add to appropriate lists
+            walkRoomGrid[x, y] =
+                new PathfindingTile(x, y);
+            flyRoomGrid[x, y] =
+                new PathfindingTile(x, y);
+            burrowRoomGrid[x, y] = 
+                new PathfindingTile(x, y);
+        }
+
+        /// <summary>
+        /// Responsible for properly subdividing and adding tiles at proper locations
+        /// </summary>
+        /// <param name="tile"> Tile to add </param>
+        /// <param name="x"> X position of original tile </param>
+        /// <param name="y"> Y position of original tile </param>
+        void AddTiles(Tile tile, int x, int y)
+        {
+            // TODO subdividing unimplemented
+            // add to appropriate lists
+            walkRoomGrid[x, y] =
+                new PathfindingTile(tile, tile.walkable, tile.walkMovementPenalty);
+            flyRoomGrid[x, y] =
+                new PathfindingTile(tile, tile.flyable, tile.flyMovementPenalty);
+            burrowRoomGrid[x, y] = 
+                new PathfindingTile(tile, tile.burrowable, tile.burrowMovementPenalty);
         }
 
         /// <summary>
