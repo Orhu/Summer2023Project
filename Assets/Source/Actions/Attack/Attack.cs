@@ -88,7 +88,7 @@ namespace Cardificer
         [Tooltip("The sequence of when and where to spawn projectiles")]
         public abstract List<ProjectileSpawnInfo> spawnSequence { set; get; }
 
-        [Header("Audio")]
+        [Header("Projectile Audio")]
 
         [Tooltip("AudioClip for projectile travel")]
         [SerializeField] protected AudioClip travelAudioClip;
@@ -144,8 +144,8 @@ namespace Cardificer
         /// <param name="ignoredObjects"> The objects this action will ignore. </param>
         public virtual void Play(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects = null)
         {
-            actor.GetActionSourceTransform().GetComponent<MonoBehaviour>().StartCoroutine(PlaySpawnSequence(actor, modifiers, causer, ignoredObjects));
             AudioManager.instance.PlayAudioAtActor(actionAudioClip, actor);
+            actor.GetActionSourceTransform().GetComponent<MonoBehaviour>().StartCoroutine(PlaySpawnSequence(actor, modifiers, causer, ignoredObjects));
 
         }
         public void Play(IActor actor, GameObject causer, List<GameObject> ignoredObjects = null)

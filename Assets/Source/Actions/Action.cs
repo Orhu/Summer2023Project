@@ -12,6 +12,7 @@ namespace Cardificer {
         // The description of this action. Any Serialized Field names that appear in [] will be replaced with their actual value.
         protected string description = "";
 
+        [Header("Action Audio")]
         //Action Audio Clip variable. 
         [SerializeField] protected AudioClip actionAudioClip;
 

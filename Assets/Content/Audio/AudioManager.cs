@@ -114,18 +114,18 @@ namespace Cardificer
 
             else
             {
-                if (projectiles.Count == 0)
-                {
-                    return;
-                }
-
-                var audioSource = projectiles[0].gameObject.AddComponent<AudioSource>();
-                audioSource.clip = audioClip;
-                audioSource.loop = true;
-                //audioSource.playOnAwake = true; 
-                audioSource.spatialBlend = .5f;
-                audioSource.pitch = UnityEngine.Random.Range(.8f, 1.1f);
-                audioSource.Play();
+                
+                 if (projectiles.Count == 0 || projectiles[0] == null)
+                 {
+                     return; 
+                 }
+                 var audioSource = projectiles[0].gameObject.AddComponent<AudioSource>();
+                 audioSource.clip = audioClip;
+                 audioSource.loop = true;
+                 //audioSource.playOnAwake = true; 
+                 audioSource.spatialBlend = .5f;
+                 audioSource.pitch = UnityEngine.Random.Range(.8f, 1.1f);
+                 audioSource.Play();
             }
         }
 
