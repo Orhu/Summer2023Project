@@ -234,6 +234,9 @@ namespace Cardificer
 
                 case SpawnLocation.RoomCenter:
                     return FloorGenerator.floorGeneratorInstance.currentRoom.transform.position;
+
+                case SpawnLocation.Causer:
+                    return causer.transform.position;
             }
             return Vector3.zero;
         }
