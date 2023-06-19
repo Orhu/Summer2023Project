@@ -32,15 +32,19 @@ namespace Cardificer.FiniteStateMachine
             switch (targetType)
             {
                 case TargetType.Both:
-                    // TODO there is a compile error here because Player updates from PR #184 (Make Channeling) are not on this branch. Should resolve once merged.
-                    // if you need this to work for testing, simply replace "feet" with "GetFeet()"
-                    stateMachine.currentPathfindingTarget = Player.feet.transform.position;
+                    // TODO Hello! You found my planned compile error.
+                    // There is a compile error here because Player updates from PR #184 (Make Channeling) were not on this branch. 
+                    // Once this branch is merged with main, delete the current feet getting and replace it with the commented feet getting.
+                    stateMachine.currentPathfindingTarget = Player.GetFeet().transform.position;
+                    // stateMachine.currentPathfindingTarget = Player.feet.transform.position;
                     stateMachine.currentAttackTarget = Player.Get().transform.position;
                     break;
                 case TargetType.Pathfinding:
-                    // TODO there is a compile error here because Player updates from PR #184 (Make Channeling) are not on this branch. Should resolve once merged.
-                    // if you need this to work for testing, simply replace "feet" with "GetFeet()"
-                    stateMachine.currentPathfindingTarget = Player.feet.transform.position;
+                    // TODO Hello! You found my planned compile error.
+                    // There is a compile error here because Player updates from PR #184 (Make Channeling) were not on this branch. 
+                    // Once this branch is merged with main, delete the current feet getting and replace it with the commented feet getting.
+                    stateMachine.currentPathfindingTarget = Player.GetFeet().transform.position;
+                    // stateMachine.currentPathfindingTarget = Player.feet.transform.position;
                     break;
                 case TargetType.Attack:
                     stateMachine.currentAttackTarget = Player.Get().transform.position;
