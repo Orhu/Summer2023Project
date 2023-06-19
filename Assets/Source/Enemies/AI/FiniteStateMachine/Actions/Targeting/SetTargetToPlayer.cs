@@ -32,11 +32,15 @@ namespace Cardificer.FiniteStateMachine
             switch (targetType)
             {
                 case TargetType.Both:
-                    stateMachine.currentPathfindingTarget = Player.GetFeet().transform.position;
+                    // TODO there is a compile error here because Player updates from PR #184 are not on this branch. Should resolve once merged.
+                    // if you need this to work for testing, simply replace "feet" with "GetFeet()"
+                    stateMachine.currentPathfindingTarget = Player.feet.transform.position;
                     stateMachine.currentAttackTarget = Player.Get().transform.position;
                     break;
                 case TargetType.Pathfinding:
-                    stateMachine.currentPathfindingTarget = Player.GetFeet().transform.position;
+                    // TODO there is a compile error here because Player updates from PR #184 are not on this branch. Should resolve once merged.
+                    // if you need this to work for testing, simply replace "feet" with "GetFeet()"
+                    stateMachine.currentPathfindingTarget = Player.feet.transform.position;
                     break;
                 case TargetType.Attack:
                     stateMachine.currentAttackTarget = Player.Get().transform.position;
