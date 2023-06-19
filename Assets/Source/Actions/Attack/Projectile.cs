@@ -138,6 +138,7 @@ namespace Cardificer
             remainingLifetime = attack.lifetime;
             remainingHits = attack.hitCount;
             remainingHomingTime = attack.homingTime;
+            remainingHomingDelay = attack.homingDelay;
             homingSpeed = attack.homingSpeed;
             maxSpeed = attack.maxSpeed;
             minSpeed = attack.minSpeed;

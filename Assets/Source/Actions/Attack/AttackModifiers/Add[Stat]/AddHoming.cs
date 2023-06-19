@@ -15,6 +15,9 @@ namespace Cardificer
         [Tooltip("The amount of homing time to add.")]
         [SerializeField] private float homingTime;
 
+        [Tooltip("The amount of homing delay to add.")]
+        [SerializeField] private float homingdelay;
+
         // The projectile this modifies
         public override Projectile modifiedProjectile
         {
