@@ -164,7 +164,7 @@ namespace Cardificer
             get
             {
                 if (_autosaver != null) { return _autosaver; }
-                _autosaver = new GameObject().AddComponent<Autosaver>();
+                _autosaver = new GameObject("Autosaver").AddComponent<Autosaver>();
                 return _autosaver;
             }
         }

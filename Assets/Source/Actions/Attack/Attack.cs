@@ -215,6 +215,7 @@ namespace Cardificer
         Actor,
         AimPosition,
         RoomCenter,
+        Causer,
     }
 
     /// <summary>
