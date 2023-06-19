@@ -98,10 +98,14 @@ namespace Cardificer
         public System.Action onDestroyed;
         #endregion
 
+        // The current closest target to the actor.
+        private GameObject closestTargetToActor;
 
+        // The current closest target to the projectile.
+        private GameObject closestTargetToProjectile;
 
-        // The current closest target.
-        private GameObject closestTarget;
+        // The current closest target to the aim location.
+        private GameObject closestTargetToAimLocation;
 
         // The current randomly picked target.
         private GameObject randomTarget;
@@ -135,6 +139,16 @@ namespace Cardificer
             shape = Instantiate(attack.shape);
 
             attackData = new DamageData(attack.attack, causer);
+            if (attack.switchAfterHit)
+            {
+                onOverlap +=
+                    (Collider2D colldier) =>
+                    {
+                        closestTarget = null;
+                        randomTarget = null;
+                    };
+            }
+
 
             InitializeModifiers();
 
@@ -260,31 +274,14 @@ namespace Cardificer
                     }
                     return actor.GetActionAimPosition();
 
-                case AimMode.AtClosestEnemy:
-                    if (closestTarget != null)
-                    {
-                        return closestTarget.transform.position;
-                    }
+                case AimMode.AtClosestEnemyToProjectile:
+                    return FindClosestTarget(transform.position, ref closestTargetToProjectile);
 
-                    Collider2D[] roomObjects = Physics2D.OverlapBoxAll(transform.position, FloorGenerator.floorGeneratorInstance.roomSize * 2, 0f);
-                    foreach (Collider2D roomObject in roomObjects)
-                    {
-                        // If has health, is not ignored, and is the closest object.
-                        if (roomObject.GetComponent<Health>() != null 
-                            && !roomObject.CompareTag("Inanimate") 
-                            && !ignoredObjects.Contains(roomObject.gameObject) 
-                            && (closestTarget == null || (roomObject.transform.position - transform.position).sqrMagnitude < (closestTarget.transform.position - transform.position).sqrMagnitude)
-                            )
-                        {
-                            closestTarget = roomObject.gameObject;
-                        }
-                    }
+                case AimMode.AtClosestEnemyToActor:
+                    return FindClosestTarget(actor.GetActionSourceTransform().position, ref closestTargetToActor);
 
-                    if (closestTarget == null)
-                    {
-                        return transform.position;
-                    }
-                    return closestTarget.transform.position;
+                case AimMode.AtClosestEnemyToAimLocation:
+                    return FindClosestTarget(GetAimTarget(AimMode.AtMouse), ref closestTargetToAimLocation);
 
                 case AimMode.AtRandomEnemy:
                     if (randomTarget != null)
@@ -292,16 +289,14 @@ namespace Cardificer
                         return randomTarget.transform.position;
                     }
 
-                    Collider2D[] roomColliders = Physics2D.OverlapBoxAll(transform.position, FloorGenerator.floorGeneratorInstance.roomSize * 2, 0f);
-                    List<GameObject> possibleTargets = new List<GameObject>(roomColliders.Length);
-                    foreach (Collider2D roomCollider in roomColliders)
-                    {
-                        // If has health, is not ignored, and is the closest object.
-                        if (roomCollider.GetComponent<Health>() != null && !ignoredObjects.Contains(roomCollider.gameObject))
+                    List<GameObject> possibleTargets = FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies;
+                    possibleTargets.Add(Player.Get());
+                    possibleTargets.RemoveAll(
+                        // Removes ignored objects
+                        (GameObject possibleTarget) =>
                         {
-                            possibleTargets.Add(roomCollider.gameObject);
-                        }
-                    }
+                            return ignoredObjects.Contains(possibleTarget);
+                        });
 
                     randomTarget = possibleTargets[UnityEngine.Random.Range(0, possibleTargets.Count)].gameObject;
                     if (randomTarget == null)
@@ -314,6 +309,41 @@ namespace Cardificer
                     return transform.position + transform.right;
             }
             return transform.position + transform.right;
+        }
+
+        /// <summary>
+        /// Gets the current closest target to a location.
+        /// </summary>
+        /// <param name="location"> The location to find the closest target to. </param>
+        /// <param name="currentTarget"> The variable storing the last found target. </param>
+        /// <returns></returns>
+        private Vector2 FindClosestTarget(Vector2 location, ref GameObject currentTarget)
+        {
+            if (currentTarget != null)
+            {
+                return currentTarget.transform.position;
+            }
+
+            List<GameObject> possibleTargets = FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies;
+            possibleTargets.Add(Player.Get());
+
+            foreach (GameObject possibleTarget in possibleTargets)
+            {
+                // If has health, is not ignored, and is the closest object.
+                if (!ignoredObjects.Contains(possibleTarget)
+                    && (currentTarget == null || ((Vector2)possibleTarget.transform.position - location).sqrMagnitude < ((Vector2)currentTarget.transform.position - location).sqrMagnitude)
+                    )
+                {
+                    currentTarget = possibleTarget;
+                }
+            }
+
+
+            if (currentTarget == null)
+            {
+                return transform.position;
+            }
+            return currentTarget.transform.position;
         }
         #endregion
 

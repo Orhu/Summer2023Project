@@ -62,6 +62,9 @@ namespace Cardificer
         [Tooltip("What the homing will rotate the projectile towards")]
         public AimMode homingAimMode;
 
+        [Tooltip("Whether or not homing target should be reset after each hit.")]
+        public bool switchAfterHit = false;
+
 
 
         [Header("Visuals")]
@@ -217,7 +220,9 @@ namespace Cardificer
     public enum AimMode
     {
         AtMouse,
-        AtClosestEnemy,
+        AtClosestEnemyToProjectile,
+        AtClosestEnemyToAimLocation,
+        AtClosestEnemyToActor,
         AtRandomEnemy,
         Right,
     }
