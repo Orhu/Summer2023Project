@@ -54,7 +54,7 @@ namespace Cardificer
                 yield break;
             }
 
-            var startNodeResult = roomInterface.WorldPosToTile(stateMachine.feetCollider.transform.position,
+            var startNodeResult = roomInterface.WorldPosToTile(stateMachine.feetColliderPosition,
                 stateMachine.currentMovementType);
             var targetNodeResult = roomInterface.WorldPosToTile(stateMachine.currentPathfindingTarget,
                 stateMachine.currentMovementType);
@@ -127,7 +127,7 @@ namespace Cardificer
             yield return null;
             if (pathSuccess)
             {
-                waypoints = RetracePath(startNode, targetNode);
+                waypoints = RetracePath(startNode, targetNode, stateMachine);
             }
 
             requestManager.FinishedProcessingPath(waypoints, pathSuccess, stateMachine);
@@ -139,7 +139,7 @@ namespace Cardificer
         /// <param name="startTile"> Start tile </param>
         /// <param name="endTile"> End tile </param>
         /// <returns> Array containing waypoints to travel from start to end </returns>
-        Vector2[] RetracePath(PathfindingTile startTile, PathfindingTile endTile)
+        Vector2[] RetracePath(PathfindingTile startTile, PathfindingTile endTile, BaseStateMachine stateMachine)
         {
             List<PathfindingTile> path = new List<PathfindingTile>();
             PathfindingTile currentNode = endTile;
@@ -150,7 +150,7 @@ namespace Cardificer
                 currentNode = currentNode.retraceStep;
             }
 
-            Vector2[] waypoints = SimplifyPath(path);
+            Vector2[] waypoints = SimplifyPath(path, stateMachine);
             Array.Reverse(waypoints);
             return waypoints;
         }
@@ -160,7 +160,7 @@ namespace Cardificer
         /// </summary>
         /// <param name="path"> Input path </param>
         /// <returns></returns>
-        Vector2[] SimplifyPath(List<PathfindingTile> path)
+        Vector2[] SimplifyPath(List<PathfindingTile> path, BaseStateMachine stateMachine)
         {
             /*
                     List<Vector2> waypoints = new List<Vector2>();
@@ -175,6 +175,7 @@ namespace Cardificer
                         directionOld = directionNew;
                     }*/
             List<Vector2> waypoints = new List<Vector2>();
+            waypoints.Add(stateMachine.currentPathfindingTarget);
             foreach (var tile in path)
             {
                 waypoints.Add(roomInterface.TileToWorldPos(tile));

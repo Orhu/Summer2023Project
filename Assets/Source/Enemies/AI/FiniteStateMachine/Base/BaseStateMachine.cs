@@ -24,7 +24,10 @@ namespace Cardificer.FiniteStateMachine
         [HideInInspector] public Vector2 currentAttackTarget;
 
         // cached feet collider
-        [HideInInspector] public Collider2D feetCollider;
+        [HideInInspector] private Collider2D feetCollider;
+        
+        // tracks position of feet collider 
+        [HideInInspector] public Vector2 feetColliderPosition;
 
         // the current state this machine is in
         [HideInInspector] public BaseState currentState;
@@ -98,7 +101,35 @@ namespace Cardificer.FiniteStateMachine
             cooldownData.cooldownReady = new Dictionary<BaseAction, bool>();
             cachedComponents = new Dictionary<Type, Component>();
             currentMovementType = startingMovementType;
-            feetCollider = GetComponentInChildren<Collider2D>();;
+            feetCollider = GetMyFeet();
+        }
+
+        private Collider2D GetMyFeet()
+        {
+            if (feetCollider != null)
+            {
+                return feetCollider;
+            }
+
+            Collider2D enemyFeetCollider = null;
+            var enemyColliders = GetComponentsInChildren<Collider2D>();
+            foreach (var enemyCollider in enemyColliders)
+            {
+                if (!enemyCollider.isTrigger)
+                {
+                    enemyFeetCollider = enemyCollider;
+                    break;
+                }
+            }
+
+            if (enemyFeetCollider != null)
+            {
+                feetCollider = enemyFeetCollider;
+                return feetCollider;
+            } else {
+                Debug.LogError("No feet collider found! Make sure you have a non-trigger collider attached to the player.");
+                return null;
+            } 
         }
         
         
@@ -117,6 +148,11 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void Update()
         {
+            var offset = feetCollider.offset;
+            var position = feetCollider.transform.position;
+            feetColliderPosition = new Vector2(position.x + offset.x, 
+                position.y + offset.y);
+            
             if (Time.time - timeStarted <= delayBeforeLogic) return;
 
             if (exhausted)

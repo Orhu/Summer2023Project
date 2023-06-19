@@ -35,7 +35,7 @@ namespace Cardificer.FiniteStateMachine
                     // TODO Hello! You found my planned compile error.
                     // There is a compile error here because Player updates from PR #184 (Make Channeling) were not on this branch. 
                     // Once this branch is merged with main, delete the current feet getting and replace it with the commented feet getting.
-                    stateMachine.currentPathfindingTarget = Player.GetFeet().transform.position;
+                    stateMachine.currentPathfindingTarget = Player.GetFeetPosition();
                     // stateMachine.currentPathfindingTarget = Player.feet.transform.position;
                     stateMachine.currentAttackTarget = Player.Get().transform.position;
                     break;
@@ -43,7 +43,7 @@ namespace Cardificer.FiniteStateMachine
                     // TODO Hello! You found my planned compile error.
                     // There is a compile error here because Player updates from PR #184 (Make Channeling) were not on this branch. 
                     // Once this branch is merged with main, delete the current feet getting and replace it with the commented feet getting.
-                    stateMachine.currentPathfindingTarget = Player.GetFeet().transform.position;
+                    stateMachine.currentPathfindingTarget = Player.GetFeetPosition();
                     // stateMachine.currentPathfindingTarget = Player.feet.transform.position;
                     break;
                 case TargetType.Attack:

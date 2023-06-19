@@ -26,25 +26,38 @@ namespace Cardificer
             return player;
         }
 
-        public static Collider2D GetFeet()
+        public static Vector2 GetFeetPosition()
         {
             if (playerFeet != null)
             {
-                return playerFeet;
+                var position = playerFeet.transform.position;
+                var offset = playerFeet.offset;
+                return new Vector2(position.x + offset.x,
+                    position.y + offset.y);
             }
 
-            var playerCollider = Get().GetComponentInChildren<Collider2D>();
-            if (playerCollider != null)
+            Collider2D playerFeetCollider = null;
+            var playerColliders = Get().GetComponentsInChildren<Collider2D>();
+            foreach (var playerCollider in playerColliders)
             {
-                playerFeet = playerCollider;
-                return playerFeet;
+                if (!playerCollider.isTrigger)
+                {
+                    playerFeetCollider = playerCollider;
+                    break;
+                }
             }
-            else
+
+            if (playerFeetCollider != null)
             {
-                Debug.LogError(
-                    "No feet collider found! Make sure you have a non-trigger collider attached to the player.");
-                return null;
-            }
+                playerFeet = playerFeetCollider;
+                var position = playerFeet.transform.position;
+                var offset = playerFeet.offset;
+                return new Vector2(position.x + offset.x,
+                    position.y + offset.y);
+            } else {
+                Debug.LogError("No feet collider found! Make sure you have a non-trigger collider attached to the player.");
+                return Vector2.zero;
+            } 
         }
 
     }

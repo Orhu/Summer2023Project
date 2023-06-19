@@ -67,7 +67,7 @@ namespace Cardificer.FiniteStateMachine
         {
             if (!success || stateMachine == null || stateMachine.pathData.ignorePathRequests) return;
 
-            stateMachine.pathData.path = new Path(newPath, stateMachine.feetCollider.transform.position);
+            stateMachine.pathData.path = new Path(newPath, stateMachine.feetColliderPosition);
 
             if (stateMachine.pathData.prevFollowCoroutine != null)
             {
@@ -122,7 +122,7 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> The stateMachine to be used. </param>
         private bool ArrivedAtPoint(Vector2 point, BaseStateMachine stateMachine)
         {
-            return Vector2.Distance(point, stateMachine.feetCollider.transform.position) <= distanceBuffer;
+            return Vector2.Distance(point, stateMachine.feetColliderPosition) <= distanceBuffer;
         }
     }
 }
