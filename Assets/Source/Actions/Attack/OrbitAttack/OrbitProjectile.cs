@@ -52,11 +52,6 @@ namespace Cardificer
         /// </summary>
         new void FixedUpdate()
         {
-            if (remainingHomingTime <= 0 && attack.homingSpeed <= 0)
-            {
-                transform.rotation *= Quaternion.AngleAxis(OrbitSign() * Mathf.Rad2Deg * speed * Time.fixedDeltaTime / radius, Vector3.forward);
-            }
-
             base.FixedUpdate();
 
             if (orbitAttack.attachedToSpawnLocation)

@@ -20,17 +20,16 @@ MonoBehaviour:
   hitCount: 4
   applyDamageOnHit: 1
   modifiers:
+  - {fileID: 11400000, guid: 7526a72a83c97084da731dc26bcd6fac, type: 2}
   - {fileID: 11400000, guid: b35a169b6528fa14d9d1985637c4b021, type: 2}
-  - {fileID: 11400000, guid: 4461021090cc2984eab1fbc2ccd27225, type: 2}
-  - {fileID: 11400000, guid: 8f157c72f01f0bd4dbb4d50195a7cd1c, type: 2}
   shape: {fileID: 11400000, guid: 9009f0e272fb0964b84d5e019d3ea5b4, type: 2}
-  lifetime: 3
-  initialSpeed: 2
+  lifetime: 8
+  initialSpeed: 5
   acceleration: 1
   minSpeed: 0
   maxSpeed: 20
-  homingSpeed: 0
-  homingTime: 0
+  homingSpeed: 5
+  homingTime: 10
   homingAimMode: 1
   visualObject: {fileID: 815138696641318384, guid: 5a43758f167be394badf944662ecc2c3, type: 3}
   detachVisualsBeforeDestroy: 0

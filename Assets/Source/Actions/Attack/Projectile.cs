@@ -191,16 +191,19 @@ namespace Cardificer
         /// </summary>
         protected void FixedUpdate()
         {
+            rigidBody.velocity += (Vector2)transform.right * acceleration * Time.fixedDeltaTime;
+
             if (remainingHomingTime > 0 && homingSpeed > 0)
             {
-                Vector3 targetDirection = (GetAimTarget(attack.homingAimMode) - transform.position).normalized;
-                float targetRotation = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
-                float currentRotation = transform.rotation.eulerAngles.z;
-                transform.rotation = Quaternion.AngleAxis(Mathf.LerpAngle(currentRotation, targetRotation, homingSpeed), Vector3.forward);
+                Vector2 targetVelocity = (GetAimTarget(attack.homingAimMode) - transform.position).normalized * maxSpeed;
+                if (targetVelocity.sqrMagnitude > Vector2.kEpsilon)
+                {
+                    rigidBody.velocity += (targetVelocity - rigidBody.velocity).normalized * homingSpeed * Time.fixedDeltaTime;
+                }
             }
 
-            speed = Mathf.Clamp(speed + acceleration * Time.fixedDeltaTime, minSpeed, maxSpeed);
-            rigidBody.velocity = transform.right * speed;
+            speed = Mathf.Clamp(rigidBody.velocity.magnitude, minSpeed, maxSpeed);
+            rigidBody.velocity = rigidBody.velocity.normalized * speed;
         }
 
         /// <summary>
@@ -264,8 +267,11 @@ namespace Cardificer
                     foreach (Collider2D roomObject in roomObjects)
                     {
                         // If has health, is not ignored, and is the closest object.
-                        if (roomObject.GetComponent<Health>() != null && !ignoredObjects.Contains(roomObject.gameObject) &&
-                            (closestTarget == null || (roomObject.transform.position - transform.position).sqrMagnitude < (closestTarget.transform.position - transform.position).sqrMagnitude))
+                        if (roomObject.GetComponent<Health>() != null 
+                            && !roomObject.CompareTag("Inanimate") 
+                            && !ignoredObjects.Contains(roomObject.gameObject) 
+                            && (closestTarget == null || (roomObject.transform.position - transform.position).sqrMagnitude < (closestTarget.transform.position - transform.position).sqrMagnitude)
+                            )
                         {
                             closestTarget = roomObject.gameObject;
                         }
@@ -273,7 +279,7 @@ namespace Cardificer
 
                     if (closestTarget == null)
                     {
-                        return transform.position + transform.right;
+                        return transform.position;
                     }
                     return closestTarget.transform.position;
 
