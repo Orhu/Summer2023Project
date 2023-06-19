@@ -144,7 +144,9 @@ namespace Cardificer
                 onOverlap +=
                     (Collider2D colldier) =>
                     {
-                        closestTarget = null;
+                        closestTargetToActor = null;
+                        closestTargetToProjectile = null;
+                        closestTargetToAimLocation = null;
                         randomTarget = null;
                     };
             }
