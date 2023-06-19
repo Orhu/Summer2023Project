@@ -140,6 +140,7 @@ namespace Cardificer
 
             // Setup collision
             rigidBody = GetComponent<Rigidbody2D>();
+            rigidBody.velocity = speed * transform.right;
             Collider2D collider = shape.CreateCollider(gameObject);
             if (actor.GetCollider() != null)
             {
@@ -211,6 +212,8 @@ namespace Cardificer
         /// </summary>
         void Update()
         {
+            visualObject.transform.right = rigidBody.velocity;
+
             remainingLifetime -= Time.deltaTime;
             remainingHomingTime -= Time.deltaTime;
             if (remainingLifetime <= 0)
