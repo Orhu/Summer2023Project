@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
+using UnityEditor;
 
 namespace Cardificer
 {
@@ -69,17 +71,17 @@ namespace Cardificer
         [Serializable]
         public class State
         {
-            // All the cards in the deck
-            public List<Card> cards;
+            // All the paths cards in the deck
+            public List<string> pathToCards;
 
-            // The cards in the draw pile.
-            public List<Card> drawableCards;
+            // The paths to cards in the draw pile.
+            public List<string> pathToCardsDrawableCards;
 
-            // The cards in hand.
-            public List<Card> inHandCards;
+            // The paths to cards in hand.
+            public List<string> pathToCardsInHandCards;
 
-            // The cards in the discard pile.
-            public List<Card> discardedCards;
+            // The paths to cards in the discard pile.
+            public List<string> pathToCardsDiscardedCards;
 
             /// <summary>
             /// Copies the state from a deck
@@ -87,10 +89,10 @@ namespace Cardificer
             /// <param name="deck"> The deck to copy. </param>
             public State(Deck deck)
             {
-                cards = deck.cards;
-                drawableCards = deck.drawableCards;
-                inHandCards = deck.inHandCards;
-                discardedCards = deck.discardedCards;
+                pathToCards = deck.cards.Select(AssetDatabase.GetAssetPath).ToList();
+                pathToCardsDrawableCards = deck.drawableCards.Select(AssetDatabase.GetAssetPath).ToList(); ;
+                pathToCardsInHandCards = deck.inHandCards.Select(AssetDatabase.GetAssetPath).ToList(); ;
+                pathToCardsDiscardedCards = deck.discardedCards.Select(AssetDatabase.GetAssetPath).ToList(); ;
             }
 
             /// <summary>
@@ -99,10 +101,23 @@ namespace Cardificer
             /// <param name="deck"> The deck to load into. </param>
             public void LoadInto(Deck deck)
             {
-                deck.cards = cards;
-                deck.drawableCards = drawableCards;
-                deck.inHandCards = inHandCards;
-                deck.discardedCards = discardedCards;
+                deck.cards = pathToCards.Select(AssetDatabase.LoadAssetAtPath<Card>).OfType<Card>().ToList();
+
+                if (pathToCards.Count != deck.cards.Count)
+                {
+                    SaveManager.AutosaveCorrupted("Cards in deck failed to load");
+                    return;
+                }
+
+                deck.drawableCards = pathToCardsDrawableCards.Select(AssetDatabase.LoadAssetAtPath<Card>).OfType<Card>().ToList();
+                deck.inHandCards = pathToCardsInHandCards.Select(AssetDatabase.LoadAssetAtPath<Card>).OfType<Card>().ToList();
+                deck.discardedCards = pathToCardsDiscardedCards.Select(AssetDatabase.LoadAssetAtPath<Card>).OfType<Card>().ToList();
+
+                if (deck.drawableCards.Count + deck.inHandCards.Count + deck.discardedCards.Count != deck.cards.Count)
+                {
+                    SaveManager.AutosaveCorrupted("Draw/Hand/Discard & Deck size mismatch");
+                    return;
+                }
             }
         }
 
@@ -136,9 +151,12 @@ namespace Cardificer
                 return;
             }
 
-            drawableCards = new List<Card>(cards);
+            if (drawableCards == null || drawableCards.Count == 0)
+            {
+                drawableCards = new List<Card>(cards);
+                ReshuffleDrawPile();
+            }
 
-            ReshuffleDrawPile();
             for (int i = 0; i < handSize; i++)
             {
                 DrawCard();

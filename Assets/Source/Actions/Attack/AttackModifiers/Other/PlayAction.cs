@@ -14,8 +14,7 @@ namespace Cardificer
         [Tooltip("The action to play.")]
         [SerializeField] private Action action;
 
-        [Tooltip("The delay before the action is taken")]
-        [Min(0f)]
+        [Tooltip("The delay before the action is taken")] [Min(0f)]
         [SerializeField] private float delay = 0f;
 
         [Tooltip("When the action is played")]
@@ -177,6 +176,15 @@ namespace Cardificer
         {
             return ref _canAct;
         }
+        /// <summary>
+        /// Get the attached audiosource component. 
+        /// </summary>
+        /// <returns></returns>
+        public AudioSource GetAudioSource()
+        {
+            return sourceTransform.GetComponent<AudioSource>();
+        }        
+
         #endregion
 
         /// <summary>

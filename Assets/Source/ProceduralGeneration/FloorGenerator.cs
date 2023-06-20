@@ -89,21 +89,44 @@ namespace Cardificer
             Deck.playerDeck.onCardRemoved += OnCardRemoved;
             map = GetComponent<LayoutGenerator>().Generate(layoutGenerationParameters);
             GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, roomSize);
-            currentRoom.Generate();
 
             // Autosave loading
-            if (!SaveManager.autosaveExists) { return; }
+            if (!SaveManager.autosaveExists) 
+            {
+                Room startRoom = map.startCell.room.GetComponent<Room>();
+                startRoom.Enter(Direction.None);
+                return; 
+            }
 
             List<Vector3Int> vistedRooms = SaveManager.savedVisitedRooms;
             Room lastRoom = map.startCell.room.GetComponent<Room>();
             int nextCardIndex = vistedRooms[0].z;
             foreach (Vector3Int vistedRoom in vistedRooms)
             {
+                if (vistedRoom.x >= map.mapSize.x || vistedRoom.y >= map.mapSize.y || map.map[vistedRoom.x, vistedRoom.y].room == null)
+                {
+                    SaveManager.AutosaveCorrupted("Invalid room index");
+                    return;
+                }
+
                 lastRoom.Exit();
                 lastRoom = map.map[vistedRoom.x, vistedRoom.y].room.GetComponent<Room>();
                 lastRoom.Generate(false);
+
+                if (nextCardIndex > vistedRoom.z)
+                {
+                    SaveManager.AutosaveCorrupted("Card index too small");
+                    return;
+                }
+
                 while (nextCardIndex < vistedRoom.z)
                 {
+                    if (nextCardIndex >= Deck.playerDeck.cards.Count || nextCardIndex < 0)
+                    {
+                        SaveManager.AutosaveCorrupted("Card index out of bounds");
+                        return;
+                    }
+
                     OnCardAdded(Deck.playerDeck.cards[nextCardIndex]);
                     nextCardIndex++;
                 }
@@ -119,11 +142,10 @@ namespace Cardificer
             int max = SaveManager.autosaveExists ? SaveManager.savedVisitedRooms[0].z : Deck.playerDeck.cards.Count;
             for (int i = 0; i < max; i++)
             {
+                if (i >= Deck.playerDeck.cards.Count) { continue; }
+
                 Card card = Deck.playerDeck.cards[i];
-                if (card.effects == null)
-                {
-                    return;
-                }
+                if (card == null || card.effects == null) { continue; }
 
                 foreach (DungeonEffect effect in card.effects)
                 {
@@ -160,6 +182,7 @@ namespace Cardificer
             int max = SaveManager.autosaveExists ? SaveManager.savedVisitedRooms[0].z : Deck.playerDeck.cards.Count;
             for (int i = 0; i < max; i++)
             {
+                if (i >= Deck.playerDeck.cards.Count) { continue; }
                 OnCardAdded(Deck.playerDeck.cards[i]);
             }
         }

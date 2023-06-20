@@ -10,6 +10,12 @@ namespace Cardificer
 
     public class RoomExteriorGenerationParameters : ScriptableObject
     {
+        [Tooltip("The wall tile")]
+        public Tile wallTile;
+
+        [Tooltip("The door tile")]
+        public Tile doorTile;
+
         [Tooltip("The possible right wall sprites to use (will pick randomly from these)")]
         public GenericWeightedThings<Sprite> rightWallSprites;
 

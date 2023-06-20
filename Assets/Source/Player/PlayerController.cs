@@ -36,9 +36,16 @@ namespace Cardificer
             if (!SaveManager.autosaveExists) { return; }
 
             transform.position = SaveManager.savedPlayerPosition;
+            // TODO: There is a small probability that the player position is invalid and is not caught by the default save file corruption detection.
+
             Health health = GetComponent<Health>();
             health.maxHealth = health.maxHealth;
             health.currentHealth = SaveManager.savedPlayerHealth;
+            if (health.currentHealth > health.maxHealth || health.currentHealth <= 0)
+            {
+                SaveManager.AutosaveCorrupted("Invalid player health");
+                return;
+            }
         }
 
         /// <summary>
@@ -162,6 +169,13 @@ namespace Cardificer
         {
             return ref _canAct;
         }
+
+        public AudioSource GetAudioSource()
+        {
+            
+                return GetComponent<AudioSource>(); 
+        }        
+
         #endregion
     }
 }

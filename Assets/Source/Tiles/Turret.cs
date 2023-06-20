@@ -25,7 +25,7 @@ namespace Cardificer
         private enum PlayTime
         {
             AlwaysShooting,
-            WhenOverlaping
+            WhenOverlapping
         }
 
 
@@ -76,7 +76,7 @@ namespace Cardificer
         /// <param name="collision"> The thing that was overlapped. </param>
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (playTime == PlayTime.WhenOverlaping && collision.CompareTag("Player") && !collision.isTrigger)
+            if (playTime == PlayTime.WhenOverlapping && collision.CompareTag("Player") && !collision.isTrigger)
             {
                 coroutine = StartCoroutine(PlayAction());
             }
@@ -88,7 +88,7 @@ namespace Cardificer
         /// <param name="collision"> The thing that was overlapped. </param>
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (playTime == PlayTime.WhenOverlaping && collision.CompareTag("Player") && !collision.isTrigger)
+            if (playTime == PlayTime.WhenOverlapping && collision.CompareTag("Player") && !collision.isTrigger)
             {
                 StopAllCoroutines();
                 coroutine = null;
@@ -140,6 +140,16 @@ namespace Cardificer
         /// </summary>
         /// <returns> A delegate with a out parameter, that allows any subscribed objects to determine whether or not this actor can act. </returns>
         public ref IActor.CanActRequest GetOnRequestCanAct() { return ref canAct; }
+
+        /// <summary>
+        /// Gets the AudioSource on the object. 
+        /// </summary>
+        /// <returns></returns>
+        public AudioSource GetAudioSource()
+        {
+            return GetComponent<AudioSource>(); 
+        }
+
         #endregion
     }
 }
