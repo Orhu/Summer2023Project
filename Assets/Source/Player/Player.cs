@@ -29,8 +29,19 @@ namespace Cardificer
             get
             {
                 if (_feet != null) { return _feet; }
-                _feet = Get().GetComponentInChildren<Collider2D>();
-                return _feet;
+
+                Collider2D[] playerColliders = Get().GetComponentsInChildren<Collider2D>();
+                foreach (var playerCollider in playerColliders)
+                {
+                    if (!playerCollider.isTrigger)
+                    {
+                        _feet = playerCollider;
+                        return _feet;
+                    }
+                }
+                
+                Debug.LogError("No feet collider found! Make sure you have a non-trigger collider attached to the enemy.");
+                return null;
             }
         }
 
