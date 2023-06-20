@@ -45,7 +45,7 @@ namespace Cardificer
         {
             if (targetFeet)
             {
-                stateMachine.currentTarget = Player.feet.transform.position;
+                stateMachine.currentTarget = Player.GetFeet().transform.position;
             }
             else
             {
