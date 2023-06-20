@@ -13,22 +13,23 @@ MonoBehaviour:
   m_Name: BulletAttack_StickyBomb
   m_EditorClassIdentifier: 
   attack:
-    damage: 6
+    damage: 1
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
   hitCount: 1
   applyDamageOnHit: 1
-  modifiers: []
+  modifiers:
+  - {fileID: 11400000, guid: 092f60b9b70ec6e4b95088d9d2339732, type: 2}
   shape: {fileID: 11400000, guid: 8a78b135e83819648b525598531de026, type: 2}
-  lifetime: 10
-  initialSpeed: 10
-  acceleration: -1
-  minSpeed: 5
-  maxSpeed: 10
+  lifetime: 3.5
+  initialSpeed: 6
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 6
   homingSpeed: 0
   homingTime: 0
-  homingAimMode: 0
+  homingAimMode: 1
   visualObject: {fileID: 5607299386841061148, guid: 4b2ef75c380f4c84eac799d8f86952e1, type: 3}
   detachVisualsBeforeDestroy: 0
   spawnLocation: 0
