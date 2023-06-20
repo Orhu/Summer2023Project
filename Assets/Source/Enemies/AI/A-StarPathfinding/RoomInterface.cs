@@ -63,6 +63,7 @@ namespace Cardificer
         [Tooltip("Draw Tiles detected as \"burrow\" during room-grid copying")]
         [SerializeField] private bool drawBurrowTiles;
 
+        // tracks list of null tiles during room copying for the purpose of displaying them as gizmos
         private List<Vector2> debugNullTiles = new List<Vector2>();
 
         /// <summary>
