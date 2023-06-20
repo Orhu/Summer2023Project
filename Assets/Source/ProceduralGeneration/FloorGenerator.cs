@@ -28,8 +28,8 @@ namespace Cardificer
         [Tooltip("Whether or not to randomize the seed on start")]
         public bool randomizeSeed;
 
-        [Tooltip("Event called when the room is changed")]
-        public UnityEvent onRoomChange;
+        // Event called when the room is changed
+        [HideInInspector] public UnityEvent onRoomChange;
 
         // The random instance
         [HideInInspector] static public System.Random random;

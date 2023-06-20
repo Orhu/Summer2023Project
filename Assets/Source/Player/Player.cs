@@ -29,8 +29,19 @@ namespace Cardificer
             get
             {
                 if (_feet != null) { return _feet; }
-                _feet = Get().GetComponentInChildren<Collider2D>();
-                return _feet;
+
+                Collider2D[] playerColliders = Get().GetComponentsInChildren<Collider2D>();
+                foreach (var playerCollider in playerColliders)
+                {
+                    if (!playerCollider.isTrigger)
+                    {
+                        _feet = playerCollider;
+                        return _feet;
+                    }
+                }
+                
+                Debug.LogError("No feet collider found! Make sure you have a non-trigger collider attached to the enemy.");
+                return null;
             }
         }
 
@@ -45,6 +56,17 @@ namespace Cardificer
             player = GameObject.FindGameObjectWithTag("Player");
 
             return player;
+        }
+
+        /// <summary>
+        /// Returns the feet collider's center, correctly offset from base transform
+        /// </summary>
+        /// <returns></returns>
+        public static Vector2 GetFeetPosition()
+        {
+            var offset = feet.offset;
+            var position = feet.transform.position;
+            return new Vector2(position.x + offset.x, position.y + offset.y);
         }
     }
 }

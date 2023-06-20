@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b1feef127a8c424ab5758a744b45cc8, type: 3}
   m_Name: RockTile
   m_EditorClassIdentifier: 
-  walkable: 0
-  movementPenalty: 0
+  allowedMovementTypes: 6
+  walkMovementPenalty: 0
+  flyMovementPenalty: 0
+  burrowMovementPenalty: 0
   gridLocation: {x: 0, y: 0}
   type: 1
   spawnedObject: {fileID: 8112099523175327361, guid: 3c4064fefec31e84a9a71518343d7a49, type: 3}
