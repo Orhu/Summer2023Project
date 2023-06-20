@@ -25,6 +25,9 @@ namespace Cardificer
         [Tooltip("If true, the attached collider can not deal damage.")]
         [SerializeField] private bool noCollisionDamage;
 
+        [Tooltip("AudioClip for Damage On Interact")] 
+        [SerializeField] private AudioClip audioClip; 
+
         // The collider used for overlap detection.
         private new Collider2D collider;
 
@@ -78,12 +81,22 @@ namespace Cardificer
             if (immediatelyDamage)
             {
                 health.ReceiveAttack(damageData);
+                if (audioClip != null)
+                {
+                    AudioManager.instance.PlayAudioAtPos(audioClip, transform.position);
+
+                }
             }
 
             yield return new WaitForSeconds(damageInterval);
             while (other != null && collider.IsTouching(other))
             {
                 health.ReceiveAttack(damageData);
+                if (audioClip != null)
+                {
+                    AudioManager.instance.PlayAudioAtPos(audioClip, transform.position);
+
+                }
                 yield return new WaitForSeconds(damageInterval);
             }
         }
