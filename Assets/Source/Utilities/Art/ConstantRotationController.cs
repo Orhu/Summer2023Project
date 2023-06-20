@@ -20,7 +20,7 @@ namespace Cardificer
         /// <summary>
         /// Constant rotation is applied to the GameObject each frame.
         /// </summary>
-        void Update()
+        private void Update()
         {
             float rotationDirectionVal = rotateClockwise ? 1f : -1f;
             this.transform.Rotate(0f, 0f, this.transform.rotation.z - rotationDirectionVal * rotationRate * Time.deltaTime);

@@ -15,7 +15,7 @@ namespace Cardificer
         /// <summary>
         /// Gets reference to Parent's rigidbody (the actual movey thing)
         /// </summary>
-        void Awake()
+        private void Awake()
         {
             body = GetComponentInParent<Rigidbody2D>();
         }
@@ -23,7 +23,7 @@ namespace Cardificer
         /// <summary>
         /// If the rigidbody has stopped moving, reset the parent's rotation so it is zeroed.
         /// </summary>
-        void LateUpdate()
+        private void LateUpdate()
         {
             if (body == null)
             {

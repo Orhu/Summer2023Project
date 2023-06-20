@@ -15,7 +15,7 @@ namespace Cardificer
         /// <summary>
         /// Starts destruction countdown.
         /// </summary>
-        void Awake()
+        private void Awake()
         {
             Destroy(this.gameObject, timeToDestruction);
         }
