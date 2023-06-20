@@ -55,6 +55,9 @@ namespace Cardificer
         // The remaining time this will home for in seconds.
         [NonSerialized] public float remainingHomingTime;
 
+        // The remaining time until this will home in seconds.
+        [NonSerialized] public float remainingHomingDelay;
+
         // The speed that this projectile will turn at.
         [NonSerialized] public float homingSpeed;
 
@@ -101,10 +104,17 @@ namespace Cardificer
         public System.Action onDestroyed;
         #endregion
 
+        // The current velocity of this projectile.
+        protected Vector2 velocity;
 
+        // The current closest target to the actor.
+        private GameObject closestTargetToActor;
 
-        // The current closest target.
-        private GameObject closestTarget;
+        // The current closest target to the projectile.
+        private GameObject closestTargetToProjectile;
+
+        // The current closest target to the aim location.
+        private GameObject closestTargetToAimLocation;
 
         // The current randomly picked target.
         private GameObject randomTarget;
@@ -131,6 +141,7 @@ namespace Cardificer
             remainingLifetime = attack.lifetime;
             remainingHits = attack.hitCount;
             remainingHomingTime = attack.homingTime;
+            remainingHomingDelay = attack.homingDelay;
             homingSpeed = attack.homingSpeed;
             maxSpeed = attack.maxSpeed;
             minSpeed = attack.minSpeed;
@@ -138,6 +149,18 @@ namespace Cardificer
             shape = Instantiate(attack.shape);
 
             attackData = new DamageData(attack.attack, causer);
+            if (attack.switchAfterHit)
+            {
+                onOverlap +=
+                    (Collider2D colldier) =>
+                    {
+                        closestTargetToActor = null;
+                        closestTargetToProjectile = null;
+                        closestTargetToAimLocation = null;
+                        randomTarget = null;
+                    };
+            }
+
 
             InitializeModifiers();
 
@@ -195,25 +218,32 @@ namespace Cardificer
         /// </summary>
         protected void FixedUpdate()
         {
-            if (remainingHomingTime > 0 && homingSpeed > 0)
+            velocity += (Vector2)transform.right * acceleration * Time.fixedDeltaTime;
+
+            if (remainingHomingDelay <= 0 && remainingHomingTime > 0 && homingSpeed > 0)
             {
-                Vector3 targetDirection = (GetAimTarget(attack.homingAimMode) - transform.position).normalized;
-                float targetRotation = Mathf.Atan2(targetDirection.y, targetDirection.x) * Mathf.Rad2Deg;
-                float currentRotation = transform.rotation.eulerAngles.z;
-                transform.rotation = Quaternion.AngleAxis(Mathf.LerpAngle(currentRotation, targetRotation, homingSpeed), Vector3.forward);
+                Vector2 targetVelocity = (GetAimTarget(attack.homingAimMode) - transform.position).normalized * maxSpeed;
+                if (targetVelocity.sqrMagnitude > Vector2.kEpsilon)
+                {
+                    velocity += (targetVelocity - velocity).normalized * homingSpeed * Time.fixedDeltaTime;
+                }
             }
 
-            speed = Mathf.Clamp(speed + acceleration * Time.fixedDeltaTime, minSpeed, maxSpeed);
-            rigidBody.velocity = transform.right * speed;
+            speed = Mathf.Clamp(velocity.magnitude, minSpeed, maxSpeed);
+            rigidBody.velocity = velocity.normalized * speed;
         }
 
         /// <summary>
         /// Handles lifetime
         /// </summary>
-        void Update()
+        protected void Update()
         {
             remainingLifetime -= Time.deltaTime;
-            remainingHomingTime -= Time.deltaTime;
+            if (remainingHomingDelay <= 0)
+            {
+                remainingHomingTime -= Time.deltaTime;
+            }
+            remainingHomingDelay -= Time.deltaTime;
             if (remainingLifetime <= 0)
             {
                 Destroy(gameObject);
@@ -261,28 +291,14 @@ namespace Cardificer
                     }
                     return actor.GetActionAimPosition();
 
-                case AimMode.AtClosestEnemy:
-                    if (closestTarget != null)
-                    {
-                        return closestTarget.transform.position;
-                    }
+                case AimMode.AtClosestEnemyToProjectile:
+                    return FindClosestTarget(transform.position, ref closestTargetToProjectile);
 
-                    Collider2D[] roomObjects = Physics2D.OverlapBoxAll(transform.position, FloorGenerator.floorGeneratorInstance.roomSize * 2, 0f);
-                    foreach (Collider2D roomObject in roomObjects)
-                    {
-                        // If has health, is not ignored, and is the closest object.
-                        if (roomObject.GetComponent<Health>() != null && !ignoredObjects.Contains(roomObject.gameObject) &&
-                            (closestTarget == null || (roomObject.transform.position - transform.position).sqrMagnitude < (closestTarget.transform.position - transform.position).sqrMagnitude))
-                        {
-                            closestTarget = roomObject.gameObject;
-                        }
-                    }
+                case AimMode.AtClosestEnemyToActor:
+                    return FindClosestTarget(actor.GetActionSourceTransform().position, ref closestTargetToActor);
 
-                    if (closestTarget == null)
-                    {
-                        return transform.position + transform.right;
-                    }
-                    return closestTarget.transform.position;
+                case AimMode.AtClosestEnemyToAimLocation:
+                    return FindClosestTarget(GetAimTarget(AimMode.AtMouse), ref closestTargetToAimLocation);
 
                 case AimMode.AtRandomEnemy:
                     if (randomTarget != null)
@@ -290,28 +306,61 @@ namespace Cardificer
                         return randomTarget.transform.position;
                     }
 
-                    Collider2D[] roomColliders = Physics2D.OverlapBoxAll(transform.position, FloorGenerator.floorGeneratorInstance.roomSize * 2, 0f);
-                    List<GameObject> possibleTargets = new List<GameObject>(roomColliders.Length);
-                    foreach (Collider2D roomCollider in roomColliders)
-                    {
-                        // If has health, is not ignored, and is the closest object.
-                        if (roomCollider.GetComponent<Health>() != null && !ignoredObjects.Contains(roomCollider.gameObject))
+                    List<GameObject> possibleTargets = new List<GameObject>(FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies);
+                    possibleTargets.Add(Player.Get());
+                    possibleTargets.RemoveAll(
+                        // Removes ignored objects
+                        (GameObject possibleTarget) =>
                         {
-                            possibleTargets.Add(roomCollider.gameObject);
-                        }
-                    }
+                            return ignoredObjects.Contains(possibleTarget);
+                        });
 
-                    randomTarget = possibleTargets[UnityEngine.Random.Range(0, possibleTargets.Count)].gameObject;
-                    if (randomTarget == null)
+                    if (possibleTargets.Count <= 0)
                     {
                         return transform.position + transform.right;
                     }
+                    randomTarget = possibleTargets[UnityEngine.Random.Range(0, possibleTargets.Count)].gameObject;
                     return randomTarget.transform.position;
 
                 case AimMode.Right:
                     return transform.position + transform.right;
             }
             return transform.position + transform.right;
+        }
+
+        /// <summary>
+        /// Gets the current closest target to a location.
+        /// </summary>
+        /// <param name="location"> The location to find the closest target to. </param>
+        /// <param name="currentTarget"> The variable storing the last found target. </param>
+        /// <returns> The position of the closest target in world space. </returns>
+        private Vector2 FindClosestTarget(Vector2 location, ref GameObject currentTarget)
+        {
+            if (currentTarget != null)
+            {
+                return currentTarget.transform.position;
+            }
+
+            List<GameObject> possibleTargets = new List<GameObject>(FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies);
+            possibleTargets.Add(Player.Get());
+
+            foreach (GameObject possibleTarget in possibleTargets)
+            {
+                // If has health, is not ignored, and is the closest object.
+                if (!ignoredObjects.Contains(possibleTarget)
+                    && (currentTarget == null || ((Vector2)possibleTarget.transform.position - location).sqrMagnitude < ((Vector2)currentTarget.transform.position - location).sqrMagnitude)
+                    )
+                {
+                    currentTarget = possibleTarget;
+                }
+            }
+
+
+            if (currentTarget == null)
+            {
+                return transform.position;
+            }
+            return currentTarget.transform.position;
         }
         #endregion
 
