@@ -99,11 +99,30 @@ namespace Cardificer
             int nextCardIndex = vistedRooms[0].z;
             foreach (Vector3Int vistedRoom in vistedRooms)
             {
+                if (vistedRoom.x >= map.mapSize.x || vistedRoom.y >= map.mapSize.y || map.map[vistedRoom.x, vistedRoom.y].room == null)
+                {
+                    SaveManager.AutosaveCorrupted("Invalid room index");
+                    return;
+                }
+
                 lastRoom.Exit();
                 lastRoom = map.map[vistedRoom.x, vistedRoom.y].room.GetComponent<Room>();
                 lastRoom.Generate(false);
+
+                if (nextCardIndex > vistedRoom.z)
+                {
+                    SaveManager.AutosaveCorrupted("Card index too small");
+                    return;
+                }
+
                 while (nextCardIndex < vistedRoom.z)
                 {
+                    if (nextCardIndex >= Deck.playerDeck.cards.Count || nextCardIndex < 0)
+                    {
+                        SaveManager.AutosaveCorrupted("Card index out of bounds");
+                        return;
+                    }
+
                     OnCardAdded(Deck.playerDeck.cards[nextCardIndex]);
                     nextCardIndex++;
                 }

@@ -99,7 +99,7 @@ namespace Cardificer
 
                 if (pathToCards.Count != deck.cards.Count)
                 {
-                    Debug.LogError("Save File Corrupted: Deck failed to load");
+                    SaveManager.AutosaveCorrupted("Cards in deck failed to load");
                     return;
                 }
 
@@ -109,10 +109,7 @@ namespace Cardificer
 
                 if (deck.drawableCards.Count + deck.inHandCards.Count + deck.discardedCards.Count != deck.cards.Count)
                 {
-                    Debug.LogError("Save File Corrupted: Hand state failed to load");
-                    deck.drawableCards.Clear();
-                    deck.inHandCards.Clear();
-                    deck.discardedCards.Clear();
+                    SaveManager.AutosaveCorrupted("Draw/Hand/Discard & Deck size mismatch");
                     return;
                 }
             }

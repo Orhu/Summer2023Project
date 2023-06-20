@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 namespace Cardificer
 {
@@ -158,6 +158,15 @@ namespace Cardificer
             {
                 return File.Exists(filePath);
             }
+
+            /// <summary>
+            /// When this save file was last saved to.
+            /// </summary>
+            /// <returns> The date and time of the last save. </returns>
+            public System.DateTime LastSaveTime()
+            {
+                return File.GetLastWriteTimeUtc(filePath);
+            }
         }
 
 
@@ -167,10 +176,21 @@ namespace Cardificer
         private const int NUMBER_OF_AUTOSAVES = 10;
 
 
-        // Whether or not an autosave currently exists.
+        // Whether or not an autosave currently exists. 
         public static bool autosaveExists
         {
             get => autosaver.latestAutosave != null;
+        }
+
+        /// <summary>
+        /// Notifies the save system that an autosave has been corrupted, and attempts a revert.
+        /// </summary>
+        /// <param name="message"> Text describing what data is corrupted. </param>
+        public static void AutosaveCorrupted(string message)
+        {
+            Debug.LogWarning("Autosave contains invalid data: " + message + ", reverting to previous autosave.");
+            autosaver.latestAutosave = null;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         // Stores a reference to the current autosaver
@@ -193,37 +213,39 @@ namespace Cardificer
             // Stores references to all the autosaves
             private SaveData<AutosaveData>[] autosaves;
 
+            // Whether or not an error has been logged by this while loading.
+            private bool errorLogged = false;
+
             // The currently active autosave.
             private SaveData<int> _latestAutosaveIndex = new SaveData<int>("AutosaveIndex", false);
             public AutosaveData latestAutosave
             {
                 get
                 {
-                    bool errorLogged = false;
-
                     // Find most recent autosave
                     if (!_latestAutosaveIndex.Exists())
                     {
                         bool autosaveFound = false;
                         int autosaveIndex = 0;
-                        while (
-                            autosaveIndex < NUMBER_OF_AUTOSAVES - 1
-                            && autosaves[autosaveIndex].Exists() && autosaves[autosaveIndex + 1].Exists()
-                            && autosaves[autosaveIndex].data.saveTime < autosaves[autosaveIndex + 1].data.saveTime
-                            )
+                        for (int i = 0; i < NUMBER_OF_AUTOSAVES; i++)
                         {
-                            autosaveIndex++;
+                            if (!autosaves[i].Exists() || autosaves[i].LastSaveTime() < autosaves[autosaveIndex].LastSaveTime()) { continue; }
+                            autosaveIndex = i;
                             autosaveFound = true;
                         }
 
                         if (autosaveFound)
                         {
-                            Debug.LogWarning("AutosaveIndex missing, regenerating data");
+                            if (!errorLogged)
+                            {
+                                Debug.LogWarning("AutosaveIndex missing, regenerating data");
+                            }
                             _latestAutosaveIndex.data = autosaveIndex;
                         }
                         else
                         {
                             // No valid autosaves
+                            errorLogged = false;
                             return null;
                         }
                     }
@@ -249,6 +271,7 @@ namespace Cardificer
                         try
                         {
                             _latestAutosaveIndex.data = index;
+                            errorLogged = false;
                             return autosaves[index].data;
                         }
                         catch
@@ -266,13 +289,22 @@ namespace Cardificer
                     // No valid autosaves
                     Debug.LogWarning("No valid autosaves found, deleting corrupt data");
                     _latestAutosaveIndex.ClearData();
+                    errorLogged = false;
                     return null;
                 }
                 set
                 {
-                    _latestAutosaveIndex.data = (_latestAutosaveIndex.data + 1) % NUMBER_OF_AUTOSAVES;
-                    value.saveTime = System.DateTime.Now;
-                    autosaves[_latestAutosaveIndex.data].data = value;
+                    if (value == null)
+                    {
+                        autosaves[_latestAutosaveIndex.data].ClearData();
+                        _latestAutosaveIndex.ClearData();
+                        errorLogged = true;
+                    }
+                    else
+                    {
+                        _latestAutosaveIndex.data = (_latestAutosaveIndex.data + 1) % NUMBER_OF_AUTOSAVES;
+                        autosaves[_latestAutosaveIndex.data].data = value;
+                    }
                 }
             }
 
@@ -284,9 +316,6 @@ namespace Cardificer
             [System.Serializable]
             public class AutosaveData
             {
-                // The time at which this was saved.
-                public System.DateTime saveTime;
-
                 // The seed of the current floor.
                 public int floorSeed;
 
