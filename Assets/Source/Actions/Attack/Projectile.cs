@@ -329,7 +329,7 @@ namespace Cardificer
         /// </summary>
         /// <param name="location"> The location to find the closest target to. </param>
         /// <param name="currentTarget"> The variable storing the last found target. </param>
-        /// <returns></returns>
+        /// <returns> The position of the closest target in world space. </returns>
         private Vector2 FindClosestTarget(Vector2 location, ref GameObject currentTarget)
         {
             if (currentTarget != null)
