@@ -43,7 +43,7 @@ namespace Cardificer
                 return false;
             }
 
-            other.remainingDuration = Mathf.Max(maxDuration, other.remainingDuration + additionalStackTime);
+            other.remainingDuration = Mathf.Min(maxDuration, other.remainingDuration + additionalStackTime);
             return true;
         }
 
