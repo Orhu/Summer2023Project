@@ -21,20 +21,22 @@ namespace Cardificer
             foreach (RoomTypeToLayoutParameters roomTypeToLayoutParameters in layoutParameters.roomTypesTolayoutParameters.roomTypesToLayoutParameters)
             {
                 int variance = roomTypeToLayoutParameters.numRooomsVariance;
-                int numCells = roomTypeToLayoutParameters.numRooms;
-                numCells += FloorGenerator.random.Next(-variance, variance + 1);
+                int numRooms = roomTypeToLayoutParameters.numRooms;
+                numRooms += FloorGenerator.random.Next(-variance, variance + 1);
                 if (roomTypeToLayoutParameters.roomType.deadEnd)
                 {
-                    numDeadEndCells += numCells;
+                    numDeadEndRooms += numRooms;
+                    deadEndRooms.Add(roomTypeToLayoutParameters.roomType);
                 }
                 else
                 {
-                    numNormalCells += numCells;
+                    numNormalRooms += numRooms;
+                    normalRooms.Add(roomTypeToLayoutParameters.roomType);
                 }
             }
             
             // Initialize the gen map
-            Vector2Int mapSize = DetermineMapSize(numNormalCells + numD);
+            Vector2Int mapSize = DetermineMapSize(numNormalRooms + numDeadEndRooms);
             MapCell[,] genMap = InitializeGenMap(mapSize);
 
             // Create the starting cell
