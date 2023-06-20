@@ -7,9 +7,9 @@ using Tile = Cardificer.Tile;
 /// </summary>
 public class PathfindingTile : IHeapItem<PathfindingTile>
 {
-    // is this tile able to be moved to?
-    [HideInInspector] public bool moveable;
-
+    // allowed movement types to this tile
+    [HideInInspector] public RoomInterface.MovementType allowedMovementTypes;
+    
     // how much this tile cost to travel on (higher is avoided more, lower is preferred)
     [HideInInspector] public int movementPenalty;
 
@@ -27,19 +27,18 @@ public class PathfindingTile : IHeapItem<PathfindingTile>
 
     // parent of this tile, as determined by pathfinding algorithm. used to retrace steps in pathfinding
     [HideInInspector] public PathfindingTile retraceStep;
+    
 
 
     /// <summary>
     /// Constructor for a PathfindingTile from a Tile
     /// </summary>
     /// <param name="t"> Tile to construct from </param>
-    /// <param name="moveable"> Is this tile able to be traversed?
-    /// This param is needed because Tiles have multiple "moveable" variables for walking, flying, and burrowing </param>
     /// <param name="movementPenalty"> How much this tile costs to walk on (higher is avoided more, lower is preferred).
     /// This param is needed because Tiles have multiple movementPenalty variables for walking, flying, and burrowing </param>
-    public PathfindingTile(Tile t, bool moveable, int movementPenalty)
+    public PathfindingTile(Tile t, int movementPenalty)
     {
-        this.moveable = moveable;
+        allowedMovementTypes = t.allowedMovementTypes;
         this.movementPenalty = movementPenalty;
         gridLocation = t.gridLocation;
         gCost = 0;

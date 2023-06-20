@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,11 +13,13 @@ namespace Cardificer
         /// <summary>
         /// Represents a type of movement
         /// </summary>
+        [Flags]
         public enum MovementType
         {
-            Walk,
-            Fly,
-            Burrow
+            None = 0,
+            Walk = 1,
+            Fly = 2,
+            Burrow = 4
         }
 
         // the room this class represents
@@ -50,15 +53,16 @@ namespace Cardificer
 
         [Tooltip("Draw Tiles detected as \"null\" during room-grid copying")]
         [SerializeField] private bool drawNullTiles;
-        
+
         [Tooltip("Draw Tiles detected as \"walk\" during room-grid copying")]
         [SerializeField] private bool drawWalkTiles;
-        
+
         [Tooltip("Draw Tiles detected as \"fly\" during room-grid copying")]
         [SerializeField] private bool drawFlyTiles;
-        
+
         [Tooltip("Draw Tiles detected as \"burrow\" during room-grid copying")]
         [SerializeField] private bool drawBurrowTiles;
+
         private List<Vector2> debugNullTiles = new List<Vector2>();
 
         /// <summary>
@@ -122,18 +126,18 @@ namespace Cardificer
             // TODO subdividing unimplemented
             // add to appropriate lists
             walkRoomGrid[x, y] =
-                new PathfindingTile(tile, tile.walkable, tile.walkMovementPenalty);
+                new PathfindingTile(tile, tile.walkMovementPenalty);
             flyRoomGrid[x, y] =
-                new PathfindingTile(tile, tile.flyable, tile.flyMovementPenalty);
-            burrowRoomGrid[x, y] = 
-                new PathfindingTile(tile, tile.burrowable, tile.burrowMovementPenalty);
+                new PathfindingTile(tile, tile.flyMovementPenalty);
+            burrowRoomGrid[x, y] =
+                new PathfindingTile(tile, tile.burrowMovementPenalty);
         }
 
         /// <summary>
         /// Gets the tile at the given world position
         /// </summary>
         /// <param name="worldPos"> The world position </param>
-        /// <param name="movementType"> The movement type to search for </param>
+        /// <param name="movementType"> The movement grid to search on </param>
         /// <returns> The tile and boolean saying whether the tile was successfully found </returns>
         public (PathfindingTile, bool) WorldPosToTile(Vector2 worldPos, MovementType movementType)
         {
@@ -226,24 +230,30 @@ namespace Cardificer
                                 switch (movementType)
                                 {
                                     case MovementType.Walk:
-                                        if (walkRoomGrid[checkX - x, checkY].moveable &&
-                                            walkRoomGrid[checkX, checkY - y].moveable)
+                                        if (walkRoomGrid[checkX - x, checkY].allowedMovementTypes
+                                                .HasFlag(MovementType.Walk) &&
+                                            walkRoomGrid[checkX, checkY - y].allowedMovementTypes
+                                                .HasFlag(MovementType.Walk))
                                         {
                                             neighbors.Add(walkRoomGrid[checkX, checkY]);
                                         }
 
                                         break;
                                     case MovementType.Fly:
-                                        if (flyRoomGrid[checkX - x, checkY].moveable &&
-                                            flyRoomGrid[checkX, checkY - y].moveable)
+                                        if (flyRoomGrid[checkX - x, checkY].allowedMovementTypes
+                                                .HasFlag(MovementType.Fly) &&
+                                            flyRoomGrid[checkX, checkY - y].allowedMovementTypes
+                                                .HasFlag(MovementType.Fly))
                                         {
                                             neighbors.Add(flyRoomGrid[checkX, checkY]);
                                         }
 
                                         break;
                                     case MovementType.Burrow:
-                                        if (burrowRoomGrid[checkX - x, checkY].moveable &&
-                                            burrowRoomGrid[checkX, checkY - y].moveable)
+                                        if (burrowRoomGrid[checkX - x, checkY].allowedMovementTypes
+                                                .HasFlag(MovementType.Burrow) &&
+                                            burrowRoomGrid[checkX, checkY - y].allowedMovementTypes
+                                                .HasFlag(MovementType.Burrow))
                                         {
                                             neighbors.Add(burrowRoomGrid[checkX, checkY]);
                                         }
@@ -269,19 +279,7 @@ namespace Cardificer
         /// </summary>
         private void OnDrawGizmos()
         {
-            if (drawNullTiles)
-            {
-                foreach (var v2 in debugNullTiles)
-                {
-                    Gizmos.color = Color.blue;
-                    Vector2 worldPos = new Vector2(
-                        v2.x + myWorldPosition.x - myRoomSize.x / 2,
-                        v2.y + myWorldPosition.y - myRoomSize.y / 2
-                    );
-                    Gizmos.DrawCube(worldPos, Vector3.one);
-                }
-            }
-            else if (drawWalkTiles)
+            if (Application.isPlaying)
             {
                 for (int x = 0; x < walkRoomGrid.GetLength(0); x++)
                 {
@@ -289,7 +287,7 @@ namespace Cardificer
                     {
                         var t = walkRoomGrid[x, y];
 
-                        if (t == null)
+                        if (t == null && drawNullTiles)
                         {
                             Gizmos.color = Color.blue;
                             Vector2 worldPos = new Vector2(
@@ -300,61 +298,29 @@ namespace Cardificer
                         }
                         else
                         {
-                            Gizmos.color = t.moveable ? Color.green : Color.red;
+                            if (drawWalkTiles)
+                            {
+                                Gizmos.color = t.allowedMovementTypes.HasFlag(MovementType.Walk)
+                                    ? Color.green
+                                    : Color.red;
+                            }
+                            else if (drawFlyTiles)
+                            {
+                                Gizmos.color = t.allowedMovementTypes.HasFlag(MovementType.Fly)
+                                    ? Color.green
+                                    : Color.red;
+                            }
+                            else if (drawBurrowTiles)
+                            {
+                                Gizmos.color = t.allowedMovementTypes.HasFlag(MovementType.Burrow)
+                                    ? Color.green
+                                    : Color.red;
+                            }
 
-                            Gizmos.DrawCube(TileToWorldPos(t), Vector3.one);
-                        }
-                    }
-                }
-            }
-            else if (drawBurrowTiles)
-            {
-                for (int x = 0; x < burrowRoomGrid.GetLength(0); x++)
-                {
-                    for (int y = 0; y < burrowRoomGrid.GetLength(1); y++)
-                    {
-                        var t = burrowRoomGrid[x, y];
-
-                        if (t == null)
-                        {
-                            Gizmos.color = Color.blue;
-                            Vector2 worldPos = new Vector2(
-                                x + myWorldPosition.x - myRoomSize.x / 2,
-                                y + myWorldPosition.y - myRoomSize.y / 2
-                            );
-                            Gizmos.DrawCube(worldPos, Vector3.one);
-                        }
-                        else
-                        {
-                            Gizmos.color = t.moveable ? Color.green : Color.red;
-
-                            Gizmos.DrawCube(TileToWorldPos(t), Vector3.one);
-                        }
-                    }
-                }
-            }
-            else if (drawFlyTiles)
-            {
-                for (int x = 0; x < flyRoomGrid.GetLength(0); x++)
-                {
-                    for (int y = 0; y < flyRoomGrid.GetLength(1); y++)
-                    {
-                        var t = flyRoomGrid[x, y];
-
-                        if (t == null)
-                        {
-                            Gizmos.color = Color.blue;
-                            Vector2 worldPos = new Vector2(
-                                x + myWorldPosition.x - myRoomSize.x / 2,
-                                y + myWorldPosition.y - myRoomSize.y / 2
-                            );
-                            Gizmos.DrawCube(worldPos, Vector3.one);
-                        }
-                        else
-                        {
-                            Gizmos.color = t.moveable ? Color.green : Color.red;
-
-                            Gizmos.DrawCube(TileToWorldPos(t), Vector3.one);
+                            if (drawWalkTiles || drawFlyTiles || drawBurrowTiles)
+                            {
+                                Gizmos.DrawCube(TileToWorldPos(t), Vector3.one);
+                            }
                         }
                     }
                 }

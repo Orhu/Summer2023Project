@@ -70,6 +70,7 @@ MonoBehaviour:
   immediatelyDamage: 1
   noTriggerDamage: 1
   noCollisionDamage: 0
+  audioClip: {fileID: 0}
 --- !u!1 &7281680880204442677
 GameObject:
   m_ObjectHideFlags: 0
@@ -217,11 +218,11 @@ MonoBehaviour:
   delayBeforeLogic: 1
   currentPathfindingTarget: {x: 0, y: 0}
   currentAttackTarget: {x: 0, y: 0}
-  feetCollider: {fileID: 0}
+  feetColliderPosition: {x: 0, y: 0}
   currentState: {fileID: 0}
   destinationReached: 0
   exhausted: 0
-  startingMovementType: 0
+  startingMovementType: 1
   currentMovementType: 0
   drawGizmos: 1
   currentWaypoint: {x: 0, y: 0}

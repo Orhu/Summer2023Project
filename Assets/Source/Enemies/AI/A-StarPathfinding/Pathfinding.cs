@@ -43,7 +43,6 @@ namespace Cardificer
         /// <returns> Sends a signal to the request manager that a path has been found </returns>
         IEnumerator FindPath(BaseStateMachine stateMachine)
         {
-            roomInterface.GrabCurrentRoom();
             Vector2[] waypoints = new Vector2[0];
             bool pathSuccess = false;
 
@@ -75,7 +74,8 @@ namespace Cardificer
             }
 
 
-            if (startNode.moveable && targetNode.moveable)
+            if (startNode.allowedMovementTypes.HasFlag(stateMachine.currentMovementType) && 
+                targetNode.allowedMovementTypes.HasFlag(stateMachine.currentMovementType))
             {
                 Heap<PathfindingTile> openSet = new Heap<PathfindingTile>(roomInterface.GetMaxRoomSize());
                 HashSet<PathfindingTile> closedSet = new HashSet<PathfindingTile>();
@@ -97,7 +97,7 @@ namespace Cardificer
                     foreach (PathfindingTile neighbor in roomInterface.GetNeighbors(currentNode,
                                  stateMachine.currentMovementType))
                     {
-                        if (!neighbor.moveable || closedSet.Contains(neighbor))
+                        if (!neighbor.allowedMovementTypes.HasFlag(stateMachine.currentMovementType) || closedSet.Contains(neighbor))
                         {
                             // this node has already been explored, or is not walkable, so skip
                             continue;

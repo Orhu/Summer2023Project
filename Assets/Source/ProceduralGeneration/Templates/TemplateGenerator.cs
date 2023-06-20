@@ -47,7 +47,7 @@ namespace Cardificer
                     {
                         createdTile.gridLocation = new Vector2Int(i, j);
                         createdTile.type = TileType.None;
-                        createdTile.walkable = true;
+                        createdTile.allowedMovementTypes = RoomInterface.MovementType.Walk | RoomInterface.MovementType.Burrow | RoomInterface.MovementType.Fly;
 
                     }
                     else
