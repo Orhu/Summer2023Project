@@ -140,6 +140,16 @@ namespace Cardificer
         /// </summary>
         /// <returns> A delegate with a out parameter, that allows any subscribed objects to determine whether or not this actor can act. </returns>
         public ref IActor.CanActRequest GetOnRequestCanAct() { return ref canAct; }
+
+        /// <summary>
+        /// Gets the AudioSource on the object. 
+        /// </summary>
+        /// <returns></returns>
+        public AudioSource GetAudioSource()
+        {
+            return GetComponent<AudioSource>(); 
+        }
+
         #endregion
     }
 }

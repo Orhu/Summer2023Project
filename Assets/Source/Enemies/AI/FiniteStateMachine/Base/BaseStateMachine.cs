@@ -274,7 +274,15 @@ namespace Cardificer.FiniteStateMachine
         {
             return ref _canAct;
         }
-
+        
+        /// <summary>
+        /// Get the audio source component from the object. 
+        /// </summary>
+        /// <returns>Returns the relevant audio source</returns>
+        public AudioSource GetAudioSource()
+        {
+            return GetComponent<AudioSource>(); 
+        }
         #endregion
     }
 }
