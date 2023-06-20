@@ -46,5 +46,16 @@ namespace Cardificer
 
             return player;
         }
+
+        /// <summary>
+        /// Returns the feet collider's center, correctly offset from base transform
+        /// </summary>
+        /// <returns></returns>
+        public static Vector2 GetFeetPosition()
+        {
+            var offset = feet.offset;
+            var position = feet.transform.position;
+            return new Vector2(position.x + offset.x, position.y + offset.y);
+        }
     }
 }
