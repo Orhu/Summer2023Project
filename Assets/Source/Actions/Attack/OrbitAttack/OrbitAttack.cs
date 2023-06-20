@@ -8,7 +8,7 @@ namespace Cardificer
     /// <summary>
     /// An attack that creates a projectile that orbits around the spawn location.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewOrbitAttack", menuName = "Cards/Actions/OrbitAttackAttack")]
+    [CreateAssetMenu(fileName = "NewOrbitAttack", menuName = "Cards/Actions/OrbitAttack")]
     public class OrbitAttack : Attack
     {
         [Tooltip("The sequence of when and where to spawn bullets")]
