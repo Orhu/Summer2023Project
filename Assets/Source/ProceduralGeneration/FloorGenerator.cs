@@ -94,7 +94,7 @@ namespace Cardificer
             if (!SaveManager.autosaveExists) 
             {
                 Room startRoom = map.startCell.room.GetComponent<Room>();
-                startRoom.Enter(Direction.None);
+                startRoom.Enter(Direction.None, callCleared: false);
                 return; 
             }
 
@@ -131,7 +131,7 @@ namespace Cardificer
                     nextCardIndex++;
                 }
             }
-            lastRoom.Enter();
+            lastRoom.Enter(callCleared: false);
         }
 
         /// <summary>
