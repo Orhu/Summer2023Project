@@ -38,7 +38,9 @@ namespace Cardificer
             velocity = speed * transform.right;
         }
 
-        // Updates the visual object
+        /// <summary>
+        /// Updates the visual's rotation.
+        /// </summary>
         private new void Update()
         {
             visualObject.transform.right = velocity;

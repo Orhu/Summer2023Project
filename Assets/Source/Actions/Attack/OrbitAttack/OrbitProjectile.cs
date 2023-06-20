@@ -50,11 +50,6 @@ namespace Cardificer
             transform.rotation = Quaternion.AngleAxis(-startingRotation * OrbitSign(), Vector3.forward);
 
             base.Start();
-
-            if (orbitSpawnInfo.orbitDirection == OrbitSpawnInfo.RotationDirection.Counterclockwise)
-            {
-                //transform.GetChild(0).transform.localScale = Vector3.Scale(transform.GetChild(0).transform.localScale, new Vector3(1, -1, 1));
-            }
         }
 
         /// <summary>
