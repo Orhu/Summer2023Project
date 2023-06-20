@@ -66,7 +66,7 @@ namespace Cardificer
         /// <param name="invertInvincibility"> Whether or not this should cause invincibility if it does no damage and not cause invincibility if it does. </param>
         public DamageData(int damage, DamageType damageType, List<StatusEffect> statusEffects, Object causer, bool invertInvincibility = false) : this(damage, damageType, causer, invertInvincibility)
         {
-            this.statusEffects = statusEffects;
+            this.statusEffects = new List<StatusEffect>(statusEffects);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Cardificer
         /// <param name="invertInvincibility"> Whether or not this should cause invincibility if it does no damage and not cause invincibility if it does. </param>
         public DamageData(List<StatusEffect> statusEffects, Object causer, bool invertInvincibility = false)
         {
-            this.statusEffects = statusEffects;
+            this.statusEffects = new List<StatusEffect>(statusEffects);
             this.causer = causer;
             this.invertInvincibility = invertInvincibility;
         }
@@ -159,23 +159,9 @@ namespace Cardificer
         /// <returns> A copy of the modified attack </returns>
         public static DamageData operator +(DamageData attack, List<StatusEffect> effects)
         {
-            effects.AddRange(attack.statusEffects);
-            return new DamageData(attack.damage, attack.damageType, effects, attack.causer);
-        }
-
-        /// <summary>
-        /// Removes status effects to an attack.
-        /// </summary>
-        /// <param name="attack"> The original attack. </param>
-        /// <param name="effects"> The status effects to remove. </param>
-        /// <returns> A copy of the modified attack </returns>
-        public static DamageData operator -(DamageData attack, List<StatusEffect> effects)
-        {
-            foreach (StatusEffect statusEffect in attack.statusEffects)
-            {
-                effects.Remove(statusEffect);
-            }
-            return new DamageData(attack.damage, attack.damageType, effects, attack.causer);
+            List<StatusEffect> newEffects = new List<StatusEffect>(effects);
+            newEffects.AddRange(attack.statusEffects);
+            return new DamageData(attack.damage, attack.damageType, newEffects, attack.causer);
         }
 
         public enum DamageType

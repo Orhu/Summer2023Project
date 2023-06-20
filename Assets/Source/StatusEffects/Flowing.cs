@@ -3,14 +3,13 @@ using UnityEngine;
 namespace Cardificer
 {
     /// <summary>
-    /// A status effect that prevents movement entirely.
+    /// A status effect that increases movement speed.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewSlowed", menuName = "Status Effects/Slowed")]
-    public class Slowed : StatusEffect
+    [CreateAssetMenu(fileName = "NewFlowing", menuName = "Status Effects/Flowing")]
+    public class Flowing : StatusEffect
     {
-        [Tooltip("The percent to reduce the movement speed by per stack")]
-        [Range(0f, 1f)]
-        [SerializeField] private float slowAmount = 0.25f;
+        [Tooltip("The speed in tiles/s that is added to the player's speed")] [Range(0f, 1f)]
+        [SerializeField] private float addedSpeed = 0.25f;
 
         /// <summary>
         /// Creates a new status effect that is a copy of the caller.
@@ -19,9 +18,9 @@ namespace Cardificer
         /// <returns> The status effect that was created. </returns>
         public override StatusEffect CreateCopy(GameObject gameObject)
         {
-            Slowed instance = (Slowed)base.CreateCopy(gameObject);
+            Flowing instance = (Flowing)base.CreateCopy(gameObject);
 
-            gameObject.GetComponent<Movement>().requestSpeedModifications += instance.SlowMovement;
+            gameObject.GetComponent<Movement>().requestSpeedModifications += instance.IncreaseMovement;
 
             return instance;
         }
@@ -47,9 +46,10 @@ namespace Cardificer
         /// Responds to a movement components speed modification request, and sets the speed to 0.
         /// </summary>
         /// <param name="speed"> The speed variable to be modified. </param>
-        private void SlowMovement(ref float speed)
+        private void IncreaseMovement(ref float speed)
         {
-            speed *= Mathf.Pow(slowAmount, stacks);
+            if (speed <= 0) { return; } 
+            speed += addedSpeed * stacks;
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Cardificer
         {
             if (gameObject != null)
             {
-                gameObject.GetComponent<Movement>().requestSpeedModifications -= SlowMovement;
+                gameObject.GetComponent<Movement>().requestSpeedModifications -= IncreaseMovement;
             }
             base.OnDestroy();
         }
