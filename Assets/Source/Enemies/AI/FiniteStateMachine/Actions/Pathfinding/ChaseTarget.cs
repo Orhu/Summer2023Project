@@ -15,12 +15,12 @@ namespace Cardificer.FiniteStateMachine
         [Tooltip("After a Path request is submitted, how long before another one is allowed?")]
         [SerializeField] private float pathLockout = 0.25f;
         
-        [Tooltip("How close do we need to be to our point before we are happy? " +
-                 "The default value was found by testing how many units are traveled every frame with a movement speed of 4. " +
-                 "This number may need to be larger for faster units, or smaller for slower units. " +
-                 "Essentially, this number allows us to avoid the \"zigzagging\" effect that happens when an enemy overshoots its target by giving their transform a buffer dist from target pos (buffer for float comparison). " +
-                 "But, if the number is too high, the leniency will cause the enemy to not get close enough to their target pos before turning, " +
-                 "leading to unpredictable behavior.")]
+        // Default value found by testing units traveled every frame with movement speed of 4.
+        // Essentially, this number allows us to avoid the "zigzagging" effect that happens when an enemy overshoots its
+        // target (due to moving too fast in one frame) by providing a buffer for Vector2 position float comparison.
+        // But, if the number is too high, the leniency will cause the enemy to not get close enough to their target pos before
+        // turning, leading to unpredictable behavior.
+        [Tooltip("When reaching a waypoint, how close do we have to be before we stop? (Vector2 position float comparison buffer)")]
         [SerializeField] private float distanceBuffer = 0.061f;
         
         // need to track our current data

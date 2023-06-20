@@ -42,15 +42,7 @@ namespace Cardificer
 
         // this instance
         public static RoomInterface instance;
-
-        /// <summary>
-        /// Sets the instance to this instance
-        /// </summary>
-        void Awake()
-        {
-            instance = this;
-        }
-
+        
         [Tooltip("Draw Tiles detected as \"null\" during room-grid copying")]
         [SerializeField] private bool drawNullTiles;
 
@@ -65,6 +57,15 @@ namespace Cardificer
 
         // tracks list of null tiles during room copying for the purpose of displaying them as gizmos
         private List<Vector2> debugNullTiles = new List<Vector2>();
+
+        /// <summary>
+        /// Sets the instance to this instance
+        /// </summary>
+        void Awake()
+        {
+            instance = this;
+            FloorGenerator.floorGeneratorInstance.onRoomChange.AddListener(GrabCurrentRoom);
+        }
 
         /// <summary>
         /// Retrieves player's current room from the FloorGenerator singleton, updating this class' room reference
@@ -101,17 +102,8 @@ namespace Cardificer
                 for (int y = 0; y < myRoomSize.y; y++)
                 {
                     Tile curTile = inputArray[x, y];
-
-                    // TODO must be a better way than foreach comparing to null. Doors return null currently, Mabel says she is working on it so update this when ready
-                    if (curTile == null)
-                    {
-                        // in this case the tile was null. This breaks pathfinding tile conversion, so make a big fuss!!
-                        Debug.LogError("Room Load Failed: Null tile at " + x + ", " + y);
-                    }
-                    else
-                    {
-                        AddTiles(curTile, x, y);
-                    }
+                    AddTiles(curTile, new Vector2Int(x, y));
+                    
                 }
             }
         }
@@ -122,15 +114,15 @@ namespace Cardificer
         /// <param name="tile"> Tile to add </param>
         /// <param name="x"> X position of original tile </param>
         /// <param name="y"> Y position of original tile </param>
-        void AddTiles(Tile tile, int x, int y)
+        void AddTiles(Tile tile, Vector2Int pos)
         {
             // TODO subdividing unimplemented
-            // add to appropriate lists
-            walkRoomGrid[x, y] =
+            // add to appropriate lists (if there is a Null Reference in this area, it is most likely because a null tile slipped through the cracks)
+            walkRoomGrid[pos.x, pos.y] =
                 new PathfindingTile(tile, tile.walkMovementPenalty);
-            flyRoomGrid[x, y] =
+            flyRoomGrid[pos.x, pos.y] =
                 new PathfindingTile(tile, tile.flyMovementPenalty);
-            burrowRoomGrid[x, y] =
+            burrowRoomGrid[pos.x, pos.y] =
                 new PathfindingTile(tile, tile.burrowMovementPenalty);
         }
 

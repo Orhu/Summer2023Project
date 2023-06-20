@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Cardificer.FiniteStateMachine
@@ -12,11 +13,12 @@ namespace Cardificer.FiniteStateMachine
         /// <summary>
         /// Enum representing targeting modes for setting a target
         /// </summary>
+        [Flags]
         enum TargetType
         {
-            Pathfinding,
-            Attack,
-            Both
+            None = 0,
+            Pathfinding = 1,
+            Attack = 2,
         }
 
         [Tooltip("Target type to use. Should we set the pathfinding target, attack target, or both for this unit?")]
@@ -29,26 +31,14 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> Ends when the action is complete. </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
-            switch (targetType)
+            if (targetType.HasFlag(TargetType.Pathfinding))
             {
-                case TargetType.Both:
-                    // TODO Hello! You found my planned compile error.
-                    // There is a compile error here because Player updates from PR #184 (Make Channeling) were not on this branch. 
-                    // Once this branch is merged with main, delete the current feet getting and replace it with the commented feet getting.
-                    stateMachine.currentPathfindingTarget = Player.GetFeetPosition();
-                    // stateMachine.currentPathfindingTarget = Player.feet.transform.position;
-                    stateMachine.currentAttackTarget = Player.Get().transform.position;
-                    break;
-                case TargetType.Pathfinding:
-                    // TODO Hello! You found my planned compile error.
-                    // There is a compile error here because Player updates from PR #184 (Make Channeling) were not on this branch. 
-                    // Once this branch is merged with main, delete the current feet getting and replace it with the commented feet getting.
-                    stateMachine.currentPathfindingTarget = Player.GetFeetPosition();
-                    // stateMachine.currentPathfindingTarget = Player.feet.transform.position;
-                    break;
-                case TargetType.Attack:
-                    stateMachine.currentAttackTarget = Player.Get().transform.position;
-                    break;
+                stateMachine.currentPathfindingTarget = Player.GetFeetPosition();
+            }
+
+            if (targetType.HasFlag(TargetType.Attack))
+            {
+                stateMachine.currentAttackTarget = Player.Get().transform.position;
             }
 
             stateMachine.cooldownData.cooldownReady[this] = true;
