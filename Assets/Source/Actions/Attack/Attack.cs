@@ -217,6 +217,11 @@ namespace Cardificer
             projectile.spawnSequence = spawnSequence;
             return projectile;
         }
+
+        /// <summary>
+        /// Play impact audio at specific position in scene.
+        /// </summary>
+        /// <param name="pos">Position of the impact audio sound</param>
         protected void PlayImpactAtPos(Vector2 pos)
         {
             AudioManager.instance.PlayAudioAtPos(impactAudioClip, pos);

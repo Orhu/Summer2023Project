@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace Cardificer
 {
+    /// <summary>
+    /// A class to leverage average audio positions when projectiles are involved in a card. 
+    /// </summary>
     public class AverageAudio : MonoBehaviour
     {
         [Tooltip("The list of spawned projectiles")]
@@ -33,7 +36,7 @@ namespace Cardificer
         /// <summary>
         /// Get the average transform of the projectiles
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns the average position of a list of projectiles</returns>
         public Vector2 TryGetAveragePos()
         {
             float totalX = 0;

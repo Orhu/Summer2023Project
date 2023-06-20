@@ -34,6 +34,10 @@ namespace Cardificer
         public ref CanActRequest GetOnRequestCanAct();
         delegate void CanActRequest(ref bool canAct);
 
+        /// <summary>
+        /// Gets the audio source component of the object. 
+        /// </summary>
+        /// <returns></returns>
         public abstract AudioSource GetAudioSource();
 
 

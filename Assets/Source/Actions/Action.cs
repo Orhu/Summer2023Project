@@ -13,7 +13,7 @@ namespace Cardificer {
         protected string description = "";
 
         [Header("Action Audio")]
-        //Action Audio Clip variable. 
+        [Tooltip("Taking an Action Audio Clip variable")]
         [SerializeField] protected AudioClip actionAudioClip;
 
         /// <summary>
