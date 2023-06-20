@@ -5,15 +5,18 @@ namespace Cardificer
     /// <summary>
     /// Agent serves as the brain of any agent. Has the ability to input basic tasks, delegating them to various parts of the agent as needed.
     /// </summary>
-    [RequireComponent(typeof(Movement), typeof(AnimatorController))]
+    [RequireComponent(typeof(Movement), typeof(AnimatorController), typeof(ChannelAbility))]
     public class PlayerController : MonoBehaviour, IActor
     {
 
         // Movement component to allow the agent to move
         private Movement movementComponent;
 
-        // animator component to make the pretty animations do their thing
+        // Animator component to make the pretty animations do their thing.
         private AnimatorController animatorComponent;
+
+        // The component responsible for the channeling ability
+        private ChannelAbility channelAbility;
 
         /// <summary>
         /// Initialize components.
@@ -22,6 +25,7 @@ namespace Cardificer
         {
             movementComponent = GetComponent<Movement>();
             animatorComponent = GetComponent<AnimatorController>();
+            channelAbility = GetComponent<ChannelAbility>();
         }
 
         /// <summary>
@@ -32,9 +36,16 @@ namespace Cardificer
             if (!SaveManager.autosaveExists) { return; }
 
             transform.position = SaveManager.savedPlayerPosition;
+            // TODO: There is a small probability that the player position is invalid and is not caught by the default save file corruption detection.
+
             Health health = GetComponent<Health>();
             health.maxHealth = health.maxHealth;
             health.currentHealth = SaveManager.savedPlayerHealth;
+            if (health.currentHealth > health.maxHealth || health.currentHealth <= 0)
+            {
+                SaveManager.AutosaveCorrupted("Invalid player health");
+                return;
+            }
         }
 
         /// <summary>
@@ -46,13 +57,15 @@ namespace Cardificer
 
             if (canAct)
             {
+                // Card Selection
                 int pressedPreview = GetPressedPreviewButton();
                 if (pressedPreview > 0)
                 {
                     Deck.playerDeck.SelectCard(pressedPreview - 1);
                 }
 
-                if (Input.GetButtonDown("Fire1"))
+                // Card Playing
+                if (Input.GetButtonDown("Fire1") && !Input.GetButton("Fire2"))
                 {
                     if (Deck.playerDeck.PlayChord())
                     {
@@ -60,6 +73,16 @@ namespace Cardificer
                     }
                 }
                 animatorComponent.SetMirror("castLeft", GetActionAimPosition().x - transform.position.x < 0);
+
+                // Channeling
+                if (Input.GetButtonDown("Fire2") && !Deck.playerDeck.isActing)
+                {
+                    channelAbility.StartChanneling();
+                }
+                if (Input.GetButtonUp("Fire2"))
+                {
+                    channelAbility.StopChanneling();
+                }
             }
 
             // Open Pause Menu

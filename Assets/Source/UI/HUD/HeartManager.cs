@@ -23,7 +23,7 @@ namespace Cardificer
         /// </summary>
         void Start()
         {
-            playerHealthScript = Player.Get().GetComponent<Health>();
+            playerHealthScript = Player.health;
             currentPlayerHealth = playerHealthScript.maxHealth;
             UpdateHeartManager();
         }
