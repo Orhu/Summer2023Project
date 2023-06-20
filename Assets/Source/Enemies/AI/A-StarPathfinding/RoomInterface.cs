@@ -280,7 +280,7 @@ namespace Cardificer
         /// </summary>
         private void OnDrawGizmos()
         {
-            if (Application.isPlaying)
+            if ((drawWalkTiles || drawFlyTiles || drawBurrowTiles) && Application.isPlaying && walkRoomGrid != null)
             {
                 for (int x = 0; x < walkRoomGrid.GetLength(0); x++)
                 {
