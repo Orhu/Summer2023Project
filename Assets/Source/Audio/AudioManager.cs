@@ -74,11 +74,19 @@ namespace Cardificer
 
         }
 
+        /// <summary>
+        /// Checking for expired audio and destroying their objects on the Fixed Update. 
+        /// </summary>
         private void FixedUpdate()
         {
             DestroyExpiredAudio();
         }
 
+        /// <summary>
+        /// Create an AudioSource GameObject at a specific position and play the associated clip. 
+        /// </summary>
+        /// <param name="audioClip">The audio clip to be played at a location.</param>
+        /// <param name="vector">The location for the audio clip to be played.</param>
         public void PlayAudioAtPos(AudioClip audioClip, Vector2 vector)
         {
 
@@ -97,6 +105,12 @@ namespace Cardificer
             audioSourcesList.Add(audioSource);
         }
 
+        /// <summary>
+        /// Get the average audio location of multiple projectiles and create a gameobject with an audio source at the average position to play. 
+        /// </summary>
+        /// <param name="projectiles">The list of projectiles to find the average position of. </param>
+        /// <param name="audioClip">The audioclip to play at the location. </param>
+        /// <param name="averageOrFirst">Determines whether to get the average location of all projectiles or just use one projectile</param>
         public void GetAverageAudioSource(List<Projectile> projectiles, AudioClip audioClip, bool averageOrFirst)
         {
 
@@ -129,6 +143,10 @@ namespace Cardificer
             }
         }
 
+        /// <summary>
+        /// Kill the average audio object after it is finished playing
+        /// </summary>
+        /// <param name="averageAudio">What average audio object to kill</param>
         public static void KillAverageAudio(AverageAudio averageAudio)
         {
 
@@ -136,7 +154,9 @@ namespace Cardificer
             Destroy(averageAudio.gameObject);
 
         }
-
+        /// <summary>
+        /// Destroy audio in the scene after it has finished playing. 
+        /// </summary>
         private void DestroyExpiredAudio()
         {
             foreach (var audioSource in audioSourcesList)

@@ -94,6 +94,7 @@ namespace Cardificer
         // Invoked when this projectile hits something damageable, passes the hit collider as a parameter.
         public System.Action<Collider2D> onOverlap;
 
+        // Invoked when projectile hits something and plays the relevant impact AudioClip. 
         public System.Action<Vector2> playImpactAudio;
 
         // Invoked when this is destroyed.
