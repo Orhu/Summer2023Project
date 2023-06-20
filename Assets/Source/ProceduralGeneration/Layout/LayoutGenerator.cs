@@ -13,11 +13,28 @@ namespace Cardificer
         /// </summary>
         public Map Generate(LayoutGenerationParameters layoutParameters)
         {
-            // Get the number of normal cells
-            int numNormalCells = layoutParameters.numNormalRooms + FloorGenerator.random.Next(0, layoutParameters.numNormalRoomsVariance * 2 + 1) - layoutParameters.numNormalRoomsVariance;
+            int numNormalRooms = 0;
+            int numDeadEndRooms = 0;
+            List<RoomType> normalRooms = new List<RoomType>();
+            List<RoomType> deadEndRooms = new List<RoomType>();
 
+            foreach (RoomTypeToLayoutParameters roomTypeToLayoutParameters in layoutParameters.roomTypesTolayoutParameters.roomTypesToLayoutParameters)
+            {
+                int variance = roomTypeToLayoutParameters.numRooomsVariance;
+                int numCells = roomTypeToLayoutParameters.numRooms;
+                numCells += FloorGenerator.random.Next(-variance, variance + 1);
+                if (roomTypeToLayoutParameters.roomType.deadEnd)
+                {
+                    numDeadEndCells += numCells;
+                }
+                else
+                {
+                    numNormalCells += numCells;
+                }
+            }
+            
             // Initialize the gen map
-            Vector2Int mapSize = DetermineMapSize(numNormalCells + layoutParameters.numSpecialRooms);
+            Vector2Int mapSize = DetermineMapSize(numNormalCells + numD);
             MapCell[,] genMap = InitializeGenMap(mapSize);
 
             // Create the starting cell
