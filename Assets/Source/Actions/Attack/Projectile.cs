@@ -315,11 +315,11 @@ namespace Cardificer
                             return ignoredObjects.Contains(possibleTarget);
                         });
 
-                    randomTarget = possibleTargets[UnityEngine.Random.Range(0, possibleTargets.Count)].gameObject;
-                    if (randomTarget == null)
+                    if (possibleTargets.Count <= 0)
                     {
                         return transform.position + transform.right;
                     }
+                    randomTarget = possibleTargets[UnityEngine.Random.Range(0, possibleTargets.Count)].gameObject;
                     return randomTarget.transform.position;
 
                 case AimMode.Right:
