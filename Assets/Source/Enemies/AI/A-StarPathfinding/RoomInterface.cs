@@ -109,11 +109,10 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Responsible for properly subdividing and adding tiles at proper locations
+        /// Responsible for properly subdividing and adding tiles at proper locations in their respective grids
         /// </summary>
         /// <param name="tile"> Tile to add </param>
-        /// <param name="x"> X position of original tile </param>
-        /// <param name="y"> Y position of original tile </param>
+        /// <param name="pos"> Grid position to add tile at </param>
         void AddTiles(Tile tile, Vector2Int pos)
         {
             // TODO subdividing unimplemented
