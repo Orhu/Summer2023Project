@@ -2,6 +2,7 @@ using Skaillz.EditInline;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Cardificer
 {
@@ -91,6 +92,16 @@ namespace Cardificer
         [Tooltip("The sequence of when and where to spawn projectiles")]
         public abstract List<ProjectileSpawnInfo> spawnSequence { set; get; }
 
+        [Header("Projectile Audio")]
+
+        [Tooltip("AudioClip for projectile travel")]
+        [SerializeField] protected AudioClip travelAudioClip;
+
+        [Tooltip("AudioClip for projectile impact.")]
+        [SerializeField] protected AudioClip impactAudioClip;
+
+
+
         // The projectile to spawn
         public Projectile projectilePrefab;
         // The previewer prefab to use.
@@ -137,7 +148,9 @@ namespace Cardificer
         /// <param name="ignoredObjects"> The objects this action will ignore. </param>
         public virtual void Play(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects = null)
         {
+            AudioManager.instance.PlayAudioAtActor(actionAudioClip, actor);
             actor.GetActionSourceTransform().GetComponent<MonoBehaviour>().StartCoroutine(PlaySpawnSequence(actor, modifiers, causer, ignoredObjects));
+
         }
         public void Play(IActor actor, GameObject causer, List<GameObject> ignoredObjects = null)
         {
@@ -163,13 +176,16 @@ namespace Cardificer
         protected IEnumerator PlaySpawnSequence(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects)
         {
             List<ProjectileSpawnInfo> spawnSequence = new List<ProjectileSpawnInfo>(this.spawnSequence);
+            var projectileList = new List<Projectile>();
             for (int i = 0; i < spawnSequence.Count; i++)
             {
                 if (spawnSequence[i].delay > 0)
                 {
                     yield return new WaitForSeconds(spawnSequence[i].delay);
                 }
-                SpawnProjectile(actor, modifiers, causer, ignoredObjects, i, spawnSequence);
+                var spawnedProjectile = SpawnProjectile(actor, modifiers, causer, ignoredObjects, i, spawnSequence);
+                projectileList.Add(spawnedProjectile);
+                spawnedProjectile.playImpactAudio += (Vector2 pos) => PlayImpactAtPos(pos);
 
                 // Wait to ensure the sequence doesn't miss new additions
                 if (i + 1 >= spawnSequence.Count)
@@ -178,6 +194,7 @@ namespace Cardificer
                     yield return new WaitForEndOfFrame();
                 }
             }
+            AudioManager.instance.GetAverageAudioSource(projectileList, travelAudioClip, projectileList.Count > 1);
         }
 
 
@@ -204,6 +221,15 @@ namespace Cardificer
             projectile.spawnSequence = spawnSequence;
             return projectile;
         }
+
+        /// <summary>
+        /// Play impact audio at specific position in scene.
+        /// </summary>
+        /// <param name="pos">Position of the impact audio sound</param>
+        protected void PlayImpactAtPos(Vector2 pos)
+        {
+            AudioManager.instance.PlayAudioAtPos(impactAudioClip, pos);
+        } 
         #endregion
     }
 
