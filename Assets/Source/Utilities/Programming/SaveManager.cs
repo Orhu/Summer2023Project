@@ -58,7 +58,7 @@ namespace Cardificer
             get
             {
                 if (!autosaveExists) { return null; }
-                return autosaver.latestAutosave.visedRooms;
+                return autosaver.latestAutosave.visitedRooms;
             }
         }
 
@@ -297,7 +297,7 @@ namespace Cardificer
                 public int playerHealth;
 
                 // The locations and current card count of visited rooms
-                public List<Vector3Int> visedRooms = new List<Vector3Int>();
+                public List<Vector3Int> visitedRooms = new List<Vector3Int>();
 
                 // The current state of the deck.
                 public Deck.State deckState;
@@ -315,7 +315,7 @@ namespace Cardificer
                 {
                     floorSeed = other.floorSeed;
                     playerPos = other.playerPos;
-                    visedRooms = other.visedRooms;
+                    visitedRooms = other.visitedRooms;
                     deckState = other.deckState;
                 }
             }
@@ -327,13 +327,6 @@ namespace Cardificer
             /// </summary>
             private void Awake()
             {
-                FloorGenerator.floorGeneratorInstance.onRoomChange.AddListener(() =>
-                {
-                    FloorGenerator.floorGeneratorInstance.currentRoom.onCleared += Autosave;
-                });
-
-                Player.Get().GetComponent<Health>().onDeath.AddListener(ClearTransientSaves);
-
                 autosaves = new SaveData<AutosaveData>[NUMBER_OF_AUTOSAVES];
                 for (int i = 0; i < NUMBER_OF_AUTOSAVES; i++)
                 {
@@ -346,6 +339,14 @@ namespace Cardificer
             /// </summary>
             private void Start()
             {
+                FloorGenerator.floorGeneratorInstance.onRoomChange.AddListener(
+                    () =>
+                    {
+                        FloorGenerator.floorGeneratorInstance.currentRoom.onCleared += Autosave;
+                    });
+
+                Player.Get().GetComponent<Health>().onDeath.AddListener(ClearTransientSaves);
+
                 if (autosaveExists) { return; }
                 Invoke("Autosave", 0.5f);
             }
@@ -363,7 +364,7 @@ namespace Cardificer
                 saveData.deckState = new Deck.State(Deck.playerDeck);
                 saveData.floorSeed = FloorGenerator.floorGeneratorInstance.seed;
                 Vector2Int loc = FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation;
-                saveData.visedRooms.Add(new Vector3Int(loc.x, loc.y, Deck.playerDeck.cards.Count));
+                saveData.visitedRooms.Add(new Vector3Int(loc.x, loc.y, Deck.playerDeck.cards.Count));
 
                 latestAutosave = saveData;
             }
