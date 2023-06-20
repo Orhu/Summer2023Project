@@ -9,11 +9,14 @@ namespace Cardificer
     [CreateAssetMenu(fileName = "NewAddHoming", menuName = "Cards/AttackModifers/Add[Stat]/AddHoming")]
     public class AddHoming : AttackModifier
     {
-        [Tooltip("The homing speed to add.")]
+        [Tooltip("The speed in tile/s^2 that projectiles will accelerate towards the closest enemy, to add.")]
         [SerializeField] private float homingSpeed;
 
-        [Tooltip("The amount of homing time to add.")]
+        [Tooltip("The amount of duration that this will home for, in seconds to add.")]
         [SerializeField] private float homingTime;
+
+        [Tooltip("The amount of time to wait before homing begins, in seconds to add.")]
+        [SerializeField] private float homingDelay;
 
         // The projectile this modifies
         public override Projectile modifiedProjectile

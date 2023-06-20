@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b1feef127a8c424ab5758a744b45cc8, type: 3}
   m_Name: EnemySpawnerTile
   m_EditorClassIdentifier: 
-  walkable: 1
-  movementPenalty: 0
+  allowedMovementTypes: -1
+  walkMovementPenalty: 0
+  flyMovementPenalty: 0
+  burrowMovementPenalty: 0
   gridLocation: {x: 0, y: 0}
   type: 3
   spawnedObject: {fileID: 2274758073256205631, guid: ca0ff0e27f321cd439c6840231a4728f, type: 3}

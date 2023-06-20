@@ -34,8 +34,17 @@ namespace Cardificer
             // Position offset
             transform.position += Quaternion.AngleAxis(aimRotation, Vector3.forward) * bulletSpawnInfo.offset;
 
-
             base.Start();
+            velocity = speed * transform.right;
+        }
+
+        /// <summary>
+        /// Updates the visual's rotation.
+        /// </summary>
+        private new void Update()
+        {
+            visualObject.transform.right = velocity;
+            base.Update();
         }
     }
 }

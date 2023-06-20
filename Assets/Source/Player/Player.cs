@@ -10,8 +10,40 @@ namespace Cardificer
         // Stores a ref to the player.
         private static GameObject player;
 
+        // Stores a ref to the player's health component.
+        private static Health _health;
+        public static Health health
+        {
+            get
+            {
+                if (_health != null) { return _health; }
+                _health = Get().GetComponent<Health>();
+                return _health;
+            }
+        }
+
         // Stores a ref to the player's feet collider.
-        private static Collider2D playerFeet;
+        private static Collider2D _feet;
+        public static Collider2D feet
+        {
+            get
+            {
+                if (_feet != null) { return _feet; }
+
+                Collider2D[] playerColliders = Get().GetComponentsInChildren<Collider2D>();
+                foreach (var playerCollider in playerColliders)
+                {
+                    if (!playerCollider.isTrigger)
+                    {
+                        _feet = playerCollider;
+                        return _feet;
+                    }
+                }
+                
+                Debug.LogError("No feet collider found! Make sure you have a non-trigger collider attached to the enemy.");
+                return null;
+            }
+        }
 
         /// <summary>
         /// Gets the player.
@@ -26,26 +58,15 @@ namespace Cardificer
             return player;
         }
 
-        public static Collider2D GetFeet()
+        /// <summary>
+        /// Returns the feet collider's center, correctly offset from base transform
+        /// </summary>
+        /// <returns></returns>
+        public static Vector2 GetFeetPosition()
         {
-            if (playerFeet != null)
-            {
-                return playerFeet;
-            }
-
-            var playerCollider = Get().GetComponentInChildren<Collider2D>();
-            if (playerCollider != null)
-            {
-                playerFeet = playerCollider;
-                return playerFeet;
-            }
-            else
-            {
-                Debug.LogError(
-                    "No feet collider found! Make sure you have a non-trigger collider attached to the player.");
-                return null;
-            }
+            var offset = feet.offset;
+            var position = feet.transform.position;
+            return new Vector2(position.x + offset.x, position.y + offset.y);
         }
-
     }
 }

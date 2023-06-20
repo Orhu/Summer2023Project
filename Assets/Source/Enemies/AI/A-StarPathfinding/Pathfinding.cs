@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cardificer;
+using Cardificer.FiniteStateMachine;
 using UnityEngine;
-using PathfindingTile = Cardificer.RoomInterface.PathfindingTile;
 
 namespace Cardificer
 {
@@ -42,7 +43,6 @@ namespace Cardificer
         /// <returns> Sends a signal to the request manager that a path has been found </returns>
         IEnumerator FindPath(BaseStateMachine stateMachine)
         {
-            roomInterface.GrabCurrentRoom();
             Vector2[] waypoints = new Vector2[0];
             bool pathSuccess = false;
 
@@ -53,8 +53,10 @@ namespace Cardificer
                 yield break;
             }
 
-            var startNodeResult = roomInterface.WorldPosToTile(stateMachine.feetCollider.transform.position);
-            var targetNodeResult = roomInterface.WorldPosToTile(stateMachine.currentTarget);
+            var startNodeResult = roomInterface.WorldPosToTile(stateMachine.feetColliderPosition,
+                stateMachine.currentMovementType);
+            var targetNodeResult = roomInterface.WorldPosToTile(stateMachine.currentPathfindingTarget,
+                stateMachine.currentMovementType);
 
             PathfindingTile startNode;
             PathfindingTile targetNode;
@@ -72,7 +74,8 @@ namespace Cardificer
             }
 
 
-            if (startNode.walkable && targetNode.walkable)
+            if (startNode.allowedMovementTypes.HasFlag(stateMachine.currentMovementType) && 
+                targetNode.allowedMovementTypes.HasFlag(stateMachine.currentMovementType))
             {
                 Heap<PathfindingTile> openSet = new Heap<PathfindingTile>(roomInterface.GetMaxRoomSize());
                 HashSet<PathfindingTile> closedSet = new HashSet<PathfindingTile>();
@@ -91,19 +94,20 @@ namespace Cardificer
                         break;
                     }
 
-                    foreach (PathfindingTile neighbor in roomInterface.GetNeighbors(currentNode))
+                    foreach (PathfindingTile neighbor in roomInterface.GetNeighbors(currentNode,
+                                 stateMachine.currentMovementType))
                     {
-                        if (!neighbor.walkable || closedSet.Contains(neighbor))
+                        if (!neighbor.allowedMovementTypes.HasFlag(stateMachine.currentMovementType) || closedSet.Contains(neighbor))
                         {
                             // this node has already been explored, or is not walkable, so skip
                             continue;
                         }
 
-                        int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbor) +
-                                                         neighbor.movementPenalty;
-                        if (newMovementCostToNeighbour < neighbor.gCost || !openSet.Contains(neighbor))
+                        int newMovementCostToNeighbor = currentNode.gCost + GetDistance(currentNode, neighbor) +
+                                                        neighbor.movementPenalty;
+                        if (newMovementCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor))
                         {
-                            neighbor.gCost = newMovementCostToNeighbour;
+                            neighbor.gCost = newMovementCostToNeighbor;
                             neighbor.hCost = GetDistance(neighbor, targetNode);
                             neighbor.retraceStep = currentNode;
 
@@ -123,7 +127,7 @@ namespace Cardificer
             yield return null;
             if (pathSuccess)
             {
-                waypoints = RetracePath(startNode, targetNode);
+                waypoints = RetracePath(startNode, targetNode, stateMachine);
             }
 
             requestManager.FinishedProcessingPath(waypoints, pathSuccess, stateMachine);
@@ -135,7 +139,7 @@ namespace Cardificer
         /// <param name="startTile"> Start tile </param>
         /// <param name="endTile"> End tile </param>
         /// <returns> Array containing waypoints to travel from start to end </returns>
-        Vector2[] RetracePath(PathfindingTile startTile, PathfindingTile endTile)
+        Vector2[] RetracePath(PathfindingTile startTile, PathfindingTile endTile, BaseStateMachine stateMachine)
         {
             List<PathfindingTile> path = new List<PathfindingTile>();
             PathfindingTile currentNode = endTile;
@@ -146,7 +150,7 @@ namespace Cardificer
                 currentNode = currentNode.retraceStep;
             }
 
-            Vector2[] waypoints = SimplifyPath(path);
+            Vector2[] waypoints = SimplifyPath(path, stateMachine);
             Array.Reverse(waypoints);
             return waypoints;
         }
@@ -156,13 +160,13 @@ namespace Cardificer
         /// </summary>
         /// <param name="path"> Input path </param>
         /// <returns></returns>
-        Vector2[] SimplifyPath(List<PathfindingTile> path)
+        Vector2[] SimplifyPath(List<PathfindingTile> path, BaseStateMachine stateMachine)
         {
             /*
                     List<Vector2> waypoints = new List<Vector2>();
                     waypoints.Add(targetPosition);
                     Vector2 directionOld = Vector2.zero;
-
+                    
                     for (int i = 1; i < path.Count; i ++) {
                         Vector2 directionNew = new Vector2(path[i-1].gridLocation.x - path[i].gridLocation.x,path[i-1].gridLocation.y - path[i].gridLocation.y);
                         if (directionNew != directionOld) {
@@ -171,6 +175,7 @@ namespace Cardificer
                         directionOld = directionNew;
                     }*/
             List<Vector2> waypoints = new List<Vector2>();
+            waypoints.Add(stateMachine.currentPathfindingTarget);
             foreach (var tile in path)
             {
                 waypoints.Add(roomInterface.TileToWorldPos(tile));

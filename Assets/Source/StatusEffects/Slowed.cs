@@ -34,7 +34,7 @@ namespace Cardificer
         /// <returns> Whether or not this status effect was consumed by the stacking. </returns>
         public override bool Stack(StatusEffect other)
         {
-            if (other.GetType() != GetType())
+            if (!base.Stack(other))
             {
                 return false;
             }
