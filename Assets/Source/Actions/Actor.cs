@@ -33,5 +33,13 @@ namespace Cardificer
         /// <returns> A delegate with a out parameter, that allows any subscribed objects to determine whether or not this actor can act. </returns>
         public ref CanActRequest GetOnRequestCanAct();
         delegate void CanActRequest(ref bool canAct);
+
+        /// <summary>
+        /// Gets the audio source component of the object. 
+        /// </summary>
+        /// <returns></returns>
+        public abstract AudioSource GetAudioSource();
+
+
     }
 }

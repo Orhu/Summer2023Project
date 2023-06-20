@@ -94,6 +94,9 @@ namespace Cardificer
         // Invoked when this projectile hits something damageable, passes the hit collider as a parameter.
         public System.Action<Collider2D> onOverlap;
 
+        // Invoked when projectile hits something and plays the relevant impact AudioClip. 
+        public System.Action<Vector2> playImpactAudio;
+
         // Invoked when this is destroyed.
         public System.Action onDestroyed;
         #endregion
@@ -137,6 +140,7 @@ namespace Cardificer
             attackData = new DamageData(attack.attack, causer);
 
             InitializeModifiers();
+
 
             // Setup collision
             rigidBody = GetComponent<Rigidbody2D>();
@@ -332,6 +336,7 @@ namespace Cardificer
 
                 if (--remainingHits <= 0)
                 {
+                    playImpactAudio?.Invoke(transform.position);
                     Destroy(gameObject);
                 }
             }
@@ -345,6 +350,7 @@ namespace Cardificer
         {
             Invoke(nameof(DestroyOnWallHit), Time.fixedDeltaTime);
             onHit?.Invoke(collision);
+            playImpactAudio?.Invoke(transform.position);
         }
 
         /// <summary>
