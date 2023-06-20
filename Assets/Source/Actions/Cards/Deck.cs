@@ -56,6 +56,7 @@ namespace Cardificer
         public Action<Card> onCardRemoved;
         #endregion
 
+        // Whether or not an action is currently being played.
         public bool isActing
         {
             get => cardIndicesToActionTimes.Count > 0;
@@ -219,6 +220,9 @@ namespace Cardificer
             onDrawPileChanged?.Invoke();
         }
 
+        /// <summary>
+        /// Resets all card cooldowns back to 0.
+        /// </summary>
         public void ClearCooldowns()
         {
             if (!isActing)
