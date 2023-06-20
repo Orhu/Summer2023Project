@@ -18,18 +18,6 @@ namespace Cardificer
         // The time until the next damage tick is applied
         private float timeToDamage;
 
-        // The number of times this status effect has been applied.
-        private int _stacks = 1;
-        public override int stacks
-        {
-            protected set
-            {
-                remainingDuration = Mathf.Min(remainingDuration + duration, 4f);
-                _stacks = value;
-            }
-            get { return _stacks; }
-        }
-
         /// <summary>
         /// Initialize timeToDamage
         /// </summary>
