@@ -8,7 +8,7 @@ namespace Cardificer.FiniteStateMachine
     /// <summary>
     /// Represents a decision checking if we currently have line of sight on the player
     /// </summary>
-    [CreateAssetMenu(menuName = "FSM/Decisions/Player/Line of Sight on Player")]
+    [CreateAssetMenu(menuName="FSM/Decisions/Player/Line of Sight on Player")]
     public class LineOfSightOnPlayer : Decision
     {
         [Tooltip("Maximum raycast range?")]
@@ -37,16 +37,8 @@ namespace Cardificer.FiniteStateMachine
 
             if (hit.collider != null)
             {
-                if (hit.collider.CompareTag("Player"))
-                {
-                    // Line of sight is unobstructed and player is hit
-                    return true;
-                }
-                else
-                {
-                    // Obstacle or other object hit
-                    return false;
-                }
+                // return if we hit the player
+                return hit.collider.CompareTag("Player");
             }
 
             // No objects hit

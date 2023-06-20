@@ -7,17 +7,17 @@ namespace Cardificer.FiniteStateMachine
     /// <summary>
     /// Represents an action that executes only if several conditions return true
     /// </summary>
-    [CreateAssetMenu(menuName = "FSM/Actions/Conditional AND Action")]
+    [CreateAssetMenu(menuName="FSM/Actions/Conditional AND Action")]
     public class ConditionalAndAction : BaseAction
     {
         [Tooltip("Decisions to evaluate with AND condition.")]
         [SerializeField] private List<BaseDecision> decisions;
 
         [Tooltip("Action to perform if decision is true.")]
-        [SerializeField] private Action trueAction;
+        [SerializeField] private BaseAction trueAction;
 
         [Tooltip("Action to perform if decision is false.")]
-        [SerializeField] private Action falseAction;
+        [SerializeField] private BaseAction falseAction;
 
         /// <summary>
         /// Evaluate the condition and execute the action if all listed conditions are true.

@@ -38,7 +38,10 @@ namespace Cardificer.FiniteStateMachine
         // tracks whether we are currently exhausted
         [HideInInspector] public bool exhausted;
 
-        // struct used to store path data with this state machine instance, so we can remember pathfinding data on scriptableobjects where we cannot store them in-object
+        /// <summary>
+        /// Struct used to store path data with this state machine instance,
+        /// so we can remember pathfinding data on our ScriptableObjects where we cannot store them in-object
+        /// </summary>
         public struct PathData
         {
             // path to target 
@@ -79,8 +82,10 @@ namespace Cardificer.FiniteStateMachine
         // current movement type of this enemy
         [HideInInspector] public MovementType currentMovementType;
 
-        // chase data struct used to store chase data as it is passed to the pathfinding singleton from pathing scriptable objects.
-        // never need to actually cache the data in the state machine, just declaring the struct here so it is only declared once
+        /// <summary>
+        /// Chase Data struct used to store chase data as it is passed to the pathfinding singleton from pathing scriptable objects.
+        /// Never need to actually cache the data in the state machine, just declaring the struct here so it is only declared once.
+        /// </summary>
         public struct ChaseData
         {
             private BaseStateMachine stateMachine;
@@ -90,6 +95,8 @@ namespace Cardificer.FiniteStateMachine
 
         [Tooltip("Draw debug gizmos? Pathfinding target is magenta, attack target is yellow, current waypoint is cyan")]
         [SerializeField] private bool drawGizmos;
+        
+        // the current waypoint we are pathing to (updated by pathing scriptable objects). only used to draw debug gizmos
         [HideInInspector] public Vector2 currentWaypoint = Vector2.zero;
 
         /// <summary>
@@ -104,6 +111,10 @@ namespace Cardificer.FiniteStateMachine
             feetCollider = GetMyFeet();
         }
 
+        /// <summary>
+        /// Grabs colliders from this enemy and sifts through them to find the feet collider
+        /// </summary>
+        /// <returns> The feet collider. </returns>
         private Collider2D GetMyFeet()
         {
             if (feetCollider != null)
@@ -127,7 +138,7 @@ namespace Cardificer.FiniteStateMachine
                 feetCollider = enemyFeetCollider;
                 return feetCollider;
             } else {
-                Debug.LogError("No feet collider found! Make sure you have a non-trigger collider attached to the player.");
+                Debug.LogError("No feet collider found! Make sure you have a non-trigger collider attached to the enemy.");
                 return null;
             } 
         }
@@ -148,8 +159,8 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void Update()
         {
-            var offset = feetCollider.offset;
-            var position = feetCollider.transform.position;
+            Vector2 offset = feetCollider.offset;
+            Vector2 position = feetCollider.transform.position;
             feetColliderPosition = new Vector2(position.x + offset.x, 
                 position.y + offset.y);
             

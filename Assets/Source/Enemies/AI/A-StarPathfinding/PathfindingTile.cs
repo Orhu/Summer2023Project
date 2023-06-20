@@ -33,30 +33,15 @@ public class PathfindingTile : IHeapItem<PathfindingTile>
     /// Constructor for a PathfindingTile from a Tile
     /// </summary>
     /// <param name="t"> Tile to construct from </param>
-    /// <param name="newMoveable"> Is this tile able to be traversed?
+    /// <param name="moveable"> Is this tile able to be traversed?
     /// This param is needed because Tiles have multiple "moveable" variables for walking, flying, and burrowing </param>
-    /// <param name="newMovementPenalty"> How much this tile costs to walk on (higher is avoided more, lower is preferred).
+    /// <param name="movementPenalty"> How much this tile costs to walk on (higher is avoided more, lower is preferred).
     /// This param is needed because Tiles have multiple movementPenalty variables for walking, flying, and burrowing </param>
-    public PathfindingTile(Tile t, bool newMoveable, int newMovementPenalty)
+    public PathfindingTile(Tile t, bool moveable, int movementPenalty)
     {
-        moveable = newMoveable;
-        movementPenalty = newMovementPenalty;
+        this.moveable = moveable;
+        this.movementPenalty = movementPenalty;
         gridLocation = t.gridLocation;
-        gCost = 0;
-        hCost = 0;
-        retraceStep = null;
-    }
-
-    /// <summary>
-    /// Constructor for a PathfindingTile default with a gridLocation. Currently used to mitigate the null error issue with door tiles.
-    /// </summary>
-    /// <param name="gridX"> Grid X pos </param>
-    /// <param name="gridY"> Grid Y pos </param>
-    public PathfindingTile(int gridX, int gridY)
-    {
-        moveable = false;
-        movementPenalty = 0;
-        gridLocation = new Vector2Int(gridX, gridY);
         gCost = 0;
         hCost = 0;
         retraceStep = null;

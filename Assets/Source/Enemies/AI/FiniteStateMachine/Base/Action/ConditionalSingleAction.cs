@@ -7,17 +7,17 @@ namespace Cardificer.FiniteStateMachine
     /// <summary>
     /// Represents an action that executes only if a condition returns true
     /// </summary>
-    [CreateAssetMenu(menuName = "FSM/Actions/Conditional Single Action")]
+    [CreateAssetMenu(menuName="FSM/Actions/Conditional Single Action")]
     public class ConditionalSingleAction : BaseAction
     {
         [Tooltip("Decision to evaluate.")]
         [SerializeField] private BaseDecision decision;
 
         [Tooltip("Action to perform if decision is true.")]
-        [SerializeField] private Action trueAction;
+        [SerializeField] private BaseAction trueAction;
 
         [Tooltip("Action to perform if decision is false.")]
-        [SerializeField] private Action falseAction;
+        [SerializeField] private BaseAction falseAction;
 
         /// <summary>
         /// Evaluate the condition and execute the action if the condition is true.

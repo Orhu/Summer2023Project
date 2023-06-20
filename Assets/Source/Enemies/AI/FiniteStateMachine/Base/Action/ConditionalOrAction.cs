@@ -7,17 +7,17 @@ namespace Cardificer.FiniteStateMachine
     /// <summary>
     /// Represents an action that executes only if one of several conditions return true
     /// </summary>
-    [CreateAssetMenu(menuName = "FSM/Actions/Conditional OR Action")]
+    [CreateAssetMenu(menuName="FSM/Actions/Conditional OR Action")]
     public class ConditionalOrAction : BaseAction
     {
         [Tooltip("Decisions to evaluate with OR condition.")]
         [SerializeField] private List<BaseDecision> decisions;
 
         [Tooltip("Action to perform if decision is true.")]
-        [SerializeField] private Action trueAction;
+        [SerializeField] private BaseAction trueAction;
 
         [Tooltip("Action to perform if decision is false.")]
-        [SerializeField] private Action falseAction;
+        [SerializeField] private BaseAction falseAction;
 
         /// <summary>
         /// Evaluate the condition and execute the action if one of the listed conditions is true.

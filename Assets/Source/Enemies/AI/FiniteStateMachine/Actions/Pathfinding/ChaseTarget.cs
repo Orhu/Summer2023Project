@@ -6,18 +6,23 @@ namespace Cardificer.FiniteStateMachine
 {
     /// <summary>
     /// Represents an action that moves towards the current pathfinding target as specified by the stateMachine using this action.
-    /// This action will continuously update its path so it should only be run once.
-    /// When leaving this state, enemies should stop the FollowPath and UpdatePath coroutines, as well as enabling stateMachine.pathData.ignorePathRequests
+    /// When leaving this state, enemies should stop the stateMachine.pathData.prevFollowCoroutine coroutine,
+    /// as well as enabling stateMachine.pathData.ignorePathRequests
     /// </summary>
-    [CreateAssetMenu(menuName = "FSM/Actions/Pathfinding/Initialize Chase Target Loop")]
-    public class ChaseTarget : Action
+    [CreateAssetMenu(menuName="FSM/Actions/Pathfinding/Request and Follow Path")]
+    public class ChaseTarget : SingleAction
     {
-        [Tooltip("How often does this enemy update its path, in seconds?")]
-        [SerializeField] private float delayBetweenPathUpdates = 0.25f;
-
-        [Tooltip("How close do we need to be to our point before we are happy?")]
+        [Tooltip("After a Path request is submitted, how long before another one is allowed?")]
+        [SerializeField] private float pathLockout = 0.25f;
+        
+        [Tooltip("How close do we need to be to our point before we are happy? " +
+                 "The default value was found by testing how many units are traveled every frame with a movement speed of 4. " +
+                 "This number may need to be larger for faster units, or smaller for slower units. " +
+                 "Essentially, this number allows us to avoid the \"zigzagging\" effect that happens when an enemy overshoots its target by giving their transform a buffer dist from target pos (buffer for float comparison). " +
+                 "But, if the number is too high, the leniency will cause the enemy to not get close enough to their target pos before turning, " +
+                 "leading to unpredictable behavior.")]
         [SerializeField] private float distanceBuffer = 0.061f;
-
+        
         // need to track our current data
         private ChaseData chaseData;
 
@@ -25,34 +30,19 @@ namespace Cardificer.FiniteStateMachine
         /// Starts chase action
         /// </summary>
         /// <param name="stateMachine"> stateMachine to be used </param>
-        /// <returns></returns>
-        protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
-        {
-            stateMachine.StartCoroutine(UpdatePath(stateMachine));
-            yield break;
-        }
-
-        /// <summary>
-        /// Sends a request for a path, and continuously submits requests every delayBetweenPathUpdates seconds
-        /// </summary>
-        /// <param name="stateMachine"> The stateMachine to be used. </param>
-        /// <returns></returns>
-        IEnumerator UpdatePath(BaseStateMachine stateMachine)
+        /// <returns> Waits pathLockout seconds before allowing another request. </returns>
+        protected sealed override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             RequestPath(stateMachine);
-
-            while (true)
-            {
-                yield return new WaitForSeconds(delayBetweenPathUpdates);
-                RequestPath(stateMachine);
-            }
+            yield return new WaitForSeconds(pathLockout);
+            stateMachine.cooldownData.cooldownReady[this] = true;
         }
 
         /// <summary>
         /// Updates our position and target position, then submits a path request
         /// </summary>
         /// <param name="stateMachine"> The stateMachine to be used. </param>
-        void RequestPath(BaseStateMachine stateMachine)
+        private void RequestPath(BaseStateMachine stateMachine)
         {
             PathRequestManager.RequestPath(stateMachine, OnPathFound);
         }
@@ -63,7 +53,7 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="newPath"> The new path </param>
         /// <param name="success"> Whether the path was successfully found or not </param>
         /// <param name="stateMachine"> The stateMachine to be used. </param>
-        public void OnPathFound(Vector2[] newPath, bool success, BaseStateMachine stateMachine)
+        private void OnPathFound(Vector2[] newPath, bool success, BaseStateMachine stateMachine)
         {
             if (!success || stateMachine == null || stateMachine.pathData.ignorePathRequests) return;
 
@@ -83,8 +73,8 @@ namespace Cardificer.FiniteStateMachine
         /// Follows the path to the target, if we have one. If we reach attackRange of our target, then stop and attack
         /// </summary>
         /// <param name="stateMachine"> The stateMachine to be used. </param>
-        /// <returns></returns>
-        IEnumerator FollowPath(BaseStateMachine stateMachine)
+        /// <returns> Allows other code to execute in between iterations of the while (true) loop </returns>
+        private IEnumerator FollowPath(BaseStateMachine stateMachine)
         {
             if (stateMachine.pathData.path.lookPoints.Length == 0)
             {

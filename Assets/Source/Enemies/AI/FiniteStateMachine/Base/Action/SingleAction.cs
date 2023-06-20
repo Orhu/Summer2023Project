@@ -6,7 +6,7 @@ namespace Cardificer.FiniteStateMachine
     /// <summary>
     /// Represents an action in a finite state machine
     /// </summary>
-    public abstract class Action : BaseAction
+    public abstract class SingleAction : BaseAction
     {
         /// <summary>
         /// If this action's cooldown is ready, then execute the action.

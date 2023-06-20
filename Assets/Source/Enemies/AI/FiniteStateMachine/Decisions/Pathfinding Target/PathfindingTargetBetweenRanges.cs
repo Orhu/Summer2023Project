@@ -8,7 +8,7 @@ namespace Cardificer.FiniteStateMachine
     /// <summary>
     /// Represents a decision checking whether our target is in a certain range
     /// </summary>
-    [CreateAssetMenu(menuName = "FSM/Decisions/Pathfinding Target/Pathfinding Target Between Ranges")]
+    [CreateAssetMenu(menuName="FSM/Decisions/Pathfinding Target/Pathfinding Target Between Ranges")]
     public class PathfindingTargetBetweenRanges : Decision
     {
         [Tooltip("What min range for our target?")]

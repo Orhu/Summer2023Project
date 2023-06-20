@@ -8,7 +8,7 @@
         /// Sets the ignore path requests variable to serialized bool
         /// </summary>
         [CreateAssetMenu(menuName = "FSM/Actions/State Variables/Ignore Path Requests")]
-        public class IgnorePathRequests : Action
+        public class IgnorePathRequests : SingleAction
         {
             [Tooltip("The value to set ignorePathRequests on this enemy to")]
             [SerializeField] private bool newIgnorePathRequests;
@@ -17,7 +17,7 @@
             /// Updates the ignorePathRequests variable
             /// </summary>
             /// <param name="stateMachine"> The state machine to be used. </param>
-            /// <returns></returns>
+            /// <returns> Ends when the action is complete. </returns>
             protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
             {
                 stateMachine.pathData.ignorePathRequests = newIgnorePathRequests;

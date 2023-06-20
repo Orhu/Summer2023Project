@@ -100,10 +100,8 @@ namespace Cardificer
                     // TODO must be a better way than foreach comparing to null. Doors return null currently, Mabel says she is working on it so update this when ready
                     if (curTile == null)
                     {
-                        // in this case the tile was null. Make an impassable tile at this spot
-                        Debug.LogWarning("Null tile at " + x + ", " + y);
-                        AddGenericTiles(x, y);
-                        debugNullTiles.Add(new Vector2(x, y));
+                        // in this case the tile was null. This breaks pathfinding tile conversion, so make a big fuss!!
+                        Debug.LogError("Room Load Failed: Null tile at " + x + ", " + y);
                     }
                     else
                     {
@@ -111,23 +109,6 @@ namespace Cardificer
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Responsible for properly subdividing and adding tiles at proper locations 
-        /// </summary>
-        /// <param name="x"> X position of original tile </param>
-        /// <param name="y"> Y position of original tile </param>
-        void AddGenericTiles(int x, int y)
-        {
-            // TODO subdividing unimplemented
-            // add to appropriate lists
-            walkRoomGrid[x, y] =
-                new PathfindingTile(x, y);
-            flyRoomGrid[x, y] =
-                new PathfindingTile(x, y);
-            burrowRoomGrid[x, y] = 
-                new PathfindingTile(x, y);
         }
 
         /// <summary>

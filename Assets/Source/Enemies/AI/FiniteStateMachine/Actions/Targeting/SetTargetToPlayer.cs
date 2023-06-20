@@ -7,7 +7,7 @@ namespace Cardificer.FiniteStateMachine
     /// Represents an action to update our target to be the player
     /// </summary>
     [CreateAssetMenu(menuName = "FSM/Actions/Set Target To Player")]
-    public class SetTargetToPlayer : Action
+    public class SetTargetToPlayer : SingleAction
     {
         /// <summary>
         /// Enum representing targeting modes for setting a target
@@ -26,7 +26,7 @@ namespace Cardificer.FiniteStateMachine
         /// Sets pathfinding and/or attack target depending on the requested targeting type
         /// </summary>
         /// <param name="stateMachine"> The state machine to be used. </param>
-        /// <returns></returns>
+        /// <returns> Ends when the action is complete. </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             switch (targetType)
