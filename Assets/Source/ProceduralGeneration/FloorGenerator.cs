@@ -89,10 +89,14 @@ namespace Cardificer
             Deck.playerDeck.onCardRemoved += OnCardRemoved;
             map = GetComponent<LayoutGenerator>().Generate(layoutGenerationParameters);
             GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, roomSize);
-            currentRoom.Generate();
 
             // Autosave loading
-            if (!SaveManager.autosaveExists) { return; }
+            if (!SaveManager.autosaveExists) 
+            {
+                Room startRoom = map.startCell.room.GetComponent<Room>();
+                startRoom.Enter(Direction.None);
+                return; 
+            }
 
             List<Vector3Int> vistedRooms = SaveManager.savedVisitedRooms;
             Room lastRoom = map.startCell.room.GetComponent<Room>();

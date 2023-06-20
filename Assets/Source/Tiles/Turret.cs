@@ -25,7 +25,7 @@ namespace Cardificer
         private enum PlayTime
         {
             AlwaysShooting,
-            WhenOverlaping
+            WhenOverlapping
         }
 
 
@@ -76,7 +76,7 @@ namespace Cardificer
         /// <param name="collision"> The thing that was overlapped. </param>
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (playTime == PlayTime.WhenOverlaping && collision.CompareTag("Player") && !collision.isTrigger)
+            if (playTime == PlayTime.WhenOverlapping && collision.CompareTag("Player") && !collision.isTrigger)
             {
                 coroutine = StartCoroutine(PlayAction());
             }
@@ -88,7 +88,7 @@ namespace Cardificer
         /// <param name="collision"> The thing that was overlapped. </param>
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (playTime == PlayTime.WhenOverlaping && collision.CompareTag("Player") && !collision.isTrigger)
+            if (playTime == PlayTime.WhenOverlapping && collision.CompareTag("Player") && !collision.isTrigger)
             {
                 StopAllCoroutines();
                 coroutine = null;

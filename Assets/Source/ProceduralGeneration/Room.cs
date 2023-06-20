@@ -92,12 +92,12 @@ namespace Cardificer
                 transform.GetChild(i).gameObject.SetActive(true);
             }
 
-            FloorGenerator.floorGeneratorInstance.currentRoom = this;
-
             bool shouldCloseDoors = !generated;
             Generate(spawnEnemies);
 
             bool enemiesPresent = template.chosenEnemyPool.enemies != null && template.chosenEnemyPool.enemies.Count != 0;
+
+            FloorGenerator.floorGeneratorInstance.currentRoom = this;
 
             // Move player into room, then close/activate doors (so player doesn't get trapped in door)
             StartCoroutine(MovePlayer(direction, shouldCloseDoors && enemiesPresent, !enemiesPresent && shouldCloseDoors));
