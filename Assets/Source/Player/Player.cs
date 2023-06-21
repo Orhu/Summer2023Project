@@ -45,6 +45,44 @@ namespace Cardificer
             }
         }
 
+        #region Money
+        // Stores how much money the player currently has.
+        private static int money = 0;
+        
+        /// <summary>
+        /// Sets how much money the player has.
+        /// </summary>
+        /// <param name="newMoney"> The new amount of money. </param>
+        /// <returns> True if newMoney >= 0. </returns>
+        public static bool SetMoney(int newMoney)
+        {
+            if (newMoney < 0) { return false; }
+
+            money = newMoney;
+            onMoneyChanged?.Invoke();
+            return true;
+        }
+
+        /// <summary>
+        /// Adds an amount to the player's money.
+        /// </summary>
+        /// <param name="amount"> The number of coins to add. </param>
+        /// <returns> Whether or not the player had enough money. </returns>
+        public static bool AddMoney(int amount)
+        {
+            return SetMoney(money + amount);
+        }
+
+        /// <summary>
+        /// Gets the player's money.
+        /// </summary>
+        /// <returns> The current number of coins the player has. </returns>
+        public static int GetMoney() => money;
+
+        // Call whenever the player gains or looses money
+        public static System.Action onMoneyChanged;
+        #endregion
+
         /// <summary>
         /// Gets the player.
         /// </summary>
