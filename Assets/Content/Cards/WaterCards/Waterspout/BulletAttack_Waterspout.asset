@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_Waterspout
   m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 0}
   attack:
     damage: 4
     damageType: 0
-    statusEffects: []
+    statusEffects:
+    - {fileID: 11400000, guid: 86bc1b9f564011949b00550517008c42, type: 2}
     invertInvincibility: 0
   hitCount: 999
   applyDamageOnHit: 1
@@ -30,11 +32,15 @@ MonoBehaviour:
   maxSpeed: 6
   homingSpeed: 0
   homingTime: 0
+  homingDelay: 0
   homingAimMode: 1
+  switchAfterHit: 0
   visualObject: {fileID: 1890156799454768057, guid: ff4b1c5fdbcdcd245bff561cb75c4b3b, type: 3}
   detachVisualsBeforeDestroy: 0
   spawnLocation: 0
   aimMode: 0
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   _spawnSequence:
