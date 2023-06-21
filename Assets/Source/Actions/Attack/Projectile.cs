@@ -323,7 +323,7 @@ namespace Cardificer
                     return randomTarget.transform.position;
 
                 case AimMode.Right:
-                    return transform.position + transform.right;
+                    return transform.position + actor.GetActionSourceTransform().right;
             }
             return transform.position + transform.right;
         }
