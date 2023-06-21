@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Cardificer
 {
@@ -10,6 +11,16 @@ namespace Cardificer
     /// </summary>
     public class PauseMenu : MonoBehaviour
     {
+        [SerializeField] private GameObject mainPauseMenuContainer;
+        [SerializeField] private GameObject pauseMenuController;
+        /// <summary>
+        /// Resumes the game
+        /// </summary>
+        public void Resume()
+        {
+            MenuManager.instance.CloseMenu();
+        }
+
         /// <summary>
         /// Debug ability to reset the game.
         /// Clears saves and reloads the current scene
@@ -36,6 +47,21 @@ namespace Cardificer
         public void SaveAndQuit()
         {
 
+            Application.Quit();
+        }
+
+        /// <summary>
+        /// When the pause menu is disabled, set the mainPauseMenu to be the active menu
+        /// (instead of like, options menu)
+        /// </summary>
+        private void OnDisable()
+        {
+            // close all menus
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                pauseMenuController.transform.GetChild(i).gameObject.SetActive(false);
+            }
+            mainPauseMenuContainer.SetActive(true);
         }
     }
 }
