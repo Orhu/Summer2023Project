@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &6553300418283927275
+--- !u!1001 &2241183747718736674
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -8,12 +8,36 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 6816320395962278881, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
+      propertyPath: roomSize.x
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816320395962278881, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
+      propertyPath: roomSize.y
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816320395962278881, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
+      propertyPath: randomizeSeed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816320395962278881, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
+      propertyPath: layoutGenerationParameters.numSpecialRooms
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816320395962278881, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
+      propertyPath: onRoomChange.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816320395962278881, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
       propertyPath: templateGenerationParameters.templatesPool.roomTypesToDifficultiesToTemplates.Array.data[0].difficultiesToTemplates.difficultiesToTemplates.Array.data[0].templates.Array.size
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6816320395962278881, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
       propertyPath: templateGenerationParameters.templatesPool.roomTypesToDifficultiesToTemplates.Array.data[0].difficultiesToTemplates.difficultiesToTemplates.Array.data[1].templates.Array.size
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816320395962278881, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
+      propertyPath: templateGenerationParameters.templatesPool.roomTypesToDifficultiesToTemplates.Array.data[2].difficultiesToTemplates.difficultiesToTemplates.Array.data[0].templates.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6816320395962278881, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
       propertyPath: templateGenerationParameters.templatesPool.roomTypesToDifficultiesToTemplates.Array.data[0].difficultiesToTemplates.difficultiesToTemplates.Array.data[0].templates.Array.data[0]
@@ -43,6 +67,14 @@ PrefabInstance:
       propertyPath: templateGenerationParameters.templatesPool.roomTypesToDifficultiesToTemplates.Array.data[0].difficultiesToTemplates.difficultiesToTemplates.Array.data[1].templates.Array.data[2]
       value: 
       objectReference: {fileID: 11400000, guid: bf9c4028241cbde469e5d9e0b89e0e83, type: 2}
+    - target: {fileID: 6816320395962278881, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
+      propertyPath: templateGenerationParameters.templatesPool.roomTypesToDifficultiesToTemplates.Array.data[2].difficultiesToTemplates.difficultiesToTemplates.Array.data[0].templates.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 3e0b8d5b90ee7bf408dfed9fe210481d, type: 2}
+    - target: {fileID: 6816320395962278881, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
+      propertyPath: templateGenerationParameters.templatesPool.roomTypesToDifficultiesToTemplates.Array.data[2].difficultiesToTemplates.difficultiesToTemplates.Array.data[0].templates.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 45c3765f46d4ee147a5d49bb6b094878, type: 2}
     - target: {fileID: 6816320395962278883, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -89,7 +121,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6816320395962278886, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
       propertyPath: m_Name
-      value: TestFloorGen
+      value: Floor1Generator
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816320395962278886, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
