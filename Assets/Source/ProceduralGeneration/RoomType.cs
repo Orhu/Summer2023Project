@@ -14,6 +14,9 @@ namespace Cardificer
         [Tooltip("Whether or not this room type can only spawn as a dead end")]
         public bool deadEnd { get; private set; }
 
+        [Tooltip("Whether or not this room type will be generated as a start room")]
+        public bool startRoom { get; private set; }
+
         [Tooltip("The size multiplier of this room: What size is this room compared to the size of a normal room?")]
         public Vector2Int sizeMultiplier { get; private set; }
 

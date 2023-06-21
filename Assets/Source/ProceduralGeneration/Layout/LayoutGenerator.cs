@@ -15,23 +15,38 @@ namespace Cardificer
         {
             int numNormalRooms = 0;
             int numDeadEndRooms = 0;
-            List<RoomType> normalRooms = new List<RoomType>();
-            List<RoomType> deadEndRooms = new List<RoomType>();
+            Dictionary<RoomType, int> normalRooms = new Dictionary<RoomType, int>();
+            Dictionary<RoomType, int> deadEndRooms = new Dictionary<RoomType, int>();
+            RoomType startRoom = null;
 
             foreach (RoomTypeToLayoutParameters roomTypeToLayoutParameters in layoutParameters.roomTypesTolayoutParameters.roomTypesToLayoutParameters)
             {
+                if (roomTypeToLayoutParameters.roomType.startRoom)
+                {
+                    if (startRoom == null)
+                    {
+                        startRoom = roomTypeToLayoutParameters.roomType;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Only one start room will be generated! Disregarding this room type: " + roomTypeToLayoutParameters.roomType.name);
+                    }
+
+                    continue;
+                }
+
                 int variance = roomTypeToLayoutParameters.numRooomsVariance;
                 int numRooms = roomTypeToLayoutParameters.numRooms;
                 numRooms += FloorGenerator.random.Next(-variance, variance + 1);
                 if (roomTypeToLayoutParameters.roomType.deadEnd)
                 {
                     numDeadEndRooms += numRooms;
-                    deadEndRooms.Add(roomTypeToLayoutParameters.roomType);
+                    deadEndRooms.Add(roomTypeToLayoutParameters.roomType, numRooms);
                 }
                 else
                 {
                     numNormalRooms += numRooms;
-                    normalRooms.Add(roomTypeToLayoutParameters.roomType);
+                    normalRooms.Add(roomTypeToLayoutParameters.roomType, numRooms);
                 }
             }
             
@@ -39,19 +54,14 @@ namespace Cardificer
             Vector2Int mapSize = DetermineMapSize(numNormalRooms + numDeadEndRooms);
             MapCell[,] genMap = InitializeGenMap(mapSize);
 
-            // Create the starting cell
-            MapCell startCell = GenerateStartCell(genMap, mapSize);
+            // Create the starting room
+            MapCell startCell;
+            List<MapCell> generatableCells = GenerateStartRoom(genMap, mapSize, startRoom, startCell);
 
-            // Get all the branchable cells (which will start out as all the normal cells, then cells will be removed from them as it goes along
-            List<MapCell> branchableCells = GenerateNormalCells(genMap, startCell, numNormalCells, layoutParameters);
+            // Get all the branchable cells (which will start out as all the edge normal cells, then cells will be removed from them as it goes along
+            List<MapCell> branchableCells = GenerateNormalCells(genMap, generatableCells, normalRooms, layoutParameters);
 
-            // If somehow (this should never happen) The boss or special cells failed to generate, just start over
-            if (!GenerateBossAndExitCells(genMap, branchableCells))
-            {
-                // This should never happen butttt y'know just in case
-                return Generate(layoutParameters);
-            }
-            if (!GenerateSpecialCells(genMap, branchableCells, layoutParameters.numSpecialRooms))
+            if (!GenerateDeadEnds(genMap, branchableCells))
             {
                 return Generate(layoutParameters);
             }
@@ -94,12 +104,14 @@ namespace Cardificer
         /// Initializes the starting cell in the center of the map
         /// </summary>
         /// <param name="genMap"> The map that is being generated </param>
+        /// <param name="mapSize"> The size of the map </param>
+        /// <param name="startRoom"> The room type to generate </param>
+        /// <param name="startCell"> The out param for the start cell (aka the middle of the map) </param>
         /// <returns> The start cell </returns>
-        private MapCell GenerateStartCell(MapCell[,] genMap, Vector2Int mapSize)
+        private MapCell GenerateStartCell(MapCell[,] genMap, Vector2Int mapSize, RoomType startRoomType, ref MapCell startCell)
         {
             Vector2Int startPos = new Vector2Int((mapSize.x + 1) / 2, (mapSize.y + 1) / 2);
-            MapCell startRoom = genMap[startPos.x, startPos.y];
-            startRoom.visited = true;
+            startCell = genMap[startPos.x, startPos.y];
             startRoom.type = RoomType.Start;
             startRoom.direction = Direction.All;
             return startRoom;
