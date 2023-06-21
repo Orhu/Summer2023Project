@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,6 +7,7 @@ namespace Cardificer
     /// <summary>
     /// A slot that contains an item to be sold for coins.
     /// </summary>
+    [RequireComponent(typeof(Collider2D))]
     public class ShopSlot : MonoBehaviour
     {
         [Tooltip("The loot table to determine what is sellable in this slot and in what frequencies.")]
@@ -15,7 +17,7 @@ namespace Cardificer
         public int buyCount = 1;
 
         [Tooltip("Called when the price of this item is set. Passes the price as a parameter.")]
-        public UnityEvent<int> onPriceSet;
+        public UnityEvent<string> onPriceSet;
 
         [Tooltip("Called when this is made buyable.")]
         public UnityEvent onBuyable;
@@ -25,6 +27,11 @@ namespace Cardificer
 
         [Tooltip("Called when has been bought.")]
         public UnityEvent onBought;
+
+
+        // The collider responsible for detecting if the player is overlapping.
+        private new Collider2D collider;
+
 
 
         /// <summary>
@@ -56,7 +63,10 @@ namespace Cardificer
             public int price;
 
             // Called when this is destroyed.
-            System.Action onDestroyed;
+            public System.Action onDestroyed;
+
+            // Whether or not this has been bought.
+            bool bought = false;
 
 
 
@@ -83,6 +93,8 @@ namespace Cardificer
             /// </summary>
             private void UpdateBuyability()
             {
+                if (bought) { return; }
+
                 bool buyable = Player.GetMoney() >= price;
                 collider.isTrigger = buyable;
 
@@ -102,15 +114,18 @@ namespace Cardificer
             /// <param name="collision"> The thing that was overlapped. </param>
             private void OnTriggerEnter2D(Collider2D collision)
             {
+                if (bought) { return; }
                 if (!collision.CompareTag("Player")) { return; }
 
+                bought = true;
                 Player.AddMoney(-price);
-                price = 0;
+                shopSlot.onBought?.Invoke();
             }
 
 
             private void OnDestroy()
             {
+                Player.onMoneyChanged -= UpdateBuyability;
                 if (!gameObject.scene.isLoaded) { return; }
                 onDestroyed?.Invoke();
             }
@@ -121,16 +136,38 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
+            collider = GetComponent<Collider2D>();
+            StartCoroutine(SpawnBuyableObject());
+        }
+
+        /// <summary>
+        /// Spawn a new object that can be bought.
+        /// </summary>
+        private IEnumerator SpawnBuyableObject()
+        {
+            while (collider.IsTouching(Player.feet))
+            {
+                yield return new WaitForSeconds(1f);
+            }
+
             PricedObject pricedObject = possibleItems.PullFromTable();
 
             GameObject sellableItem = Instantiate(pricedObject.gameObject);
             sellableItem.transform.parent = transform;
+            sellableItem.transform.localPosition = Vector3.zero;
 
             Price price = sellableItem.AddComponent<Price>();
             price.price = pricedObject.price;
-            onPriceSet?.Invoke(pricedObject.price);
-        }
+            onPriceSet?.Invoke(pricedObject.price.ToString());
 
-        
+            if (--buyCount <= 0)
+            {
+                price.onDestroyed += () => { Destroy(gameObject); };
+            }
+            else
+            {
+                price.onDestroyed += () => { StartCoroutine(SpawnBuyableObject()); };
+            }
+        }
     }
 }
