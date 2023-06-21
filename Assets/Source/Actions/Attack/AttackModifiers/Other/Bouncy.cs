@@ -52,13 +52,13 @@ namespace Cardificer
                 bouncyProjectile.StartCoroutine(ClearLastNormal());
 
                 bouncyProjectile.transform.right = Vector2.Reflect(bouncyProjectile.transform.right, bounceNormal);
-                bouncyRigidbody.velocity = bouncyProjectile.speed * bouncyProjectile.transform.right;
+                bouncyProjectile.velocity = bouncyProjectile.speed * bouncyProjectile.transform.right;
                 lastBounceNormal = bounceNormal;
             }
             else if (Vector2.Dot(bounceNormal, lastBounceNormal) < DOUBLE_BOUNCE_PROTECTION_FACTOR)
             {
                 bouncyProjectile.transform.right = Vector2.Reflect(bouncyProjectile.transform.right, bounceNormal);
-                bouncyRigidbody.velocity = bouncyProjectile.speed * bouncyProjectile.transform.right;
+                bouncyProjectile.velocity = bouncyProjectile.speed * bouncyProjectile.transform.right;
                 lastBounceNormal = bounceNormal;
             }
         }
