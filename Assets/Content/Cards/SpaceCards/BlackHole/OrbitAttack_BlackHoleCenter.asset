@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
   m_Name: OrbitAttack_BlackHoleCenter
   m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 0}
   attack:
     damage: 2
     damageType: 1
@@ -24,17 +25,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
   shape: {fileID: 11400000, guid: 992716a277dcb9d4cb4dca97337720eb, type: 2}
   lifetime: 5
-  initialSpeed: 2
-  acceleration: 2
-  minSpeed: 2
-  maxSpeed: 2
-  homingSpeed: 1
+  initialSpeed: 4
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 4
+  homingSpeed: 6
   homingTime: 5
+  homingDelay: 0
   homingAimMode: 0
+  switchAfterHit: 0
   visualObject: {fileID: 7940671346844068234, guid: 76dca763be816344292b13e8a923f5c1, type: 3}
   detachVisualsBeforeDestroy: 0
   spawnLocation: 1
   aimMode: 0
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
   previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   _spawnSequence:
