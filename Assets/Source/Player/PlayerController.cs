@@ -35,6 +35,12 @@ namespace Cardificer
         {
             if (!SaveManager.autosaveExists) { return; }
 
+            if (!Player.SetMoney(SaveManager.savedPlayerMoney))
+            {
+                SaveManager.AutosaveCorrupted("Invalid player money");
+                return;
+            }
+
             transform.position = SaveManager.savedPlayerPosition;
             // TODO: There is a small probability that the player position is invalid and is not caught by the default save file corruption detection.
 
