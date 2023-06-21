@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
   m_Name: OrbitAttack_Whirlpool
   m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 0}
   attack:
     damage: 1
     damageType: 0
@@ -23,18 +24,22 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
   - {fileID: 11400000, guid: 3b1b6f1ebbdacbd49afdf8b70297d8f9, type: 2}
   shape: {fileID: 11400000, guid: 15c7667c43e0a0444b5d85e9e2c660fe, type: 2}
-  lifetime: 6
+  lifetime: 2.5
   initialSpeed: 0
   acceleration: 0
   minSpeed: 0
   maxSpeed: 0
   homingSpeed: 0
   homingTime: 0
+  homingDelay: 0
   homingAimMode: 0
+  switchAfterHit: 0
   visualObject: {fileID: 4684822123516431346, guid: 7e7405059974b7c4bb7e9bbebd65c5da, type: 3}
   detachVisualsBeforeDestroy: 0
   spawnLocation: 1
   aimMode: 0
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
   previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   _spawnSequence:
