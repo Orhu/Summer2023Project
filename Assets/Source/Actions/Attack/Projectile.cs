@@ -32,6 +32,8 @@ namespace Cardificer
         // The index of this in the spawn sequence.
         [NonSerialized] public int index;
 
+        // The current velocity of this projectile.
+        [NonSerialized] public Vector2 velocity;
 
         #region Modifiable Properties
         // The speed of the projectile in tiles/s.
@@ -104,8 +106,6 @@ namespace Cardificer
         public System.Action onDestroyed;
         #endregion
 
-        // The current velocity of this projectile.
-        protected Vector2 velocity;
 
         // The current closest target to the actor.
         private GameObject closestTargetToActor;
@@ -323,7 +323,7 @@ namespace Cardificer
                     return randomTarget.transform.position;
 
                 case AimMode.Right:
-                    return transform.position + transform.right;
+                    return transform.position + actor.GetActionSourceTransform().right;
             }
             return transform.position + transform.right;
         }

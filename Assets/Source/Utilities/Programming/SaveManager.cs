@@ -374,7 +374,12 @@ namespace Cardificer
                         FloorGenerator.floorGeneratorInstance.currentRoom.onCleared += Autosave;
                     });
 
-                Player.health.onDeath.AddListener(ClearTransientSaves);
+                Player.health.onDeath.AddListener(
+                    () =>
+                    {
+                        ClearTransientSaves();
+                        CancelInvoke();
+                    });
 
                 if (autosaveExists) { return; }
                 Invoke("Autosave", 0.5f);
@@ -385,7 +390,7 @@ namespace Cardificer
             /// </summary>
             private void Autosave()
             {
-                if (!gameObject.scene.isLoaded) { return; }
+                if (!gameObject.scene.isLoaded || SceneManager.sceneCount > 1) { return; }
 
                 AutosaveData saveData = latestAutosave == null ? new AutosaveData() : latestAutosave;
                 saveData.playerPos = Player.Get().transform.position;

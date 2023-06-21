@@ -82,10 +82,12 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// The function called when the room is entered
+        /// The function called when the room is entered.
         /// </summary>
-        /// <param name="direction"> The direction the room is being entered from </param>
-        public void Enter(Direction direction = Direction.None, bool spawnEnemies = true)
+        /// <param name="direction"> The direction the room is being entered from. </param>
+        /// <param name="spawnEnemies"> Whether or not enemies should be spawned. </param>
+        /// <param name="callCleared"> Whether or not the on cleared function should be called. </param>
+        public void Enter(Direction direction = Direction.None, bool spawnEnemies = true, bool callCleared = true)
         {
             for (int i = 0; i < transform.childCount; i++)
             {
@@ -100,7 +102,7 @@ namespace Cardificer
             FloorGenerator.floorGeneratorInstance.currentRoom = this;
 
             // Move player into room, then close/activate doors (so player doesn't get trapped in door)
-            StartCoroutine(MovePlayer(direction, shouldCloseDoors && enemiesPresent, !enemiesPresent && shouldCloseDoors));
+            StartCoroutine(MovePlayer(direction, shouldCloseDoors && enemiesPresent, callCleared && (!enemiesPresent && shouldCloseDoors)));
         }
 
         /// <summary>

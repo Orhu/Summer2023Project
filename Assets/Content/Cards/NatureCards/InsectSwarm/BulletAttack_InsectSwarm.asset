@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_InsectSwarm
   m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 0}
   attack:
     damage: 1
     damageType: 0
     statusEffects: []
+    invertInvincibility: 0
   hitCount: 999
   applyDamageOnHit: 1
   modifiers:
@@ -27,13 +29,17 @@ MonoBehaviour:
   acceleration: 0
   minSpeed: 0
   maxSpeed: 2
-  homingSpeed: 0.02
+  homingSpeed: 4
   homingTime: 10
+  homingDelay: 0
   homingAimMode: 0
+  switchAfterHit: 0
   visualObject: {fileID: 2590388692885767735, guid: fdc496f2815d6404db3fb15f132dad11, type: 3}
   detachVisualsBeforeDestroy: 0
   spawnLocation: 0
   aimMode: 0
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   _spawnSequence:
