@@ -110,7 +110,7 @@ namespace Cardificer
         /// Gets the card preview button being pressed.
         /// </summary>
         /// <returns> The number corresponding to the current button, -1 if none pressed. </returns>
-        static int GetPressedPreviewButton()
+        private static int GetPressedPreviewButton()
         {
             for (int i = 1; i <= Deck.playerDeck.handSize; i++)
             {
@@ -123,6 +123,10 @@ namespace Cardificer
             return -1;
         }
 
+        private void OnDestroy()
+        {
+            Player.SetMoney(0);
+        }
         #region IActor Implementation
 
         // Gets whether or not this actor can act.

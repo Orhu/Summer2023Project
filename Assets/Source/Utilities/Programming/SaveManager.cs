@@ -72,6 +72,16 @@ namespace Cardificer
             }
         }
 
+        // The currently saved visited room data. X,Y = room location, Z = size of deck at the time of clearing. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+        public static Vector3Int[] savedRemainingShopBuys
+        {
+            get
+            {
+                if (!autosaveExists) { return null; }
+                return autosaver.latestAutosave.remainingShopBuys;
+            }
+        }
+
         // The currently saved player position. Saving handled by autosaves. Use autosaveExists to check if data Valid.
         public static Vector2 savedPlayerPosition
         {
@@ -249,6 +259,9 @@ namespace Cardificer
                 // The locations and current card count of visited rooms
                 public List<Vector3Int> visitedRooms = new List<Vector3Int>();
 
+                // The locations and current card count of visited rooms
+                public Vector3Int[] remainingShopBuys;
+
                 // The current state of the deck.
                 public Deck.State deckState;
 
@@ -287,6 +300,7 @@ namespace Cardificer
                 saveData.floorSeed = FloorGenerator.floorGeneratorInstance.seed;
                 Vector2Int loc = FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation;
                 saveData.visitedRooms.Add(new Vector3Int(loc.x, loc.y, Deck.playerDeck.cards.Count));
+                saveData.remainingShopBuys = ShopSlot.savableRemainingShopBuys;
 
 
                 latestAutosave = saveData;

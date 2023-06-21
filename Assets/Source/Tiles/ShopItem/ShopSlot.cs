@@ -1,6 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace Cardificer
 {
@@ -29,8 +32,60 @@ namespace Cardificer
         public UnityEvent onBought;
 
 
+        // The locations mapped to the remaining buy count of every shop slot that has been bought from.
+        public static Dictionary<Vector2Int, int> _locationsToRemainingShopBuys;
+        private static Dictionary<Vector2Int, int> locationsToRemainingShopBuys
+        {
+            get
+            {
+                if (_locationsToRemainingShopBuys != null) { return _locationsToRemainingShopBuys; }
+
+                if (SaveManager.autosaveExists)
+                {
+                    Vector3Int[] keyValuePairs = SaveManager.savedRemainingShopBuys;
+                    _locationsToRemainingShopBuys = keyValuePairs.ToDictionary(
+                        // Extract Keys
+                        (Vector3Int keyValuePair) =>
+                        {
+                            return new Vector2Int(keyValuePair.x, keyValuePair.y);
+                        },
+                        // Extract Values
+                        (Vector3Int keyValuePair) =>
+                        {
+                            return keyValuePair.z;
+                        });
+                }
+                else
+                {
+                    _locationsToRemainingShopBuys = new Dictionary<Vector2Int, int>();
+                }
+                SceneManager.sceneUnloaded += (Scene scene) => { locationsToRemainingShopBuys = null; };
+
+                return _locationsToRemainingShopBuys;
+            }
+            set => _locationsToRemainingShopBuys = value;
+        }
+
+        // The locations mapped to the remaining buy count of every shop slot that has been bought from formated as a single Vector3Int.
+        public static Vector3Int[] savableRemainingShopBuys
+        {
+            get
+            {
+                return locationsToRemainingShopBuys.Select(
+                    // Combine key value pairs
+                    (KeyValuePair<Vector2Int, int> keyValuePair) =>
+                    {
+                        return new Vector3Int(keyValuePair.Key.x, keyValuePair.Key.y, keyValuePair.Value);
+                    }).ToArray();
+            }
+        }
+
+
         // The collider responsible for detecting if the player is overlapping.
         private new Collider2D collider;
+
+        // The integer position of this slot.
+        private Vector2Int intPosition;
 
 
 
@@ -131,13 +186,38 @@ namespace Cardificer
             }
         }
 
+
+
+
         /// <summary>
         /// Spawns the sellable object and gives it a price.
         /// </summary>
         private void Start()
         {
+            intPosition = new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
+
+            int savedBuyCount;
+            if (locationsToRemainingShopBuys.TryGetValue(intPosition, out savedBuyCount))
+            {
+                buyCount = savedBuyCount;
+
+                if (buyCount <= 0)
+                {
+                    Destroy(gameObject);
+                    return;
+                }
+            }
+
             collider = GetComponent<Collider2D>();
             StartCoroutine(SpawnBuyableObject());
+
+            onBought.AddListener(
+                // Update buy count
+                () => 
+                { 
+                    buyCount--;
+                    locationsToRemainingShopBuys[intPosition] = buyCount;
+                });
         }
 
         /// <summary>
@@ -160,7 +240,8 @@ namespace Cardificer
             price.price = pricedObject.price;
             onPriceSet?.Invoke(pricedObject.price.ToString());
 
-            if (--buyCount <= 0)
+
+            if (buyCount - 1 <= 0)
             {
                 price.onDestroyed += () => { Destroy(gameObject); };
             }
