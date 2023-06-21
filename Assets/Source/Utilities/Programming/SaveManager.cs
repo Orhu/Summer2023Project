@@ -42,6 +42,16 @@ namespace Cardificer
             }
         }
 
+        // The currently saved player money. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+        public static int savedPlayerMoney
+        {
+            get
+            {
+                if (!autosaveExists) { return 0; }
+                return autosaver.latestAutosave.playerMoney;
+            }
+        }
+
         // The currently saved floor seed. Saving handled by autosaves. Use autosaveExists to check if data Valid.
         public static int savedFloorSeed
         {
@@ -233,6 +243,9 @@ namespace Cardificer
                 // The last health of the player.
                 public int playerHealth;
 
+                // The last amount of money the player had.
+                public int playerMoney;
+
                 // The locations and current card count of visited rooms
                 public List<Vector3Int> visitedRooms = new List<Vector3Int>();
 
@@ -269,6 +282,7 @@ namespace Cardificer
                 // Add new save data Here:
                 saveData.playerPos = Player.Get().transform.position;
                 saveData.playerHealth = Player.health.currentHealth;
+                saveData.playerMoney = Player.GetMoney();
                 saveData.deckState = new Deck.State(Deck.playerDeck);
                 saveData.floorSeed = FloorGenerator.floorGeneratorInstance.seed;
                 Vector2Int loc = FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation;
