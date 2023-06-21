@@ -8,48 +8,40 @@ namespace Cardificer
     /// </summary>
     public class RoomType : ScriptableObject
     {
-        [Tooltip("The name of this room type (for display purposes)")]
-        public string displayName { get; private set; }
-
-        [Tooltip("Whether or not this room type can only spawn as a dead end")]
-        public bool deadEnd { get; private set; }
+        [Tooltip("The name of this room type (for display/dev purposes)")]
+        public string displayName { private set; get; }
 
         [Tooltip("Whether or not this room type will be generated as a start room")]
-        public bool startRoom { get; private set; }
+        public bool startRoom { private set; get; }
 
         [Tooltip("The size multiplier of this room: What size is this room compared to the size of a normal room?")]
-        public Vector2Int sizeMultiplier { get; private set; }
+        public Vector2Int sizeMultiplier { private set; get; }
 
-        [Tooltip("The explicit room size of this room type")]
-        public Vector2Int explicitRoomSize { get; private set; }
+        [Tooltip("Whether or not this room type can only spawn as a dead end")]
+        public bool deadEnd { private set; get; }
 
-        [Tooltip("The attached rooms and where they must be attached")]
-        public List<AttachedRoomToAttachmentLocation> attachedRooms;
-    }
+        [Tooltip("The attached room (leave blank for no attached room). This can only be specified on dead ends, and the attached room must also be a dead end.")]
+        public RoomType attachedRoom { private set; get; }
 
-    /// <summary>
-    /// An enum that tracks attachment locations for attached rooms
-    /// </summary>
-    public enum AttachmentLocation
-    {
-        NA, // Not applicable: The attached room doesn't care where it's attached
-        Opposite, // The attached room must be opposite to a door
-        Adjacent, // The attached room must be on one of the two sides adjacent to a door
-    }
+        [Tooltip("The location where the attached room must be attached")]
+        public AttachmentLocation attachmentLocation { private set; get; }
 
-    /// <summary>
-    /// Holds a RoomType and the attachment location of that room
-    /// </summary>
-    public class AttachedRoomToAttachmentLocation
-    {
-        /// <summary>
-        /// The attached room
-        /// </summary>
-        public RoomType attachedRoom;
+        [Tooltip("Whether or not it should not use a random offset (as opposed to an explicit one)")]
+        public bool useRandomOffset { private set; get; } 
+
+        [Tooltip("The explicit offset to use if use random offset is false")]
+        public Vector2Int offset { private set; get; }
 
         /// <summary>
-        /// The attachment location of the attached room
+        /// An enum that tracks attachment locations for attached rooms
         /// </summary>
-        public AttachmentLocation attachmentLocation;
+        public enum AttachmentLocation
+        {
+            NA, // Not applicable: The attached room doesn't care where it's attached
+            SoftOpposite, // The attached room must be on the opposite side to a door, but not necessarily directly opposite
+            HardOpposite, // The attached room must be directly opposite to a door
+            SoftAdjacent, // The attached room must be on one of the two sides adjacent to a door
+            HardAdjacent, // The attached room must be on one of the two sides adjacent to a door, on the closest wall to the door
+        }
     }
 }

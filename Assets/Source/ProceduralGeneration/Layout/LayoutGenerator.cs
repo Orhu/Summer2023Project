@@ -29,7 +29,7 @@ namespace Cardificer
                     }
                     else
                     {
-                        Debug.LogWarning("Only one start room will be generated! Disregarding this room type: " + roomTypeToLayoutParameters.roomType.name);
+                        Debug.LogWarning("Only one start room will be generated! Disregarding this room type: " + roomTypeToLayoutParameters.roomType.displayName);
                     }
 
                     continue;
@@ -56,10 +56,10 @@ namespace Cardificer
 
             // Create the starting room
             MapCell startCell;
-            List<MapCell> generatableCells = GenerateStartRoom(genMap, mapSize, startRoom, startCell);
+            List<MapCell> initialNeighbors = GenerateStartRoom(genMap, mapSize, startRoom, out startCell);
 
             // Get all the branchable cells (which will start out as all the edge normal cells, then cells will be removed from them as it goes along
-            List<MapCell> branchableCells = GenerateNormalCells(genMap, generatableCells, normalRooms, layoutParameters);
+            List<MapCell> branchableCells = GenerateNormalCells(genMap, initialNeighbors, normalRooms, layoutParameters);
 
             if (!GenerateDeadEnds(genMap, branchableCells))
             {
@@ -101,14 +101,91 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Initializes the starting cell in the center of the map
+        /// Gets a random offset for the room type (where it will fit)
+        /// </summary>
+        /// <param name="genMap"> The currently generated map </param>
+        /// <param name="roomType"> The room type to get the random offset of </param>
+        /// <param name="generatedCell"> The cell that's being generated </param>
+        /// <returns> The random offset and whether or not this room type actually fits in this location </returns>
+        private (Vector2Int, bool) GetRandomRoomOffset(MapCell[,] genMap, RoomType roomType, MapCell generatedCell)
+        {
+            // Get the possible offsets
+            List<Vector2Int> possibleOffsets = new List<Vector2Int>();
+
+            if (!roomType.useRandomOffset)
+            {
+                return (roomType.offset, CheckIfRoomFits(genMap, roomType, generatedCell, roomType.offset));
+            }
+
+            bool checkHorizontalOffset = !(generatedCell.direction.HasFlag(Direction.Left) || generatedCell.direction.HasFlag(Direction.Right));
+            bool checkVerticalOffset = !(generatedCell.direction.HasFlag(Direction.Up) || generatedCell.direction.HasFlag(Direction.Down));
+            for (int i = 0; i < roomType.sizeMultiplier.x && (i == 0 || checkHorizontalOffset); i++)
+            {
+                for (int j = 0; j < roomType.sizeMultiplier.y && (j == 0 || checkVerticalOffset); j++)
+                {
+                    // -i and -j because 0, 0 is bottom left, and we need to move the room down left in order to not lose the room
+                    Vector2Int offset = new Vector2Int(-i, -j);
+                    if (CheckIfRoomFits(genMap, roomType, generatedCell, offset))
+                    {
+                        possibleOffsets.Add(offset);
+                    }
+                }
+            }
+
+            if (possibleOffsets.Count == 0)
+            {
+                return (new Vector2Int(0, 0), false);
+            }
+
+            return (possibleOffsets[FloorGenerator.random.Next(0, possibleOffsets.Count - 1)], true);
+        }
+
+        /// <summary>
+        /// Checks if a room fits in the generated cell with the given offset
+        /// </summary>
+        /// <param name="genMap"> The current generated map </param>
+        /// <param name="roomType"> The room type to check whether it fits </param>
+        /// <param name="generatedCell"> The cell where the room is being generated </param>
+        /// <param name="offset"> The offset of the room (because it can be different sizes) </param>
+        /// <returns> Whether or not the room fits at the location </returns>
+        private bool CheckIfRoomFits(MapCell[,] genMap, RoomType roomType, MapCell generatedCell, Vector2Int offset)
+        {
+            for (int i = 0; i < roomType.sizeMultiplier.x; i++)
+            {
+                for (int j = 0; j < roomType.sizeMultiplier.y; j++)
+                {
+                    if (genMap[i + generatedCell.location.x + offset.x, j + generatedCell.location.y + offset.y].visited)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            if (roomType.attachedRoom != null)
+            {
+                if (!roomType.deadEnd)
+                {
+                    Debug.LogWarning("Rooms that are not dead ends cannot have attached rooms! Attached room on " + roomType.displayName + " will not be generated.");
+                    return true;
+                }
+                else if (roomType.attachmentLocation == RoomType.AttachmentLocation.NA)
+                {
+                    if (GetUnvisitedNeighbors(genMap, ))
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Initializes the starting room in the center of the map
         /// </summary>
         /// <param name="genMap"> The map that is being generated </param>
         /// <param name="mapSize"> The size of the map </param>
         /// <param name="startRoom"> The room type to generate </param>
         /// <param name="startCell"> The out param for the start cell (aka the middle of the map) </param>
-        /// <returns> The start cell </returns>
-        private MapCell GenerateStartCell(MapCell[,] genMap, Vector2Int mapSize, RoomType startRoomType, ref MapCell startCell)
+        /// <returns> The initial neighbors of the starting room </returns>
+        private List<MapCell> GenerateStartRoom(MapCell[,] genMap, Vector2Int mapSize, RoomType startRoomType, out MapCell startCell)
         {
             Vector2Int startPos = new Vector2Int((mapSize.x + 1) / 2, (mapSize.y + 1) / 2);
             startCell = genMap[startPos.x, startPos.y];
@@ -175,13 +252,14 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Gets all the unvisited neighbors of the given cell
+        /// Gets all the unvisited neighbors of the given room
         /// </summary>
         /// <param name="genMap"> The current generated map </param>
+        /// <param name="roomType"> The room type to get the neighbors of </param>
         /// <param name="cell"> The cell to get the neighbors of </param>
-        /// <param name="useDirection"> Whether or not to use the directions that the given cell opens in to get the neighbors </param>
+        /// <param name="useDirection"> Whether or not to use the directions that the given room opens in to get the neighbors </param>
         /// <returns> The unvisited neighbors </returns>
-        private List<MapCell> GetUnvisitedNeighbors(MapCell[,] genMap, MapCell cell, bool useDirection)
+        private List<MapCell> GetUnvisitedNeighbors(MapCell[,] genMap, RoomType roomType, Vector2Int offset, MapCell cell, bool useDirection)
         {
             List<MapCell> neighbors = new List<MapCell>();
 
