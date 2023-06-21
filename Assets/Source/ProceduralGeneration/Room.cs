@@ -21,8 +21,11 @@ namespace Cardificer
         // The type of the room
         [HideInInspector] public RoomType roomType;
 
-        // The location of the room in the map
+        // The bottom left location of the room in the map
         [HideInInspector] public Vector2Int roomLocation;
+
+        // The cells this room takes up
+        [HideInInspector] public List<MapCell> roomMapCells;
 
         // The enemies alive in this room
         public List<GameObject> livingEnemies;

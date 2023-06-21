@@ -100,11 +100,19 @@ namespace Cardificer
             return genMap;
         }
 
+        private Room CreateRoom(RoomType roomType)
+        {
+            Room room = new Room();
+            room.roomType = roomType;
+            room.roomMapCells = new List<MapCell>();
+            return room;
+        }
+
         /// <summary>
         /// Gets a random offset for the room type (where it will fit)
         /// </summary>
         /// <param name="genMap"> The currently generated map </param>
-        /// <param name="roomType"> The room type to get the random offset of </param>
+        /// <param name="room"> The room  to get the random offset of </param>
         /// <param name="generatedCell"> The cell that's being generated </param>
         /// <returns> The random offset and whether or not this room type actually fits in this location </returns>
         private (Vector2Int, bool) GetRandomRoomOffset(MapCell[,] genMap, RoomType roomType, MapCell generatedCell)
@@ -144,11 +152,9 @@ namespace Cardificer
         /// Checks if a room fits in the generated cell with the given offset
         /// </summary>
         /// <param name="genMap"> The current generated map </param>
-        /// <param name="roomType"> The room type to check whether it fits </param>
-        /// <param name="generatedCell"> The cell where the room is being generated </param>
-        /// <param name="offset"> The offset of the room (because it can be different sizes) </param>
+        /// <param name="generatedRoom"> The room being generated </param>
         /// <returns> Whether or not the room fits at the location </returns>
-        private bool CheckIfRoomFits(MapCell[,] genMap, RoomType roomType, MapCell generatedCell, Vector2Int offset)
+        private bool CheckIfRoomFits(MapCell[,] genMap, Room generatedRoom)
         {
             for (int i = 0; i < roomType.sizeMultiplier.x; i++)
             {
