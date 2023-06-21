@@ -193,23 +193,92 @@ namespace Cardificer
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
-        // Stores a reference to the current autosaver
-        private static Autosaver _autosaver;
-        private static Autosaver autosaver
-        {
-            get
-            {
-                if (_autosaver != null) { return _autosaver; }
-                _autosaver = new GameObject("Autosaver").AddComponent<Autosaver>();
-                return _autosaver;
-            }
-        }
 
         /// <summary>
         /// Class for managing storing and loading autosaves.
         /// </summary>
+        /// <example>
+        /// To use save more data during an autosave:
+        /// Add a new field to the AutosaveData class, and retrieve and set any needed data inside the Autosave() function.
+        /// Then create a new property in the following format:
+        /// 
+        /// public static Vector2 savedPlayerPosition
+        /// {
+        ///     get
+        ///     {
+        ///         if (!autosaveExists) { return Vector2.zero; }
+        ///         return autosaver.latestAutosave.playerPos;
+        ///     }
+        /// }
+        /// 
+        /// This property then can be queried anywhere in the project to access to most up to date, saved data.
+        /// 
+        /// NOTE: Everything within the #region Save Management can be safely ignored.
+        /// </example>
         private class Autosaver : MonoBehaviour
         {
+
+            /// <summary>
+            /// All the data stored in a single autosave.
+            /// </summary>
+            [System.Serializable]
+            public class AutosaveData
+            {
+                // The seed of the current floor.
+                public int floorSeed;
+
+                // The last position of the player.
+                public Vector2 playerPos;
+
+                // The last health of the player.
+                public int playerHealth;
+
+                // The locations and current card count of visited rooms
+                public List<Vector3Int> visitedRooms = new List<Vector3Int>();
+
+                // The current state of the deck.
+                public Deck.State deckState;
+
+                /// <summary>
+                /// Default constructor.
+                /// </summary>
+                public AutosaveData() { }
+
+                /// <summary>
+                /// Copy constructor.
+                /// </summary>
+                /// <param name="other"> The instance to copy. </param>
+                public AutosaveData(AutosaveData other)
+                {
+                    floorSeed = other.floorSeed;
+                    playerPos = other.playerPos;
+                    visitedRooms = other.visitedRooms;
+                    deckState = other.deckState;
+                }
+            }
+
+            /// <summary>
+            /// Saves all data needed to reload the game after a room was cleared.
+            /// </summary>
+            private void Autosave()
+            {
+                if (!gameObject.scene.isLoaded || SceneManager.sceneCount > 1) { return; }
+
+                AutosaveData saveData = latestAutosave == null ? new AutosaveData() : latestAutosave;
+
+                // Add new save data Here:
+                saveData.playerPos = Player.Get().transform.position;
+                saveData.playerHealth = Player.health.currentHealth;
+                saveData.deckState = new Deck.State(Deck.playerDeck);
+                saveData.floorSeed = FloorGenerator.floorGeneratorInstance.seed;
+                Vector2Int loc = FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation;
+                saveData.visitedRooms.Add(new Vector3Int(loc.x, loc.y, Deck.playerDeck.cards.Count));
+
+
+                latestAutosave = saveData;
+            }
+
+            #region Save Management
             // Stores references to all the autosaves
             private SaveData<AutosaveData>[] autosaves;
 
@@ -311,47 +380,6 @@ namespace Cardificer
 
 
             /// <summary>
-            /// All the data stored in a single autosave.
-            /// </summary>
-            [System.Serializable]
-            public class AutosaveData
-            {
-                // The seed of the current floor.
-                public int floorSeed;
-
-                // The last position of the player.
-                public Vector2 playerPos;
-
-                // The last health of the player.
-                public int playerHealth;
-
-                // The locations and current card count of visited rooms
-                public List<Vector3Int> visitedRooms = new List<Vector3Int>();
-
-                // The current state of the deck.
-                public Deck.State deckState;
-
-                /// <summary>
-                /// Default constructor.
-                /// </summary>
-                public AutosaveData() { }
-
-                /// <summary>
-                /// Copy constructor.
-                /// </summary>
-                /// <param name="other"> The instance to copy. </param>
-                public AutosaveData(AutosaveData other)
-                {
-                    floorSeed = other.floorSeed;
-                    playerPos = other.playerPos;
-                    visitedRooms = other.visitedRooms;
-                    deckState = other.deckState;
-                }
-            }
-
-
-
-            /// <summary>
             /// Initializes listeners, and the save data structure.
             /// </summary>
             private void Awake()
@@ -384,23 +412,19 @@ namespace Cardificer
                 if (autosaveExists) { return; }
                 Invoke("Autosave", 0.5f);
             }
+            #endregion
+        }
 
-            /// <summary>
-            /// Saves all data needed to reload the game after a room was cleared.
-            /// </summary>
-            private void Autosave()
+        
+        // Stores a reference to the current autosaver
+        private static Autosaver _autosaver;
+        private static Autosaver autosaver
+        {
+            get
             {
-                if (!gameObject.scene.isLoaded || SceneManager.sceneCount > 1) { return; }
-
-                AutosaveData saveData = latestAutosave == null ? new AutosaveData() : latestAutosave;
-                saveData.playerPos = Player.Get().transform.position;
-                saveData.playerHealth = Player.health.currentHealth;
-                saveData.deckState = new Deck.State(Deck.playerDeck);
-                saveData.floorSeed = FloorGenerator.floorGeneratorInstance.seed;
-                Vector2Int loc = FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation;
-                saveData.visitedRooms.Add(new Vector3Int(loc.x, loc.y, Deck.playerDeck.cards.Count));
-
-                latestAutosave = saveData;
+                if (_autosaver != null) { return _autosaver; }
+                _autosaver = new GameObject("Autosaver").AddComponent<Autosaver>();
+                return _autosaver;
             }
         }
         #endregion
