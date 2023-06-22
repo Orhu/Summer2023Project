@@ -62,10 +62,14 @@ namespace Cardificer
         {
             List<Tile> possibleTiles = tileTypesToPossibleTiles.At(preferredTile.tileType);
 
-            if (possibleTiles.Contains(preferredTile.preferredTile))
+            if (preferredTile.preferredTile != null)
             {
                 return preferredTile.preferredTile.ShallowCopy();
             }
+            /*if (possibleTiles.Contains(preferredTile.preferredTile))
+            {
+                return preferredTile.preferredTile.ShallowCopy();
+            }*/
 
             if (possibleTiles.Count != 0)
             {
