@@ -27,10 +27,12 @@ namespace Cardificer
             AlwaysShooting,
             WhenOverlapping
         }
-
-
+        
         // The coroutine responsible for playing actions.
         private Coroutine coroutine;
+
+        // this actor's damage multiplier
+        private float damageMultiplier;
 
 
         /// <summary>
@@ -38,6 +40,9 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
+            // TODO: damage multiplier modifications should be done here when they are implemented
+            damageMultiplier = 1f;
+            
             if (playTime == PlayTime.AlwaysShooting)
             {
                 coroutine = StartCoroutine(PlayAction());
@@ -148,6 +153,15 @@ namespace Cardificer
         public AudioSource GetAudioSource()
         {
             return GetComponent<AudioSource>(); 
+        }
+
+        /// <summary>
+        /// Gets the damage multiplier of this actor.
+        /// </summary>
+        /// <returns> The damage multiplier. </returns>
+        public float GetDamageMultiplier()
+        {
+            return damageMultiplier;
         }
 
         #endregion

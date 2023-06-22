@@ -40,6 +40,9 @@ namespace Cardificer
 
         // The projectile this modifies
         private GameObject causer;
+        
+        // the damage multiplier of this action
+        private float damageMultiplier;
 
 
         // The projectile this modifies
@@ -113,6 +116,12 @@ namespace Cardificer
 
                 if (action is Attack attack)
                 {
+                    // TODO damage multiplier should be done here when implemented
+                    IActor causedBy = causer.GetComponent<IActor>();
+                    if (causedBy != null)
+                    {
+                        attack.attack.damage *= Mathf.RoundToInt(causedBy.GetDamageMultiplier());
+                    }
                     attack.Play(this, causer, ignoredObjects);
                 }
                 else
@@ -179,11 +188,20 @@ namespace Cardificer
         /// <summary>
         /// Get the attached audiosource component. 
         /// </summary>
-        /// <returns></returns>
+        /// <returns> The audiosource. </returns>
         public AudioSource GetAudioSource()
         {
             return sourceTransform.GetComponent<AudioSource>();
-        }        
+        }
+
+        /// <summary>
+        /// Gets the damage multiplier of this actor
+        /// </summary>
+        /// <returns> The damage multiplier. </returns>
+        public float GetDamageMultiplier()
+        {
+            return damageMultiplier;
+        }
 
         #endregion
 

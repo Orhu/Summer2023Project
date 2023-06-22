@@ -6,6 +6,8 @@ namespace Cardificer
     /// <summary>
     /// A movement component that moves towards the move input, and has acceleration and deceleration.
     /// </summary>
+    [RequireComponent(typeof(Health))]
+    [RequireComponent(typeof(SimpleMovement))]
     [RequireComponent(typeof(Rigidbody2D))]
     public class SimpleMovement : Movement
     {

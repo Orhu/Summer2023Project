@@ -17,6 +17,9 @@ namespace Cardificer
 
         // The component responsible for the channeling ability
         private ChannelAbility channelAbility;
+        
+        // damage multiplier of this actor
+        private float damageMultiplier;
 
         /// <summary>
         /// Initialize components.
@@ -34,6 +37,9 @@ namespace Cardificer
         private void Start()
         {
             if (!SaveManager.autosaveExists) { return; }
+
+            // TODO: damage multiplier modifications should be done here when they are implemented
+            damageMultiplier = 1f;
 
             transform.position = SaveManager.savedPlayerPosition;
             // TODO: There is a small probability that the player position is invalid and is not caught by the default save file corruption detection.
@@ -170,11 +176,24 @@ namespace Cardificer
             return ref _canAct;
         }
 
+        /// <summary>
+        /// Returns AudioSource component of this actor
+        /// </summary>
+        /// <returns> The AudioSource. </returns>
         public AudioSource GetAudioSource()
         {
             
                 return GetComponent<AudioSource>(); 
-        }        
+        }
+
+        /// <summary>
+        /// Gets damage multiplier of this actor
+        /// </summary>
+        /// <returns> The damage multiplier. </returns>
+        public float GetDamageMultiplier()
+        {
+            return damageMultiplier;
+        }
 
         #endregion
     }

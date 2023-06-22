@@ -99,6 +99,9 @@ namespace Cardificer.FiniteStateMachine
         // the current waypoint we are pathing to (updated by pathing scriptable objects). only used to draw debug gizmos
         [HideInInspector] public Vector2 currentWaypoint = Vector2.zero;
 
+        // tracks current damage multiplier, retrieved from the enemy stat singleton
+        private float damageMultiplier;
+
         /// <summary>
         /// Initialize variables
         /// </summary>
@@ -151,7 +154,22 @@ namespace Cardificer.FiniteStateMachine
         {
             timeStarted = Time.time;
             FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Add(gameObject);
+            SetStats();
             currentState.OnStateEnter(this);
+        }
+
+        /// <summary>
+        /// Sets base stats of this enemy according to the stats manager
+        /// </summary>
+        void SetStats()
+        {
+            EnemyStatManager stats = EnemyStatManager._instance;
+            
+            GetComponent<Health>().maxHealth *= Mathf.RoundToInt(stats.healthMultiplier);
+            GetComponent<SimpleMovement>().maxSpeed *= stats.moveSpeedMultiplier;
+            // uncomment below line if we want damage on interact damage to scale with enemy stats singleton
+            // feetCollider.GetComponent<DamageOnInteract>().damageData.damage *= Mathf.RoundToInt(stats.damageMultiplier);
+            damageMultiplier *= stats.damageMultiplier;
         }
 
         /// <summary>
@@ -283,6 +301,16 @@ namespace Cardificer.FiniteStateMachine
         {
             return GetComponent<AudioSource>(); 
         }
+
+        /// <summary>
+        /// Gets the damage multiplier of this actor
+        /// </summary>
+        /// <returns> The damage multiplier. </returns>
+        public float GetDamageMultiplier()
+        {
+            return damageMultiplier;
+        }
+
         #endregion
     }
 }
