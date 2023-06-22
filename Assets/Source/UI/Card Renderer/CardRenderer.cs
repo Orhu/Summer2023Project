@@ -31,12 +31,12 @@ namespace Cardificer
                     if (!renderActionSide)
                     {
                         links.cardSprite.sprite = _card.effectImage;
-                        links.backgroundSprite.sprite = _card.effectBackground;
+                        //links.backgroundSprite.sprite = _card.effectBackground;
                     }
                     else
                     {
                         links.cardSprite.sprite = _card.actionImage;
-                        links.backgroundSprite.sprite = _card.actionBackground;
+                        //links.backgroundSprite.sprite = _card.actionBackground;
                     }
                 }
             }
