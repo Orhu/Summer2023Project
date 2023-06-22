@@ -49,6 +49,14 @@ namespace Cardificer
 
             Application.Quit();
         }
+        /// <summary>
+        /// When the pause menu is reenabled, 
+        /// set the main pause menu to be active again
+        /// </summary>
+        private void OnEnable()
+        {
+            mainPauseMenuContainer.SetActive(true);
+        }
 
         /// <summary>
         /// When the pause menu is disabled, set the mainPauseMenu to be the active menu
@@ -57,11 +65,10 @@ namespace Cardificer
         private void OnDisable()
         {
             // close all menus
-            for (int i = 0; i < transform.childCount; i++)
+            for (int i = 0; i < pauseMenuController.transform.childCount; i++)
             {
                 pauseMenuController.transform.GetChild(i).gameObject.SetActive(false);
             }
-            mainPauseMenuContainer.SetActive(true);
         }
     }
 }
