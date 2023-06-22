@@ -80,8 +80,8 @@ namespace Cardificer
                             // Creates a new game object to act as the source of the played action
                             () =>
                             {
-                            // Create runner object since the projectile will be null.
-                            GameObject coroutineRunner = new GameObject(value.name + " Play " + action.name + " Source");
+                                // Create runner object since the projectile will be null.
+                                GameObject coroutineRunner = new GameObject(value.name + " Play " + action.name + " Source");
                                 coroutineRunner.transform.position = sourceTransform.position;
                                 coroutineRunner.transform.rotation = sourceTransform.rotation;
                                 sourceTransform = coroutineRunner.transform;

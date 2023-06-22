@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 682218294}
   - component: {fileID: 682218293}
   - component: {fileID: 682218296}
+  - component: {fileID: 682218297}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -220,6 +221,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc00dde5844cd7a4ba2306a09734e8ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &682218297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 682218292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
 --- !u!1 &1401207067
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,7 +289,7 @@ MonoBehaviour:
   genericTiles: {fileID: 11400000, guid: 618d5c00f3eff444c9f6bb0835db2bcb, type: 2}
   templateName: EnemyTemplateWoah
   nullSprite: {fileID: 21300000, guid: b81f267f3ea133e47b89d1b25e6f06e7, type: 3}
-  _roomSize: {x: 13, y: 9}
+  _roomSize: {x: 17, y: 11}
 --- !u!4 &1401207069
 Transform:
   m_ObjectHideFlags: 0

@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
+  m_Name: OrbitAttack_AsteroidRainMain
+  m_EditorClassIdentifier: 
+  attack:
+    damage: 0
+    damageType: 0
+    statusEffects: []
+    invertInvincibility: 0
+  hitCount: 999
+  applyDamageOnHit: 0
+  modifiers:
+  - {fileID: 11400000, guid: b8fddc4562349084e8199bc27eced318, type: 2}
+  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
+  shape: {fileID: 11400000, guid: 2d518888c7a7ab247a3208585fb1afc0, type: 2}
+  lifetime: 0.01
+  initialSpeed: 0
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 0
+  homingSpeed: 0
+  homingTime: 0
+  homingAimMode: 0
+  visualObject: {fileID: 5678426477218678071, guid: 0af2668acb1ae1447bb5fd6087c3d817, type: 3}
+  detachVisualsBeforeDestroy: 0
+  spawnLocation: 1
+  aimMode: 3
+  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
+  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
+  _spawnSequence:
+  - delay: 0
+    startingAngle: 0
+    radius: 0
+    orbitDirection: 0
+  - delay: 0.4
+    startingAngle: 0
+    radius: 0
+    orbitDirection: 0
+  - delay: 0.4
+    startingAngle: 0
+    radius: 0
+    orbitDirection: 0
+  - delay: 0.4
+    startingAngle: 0
+    radius: 0
+    orbitDirection: 0
+  randomStartingAngle: 0
+  randomRadius: 0
+  attachedToSpawnLocation: 1

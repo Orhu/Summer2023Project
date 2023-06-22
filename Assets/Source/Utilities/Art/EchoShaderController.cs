@@ -38,7 +38,7 @@ namespace Cardificer
         /// </summary>
         public void CallEcho()
         {
-            echoCoroutine = StartCoroutine(EchoAction(-0.1f, 1f));
+            echoCoroutine = StartCoroutine(EchoAction(0f, 1f));
         }
 
         /// <summary>

@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MovementType = Cardificer.RoomInterface.MovementType;
 
-namespace Cardificer
+namespace Cardificer.FiniteStateMachine
 {
     /// <summary>
     /// Represents the state machine that manages and switches between states. Essentially serves as the "brain" and logic of an enemy.
@@ -16,14 +17,17 @@ namespace Cardificer
         // delay after this enemy is spawned before it begins performing logic
         [SerializeField] private float delayBeforeLogic;
 
-        // the target
-        [HideInInspector] public Vector2 currentTarget;
+        // the pathfinding target
+        [HideInInspector] public Vector2 currentPathfindingTarget;
 
-        // the player
-        [HideInInspector] public GameObject player;
+        // the attack target
+        [HideInInspector] public Vector2 currentAttackTarget;
 
         // cached feet collider
-        [HideInInspector] public Collider2D feetCollider;
+        [HideInInspector] private Collider2D feetCollider;
+        
+        // tracks position of feet collider 
+        [HideInInspector] public Vector2 feetColliderPosition;
 
         // the current state this machine is in
         [HideInInspector] public BaseState currentState;
@@ -34,7 +38,10 @@ namespace Cardificer
         // tracks whether we are currently exhausted
         [HideInInspector] public bool exhausted;
 
-        // struct used to store path data with this state machine instance, so we can remember pathfinding data on scriptableobjects where we cannot store them in-object
+        /// <summary>
+        /// Struct used to store path data with this state machine instance,
+        /// so we can remember pathfinding data on our ScriptableObjects where we cannot store them in-object
+        /// </summary>
         public struct PathData
         {
             // path to target 
@@ -57,8 +64,9 @@ namespace Cardificer
         public struct CooldownData
         {
             // is action cooldown available?
-            public Dictionary<FSMAction, bool> cooldownReady;
+            public Dictionary<BaseAction, bool> cooldownReady;
         }
+
         // stores our current attack data
         [HideInInspector] public CooldownData cooldownData;
 
@@ -68,10 +76,28 @@ namespace Cardificer
         // tracks the time this was initialized
         private float timeStarted;
 
-        // draw debug gizmos?
+        [Tooltip("Movement type this enemy begins in")]
+        [SerializeField] private MovementType startingMovementType;
+
+        // current movement type of this enemy
+        [HideInInspector] public MovementType currentMovementType;
+
+        /// <summary>
+        /// Chase Data struct used to store chase data as it is passed to the pathfinding singleton from pathing scriptable objects.
+        /// Never need to actually cache the data in the state machine, just declaring the struct here so it is only declared once.
+        /// </summary>
+        public struct ChaseData
+        {
+            private BaseStateMachine stateMachine;
+            private Coroutine prevUpdateCoroutine;
+            private Coroutine prevFollowCoroutine;
+        }
+
+        [Tooltip("Draw debug gizmos? Pathfinding target is magenta, attack target is yellow, current waypoint is cyan")]
         [SerializeField] private bool drawGizmos;
-        // debug waypoint used for drawing gizmos
-        [HideInInspector] public Vector2 debugWaypoint;
+        
+        // the current waypoint we are pathing to (updated by pathing scriptable objects). only used to draw debug gizmos
+        [HideInInspector] public Vector2 currentWaypoint = Vector2.zero;
 
         /// <summary>
         /// Initialize variables
@@ -79,37 +105,51 @@ namespace Cardificer
         private void Awake()
         {
             currentState = initialState;
-            cooldownData.cooldownReady = new Dictionary<FSMAction, bool>();
+            cooldownData.cooldownReady = new Dictionary<BaseAction, bool>();
             cachedComponents = new Dictionary<Type, Component>();
-            feetCollider = FindMyFeet();
+            currentMovementType = startingMovementType;
+            feetCollider = GetMyFeet();
         }
 
         /// <summary>
-        /// Grab both colliders and return the feet collider
+        /// Grabs colliders from this enemy and sifts through them to find the feet collider
         /// </summary>
-        Collider2D FindMyFeet()
+        /// <returns> The feet collider. </returns>
+        private Collider2D GetMyFeet()
         {
-            var collider = GetComponentInChildren<Collider2D>();
-
-            if (collider != null)
+            if (feetCollider != null)
             {
-                return collider;
+                return feetCollider;
             }
-            else
+
+            Collider2D enemyFeetCollider = null;
+            var enemyColliders = GetComponentsInChildren<Collider2D>();
+            foreach (var enemyCollider in enemyColliders)
             {
-                Debug.LogError(
-                    "No feet collider found! Make sure you have a non-trigger collider attached to this game object.");
+                if (!enemyCollider.isTrigger)
+                {
+                    enemyFeetCollider = enemyCollider;
+                    break;
+                }
+            }
+
+            if (enemyFeetCollider != null)
+            {
+                feetCollider = enemyFeetCollider;
+                return feetCollider;
+            } else {
+                Debug.LogError("No feet collider found! Make sure you have a non-trigger collider attached to the enemy.");
                 return null;
-            }
+            } 
         }
-
+        
+        
         /// <summary>
         /// Grab the player gameobject and sets it to the default target
         /// </summary>
         private void Start()
         {
             timeStarted = Time.time;
-            player = Player.Get();
             FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Add(gameObject);
             currentState.OnStateEnter(this);
         }
@@ -119,6 +159,11 @@ namespace Cardificer
         /// </summary>
         private void Update()
         {
+            Vector2 offset = feetCollider.offset;
+            Vector2 position = feetCollider.transform.position;
+            feetColliderPosition = new Vector2(position.x + offset.x, 
+                position.y + offset.y);
+            
             if (Time.time - timeStarted <= delayBeforeLogic) return;
 
             if (exhausted)
@@ -126,6 +171,7 @@ namespace Cardificer
                 GetComponent<Movement>().movementInput = Vector2.zero;
                 return;
             }
+
             currentState.OnStateUpdate(this);
         }
 
@@ -153,7 +199,11 @@ namespace Cardificer
         /// </summary>
         private void OnDestroy()
         {
-            if (!gameObject.scene.isLoaded) { return; }
+            if (!gameObject.scene.isLoaded)
+            {
+                return;
+            }
+
             FloorGenerator.floorGeneratorInstance.currentRoom.RemoveEnemy(gameObject);
         }
 
@@ -163,14 +213,20 @@ namespace Cardificer
         private void OnDrawGizmos()
         {
             if (!drawGizmos) return;
-            Gizmos.color = Color.blue;
-            Gizmos.DrawCube(debugWaypoint, Vector3.one);
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawCube(currentPathfindingTarget, Vector3.one);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawCube(currentAttackTarget, Vector3.one);
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawCube(currentWaypoint, Vector3.one);
         }
 
         #region IActor Implementation
+
         // Gets whether or not this actor can act.
         IActor.CanActRequest _canAct;
-        bool canAct
+
+        public bool canAct
         {
             get
             {
@@ -196,7 +252,7 @@ namespace Cardificer
         /// <returns> The mouse position in world space. </returns>
         public Vector3 GetActionAimPosition()
         {
-            return currentTarget;
+            return currentAttackTarget;
         }
 
 
@@ -218,7 +274,7 @@ namespace Cardificer
         {
             return ref _canAct;
         }
-
+        
         /// <summary>
         /// Get the audio source component from the object. 
         /// </summary>
@@ -227,7 +283,6 @@ namespace Cardificer
         {
             return GetComponent<AudioSource>(); 
         }
-
         #endregion
     }
 }

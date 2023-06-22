@@ -54,16 +54,20 @@ namespace Cardificer
 
         [Header("Homing")]
 
-        [Tooltip("The speed in degrees/s that projectiles will rotate towards the closest enemy")]
-        [Min(0)]
+        [Tooltip("The speed in tile/s^2 that projectiles will accelerate towards the closest enemy")] [Min(0)]
         public float homingSpeed = 0;
 
-        [Tooltip("The duration that this will home for.")]
-        [Min(0)]
+        [Tooltip("The duration that this will home for.")] [Min(0)]
         public float homingTime = 0;
+
+        [Tooltip("The time to wait before homing begins, in seconds")] [Min(0)]
+        public float homingDelay = 0;
 
         [Tooltip("What the homing will rotate the projectile towards")]
         public AimMode homingAimMode;
+
+        [Tooltip("Whether or not homing target should be reset after each hit.")]
+        public bool switchAfterHit = false;
 
 
 
@@ -246,7 +250,9 @@ namespace Cardificer
     public enum AimMode
     {
         AtMouse,
-        AtClosestEnemy,
+        AtClosestEnemyToProjectile,
+        AtClosestEnemyToAimLocation,
+        AtClosestEnemyToActor,
         AtRandomEnemy,
         Right,
     }

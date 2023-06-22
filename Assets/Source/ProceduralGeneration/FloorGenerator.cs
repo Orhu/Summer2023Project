@@ -28,8 +28,8 @@ namespace Cardificer
         [Tooltip("Whether or not to randomize the seed on start")]
         public bool randomizeSeed;
 
-        [Tooltip("Event called when the room is changed")]
-        public UnityEvent onRoomChange;
+        // Event called when the room is changed
+        [HideInInspector] public UnityEvent onRoomChange;
 
         // The random instance
         [HideInInspector] static public System.Random random;
@@ -94,7 +94,7 @@ namespace Cardificer
             if (!SaveManager.autosaveExists) 
             {
                 Room startRoom = map.startCell.room.GetComponent<Room>();
-                startRoom.Enter(Direction.None);
+                startRoom.Enter(Direction.None, callCleared: false);
                 return; 
             }
 
@@ -103,16 +103,35 @@ namespace Cardificer
             int nextCardIndex = vistedRooms[0].z;
             foreach (Vector3Int vistedRoom in vistedRooms)
             {
+                if (vistedRoom.x >= map.mapSize.x || vistedRoom.y >= map.mapSize.y || map.map[vistedRoom.x, vistedRoom.y].room == null)
+                {
+                    SaveManager.AutosaveCorrupted("Invalid room index");
+                    return;
+                }
+
                 lastRoom.Exit();
                 lastRoom = map.map[vistedRoom.x, vistedRoom.y].room.GetComponent<Room>();
                 lastRoom.Generate(false);
+
+                if (nextCardIndex > vistedRoom.z)
+                {
+                    SaveManager.AutosaveCorrupted("Card index too small");
+                    return;
+                }
+
                 while (nextCardIndex < vistedRoom.z)
                 {
+                    if (nextCardIndex >= Deck.playerDeck.cards.Count || nextCardIndex < 0)
+                    {
+                        SaveManager.AutosaveCorrupted("Card index out of bounds");
+                        return;
+                    }
+
                     OnCardAdded(Deck.playerDeck.cards[nextCardIndex]);
                     nextCardIndex++;
                 }
             }
-            lastRoom.Enter();
+            lastRoom.Enter(callCleared: false);
         }
 
         /// <summary>
@@ -123,11 +142,10 @@ namespace Cardificer
             int max = SaveManager.autosaveExists ? SaveManager.savedVisitedRooms[0].z : Deck.playerDeck.cards.Count;
             for (int i = 0; i < max; i++)
             {
+                if (i >= Deck.playerDeck.cards.Count) { continue; }
+
                 Card card = Deck.playerDeck.cards[i];
-                if (card.effects == null)
-                {
-                    return;
-                }
+                if (card == null || card.effects == null) { continue; }
 
                 foreach (DungeonEffect effect in card.effects)
                 {
@@ -164,6 +182,7 @@ namespace Cardificer
             int max = SaveManager.autosaveExists ? SaveManager.savedVisitedRooms[0].z : Deck.playerDeck.cards.Count;
             for (int i = 0; i < max; i++)
             {
+                if (i >= Deck.playerDeck.cards.Count) { continue; }
                 OnCardAdded(Deck.playerDeck.cards[i]);
             }
         }

@@ -1,4 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using MovementType = Cardificer.RoomInterface.MovementType;
 
 namespace Cardificer
 {
@@ -9,11 +12,17 @@ namespace Cardificer
     [CreateAssetMenu(fileName = "NewTile", menuName = "Generation/Tile", order = 1)]
     public class Tile : ScriptableObject
     {
-        [Tooltip("is this tile walkable?")]
-        [SerializeField] public bool walkable = true;
+        [Tooltip("Movement types this tile supports")]
+        [SerializeField] public MovementType allowedMovementTypes;
 
         [Tooltip("How much this tile costs to walk on (higher is avoided more, lower is preferred)")]
-        [SerializeField] public int movementPenalty;
+        [SerializeField] public int walkMovementPenalty;
+
+        [Tooltip("How much this tile costs to fly over (higher is avoided more, lower is preferred)")]
+        public int flyMovementPenalty;
+
+        [Tooltip("How much this tile costs to burrow below (higher is avoided more, lower is preferred)")]
+        public int burrowMovementPenalty;
 
         // the x and y location of this tile within the 2D array grid
         [HideInInspector] public Vector2Int gridLocation;
@@ -31,7 +40,10 @@ namespace Cardificer
         public Tile ShallowCopy()
         {
             Tile copiedTile = ScriptableObject.CreateInstance<Tile>();
-            copiedTile.walkable = walkable;
+            copiedTile.allowedMovementTypes = allowedMovementTypes;
+            copiedTile.walkMovementPenalty = walkMovementPenalty;
+            copiedTile.flyMovementPenalty = flyMovementPenalty;
+            copiedTile.burrowMovementPenalty = burrowMovementPenalty;
             copiedTile.gridLocation = gridLocation;
             copiedTile.type = type;
             copiedTile.spawnedObject = spawnedObject;

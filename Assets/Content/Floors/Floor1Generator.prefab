@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6816320395962278883
 Transform:
   m_ObjectHideFlags: 0
@@ -49,7 +49,7 @@ MonoBehaviour:
   layoutGenerationParameters:
     numNormalRooms: 20
     numNormalRoomsVariance: 3
-    numSpecialRooms: 0
+    numSpecialRooms: 4
     preferredNumDoors: 2
     strictnessNumDoors: 12
   templateGenerationParameters:
@@ -165,7 +165,8 @@ MonoBehaviour:
           difficultiesToTemplates:
           - difficulty: 0
             templates:
-            - {fileID: 11400000, guid: e16e93c53b43d3547afad1d675e8e199, type: 2}
+            - {fileID: 11400000, guid: 3e0b8d5b90ee7bf408dfed9fe210481d, type: 2}
+            - {fileID: 11400000, guid: 45c3765f46d4ee147a5d49bb6b094878, type: 2}
       - roomType: 4
         difficultiesToTemplates:
           difficultiesToTemplates:
@@ -182,7 +183,7 @@ MonoBehaviour:
     tileTypesToPossibleTiles:
       tileTypesToPossibleTiles: []
     genericTiles: {fileID: 11400000, guid: 618d5c00f3eff444c9f6bb0835db2bcb, type: 2}
-  roomSize: {x: 13, y: 9}
+  roomSize: {x: 17, y: 11}
   roomTypesToExteriorGenerationParameters:
     roomTypesToRoomExteriorGenerationParameters:
     - roomType: 1
