@@ -802,6 +802,7 @@ GameObject:
   - component: {fileID: 752266632}
   - component: {fileID: 752266631}
   - component: {fileID: 752266633}
+  - component: {fileID: 752266634}
   m_Layer: 5
   m_Name: Quip
   m_TagString: Untagged
@@ -849,7 +850,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Now In Color!
+  m_text: Let me give you my card!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -947,6 +948,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &752266634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752266629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e177c6fdde1bd8c42834fd3c46ff8865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  quipText: {fileID: 752266631}
+  textFileOfQuips: {fileID: 4900000, guid: fd0b04e39fc97ae4e84c0c7b8b825f99, type: 3}
 --- !u!1 &773925623
 GameObject:
   m_ObjectHideFlags: 0
