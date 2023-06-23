@@ -7,7 +7,6 @@ namespace Cardificer
     /// <summary>
     /// A component for rendering cards in UI space.
     /// </summary>
-    [ExecuteInEditMode]
     public class CardRenderer : MonoBehaviour
     {
         [Tooltip("The card to render.")]
@@ -23,10 +22,28 @@ namespace Cardificer
                 links.descriptionTextBox.enabled = shouldEnable;
                 links.backgroundSprite.enabled = shouldEnable;
                 links.cardSprite.enabled = shouldEnable;
+                links.projectileTypeImage.enabled = shouldEnable;
                 if (shouldEnable)
                 {
+                    // Name of the card
                     links.nameTextBox.text = _card.displayName;
-                    links.descriptionTextBox.text = _card.GetDescription(renderActionSide);
+
+                    // Description of the card
+                    //links.descriptionTextBox.text = _card.GetDescription(renderActionSide);
+
+                    // Rarity of the card
+                    //links.rarityImageObject.SetActive(_card.rare);
+
+                    //links.projectileTypeImage = _card.projectileType;
+
+                    // Cooldown of the card
+                    links.coolDownOverlayText.text = _card.cooldownTime.ToString();
+
+                    // For managing damage container colors
+                    for (int i = 0; i < 3; i++)
+                    {
+                        //links.damageContainer;
+                    }
 
                     if (!renderActionSide)
                     {
@@ -41,35 +58,6 @@ namespace Cardificer
                 }
             }
             get { return _card; }
-        }
-
-        // Whether or not the preview overlay should be enabled.
-        public bool previewing
-        {
-            set { links.previewOverlay.enabled = value; }
-            get { return links.previewOverlay.enabled; }
-        }
-
-        // The cooldown time to display. If <= 0 no cooldown overlay will be rendered.
-        public float cooldownTime
-        {
-            set
-            {
-                links.cooldownOverlay.enabled = value > 0;
-                links.cooldownTimeTextBox.text = (Mathf.Round(value * 10f) / 10f).ToString();
-                links.cooldownTimeTextBox.enabled = value > 0;
-            }
-        }
-
-        // The cooldown time to display.If <= 0 no cooldown overlay will be rendered.
-        public float actionTime
-        {
-            set
-            {
-                links.actionTimeOverlay.enabled = value > 0;
-                links.actionTimeTextBox.text = (Mathf.Round(value * 10f) / 10f).ToString();
-                links.actionTimeTextBox.enabled = value > 0;
-            }
         }
 
         [Tooltip("The links to the necessary components for rendering.")]
@@ -115,26 +103,23 @@ namespace Cardificer
             [Tooltip("The text boxed used to display the description of the card.")]
             public TMP_Text descriptionTextBox;
 
-            [Tooltip("The text boxed used to display the current remaining cooldown of the card.")]
-            public TMP_Text cooldownTimeTextBox;
-
-            [Tooltip("The text boxed used to display the current remaining action time of the card.")]
-            public TMP_Text actionTimeTextBox;
-
             [Tooltip("The image used to render the background of the card.")]
             public Image backgroundSprite;
 
             [Tooltip("The image used to render the card specific sprite.")]
             public Image cardSprite;
 
-            [Tooltip("The overlay to enable when previewing this card.")]
-            public Image previewOverlay;
+            [Tooltip("The text displaying the card's cooldown.")]
+            public TMP_Text coolDownOverlayText;
 
-            [Tooltip("The overlay to enable when this card is on cooldown.")]
-            public Image cooldownOverlay;
+            [Tooltip("The gameobject that handles how many damage icons to spawn")]
+            public GameObject damageContainer;
 
-            [Tooltip("The overlay to enable when this card is on acting.")]
-            public Image actionTimeOverlay;
+            [Tooltip("The image associated with the projectile type.")]
+            public Image projectileTypeImage;
+
+            [Tooltip("GameObject associated with rarity image, set active if the card is rare")]
+            public GameObject rarityImageObject;
         }
     }
 }
