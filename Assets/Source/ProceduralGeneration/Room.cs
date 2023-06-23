@@ -9,32 +9,13 @@ namespace Cardificer
     /// </summary>
     public class Room : MonoBehaviour
     {
-        // The template used to generate this room
-        [HideInInspector] public Template template;
-
-        // The grid of tiles
-        [HideInInspector] public Tile[,] roomGrid;
-
-        // The size of the room
-        [HideInInspector] public Vector2Int roomSize;
-
-        // The type of the room
-        [HideInInspector] public RoomType roomType;
-
-        // The bottom left location of the room in the map
-        [HideInInspector] public Vector2Int roomLocation;
-
-        // The cells this room takes up
-        [HideInInspector] public List<MapCell> roomMapCells;
+        #region RUNTIME_FUNCTIONALITY
 
         // The enemies alive in this room
-        public List<GameObject> livingEnemies;
+        [HideInInspector] public List<GameObject> livingEnemies;
 
         // The doors of this room
         [HideInInspector] public List<Door> doors = new List<Door>();
-
-        // Whether this room has been generated or not
-        private bool generated = false;
 
         // Called when all enemies in this room are killed.
         public System.Action onCleared;
@@ -205,8 +186,35 @@ namespace Cardificer
             }
         }
 
+        #endregion
+
+        #region GENERATION
+
+        // The template used to generate this room
+        [HideInInspector] public Template template;
+
+        // The grid of tiles
+        [HideInInspector] public Tile[,] roomGrid;
+
+        // The size of a cell
+        // TODO: Write property things
+        [HideInInspector] public Vector2Int cellSize { set; get; }
+
+        // The size of the room
+        [HideInInspector] public Vector2Int roomSize { private set; get; }
+
+        // The type of the room
+        [HideInInspector] public RoomType roomType;
+
+        // The bottom left location of the room in the map
+        // TODO: write property things
+        [HideInInspector] public Vector2Int roomLocation { set; get; }
+
+        // Whether this room has been generated or not
+        private bool generated = false;
+
         /// <summary>
-        /// Generates the layout of the room
+        /// Generates the template of the room
         /// </summary>
         /// <param name="spawnEnemies"> Whether or not to spawn enemies </param>
         public void Generate(bool spawnEnemies = true)
@@ -218,6 +226,8 @@ namespace Cardificer
                 generated = true;
             }
         }
+
+        #endregion
     }
 
     /// <summary>

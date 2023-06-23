@@ -24,9 +24,6 @@ namespace Cardificer
         // The directions that this cell has
         public Direction direction = Direction.None;
 
-        // The type of room this is
-        public RoomType type = RoomType.None;
-
         // Whether this cell has been visited
         public bool visited = false;
 
@@ -60,8 +57,8 @@ namespace Cardificer
         // The 2D array of map cells
         public MapCell[,] map;
 
-        // The start cell (or midpoint)
-        public MapCell startCell;
+        // The start room (or midpoint)
+        public Room startRoom;
 
         // The size of the map
         public Vector2Int mapSize;

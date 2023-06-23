@@ -35,13 +35,15 @@ namespace Cardificer
         /// <summary>
         /// An enum that tracks attachment locations for attached rooms
         /// </summary>
+        [System.Serializable]
         public enum AttachmentLocation
         {
             NA, // Not applicable: The attached room doesn't care where it's attached
             SoftOpposite, // The attached room must be on the opposite side to a door, but not necessarily directly opposite
             HardOpposite, // The attached room must be directly opposite to a door
-            SoftAdjacent, // The attached room must be on one of the two sides adjacent to a door
-            HardAdjacent, // The attached room must be on one of the two sides adjacent to a door, on the closest wall to the door
+            SoftAdjacent, // The attached room must be on the same side as a door, but not necessarily on one of the two walls closest to the door
+            HardAdjacent, // The attached room must be on the same side as a door, on one of the two walls closest to the door
+            Perpendicular, // The attached room must be on one of the two sides rotated ninety degrees from the side the door is on
         }
     }
 }

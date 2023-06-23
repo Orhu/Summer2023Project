@@ -16,8 +16,8 @@ namespace Cardificer
         [Tooltip("The template generation parameters for this floor")]
         public TemplateGenerationParameters templateGenerationParameters;
 
-        [Tooltip("The size of a room on this floor")]
-        public Vector2Int roomSize;
+        [Tooltip("The size of a map cell on this floor")]
+        public Vector2Int cellSize;
 
         [Tooltip("A dictionary that holds room types and their associated exterior generation parameters for this floor")]
         public RoomTypesToRoomExteriorGenerationParameters roomTypesToExteriorGenerationParameters;
@@ -88,7 +88,7 @@ namespace Cardificer
             Deck.playerDeck.onCardAdded += OnCardAdded;
             Deck.playerDeck.onCardRemoved += OnCardRemoved;
             map = GetComponent<LayoutGenerator>().Generate(layoutGenerationParameters);
-            GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, roomSize);
+            GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, cellSize);
 
             // Autosave loading
             if (!SaveManager.autosaveExists) 
