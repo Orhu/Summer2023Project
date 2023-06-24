@@ -79,6 +79,9 @@ namespace Cardificer
         [Tooltip("Whether or not the visuals should be detached before the object is destroyed so that they can handle their own lifetime.")]
         public bool detachVisualsBeforeDestroy = false;
 
+        [Tooltip("Time to wait before destroying detatched visuals.")]
+        public float detatchedVisualsTimeBeforeDestroy = 0f;
+
 
 
         [Header("Spawning")]
