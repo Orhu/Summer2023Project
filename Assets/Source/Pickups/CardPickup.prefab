@@ -8,7 +8,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3198992215373019114}
+  - component: {fileID: 5517316067979047568}
   - component: {fileID: 7242342788432277796}
   - component: {fileID: -6324635261274391433}
   m_Layer: 21
@@ -18,8 +18,8 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &3198992215373019114
-RectTransform:
+--- !u!4 &5517316067979047568
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -35,11 +35,6 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 610, y: 343}
-  m_SizeDelta: {x: 1220, y: 686}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!61 &7242342788432277796
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -110,7 +105,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8921037507876515799}
-  m_Father: {fileID: 3198992215373019114}
+  m_Father: {fileID: 5517316067979047568}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1156475824543714489
@@ -209,8 +204,8 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -896331863
+  m_SortingOrder: 100
   m_TargetDisplay: 0
 --- !u!114 &6331051685755953164
 MonoBehaviour:
@@ -281,7 +276,7 @@ Transform:
   m_LocalScale: {x: 0.43, y: 0.43, z: 0.43}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 3198992215373019114}
+  m_Father: {fileID: 5517316067979047568}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6765301237771128574
@@ -443,11 +438,16 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2561585403999973543, guid: 9b8a61d99e10acb459a147a60b83c610, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6389152267621796008, guid: 9b8a61d99e10acb459a147a60b83c610, type: 3}
       propertyPath: m_Name
       value: CardRendererBooster
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 745902946420790642, guid: 9b8a61d99e10acb459a147a60b83c610, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9b8a61d99e10acb459a147a60b83c610, type: 3}
 --- !u!224 &5914168258152287020 stripped
 RectTransform:
