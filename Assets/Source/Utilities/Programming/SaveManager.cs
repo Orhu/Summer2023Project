@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -69,6 +70,16 @@ namespace Cardificer
             {
                 if (!autosaveExists) { return Vector2.zero; }
                 return autosaver.latestAutosave.playerPos;
+            }
+        }
+
+        // The saved list of destroyed tile world positions
+        public static List<Vector2> savedDestroyedTiles
+        {
+            get
+            {
+                if (!autosaveExists) { return new List<Vector2>(); }
+                return autosaver.latestAutosave.destroyedTiles;
             }
         }
 
@@ -238,6 +249,9 @@ namespace Cardificer
 
                 // The current state of the deck.
                 public Deck.State deckState;
+                
+                // The current destroyed tiles world positions
+                public List<Vector2> destroyedTiles;
 
                 /// <summary>
                 /// Default constructor.
@@ -254,6 +268,7 @@ namespace Cardificer
                     playerPos = other.playerPos;
                     visitedRooms = other.visitedRooms;
                     deckState = other.deckState;
+                    destroyedTiles = other.destroyedTiles;
                 }
             }
 
@@ -271,6 +286,7 @@ namespace Cardificer
                 saveData.playerHealth = Player.health.currentHealth;
                 saveData.deckState = new Deck.State(Deck.playerDeck);
                 saveData.floorSeed = FloorGenerator.floorGeneratorInstance.seed;
+                saveData.destroyedTiles = TileMoveableOnDestroy.destroyedTiles != null ? TileMoveableOnDestroy.destroyedTiles.ToList() : savedDestroyedTiles;
                 Vector2Int loc = FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation;
                 saveData.visitedRooms.Add(new Vector3Int(loc.x, loc.y, Deck.playerDeck.cards.Count));
 
