@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
   m_Name: OrbitAttack_Slash
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 0}
+  actionAudioClip: {fileID: 8300000, guid: b817808265bdb2e44a7bae6dfe84708e, type: 3}
   attack:
     damage: 4
     damageType: 1
@@ -24,18 +24,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
   - {fileID: 11400000, guid: b0643d27bb01b9b428a5c01729fdea4d, type: 2}
   shape: {fileID: 11400000, guid: 974e8cc2eb24bdd4d98a1033c08aba7c, type: 2}
-  lifetime: 0.16666667
-  initialSpeed: 9.424778
+  lifetime: 0.1111111
+  initialSpeed: 28.27434
   acceleration: 0
   minSpeed: 0
-  maxSpeed: 9.424778
+  maxSpeed: 28.27434
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
   homingAimMode: 1
   switchAfterHit: 0
   visualObject: {fileID: 293521835147723709, guid: 32c525403adfffb4e98835cb379cac84, type: 3}
-  detachVisualsBeforeDestroy: 0
+  detachVisualsBeforeDestroy: 1
+  detatchedVisualsTimeBeforeDestroy: 0.25
   spawnLocation: 0
   aimMode: 0
   travelAudioClip: {fileID: 0}
