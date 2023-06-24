@@ -197,8 +197,15 @@ namespace Cardificer
         [HideInInspector] public Tile[,] roomGrid;
 
         // The size of a cell
-        // TODO: Write property things
-        [HideInInspector] public Vector2Int cellSize { set; get; }
+        private Vector2Int _cellSize;
+        [HideInInspector] public Vector2Int cellSize 
+        { 
+            set
+            {
+                roomSize = cellSize * roomType.sizeMultiplier;
+            }
+            get { return _cellSize; }
+        }
 
         // The size of the room
         [HideInInspector] public Vector2Int roomSize { private set; get; }
@@ -207,9 +214,16 @@ namespace Cardificer
         [HideInInspector] public RoomType roomType;
 
         // The bottom left location of the room in the map
-        // TODO: write property things
-        newRoom.transform.position = FloorGenerator.TransformMapToWorld(createdCell.location, map.startCell.location, roomSize);
-        [HideInInspector] public Vector2Int roomLocation { set; get; }
+        private Vector2Int _roomLocation;
+        [HideInInspector] public Vector2Int roomLocation 
+        { 
+            set
+            {
+                _roomLocation = value;
+                transform.position = FloorGenerator.TransformMapToWorld(value, FloorGenerator.floorGeneratorInstance.map.startRoom.roomLocation, cellSize);
+            }
+            get { return _roomLocation; } 
+        }
 
         // Whether this room has been generated or not
         private bool generated = false;
