@@ -27,7 +27,7 @@ namespace Cardificer
         /// </summary>
         void Start()
         {
-            Vector2 roomScale = FloorGenerator.floorGeneratorInstance.roomSize;
+            Vector2 roomScale = FloorGenerator.floorGeneratorInstance.cellSize;
 
             if (roomScale.y > roomScale.x * (1 / GetComponent<Camera>().aspect))
             {
@@ -56,7 +56,7 @@ namespace Cardificer
                 return;
             }
 
-            if (floorGenerator.currentRoom.roomType == RoomType.Boss)
+            /*if (floorGenerator.currentRoom.roomType == RoomType.Boss)
             {
                 Vector3 playerPos = player.transform.position;
                 newPosition = new Vector3();
@@ -92,12 +92,12 @@ namespace Cardificer
                 }
 
                 newPosition.z = -1;
-            }
-            else
-            {
-                Vector2 pos2D = FloorGenerator.TransformMapToWorld(floorGenerator.currentRoom.roomLocation, floorGenerator.map.startCell.location, floorGenerator.roomSize);
+            }*/
+            //else
+            //{
+                Vector2 pos2D = FloorGenerator.TransformMapToWorld(floorGenerator.currentRoom.roomLocation, floorGenerator.map.startRoom.roomLocation, floorGenerator.cellSize);
                 newPosition = new Vector3(pos2D.x, pos2D.y, -1);
-            }
+            //}
 
             transform.position = Vector3.Lerp(transform.position, newPosition, Time.fixedDeltaTime * speed);
         }
