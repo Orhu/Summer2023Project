@@ -115,8 +115,7 @@ namespace Cardificer
         {
             DifficultiesToTemplates difficultiesToTemplates = templatesPool.At(roomType);
 
-            // Normal is the only type of room that difficulty matters for
-            if (roomType == RoomType.Normal)
+            if (roomType.useDifficulty)
             {
                 if (hardRoomPercentage / 100 > FloorGenerator.random.NextDouble())
                 {

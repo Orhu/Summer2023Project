@@ -32,6 +32,9 @@ namespace Cardificer
         [Tooltip("The explicit offset to use if use random offset is false")]
         public Vector2Int offset { private set; get; }
 
+        [Tooltip("Whether or not this room type uses the difficulty meter")]
+        public bool useDifficulty { private set; get; }
+
         /// <summary>
         /// An enum that tracks attachment locations for attached rooms
         /// </summary>
