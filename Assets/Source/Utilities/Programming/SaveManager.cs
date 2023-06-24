@@ -53,7 +53,7 @@ namespace Cardificer
         }
 
         // The currently saved visited room data. X,Y = room location, Z = size of deck at the time of clearing. Saving handled by autosaves. Use autosaveExists to check if data Valid.
-        public static List<Vector3Int> savedVisitedRooms
+        public static List<Vector2Int> savedVisitedRooms
         {
             get
             {
@@ -234,7 +234,7 @@ namespace Cardificer
                 public int playerHealth;
 
                 // The locations and current card count of visited rooms
-                public List<Vector3Int> visitedRooms = new List<Vector3Int>();
+                public List<Vector2Int> visitedRooms = new List<Vector2Int>();
 
                 // The current state of the deck.
                 public Deck.State deckState;
@@ -271,8 +271,7 @@ namespace Cardificer
                 saveData.playerHealth = Player.health.currentHealth;
                 saveData.deckState = new Deck.State(Deck.playerDeck);
                 saveData.floorSeed = FloorGenerator.floorGeneratorInstance.seed;
-                Vector2Int loc = FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation;
-                saveData.visitedRooms.Add(new Vector3Int(loc.x, loc.y, Deck.playerDeck.cards.Count));
+                saveData.visitedRooms.Add(FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation);
 
 
                 latestAutosave = saveData;

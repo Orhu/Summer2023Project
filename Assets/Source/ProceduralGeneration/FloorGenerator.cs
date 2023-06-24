@@ -83,153 +83,35 @@ namespace Cardificer
 
             random = new System.Random(seed);
 
-            GetSpecialRoomsFromDeck();
-            GetTilesFromDeck();
-            Deck.playerDeck.onCardAdded += OnCardAdded;
-            Deck.playerDeck.onCardRemoved += OnCardRemoved;
             map = GetComponent<LayoutGenerator>().Generate(layoutGenerationParameters);
             GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, cellSize);
 
             // Autosave loading
             if (!SaveManager.autosaveExists) 
             {
-                Room startRoom = map.startCell.room.GetComponent<Room>();
+                Room startRoom = map.startRoom.GetComponent<Room>();
                 startRoom.Enter(Direction.None, callCleared: false);
                 return; 
             }
 
-            List<Vector3Int> vistedRooms = SaveManager.savedVisitedRooms;
-            Room lastRoom = map.startCell.room.GetComponent<Room>();
-            int nextCardIndex = vistedRooms[0].z;
-            foreach (Vector3Int vistedRoom in vistedRooms)
+            List<Vector2Int> visitedRooms = SaveManager.savedVisitedRooms;
+            Room lastRoom = map.startRoom.GetComponent<Room>();
+            foreach (Vector2Int visitedRoom in visitedRooms)
             {
-                if (vistedRoom.x >= map.mapSize.x || vistedRoom.y >= map.mapSize.y || map.map[vistedRoom.x, vistedRoom.y].room == null)
+                if (visitedRoom.x >= map.mapSize.x || visitedRoom.y >= map.mapSize.y || map.map[visitedRoom.x, visitedRoom.y].room == null)
                 {
                     SaveManager.AutosaveCorrupted("Invalid room index");
                     return;
                 }
 
                 lastRoom.Exit();
-                lastRoom = map.map[vistedRoom.x, vistedRoom.y].room.GetComponent<Room>();
+                lastRoom = map.map[visitedRoom.x, visitedRoom.y].room.GetComponent<Room>();
                 lastRoom.Generate(false);
-
-                if (nextCardIndex > vistedRoom.z)
-                {
-                    SaveManager.AutosaveCorrupted("Card index too small");
-                    return;
-                }
-
-                while (nextCardIndex < vistedRoom.z)
-                {
-                    if (nextCardIndex >= Deck.playerDeck.cards.Count || nextCardIndex < 0)
-                    {
-                        SaveManager.AutosaveCorrupted("Card index out of bounds");
-                        return;
-                    }
-
-                    OnCardAdded(Deck.playerDeck.cards[nextCardIndex]);
-                    nextCardIndex++;
-                }
             }
             lastRoom.Enter(callCleared: false);
         }
 
         /// <summary>
-        /// Initializes the floor generator with the special rooms found in the deck
-        /// </summary>
-        private void GetSpecialRoomsFromDeck()
-        {
-            int max = SaveManager.autosaveExists ? SaveManager.savedVisitedRooms[0].z : Deck.playerDeck.cards.Count;
-            for (int i = 0; i < max; i++)
-            {
-                if (i >= Deck.playerDeck.cards.Count) { continue; }
-
-                Card card = Deck.playerDeck.cards[i];
-                if (card == null || card.effects == null) { continue; }
-
-                foreach (DungeonEffect effect in card.effects)
-                {
-                    if (effect == null)
-                    {
-                        continue;
-                    }
-                    if (effect.specialRooms == null)
-                    {
-                        return;
-                    }
-                    foreach (Template specialRoom in effect.specialRooms)
-                    {
-                        layoutGenerationParameters.numSpecialRooms++;
-                        templateGenerationParameters.templatesPool.At(RoomType.Special).At(Difficulty.NotApplicable).Add(specialRoom);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Initializes the floor generator with tiles found in the deck
-        /// </summary>
-        private void GetTilesFromDeck()
-        {
-            foreach (TileType tileType in System.Enum.GetValues(typeof(TileType)))
-            {
-                TileTypeToPossibleTiles tileTypeToPossibleTiles;
-                tileTypeToPossibleTiles.tileType = tileType;
-                tileTypeToPossibleTiles.possibleTiles = new List<Tile>();
-                templateGenerationParameters.tileTypesToPossibleTiles.tileTypesToPossibleTiles.Add(tileTypeToPossibleTiles);
-            }
-
-            int max = SaveManager.autosaveExists ? SaveManager.savedVisitedRooms[0].z : Deck.playerDeck.cards.Count;
-            for (int i = 0; i < max; i++)
-            {
-                if (i >= Deck.playerDeck.cards.Count) { continue; }
-                OnCardAdded(Deck.playerDeck.cards[i]);
-            }
-        }
-
-        /// <summary>
-        /// Adds the added tiles from the card
-        /// </summary>
-        /// <param name="card"> The card </param>
-        private void OnCardAdded(Card card)
-        {
-            if (card == null || card.effects == null)
-            {
-                return;
-            }
-
-            foreach (DungeonEffect effect in card.effects)
-            {
-                if (effect == null)
-                {
-                    continue;
-                }
-                if (effect.tiles == null)
-                {
-                    return;
-                }
-                foreach (Tile tile in effect.tiles)
-                {
-                    templateGenerationParameters.tileTypesToPossibleTiles.At(tile.type).Add(tile);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Removes the added tiles from the card
-        /// </summary>
-        /// <param name="card"> The card </param>
-        private void OnCardRemoved(Card card)
-        {
-            foreach (DungeonEffect effect in card.effects)
-            {
-                foreach (Tile tile in effect.tiles)
-                {
-                    templateGenerationParameters.tileTypesToPossibleTiles.At(tile.type).Remove(tile);
-                }
-            }
-        }
-
         /// Transforms a map location to a world location
         /// </summary>
         /// <param name="mapLocation"> The location to transform </param>
