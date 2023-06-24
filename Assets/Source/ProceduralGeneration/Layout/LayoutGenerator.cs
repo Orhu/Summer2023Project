@@ -124,7 +124,8 @@ namespace Cardificer
         {
             GameObject newRoom = new GameObject();
             newRoom.name = roomType.displayName + " Room";
-            newRoom.transform.parent = transform;
+            newRoom.transform.parent = roomContainer.transform;
+            newRoom.AddComponent<TemplateGenerator>(); // Should probably make a prefab but whatevs
             Room roomComponent = newRoom.AddComponent<Room>();
             roomComponent.roomType = roomType;
             return roomComponent;
@@ -648,7 +649,7 @@ namespace Cardificer
                 for (int j = 0; j < room.roomType.sizeMultiplier.y; j++)
                 {
                     MapCell cell = genMap[i + room.roomLocation.x, j + room.roomLocation.y];
-                    cell.room = room.gameObject;
+                    cell.room = room;
                     cell.visited = true;
                 }
             }
@@ -684,47 +685,7 @@ namespace Cardificer
         /// <returns> The list of edge cells </returns>
         private List<MapCell> GetEdgeCells(MapCell[,] genMap, Room room)
         {
-            List<MapCell> edgeCells = new List<MapCell>();
-
-            if (room.roomType.sizeMultiplier == new Vector2Int(1, 1))
-            {
-                edgeCells.Add(genMap[room.roomLocation.x, room.roomLocation.y]);
-                return edgeCells;
-            }
-
-            if (room.roomType.sizeMultiplier.x == 1)
-            {
-                for (int j = 0; j < room.roomType.sizeMultiplier.y; j++)
-                {
-                    edgeCells.Add(genMap[room.roomLocation.x, room.roomLocation.y + j]);
-                }
-
-                return edgeCells;
-            }
-
-            if (room.roomType.sizeMultiplier.y == 1)
-            {
-                for (int i = 0; i < room.roomType.sizeMultiplier.x; i++)
-                {
-                    edgeCells.Add(genMap[room.roomLocation.x + i, room.roomLocation.y]);
-                }
-
-                return edgeCells;
-            }
-
-            for (int i = 0; i < room.roomType.sizeMultiplier.x; i++)
-            {
-                edgeCells.Add(genMap[room.roomLocation.x + i, room.roomLocation.y]);
-                edgeCells.Add(genMap[room.roomLocation.x + i, room.roomLocation.y + room.roomType.sizeMultiplier.y - 1]);
-            }
-
-            for (int j = 1; j < room.roomType.sizeMultiplier.y - 1; j++)
-            {
-                edgeCells.Add(genMap[room.roomLocation.x, room.roomLocation.y + j]);
-                edgeCells.Add(genMap[room.roomLocation.x + room.roomType.sizeMultiplier.x - 1, room.roomLocation.y + j]);
-            }
-
-            return edgeCells;
+            return room.GetEdgeCells(genMap);
         }
 
         /// <summary>

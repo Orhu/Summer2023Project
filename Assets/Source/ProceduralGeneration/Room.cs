@@ -208,6 +208,7 @@ namespace Cardificer
 
         // The bottom left location of the room in the map
         // TODO: write property things
+        newRoom.transform.position = FloorGenerator.TransformMapToWorld(createdCell.location, map.startCell.location, roomSize);
         [HideInInspector] public Vector2Int roomLocation { set; get; }
 
         // Whether this room has been generated or not
@@ -225,6 +226,56 @@ namespace Cardificer
                 GetComponent<TemplateGenerator>().Generate(this, template, spawnEnemies);
                 generated = true;
             }
+        }
+
+        /// <summary>
+        /// Gets the edge cells of the room using the given map
+        /// </summary>
+        /// <param name="map"> The map to get the cells from </param>
+        /// <returns> The edge cells </returns>
+        public List<MapCell> GetEdgeCells(MapCell[,] map)
+        {
+            List<MapCell> edgeCells = new List<MapCell>();
+
+            if (roomType.sizeMultiplier == new Vector2Int(1, 1))
+            {
+                edgeCells.Add(map[roomLocation.x, roomLocation.y]);
+                return edgeCells;
+            }
+
+            if (roomType.sizeMultiplier.x == 1)
+            {
+                for (int j = 0; j < roomType.sizeMultiplier.y; j++)
+                {
+                    edgeCells.Add(map[roomLocation.x, roomLocation.y + j]);
+                }
+
+                return edgeCells;
+            }
+
+            if (roomType.sizeMultiplier.y == 1)
+            {
+                for (int i = 0; i < roomType.sizeMultiplier.x; i++)
+                {
+                    edgeCells.Add(map[roomLocation.x + i, roomLocation.y]);
+                }
+
+                return edgeCells;
+            }
+
+            for (int i = 0; i < roomType.sizeMultiplier.x; i++)
+            {
+                edgeCells.Add(map[roomLocation.x + i, roomLocation.y]);
+                edgeCells.Add(map[roomLocation.x + i, roomLocation.y + roomType.sizeMultiplier.y - 1]);
+            }
+
+            for (int j = 1; j < roomType.sizeMultiplier.y - 1; j++)
+            {
+                edgeCells.Add(map[roomLocation.x, roomLocation.y + j]);
+                edgeCells.Add(map[roomLocation.x + roomType.sizeMultiplier.x - 1, roomLocation.y + j]);
+            }
+
+            return edgeCells;
         }
 
         #endregion

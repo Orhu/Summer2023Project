@@ -31,7 +31,7 @@ namespace Cardificer
         public Vector2Int location;
 
         // The room at this location
-        public GameObject room;
+        public Room room;
     }
 
     /// <summary>

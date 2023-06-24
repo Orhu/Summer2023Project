@@ -52,17 +52,29 @@ namespace Cardificer
         [Tooltip("The possible bottom door sprites to use")]
         public GenericWeightedThings<DoorSprites> bottomDoorSprites;
 
+        [Tooltip("The possible above right door sprites to use")]
+        public GenericWeightedThings<Sprite> aboveRightDoorSprites;
+
+        [Tooltip("The possible below right door sprites to use")]
+        public GenericWeightedThings<Sprite> belowRightDoorSprites;
+
+        [Tooltip("The possible beside top door right sprites to use")]
+        public GenericWeightedThings<Sprite> besideTopDoorRightSprites;
+
+        [Tooltip("The possible beside top door left sprites to use")]
+        public GenericWeightedThings<Sprite> besideTopDoorLeftSprites;
+
         [Tooltip("The possible above left door sprites to use")]
         public GenericWeightedThings<Sprite> aboveLeftDoorSprites;
 
         [Tooltip("The possible below left door sprites to use")]
         public GenericWeightedThings<Sprite> belowLeftDoorSprites;
 
-        [Tooltip("The possible above right door sprites to use")]
-        public GenericWeightedThings<Sprite> aboveRightDoorSprites;
+        [Tooltip("The possible beside bottom door right sprites to use")]
+        public GenericWeightedThings<Sprite> besideBottomDoorRightSprites;
 
-        [Tooltip("The possible below right door sprites to use")]
-        public GenericWeightedThings<Sprite> belowRightDoorSprites;
+        [Tooltip("The possible beside bottom door left sprites to use")]
+        public GenericWeightedThings<Sprite> besideBottomDoorLeftSprites;
 
         [Tooltip("The possible floor sprites to use")]
         public GenericWeightedThings<Sprite> floorSprites;
@@ -84,10 +96,14 @@ namespace Cardificer
             topDoorSprites.Reset();
             leftDoorSprites.Reset();
             bottomDoorSprites.Reset();
-            aboveLeftDoorSprites.Reset();
-            belowLeftDoorSprites.Reset();
             aboveRightDoorSprites.Reset();
             belowRightDoorSprites.Reset();
+            besideTopDoorRightSprites.Reset();
+            besideTopDoorLeftSprites.Reset();
+            aboveLeftDoorSprites.Reset();
+            belowLeftDoorSprites.Reset();
+            besideBottomDoorRightSprites.Reset();
+            besideBottomDoorLeftSprites.Reset();
             floorSprites.Reset();
         }
     }
