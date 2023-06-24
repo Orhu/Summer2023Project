@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_RewindOrb
   m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 8300000, guid: 1556da8adf328074486e70081be3c5a4, type: 3}
   attack:
     damage: 4
     damageType: 0
     statusEffects: []
+    invertInvincibility: 0
   hitCount: 3
   applyDamageOnHit: 1
   modifiers:
@@ -29,11 +31,16 @@ MonoBehaviour:
   maxSpeed: 8
   homingSpeed: 0
   homingTime: 0
+  homingDelay: 0
   homingAimMode: 1
+  switchAfterHit: 0
   visualObject: {fileID: 6866347195849778357, guid: 29e713b6fe803504d84fd4ff3e6ea3ea, type: 3}
   detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
   spawnLocation: 0
   aimMode: 0
+  travelAudioClip: {fileID: 8300000, guid: c228b51c3f35d5445b61f245abe676b4, type: 3}
+  impactAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   _spawnSequence:
