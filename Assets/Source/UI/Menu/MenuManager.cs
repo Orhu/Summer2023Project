@@ -121,7 +121,10 @@ namespace Cardificer
                 // Sets timeScale to 0, so all time related functions are stopped
                 Time.timeScale = 0;
                 instance.boosterPackMenu.gameObject.SetActive(true);
-                instance.boosterPackMenu.boosterPackObject = boosterPack;
+                if (instance.boosterPackMenu.boosterPackObject != boosterPack)
+                {
+                    instance.boosterPackMenu.boosterPackObject = boosterPack;
+                }
                 // Disable player movement
                 instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
                 instance.currentMenu = MenuTypes.Booster;
