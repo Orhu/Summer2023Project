@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace Cardificer
 {
@@ -44,12 +44,11 @@ namespace Cardificer
 
         /// <summary>
         /// Asks for the user to confirm they want to quit,
-        /// saves, then exits the game.
+        /// saves, then returns the player to the main menu
         /// </summary>
         public void SaveAndQuit()
         {
-
-            Application.Quit();
+            SceneManager.LoadScene("MainMenu");
         }
         /// <summary>
         /// When the pause menu is reenabled, 

@@ -6,6 +6,10 @@ using UnityEngine.SceneManagement;
 
 namespace Cardificer
 {
+    /// <summary>
+    /// MainMenu manager script for handling rendering and logic
+    /// for the main menu UI object
+    /// </summary>
     public class MainMenu : MonoBehaviour
     {
         [Tooltip("Deactivate if no save file exists.")]
