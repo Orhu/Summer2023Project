@@ -55,7 +55,7 @@ namespace Cardificer
         /// <summary>
         /// Sets the instance to this instance
         /// </summary>
-        void Awake()
+        private void Start()
         {
             instance = this;
             FloorGenerator.floorGeneratorInstance.onRoomChange.AddListener(GrabCurrentRoom);

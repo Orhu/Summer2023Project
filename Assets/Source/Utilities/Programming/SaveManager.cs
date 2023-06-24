@@ -11,6 +11,8 @@ namespace Cardificer
     /// 
     /// To use just add a new property and SaveData backing field of the type you want to save. NOTE: Type must be serializable.
     /// Inside the constructor of the save data is the name of the save file, and whether or not it should persist through save clears.
+    /// 
+    /// For more info on autosaves see the inner class Autosaver.
     /// </summary>
     /// <example>
     /// // The player's position as it is saved to the disk.
