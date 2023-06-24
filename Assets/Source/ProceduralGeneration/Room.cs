@@ -213,6 +213,9 @@ namespace Cardificer
         // The type of the room
         [HideInInspector] public RoomType roomType;
 
+        // The location of the start room in the map
+        [HideInInspector] public Vector2Int startLocation;
+
         // The bottom left location of the room in the map
         private Vector2Int _roomLocation;
         [HideInInspector] public Vector2Int roomLocation 
@@ -220,7 +223,8 @@ namespace Cardificer
             set
             {
                 _roomLocation = value;
-                transform.position = FloorGenerator.TransformMapToWorld(value, FloorGenerator.floorGeneratorInstance.map.startRoom.roomLocation, cellSize);
+                transform.position = FloorGenerator.TransformMapToWorld(value, startLocation, cellSize);
+                name = roomType.displayName + " Room " + value.ToString();
             }
             get { return _roomLocation; } 
         }

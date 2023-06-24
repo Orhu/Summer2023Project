@@ -66,7 +66,7 @@ namespace Cardificer
             // Get all the branchable cells (which will start out as all the edge normal cells, then cells will be removed from them as it goes along
             List<MapCell> branchableCells = GenerateNormalRooms(genMap, roomContainer, startRoom, normalRooms, layoutParameters.preferredNumDoors, layoutParameters.strictnessNumDoors);
 
-            if (!GenerateDeadEnds(genMap, roomContainer, branchableCells, deadEndRooms))
+            if (!GenerateDeadEnds(genMap, roomContainer, startRoom.startLocation, branchableCells, deadEndRooms))
             {
                 if (generateCallCount == 2)
                 {
@@ -119,8 +119,9 @@ namespace Cardificer
         /// </summary>
         /// <param name="roomContainer"> The game object to hold all the room game objects in </param>
         /// <param name="roomType"> The room type of the room </param>
+        /// <param name="startLocation"> The location of the start room in the map </param>
         /// <returns> The created room </returns>
-        private Room CreateRoom(GameObject roomContainer, RoomType roomType)
+        private Room CreateRoom(GameObject roomContainer, RoomType roomType, Vector2Int startLocation)
         {
             GameObject newRoom = new GameObject();
             newRoom.name = roomType.displayName + " Room";
@@ -128,6 +129,7 @@ namespace Cardificer
             newRoom.AddComponent<TemplateGenerator>(); // Should probably make a prefab but whatevs
             Room roomComponent = newRoom.AddComponent<Room>();
             roomComponent.roomType = roomType;
+            roomComponent.startLocation = startLocation;
             return roomComponent;
         }
 
@@ -169,13 +171,13 @@ namespace Cardificer
 
                 int numDoors = 0;
 
-                Dictionary<MapCell, Direction> directionsToReset = new Dictionary<MapCell, Direction>();
+                List<(MapCell, Direction)> directionsToReset = new List<(MapCell, Direction)>();
 
                 foreach ((MapCell, Direction) requiredDirection in GetRequiredDirections(genMap, room))
                 {
                     if (!requiredDirection.Item1.direction.HasFlag(requiredDirection.Item2))
                     {
-                        directionsToReset.Add(requiredDirection.Item1, requiredDirection.Item2);
+                        directionsToReset.Add((requiredDirection.Item1, requiredDirection.Item2));
                     }
                     requiredDirection.Item1.direction |= requiredDirection.Item2;
                     numDoors++;
@@ -183,9 +185,9 @@ namespace Cardificer
 
                 if (!CheckIfRoomFits(genMap, room))
                 { 
-                    foreach (KeyValuePair<MapCell, Direction> resetDirection in directionsToReset)
+                    foreach ((MapCell, Direction) resetDirection in directionsToReset)
                     {
-                        resetDirection.Key.direction ^= resetDirection.Value;
+                        resetDirection.Item1.direction ^= resetDirection.Item2;
                     }
                     possibleOffsets.Remove(offset);
                     continue;
@@ -667,7 +669,7 @@ namespace Cardificer
         {
             Vector2Int startPos = new Vector2Int((mapSize.x + 1) / 2, (mapSize.y + 1) / 2);
             MapCell startCell = genMap[startPos.x, startPos.y];
-            Room startRoom = CreateRoom(roomContainer, startRoomType);
+            Room startRoom = CreateRoom(roomContainer, startRoomType, startCell.location);
             bool fits = GenerateRandomRoomLayout(genMap, startRoom, startCell);
             if (!fits)
             {
@@ -787,7 +789,7 @@ namespace Cardificer
                 bool fits;
                 do
                 {
-                    newRoom = CreateRoom(roomContainer, possibleRoomTypes[FloorGenerator.random.Next(0, possibleRoomTypes.Count)]);
+                    newRoom = CreateRoom(roomContainer, possibleRoomTypes[FloorGenerator.random.Next(0, possibleRoomTypes.Count)], startRoom.startLocation);
                     possibleRoomTypes.Remove(newRoom.roomType);
                     fits = GenerateRandomRoomLayout(genMap, newRoom, currentCell, false, preferredNumDoors, strictnessNumDoors, totalNormalRooms, newRoomsCount, cellsToGenerate.Count);
                 }
@@ -797,7 +799,7 @@ namespace Cardificer
                 {
                     // Unfortunately it's possible for this to happen if you don't have enough single-celled rooms. We're not worrying about that for now though  :')
                     // Potential fix idea: Force create single rooms (even if it exceeds the # of rooms wanted)
-                    throw new System.Exception("Unable to generate layout! The rooms do not fit.");
+                    throw new System.Exception("Unable to generate layout! The rooms do not fit. Last attempted room to fit: " + newRoom.roomType.displayName);
                 }
 
                 if (roomTypeCounts.ContainsKey(newRoom.roomType))
@@ -820,7 +822,7 @@ namespace Cardificer
                 {
                     List<MapCell> possibleCells = GetPossibleAttachedRoomCells(genMap, newRoom);
                     MapCell cell = possibleCells[FloorGenerator.random.Next(0, possibleCells.Count)];
-                    Room attachedRoom = CreateRoom(roomContainer, newRoom.roomType.attachedRoom);
+                    Room attachedRoom = CreateRoom(roomContainer, newRoom.roomType.attachedRoom, startRoom.startLocation);
                     BranchRoom(genMap, newRoom, cell);
                     // Attached rooms must be a dead end
                     GenerateRandomRoomLayout(genMap, attachedRoom, cell, true);
@@ -972,16 +974,17 @@ namespace Cardificer
         /// </summary>
         /// <param name="genMap"> The current generated map </param>
         /// <param name="roomContainer"> The room container to put spawned rooms into </param>
+        /// <param name="startLocation"> The location of the start room in the map </param>
         /// <param name="branchableCells"> The cells that are possible to branch off of </param>
         /// <param name="deadEnds"> The dead end rooms that need to be created </param>
         /// <returns> Whether or not the dead ends were successfully generated </returns>
-        private bool GenerateDeadEnds(MapCell[,] genMap, GameObject roomContainer, List<MapCell> branchableCells, Dictionary<RoomType, int> deadEnds)
+        private bool GenerateDeadEnds(MapCell[,] genMap, GameObject roomContainer, Vector2Int startLocation, List<MapCell> branchableCells, Dictionary<RoomType, int> deadEnds)
         {
             Dictionary<RoomType, int> deadEndCounts = new Dictionary<RoomType, int>();
             while (deadEnds.Count > 0)
             {
                 RoomType randomType = deadEnds.ElementAt(FloorGenerator.random.Next(0, deadEnds.Count)).Key;
-                Room newRoom = CreateRoom(roomContainer, randomType);
+                Room newRoom = CreateRoom(roomContainer, randomType, startLocation);
 
                 List<MapCell> branchableCellsInstance = new List<MapCell>(branchableCells);
 
@@ -1018,7 +1021,7 @@ namespace Cardificer
                         {
                             List<MapCell> possibleCells = GetPossibleAttachedRoomCells(genMap, newRoom);
                             MapCell cell = possibleCells[FloorGenerator.random.Next(0, possibleCells.Count)];
-                            Room attachedRoom = CreateRoom(roomContainer, newRoom.roomType.attachedRoom);
+                            Room attachedRoom = CreateRoom(roomContainer, newRoom.roomType.attachedRoom, startLocation);
                             BranchRoom(genMap, newRoom, cell);
                             // Attached rooms must be a dead end
                             GenerateRandomRoomLayout(genMap, attachedRoom, cell, true);
