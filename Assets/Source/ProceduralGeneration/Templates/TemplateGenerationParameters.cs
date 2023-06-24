@@ -34,22 +34,6 @@ namespace Cardificer
         public TemplateGenerationParameters()
         {
             usedTemplates = new RoomTypesToDifficultiesToTemplates();
-
-            foreach (RoomType roomType in System.Enum.GetValues(typeof(RoomType)))
-            {
-                RoomTypeToDifficultiesToTemplates roomTypeToDifficultiesToTemplates = new RoomTypeToDifficultiesToTemplates();
-                roomTypeToDifficultiesToTemplates.roomType = roomType;
-                DifficultiesToTemplates difficultiesToTemplates = new DifficultiesToTemplates();
-                foreach (Difficulty difficulty in System.Enum.GetValues(typeof(Difficulty)))
-                {
-                    DifficultyToTemplates difficultyToTemplates = new DifficultyToTemplates();
-                    difficultyToTemplates.difficulty = difficulty;
-                    difficultyToTemplates.templates = new List<Template>();
-                    difficultiesToTemplates.difficultiesToTemplates.Add(difficultyToTemplates);
-                }
-                roomTypeToDifficultiesToTemplates.difficultiesToTemplates = difficultiesToTemplates;
-                usedTemplates.roomTypesToDifficultiesToTemplates.Add(roomTypeToDifficultiesToTemplates);
-            }
         }
 
         /// <summary>
