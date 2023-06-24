@@ -28,18 +28,19 @@ namespace Cardificer
                     // Name of the card
                     links.nameTextBox.text = _card.displayName;
 
-                    // Description of the card
+                    // TODO Description of the card
                     //links.descriptionTextBox.text = _card.GetDescription(renderActionSide);
 
-                    // Rarity of the card
-                    //links.rarityImageObject.SetActive(_card.rare);
+                    // TODO Rarity of the card
+                    //links.rarityImage.enabled = _card.rarity;
 
+                    // TODO Projectile type
                     //links.projectileTypeImage = _card.projectileType;
 
                     // Cooldown of the card
                     links.coolDownOverlayText.text = _card.cooldownTime.ToString();
 
-                    // For managing damage container colors
+                    // TODO For managing damage container colors
                     for (int i = 0; i < 3; i++)
                     {
                         //links.damageContainer;
@@ -48,12 +49,10 @@ namespace Cardificer
                     if (!renderActionSide)
                     {
                         links.cardSprite.sprite = _card.effectImage;
-                        //links.backgroundSprite.sprite = _card.effectBackground;
                     }
                     else
                     {
                         links.cardSprite.sprite = _card.actionImage;
-                        //links.backgroundSprite.sprite = _card.actionBackground;
                     }
                 }
             }
@@ -118,8 +117,8 @@ namespace Cardificer
             [Tooltip("The image associated with the projectile type.")]
             public Image projectileTypeImage;
 
-            [Tooltip("GameObject associated with rarity image, set active if the card is rare")]
-            public GameObject rarityImageObject;
+            [Tooltip("The image associated with the card's rarity.")]
+            public Image rarityImage;
         }
     }
 }
