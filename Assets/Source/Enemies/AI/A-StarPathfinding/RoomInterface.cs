@@ -28,7 +28,7 @@ namespace Cardificer
         // the size of this room, in tiles
         [HideInInspector] public Vector2Int myRoomSize;
 
-        // the walking tile grid of this room
+        // the tile grid of this room
         private PathfindingTile[,] roomGrid;
 
         // the world position of this room
