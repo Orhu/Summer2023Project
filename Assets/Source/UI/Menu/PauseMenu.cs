@@ -11,7 +11,9 @@ namespace Cardificer
     /// </summary>
     public class PauseMenu : MonoBehaviour
     {
+        [Tooltip("Main container that opens when you pause the game (not options or anything)")]
         [SerializeField] private GameObject mainPauseMenuContainer;
+        [Tooltip("Use this to close all menu containers without closing things like game title.")]
         [SerializeField] private GameObject pauseMenuController;
         /// <summary>
         /// Resumes the game
