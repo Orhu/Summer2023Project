@@ -286,7 +286,7 @@ namespace Cardificer
                 saveData.playerHealth = Player.health.currentHealth;
                 saveData.deckState = new Deck.State(Deck.playerDeck);
                 saveData.floorSeed = FloorGenerator.floorGeneratorInstance.seed;
-                saveData.destroyedTiles = TileMoveableOnDestroy.destroyedTiles != null ? TileMoveableOnDestroy.destroyedTiles.ToList() : savedDestroyedTiles;
+                saveData.destroyedTiles = DestroyableTile.destroyedTiles != null ? DestroyableTile.destroyedTiles.ToList() : savedDestroyedTiles;
                 Vector2Int loc = FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation;
                 saveData.visitedRooms.Add(new Vector3Int(loc.x, loc.y, Deck.playerDeck.cards.Count));
 
