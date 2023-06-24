@@ -34,6 +34,17 @@ namespace Cardificer
             }
         }
 
+        // The currently saved random state. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+        public static Random.State savedRandomState
+        {
+            get
+            {
+                if (!autosaveExists) { return Random.state; }
+                return autosaver.latestAutosave.randomState;
+            }
+        }
+
+
         // The currently saved player health. Saving handled by autosaves. Use autosaveExists to check if data Valid.
         public static int savedPlayerHealth
         {
@@ -217,7 +228,7 @@ namespace Cardificer
 
 
         /// <summary>
-        /// Class for managing storing and loading autosaves.
+        /// Class for managing and storing autosaves.
         /// </summary>
         /// <example>
         /// To use save more data during an autosave:
@@ -248,6 +259,9 @@ namespace Cardificer
             {
                 // The seed of the current floor.
                 public int floorSeed;
+
+                // The random state at the time of the autosave.
+                public Random.State randomState;
 
                 // The last position of the player.
                 public Vector2 playerPos;
@@ -303,7 +317,7 @@ namespace Cardificer
                 Vector2Int loc = FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation;
                 saveData.visitedRooms.Add(new Vector3Int(loc.x, loc.y, Deck.playerDeck.cards.Count));
                 saveData.remainingShopBuys = ShopSlot.savableRemainingShopBuys;
-
+                saveData.randomState = Random.state;
 
                 latestAutosave = saveData;
             }

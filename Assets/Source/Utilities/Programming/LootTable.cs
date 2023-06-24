@@ -38,9 +38,11 @@ namespace Cardificer
         /// <summary>
         /// Pull a single item randomly from the table based on weight
         /// </summary>
-        /// <returns>A single item from the table</returns>
-        public T PullFromTable()
+        /// <param name="seed"> A position to us as a seed to pull from the table. </param>
+        /// <returns> A single item from the table. </returns>
+        public T PullFromTable(Vector3 seed)
         {
+            System.Random rng = new System.Random(PositionToSeed(seed));
             float totalWeight = 0;
             T selected = default(T);
             if (weightedLoot.Count > 0)
@@ -48,7 +50,7 @@ namespace Cardificer
                 foreach (var loot in weightedLoot)
                 {
                     float weight = loot.weight;
-                    float rand = Random.Range(0, totalWeight + weight);
+                    float rand = (float)(rng.NextDouble()) * (totalWeight + weight);
                     if (rand >= totalWeight)
                     {
                         selected = loot.lootItem;
@@ -66,19 +68,23 @@ namespace Cardificer
         /// <summary>
         /// Using a copy of the weightedLootList, randomly select cards to return and delete
         /// </summary>
+        /// <param name="seed"> A position to us as a seed to pull from the table. </param>
         /// <param name="copyOfWeightedLoot">A copy of the weighted loot list</param>
         /// <returns>A random card</returns>
-        public T PullAndRemoveFromTable(List<WeightedLootItems<T>> copyOfWeightedLoot)
+        public T PullAndRemoveFromTable(Vector3 seed, List<WeightedLootItems<T>> copyOfWeightedLoot)
         {
             float totalWeight = 0;
             T selected = default(T);
             int index = 0;
+
+            System.Random rng = new System.Random(PositionToSeed(seed));
+
             if (copyOfWeightedLoot.Count > 0)
             {
                 for (int i = 0; i < copyOfWeightedLoot.Count; i++)
                 {
                     float weight = copyOfWeightedLoot[i].weight;
-                    float rand = Random.Range(0, totalWeight + weight);
+                    float rand = (float)(rng.NextDouble()) * (totalWeight + weight);
                     if (rand >= totalWeight)
                     {
                         selected = copyOfWeightedLoot[i].lootItem;
@@ -97,9 +103,10 @@ namespace Cardificer
         /// <summary>
         /// Pulls multiple items randomly from the table based on weight
         /// </summary>
+        /// <param name="seed"> A position to us as a seed to pull from the table. </param>
         /// <param name="pullCount">Number of items pulled from the table</param>
         /// <returns>List of items pulled from the table</returns>
-        public List<T> PullMultipleFromTable(int pullCount)
+        public List<T> PullMultipleFromTable(Vector3 seed, int pullCount)
         {
             if (pullCount <= weightedLoot.Count)
             {
@@ -108,12 +115,12 @@ namespace Cardificer
                 for (int i = 0; i < pullCount; i++)
                 {
                     // Pull and remove an item from the list of items
-                    T item = PullAndRemoveFromTable(backup);
+                    T item = PullAndRemoveFromTable(seed, backup);
                     // If it's already in the list we will be returning,
                     // keep pulling and deleting from the list until we encounter a non dupe
                     while (itemList.Contains(item) && backup.Count > 0)
                     {
-                        item = PullAndRemoveFromTable(backup);
+                        item = PullAndRemoveFromTable(seed, backup);
                     }
 
                     // We find a non dupe
@@ -144,6 +151,21 @@ namespace Cardificer
             {
                 throw new System.Exception("Number of items pulled exceeds table size");
             }
+        }
+
+        /// <summary>
+        /// Maps a position to a unique seed.
+        /// </summary>
+        /// <param name="position"> The position to convert. </param>
+        /// <returns></returns>
+        private int PositionToSeed(Vector3 position)
+        {
+            // Szudzik's function:
+            int A = (int)position.x >= 0 ? 2 * (int)position.x : -2 * (int)position.x - 1;
+            int B = (int)position.y >= 0 ? 2 * (int)position.y : -2 * (int)position.y - 1;
+            int result = A >= B ? A * A + A + B : A + B * B;
+
+            return result + FloorGenerator.floorGeneratorInstance.seed;
         }
     }
 }

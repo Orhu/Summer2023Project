@@ -18,7 +18,7 @@ namespace Cardificer
         // Start is called before the first frame update
         void Start()
         {
-            card = lootTable.PullFromTable();
+            card = lootTable.PullFromTable(transform.position);
             GetComponentInChildren<CardRenderer>(true).card = card;
             GetComponentInChildren<SpriteRenderer>().sprite = card.runeImage;
         }
