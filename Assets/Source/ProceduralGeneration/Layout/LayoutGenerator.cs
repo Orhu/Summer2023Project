@@ -950,7 +950,7 @@ namespace Cardificer
                     bool locationOutsideRoom = locationOffset.x < room.roomLocation.x || locationOffset.x >= room.roomLocation.x + room.roomType.sizeMultiplier.x;
                     locationOutsideRoom &= locationOffset.y < room.roomLocation.y || locationOffset.y >= room.roomLocation.y + room.roomType.sizeMultiplier.y;
 
-                    MapCell neighbor = genMap[room.roomLocation.x + locationOffset.x, room.roomLocation.y + locationOffset.y];
+                    MapCell neighbor = genMap[edge.location.x + locationOffset.x, edge.location.y + locationOffset.y];
                     if (locationOutsideRoom && neighbor.visited && !neighbors.Contains(neighbor))
                     {
                         neighbors.Add(neighbor);
