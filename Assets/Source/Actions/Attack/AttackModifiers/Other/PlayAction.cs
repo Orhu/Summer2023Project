@@ -27,6 +27,9 @@ namespace Cardificer
             OnDestroyed,
             Repeately,
         }
+        
+        [Tooltip("The damage multiplier of this action")]
+        [SerializeField] private float damageMultiplier = 1f;
 
 
         // The objects ignored by this.
@@ -40,9 +43,6 @@ namespace Cardificer
 
         // The projectile this modifies
         private GameObject causer;
-        
-        // The damage multiplier of this action
-        private float damageMultiplier = 1f;
 
 
         // The projectile this modifies

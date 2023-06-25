@@ -153,8 +153,7 @@ namespace Cardificer
             IActor causedBy = causer.GetComponent<IActor>();
             if (causedBy != null)
             {
-                var damage = attackData.damage; // Get the damage on the attackData
-                attackData += Mathf.RoundToInt(causedBy.GetDamageMultiplier() * damage - damage);
+                attackData.damage = Mathf.RoundToInt(attackData.damage * causedBy.GetDamageMultiplier());
             }
             
             if (attack.switchAfterHit)
