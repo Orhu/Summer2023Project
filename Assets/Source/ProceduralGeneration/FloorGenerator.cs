@@ -14,8 +14,7 @@ namespace Cardificer
         public LayoutGenerationParameters layoutGenerationParameters;
 
         [Tooltip("The template generation parameters for this floor")]
-        // TODO: Chagne to private
-        [SerializeField] public TemplateGenerationParameters templateGenerationParameters;
+        [SerializeField] private TemplateGenerationParameters templateGenerationParameters;
 
         // The copy of the template generation parameters for this floor
         [System.NonSerialized] public TemplateGenerationParameters templateGenerationParametersInstance;
@@ -127,6 +126,20 @@ namespace Cardificer
         static public Vector2 TransformMapToWorld(Vector2Int mapLocation, Vector2Int startLocation, Vector2Int roomSize)
         {
             return new Vector2((mapLocation.x - startLocation.x) * roomSize.x, (mapLocation.y - startLocation.y) * roomSize.y);
+        }
+
+        /// <summary>
+        /// Sets all the rooms to active for debugging purposes
+        /// </summary>
+        public void ShowLayout()
+        {
+            for (int i = 0; i < transform.GetChild(0).childCount; i++)
+            {
+                for (int j = 0; j < transform.GetChild(0).GetChild(i).childCount; j++)
+                {
+                    transform.GetChild(0).GetChild(i).GetChild(j).gameObject.SetActive(true);
+                }
+            }
         }
     }
 }

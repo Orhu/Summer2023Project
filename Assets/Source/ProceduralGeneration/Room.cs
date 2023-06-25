@@ -205,6 +205,7 @@ namespace Cardificer
             {
                 _cellSize = value;
                 roomSize = _cellSize * roomType.sizeMultiplier;
+                transform.position = FloorGenerator.TransformMapToWorld(roomLocation, startLocation, cellSize);
             }
             get { return _cellSize; }
         }

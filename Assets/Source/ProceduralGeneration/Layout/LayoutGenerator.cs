@@ -298,7 +298,7 @@ namespace Cardificer
                 }
                 else if (neighbor.location.y == room.roomLocation.y - 1 && neighbor.direction.HasFlag(Direction.Up))
                 {
-                    requiredDirections.Add((genMap[neighbor.location.x, neighbor.location.y - 1], Direction.Down));
+                    requiredDirections.Add((genMap[neighbor.location.x, neighbor.location.y + 1], Direction.Down));
                 }
             }
 
