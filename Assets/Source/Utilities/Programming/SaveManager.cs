@@ -54,6 +54,16 @@ namespace Cardificer
             }
         }
 
+        // The currently saved player max speed. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+        public static float savedPlayerSpeed
+        {
+            get
+            {
+                if (!autosaveExists) { return 0; }
+                return autosaver.latestAutosave.playerSpeed;
+            }
+        }
+
         // The currently saved floor seed. Saving handled by autosaves. Use autosaveExists to check if data Valid.
         public static int savedFloorSeed
         {
@@ -247,6 +257,9 @@ namespace Cardificer
 
                 // The last max health of the player.
                 public int playerMaxHealth;
+
+                // The last max speed of the player.
+                public float playerSpeed;
 
                 // The locations and current card count of visited rooms
                 public List<Vector3Int> visitedRooms = new List<Vector3Int>();

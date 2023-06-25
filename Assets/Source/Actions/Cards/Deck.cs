@@ -23,6 +23,9 @@ namespace Cardificer
         // Global singleton for the actor's deck.
         [NonSerialized] public static Deck playerDeck;
 
+        // The amount cooldowns are multiplied by.
+        [NonSerialized] public float cooldownReduction = 1f;
+
         // The actor that plays cards from this deck.
         [NonSerialized] public IActor actor;
 
@@ -274,7 +277,7 @@ namespace Cardificer
                 {
                     cardIndicesToActionTimes.Remove(cardIndexToActionTime.Key);
                     DiscardCard(cardIndexToActionTime.Key);
-                    cardIndicesToCooldowns.Add(cardIndexToActionTime.Key, inHandCards[cardIndexToActionTime.Key].cooldownTime);
+                    cardIndicesToCooldowns.Add(cardIndexToActionTime.Key, inHandCards[cardIndexToActionTime.Key].cooldownTime * cooldownReduction);
                 }
                 else
                 {
