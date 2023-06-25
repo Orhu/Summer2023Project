@@ -28,21 +28,15 @@ namespace Cardificer
         // the size of this room, in tiles
         [HideInInspector] public Vector2Int myRoomSize;
 
-        // the walking tile grid of this room
-        private PathfindingTile[,] walkRoomGrid;
-
-        // the flying tile grid of this room
-        private PathfindingTile[,] flyRoomGrid;
-
-        // the burrowing tile grid of this room
-        private PathfindingTile[,] burrowRoomGrid;
+        // the tile grid of this room
+        private PathfindingTile[,] roomGrid;
 
         // the world position of this room
         private Vector2 myWorldPosition;
 
         // this instance
         public static RoomInterface instance;
-        
+
         [Tooltip("Draw Tiles detected as \"null\" during room-grid copying")]
         [SerializeField] private bool drawNullTiles;
 
@@ -61,7 +55,7 @@ namespace Cardificer
         /// <summary>
         /// Sets the instance to this instance
         /// </summary>
-        void Awake()
+        private void Start()
         {
             instance = this;
             FloorGenerator.floorGeneratorInstance.onRoomChange.AddListener(GrabCurrentRoom);
@@ -93,9 +87,7 @@ namespace Cardificer
         /// <param name="inputArray"> The input array of tiles </param>
         void DeepCopyGrid(Tile[,] inputArray)
         {
-            walkRoomGrid = new PathfindingTile[myRoomSize.x, myRoomSize.y];
-            flyRoomGrid = new PathfindingTile[myRoomSize.x, myRoomSize.y];
-            burrowRoomGrid = new PathfindingTile[myRoomSize.x, myRoomSize.y];
+            roomGrid = new PathfindingTile[myRoomSize.x, myRoomSize.y];
 
             for (int x = 0; x < myRoomSize.x; x++)
             {
@@ -103,7 +95,6 @@ namespace Cardificer
                 {
                     Tile curTile = inputArray[x, y];
                     AddTiles(curTile, new Vector2Int(x, y));
-                    
                 }
             }
         }
@@ -117,21 +108,16 @@ namespace Cardificer
         {
             // TODO subdividing unimplemented
             // add to appropriate lists (if there is a Null Reference in this area, it is most likely because a null tile slipped through the cracks)
-            walkRoomGrid[pos.x, pos.y] =
+            roomGrid[pos.x, pos.y] =
                 new PathfindingTile(tile, tile.walkMovementPenalty);
-            flyRoomGrid[pos.x, pos.y] =
-                new PathfindingTile(tile, tile.flyMovementPenalty);
-            burrowRoomGrid[pos.x, pos.y] =
-                new PathfindingTile(tile, tile.burrowMovementPenalty);
         }
 
         /// <summary>
         /// Gets the tile at the given world position
         /// </summary>
         /// <param name="worldPos"> The world position </param>
-        /// <param name="movementType"> The movement grid to search on </param>
         /// <returns> The tile and boolean saying whether the tile was successfully found </returns>
-        public (PathfindingTile, bool) WorldPosToTile(Vector2 worldPos, MovementType movementType)
+        public (PathfindingTile, bool) WorldPosToTile(Vector2 worldPos)
         {
             Vector2Int tilePos = new Vector2Int(
                 Mathf.RoundToInt(worldPos.x + myRoomSize.x / 2 - myWorldPosition.x),
@@ -139,18 +125,7 @@ namespace Cardificer
             );
             try
             {
-                switch (movementType)
-                {
-                    case MovementType.Walk:
-                        return (walkRoomGrid[tilePos.x, tilePos.y], true);
-                    case MovementType.Fly:
-                        return (flyRoomGrid[tilePos.x, tilePos.y], true);
-                    case MovementType.Burrow:
-                        return (burrowRoomGrid[tilePos.x, tilePos.y], true);
-                    default:
-                        Debug.LogError("Attempted to get tile from invalid movement type");
-                        return (null, false);
-                }
+                return (roomGrid[tilePos.x, tilePos.y], true);
             }
             catch
             {
@@ -201,18 +176,7 @@ namespace Cardificer
                         if (y == 0 || x == 0)
                         {
                             // cardinal direction, just add it!
-                            switch (movementType)
-                            {
-                                case MovementType.Walk:
-                                    neighbors.Add(walkRoomGrid[checkX, checkY]);
-                                    break;
-                                case MovementType.Fly:
-                                    neighbors.Add(flyRoomGrid[checkX, checkY]);
-                                    break;
-                                case MovementType.Burrow:
-                                    neighbors.Add(burrowRoomGrid[checkX, checkY]);
-                                    break;
-                            }
+                            neighbors.Add(roomGrid[checkX, checkY]);
                         }
                         else
                         {
@@ -222,32 +186,32 @@ namespace Cardificer
                                 switch (movementType)
                                 {
                                     case MovementType.Walk:
-                                        if (walkRoomGrid[checkX - x, checkY].allowedMovementTypes
+                                        if (roomGrid[checkX - x, checkY].allowedMovementTypes
                                                 .HasFlag(MovementType.Walk) &&
-                                            walkRoomGrid[checkX, checkY - y].allowedMovementTypes
+                                            roomGrid[checkX, checkY - y].allowedMovementTypes
                                                 .HasFlag(MovementType.Walk))
                                         {
-                                            neighbors.Add(walkRoomGrid[checkX, checkY]);
+                                            neighbors.Add(roomGrid[checkX, checkY]);
                                         }
 
                                         break;
                                     case MovementType.Fly:
-                                        if (flyRoomGrid[checkX - x, checkY].allowedMovementTypes
+                                        if (roomGrid[checkX - x, checkY].allowedMovementTypes
                                                 .HasFlag(MovementType.Fly) &&
-                                            flyRoomGrid[checkX, checkY - y].allowedMovementTypes
+                                            roomGrid[checkX, checkY - y].allowedMovementTypes
                                                 .HasFlag(MovementType.Fly))
                                         {
-                                            neighbors.Add(flyRoomGrid[checkX, checkY]);
+                                            neighbors.Add(roomGrid[checkX, checkY]);
                                         }
 
                                         break;
                                     case MovementType.Burrow:
-                                        if (burrowRoomGrid[checkX - x, checkY].allowedMovementTypes
+                                        if (roomGrid[checkX - x, checkY].allowedMovementTypes
                                                 .HasFlag(MovementType.Burrow) &&
-                                            burrowRoomGrid[checkX, checkY - y].allowedMovementTypes
+                                            roomGrid[checkX, checkY - y].allowedMovementTypes
                                                 .HasFlag(MovementType.Burrow))
                                         {
-                                            neighbors.Add(burrowRoomGrid[checkX, checkY]);
+                                            neighbors.Add(roomGrid[checkX, checkY]);
                                         }
 
                                         break;
@@ -271,13 +235,13 @@ namespace Cardificer
         /// </summary>
         private void OnDrawGizmos()
         {
-            if ((drawWalkTiles || drawFlyTiles || drawBurrowTiles) && Application.isPlaying && walkRoomGrid != null)
+            if ((drawWalkTiles || drawFlyTiles || drawBurrowTiles) && Application.isPlaying && roomGrid != null)
             {
-                for (int x = 0; x < walkRoomGrid.GetLength(0); x++)
+                for (int x = 0; x < roomGrid.GetLength(0); x++)
                 {
-                    for (int y = 0; y < walkRoomGrid.GetLength(1); y++)
+                    for (int y = 0; y < roomGrid.GetLength(1); y++)
                     {
-                        var t = walkRoomGrid[x, y];
+                        var t = roomGrid[x, y];
 
                         if (t == null && drawNullTiles)
                         {

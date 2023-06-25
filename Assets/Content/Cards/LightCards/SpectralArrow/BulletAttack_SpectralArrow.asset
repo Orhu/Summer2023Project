@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_SpectralArrow
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 0}
+  actionAudioClip: {fileID: 8300000, guid: b7ca87ac2ea2d3942a06ae88e20d1bc6, type: 3}
   attack:
     damage: 4
     damageType: 1
@@ -24,18 +24,19 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9d82b16c265d53449abb862e4f1cf39f, type: 2}
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
   shape: {fileID: 11400000, guid: 16bac2aeba1c6f2418473d9dea470cec, type: 2}
-  lifetime: 15
+  lifetime: 7
   initialSpeed: 6
   acceleration: 0
   minSpeed: 0
   maxSpeed: 6
   homingSpeed: 5
-  homingTime: 15
+  homingTime: 7
   homingDelay: 0
   homingAimMode: 2
   switchAfterHit: 0
   visualObject: {fileID: 8356533455023832542, guid: ca094422b0a19554791a1b34b0b71ebb, type: 3}
   detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
   spawnLocation: 0
   aimMode: 0
   travelAudioClip: {fileID: 0}

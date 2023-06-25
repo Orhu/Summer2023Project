@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_ShatterboneShard
   m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 0}
   attack:
     damage: 2
     damageType: 0
@@ -29,16 +30,21 @@ MonoBehaviour:
   maxSpeed: 8
   homingSpeed: 0
   homingTime: 0
+  homingDelay: 0
   homingAimMode: 1
+  switchAfterHit: 0
   visualObject: {fileID: 7552350355042698843, guid: 8dc9535649d14cf4d98ad3499820848a, type: 3}
   detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
   spawnLocation: 0
-  aimMode: 3
+  aimMode: 5
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   _spawnSequence:
   - delay: 0
-    angle: 0
-    offset: {x: 0, y: 0}
-  randomAngle: 360
+    angle: 180
+    offset: {x: 0.15, y: 0}
+  randomAngle: 150
   randomOffset: 0

@@ -430,7 +430,12 @@ namespace Cardificer
             onDestroyed?.Invoke();
             if (attack.detachVisualsBeforeDestroy)
             {
-                transform.GetChild(0).transform.parent = null;
+                GameObject childObj = transform.GetChild(0).gameObject;
+                childObj.transform.parent = null;
+                if (attack.detatchedVisualsTimeBeforeDestroy != 0f)
+                {
+                    Destroy(childObj, attack.detatchedVisualsTimeBeforeDestroy);
+                }
             }
         }
 

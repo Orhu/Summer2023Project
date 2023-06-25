@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,6 +11,8 @@ namespace Cardificer
     /// 
     /// To use just add a new property and SaveData backing field of the type you want to save. NOTE: Type must be serializable.
     /// Inside the constructor of the save data is the name of the save file, and whether or not it should persist through save clears.
+    /// 
+    /// For more info on autosaves see the inner class Autosaver.
     /// </summary>
     /// <example>
     /// // The player's position as it is saved to the disk.
@@ -69,6 +72,16 @@ namespace Cardificer
             {
                 if (!autosaveExists) { return Vector2.zero; }
                 return autosaver.latestAutosave.playerPos;
+            }
+        }
+
+        // The saved list of destroyed tile world positions
+        public static List<Vector2> savedDestroyedTiles
+        {
+            get
+            {
+                if (!autosaveExists) { return new List<Vector2>(); }
+                return autosaver.latestAutosave.destroyedTiles;
             }
         }
 
@@ -238,23 +251,14 @@ namespace Cardificer
 
                 // The current state of the deck.
                 public Deck.State deckState;
+                
+                // The current destroyed tiles world positions
+                public List<Vector2> destroyedTiles;
 
                 /// <summary>
                 /// Default constructor.
                 /// </summary>
                 public AutosaveData() { }
-
-                /// <summary>
-                /// Copy constructor.
-                /// </summary>
-                /// <param name="other"> The instance to copy. </param>
-                public AutosaveData(AutosaveData other)
-                {
-                    floorSeed = other.floorSeed;
-                    playerPos = other.playerPos;
-                    visitedRooms = other.visitedRooms;
-                    deckState = other.deckState;
-                }
             }
 
             /// <summary>
@@ -271,6 +275,7 @@ namespace Cardificer
                 saveData.playerHealth = Player.health.currentHealth;
                 saveData.deckState = new Deck.State(Deck.playerDeck);
                 saveData.floorSeed = FloorGenerator.floorGeneratorInstance.seed;
+                saveData.destroyedTiles = DestroyableTile.destroyedTiles != null ? DestroyableTile.destroyedTiles.ToList() : savedDestroyedTiles;
                 Vector2Int loc = FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation;
                 saveData.visitedRooms.Add(new Vector3Int(loc.x, loc.y, Deck.playerDeck.cards.Count));
 
