@@ -74,6 +74,9 @@ namespace Cardificer
         [Serializable]
         public class State
         {
+            // The amount cooldowns are multiplied by.
+            public float cooldownReduction = 1f;
+
             // All the paths cards in the deck
             public List<string> pathToCards;
 
@@ -92,10 +95,11 @@ namespace Cardificer
             /// <param name="deck"> The deck to copy. </param>
             public State(Deck deck)
             {
+                cooldownReduction = deck.cooldownReduction;
                 pathToCards = deck.cards.Select(AssetDatabase.GetAssetPath).ToList();
-                pathToCardsDrawableCards = deck.drawableCards.Select(AssetDatabase.GetAssetPath).ToList(); ;
-                pathToCardsInHandCards = deck.inHandCards.Select(AssetDatabase.GetAssetPath).ToList(); ;
-                pathToCardsDiscardedCards = deck.discardedCards.Select(AssetDatabase.GetAssetPath).ToList(); ;
+                pathToCardsDrawableCards = deck.drawableCards.Select(AssetDatabase.GetAssetPath).ToList();
+                pathToCardsInHandCards = deck.inHandCards.Select(AssetDatabase.GetAssetPath).ToList();
+                pathToCardsDiscardedCards = deck.discardedCards.Select(AssetDatabase.GetAssetPath).ToList();
             }
 
             /// <summary>
@@ -104,6 +108,7 @@ namespace Cardificer
             /// <param name="deck"> The deck to load into. </param>
             public void LoadInto(Deck deck)
             {
+                deck.cooldownReduction = cooldownReduction;
                 deck.cards = pathToCards.Select(AssetDatabase.LoadAssetAtPath<Card>).OfType<Card>().ToList();
 
                 if (pathToCards.Count != deck.cards.Count)
