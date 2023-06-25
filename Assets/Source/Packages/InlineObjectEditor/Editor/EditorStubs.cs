@@ -10,3 +10,12 @@ public partial class BulletAttackEditorStub : UnityEditor.Editor { }
 [UnityEditor.CustomEditor(typeof(OrbitAttack))]
 public partial class OrbitAttackEditorStub : UnityEditor.Editor { }
 
+[UnityEditor.CustomEditor(typeof(Cardificer.FiniteStateMachine.State))]
+public partial class StateEditorStub : UnityEditor.Editor { }
+
+[UnityEditor.CustomEditor(typeof(Cardificer.FiniteStateMachine.TransitionAnd))]
+public partial class TransitionAndEditorStub : UnityEditor.Editor { }
+
+[UnityEditor.CustomEditor(typeof(Cardificer.FiniteStateMachine.PerformAttack))]
+public partial class PerformAttackEditorStub : UnityEditor.Editor { }
+
