@@ -729,19 +729,19 @@ namespace Cardificer
         /// <param name="cell"> The cell to un-connect to </param>
         private void UnbranchRoom(MapCell[,] genMap, Room room, MapCell cell)
         {
-            if (cell.location.x == room.roomLocation.x + room.roomType.sizeMultiplier.x && !genMap[cell.location.x - 1, cell.location.y].direction.HasFlag(Direction.Right))
+            if (cell.location.x == room.roomLocation.x + room.roomType.sizeMultiplier.x && genMap[cell.location.x - 1, cell.location.y].direction.HasFlag(Direction.Right))
             {
                 genMap[cell.location.x - 1, cell.location.y].direction ^= Direction.Right;
             }
-            else if (cell.location.y == room.roomLocation.y + room.roomType.sizeMultiplier.y && !genMap[cell.location.x, cell.location.y - 1].direction.HasFlag(Direction.Up))
+            else if (cell.location.y == room.roomLocation.y + room.roomType.sizeMultiplier.y && genMap[cell.location.x, cell.location.y - 1].direction.HasFlag(Direction.Up))
             {
                 genMap[cell.location.x, cell.location.y - 1].direction ^= Direction.Up;
             }
-            else if (cell.location.x == room.roomLocation.x - 1 && !genMap[cell.location.x + 1, cell.location.y].direction.HasFlag(Direction.Left))
+            else if (cell.location.x == room.roomLocation.x - 1 && genMap[cell.location.x + 1, cell.location.y].direction.HasFlag(Direction.Left))
             {
                 genMap[cell.location.x + 1, cell.location.y].direction ^= Direction.Left;
             }
-            else if (cell.location.y == room.roomLocation.y - 1 && !genMap[cell.location.x, cell.location.y + 1].direction.HasFlag(Direction.Down))
+            else if (cell.location.y == room.roomLocation.y - 1 && genMap[cell.location.x, cell.location.y + 1].direction.HasFlag(Direction.Down))
             {
                 genMap[cell.location.x, cell.location.y + 1].direction ^= Direction.Down;
             }
@@ -1028,7 +1028,7 @@ namespace Cardificer
                         BranchRoom(genMap, branchCell.room, newRoomCell);
                         if (!GenerateRandomRoomLayout(genMap, newRoom, newRoomCell, true))
                         {
-                            UnbranchRoom(genMap, newRoom, newRoomCell);
+                            UnbranchRoom(genMap, branchCell.room, newRoomCell);
                             possibleNewRoomCells.Remove(newRoomCell);
                             continue;
                         }
