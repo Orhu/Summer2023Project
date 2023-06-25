@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Cardificer
@@ -29,7 +30,7 @@ namespace Cardificer
         private GameObject player;
 
         // Whether or not the camera is currently snapping between rooms
-        private bool snapping;
+        private bool snapping = true;
 
         // The minimum position of the camera
         private Vector2 minPosition;
@@ -184,11 +185,6 @@ namespace Cardificer
             minPosition.y = roomWorldBottomLeftLocation.y - extraHeight / 2 - 0.5f;
             maxPosition.x = roomWorldTopRightCellMiddleLocation.x + width / 2;
             maxPosition.y = roomWorldTopRightLocation.y + extraHeight / 2 + 0.5f;
-
-            Debug.Log("min position: " + minPosition);
-            Debug.Log("Max position: " + maxPosition);
-            Debug.Log("room world bottom left loctation: " + roomWorldBottomLeftLocation);
-            Debug.Log("room world top left location: " + roomWorldTopRightLocation);
         }
 
         /// <summary>
@@ -197,6 +193,32 @@ namespace Cardificer
         private void OnRoomChange()
         {
             DetermineMinAndMax();
+            StartCoroutine(MoveCameraToRoom());
+        }
+
+        /// <summary>
+        /// Moves the camera into a room
+        /// </summary>
+        /// <returns> IEnumerator so the camera doesn't try to move regularly; it waits for this to finish </returns>
+        private IEnumerator MoveCameraToRoom()
+        {
+            snapping = true;
+
+            Vector3 position = GetCameraPosition();
+
+            Vector2 vector2Transform = new Vector2(transform.position.x, transform.position.y);
+            Vector2 vector2Position = new Vector2(position.x, position.y);
+
+            while ((vector2Transform - vector2Position).magnitude > Time.fixedDeltaTime * speed)
+            {
+                Vector2 offset = (vector2Position - vector2Transform).normalized * Time.fixedDeltaTime * speed;
+                transform.position = new Vector3(offset.x + transform.position.x, offset.y + transform.position.y, position.z);
+                vector2Transform = new Vector2(transform.position.x, transform.position.y);
+                vector2Position = new Vector2(position.x, position.y);
+                yield return null;
+            }
+
+            snapping = false;
         }
     }
 }
