@@ -1,9 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Cardificer
 {
+    /// <summary>
+    /// Increases the player's max health when picked up.
+    /// </summary>
     [RequireComponent(typeof(Collider2D))]
     public class MaxHealthPickup : MonoBehaviour
     {
@@ -11,7 +12,7 @@ namespace Cardificer
         public int increaseAmount = 4;
 
         /// <summary>
-        /// Pickup health.
+        /// Pickup max health.
         /// </summary>
         /// <param name="collision"> The thing to test if it is the player. </param>
         private void OnTriggerEnter2D(Collider2D collision)

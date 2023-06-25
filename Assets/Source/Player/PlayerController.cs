@@ -39,9 +39,9 @@ namespace Cardificer
             // TODO: There is a small probability that the player position is invalid and is not caught by the default save file corruption detection.
 
             Health health = GetComponent<Health>();
-            health.maxHealth = health.maxHealth;
+            health.maxHealth = SaveManager.savedPlayerMaxHealth;
             health.currentHealth = SaveManager.savedPlayerHealth;
-            if (health.currentHealth > health.maxHealth || health.currentHealth <= 0)
+            if (health.currentHealth > health.maxHealth || health.currentHealth <= 0 || health.maxHealth <= 0)
             {
                 SaveManager.AutosaveCorrupted("Invalid player health");
                 return;
