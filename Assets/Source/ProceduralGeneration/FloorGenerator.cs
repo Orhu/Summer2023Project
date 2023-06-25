@@ -121,11 +121,11 @@ namespace Cardificer
         /// </summary>
         /// <param name="mapLocation"> The location to transform </param>
         /// <param name="startLocation"> The start location (aka midpoint of the map) </param>
-        /// <param name="roomSize"> The room size </param>
+        /// <param name="cellSize"> The size of a cell in the map </param>
         /// <returns> The world location </returns>
-        static public Vector2 TransformMapToWorld(Vector2Int mapLocation, Vector2Int startLocation, Vector2Int roomSize)
+        static public Vector2 TransformMapToWorld(Vector2Int mapLocation, Vector2Int startLocation, Vector2Int cellSize)
         {
-            return new Vector2((mapLocation.x - startLocation.x) * roomSize.x, (mapLocation.y - startLocation.y) * roomSize.y);
+            return new Vector2((mapLocation.x - startLocation.x) * cellSize.x, (mapLocation.y - startLocation.y) * cellSize.y);
         }
 
         /// <summary>

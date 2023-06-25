@@ -37,7 +37,7 @@ namespace Cardificer
                     continue;
                 }
 
-                int variance = roomTypeToLayoutParameters.numRooomsVariance;
+                int variance = roomTypeToLayoutParameters.numRoomsVariance;
                 int numRooms = roomTypeToLayoutParameters.numRooms;
                 numRooms += FloorGenerator.random.Next(-variance, variance + 1);
                 if (roomTypeToLayoutParameters.roomType.deadEnd)
@@ -1014,22 +1014,22 @@ namespace Cardificer
                 {
                     MapCell branchCell = branchableCells[FloorGenerator.random.Next(0, branchableCells.Count)];
 
-                    List<MapCell> possibleNewRooomCells = GetUnvisitedNeighbors(genMap, branchCell, false);
-                    if (possibleNewRooomCells.Count == 0)
+                    List<MapCell> possibleNewRoomCells = GetUnvisitedNeighbors(genMap, branchCell, false);
+                    if (possibleNewRoomCells.Count == 0)
                     {
                         branchableCellsInstance.Remove(branchCell);
                         branchableCells.Remove(branchCell);
                         continue;
                     }
 
-                    while (possibleNewRooomCells.Count > 0)
+                    while (possibleNewRoomCells.Count > 0)
                     {
-                        MapCell newRoomCell = possibleNewRooomCells[FloorGenerator.random.Next(0, possibleNewRooomCells.Count)];
+                        MapCell newRoomCell = possibleNewRoomCells[FloorGenerator.random.Next(0, possibleNewRoomCells.Count)];
                         BranchRoom(genMap, branchCell.room, newRoomCell);
                         if (!GenerateRandomRoomLayout(genMap, newRoom, newRoomCell, true))
                         {
                             UnbranchRoom(genMap, newRoom, newRoomCell);
-                            possibleNewRooomCells.Remove(newRoomCell);
+                            possibleNewRoomCells.Remove(newRoomCell);
                             continue;
                         }
 
@@ -1052,7 +1052,7 @@ namespace Cardificer
                         break;
                     }
 
-                    if (possibleNewRooomCells.Count == 0)
+                    if (possibleNewRoomCells.Count == 0)
                     {
                         branchableCellsInstance.Remove(branchCell);
                         continue;

@@ -12,8 +12,8 @@ namespace Cardificer
         /// </summary>
         /// <param name="roomTypesToExteriorParameters"> The parameters for each type of room </param>
         /// <param name="map"> The map to generate the rooms for </param>
-        /// <param name="roomSize"> The size of a single room </param>
-        public void Generate(RoomTypesToRoomExteriorGenerationParameters roomTypesToExteriorParameters, Map map, Vector2Int roomSize)
+        /// <param name="cellSize"> The size of a single cell </param>
+        public void Generate(RoomTypesToRoomExteriorGenerationParameters roomTypesToExteriorParameters, Map map, Vector2Int cellSize)
         {
             // Iterate over every room and create it
             for (int i = 0; i < map.mapSize.x; i++)
@@ -25,7 +25,7 @@ namespace Cardificer
                         continue;
                     }
 
-                    CreateRoomExterior(map.map[i, j].room, roomTypesToExteriorParameters.At(map.map[i, j].room.roomType), map, roomSize);
+                    CreateRoomExterior(map.map[i, j].room, roomTypesToExteriorParameters.At(map.map[i, j].room.roomType), map, cellSize);
                 }
             }
         }
@@ -36,10 +36,10 @@ namespace Cardificer
         /// <param name="createdRoom"> The cell to create the room for </param>
         /// <param name="exteriorParameters"> The parameters for this type of room </param>
         /// <param name="map"> The map </param>
-        /// <param name="roomSize"> The size of a single room </param>
-        private void CreateRoomExterior(Room createdRoom, RoomExteriorGenerationParameters exteriorParameters, Map map, Vector2Int roomSize)
+        /// <param name="cellSize"> The size of a single cell </param>
+        private void CreateRoomExterior(Room createdRoom, RoomExteriorGenerationParameters exteriorParameters, Map map, Vector2Int cellSize)
         {
-            createdRoom.cellSize = roomSize * createdRoom.roomType.sizeMultiplier;
+            createdRoom.cellSize = cellSize;
             createdRoom.roomGrid = new Tile[createdRoom.roomSize.x, createdRoom.roomSize.y];
 
             CreateWalls(map, createdRoom, exteriorParameters);

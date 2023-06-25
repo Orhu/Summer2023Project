@@ -62,6 +62,6 @@ namespace Cardificer
         public int numRooms;
 
         [Tooltip("The variance allowed with the number of rooms")]
-        public int numRooomsVariance;
+        public int numRoomsVariance;
     }
 }

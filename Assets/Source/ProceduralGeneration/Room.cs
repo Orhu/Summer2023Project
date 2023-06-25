@@ -205,7 +205,11 @@ namespace Cardificer
             {
                 _cellSize = value;
                 roomSize = _cellSize * roomType.sizeMultiplier;
-                transform.position = FloorGenerator.TransformMapToWorld(roomLocation, startLocation, cellSize);
+                // Transform map to world gives middle of bottom left cell
+                Vector2 offset = new Vector2();
+                offset.x = ((roomType.sizeMultiplier.x - 1) / 2.0f) * _cellSize.x + (((roomType.sizeMultiplier.x - 1) % 2) * 0.5f);
+                offset.y = ((roomType.sizeMultiplier.y - 1) / 2.0f) * _cellSize.y + (((roomType.sizeMultiplier.y - 1) % 2) * 0.5f);
+                transform.position = FloorGenerator.TransformMapToWorld(roomLocation, startLocation, cellSize) + offset;
             }
             get { return _cellSize; }
         }
@@ -226,7 +230,7 @@ namespace Cardificer
             set
             {
                 _roomLocation = value;
-                transform.position = FloorGenerator.TransformMapToWorld(value, startLocation, cellSize);
+                transform.position = FloorGenerator.TransformMapToWorld(value, startLocation, cellSize) + (roomType.sizeMultiplier / 2) * (cellSize / 2);
                 name = roomType.displayName + " Room " + value.ToString();
             }
             get { return _roomLocation; } 
