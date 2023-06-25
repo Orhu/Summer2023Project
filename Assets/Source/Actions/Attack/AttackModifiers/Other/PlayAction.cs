@@ -41,7 +41,7 @@ namespace Cardificer
         // The projectile this modifies
         private GameObject causer;
         
-        // the damage multiplier of this action
+        // The damage multiplier of this action
         private float damageMultiplier;
 
 
@@ -116,12 +116,6 @@ namespace Cardificer
 
                 if (action is Attack attack)
                 {
-                    // TODO damage multiplier should be done here when implemented
-                    IActor causedBy = causer.GetComponent<IActor>();
-                    if (causedBy != null)
-                    {
-                        attack.attack.damage *= Mathf.RoundToInt(causedBy.GetDamageMultiplier());
-                    }
                     attack.Play(this, causer, ignoredObjects);
                 }
                 else

@@ -9,33 +9,34 @@ namespace Cardificer.FiniteStateMachine
     /// <summary>
     /// Represents the state machine that manages and switches between states. Essentially serves as the "brain" and logic of an enemy.
     /// </summary>
+    [RequireComponent(typeof(Health), typeof(SimpleMovement))]
     public class BaseStateMachine : MonoBehaviour, IActor
     {
-        // the state this machine starts in
+        // The state this machine starts in
         [SerializeField] private BaseState initialState;
 
-        // delay after this enemy is spawned before it begins performing logic
+        // Delay after this enemy is spawned before it begins performing logic
         [SerializeField] private float delayBeforeLogic;
 
-        // the pathfinding target
+        // The pathfinding target
         [HideInInspector] public Vector2 currentPathfindingTarget;
 
-        // the attack target
+        // The attack target
         [HideInInspector] public Vector2 currentAttackTarget;
 
-        // cached feet collider
+        // Cached feet collider
         [HideInInspector] private Collider2D feetCollider;
         
-        // tracks position of feet collider 
+        // Tracks position of feet collider 
         [HideInInspector] public Vector2 feetColliderPosition;
 
-        // the current state this machine is in
+        // The current state this machine is in
         [HideInInspector] public BaseState currentState;
 
-        // tracks whether our destination has been reached or not
+        // Tracks whether our destination has been reached or not
         [HideInInspector] public bool destinationReached;
 
-        // tracks whether we are currently exhausted
+        // Tracks whether we are currently exhausted
         [HideInInspector] public bool exhausted;
 
         /// <summary>
@@ -44,42 +45,42 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         public struct PathData
         {
-            // path to target 
+            // Path to target 
             public Path path;
 
-            // index of where we are in the path
+            // Index of where we are in the path
             public int targetIndex;
 
-            // do we ignore incoming path requests?
+            // Do we ignore incoming path requests?
             public bool ignorePathRequests;
 
-            // store the path following coroutine so it can be cancelled as needed
+            // Store the path following coroutine so it can be cancelled as needed
             public IEnumerator prevFollowCoroutine;
         }
 
-        // stores our current path data
+        // Stores our current path data
         [HideInInspector] public PathData pathData;
 
-        // struct to store cooldown data
+        // Struct to store cooldown data
         public struct CooldownData
         {
             // is action cooldown available?
             public Dictionary<BaseAction, bool> cooldownReady;
         }
 
-        // stores our current attack data
+        // Stores our current attack data
         [HideInInspector] public CooldownData cooldownData;
 
-        // maintained list of components which are cached for performance
+        // Maintained list of components which are cached for performance
         private Dictionary<Type, Component> cachedComponents;
 
-        // tracks the time this was initialized
+        // Tracks the time this was initialized
         private float timeStarted;
 
         [Tooltip("Movement type this enemy begins in")]
         [SerializeField] private MovementType startingMovementType;
 
-        // current movement type of this enemy
+        // Current movement type of this enemy
         [HideInInspector] public MovementType currentMovementType;
 
         /// <summary>
@@ -96,11 +97,8 @@ namespace Cardificer.FiniteStateMachine
         [Tooltip("Draw debug gizmos? Pathfinding target is magenta, attack target is yellow, current waypoint is cyan")]
         [SerializeField] private bool drawGizmos;
         
-        // the current waypoint we are pathing to (updated by pathing scriptable objects). only used to draw debug gizmos
+        // The current waypoint we are pathing to (updated by pathing scriptable objects). only used to draw debug gizmos
         [HideInInspector] public Vector2 currentWaypoint = Vector2.zero;
-
-        // tracks current damage multiplier, retrieved from the enemy stat singleton
-        private float damageMultiplier;
 
         /// <summary>
         /// Initialize variables
@@ -152,9 +150,9 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void Start()
         {
+            SetStats();
             timeStarted = Time.time;
             FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Add(gameObject);
-            SetStats();
             currentState.OnStateEnter(this);
         }
 
@@ -163,13 +161,16 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         void SetStats()
         {
-            EnemyStatManager stats = EnemyStatManager._instance;
+            // assign health
+            var startingHealth = Mathf.RoundToInt(GetComponent<Health>().maxHealth * EnemyStatManager.healthMultiplier);
+            GetComponent<Health>().maxHealth = startingHealth;
+            GetComponent<Health>().currentHealth = startingHealth;
             
-            GetComponent<Health>().maxHealth *= Mathf.RoundToInt(stats.healthMultiplier);
-            GetComponent<SimpleMovement>().maxSpeed *= stats.moveSpeedMultiplier;
-            // uncomment below line if we want damage on interact damage to scale with enemy stats singleton
-            // feetCollider.GetComponent<DamageOnInteract>().damageData.damage *= Mathf.RoundToInt(stats.damageMultiplier);
-            damageMultiplier *= stats.damageMultiplier;
+            // assign speed
+            GetComponent<SimpleMovement>().maxSpeed *= EnemyStatManager.moveSpeedMultiplier;
+            
+            // assign damage on touch
+            feetCollider.GetComponent<DamageOnInteract>().damageData.damage *= Mathf.RoundToInt(EnemyStatManager.onTouchDamageMultiplier);
         }
 
         /// <summary>
@@ -308,7 +309,7 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> The damage multiplier. </returns>
         public float GetDamageMultiplier()
         {
-            return damageMultiplier;
+            return EnemyStatManager.projectileDamageMultiplier;
         }
 
         #endregion

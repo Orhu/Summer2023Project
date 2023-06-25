@@ -31,8 +31,8 @@ namespace Cardificer
         // The coroutine responsible for playing actions.
         private Coroutine coroutine;
 
-        // this actor's damage multiplier
-        private float damageMultiplier;
+        // This actor's damage multiplier
+        private float damageMultiplier = 1f;
 
 
         /// <summary>
@@ -40,8 +40,7 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
-            // TODO: damage multiplier modifications should be done here when they are implemented
-            damageMultiplier = 1f;
+            damageMultiplier = EnemyStatManager.turretDamageMultiplier;
             
             if (playTime == PlayTime.AlwaysShooting)
             {

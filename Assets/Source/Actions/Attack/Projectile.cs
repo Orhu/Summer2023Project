@@ -150,11 +150,11 @@ namespace Cardificer
             
             // Set up attack
             attackData = new DamageData(attack.attack, causer);
-            // TODO Liam may want to do this different, just fiddled it in to get it working
             IActor causedBy = causer.GetComponent<IActor>();
             if (causedBy != null)
             {
-                attackData += (Mathf.RoundToInt(causedBy.GetDamageMultiplier()) * attackData.damage);
+                var damage = attackData.damage; // Get the damage on the attackData
+                attackData += Mathf.RoundToInt(causedBy.GetDamageMultiplier() * damage - damage);
             }
             
             if (attack.switchAfterHit)
