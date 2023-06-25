@@ -304,7 +304,7 @@ namespace Cardificer
                     Sprite floorSprite = exteriorGenerationParameters.floorSprites.GetRandomThing(FloorGenerator.random);
                     CreateFloorTile(floorSprite, new Vector2Int(0, (room.cellSize.y * j) + room.cellSize.y / 2), floorContainer);
                 }
-                if (map.map[room.roomLocation.x + room.roomType.sizeMultiplier.x - 1, j + room.roomLocation.y].direction.HasFlag(Direction.Left))
+                if (map.map[room.roomLocation.x + room.roomType.sizeMultiplier.x - 1, j + room.roomLocation.y].direction.HasFlag(Direction.Right))
                 {
                     Sprite floorSprite = exteriorGenerationParameters.floorSprites.GetRandomThing(FloorGenerator.random);
                     CreateFloorTile(floorSprite, new Vector2Int(roomSize.x - 1, (room.cellSize.y * j) + room.cellSize.y / 2), floorContainer);
