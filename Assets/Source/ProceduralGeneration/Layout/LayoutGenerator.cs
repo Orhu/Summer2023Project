@@ -147,11 +147,11 @@ namespace Cardificer
 
             if (room.roomType.useRandomOffset)
             {
-                bool checkHorizontalOffset = !(generatedCell.direction.HasFlag(Direction.Left) || generatedCell.direction.HasFlag(Direction.Right));
-                bool checkVerticalOffset = !(generatedCell.direction.HasFlag(Direction.Up) || generatedCell.direction.HasFlag(Direction.Down));
-                for (int i = 0; i < room.roomType.sizeMultiplier.x && (i == 0 || checkHorizontalOffset); i++)
+                //bool checkHorizontalOffset = !(generatedCell.direction.HasFlag(Direction.Left) || generatedCell.direction.HasFlag(Direction.Right));
+                //bool checkVerticalOffset = !(generatedCell.direction.HasFlag(Direction.Up) || generatedCell.direction.HasFlag(Direction.Down));
+                for (int i = 0; i < room.roomType.sizeMultiplier.x; i++)// && (i == 0 || checkHorizontalOffset); i++)
                 {
-                    for (int j = 0; j < room.roomType.sizeMultiplier.y && (j == 0 || checkVerticalOffset); j++)
+                    for (int j = 0; j < room.roomType.sizeMultiplier.y; j++) //&& (j == 0 || checkVerticalOffset); j++)
                     {
                         // -i and -j because 0, 0 is bottom left, and we need to move the room down left in order to not lose the room
                         possibleOffsets.Add(new Vector2Int(-i, -j));
@@ -446,6 +446,10 @@ namespace Cardificer
             {
                 foreach (Direction direction in System.Enum.GetValues(typeof(Direction)))
                 {
+                    if (direction == Direction.None || direction == Direction.All)
+                    {
+                        continue;
+                    }
                     if (doorCell.direction.HasFlag(direction))
                     {
                         switch (room.roomType.attachmentLocation)
@@ -670,12 +674,11 @@ namespace Cardificer
             Vector2Int startPos = new Vector2Int((mapSize.x + 1) / 2, (mapSize.y + 1) / 2);
             MapCell startCell = genMap[startPos.x, startPos.y];
             Room startRoom = CreateRoom(roomContainer, startRoomType, startCell.location);
-            bool fits = GenerateRandomRoomLayout(genMap, startRoom, startCell);
+            bool fits = GenerateRandomRoomLayout(genMap, startRoom, startCell, true);
             if (!fits)
             {
                 Debug.Log("The start room somehow doesn't fit in the map");
             }
-            SetRoomCells(genMap, startRoom);
             return startRoom;
         }
 
@@ -784,14 +787,20 @@ namespace Cardificer
                 // Generate the current cell
                 MapCell currentCell = cellsToGenerate.Peek();
 
+                // Unmark the cell as visited (it will be set again during generate random room layout, but need to be false to check if the room type fits)
+                currentCell.visited = false;
+
                 List<RoomType> possibleRoomTypes = normalRooms.Keys.ToList();
                 Room newRoom;
                 bool fits;
                 do
                 {
                     newRoom = CreateRoom(roomContainer, possibleRoomTypes[FloorGenerator.random.Next(0, possibleRoomTypes.Count)], startRoom.startLocation);
-                    possibleRoomTypes.Remove(newRoom.roomType);
                     fits = GenerateRandomRoomLayout(genMap, newRoom, currentCell, false, preferredNumDoors, strictnessNumDoors, totalNormalRooms, newRoomsCount, cellsToGenerate.Count);
+                    if (!fits)
+                    {
+                        possibleRoomTypes.Remove(newRoom.roomType);
+                    }
                 }
                 while (!fits && possibleRoomTypes.Count > 0);
 
@@ -868,6 +877,10 @@ namespace Cardificer
             {
                 foreach (Direction direction in System.Enum.GetValues(typeof(Direction)))
                 {
+                    if (direction == Direction.None || direction == Direction.All)
+                    {
+                        continue;
+                    }
                     bool checkDirection = !useDirection || (useDirection && edge.direction.HasFlag(direction));
 
                     Vector2Int locationOffset = new Vector2Int();
@@ -899,6 +912,10 @@ namespace Cardificer
 
             foreach (Direction direction in System.Enum.GetValues(typeof(Direction)))
             {
+                if (direction == Direction.None || direction == Direction.All)
+                {
+                    continue;
+                }
                 bool checkDirection = !useDirection || (useDirection && cell.direction.HasFlag(direction));
 
                 Vector2Int locationOffset = new Vector2Int();
@@ -929,15 +946,20 @@ namespace Cardificer
             {
                 foreach (Direction direction in System.Enum.GetValues(typeof(Direction)))
                 {
+                    if (direction == Direction.None || direction == Direction.All)
+                    {
+                        continue;
+                    }
                     Vector2Int locationOffset = new Vector2Int();
                     locationOffset.x = System.Convert.ToInt32(direction.HasFlag(Direction.Right)) - System.Convert.ToInt32(direction.HasFlag(Direction.Left));
                     locationOffset.y = System.Convert.ToInt32(direction.HasFlag(Direction.Up)) - System.Convert.ToInt32(direction.HasFlag(Direction.Down));
                     bool locationOutsideRoom = locationOffset.x < room.roomLocation.x || locationOffset.x >= room.roomLocation.x + room.roomType.sizeMultiplier.x;
                     locationOutsideRoom &= locationOffset.y < room.roomLocation.y || locationOffset.y >= room.roomLocation.y + room.roomType.sizeMultiplier.y;
 
-                    if (locationOutsideRoom && genMap[room.roomLocation.x + locationOffset.x, room.roomLocation.y + locationOffset.y].visited)
+                    MapCell neighbor = genMap[room.roomLocation.x + locationOffset.x, room.roomLocation.y + locationOffset.y];
+                    if (locationOutsideRoom && neighbor.visited && !neighbors.Contains(neighbor))
                     {
-                        neighbors.Add(genMap[room.roomLocation.x + locationOffset.x, room.roomLocation.y + locationOffset.y]);
+                        neighbors.Add(neighbor);
                     }
                 }
             }

@@ -202,6 +202,10 @@ namespace Cardificer
             {
                 foreach (Direction direction in System.Enum.GetValues(typeof(Direction)))
                 {
+                    if (direction == Direction.None || direction == Direction.All)
+                    {
+                        continue;
+                    }
                     if (roomCell.direction.HasFlag(direction))
                     {
                         Vector2Int mapOffset = new Vector2Int();
