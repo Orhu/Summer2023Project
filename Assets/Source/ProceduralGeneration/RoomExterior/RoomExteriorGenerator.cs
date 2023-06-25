@@ -46,7 +46,7 @@ namespace Cardificer
 
             CreateDoors(map, createdRoom);
 
-            //CreateFloor(map, createdRoom, exteriorParameters);
+            CreateFloor(map, createdRoom, exteriorParameters);
 
             // Reset the exterior parameters (leave things as they were)
             exteriorParameters.Reset();
