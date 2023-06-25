@@ -12,8 +12,8 @@ namespace Cardificer.FiniteStateMachine
     [RequireComponent(typeof(Health), typeof(SimpleMovement))]
     public class BaseStateMachine : MonoBehaviour, IActor
     {
-        // The state this machine starts in
-        [SerializeField] private BaseState initialState;
+        // the state this machine starts in
+        [SerializeField] private State initialState;
 
         // Delay after this enemy is spawned before it begins performing logic
         [SerializeField] private float delayBeforeLogic;
@@ -29,9 +29,9 @@ namespace Cardificer.FiniteStateMachine
         
         // Tracks position of feet collider 
         [HideInInspector] public Vector2 feetColliderPosition;
-
-        // The current state this machine is in
-        [HideInInspector] public BaseState currentState;
+        
+        // the current state this machine is in
+        [HideInInspector] public State currentState;
 
         // Tracks whether our destination has been reached or not
         [HideInInspector] public bool destinationReached;
