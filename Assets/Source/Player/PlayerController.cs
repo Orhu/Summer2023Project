@@ -8,7 +8,9 @@ namespace Cardificer
     [RequireComponent(typeof(Movement), typeof(AnimatorController), typeof(ChannelAbility))]
     public class PlayerController : MonoBehaviour, IActor
     {
-
+        // Damage multiplier of this actor
+        [HideInInspector] public float damageMultiplier = 1f;
+        
         // Movement component to allow the agent to move
         private Movement movementComponent;
 
@@ -170,11 +172,24 @@ namespace Cardificer
             return ref _canAct;
         }
 
+        /// <summary>
+        /// Returns AudioSource component of this actor
+        /// </summary>
+        /// <returns> The AudioSource. </returns>
         public AudioSource GetAudioSource()
         {
             
                 return GetComponent<AudioSource>(); 
-        }        
+        }
+
+        /// <summary>
+        /// Gets damage multiplier of this actor
+        /// </summary>
+        /// <returns> The damage multiplier. </returns>
+        public float GetDamageMultiplier()
+        {
+            return damageMultiplier;
+        }
 
         #endregion
     }
