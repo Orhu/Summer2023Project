@@ -136,7 +136,7 @@ namespace Cardificer
                 }
                 else if (j != room.cellSize.y / 2 || (roomCell.direction & Direction.Left) == Direction.None)
                 {
-                    room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), exteriorParameters.wallTile, wallContainer);
+                    randomWallSprite = exteriorParameters.leftWallSprites.GetRandomThing(FloorGenerator.random);
                 }
                 if (randomWallSprite != null)
                 {
