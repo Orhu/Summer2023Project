@@ -259,19 +259,6 @@ namespace Cardificer
                 /// Default constructor.
                 /// </summary>
                 public AutosaveData() { }
-
-                /// <summary>
-                /// Copy constructor.
-                /// </summary>
-                /// <param name="other"> The instance to copy. </param>
-                public AutosaveData(AutosaveData other)
-                {
-                    floorSeed = other.floorSeed;
-                    playerPos = other.playerPos;
-                    visitedRooms = other.visitedRooms;
-                    deckState = other.deckState;
-                    destroyedTiles = other.destroyedTiles;
-                }
             }
 
             /// <summary>
