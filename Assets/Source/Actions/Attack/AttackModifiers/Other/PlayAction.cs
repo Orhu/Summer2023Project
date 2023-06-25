@@ -42,7 +42,7 @@ namespace Cardificer
         private GameObject causer;
         
         // The damage multiplier of this action
-        private float damageMultiplier;
+        private float damageMultiplier = 1f;
 
 
         // The projectile this modifies
