@@ -770,6 +770,7 @@ namespace Cardificer
             foreach (KeyValuePair<RoomType, int> entry in normalRooms)
             {
                 totalNormalRooms += entry.Value;
+                roomTypeCounts.Add(entry.Key, 0);
             }
 
             // Add the neighbors of the start cell to the cells to generate
@@ -813,14 +814,7 @@ namespace Cardificer
                     throw new System.Exception("Unable to generate layout! The rooms do not fit. Last attempted room to fit: " + newRoom.roomType.displayName);
                 }
 
-                if (roomTypeCounts.ContainsKey(newRoom.roomType))
-                {
-                    roomTypeCounts[newRoom.roomType]++;
-                }
-                else
-                {
-                    roomTypeCounts.Add(newRoom.roomType, 1);
-                }
+                roomTypeCounts[newRoom.roomType]++;
 
                 if (roomTypeCounts[newRoom.roomType] == normalRooms[newRoom.roomType])
                 {
@@ -1003,6 +997,12 @@ namespace Cardificer
         private bool GenerateDeadEnds(MapCell[,] genMap, GameObject roomContainer, Vector2Int startLocation, List<MapCell> branchableCells, Dictionary<RoomType, int> deadEnds)
         {
             Dictionary<RoomType, int> deadEndCounts = new Dictionary<RoomType, int>();
+
+            foreach (KeyValuePair<RoomType, int> entry in deadEnds)
+            {
+                deadEndCounts.Add(entry.Key, 0);
+            }
+
             while (deadEnds.Count > 0)
             {
                 RoomType randomType = deadEnds.ElementAt(FloorGenerator.random.Next(0, deadEnds.Count)).Key;
@@ -1025,7 +1025,7 @@ namespace Cardificer
                     while (possibleNewRooomCells.Count > 0)
                     {
                         MapCell newRoomCell = possibleNewRooomCells[FloorGenerator.random.Next(0, possibleNewRooomCells.Count)];
-                        BranchRoom(genMap, newRoom, newRoomCell);
+                        BranchRoom(genMap, branchCell.room, newRoomCell);
                         if (!GenerateRandomRoomLayout(genMap, newRoom, newRoomCell, true))
                         {
                             UnbranchRoom(genMap, newRoom, newRoomCell);
