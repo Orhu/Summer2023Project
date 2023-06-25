@@ -53,10 +53,8 @@ namespace Cardificer
                 yield break;
             }
 
-            var startNodeResult = roomInterface.WorldPosToTile(stateMachine.feetColliderPosition,
-                stateMachine.currentMovementType);
-            var targetNodeResult = roomInterface.WorldPosToTile(stateMachine.currentPathfindingTarget,
-                stateMachine.currentMovementType);
+            var startNodeResult = roomInterface.WorldPosToTile(stateMachine.feetColliderPosition);
+            var targetNodeResult = roomInterface.WorldPosToTile(stateMachine.currentPathfindingTarget);
 
             PathfindingTile startNode;
             PathfindingTile targetNode;

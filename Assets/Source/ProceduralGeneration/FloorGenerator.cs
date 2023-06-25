@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -49,10 +50,10 @@ namespace Cardificer
             set
             {
                 _currentRoom = value;
-                onRoomChange?.Invoke();
+                StartCoroutine(InvokeRoomChangeAfterFrame());
             }
         }
-
+        
         // The instance
         public static FloorGenerator floorGeneratorInstance { get; private set; }
 
@@ -140,6 +141,16 @@ namespace Cardificer
                     transform.GetChild(0).GetChild(i).GetChild(j).gameObject.SetActive(true);
                 }
             }
+        }
+        
+        /// <summary>
+        /// Invokes room change after 1 frame. This allows for room change to be called *after* the new room is set to active.
+        /// </summary>
+        /// <returns> Waits 1 frame before invoking </returns>
+        IEnumerator InvokeRoomChangeAfterFrame()
+        {
+            yield return null; // wait one frame
+            onRoomChange?.Invoke();
         }
     }
 }
