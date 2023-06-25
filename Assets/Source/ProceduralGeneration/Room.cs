@@ -202,7 +202,8 @@ namespace Cardificer
         { 
             set
             {
-                roomSize = cellSize * roomType.sizeMultiplier;
+                _cellSize = value;
+                roomSize = _cellSize * roomType.sizeMultiplier;
             }
             get { return _cellSize; }
         }
@@ -240,7 +241,7 @@ namespace Cardificer
         {
             if (!generated)
             {
-                Template template = FloorGenerator.floorGeneratorInstance.templateGenerationParameters.GetRandomTemplate(roomType);
+                Template template = FloorGenerator.floorGeneratorInstance.templateGenerationParametersInstance.GetRandomTemplate(roomType);
                 GetComponent<TemplateGenerator>().Generate(this, template, spawnEnemies);
                 generated = true;
             }

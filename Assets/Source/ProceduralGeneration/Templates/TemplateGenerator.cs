@@ -54,7 +54,7 @@ namespace Cardificer
                     }
                     else
                     {
-                        TemplateGenerationParameters templateGenParams = FloorGenerator.floorGeneratorInstance.templateGenerationParameters;
+                        TemplateGenerationParameters templateGenParams = FloorGenerator.floorGeneratorInstance.templateGenerationParametersInstance;
                         createdTile = templateGenParams.GetRandomTile(templateTile);
                         createdTile.gridLocation = new Vector2Int(i, j);
                         if (createdTile.spawnedObject != null && !(createdTile.type == TileType.EnemySpawner && !spawnEnemies))

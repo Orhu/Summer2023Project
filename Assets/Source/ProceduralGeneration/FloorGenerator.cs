@@ -14,7 +14,11 @@ namespace Cardificer
         public LayoutGenerationParameters layoutGenerationParameters;
 
         [Tooltip("The template generation parameters for this floor")]
-        public TemplateGenerationParameters templateGenerationParameters;
+        // TODO: Chagne to private
+        [SerializeField] public TemplateGenerationParameters templateGenerationParameters;
+
+        // The copy of the template generation parameters for this floor
+        [System.NonSerialized] public TemplateGenerationParameters templateGenerationParametersInstance;
 
         [Tooltip("The size of a map cell on this floor")]
         public Vector2Int cellSize;
@@ -85,6 +89,8 @@ namespace Cardificer
 
             map = GetComponent<LayoutGenerator>().Generate(layoutGenerationParameters);
             GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, cellSize);
+
+            templateGenerationParametersInstance = templateGenerationParameters.Copy();
 
             // Autosave loading
             if (!SaveManager.autosaveExists) 
