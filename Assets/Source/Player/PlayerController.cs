@@ -40,6 +40,9 @@ namespace Cardificer
             transform.position = SaveManager.savedPlayerPosition;
             // TODO: There is a small probability that the player position is invalid and is not caught by the default save file corruption detection.
 
+            damageMultiplier = SaveManager.savedPlayerDamage;
+            (movementComponent as SimpleMovement).maxSpeed = SaveManager.savedPlayerSpeed;
+
             Health health = GetComponent<Health>();
             health.maxHealth = SaveManager.savedPlayerMaxHealth;
             health.currentHealth = SaveManager.savedPlayerHealth;
