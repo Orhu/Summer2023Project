@@ -89,7 +89,7 @@ MonoBehaviour:
   leftDoorSprites:
     things:
     - thing:
-        doorOpened: {fileID: 21300000, guid: 6060854bd3bc1fb4ea84781c41201c01, type: 3}
+        doorOpened: {fileID: 21300000, guid: 33e8fd09c675c1f4fa6771b7e43ec5e2, type: 3}
         doorClosed: {fileID: 21300000, guid: 85bca1526b715244285f18d7873e8377, type: 3}
       weight: 1
       maxChosen: -1
@@ -98,6 +98,32 @@ MonoBehaviour:
     - thing:
         doorOpened: {fileID: 21300000, guid: 93861ab1c85590c44bcd2dcb8e0da97b, type: 3}
         doorClosed: {fileID: 21300000, guid: 492c29ec10b94ba46ad687828ca07b96, type: 3}
+      weight: 1
+      maxChosen: -1
+  aboveRightDoorSprites:
+    things:
+    - thing: {fileID: 21300000, guid: 777851bb37a242f458d2ba2e5f430ae6, type: 3}
+      weight: 1
+      maxChosen: -1
+  belowRightDoorSprites:
+    things:
+    - thing: {fileID: 21300000, guid: a0712226a9167d24ea8e632dfc41643d, type: 3}
+      weight: 1
+      maxChosen: -1
+  besideTopDoorRightSprites:
+    things:
+    - thing: {fileID: 21300000, guid: c0ef82ab5e73d81448ff8b994cbac76c, type: 3}
+      weight: 1
+      maxChosen: -1
+    - thing: {fileID: 21300000, guid: eeee2eba53416be46ae62ed7eed981a0, type: 3}
+      weight: 1
+      maxChosen: -1
+  besideTopDoorLeftSprites:
+    things:
+    - thing: {fileID: 21300000, guid: c0ef82ab5e73d81448ff8b994cbac76c, type: 3}
+      weight: 1
+      maxChosen: -1
+    - thing: {fileID: 21300000, guid: eeee2eba53416be46ae62ed7eed981a0, type: 3}
       weight: 1
       maxChosen: -1
   aboveLeftDoorSprites:
@@ -110,14 +136,20 @@ MonoBehaviour:
     - thing: {fileID: 21300000, guid: b83129e9492c306439081fb7e25fac81, type: 3}
       weight: 1
       maxChosen: -1
-  aboveRightDoorSprites:
+  besideBottomDoorRightSprites:
     things:
-    - thing: {fileID: 21300000, guid: 777851bb37a242f458d2ba2e5f430ae6, type: 3}
+    - thing: {fileID: 21300000, guid: c0ef82ab5e73d81448ff8b994cbac76c, type: 3}
       weight: 1
       maxChosen: -1
-  belowRightDoorSprites:
+    - thing: {fileID: 21300000, guid: eeee2eba53416be46ae62ed7eed981a0, type: 3}
+      weight: 1
+      maxChosen: -1
+  besideBottomDoorLeftSprites:
     things:
-    - thing: {fileID: 21300000, guid: a0712226a9167d24ea8e632dfc41643d, type: 3}
+    - thing: {fileID: 21300000, guid: eeee2eba53416be46ae62ed7eed981a0, type: 3}
+      weight: 1
+      maxChosen: -1
+    - thing: {fileID: 21300000, guid: c0ef82ab5e73d81448ff8b994cbac76c, type: 3}
       weight: 1
       maxChosen: -1
   floorSprites:

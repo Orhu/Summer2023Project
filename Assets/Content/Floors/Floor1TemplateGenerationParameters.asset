@@ -13,8 +13,25 @@ MonoBehaviour:
   m_Name: Floor1TemplateGenerationParameters
   m_EditorClassIdentifier: 
   templatesPool:
-    roomTypesToDifficultiesToTemplates: []
-  hardRoomPercentageIncrease: 0
+    roomTypesToDifficultiesToTemplates:
+    - roomType: {fileID: 11400000, guid: 29c9d6ab9c6b80043953eff27129ce32, type: 2}
+      difficultiesToTemplates:
+        difficultiesToTemplates:
+        - difficulty: 1
+          templates:
+          - {fileID: 11400000, guid: 9949e600945a6de4cbceb51b59936b33, type: 2}
+          - {fileID: 11400000, guid: 7c456b1543a40ba4aba600fcbffd37dd, type: 2}
+        - difficulty: 2
+          templates:
+          - {fileID: 11400000, guid: 795580939ded38b42b817db576d4d5cc, type: 2}
+          - {fileID: 11400000, guid: e7c1348eef149ea43a71013af573eeac, type: 2}
+    - roomType: {fileID: 11400000, guid: 5bae505bbc2ecc74db87ad27d3504366, type: 2}
+      difficultiesToTemplates:
+        difficultiesToTemplates:
+        - difficulty: 0
+          templates:
+          - {fileID: 11400000, guid: b756c81037c862d4cbc825065208fff4, type: 2}
+  hardRoomPercentageIncrease: 20
   tileTypesToPossibleTiles:
     tileTypesToPossibleTiles: []
-  genericTiles: {fileID: 0}
+  genericTiles: {fileID: 11400000, guid: 618d5c00f3eff444c9f6bb0835db2bcb, type: 2}
