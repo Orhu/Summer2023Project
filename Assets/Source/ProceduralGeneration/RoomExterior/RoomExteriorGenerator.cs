@@ -44,7 +44,7 @@ namespace Cardificer
 
             CreateWalls(map, createdRoom, exteriorParameters);
 
-            //CreateDoors(map, createdRoom);
+            CreateDoors(map, createdRoom);
 
             //CreateFloor(map, createdRoom, exteriorParameters);
 
@@ -83,7 +83,7 @@ namespace Cardificer
             for (int i = 1; i < roomSize.x - 1; i++)
             {
                 Sprite randomWallSprite = null;
-                MapCell roomCell = map.map[(i / room.roomType.sizeMultiplier.x) + room.roomLocation.x, room.roomLocation.y];
+                MapCell roomCell = map.map[(i / (room.roomType.sizeMultiplier.x * room.cellSize.x)) + room.roomLocation.x, room.roomLocation.y];
                 if ((i == room.cellSize.x / 2 - 1) && (roomCell.direction & Direction.Down) != Direction.None)
                 {
                     randomWallSprite = exteriorParameters.besideBottomDoorLeftSprites.GetRandomThing(FloorGenerator.random);
@@ -102,7 +102,7 @@ namespace Cardificer
                 }
 
                 randomWallSprite = null;
-                roomCell = map.map[(i / room.roomType.sizeMultiplier.x) + room.roomLocation.x, room.roomType.sizeMultiplier.y + room.roomLocation.y - 1];
+                roomCell = map.map[(i / (room.roomType.sizeMultiplier.x * room.cellSize.x)) + room.roomLocation.x, room.roomType.sizeMultiplier.y + room.roomLocation.y - 1];
                 if ((i == room.cellSize.x / 2 - 1) && (roomCell.direction & Direction.Up) != Direction.None)
                 {
                     randomWallSprite = exteriorParameters.besideTopDoorLeftSprites.GetRandomThing(FloorGenerator.random);
@@ -125,7 +125,7 @@ namespace Cardificer
             for (int j = 1; j < roomSize.y - 1; j++)
             {
                 Sprite randomWallSprite = null;
-                MapCell roomCell = map.map[room.roomLocation.x, (j / room.roomType.sizeMultiplier.y) + room.roomLocation.y];
+                MapCell roomCell = map.map[room.roomLocation.x, (j / (room.roomType.sizeMultiplier.y * room.cellSize.y)) + room.roomLocation.y];
                 if ((j == room.cellSize.y / 2 - 1) && (roomCell.direction & Direction.Left) != Direction.None)
                 {
                     randomWallSprite = exteriorParameters.belowLeftDoorSprites.GetRandomThing(FloorGenerator.random);
@@ -144,7 +144,7 @@ namespace Cardificer
                 }
 
                 randomWallSprite = null;
-                roomCell = map.map[room.roomLocation.x + room.roomType.sizeMultiplier.x - 1, (j / room.roomType.sizeMultiplier.y) + room.roomLocation.y];
+                roomCell = map.map[room.roomLocation.x + room.roomType.sizeMultiplier.x - 1, (j / (room.roomType.sizeMultiplier.y * room.cellSize.y)) + room.roomLocation.y];
                 if ((j == room.cellSize.y / 2 - 1) && (roomCell.direction & Direction.Right) != Direction.None)
                 {
                     randomWallSprite = exteriorParameters.belowRightDoorSprites.GetRandomThing(FloorGenerator.random);

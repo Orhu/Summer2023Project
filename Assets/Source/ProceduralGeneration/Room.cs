@@ -197,8 +197,9 @@ namespace Cardificer
         [HideInInspector] public Tile[,] roomGrid;
 
         // The size of a cell
-        private Vector2Int _cellSize;
-        [HideInInspector] public Vector2Int cellSize 
+        [HideInInspector] private Vector2Int _cellSize;
+        
+        public Vector2Int cellSize 
         { 
             set
             {
@@ -218,8 +219,8 @@ namespace Cardificer
         [HideInInspector] public Vector2Int startLocation;
 
         // The bottom left location of the room in the map
-        private Vector2Int _roomLocation;
-        [HideInInspector] public Vector2Int roomLocation 
+        [HideInInspector] private Vector2Int _roomLocation;
+        public Vector2Int roomLocation 
         { 
             set
             {
