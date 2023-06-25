@@ -162,15 +162,15 @@ namespace Cardificer.FiniteStateMachine
         void SetStats()
         {
             // assign health
-            var startingHealth = Mathf.RoundToInt(GetComponent<Health>().maxHealth * EnemyStatManager.healthMultiplier);
+            var startingHealth = Mathf.RoundToInt(GetComponent<Health>().maxHealth * DifficultyProgressionManager.healthMultiplier);
             GetComponent<Health>().maxHealth = startingHealth;
             GetComponent<Health>().currentHealth = startingHealth;
             
             // assign speed
-            GetComponent<SimpleMovement>().maxSpeed *= EnemyStatManager.moveSpeedMultiplier;
+            GetComponent<SimpleMovement>().maxSpeed *= DifficultyProgressionManager.moveSpeedMultiplier;
             
             // assign damage on touch
-            feetCollider.GetComponent<DamageOnInteract>().damageData.damage *= Mathf.RoundToInt(EnemyStatManager.onTouchDamageMultiplier);
+            feetCollider.GetComponent<DamageOnInteract>().damageData.damage *= Mathf.RoundToInt(DifficultyProgressionManager.onTouchDamageMultiplier);
         }
 
         /// <summary>
@@ -309,7 +309,7 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> The damage multiplier. </returns>
         public float GetDamageMultiplier()
         {
-            return EnemyStatManager.projectileDamageMultiplier;
+            return DifficultyProgressionManager.projectileDamageMultiplier;
         }
 
         #endregion

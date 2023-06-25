@@ -40,7 +40,7 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
-            damageMultiplier = EnemyStatManager.turretDamageMultiplier;
+            damageMultiplier = DifficultyProgressionManager.turretDamageMultiplier;
             
             if (playTime == PlayTime.AlwaysShooting)
             {
