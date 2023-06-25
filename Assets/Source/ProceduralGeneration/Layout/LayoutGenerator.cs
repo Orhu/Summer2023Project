@@ -354,11 +354,13 @@ namespace Cardificer
         /// <param name="activeBranches"> The number of active branches </param>
         private void SetRandomDirections(List<(MapCell, Direction)> possibleDirections, int currentNumDoors, int preferredNumDoors, float strictnessNumDoors, int targetNumRooms, int currentNumRooms, int activeBranches)
         {
+
+            int initialNumDoors = currentNumDoors;
             // While it's still possible to open in another direction
             while (possibleDirections.Count != 0)
             {
                 // If we're at the max number of directions this room is allowed to have, then stop adding more directions
-                if (currentNumDoors >= targetNumRooms - currentNumRooms)
+                if (currentNumDoors - initialNumDoors >= targetNumRooms - currentNumRooms)
                 {
                     break;
                 }
@@ -677,7 +679,7 @@ namespace Cardificer
             bool fits = GenerateRandomRoomLayout(genMap, startRoom, startCell, true);
             if (!fits)
             {
-                Debug.Log("The start room somehow doesn't fit in the map");
+                throw new System.Exception("The start room somehow doesn't fit in the map");
             }
             return startRoom;
         }
@@ -824,8 +826,6 @@ namespace Cardificer
                 {
                     normalRooms.Remove(newRoom.roomType);
                 }
-
-                newRoomsCount++;
 
                 if (newRoom.roomType.attachedRoom != null)
                 {
