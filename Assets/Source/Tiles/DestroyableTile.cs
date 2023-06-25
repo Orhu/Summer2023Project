@@ -13,7 +13,7 @@ namespace Cardificer
     /// </summary>
     public class DestroyableTile : MonoBehaviour
     {
-        // stores a shared list of destroyed tile positions
+        // Stores a shared list of destroyed tile positions
         public static HashSet<Vector2> destroyedTiles;
 
         /// <summary>
