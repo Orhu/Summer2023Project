@@ -147,8 +147,15 @@ namespace Cardificer
             minSpeed = attack.minSpeed;
             acceleration = attack.acceleration;
             shape = Instantiate(attack.shape);
-
+            
+            // Set up attack
             attackData = new DamageData(attack.attack, causer);
+            IActor causedBy = causer.GetComponent<IActor>();
+            if (causedBy != null)
+            {
+                attackData.damage = Mathf.RoundToInt(attackData.damage * causedBy.GetDamageMultiplier());
+            }
+            
             if (attack.switchAfterHit)
             {
                 onOverlap +=
