@@ -883,9 +883,10 @@ namespace Cardificer
                     bool locationOutsideRoom = locationOffset.x + edge.location.x < room.roomLocation.x || locationOffset.x + edge.location.x >= room.roomLocation.x + room.roomType.sizeMultiplier.x;
                     locationOutsideRoom |= locationOffset.y + edge.location.y < room.roomLocation.y || locationOffset.y + edge.location.y >= room.roomLocation.y + room.roomType.sizeMultiplier.y;
 
-                    if (checkDirection && locationOutsideRoom && !genMap[room.roomLocation.x + locationOffset.x, room.roomLocation.y + locationOffset.y].visited)
+                    MapCell neighbor = genMap[edge.location.x + locationOffset.x, edge.location.y + locationOffset.y];
+                    if (checkDirection && locationOutsideRoom && !neighbor.visited)
                     {
-                        neighbors.Add(genMap[room.roomLocation.x + locationOffset.x, room.roomLocation.y + locationOffset.y]);
+                        neighbors.Add(neighbor);;
                     }
                 }
             }
