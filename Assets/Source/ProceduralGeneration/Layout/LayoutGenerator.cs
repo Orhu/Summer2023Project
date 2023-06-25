@@ -880,8 +880,8 @@ namespace Cardificer
                     Vector2Int locationOffset = new Vector2Int();
                     locationOffset.x = System.Convert.ToInt32(direction.HasFlag(Direction.Right)) - System.Convert.ToInt32(direction.HasFlag(Direction.Left));
                     locationOffset.y = System.Convert.ToInt32(direction.HasFlag(Direction.Up)) - System.Convert.ToInt32(direction.HasFlag(Direction.Down));
-                    bool locationOutsideRoom = locationOffset.x < room.roomLocation.x || locationOffset.x >= room.roomLocation.x + room.roomType.sizeMultiplier.x;
-                    locationOutsideRoom &= locationOffset.y < room.roomLocation.y || locationOffset.y >= room.roomLocation.y + room.roomType.sizeMultiplier.y;
+                    bool locationOutsideRoom = locationOffset.x < 0 || locationOffset.x >= room.roomType.sizeMultiplier.x;
+                    locationOutsideRoom |= locationOffset.y < 0 || locationOffset.y >= room.roomType.sizeMultiplier.y;
 
                     if (checkDirection && locationOutsideRoom && !genMap[room.roomLocation.x + locationOffset.x, room.roomLocation.y + locationOffset.y].visited)
                     {
@@ -947,8 +947,8 @@ namespace Cardificer
                     Vector2Int locationOffset = new Vector2Int();
                     locationOffset.x = System.Convert.ToInt32(direction.HasFlag(Direction.Right)) - System.Convert.ToInt32(direction.HasFlag(Direction.Left));
                     locationOffset.y = System.Convert.ToInt32(direction.HasFlag(Direction.Up)) - System.Convert.ToInt32(direction.HasFlag(Direction.Down));
-                    bool locationOutsideRoom = locationOffset.x < room.roomLocation.x || locationOffset.x >= room.roomLocation.x + room.roomType.sizeMultiplier.x;
-                    locationOutsideRoom &= locationOffset.y < room.roomLocation.y || locationOffset.y >= room.roomLocation.y + room.roomType.sizeMultiplier.y;
+                    bool locationOutsideRoom = locationOffset.x < 0 || locationOffset.x >= room.roomType.sizeMultiplier.x;
+                    locationOutsideRoom |= locationOffset.y < 0 || locationOffset.y >= room.roomType.sizeMultiplier.y;
 
                     MapCell neighbor = genMap[edge.location.x + locationOffset.x, edge.location.y + locationOffset.y];
                     if (locationOutsideRoom && neighbor.visited && !neighbors.Contains(neighbor))
