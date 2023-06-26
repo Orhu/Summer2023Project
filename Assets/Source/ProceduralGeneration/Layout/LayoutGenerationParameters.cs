@@ -10,7 +10,7 @@ namespace Cardificer
     public class LayoutGenerationParameters
     {
         [Tooltip("A list of room types, and their layout parameters")]
-        public RoomTypesToLayoutParameters roomTypesTolayoutParameters;
+        public RoomTypesToLayoutParameters roomTypesToLayoutParameters;
 
         [Tooltip("The number of doors that is preferred")] [Range(1, 4)]
         [SerializeField] public int preferredNumDoors;

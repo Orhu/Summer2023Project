@@ -1,4 +1,5 @@
 using System.Collections;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -31,6 +32,9 @@ namespace Cardificer
 
         [Tooltip("Whether or not to randomize the seed on start")]
         public bool randomizeSeed;
+
+        [Tooltip("The file to save the generation settings in")]
+        public string generationSettingsFileName = "GenerationSettings";
 
         // Event called when the room is changed
         [HideInInspector] public UnityEvent onRoomChange;
@@ -89,6 +93,7 @@ namespace Cardificer
 
             map = GetComponent<LayoutGenerator>().Generate(layoutGenerationParameters);
             GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, cellSize);
+            SaveLayoutGenerationSettings();
 
             templateGenerationParametersInstance = templateGenerationParameters.Copy();
 
@@ -151,6 +156,57 @@ namespace Cardificer
         {
             yield return null; // wait one frame
             onRoomChange?.Invoke();
+        }
+
+        /// <summary>
+        /// Saves the layout generation settings to a file for later reference
+        /// </summary>
+        public void SaveLayoutGenerationSettings()
+        {
+            string fileText = "Seed: " + seed.ToString() + "\n\n";
+            fileText += "Room Types and their layout parameters: \n\n";
+            
+            foreach(RoomTypeToLayoutParameters roomTypeToLayoutParameters in layoutGenerationParameters.roomTypesToLayoutParameters.roomTypesToLayoutParameters)
+            {
+                fileText += "==============================================\n";
+                RoomType roomType = roomTypeToLayoutParameters.roomType;
+                fileText += "Room Type: " + roomType.displayName + "\n";
+                fileText += "Is start room: " + roomType.startRoom.ToString() + "\n";
+                fileText += "Size multiplier: " + roomType.sizeMultiplier.ToString() + "\n";
+                fileText += "Is dead end: " + roomType.deadEnd.ToString() + "\n";
+                if (roomType.attachedRoom == null)
+                {
+                    fileText += "Attached room: null" + "\n";
+                }
+                else
+                {
+                    fileText += "-------------------------------------\n";
+                    fileText += "Attached room: " + roomType.attachedRoom.displayName + "\n";
+                    fileText += "Attachement location: " + roomType.attachmentLocation.ToString() + "\n";
+                    fileText += "Is start room: " + roomType.attachedRoom.startRoom.ToString() + "\n";
+                    fileText += "Size multiplier: " + roomType.attachedRoom.sizeMultiplier.ToString() + "\n";
+                    fileText += "Use random offset: " + roomType.attachedRoom.useRandomOffset.ToString() + "\n";
+                    if (roomType.attachedRoom.useRandomOffset)
+                    {
+                        fileText += "Offset: " + roomType.attachedRoom.offset.ToString() + "\n";
+                    }
+                    fileText += "Use difficulty: " + roomType.attachedRoom.useDifficulty.ToString() + "\n";
+                    fileText += "-------------------------------------\n";
+                }
+                fileText += "Use random offset: " + roomType.useRandomOffset.ToString() + "\n";
+                if (roomType.useRandomOffset)
+                {
+                    fileText += "Offset: " + roomType.offset.ToString() + "\n";
+                }
+                fileText += "Use difficulty: " + roomType.useDifficulty.ToString() + "\n";
+                fileText += "Emergency room: " + roomType.emergencyRoom.ToString() + "\n";
+                fileText += "Number of rooms: " + roomTypeToLayoutParameters.numRooms.ToString() + "\n";
+                fileText += "Number of rooms variance: " + roomTypeToLayoutParameters.numRoomsVariance.ToString() + "\n";
+            }
+
+            fileText += "==============================================\n";
+            Debug.Log("Saved to file " + generationSettingsFileName + ".log");
+            File.WriteAllText("logs/" + generationSettingsFileName + ".log", fileText);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Cardificer
             List<RoomType> emergencyRooms = new List<RoomType>();
             RoomType startRoomType = null;
 
-            foreach (RoomTypeToLayoutParameters roomTypeToLayoutParameters in layoutParameters.roomTypesTolayoutParameters.roomTypesToLayoutParameters)
+            foreach (RoomTypeToLayoutParameters roomTypeToLayoutParameters in layoutParameters.roomTypesToLayoutParameters.roomTypesToLayoutParameters)
             {
                 if (roomTypeToLayoutParameters.roomType.startRoom)
                 {
