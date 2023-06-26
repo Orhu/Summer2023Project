@@ -81,7 +81,30 @@ namespace Cardificer.FiniteStateMachine
         [SerializeField] private MovementType startingMovementType;
 
         // Current movement type of this enemy
-        [HideInInspector] public MovementType currentMovementType;
+        private MovementType _currentMovementType;
+        public MovementType currentMovementType
+        {
+            set
+            {
+                switch (value)
+                {
+                    case MovementType.Burrow:
+                        feetCollider.gameObject.layer = LayerMask.NameToLayer("Burrowing");
+                        break;
+                    case MovementType.Fly:
+                        feetCollider.gameObject.layer = LayerMask.NameToLayer("Flying");
+                        break;
+                    case MovementType.Walk:
+                        feetCollider.gameObject.layer = LayerMask.NameToLayer("Walking");
+                        break;
+                    default:
+                        Debug.LogError("Tried to set " + name + " to an invalid movement type");
+                        return;
+                }
+                _currentMovementType = value;
+            }
+            get => _currentMovementType;
+        }
 
         /// <summary>
         /// Chase Data struct used to store chase data as it is passed to the pathfinding singleton from pathing scriptable objects.
