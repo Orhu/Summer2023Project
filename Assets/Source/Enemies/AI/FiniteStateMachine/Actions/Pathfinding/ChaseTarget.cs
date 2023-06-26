@@ -84,7 +84,7 @@ namespace Cardificer.FiniteStateMachine
             Vector2 currentWaypoint = stateMachine.pathData.path.lookPoints[0];
             stateMachine.currentWaypoint = currentWaypoint;
 
-            while (true)
+            while (stateMachine.pathData.keepFollowingPath)
             {
                 if (ArrivedAtPoint(currentWaypoint, stateMachine))
                 {

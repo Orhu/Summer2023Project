@@ -56,6 +56,9 @@ namespace Cardificer.FiniteStateMachine
 
             // Store the path following coroutine so it can be cancelled as needed
             public IEnumerator prevFollowCoroutine;
+            
+            // Should we keep following the path? Checked every time an enemy tries to move
+            public bool keepFollowingPath;
         }
 
         // Stores our current path data
