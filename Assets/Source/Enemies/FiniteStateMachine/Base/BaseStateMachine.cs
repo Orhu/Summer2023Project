@@ -27,9 +27,6 @@ namespace Cardificer.FiniteStateMachine
         // the current state this machine is in
         [HideInInspector] public State currentState;
 
-        // Tracks whether our destination has been reached or not
-        [HideInInspector] public bool destinationReached;
-
         // Tracks whether we are currently exhausted
         [HideInInspector] public bool exhausted;
 
@@ -53,6 +50,9 @@ namespace Cardificer.FiniteStateMachine
             
             // Should we keep following the path? Checked every time an enemy tries to move
             public bool keepFollowingPath;
+            
+            // Tracks whether our destination has been reached or not
+            [HideInInspector] public bool destinationReached;
         }
 
         // Stores our current path data
@@ -160,6 +160,9 @@ namespace Cardificer.FiniteStateMachine
         
         /// Allows the state machine to track other variables that may not be shared between enemy types (ie floor bosses)
         public Dictionary<string, object> trackedVariables = new Dictionary<string, object>();
+        
+        // Tracks whether this is the first time this object has been started (needed to make sure we call OnStateEnter AFTER the initial logic delay)
+        private bool firstTimeStarted = true;
 
         /// <summary>
         /// Initialize variables
@@ -193,7 +196,6 @@ namespace Cardificer.FiniteStateMachine
             SetStats();
             timeStarted = Time.time;
             FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Add(gameObject);
-            currentState.OnStateEnter(this);
         }
 
         /// <summary>
@@ -222,6 +224,12 @@ namespace Cardificer.FiniteStateMachine
             {
                 GetComponent<Movement>().movementInput = Vector2.zero;
                 return;
+            }
+
+            if (firstTimeStarted)
+            {
+                firstTimeStarted = false;
+                currentState.OnStateEnter(this);
             }
 
             currentState.OnStateUpdate(this);

@@ -84,6 +84,7 @@ namespace Cardificer.FiniteStateMachine
 
             Vector2 currentWaypoint = stateMachine.pathData.path.lookPoints[0];
             stateMachine.currentWaypoint = currentWaypoint;
+            stateMachine.pathData.destinationReached = false;
 
             while (stateMachine.pathData.keepFollowingPath)
             {
@@ -93,6 +94,7 @@ namespace Cardificer.FiniteStateMachine
                     if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.lookPoints.Length)
                     {
                         // reached the end of the waypoints, stop moving here
+                        stateMachine.pathData.destinationReached = true;
                         stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
                         yield break;
                     }
@@ -104,6 +106,8 @@ namespace Cardificer.FiniteStateMachine
                     (currentWaypoint - (Vector2)stateMachine.GetFeetPos()).normalized;
                 yield return null;
             }
+            // while loop broken out of means something external cancelled the pathfinding. Still, it seems intuitive that once pathing stops destinationReached should be true
+            stateMachine.pathData.destinationReached = true;
         }
 
         /// <summary>
