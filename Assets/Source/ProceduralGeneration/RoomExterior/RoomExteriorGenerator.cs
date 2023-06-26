@@ -58,6 +58,7 @@ namespace Cardificer
         /// <summary>
         /// Creates walls for a rectangular room
         /// </summary>
+        /// <param name="map"> The map </param>
         /// <param name="room"> The room to create the walls for </param>
         /// <param name="exteriorParameters"> The parameters of this type of room </param>
         private void CreateWalls(Map map, Room room, RoomExteriorGenerationParameters exteriorParameters)
@@ -279,8 +280,9 @@ namespace Cardificer
         /// <summary>
         /// Creates a floor for a room
         /// </summary>
-        /// <param name="createdCell"></param>
-        /// <param name="exteriorGenerationParameters"></param>
+        /// <param name="map"> The map </param>
+        /// <param name="room"> The room to create the floor for </param>
+        /// <param name="exteriorGenerationParameters"> The exterior generation parameters of this room </param>
         private void CreateFloor(Map map, Room room, RoomExteriorGenerationParameters exteriorGenerationParameters)
         {
             Vector2Int roomSize = room.roomSize;
