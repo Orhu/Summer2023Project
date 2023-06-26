@@ -43,7 +43,10 @@ namespace Cardificer
         /// </summary>
         private new void Update()
         {
-            visualObject.transform.right = velocity;
+            if (speed > Vector2.kEpsilon)
+            {
+                visualObject.transform.right = velocity;
+            }
             base.Update();
         }
     }
