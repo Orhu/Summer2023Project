@@ -15,8 +15,6 @@ namespace Cardificer
         /// <param name="layoutParameters"> The layout generation parameters. </param>
         public Map Generate(LayoutGenerationParameters layoutParameters, int generateCallCount = 0)
         {
-            int numNormalRooms = 0;
-            int numDeadEndRooms = 0;
             Dictionary<RoomType, int> normalRooms = new Dictionary<RoomType, int>();
             Dictionary<RoomType, int> deadEndRooms = new Dictionary<RoomType, int>();
             RoomType startRoomType = null;
@@ -42,18 +40,16 @@ namespace Cardificer
                 numRooms += FloorGenerator.random.Next(-variance, variance + 1);
                 if (roomTypeToLayoutParameters.roomType.deadEnd)
                 {
-                    numDeadEndRooms += numRooms;
                     deadEndRooms.Add(roomTypeToLayoutParameters.roomType, numRooms);
                 }
                 else
                 {
-                    numNormalRooms += numRooms;
                     normalRooms.Add(roomTypeToLayoutParameters.roomType, numRooms);
                 }
             }
             
             // Initialize the gen map
-            Vector2Int mapSize = DetermineMapSize(numNormalRooms + numDeadEndRooms);
+            Vector2Int mapSize = DetermineMapSize(normalRooms, deadEndRooms, startRoomType.sizeMultiplier);
             MapCell[,] genMap = InitializeGenMap(mapSize);
 
             GameObject roomContainer = new GameObject();
@@ -83,13 +79,21 @@ namespace Cardificer
         /// </summary>
         /// <param name="numRooms"> The total number of rooms that will be generated </param>
         /// <returns> The map size </returns>
-        private Vector2Int DetermineMapSize(int numRooms)
+        private Vector2Int DetermineMapSize(Dictionary<RoomType, int> normalRooms, Dictionary<RoomType, int> deadEndRooms, Vector2Int startSize)
         {
-            // Make the map size to be able to hold all the rooms in a row in any direction (worst case scenario)
-            // +7 because boss room is 3x3, then you have the exit room, and finally you have the start room in the middle. 
-            // Then a couple extra for safety (even though it should be very unlikely to happen). 
-            // TODO: Change boos room size to not be hard coded lol
-            return new Vector2Int(numRooms * 2 + 7, numRooms * 2 + 7);
+            // The length of all the rooms lined up together
+            int length = 0;
+            foreach (KeyValuePair<RoomType, int> room in normalRooms)
+            {
+                length += System.Math.Max(room.Key.sizeMultiplier.x, room.Key.sizeMultiplier.y) * room.Value;
+            }
+            foreach (KeyValuePair<RoomType, int> room in deadEndRooms)
+            {
+                length += System.Math.Max(room.Key.sizeMultiplier.x, room.Key.sizeMultiplier.y) * room.Value;
+            }
+
+            // Multiplied by 2 because rooms can extend out in any direction from the middle, + start room size 
+            return new Vector2Int(length * 2 + 1, length * 2 + System.Math.Max(startSize.x, startSize.y));
         }
 
         /// <summary>
@@ -427,15 +431,28 @@ namespace Cardificer
                     return;
                 }
 
-                bool checkHorizontalOffset = cellLocation.y == room.roomLocation.y + room.roomType.sizeMultiplier.y || cellLocation.y == room.roomLocation.y - 1;
-                bool checkVerticalOffset = !checkHorizontalOffset;
-                for (int i = 0; i < room.roomType.sizeMultiplier.x && (i == 0 || checkHorizontalOffset); i++)
+                for (int i = 0; i < room.roomType.attachedRoom.sizeMultiplier.x; i++)
                 {
-                    for (int j = 0; j < room.roomType.sizeMultiplier.y && (j == 0 || checkVerticalOffset); j++)
+                    for (int j = 0; j < room.roomType.attachedRoom.sizeMultiplier.y; j++)
                     {
                         // -i and -j because 0, 0 is bottom left, and we need to move the room down left in order to not lose the room
                         Vector2Int offset = new Vector2Int(-i, -j);
-                        if (CheckIfRoomTypeFits(genMap, room.roomType.attachedRoom, cellLocation + offset))
+
+                        // Double check that this attached room location doesn't overlap the room. This is needed because the room isn't set to visited yet
+                        Vector2Int attachedMin = cellLocation + offset;
+                        Vector2Int attachedMax = cellLocation + offset + room.roomType.attachedRoom.sizeMultiplier - new Vector2Int(1, 1);
+
+                        Vector2Int roomMin = room.roomLocation;
+                        Vector2Int roomMax = room.roomLocation + room.roomType.sizeMultiplier - new Vector2Int(1, 1);
+
+                        bool overlapping = attachedMax.x >= roomMin.x && roomMax.x >= attachedMin.x;
+                        overlapping &= attachedMax.y >= roomMin.y && roomMax.y >= attachedMin.y;
+                        if (overlapping)
+                        {
+                            continue;
+                        }
+
+                        if (CheckIfRoomTypeFits(genMap, room.roomType.attachedRoom, cellLocation + offset) && !possibleCells.Contains(genMap[cellLocation.x, cellLocation.y]))
                         {
                             possibleCells.Add(genMap[cellLocation.x, cellLocation.y]);
                             return;
@@ -484,11 +501,11 @@ namespace Cardificer
                                         {
                                             mapLocationToCheck.y = room.roomLocation.y - 1;
                                         }
-                                        else if (direction == Direction.Left)
+                                        else if (direction == Direction.Down)
                                         {
                                             mapLocationToCheck.y = room.roomLocation.y + room.roomType.sizeMultiplier.y;
                                         }
-                                        mapLocationToCheck.x = room.roomLocation.y + i;
+                                        mapLocationToCheck.x = room.roomLocation.x + i;
 
                                         checkGenMap(mapLocationToCheck);
                                     }
@@ -952,6 +969,7 @@ namespace Cardificer
                     locationOutsideRoom |= locationOffset.y + edge.location.y < room.roomLocation.y || locationOffset.y + edge.location.y >= room.roomLocation.y + room.roomType.sizeMultiplier.y;
 
                     MapCell neighbor = genMap[edge.location.x + locationOffset.x, edge.location.y + locationOffset.y];
+
                     if (locationOutsideRoom && neighbor.visited && !neighbors.Contains(neighbor))
                     {
                         neighbors.Add(neighbor);

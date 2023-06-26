@@ -192,6 +192,7 @@ namespace Cardificer
         /// </summary>
         private void OnRoomChange()
         {
+            if (floorGenerator.currentRoom == null) { return; }
             DetermineMinAndMax();
             StartCoroutine(MoveCameraToRoom());
         }
