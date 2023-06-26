@@ -84,9 +84,9 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Gets the camera position for this frame
+        /// Gets where the camera should be for this frame
         /// </summary>
-        /// <returns></returns>
+        /// <returns> The new camera position </returns>
         private Vector3 GetCameraPosition()
         {
             Vector3 playerPos = player.transform.position;
@@ -131,18 +131,20 @@ namespace Cardificer
         /// <param name="room"> The room to use to determine min and max; if left blank, uses the floor generator's current room </param>
         private void DetermineMinAndMax(Room room = null)
         {
-            Vector2Int roomLocation;
+            Room roomToUse;
             if (room == null)
             {
-                roomLocation = floorGenerator.currentRoom.roomLocation;
+                roomToUse = floorGenerator.currentRoom;
             }
             else
             {
-                roomLocation = room.roomLocation;
+                roomToUse = room;
             }
+
+            Vector2Int roomLocation = roomToUse.roomLocation;
             Vector2 roomWorldBottomLeftCellMiddleLocation = FloorGenerator.TransformMapToWorld(roomLocation, floorGenerator.map.startRoom.roomLocation, floorGenerator.cellSize);
             Vector2 roomWorldBottomLeftLocation = roomWorldBottomLeftCellMiddleLocation - floorGenerator.cellSize / 2;
-            Vector2 roomWorldTopRightCellMiddleLocation = FloorGenerator.TransformMapToWorld(roomLocation + floorGenerator.currentRoom.roomType.sizeMultiplier - new Vector2Int(1, 1), floorGenerator.map.startRoom.roomLocation, floorGenerator.cellSize);
+            Vector2 roomWorldTopRightCellMiddleLocation = FloorGenerator.TransformMapToWorld(roomLocation + roomToUse.roomType.sizeMultiplier - new Vector2Int(1, 1), floorGenerator.map.startRoom.roomLocation, floorGenerator.cellSize);
             Vector2 roomWorldTopRightLocation = roomWorldTopRightCellMiddleLocation - floorGenerator.cellSize / 2 - Vector2.one;
             roomWorldTopRightLocation += floorGenerator.cellSize;
 

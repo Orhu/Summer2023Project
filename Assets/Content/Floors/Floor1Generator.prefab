@@ -50,7 +50,7 @@ MonoBehaviour:
     roomTypesTolayoutParameters:
       roomTypesToLayoutParameters:
       - roomType: {fileID: 11400000, guid: 29c9d6ab9c6b80043953eff27129ce32, type: 2}
-        numRooms: 7
+        numRooms: 10
         numRoomsVariance: 0
       - roomType: {fileID: 11400000, guid: 5bae505bbc2ecc74db87ad27d3504366, type: 2}
         numRooms: 1
@@ -61,7 +61,7 @@ MonoBehaviour:
       - roomType: {fileID: 11400000, guid: 3dc6d5686bf40a745a17111823c27f78, type: 2}
         numRooms: 1
         numRoomsVariance: 0
-    preferredNumDoors: 2
+    preferredNumDoors: 4
     strictnessNumDoors: 12
   templateGenerationParameters: {fileID: 11400000, guid: edf9c76c7f360e4459a24604646906f9, type: 2}
   cellSize: {x: 17, y: 11}
@@ -76,6 +76,8 @@ MonoBehaviour:
     - roomType: {fileID: 11400000, guid: 3dc6d5686bf40a745a17111823c27f78, type: 2}
       roomExteriorGenerationParameters: {fileID: 11400000, guid: c0c5c6192de14794f8d7613b745c2a98, type: 2}
     - roomType: {fileID: 11400000, guid: c78aee0530486514c9ebd3b152988085, type: 2}
+      roomExteriorGenerationParameters: {fileID: 11400000, guid: c0c5c6192de14794f8d7613b745c2a98, type: 2}
+    - roomType: {fileID: 11400000, guid: 4143f222eb18ba8408c4fb5a4c2d3ae7, type: 2}
       roomExteriorGenerationParameters: {fileID: 11400000, guid: c0c5c6192de14794f8d7613b745c2a98, type: 2}
   seed: 0
   randomizeSeed: 1

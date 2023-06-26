@@ -230,12 +230,6 @@ namespace Cardificer
 
             if (room.roomType.attachedRoom != null)
             {
-                if (!room.roomType.deadEnd)
-                {
-                    Debug.LogWarning("Rooms that are not dead ends cannot have attached rooms! Attached room on " + room.roomType.displayName + " will not be generated.");
-                    return true;
-                }
-
                 return GetPossibleAttachedRoomCells(genMap, room).Count > 0;
             }
 
