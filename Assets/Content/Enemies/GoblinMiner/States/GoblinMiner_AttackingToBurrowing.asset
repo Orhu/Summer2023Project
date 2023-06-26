@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6e9d9d27adc4994b15caee955cf5cd1, type: 3}
+  m_Script: {fileID: 11500000, guid: 30f5388158b9bb24ea90a06c6b526be0, type: 3}
   m_Name: GoblinMiner_AttackingToBurrowing
   m_EditorClassIdentifier: 
-  invert: 0
-  trueState: {fileID: 0}
-  decision: {fileID: 0}
+  invert: 1
+  trueState: {fileID: 11400000, guid: 686c95b7a11cdb2488727332fc8e0110, type: 2}
+  decisions:
+  - {fileID: 11400000, guid: 1292b1b9c83d0e6459f3f96d53c6726a, type: 2}
+  - {fileID: 11400000, guid: 3b941a92a328ac5429c2d8b2306ac059, type: 2}

@@ -44,6 +44,7 @@ namespace Cardificer
         {
             base.OnDestroy();
 
+            if (gameObject == null) { return; }
             gameObject.GetComponent<Collider2D>().enabled = true;
         }
     }
