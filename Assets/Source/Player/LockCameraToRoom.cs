@@ -64,7 +64,7 @@ namespace Cardificer
             floorGenerator.onRoomChange.AddListener(OnRoomChange);
             player = Player.Get();
 
-            DetermineMinAndMax();
+            DetermineMinAndMax(floorGenerator.map.startRoom);
         }
 
         /// <summary>
@@ -172,9 +172,18 @@ namespace Cardificer
         /// <summary>
         /// Determines the min and max location of the camera
         /// </summary>
-        private void DetermineMinAndMax()
+        /// <param name="room"> The room to use to determine min and max; if left blank, uses the floor generator's current room </param>
+        private void DetermineMinAndMax(Room room = null)
         {
-            Vector2Int roomLocation = floorGenerator.currentRoom.roomLocation;
+            Vector2Int roomLocation;
+            if (room == null)
+            {
+                roomLocation = floorGenerator.currentRoom.roomLocation;
+            }
+            else
+            {
+                roomLocation = room.roomLocation;
+            }
             Vector2 roomWorldBottomLeftCellMiddleLocation = FloorGenerator.TransformMapToWorld(roomLocation, floorGenerator.map.startRoom.roomLocation, floorGenerator.cellSize);
             Vector2 roomWorldBottomLeftLocation = roomWorldBottomLeftCellMiddleLocation - floorGenerator.cellSize / 2;
             Vector2 roomWorldTopRightCellMiddleLocation = FloorGenerator.TransformMapToWorld(roomLocation + floorGenerator.currentRoom.roomType.sizeMultiplier - new Vector2Int(1, 1), floorGenerator.map.startRoom.roomLocation, floorGenerator.cellSize);
