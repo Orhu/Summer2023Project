@@ -27,8 +27,7 @@ namespace Cardificer
             AlwaysShooting,
             WhenOverlapping
         }
-
-
+        
         // The coroutine responsible for playing actions.
         private Coroutine coroutine;
 
@@ -148,6 +147,15 @@ namespace Cardificer
         public AudioSource GetAudioSource()
         {
             return GetComponent<AudioSource>(); 
+        }
+
+        /// <summary>
+        /// Gets the damage multiplier of this actor.
+        /// </summary>
+        /// <returns> The damage multiplier. </returns>
+        public float GetDamageMultiplier()
+        {
+            return DifficultyProgressionManager.turretDamageMultiplier;
         }
 
         #endregion
