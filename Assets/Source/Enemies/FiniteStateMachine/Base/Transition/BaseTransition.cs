@@ -13,7 +13,7 @@ namespace Cardificer.FiniteStateMachine
     public abstract class BaseTransition : ScriptableObject
     {
         [Tooltip("Invert the result of decision evaluation?")]
-        [SerializeField] protected bool invert;
+        [SerializeField] private bool invert;
         
         [Tooltip("What state to enter on true")] [EditInline]
         [SerializeField] protected State trueState;
@@ -24,13 +24,9 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> The stateMachine to use </param>
         public void Evaluate(BaseStateMachine stateMachine)
         {
-            if (Execute(stateMachine) && !invert)
-            {;
-                // true and not inverted, change to true state
-                StateTransition(stateMachine);
-            } else if (!Execute(stateMachine) && invert)
+            if (Execute(stateMachine) != invert)
             {
-                // false and inverted, change to true state
+                // true and not inverted, change to true state
                 StateTransition(stateMachine);
             }
         }
