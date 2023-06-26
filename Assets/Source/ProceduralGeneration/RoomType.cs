@@ -37,6 +37,9 @@ namespace Cardificer
         [Tooltip("Whether or not this room type uses the difficulty meter")]
         public bool useDifficulty = false;
 
+        [Tooltip("Whether or not this room should be used as an \"emergency room\" when none of the other rooms fit in a given location, even if enough rooms of this type have already been generated")]
+        public bool emergencyRoom = false;
+
         /// <summary>
         /// An enum that tracks attachment locations for attached rooms
         /// </summary>

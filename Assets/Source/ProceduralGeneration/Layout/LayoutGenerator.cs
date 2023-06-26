@@ -17,6 +17,7 @@ namespace Cardificer
         {
             Dictionary<RoomType, int> normalRooms = new Dictionary<RoomType, int>();
             Dictionary<RoomType, int> deadEndRooms = new Dictionary<RoomType, int>();
+            List<RoomType> emergencyRooms = new List<RoomType>();
             RoomType startRoomType = null;
 
             foreach (RoomTypeToLayoutParameters roomTypeToLayoutParameters in layoutParameters.roomTypesTolayoutParameters.roomTypesToLayoutParameters)
@@ -46,6 +47,27 @@ namespace Cardificer
                 {
                     normalRooms.Add(roomTypeToLayoutParameters.roomType, numRooms);
                 }
+
+                if (roomTypeToLayoutParameters.roomType.emergencyRoom)
+                {
+                    if (roomTypeToLayoutParameters.roomType.sizeMultiplier != new Vector2Int(1, 1))
+                    {
+                        Debug.LogWarning("Emergency rooms may not have a size multiplier other than 1, 1! Disregarding " + roomTypeToLayoutParameters.roomType.displayName + " as a valid emergency room");
+                    }
+                    else if (roomTypeToLayoutParameters.roomType.attachedRoom != null)
+                    {
+                        Debug.LogWarning("Emergency rooms may not have an attached room! Disregarding " + roomTypeToLayoutParameters.roomType.displayName + " as a valid emergency room");
+                    }
+                    else
+                    {
+                        emergencyRooms.Add(roomTypeToLayoutParameters.roomType);
+                    }
+                }
+
+                if (emergencyRooms.Count == 0)
+                {
+                    Debug.LogWarning("There are no emergency rooms! There might be a chance that generation will fail.");
+                }
             }
             
             // Initialize the gen map
@@ -60,7 +82,7 @@ namespace Cardificer
             Room startRoom = GenerateStartRoom(genMap, roomContainer, mapSize, startRoomType);
 
             // Get all the branchable cells (which will start out as all the edge normal cells, then cells will be removed from them as it goes along
-            List<MapCell> branchableCells = GenerateNormalRooms(genMap, roomContainer, startRoom, normalRooms, layoutParameters.preferredNumDoors, layoutParameters.strictnessNumDoors);
+            List<MapCell> branchableCells = GenerateNormalRooms(genMap, roomContainer, startRoom, normalRooms, emergencyRooms, layoutParameters.preferredNumDoors, layoutParameters.strictnessNumDoors);
 
             if (!GenerateDeadEnds(genMap, roomContainer, startRoom.startLocation, branchableCells, deadEndRooms))
             {
@@ -765,7 +787,7 @@ namespace Cardificer
         /// <param name="startingRoom"> The starting cell </param>
         /// <param name="numNormalCells"> The number of normal cells to generate </param>
         /// <returns> A list of all the branchable cells </returns>
-        private List<MapCell> GenerateNormalRooms(MapCell[,] genMap, GameObject roomContainer, Room startRoom, Dictionary<RoomType, int> normalRooms, int preferredNumDoors, float strictnessNumDoors)
+        private List<MapCell> GenerateNormalRooms(MapCell[,] genMap, GameObject roomContainer, Room startRoom, Dictionary<RoomType, int> normalRooms, List<RoomType> emergencyRooms, int preferredNumDoors, float strictnessNumDoors)
         {
             // Track the branchable cells created
             List<MapCell> branchableCells = new List<MapCell>();
@@ -820,16 +842,22 @@ namespace Cardificer
 
                 if (possibleRoomTypes.Count == 0)
                 {
-                    // Unfortunately it's possible for this to happen if you don't have enough single-celled rooms. We're not worrying about that for now though  :')
-                    // Potential fix idea: Force create single rooms (even if it exceeds the # of rooms wanted)
-                    throw new System.Exception("Unable to generate layout! The rooms do not fit. Last attempted room to fit: " + newRoom.roomType.displayName);
+                    if (emergencyRooms.Count == 0)
+                    {
+                        Debug.LogError("Generation failed due to lack of emergency rooms!");
+                    }
+                    // Unfortunately it's possible for this to happen if you don't have enough single-celled rooms. Creating an emergency room in the case makes it so it doesn't completely fail.
+                    newRoom = CreateRoom(roomContainer, emergencyRooms[FloorGenerator.random.Next(0, possibleRoomTypes.Count)], startRoom.startLocation);
+                    GenerateRandomRoomLayout(genMap, newRoom, currentCell, false, preferredNumDoors, strictnessNumDoors, totalNormalRooms, newRoomsCount, cellsToGenerate.Count);
+                    Debug.LogWarning("An emergency room was created! Consider adding more single-celled rooms to the generation settings.");
                 }
-
-                roomTypeCounts[newRoom.roomType]++;
-
-                if (roomTypeCounts[newRoom.roomType] == normalRooms[newRoom.roomType])
+                else
                 {
-                    normalRooms.Remove(newRoom.roomType);
+                    roomTypeCounts[newRoom.roomType]++;
+                    if (roomTypeCounts[newRoom.roomType] == normalRooms[newRoom.roomType])
+                    {
+                        normalRooms.Remove(newRoom.roomType);
+                    }
                 }
 
                 if (newRoom.roomType.attachedRoom != null)
