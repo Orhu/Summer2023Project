@@ -9,10 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eabd4dbd5b080a640bd3c050fac04c55, type: 3}
-  m_Name: Goblin_ShootAttack
+  m_Script: {fileID: 11500000, guid: 97dc95d1766383e4a9936e474ef12a94, type: 3}
+  m_Name: GoblinSpearThrower_ChaseTarget
   m_EditorClassIdentifier: 
-  actionChargeUpTime: 0
-  actionCooldownTime: 1
-  actions:
-  - {fileID: 11400000, guid: 2291eccf3a83a2148843396a530bb613, type: 2}
+  pathLockout: 0.25
+  distanceBuffer: 0.061
