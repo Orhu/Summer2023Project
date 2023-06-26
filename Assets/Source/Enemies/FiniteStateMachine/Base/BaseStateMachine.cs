@@ -75,7 +75,39 @@ namespace Cardificer.FiniteStateMachine
         private float timeStarted;
         
         // Cached feet collider
-        private Collider2D feetCollider;
+        private Collider2D _feetCollider;
+        private Collider2D feetCollider
+        {
+            get
+            {
+                if (_feetCollider != null)
+                {
+                    return _feetCollider;
+                }
+
+                Collider2D enemyFeetCollider = null;
+                var enemyColliders = GetComponentsInChildren<Collider2D>();
+                foreach (var enemyCollider in enemyColliders)
+                {
+                    if (!enemyCollider.isTrigger)
+                    {
+                        enemyFeetCollider = enemyCollider;
+                        break;
+                    }
+                }
+
+                if (enemyFeetCollider != null)
+                {
+                    _feetCollider = enemyFeetCollider;
+                    return _feetCollider;
+                }
+                else
+                {
+                    Debug.LogError("No feet collider found! Make sure you have a non-trigger collider attached to the enemy.");
+                    return null;
+                }
+            }
+        }
 
         [Tooltip("Movement type this enemy begins in")]
         [SerializeField] private MovementType startingMovementType;
@@ -138,39 +170,6 @@ namespace Cardificer.FiniteStateMachine
             cooldownData.cooldownReady = new Dictionary<BaseAction, bool>();
             cachedComponents = new Dictionary<Type, Component>();
             currentMovementType = startingMovementType;
-            feetCollider = GetMyFeet();
-        }
-
-        /// <summary>
-        /// Grabs colliders from this enemy and sifts through them to find the feet collider
-        /// </summary>
-        /// <returns> The feet collider. </returns>
-        private Collider2D GetMyFeet()
-        {
-            if (feetCollider != null)
-            {
-                return feetCollider;
-            }
-
-            Collider2D enemyFeetCollider = null;
-            var enemyColliders = GetComponentsInChildren<Collider2D>();
-            foreach (var enemyCollider in enemyColliders)
-            {
-                if (!enemyCollider.isTrigger)
-                {
-                    enemyFeetCollider = enemyCollider;
-                    break;
-                }
-            }
-
-            if (enemyFeetCollider != null)
-            {
-                feetCollider = enemyFeetCollider;
-                return feetCollider;
-            } else {
-                Debug.LogError("No feet collider found! Make sure you have a non-trigger collider attached to the enemy.");
-                return null;
-            } 
         }
 
         /// <summary>
@@ -179,9 +178,8 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> The position of the feet collider. </returns>
         public Vector2 GetFeetPos()
         {
-            Collider2D feet = GetMyFeet();
-            Vector2 offset = feet.offset;
-            Vector2 position = feet.transform.position;
+            Vector2 offset = feetCollider.offset;
+            Vector2 position = feetCollider.transform.position;
             return new Vector2(position.x + offset.x, 
                 position.y + offset.y);
         }

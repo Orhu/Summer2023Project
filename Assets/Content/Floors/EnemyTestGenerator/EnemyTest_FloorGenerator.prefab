@@ -9,16 +9,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6816320395962278881, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
       propertyPath: templateGenerationParameters.templatesPool.roomTypesToDifficultiesToTemplates.Array.data[0].difficultiesToTemplates.difficultiesToTemplates.Array.data[0].templates.Array.size
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6816320395962278881, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
       propertyPath: templateGenerationParameters.templatesPool.roomTypesToDifficultiesToTemplates.Array.data[0].difficultiesToTemplates.difficultiesToTemplates.Array.data[1].templates.Array.size
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6816320395962278881, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
       propertyPath: templateGenerationParameters.templatesPool.roomTypesToDifficultiesToTemplates.Array.data[0].difficultiesToTemplates.difficultiesToTemplates.Array.data[0].templates.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 70d315c842dcdb54c83aafa12b187846, type: 2}
+      objectReference: {fileID: 11400000, guid: 2ad9184d36f1bc343bf419a48e3946da, type: 2}
     - target: {fileID: 6816320395962278881, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
       propertyPath: templateGenerationParameters.templatesPool.roomTypesToDifficultiesToTemplates.Array.data[0].difficultiesToTemplates.difficultiesToTemplates.Array.data[0].templates.Array.data[1]
       value: 
@@ -34,7 +34,7 @@ PrefabInstance:
     - target: {fileID: 6816320395962278881, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
       propertyPath: templateGenerationParameters.templatesPool.roomTypesToDifficultiesToTemplates.Array.data[0].difficultiesToTemplates.difficultiesToTemplates.Array.data[1].templates.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 552c63899d5b70949847433f5769dad4, type: 2}
+      objectReference: {fileID: 11400000, guid: aef4fc4a90f74a04f9db6ea80912384b, type: 2}
     - target: {fileID: 6816320395962278881, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
       propertyPath: templateGenerationParameters.templatesPool.roomTypesToDifficultiesToTemplates.Array.data[0].difficultiesToTemplates.difficultiesToTemplates.Array.data[1].templates.Array.data[1]
       value: 
@@ -89,7 +89,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6816320395962278886, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
       propertyPath: m_Name
-      value: TestFloorGen
+      value: EnemyTest_FloorGenerator
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816320395962278886, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7b877c21734539b45801dfdc11169c54, type: 3}
