@@ -17,7 +17,7 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> true if the given state machine has reached its destination </returns>
         protected override bool Evaluate(BaseStateMachine stateMachine)
         {
-            return stateMachine.pathData.destinationReached;
+            return stateMachine.destinationReached;
         }
     }
 }

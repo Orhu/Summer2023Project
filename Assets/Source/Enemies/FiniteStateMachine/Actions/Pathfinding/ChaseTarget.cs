@@ -15,14 +15,6 @@ namespace Cardificer.FiniteStateMachine
         [Tooltip("After a Path request is submitted, how long before another one is allowed?")]
         [SerializeField] private float pathLockout = 0.25f;
         
-        // Default value found by testing units traveled every frame with movement speed of 4.
-        // Essentially, this number allows us to avoid the "zigzagging" effect that happens when an enemy overshoots its
-        // target (due to moving too fast in one frame) by providing a buffer for Vector2 position float comparison.
-        // But, if the number is too high, the leniency will cause the enemy to not get close enough to their target pos before
-        // turning, leading to unpredictable behavior.
-        [Tooltip("When reaching a waypoint, how close do we have to be before we stop? (Vector2 position float comparison buffer)")]
-        [SerializeField] private float distanceBuffer = 0.061f;
-        
         // need to track our current data
         private ChaseData chaseData;
 
@@ -84,7 +76,6 @@ namespace Cardificer.FiniteStateMachine
 
             Vector2 currentWaypoint = stateMachine.pathData.path.lookPoints[0];
             stateMachine.currentWaypoint = currentWaypoint;
-            stateMachine.pathData.destinationReached = false;
 
             while (stateMachine.pathData.keepFollowingPath)
             {
@@ -94,7 +85,6 @@ namespace Cardificer.FiniteStateMachine
                     if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.lookPoints.Length)
                     {
                         // reached the end of the waypoints, stop moving here
-                        stateMachine.pathData.destinationReached = true;
                         stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
                         yield break;
                     }
@@ -103,11 +93,9 @@ namespace Cardificer.FiniteStateMachine
                 }
 
                 stateMachine.GetComponent<Movement>().movementInput =
-                    (currentWaypoint - (Vector2)stateMachine.GetFeetPos()).normalized;
+                    (currentWaypoint - stateMachine.GetFeetPos()).normalized;
                 yield return null;
             }
-            // while loop broken out of means something external cancelled the pathfinding. Still, it seems intuitive that once pathing stops destinationReached should be true
-            stateMachine.pathData.destinationReached = true;
         }
 
         /// <summary>
@@ -117,7 +105,7 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> The stateMachine to be used. </param>
         private bool ArrivedAtPoint(Vector2 point, BaseStateMachine stateMachine)
         {
-            return Vector2.Distance(point, stateMachine.GetFeetPos()) <= distanceBuffer;
+            return Vector2.Distance(point, stateMachine.GetFeetPos()) <= stateMachine.distanceBuffer;
         }
     }
 }

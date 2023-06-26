@@ -30,6 +30,24 @@ namespace Cardificer.FiniteStateMachine
         // Tracks whether we are currently exhausted
         [HideInInspector] public bool exhausted;
 
+        // Tracks whether our destination has been reached or not
+        public bool destinationReached
+        {
+            get
+            {
+                return (currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer;
+            }
+        }
+
+        // The distance margin of error 
+        public float distanceBuffer
+        {
+            get
+            {
+                return movementComponent.maxSpeed * Time.fixedDeltaTime + 0.01f;
+            }
+        }
+
         /// <summary>
         /// Struct used to store path data with this state machine instance,
         /// so we can remember pathfinding data on our ScriptableObjects where we cannot store them in-object
@@ -50,9 +68,6 @@ namespace Cardificer.FiniteStateMachine
             
             // Should we keep following the path? Checked every time an enemy tries to move
             public bool keepFollowingPath;
-            
-            // Tracks whether our destination has been reached or not
-            [HideInInspector] public bool destinationReached;
         }
 
         // Stores our current path data
@@ -108,6 +123,9 @@ namespace Cardificer.FiniteStateMachine
                 }
             }
         }
+
+        // Cached moment component
+        private SimpleMovement movementComponent;
 
         [Tooltip("Movement type this enemy begins in")]
         [SerializeField] private MovementType startingMovementType;
@@ -173,6 +191,8 @@ namespace Cardificer.FiniteStateMachine
             cooldownData.cooldownReady = new Dictionary<BaseAction, bool>();
             cachedComponents = new Dictionary<Type, Component>();
             currentMovementType = startingMovementType;
+
+            movementComponent = GetComponent<SimpleMovement>();
         }
 
         /// <summary>
@@ -207,9 +227,9 @@ namespace Cardificer.FiniteStateMachine
             var startingHealth = Mathf.RoundToInt(GetComponent<Health>().maxHealth * DifficultyProgressionManager.healthMultiplier);
             GetComponent<Health>().maxHealth = startingHealth;
             GetComponent<Health>().currentHealth = startingHealth;
-            
+
             // assign speed
-            GetComponent<SimpleMovement>().maxSpeed *= DifficultyProgressionManager.moveSpeedMultiplier;
+            movementComponent.maxSpeed *= DifficultyProgressionManager.moveSpeedMultiplier;
             
             // assign damage on touch
             feetCollider.GetComponent<DamageOnInteract>().damageData.damage *= Mathf.RoundToInt(DifficultyProgressionManager.onTouchDamageMultiplier);
@@ -222,7 +242,7 @@ namespace Cardificer.FiniteStateMachine
         {
             if (exhausted || Time.time - timeStarted <= delayBeforeLogic)
             {
-                GetComponent<Movement>().movementInput = Vector2.zero;
+                movementComponent.movementInput = Vector2.zero;
                 return;
             }
 
