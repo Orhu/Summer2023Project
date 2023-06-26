@@ -57,7 +57,7 @@ namespace Cardificer.FiniteStateMachine
         {
             if (!success || stateMachine == null || stateMachine.pathData.ignorePathRequests) return;
 
-            stateMachine.pathData.path = new Path(newPath, stateMachine.feetColliderPosition);
+            stateMachine.pathData.path = new Path(newPath, stateMachine.GetFeetPos());
 
             if (stateMachine.pathData.prevFollowCoroutine != null)
             {
@@ -66,6 +66,7 @@ namespace Cardificer.FiniteStateMachine
 
             var newCoroutine = FollowPath(stateMachine);
             stateMachine.pathData.prevFollowCoroutine = newCoroutine;
+            stateMachine.pathData.targetIndex = 0;
             stateMachine.StartCoroutine(newCoroutine);
         }
 
@@ -100,7 +101,7 @@ namespace Cardificer.FiniteStateMachine
                 }
 
                 stateMachine.GetComponent<Movement>().movementInput =
-                    (currentWaypoint - (Vector2)stateMachine.transform.position).normalized;
+                    (currentWaypoint - (Vector2)stateMachine.GetFeetPos()).normalized;
                 yield return null;
             }
         }
@@ -112,7 +113,7 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> The stateMachine to be used. </param>
         private bool ArrivedAtPoint(Vector2 point, BaseStateMachine stateMachine)
         {
-            return Vector2.Distance(point, stateMachine.feetColliderPosition) <= distanceBuffer;
+            return Vector2.Distance(point, stateMachine.GetFeetPos()) <= distanceBuffer;
         }
     }
 }

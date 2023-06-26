@@ -24,12 +24,6 @@ namespace Cardificer.FiniteStateMachine
         // The attack target
         [HideInInspector] public Vector2 currentAttackTarget;
 
-        // Cached feet collider
-        [HideInInspector] private Collider2D feetCollider;
-        
-        // Tracks position of feet collider 
-        [HideInInspector] public Vector2 feetColliderPosition;
-        
         // the current state this machine is in
         [HideInInspector] public State currentState;
 
@@ -79,6 +73,9 @@ namespace Cardificer.FiniteStateMachine
 
         // Tracks the time this was initialized
         private float timeStarted;
+        
+        // Cached feet collider
+        private Collider2D feetCollider;
 
         [Tooltip("Movement type this enemy begins in")]
         [SerializeField] private MovementType startingMovementType;
@@ -146,6 +143,19 @@ namespace Cardificer.FiniteStateMachine
                 return null;
             } 
         }
+
+        /// <summary>
+        /// Gets the position of the feet collider
+        /// </summary>
+        /// <returns> The position of the feet collider. </returns>
+        public Vector2 GetFeetPos()
+        {
+            Collider2D feet = GetMyFeet();
+            Vector2 offset = feet.offset;
+            Vector2 position = feet.transform.position;
+            return new Vector2(position.x + offset.x, 
+                position.y + offset.y);
+        }
         
         
         /// <summary>
@@ -181,14 +191,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void Update()
         {
-            Vector2 offset = feetCollider.offset;
-            Vector2 position = feetCollider.transform.position;
-            feetColliderPosition = new Vector2(position.x + offset.x, 
-                position.y + offset.y);
-            
-            if (Time.time - timeStarted <= delayBeforeLogic) return;
-
-            if (exhausted)
+            if (exhausted || Time.time - timeStarted <= delayBeforeLogic)
             {
                 GetComponent<Movement>().movementInput = Vector2.zero;
                 return;

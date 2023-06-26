@@ -53,7 +53,7 @@ namespace Cardificer
                 yield break;
             }
 
-            var startNodeResult = roomInterface.WorldPosToTile(stateMachine.feetColliderPosition);
+            var startNodeResult = roomInterface.WorldPosToTile(stateMachine.GetFeetPos());
             var targetNodeResult = roomInterface.WorldPosToTile(stateMachine.currentPathfindingTarget);
 
             PathfindingTile startNode;
@@ -136,6 +136,7 @@ namespace Cardificer
         /// </summary>
         /// <param name="startTile"> Start tile </param>
         /// <param name="endTile"> End tile </param>
+        /// <param name="stateMachine"> The stateMachine to use </param>
         /// <returns> Array containing waypoints to travel from start to end </returns>
         Vector2[] RetracePath(PathfindingTile startTile, PathfindingTile endTile, BaseStateMachine stateMachine)
         {
@@ -148,30 +149,19 @@ namespace Cardificer
                 currentNode = currentNode.retraceStep;
             }
 
-            Vector2[] waypoints = SimplifyPath(path, stateMachine);
+            Vector2[] waypoints = PathToVectors(path, stateMachine);
             Array.Reverse(waypoints);
             return waypoints;
         }
 
         /// <summary>
-        /// Simplifies path by removing unnecessary waypoints by determining directions
+        /// Converts given PathfindingTile path into a path of Vector2 waypoints
         /// </summary>
         /// <param name="path"> Input path </param>
-        /// <returns></returns>
-        Vector2[] SimplifyPath(List<PathfindingTile> path, BaseStateMachine stateMachine)
+        /// <param name="stateMachine"> The stateMachine to use </param>
+        /// <returns> List of Vector2 waypoints on every PathfindingTile point </returns>
+        Vector2[] PathToVectors(List<PathfindingTile> path, BaseStateMachine stateMachine)
         {
-            /*
-                    List<Vector2> waypoints = new List<Vector2>();
-                    waypoints.Add(targetPosition);
-                    Vector2 directionOld = Vector2.zero;
-                    
-                    for (int i = 1; i < path.Count; i ++) {
-                        Vector2 directionNew = new Vector2(path[i-1].gridLocation.x - path[i].gridLocation.x,path[i-1].gridLocation.y - path[i].gridLocation.y);
-                        if (directionNew != directionOld) {
-                            waypoints.Add(roomInterface.TileToWorldPos(path[i]));
-                        }
-                        directionOld = directionNew;
-                    }*/
             List<Vector2> waypoints = new List<Vector2>();
             waypoints.Add(stateMachine.currentPathfindingTarget);
             foreach (var tile in path)
