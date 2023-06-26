@@ -30,6 +30,9 @@ namespace Cardificer.FiniteStateMachine
         // Tracks whether we are currently exhausted
         [HideInInspector] public bool exhausted;
 
+        // The time since this has transitioned to its current state.
+        [HideInInspector] public float timeSinceTransition = 0f;
+
         // Tracks whether our destination has been reached or not
         public bool destinationReached
         {
@@ -240,6 +243,8 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void Update()
         {
+            timeSinceTransition += Time.deltaTime;
+
             if (exhausted || Time.time - timeStarted <= delayBeforeLogic)
             {
                 movementComponent.movementInput = Vector2.zero;

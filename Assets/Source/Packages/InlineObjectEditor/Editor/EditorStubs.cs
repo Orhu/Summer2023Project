@@ -13,15 +13,9 @@ public partial class OrbitAttackEditorStub : UnityEditor.Editor { }
 [UnityEditor.CustomEditor(typeof(Cardificer.FiniteStateMachine.State))]
 public partial class StateEditorStub : UnityEditor.Editor { }
 
-[UnityEditor.CustomEditor(typeof(Cardificer.FiniteStateMachine.TransitionAnd))]
-public partial class TransitionAndEditorStub : UnityEditor.Editor { }
-
 [UnityEditor.CustomEditor(typeof(Cardificer.FiniteStateMachine.PerformAttack))]
 public partial class PerformAttackEditorStub : UnityEditor.Editor { }
 
 [UnityEditor.CustomEditor(typeof(Cardificer.FiniteStateMachine.Transition))]
 public partial class TransitionEditorStub : UnityEditor.Editor { }
-
-[UnityEditor.CustomEditor(typeof(Cardificer.FiniteStateMachine.TransitionOr))]
-public partial class TransitionOrEditorStub : UnityEditor.Editor { }
 
