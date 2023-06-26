@@ -16,6 +16,9 @@ namespace Cardificer
         [Tooltip("Whether or not this room type will be generated as a start room")]
         public bool startRoom = false;
 
+        [Tooltip("Whether or not this room type will be generated as a boss room")]
+        public bool bossRoom = false;
+
         [Tooltip("The size multiplier of this room: What size is this room compared to the size of a normal room?")]
         public Vector2Int sizeMultiplier = new Vector2Int(1, 1);
 

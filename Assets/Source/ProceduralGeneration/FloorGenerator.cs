@@ -91,7 +91,23 @@ namespace Cardificer
 
             random = new System.Random(seed);
 
-            map = GetComponent<LayoutGenerator>().Generate(layoutGenerationParameters);
+            Dictionary<RoomType, int> templateCounts = new Dictionary<RoomType, int>();
+            foreach (RoomTypeToLayoutParameters roomType in layoutGenerationParameters.roomTypesToLayoutParameters.roomTypesToLayoutParameters)
+            {
+                templateCounts.Add(roomType.roomType, 0);
+                try
+                {
+                    foreach (DifficultyToTemplates difficultyToTemplates in templateGenerationParameters.templatesPool.At(roomType.roomType).difficultiesToTemplates)
+                    {
+                        templateCounts[roomType.roomType] += difficultyToTemplates.templates.Count;
+                    }
+                }
+                catch
+                {
+                    Debug.LogError("No templates associated with room type " + roomType.roomType);
+                }
+            }
+            map = GetComponent<LayoutGenerator>().Generate(layoutGenerationParameters, templateCounts);
             GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, cellSize);
             SaveLayoutGenerationSettings();
 

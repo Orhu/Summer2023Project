@@ -88,12 +88,16 @@ namespace Cardificer
         /// Generates the layout.
         /// </summary>
         /// <param name="layoutParameters"> The layout generation parameters. </param>
-        public Map Generate(LayoutGenerationParameters layoutParameters, int generateCallCount = 0)
+        /// <param name="templateCounts"> The room types and their associated template counts </param>
+        /// <param name="generateCallCount"> The number of times generate has been called </param>
+        public Map Generate(LayoutGenerationParameters layoutParameters, Dictionary<RoomType, int> templateCounts, int generateCallCount = 0)
         {
             Dictionary<RoomType, int> normalRooms = new Dictionary<RoomType, int>();
             Dictionary<RoomType, int> deadEndRooms = new Dictionary<RoomType, int>();
             List<RoomType> emergencyRooms = new List<RoomType>();
             RoomType startRoomType = null;
+
+            GenericWeightedThings<RoomType> bossRooms = new GenericWeightedThings<RoomType>();
 
             foreach (RoomTypeToLayoutParameters roomTypeToLayoutParameters in layoutParameters.roomTypesToLayoutParameters.roomTypesToLayoutParameters)
             {
@@ -111,16 +115,23 @@ namespace Cardificer
                     continue;
                 }
 
-                int variance = roomTypeToLayoutParameters.numRoomsVariance;
-                int numRooms = roomTypeToLayoutParameters.numRooms;
-                numRooms += FloorGenerator.random.Next(-variance, variance + 1);
-                if (roomTypeToLayoutParameters.roomType.deadEnd)
+                if (roomTypeToLayoutParameters.roomType.bossRoom)
                 {
-                    deadEndRooms.Add(roomTypeToLayoutParameters.roomType, numRooms);
+                    bossRooms.Add(roomTypeToLayoutParameters.roomType, templateCounts[roomTypeToLayoutParameters.roomType], 1, true);
                 }
                 else
                 {
-                    normalRooms.Add(roomTypeToLayoutParameters.roomType, numRooms);
+                    int variance = roomTypeToLayoutParameters.numRoomsVariance;
+                    int numRooms = roomTypeToLayoutParameters.numRooms;
+                    numRooms += FloorGenerator.random.Next(-variance, variance + 1);
+                    if (roomTypeToLayoutParameters.roomType.deadEnd)
+                    {
+                        deadEndRooms.Add(roomTypeToLayoutParameters.roomType, numRooms);
+                    }
+                    else
+                    {
+                        normalRooms.Add(roomTypeToLayoutParameters.roomType, numRooms);
+                    }
                 }
 
                 if (roomTypeToLayoutParameters.roomType.emergencyRoom)
@@ -144,7 +155,20 @@ namespace Cardificer
                     Debug.LogWarning("There are no emergency rooms! There might be a chance that generation will fail.");
                 }
             }
-            
+
+            for (int i = 0; i < layoutParameters.numBossRooms; i++)
+            {
+                RoomType randomBossRoom = bossRooms.GetRandomThing(FloorGenerator.random);
+                if (deadEndRooms.ContainsKey(randomBossRoom))
+                {
+                    deadEndRooms[randomBossRoom]++;
+                }
+                else
+                {
+                    deadEndRooms.Add(randomBossRoom, 1);
+                }
+            }
+
             // Initialize the gen map
             Vector2Int mapSize = DetermineMapSize(normalRooms, deadEndRooms, startRoomType.sizeMultiplier);
             MapCell[,] genMap = InitializeGenMap(mapSize);
@@ -165,7 +189,7 @@ namespace Cardificer
                 {
                     throw new System.Exception("Failed to generate all the dead ends three times in a row! Aborting generation. Please remove some dead end rooms or add more normal rooms.");
                 }
-                return Generate(layoutParameters, generateCallCount + 1);
+                return Generate(layoutParameters, templateCounts, generateCallCount + 1);
             }
 
             return CreateMap(genMap, startRoom, mapSize);
