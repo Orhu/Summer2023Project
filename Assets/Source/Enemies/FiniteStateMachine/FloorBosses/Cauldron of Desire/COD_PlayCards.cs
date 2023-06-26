@@ -31,11 +31,11 @@ namespace Cardificer.FiniteStateMachine
             
             for (int i = 0; i < numberCardsToPlay; i++)
             {
-                stateMachine.currentAttackTarget = Player.Get().transform.position;
                 List<Action> currentAttack = (List<Action>)stateMachine.trackedVariables["Card" + i];
                 foreach (var attack in currentAttack)
                 {
                     yield return new WaitForSeconds(delayBetweenProjectiles);
+                    stateMachine.currentAttackTarget = Player.Get().transform.position;
                     attack.Play(stateMachine);
                 }
                 yield return new WaitForSeconds(delayBetweenAttacks);
