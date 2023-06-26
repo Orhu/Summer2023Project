@@ -112,8 +112,11 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         public struct ChaseData
         {
+            // represents the state machine that requested the path
             private BaseStateMachine stateMachine;
+            // represents the current update path coroutine
             private Coroutine prevUpdateCoroutine;
+            // represents the current follow path coroutine
             private Coroutine prevFollowCoroutine;
         }
 
@@ -122,6 +125,9 @@ namespace Cardificer.FiniteStateMachine
         
         // The current waypoint we are pathing to (updated by pathing scriptable objects). only used to draw debug gizmos
         [HideInInspector] public Vector2 currentWaypoint = Vector2.zero;
+        
+        /// Allows the state machine to track other variables that may not be shared between enemy types (ie floor bosses)
+        public Dictionary<string, object> trackedVariables = new Dictionary<string, object>();
 
         /// <summary>
         /// Initialize variables

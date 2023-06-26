@@ -7,7 +7,7 @@ namespace Cardificer.FiniteStateMachine
     /// <summary>
     /// Represents a decision that returns true if our current destination has been reached (following path completed)
     /// </summary>
-    [CreateAssetMenu(menuName = "FSM/Decisions/Destination Reached")]
+    [CreateAssetMenu(menuName = "FSM/Decisions/Pathfinding Target/Destination Reached")]
     public class DestinationReached : Decision
     {
         /// <summary>
