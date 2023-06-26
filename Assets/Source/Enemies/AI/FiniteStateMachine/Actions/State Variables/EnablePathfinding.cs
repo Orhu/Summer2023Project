@@ -1,18 +1,16 @@
 ﻿
     using System.Collections;
+    using System.Runtime.InteropServices;
     using UnityEngine;
 
     namespace Cardificer.FiniteStateMachine
     {
         /// <summary>
-        /// Sets the ignore path requests variable to serialized bool
+        /// Represents an action that enables following the current path and disables ignoring any new pathfinding requests
         /// </summary>
-        [CreateAssetMenu(menuName = "FSM/Actions/State Variables/Ignore Path Requests")]
-        public class IgnorePathRequests : SingleAction
+        [CreateAssetMenu(menuName = "FSM/Actions/State Variables/Enable Pathfinding")]
+        public class EnablePathfinding : SingleAction
         {
-            [Tooltip("The value to set ignorePathRequests on this enemy to")]
-            [SerializeField] private bool newIgnorePathRequests;
-
             /// <summary>
             /// Updates the ignorePathRequests variable
             /// </summary>
@@ -20,7 +18,9 @@
             /// <returns> Ends when the action is complete. </returns>
             protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
             {
-                stateMachine.pathData.ignorePathRequests = newIgnorePathRequests;
+                stateMachine.pathData.keepFollowingPath = true;
+                stateMachine.pathData.ignorePathRequests = false;
+                stateMachine.cooldownData.cooldownReady[this] = true;
                 yield break;
             }
         }
