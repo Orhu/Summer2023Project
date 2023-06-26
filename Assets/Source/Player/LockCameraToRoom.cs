@@ -77,54 +77,10 @@ namespace Cardificer
                 return;
             }
 
-            /*if (floorGenerator.currentRoom.roomType == RoomType.Boss)
-            {
-                Vector3 playerPos = player.transform.position;
-                newPosition = new Vector3();
-                Vector2Int bossLocation = floorGenerator.currentRoom.roomLocation;
-                Vector2 bossWorldBottomLeftLocation = FloorGenerator.TransformMapToWorld(bossLocation, floorGenerator.map.startCell.location, floorGenerator.roomSize) - floorGenerator.roomSize / 2;
-                Vector2 bossWorldTopRightLocation = FloorGenerator.TransformMapToWorld(bossLocation + new Vector2Int(2, 2), floorGenerator.map.startCell.location, floorGenerator.roomSize) - floorGenerator.roomSize / 2 - Vector2.one;
-                bossWorldTopRightLocation = bossWorldTopRightLocation + floorGenerator.roomSize;
-
-                if (playerPos.x - height * GetComponent<Camera>().aspect / 2 < bossWorldBottomLeftLocation.x - extraHeight * GetComponent<Camera>().aspect / 2 + 0.5f)
-                {
-                    newPosition.x = bossWorldBottomLeftLocation.x + (height - extraHeight) * GetComponent<Camera>().aspect / 2 + 0.5f;
-                }
-                else if (playerPos.x + height * GetComponent<Camera>().aspect / 2 > bossWorldTopRightLocation.x + extraHeight * GetComponent<Camera>().aspect / 2 - 0.5f)
-                {
-                    newPosition.x = bossWorldTopRightLocation.x - (height - extraHeight) * GetComponent<Camera>().aspect / 2 - 0.5f;
-                }
-                else
-                {
-                    newPosition.x = playerPos.x;
-                }
-
-                if (playerPos.y - height / 2 < bossWorldBottomLeftLocation.y - extraHeight + 0.5f)
-                {
-                    newPosition.y = bossWorldBottomLeftLocation.y + (height - extraHeight) / 2 - 0.5f;
-                }
-                else if (playerPos.y + height / 2 > bossWorldTopRightLocation.y + extraHeight - 0.5f)
-                {
-                    newPosition.y = bossWorldTopRightLocation.y - (height - extraHeight) / 2 + 0.5f;
-                }
-                else
-                {
-                    newPosition.y = playerPos.y;
-                }
-
-                newPosition.z = -1;
-            }*/
-            //else
-            //{
-                //Vector2 pos2D = FloorGenerator.TransformMapToWorld(floorGenerator.currentRoom.roomLocation, floorGenerator.map.startRoom.roomLocation, floorGenerator.cellSize);
-                //newPosition = new Vector3(pos2D.x, pos2D.y, -1);
-            //}
-
             if (!snapping)
             {
                 transform.position = GetCameraPosition();
             }
-            //transform.position = Vector3.Lerp(transform.position, newPosition, Time.fixedDeltaTime * speed);
         }
 
         /// <summary>
