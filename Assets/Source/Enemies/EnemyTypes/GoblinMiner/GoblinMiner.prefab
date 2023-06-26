@@ -7,6 +7,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 542899057510882649, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 4872f695e3930d74b8096ce1da5921cb, type: 2}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: _maxHealth
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442667, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -51,9 +59,69 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7281680880204442676, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 3974e024ed27eeb4893b0183edbea738, type: 3}
     - target: {fileID: 7281680880204442677, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Name
-      value: FSMEnemy
+      value: GoblinMiner
+      objectReference: {fileID: 0}
+    - target: {fileID: 7400328270181020654, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7400328270181020654, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: _animactionClipsToMirrorParameters.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7400328270181020654, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: _animactionClipsToMirrorParameters.Array.data[0].clip
+      value: 
+      objectReference: {fileID: 7400000, guid: 8771fa36bc6f8b64aa900a9508e1885f, type: 2}
+    - target: {fileID: 7400328270181020654, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: _animactionClipsToMirrorParameters.Array.data[1].clip
+      value: 
+      objectReference: {fileID: 7400000, guid: db8cae6b639f9634e99005357b834626, type: 2}
+    - target: {fileID: 7400328270181020654, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: _animactionClipsToMirrorParameters.Array.data[0].parameterName
+      value: lookingLeft
+      objectReference: {fileID: 0}
+    - target: {fileID: 7400328270181020654, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: _animactionClipsToMirrorParameters.Array.data[1].parameterName
+      value: lookingLeft
+      objectReference: {fileID: 0}
+    - target: {fileID: 7771620888905133544, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Size.x
+      value: 0.35991317
+      objectReference: {fileID: 0}
+    - target: {fileID: 7771620888905133544, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Size.y
+      value: 0.71684635
+      objectReference: {fileID: 0}
+    - target: {fileID: 7771620888905133544, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.10069904
+      objectReference: {fileID: 0}
+    - target: {fileID: 7771620888905133544, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.14157683
+      objectReference: {fileID: 0}
+    - target: {fileID: 8576139625026935080, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Size.x
+      value: 0.300315
+      objectReference: {fileID: 0}
+    - target: {fileID: 8576139625026935080, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Size.y
+      value: 0.16272624
+      objectReference: {fileID: 0}
+    - target: {fileID: 8576139625026935080, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.09999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 8576139625026935080, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.40879437
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
