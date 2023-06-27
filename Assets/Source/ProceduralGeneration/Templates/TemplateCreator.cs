@@ -194,13 +194,11 @@ namespace Cardificer
         {
             if (gridPos.x >= 1 && gridPos.x < roomSize.x - 1 && gridPos.y >= 1 && gridPos.y < roomSize.y - 1)
             {
-                createdTemplate.tiles[gridPos.x][gridPos.y].sprite = tile.sprite;
-                createdTemplate.tiles[gridPos.x][gridPos.y].preferredTile = tile.preferredTile;
-                createdTemplate.tiles[gridPos.x][gridPos.y].tileType = tile.tileType;
-                sprites[gridPos.x, gridPos.y] = new GameObject();
+                sprites[gridPos.x, gridPos.y] = Instantiate(tile.gameObject);
                 sprites[gridPos.x, gridPos.y].transform.parent = spriteContainer.transform;
                 sprites[gridPos.x, gridPos.y].transform.localPosition = new Vector3(gridPos.x, gridPos.y, 0);
                 sprites[gridPos.x, gridPos.y].AddComponent<SpriteRenderer>().sprite = tile.sprite;
+                createdTemplate.tiles[gridPos.x][gridPos.y] = sprites[gridPos.x, gridPos.y].GetComponent<TemplateTile>();
             }
         }
 
@@ -214,8 +212,21 @@ namespace Cardificer
             {
                 Destroy(sprites[gridPos.x, gridPos.y]);
                 sprites[gridPos.x, gridPos.y] = null;
-                createdTemplate.tiles[gridPos.x][gridPos.y] = new TemplateTile();
+                createdTemplate.tiles[gridPos.x][gridPos.y] = null;
             }
+        }
+
+        /// <summary>
+        /// Gets the tile at a given position
+        /// </summary>
+        /// <returns> The tile </returns>
+        public TemplateTile GetTile(Vector2Int gridPos)
+        {
+            if (IsGridPosOutsideBounds(gridPos))
+            {
+                return null;
+            }
+            return createdTemplate.tiles[gridPos.x][gridPos.y];
         }
 
         /// <summary>

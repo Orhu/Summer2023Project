@@ -1,5 +1,8 @@
 using UnityEngine.UI;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Cardificer
 {
@@ -76,7 +79,8 @@ namespace Cardificer
                 Image imageComponent = button.AddComponent<Image>();
 
                 // Add click listener
-                TemplateTile templateTile = new TemplateTile();
+                GameObject templateTileObject = new GameObject();
+                TemplateTile templateTile = templateTileObject.AddComponent<TemplateTile>();
 
                 if (genericTile.genericTile.spawnedObject == null || genericTile.genericTile.spawnedObject.GetComponent<SpriteRenderer>() != null)
                 {
@@ -132,22 +136,9 @@ namespace Cardificer
                 else if (heldTile == null)
                 {
                     // TODO: Actually implement this
-
-                    /*if (gridPos.x >= 0 && gridPos.x < roomSize.x && gridPos.y >= 0 && gridPos.y < roomSize.y)
-                    {
-                        TemplateTile editedTile = createdTemplate.tiles[gridPos.x, gridPos.y];
-                        if (editedTile != null && editedTile != tileEditing)
-                        {
-                            tileEditing = editedTile;
-                            Destroy(propertyEditor);
-                            CreateNewPropertyEditor();
-                        }
-                    }
-                    else
-                    {
-                        tileEditing = null;
-                        Destroy(propertyEditor);
-                    }*/
+                #if UNITY_EDITOR
+                    Selection.activeGameObject = templateCreator.GetTile(gridPos).gameObject;
+                #endif
                 }
                 else
                 {

@@ -28,8 +28,7 @@ namespace Cardificer
                     tiles.Add(new TilesList());
                     for (int j = 0; j < _roomSize.y; j++)
                     {
-                        tiles[i].Add(new TemplateTile());
-                        tiles[i][j].tileType = TileType.None;
+                        tiles[i].Add(null);
                     }
                 }
             }
@@ -37,22 +36,6 @@ namespace Cardificer
 
         // The enemy pool that was chosen for this template
         [HideInInspector] public EnemyPool chosenEnemyPool;
-    }
-
-    /// <summary>
-    /// A pared-down version of a tile for use in the template. This information will be used to generate the tilemaps
-    /// </summary>
-    [System.Serializable]
-    public class TemplateTile
-    {
-        [Tooltip("The sprite to use to display this tile during template creation")]
-        public Sprite sprite;
-
-        [Tooltip("The type of this tile")]
-        public TileType tileType = TileType.None;
-
-        [Tooltip("The preferred tile to spawn")]
-        public Tile preferredTile;
     }
 
     /// <summary>
