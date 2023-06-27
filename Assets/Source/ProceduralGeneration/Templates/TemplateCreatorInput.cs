@@ -101,7 +101,6 @@ namespace Cardificer
         /// </summary>
         private void InitializeHeldTileSocket()
         {
-            Debug.Log("initialize held tile socket");
             heldTileSocket = new GameObject();
             heldTileSocket.name = "Held Template Socket";
             heldTileSocket.transform.parent = transform;
@@ -123,10 +122,14 @@ namespace Cardificer
         /// </summary>
         void Update()
         {
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
                 Vector2Int gridPos = MousePosToGridPos(Input.mousePosition);
-                if (heldTile == null)
+                if (templateCreator.IsGridPosOutsideBounds(gridPos))
+                {
+                    heldTile = null;
+                }
+                else if (heldTile == null)
                 {
                     // TODO: Actually implement this
 

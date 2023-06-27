@@ -217,5 +217,15 @@ namespace Cardificer
                 createdTemplate.tiles[gridPos.x][gridPos.y] = new TemplateTile();
             }
         }
+
+        /// <summary>
+        /// Determines whether a given grid pos is outside the bounds of the template
+        /// </summary>
+        /// <param name="gridPos"> The grid pos</param>
+        /// <returns> Whether or not the grid pos is within the bounds </returns>
+        public bool IsGridPosOutsideBounds(Vector2Int gridPos)
+        {
+            return gridPos.x < 0 || gridPos.x >= roomSize.x || gridPos.y < 0 || gridPos.y >= roomSize.y;
+        }
     }
 }
