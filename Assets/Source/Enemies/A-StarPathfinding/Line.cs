@@ -11,13 +11,13 @@ namespace Cardificer
         private const float verticalLineGradient = 1e5f;
 
         // gradient of the line
-        private float gradient;
+        public float gradient;
 
         // y-intercept of the line
         private float y_intercept;
 
         // first point on the line
-        private Vector2 pointOnLine_1;
+        public Vector2 pointOnLine_1;
 
         // second point on the line
         private Vector2 pointOnLine_2;
@@ -100,17 +100,6 @@ namespace Cardificer
             float intersectX = (yInterceptPerpendicular - y_intercept) / (gradient - gradientPerpendicular);
             float intersectY = gradient * intersectX + y_intercept;
             return Vector2.Distance(p, new Vector2(intersectX, intersectY));
-        }
-
-        /// <summary>
-        /// Draw debug gizmos
-        /// </summary>
-        /// <param name="length">The length of the line to draw.</param>
-        public void DrawWithGizmos(float length)
-        {
-            Vector3 lineDir = new Vector3(1, 0, gradient).normalized;
-            Vector3 lineCentre = new Vector3(pointOnLine_1.x, 0, pointOnLine_1.y) + Vector3.up;
-            Gizmos.DrawLine(lineCentre - lineDir * length / 2f, lineCentre + lineDir * length / 2f);
         }
     }
 }

@@ -36,19 +36,13 @@ namespace Cardificer.FiniteStateMachine
         // Tracks whether our destination has been reached or not
         public bool destinationReached
         {
-            get
-            {
-                return (currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer;
-            }
+            get { return (currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer; }
         }
 
         // The distance margin of error 
         public float distanceBuffer
         {
-            get
-            {
-                return movementComponent.maxSpeed * Time.fixedDeltaTime + 0.01f;
-            }
+            get { return movementComponent.maxSpeed * Time.fixedDeltaTime + 0.01f; }
         }
 
         /// <summary>
@@ -68,7 +62,7 @@ namespace Cardificer.FiniteStateMachine
 
             // Store the path following coroutine so it can be cancelled as needed
             public IEnumerator prevFollowCoroutine;
-            
+
             // Should we keep following the path? Checked every time an enemy tries to move
             public bool keepFollowingPath;
         }
@@ -91,9 +85,10 @@ namespace Cardificer.FiniteStateMachine
 
         // Tracks the time this was initialized
         private float timeStarted;
-        
+
         // Cached feet collider
         private Collider2D _feetCollider;
+
         private Collider2D feetCollider
         {
             get
@@ -121,7 +116,8 @@ namespace Cardificer.FiniteStateMachine
                 }
                 else
                 {
-                    Debug.LogError("No feet collider found! Make sure you have a non-trigger collider attached to the enemy.");
+                    Debug.LogError(
+                        "No feet collider found! Make sure you have a non-trigger collider attached to the enemy.");
                     return null;
                 }
             }
@@ -130,11 +126,12 @@ namespace Cardificer.FiniteStateMachine
         // Cached moment component
         private SimpleMovement movementComponent;
 
-        [Tooltip("Movement type this enemy begins in")]
-        [SerializeField] private MovementType startingMovementType;
+        [Tooltip("Movement type this enemy begins in")] [SerializeField]
+        private MovementType startingMovementType;
 
         // Current movement type of this enemy
         private MovementType _currentMovementType;
+
         public MovementType currentMovementType
         {
             set
@@ -154,6 +151,7 @@ namespace Cardificer.FiniteStateMachine
                         Debug.LogError("Tried to set " + name + " to an invalid movement type");
                         return;
                 }
+
                 _currentMovementType = value;
             }
             get => _currentMovementType;
@@ -167,23 +165,26 @@ namespace Cardificer.FiniteStateMachine
         {
             // represents the state machine that requested the path
             private BaseStateMachine stateMachine;
+
             // represents the current update path coroutine
             private Coroutine prevUpdateCoroutine;
+
             // represents the current follow path coroutine
             private Coroutine prevFollowCoroutine;
         }
 
-        [Tooltip("Draw debug gizmos? Pathfinding target is magenta, attack target is yellow, current waypoint is cyan")]
-        [SerializeField] private bool drawGizmos;
-        
-        // The current waypoint we are pathing to (updated by pathing scriptable objects). only used to draw debug gizmos
-        [HideInInspector] public Vector2 currentWaypoint = Vector2.zero;
-        
         /// Allows the state machine to track other variables that may not be shared between enemy types (ie floor bosses)
         public Dictionary<string, object> trackedVariables = new Dictionary<string, object>();
-        
+
         // Tracks whether this is the first time this object has been started (needed to make sure we call OnStateEnter AFTER the initial logic delay)
         private bool firstTimeStarted = true;
+        
+        // Percent of attempted speed this unit should go
+        public float speedPercent = 1f;
+
+        [Tooltip("Draw debug gizmos? Pathfinding target is magenta, attack target is yellow, current waypoint is cyan")]
+        [SerializeField]
+        private bool drawGizmos;
 
         /// <summary>
         /// Initialize variables
@@ -206,11 +207,11 @@ namespace Cardificer.FiniteStateMachine
         {
             Vector2 offset = feetCollider.offset;
             Vector2 position = feetCollider.transform.position;
-            return new Vector2(position.x + offset.x, 
+            return new Vector2(position.x + offset.x,
                 position.y + offset.y);
         }
-        
-        
+
+
         /// <summary>
         /// Grab the player gameobject and sets it to the default target
         /// </summary>
@@ -227,15 +228,17 @@ namespace Cardificer.FiniteStateMachine
         void SetStats()
         {
             // assign health
-            var startingHealth = Mathf.RoundToInt(GetComponent<Health>().maxHealth * DifficultyProgressionManager.healthMultiplier);
+            var startingHealth =
+                Mathf.RoundToInt(GetComponent<Health>().maxHealth * DifficultyProgressionManager.healthMultiplier);
             GetComponent<Health>().maxHealth = startingHealth;
             GetComponent<Health>().currentHealth = startingHealth;
 
             // assign speed
             movementComponent.maxSpeed *= DifficultyProgressionManager.moveSpeedMultiplier;
-            
+
             // assign damage on touch
-            feetCollider.GetComponent<DamageOnInteract>().damageData.damage *= Mathf.RoundToInt(DifficultyProgressionManager.onTouchDamageMultiplier);
+            feetCollider.GetComponent<DamageOnInteract>().damageData.damage *=
+                Mathf.RoundToInt(DifficultyProgressionManager.onTouchDamageMultiplier);
         }
 
         /// <summary>
@@ -258,6 +261,23 @@ namespace Cardificer.FiniteStateMachine
             }
 
             currentState.OnStateUpdate(this);
+        }
+
+        /// <summary>
+        /// Every fixed update, update our speed percentage to the one indicated by the state machine
+        /// </summary>
+       private void FixedUpdate()
+        {
+            GetComponent<SimpleMovement>().requestSpeedModifications += AdjustMovement;
+        }
+        
+        /// <summary>
+        /// Responds to a movement components speed modification request, and multiplies the speed by the requested percentage on the stateMachine
+        /// </summary>
+        /// <param name="speed"> The speed variable to be modified. </param>
+        private void AdjustMovement(ref float speed)
+        {
+            speed *= speedPercent;
         }
 
         /// <summary>
@@ -298,12 +318,24 @@ namespace Cardificer.FiniteStateMachine
         private void OnDrawGizmos()
         {
             if (!drawGizmos) return;
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawCube(currentPathfindingTarget, Vector3.one);
-            Gizmos.color = Color.yellow;
+            Gizmos.color = Color.black;
+            foreach (Vector2 p in pathData.path.waypoints)
+            {
+                Gizmos.DrawCube(p, Vector3.one);
+            }
+
+            Gizmos.color = Color.white;
+            foreach (Line l in pathData.path.turnBoundaries)
+            {
+                Vector2 lineDir = new Vector2(1, l.gradient).normalized;
+                Vector2 lineCenter = l.pointOnLine_1;
+                Gizmos.DrawLine(lineCenter - lineDir * 5 / 2f, lineCenter + lineDir * 5 / 2f);
+            }
+            
+            Gizmos.color = Color.red;
             Gizmos.DrawCube(currentAttackTarget, Vector3.one);
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawCube(currentWaypoint, Vector3.one);
+            Gizmos.color = Color.blue;
+            Gizmos.DrawCube(currentPathfindingTarget, Vector3.one);
         }
 
         #region IActor Implementation
@@ -359,14 +391,14 @@ namespace Cardificer.FiniteStateMachine
         {
             return ref _canAct;
         }
-        
+
         /// <summary>
         /// Get the audio source component from the object. 
         /// </summary>
         /// <returns>Returns the relevant audio source</returns>
         public AudioSource GetAudioSource()
         {
-            return GetComponent<AudioSource>(); 
+            return GetComponent<AudioSource>();
         }
 
         /// <summary>
