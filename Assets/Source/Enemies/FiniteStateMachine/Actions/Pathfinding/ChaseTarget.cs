@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using ChaseData = Cardificer.FiniteStateMachine.BaseStateMachine.ChaseData;
 
@@ -96,7 +97,7 @@ namespace Cardificer.FiniteStateMachine
                 if (stateMachine.pathData.keepFollowingPath)
                 {
                     stateMachine.GetComponent<Movement>().movementInput =
-                        (currentWaypoint - stateMachine.GetFeetPos()).normalized;
+                        (stateMachine.pathData.path.lookPoints[stateMachine.pathData.targetIndex] - stateMachine.GetFeetPos()).normalized;
                 }
                 
                 yield return null;
