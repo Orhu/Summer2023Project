@@ -33,14 +33,12 @@ namespace Cardificer
             foreach (ClipToParameter animactionClipToMirrorParameter in _animactionClipsToMirrorParameters)
             {
                 animactionClipsToMirrorParameters.Add(animactionClipToMirrorParameter.clip, animactionClipToMirrorParameter.parameterName);
-
-                if (mirrorParametersToValues.ContainsKey(animactionClipToMirrorParameter.parameterName)) { continue; }
-                mirrorParametersToValues.Add(animactionClipToMirrorParameter.parameterName, false);
+                mirrorParametersToValues.TryAdd(animactionClipToMirrorParameter.parameterName, false);
             }
 
             if (defaultMirrorParam.Length > 0)
             {
-                mirrorParametersToValues.Add(defaultMirrorParam, false);
+                mirrorParametersToValues.TryAdd(defaultMirrorParam, false);
             }
         }
 

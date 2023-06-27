@@ -22,6 +22,7 @@ namespace Cardificer.FiniteStateMachine
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             stateMachine.currentMovementType = newMovemenetType;
+            stateMachine.cooldownData.cooldownReady[this] = true;
             yield break;
         }
     }
