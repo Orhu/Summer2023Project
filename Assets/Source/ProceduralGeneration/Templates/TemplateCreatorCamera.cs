@@ -13,20 +13,31 @@ namespace Cardificer
         [Tooltip("The minimum zoom the camera can have")]
         float minZoom = 0.01f;
 
+
         /// <summary>
         /// Zooms the camera
         /// </summary>
-        void Update()
+        /// <param name="scrollDelta"></param>
+        public void Zoom(Vector2 scrollDelta)
         {
-            if (GetComponent<Camera>().orthographicSize + -Input.mouseScrollDelta.y * cameraZoomSpeed < minZoom)
+            if (GetComponent<Camera>().orthographicSize + -scrollDelta.y * cameraZoomSpeed < minZoom)
             {
                 GetComponent<Camera>().orthographicSize = minZoom;
             }
             else
             {
-                GetComponent<Camera>().orthographicSize += -Input.mouseScrollDelta.y * cameraZoomSpeed;
+                GetComponent<Camera>().orthographicSize += -scrollDelta.y * cameraZoomSpeed;
             }
-            GetComponent<Camera>().orthographicSize += -Input.mouseScrollDelta.y * cameraZoomSpeed;
+            GetComponent<Camera>().orthographicSize += -scrollDelta.y * cameraZoomSpeed;
+        }
+
+        /// <summary>
+        /// Pans the camera
+        /// </summary>
+        /// <param name="delta"> The amount to move the camera by </param>
+        public void Pan(Vector2 delta)
+        {
+            transform.position += new Vector3(delta.x, delta.y);
         }
     }
 }

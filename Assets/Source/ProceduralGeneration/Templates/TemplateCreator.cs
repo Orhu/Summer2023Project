@@ -25,6 +25,9 @@ namespace Cardificer
         [Tooltip("The UI for choosing the template tiles")]
         public GameObject templateTileChooser;
 
+        [Tooltip("The camera")]
+        public TemplateCreatorCamera templateCamera;
+
         [Tooltip("The generic tiles (to load into the tile holder")]
         public GenericTiles genericTiles;
 
@@ -56,78 +59,18 @@ namespace Cardificer
         // The sprite game objects
         private GameObject[,] sprites;
 
-        // The tile being held
-        private TemplateTile heldTile;
-
-        // The socket to display the tile being held
-        private GameObject heldTileSocket;
-
         /// <summary>
         /// Initializes the template creator
         /// </summary>
         private void Start()
         {
-            templateTileChooser = Instantiate(templateTileChooser);
-            templateTileChooser.transform.parent = transform;
-            templateTileChooser.SetActive(true);
-            InitializeHeldTileSocket();
-            InitializeTileHUD();
             Reload();
-        }
-
-        /// <summary>
-        /// Initializes the tile hud, where you can pick tiles to place
-        /// </summary>
-        private void InitializeTileHUD()
-        {
-            Button saveButton = templateTileChooser.GetComponentInChildren<Button>();
-            saveButton.onClick.AddListener(SaveTemplate);
-
-            VerticalLayoutGroup layout = templateTileChooser.GetComponentInChildren<VerticalLayoutGroup>();
-            foreach (TileTypeToGenericTile genericTile in genericTiles.tileTypesToGenericTiles)
-            {
-                GameObject button = new GameObject();
-                button.name = genericTile.tileType.ToString();
-
-                // Add RectTransform component and set position and size
-                RectTransform rectTransform = button.AddComponent<RectTransform>();
-                rectTransform.SetParent(layout.transform, false);
-                rectTransform.localScale = new Vector3(1, 1, 1);
-                rectTransform.anchoredPosition = Vector2.zero;
-                rectTransform.sizeDelta = new Vector2(50f, 50f);
-
-                // Add Button component
-                Button buttonComponent = button.AddComponent<Button>();
-                buttonComponent.interactable = true;
-
-                // Add Image component and set sprite
-                Image imageComponent = button.AddComponent<Image>();
-
-                // Add click listener
-                TemplateTile templateTile = new TemplateTile();
-
-                if (genericTile.genericTile.spawnedObject == null || genericTile.genericTile.spawnedObject.GetComponent<SpriteRenderer>() != null)
-                {
-                    imageComponent.sprite = genericTile.genericTile.spawnedObject.GetComponent<SpriteRenderer>().sprite;
-                    templateTile.sprite = genericTile.genericTile.spawnedObject.GetComponent<SpriteRenderer>().sprite;
-                }
-                else
-                {
-                    imageComponent.sprite = nullSprite;
-                    templateTile.sprite = nullSprite;
-                }
-
-                templateTile.tileType = genericTile.tileType;
-
-                buttonComponent.onClick.AddListener(() => OnHoldedTileChosen(templateTile));
-                button.SetActive(true);
-            }
         }
 
         /// <summary>
         /// Saves the scriptable object to a file
         /// </summary>
-        private void SaveTemplate()
+        public void SaveTemplate()
         {
             string path = "Assets/Content/Templates/" + templateName + ".asset";
 
@@ -147,27 +90,6 @@ namespace Cardificer
             Reload();
 
 #endif
-        }
-
-        /// <summary>
-        /// Initializes the socket for displaying the held tile
-        /// </summary>
-        private void InitializeHeldTileSocket()
-        {
-            heldTileSocket = new GameObject();
-            heldTileSocket.name = "Held Template Socket";
-            heldTileSocket.transform.parent = transform;
-            heldTileSocket.AddComponent<SpriteRenderer>();
-            heldTileSocket.GetComponent<SpriteRenderer>().enabled = false;
-        }
-
-        /// <summary>
-        /// Changes the tile being held
-        /// </summary>
-        /// <param name="tile"> The tile being held </param>
-        public void OnHoldedTileChosen(TemplateTile tile)
-        {
-            heldTile = tile;
         }
 
         /// <summary>
@@ -264,111 +186,36 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Handles placing and removing tiles
+        /// Places a tile in the template
         /// </summary>
-        void Update()
+        /// <param name="tile"> The tile to place </param>
+        /// <param name="gridPos"> The grid position to place the tile in </param>
+        public void PlaceTile(TemplateTile tile, Vector2Int gridPos)
         {
-            if (Input.GetMouseButtonUp(0))
+            if (gridPos.x >= 1 && gridPos.x < roomSize.x - 1 && gridPos.y >= 1 && gridPos.y < roomSize.y - 1)
             {
-                Vector2Int gridPos = MousePosToGridPos(Input.mousePosition);
-                if (heldTile == null)
-                {
-                    // TODO: Actually implement this
-
-                    /*if (gridPos.x >= 0 && gridPos.x < roomSize.x && gridPos.y >= 0 && gridPos.y < roomSize.y)
-                    {
-                        TemplateTile editedTile = createdTemplate.tiles[gridPos.x, gridPos.y];
-                        if (editedTile != null && editedTile != tileEditing)
-                        {
-                            tileEditing = editedTile;
-                            Destroy(propertyEditor);
-                            CreateNewPropertyEditor();
-                        }
-                    }
-                    else
-                    {
-                        tileEditing = null;
-                        Destroy(propertyEditor);
-                    }*/
-                }
-                else
-                {
-                    if (gridPos.x >= 1 && gridPos.x < roomSize.x - 1 && gridPos.y >= 1 && gridPos.y < roomSize.y - 1)
-                    {
-                        createdTemplate.tiles[gridPos.x][gridPos.y].sprite = heldTile.sprite;
-                        createdTemplate.tiles[gridPos.x][gridPos.y].preferredTile = heldTile.preferredTile;
-                        createdTemplate.tiles[gridPos.x][gridPos.y].tileType = heldTile.tileType;
-                        sprites[gridPos.x, gridPos.y] = new GameObject();
-                        sprites[gridPos.x, gridPos.y].transform.parent = spriteContainer.transform;
-                        sprites[gridPos.x, gridPos.y].transform.localPosition = new Vector3(gridPos.x, gridPos.y, 0);
-                        sprites[gridPos.x, gridPos.y].AddComponent<SpriteRenderer>().sprite = heldTile.sprite;
-                    }
-                }
-            }
-
-            if (Input.GetMouseButtonUp(1))
-            {
-                Vector2Int gridPos = MousePosToGridPos(Input.mousePosition);
-                if (gridPos.x >= 1 && gridPos.x < roomSize.x - 1 && gridPos.y >= 1 && gridPos.y < roomSize.y - 1)
-                {
-                    Destroy(sprites[gridPos.x, gridPos.y]);
-                    sprites[gridPos.x, gridPos.y] = null;
-                    createdTemplate.tiles[gridPos.x][gridPos.y] = new TemplateTile();
-                }
-            }
-
-
-            if (heldTile == null)
-            {
-                heldTileSocket.GetComponent<SpriteRenderer>().enabled = false;
-            }
-            else
-            {
-                heldTileSocket.GetComponent<SpriteRenderer>().enabled = true;
-                Sprite sprite;
-                if (heldTile.preferredTile == null)
-                {
-                    sprite = heldTile.sprite;
-                }
-                else if (heldTile.preferredTile.spawnedObject.GetComponent<SpriteRenderer>().sprite != null)
-                {
-                    sprite = heldTile.preferredTile.spawnedObject.GetComponent<SpriteRenderer>().sprite;
-                }
-                else
-                {
-                    sprite = nullSprite;
-                }
-                heldTileSocket.GetComponent<SpriteRenderer>().sprite = sprite;
-                heldTileSocket.transform.position = QuantizeMousePos(Input.mousePosition);
+                createdTemplate.tiles[gridPos.x][gridPos.y].sprite = tile.sprite;
+                createdTemplate.tiles[gridPos.x][gridPos.y].preferredTile = tile.preferredTile;
+                createdTemplate.tiles[gridPos.x][gridPos.y].tileType = tile.tileType;
+                sprites[gridPos.x, gridPos.y] = new GameObject();
+                sprites[gridPos.x, gridPos.y].transform.parent = spriteContainer.transform;
+                sprites[gridPos.x, gridPos.y].transform.localPosition = new Vector3(gridPos.x, gridPos.y, 0);
+                sprites[gridPos.x, gridPos.y].AddComponent<SpriteRenderer>().sprite = tile.sprite;
             }
         }
 
         /// <summary>
-        /// Converts the mouse position to world space, then rounds it to an integer
+        /// Erases the tile at a given position
         /// </summary>
-        /// <param name="mousePos"> The mouse position </param>
-        /// <returns> The quantized world position </returns>
-        Vector3 QuantizeMousePos(Vector3 mousePos)
+        /// <param name="gridPos"> The position to erase the tile at </param>
+        public void EraseTile(Vector2Int gridPos)
         {
-            Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
-            Vector3 quantizedWorldPos = new Vector3();
-            quantizedWorldPos.x = Mathf.Round(worldPos.x);
-            quantizedWorldPos.y = Mathf.Round(worldPos.y);
-            return quantizedWorldPos;
-        }
-
-        /// <summary>
-        /// Converts a moues position to a grid position 
-        /// </summary>
-        /// <param name="mousePos"> The mouse position </param>
-        /// <returns> The grid position </returns>
-        Vector2Int MousePosToGridPos(Vector3 mousePos)
-        {
-            Vector3 quantizedMousePos = QuantizeMousePos(mousePos);
-            Vector2Int gridPos = new Vector2Int();
-            gridPos.x = (int)quantizedMousePos.x + roomSize.x / 2;
-            gridPos.y = (int)quantizedMousePos.y + roomSize.y / 2;
-            return gridPos;
+            if (gridPos.x >= 1 && gridPos.x < roomSize.x - 1 && gridPos.y >= 1 && gridPos.y < roomSize.y - 1)
+            {
+                Destroy(sprites[gridPos.x, gridPos.y]);
+                sprites[gridPos.x, gridPos.y] = null;
+                createdTemplate.tiles[gridPos.x][gridPos.y] = new TemplateTile();
+            }
         }
     }
 }
