@@ -12,5 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3a35acca2b866a4a854023149e2de6f, type: 3}
   m_Name: GoblinMiner_AttackingToBurrowing
   m_EditorClassIdentifier: 
-  trueState: {fileID: 11400000, guid: 917e7f2036bc37e4192da235e713f191, type: 2}
-  decisions: []
+  trueState: {fileID: 11400000, guid: 686c95b7a11cdb2488727332fc8e0110, type: 2}
+  decisions:
+  - decision: {fileID: 11400000, guid: 1292b1b9c83d0e6459f3f96d53c6726a, type: 2}
+    nextOperator: 4
+  - decision: {fileID: 11400000, guid: 3b941a92a328ac5429c2d8b2306ac059, type: 2}
+    nextOperator: 2
+  - decision: {fileID: 11400000, guid: a57d713efcea8ca4e9c3bbc0da872be5, type: 2}
+    nextOperator: 0
