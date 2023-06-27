@@ -154,7 +154,6 @@ namespace Cardificer.FiniteStateMachine
                 result = EvalueateOperator(result, andResults[i].Item1, andResults[i - 1].Item2);
             }
 
-            Debug.Log(result);
             return result;
         }
 
