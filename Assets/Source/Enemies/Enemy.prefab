@@ -218,12 +218,10 @@ MonoBehaviour:
   delayBeforeLogic: 1
   currentPathfindingTarget: {x: 0, y: 0}
   currentAttackTarget: {x: 0, y: 0}
-  feetColliderPosition: {x: 0, y: 0}
   currentState: {fileID: 0}
-  destinationReached: 0
   exhausted: 0
+  timeSinceTransition: 0
   startingMovementType: 1
-  currentMovementType: 0
   drawGizmos: 0
   currentWaypoint: {x: 0, y: 0}
 --- !u!114 &7281680880204442666
@@ -341,4 +339,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 059485bb3fc502f49928b10a7bfc2323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultMirrorParam: lookingLeft
   _animactionClipsToMirrorParameters: []

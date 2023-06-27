@@ -24,8 +24,8 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> True if the target is at or below the specified range from this stateMachine, false otherwise </returns>
         protected override bool Evaluate(BaseStateMachine state)
         {
-            var currentPos = state.transform.position;
-            Vector2 direction = Player.Get().transform.position - currentPos;
+            Vector2 currentPos = state.transform.position;
+            Vector2 direction = Player.GetFeetPosition() - currentPos;
             RaycastHit2D hit;
             if (sightRadius == 0)
             {
