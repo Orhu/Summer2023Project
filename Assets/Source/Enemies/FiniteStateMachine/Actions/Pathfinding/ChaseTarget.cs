@@ -79,21 +79,26 @@ namespace Cardificer.FiniteStateMachine
 
             while (stateMachine.pathData.keepFollowingPath)
             {
-                if (ArrivedAtPoint(currentWaypoint, stateMachine))
+                while (stateMachine.pathData.path.turnBoundaries[stateMachine.pathData.targetIndex]
+                       .HasCrossedLine(stateMachine.GetFeetPos()))
                 {
-                    stateMachine.pathData.targetIndex++;
-                    if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.lookPoints.Length)
+                    if (stateMachine.pathData.targetIndex == stateMachine.pathData.path.finishLineIndex)
                     {
-                        // reached the end of the waypoints, stop moving here
-                        stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
-                        yield break;
+                        stateMachine.pathData.keepFollowingPath = false;
+                        break;
                     }
-
-                    currentWaypoint = stateMachine.pathData.path.lookPoints[stateMachine.pathData.targetIndex];
+                    else
+                    {
+                        stateMachine.pathData.targetIndex++;
+                    }
                 }
 
-                stateMachine.GetComponent<Movement>().movementInput =
-                    (currentWaypoint - stateMachine.GetFeetPos()).normalized;
+                if (stateMachine.pathData.keepFollowingPath)
+                {
+                    stateMachine.GetComponent<Movement>().movementInput =
+                        (currentWaypoint - stateMachine.GetFeetPos()).normalized;
+                }
+                
                 yield return null;
             }
         }
