@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6e9d9d27adc4994b15caee955cf5cd1, type: 3}
+  m_Script: {fileID: 11500000, guid: d3a35acca2b866a4a854023149e2de6f, type: 3}
   m_Name: COD_MoveToDraw
   m_EditorClassIdentifier: 
-  invert: 0
   trueState: {fileID: 11400000, guid: a08fbcc85d382da44a663b805f61e93b, type: 2}
-  decision: {fileID: 11400000, guid: 84ee1da3f85044f40bcc338b1d5e1156, type: 2}
+  decisions:
+  - decision: {fileID: 11400000, guid: 84ee1da3f85044f40bcc338b1d5e1156, type: 2}
+    nextOperator: 1

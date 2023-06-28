@@ -180,7 +180,7 @@ namespace Cardificer.FiniteStateMachine
         private bool firstTimeStarted = true;
         
         // Percent of attempted speed this unit should go
-        public float speedPercent = 1f;
+        [HideInInspector] public float speedPercent = 1f;
 
         [Tooltip("Draw debug gizmos? Pathfinding target is magenta, attack target is yellow, current waypoint is cyan")]
         [SerializeField]
@@ -219,6 +219,7 @@ namespace Cardificer.FiniteStateMachine
         {
             SetStats();
             timeStarted = Time.time;
+            GetComponent<SimpleMovement>().requestSpeedModifications += AdjustMovement;
             FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Add(gameObject);
         }
 
@@ -263,14 +264,6 @@ namespace Cardificer.FiniteStateMachine
             currentState.OnStateUpdate(this);
         }
 
-        /// <summary>
-        /// Every fixed update, update our speed percentage to the one indicated by the state machine
-        /// </summary>
-       private void FixedUpdate()
-        {
-            GetComponent<SimpleMovement>().requestSpeedModifications += AdjustMovement;
-        }
-        
         /// <summary>
         /// Responds to a movement components speed modification request, and multiplies the speed by the requested percentage on the stateMachine
         /// </summary>
@@ -319,17 +312,20 @@ namespace Cardificer.FiniteStateMachine
         {
             if (!drawGizmos) return;
             Gizmos.color = Color.black;
-            foreach (Vector2 p in pathData.path.waypoints)
+            if (pathData.path != null)
             {
-                Gizmos.DrawCube(p, Vector3.one);
-            }
+                foreach (Vector2 p in pathData.path.waypoints)
+                {
+                    Gizmos.DrawCube(p, Vector3.one);
+                }
 
-            Gizmos.color = Color.white;
-            foreach (Line l in pathData.path.turnBoundaries)
-            {
-                Vector2 lineDir = new Vector2(1, l.gradient).normalized;
-                Vector2 lineCenter = l.pointOnLine_1;
-                Gizmos.DrawLine(lineCenter - lineDir * 5 / 2f, lineCenter + lineDir * 5 / 2f);
+                Gizmos.color = Color.white;
+                foreach (Line l in pathData.path.turnBoundaries)
+                {
+                    Vector2 lineDir = new Vector2(1, l.gradient).normalized;
+                    Vector2 lineCenter = l.pointOnLine_1;
+                    Gizmos.DrawLine(lineCenter - lineDir * 5 / 2f, lineCenter + lineDir * 5 / 2f);
+                }
             }
             
             Gizmos.color = Color.red;

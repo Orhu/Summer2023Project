@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6e9d9d27adc4994b15caee955cf5cd1, type: 3}
+  m_Script: {fileID: 11500000, guid: d3a35acca2b866a4a854023149e2de6f, type: 3}
   m_Name: COD_DrawCardsToPlayCards
   m_EditorClassIdentifier: 
-  invert: 0
   trueState: {fileID: 11400000, guid: 902a0962f14ea7145871a830e4f12dbb, type: 2}
-  decision: {fileID: 11400000, guid: cae0e48af84205b41828214e0298cd55, type: 2}
+  decisions:
+  - decision: {fileID: 11400000, guid: cae0e48af84205b41828214e0298cd55, type: 2}
+    nextOperator: 1

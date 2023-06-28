@@ -17,7 +17,7 @@ namespace Cardificer.FiniteStateMachine
         {
             var cardsDrawnExists = state.trackedVariables.TryGetValue("CardsDrawn", out var cardsDrawn);
             var cardsToDrawExists = state.trackedVariables.TryGetValue("CardsToDraw", out var cardsToDraw);
-            return cardsDrawnExists && cardsToDrawExists && cardsDrawn == cardsToDraw;
+            return cardsDrawnExists && cardsToDrawExists && (int)cardsDrawn == (int)cardsToDraw;
         }
     }
 }

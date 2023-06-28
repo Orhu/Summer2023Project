@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using Random = System.Random;
 
@@ -14,28 +15,26 @@ namespace Cardificer.FiniteStateMachine
         // Tracks seeded random from save manager
         private Random random;
 
-        // Marked true when the locations have been cached. Should only be marked true once per boss fight
-        private bool locationsCached;
-
         /// <summary>
-        /// Grabs all
+        /// Grabs all possible locations to move to, removes the nearest point, and chooses a random one as the new pathfinding target.
         /// </summary>
-        /// <param name="stateMachine"></param>
-        /// <returns></returns>
+        /// <param name="stateMachine"> The stateMachine to use </param>
+        /// <returns> Does not wait </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             stateMachine.trackedVariables.TryAdd("Random", new Random(SaveManager.savedFloorSeed));
             random = stateMachine.trackedVariables["Random"] as Random;
+            BaseStateMachine.print("Moving time!");
 
-            if (!locationsCached)
+            if (!stateMachine.trackedVariables.ContainsKey("CenterPoint"))
             {
+                BaseStateMachine.print("Locations not cached, caching now...");
                 CacheMovementPoints(stateMachine);
-                locationsCached = true;
             }
 
             List<Vector2> movementOptions = new List<Vector2>(5)
             {
-                (Vector2)stateMachine.trackedVariables["Center"],
+                (Vector2)stateMachine.trackedVariables["CenterPoint"],
                 (Vector2)stateMachine.trackedVariables["TopLeftQuadrant"],
                 (Vector2)stateMachine.trackedVariables["TopRightQuadrant"],
                 (Vector2)stateMachine.trackedVariables["BottomLeftQuadrant"],
@@ -45,6 +44,7 @@ namespace Cardificer.FiniteStateMachine
             FindClosestAndRemove(movementOptions, stateMachine);
 
             Vector2 randomMove = movementOptions[random.Next(movementOptions.Count)];
+            BaseStateMachine.print("Setting pathfinding target to randomly selected spot!");
             stateMachine.currentPathfindingTarget = randomMove;
 
             stateMachine.cooldownData.cooldownReady[this] = true;
@@ -87,25 +87,28 @@ namespace Cardificer.FiniteStateMachine
         private void CacheMovementPoints(BaseStateMachine stateMachine)
         {
             Vector2Int roomDimensions = RoomInterface.instance.myRoomSize;
+            float quarterX = roomDimensions.x / 4f;
+            float quarterY = roomDimensions.y / 4f;
+            Vector2 roomCenterWorldPos = RoomInterface.instance.myWorldPosition;
 
             // Calculate center point
-            Vector2 centerPoint = new Vector2(roomDimensions.x / 2f, roomDimensions.y / 2f);
+            Vector2 centerPoint = roomCenterWorldPos;
             stateMachine.trackedVariables.Add("CenterPoint", centerPoint);
 
             // Calculate top left quadrant center
-            Vector2 topLeftQuadrant = new Vector2(roomDimensions.x / 4f, roomDimensions.y / 4f);
+            Vector2 topLeftQuadrant = new Vector2(roomCenterWorldPos.x - quarterX, roomCenterWorldPos.y + quarterY);
             stateMachine.trackedVariables.Add("TopLeftQuadrant", topLeftQuadrant);
             
             // Calculate top right quadrant center
-            Vector2 topRightQuadrant = new Vector2(3f * roomDimensions.x / 4f, roomDimensions.y / 4f);
+            Vector2 topRightQuadrant = new Vector2(roomCenterWorldPos.x + quarterX, roomCenterWorldPos.y + quarterY);
             stateMachine.trackedVariables.Add("TopRightQuadrant", topRightQuadrant);
             
             // Calculate bottom left quadrant center
-            Vector2 bottomLeftQuadrant = new Vector2(roomDimensions.x / 4f, 3f * roomDimensions.y / 4f);
+            Vector2 bottomLeftQuadrant = new Vector2(roomCenterWorldPos.x - quarterX , roomCenterWorldPos.y - quarterY);
             stateMachine.trackedVariables.Add("BottomLeftQuadrant", bottomLeftQuadrant);
             
             // Calculate bottom right quadrant center
-            Vector2 bottomRightQuadrant = new Vector2(3f * roomDimensions.x / 4f, 3f * roomDimensions.y / 4f);
+            Vector2 bottomRightQuadrant = new Vector2(roomCenterWorldPos.x + quarterX, roomCenterWorldPos.y - quarterY);
             stateMachine.trackedVariables.Add("BottomRightQuadrant", bottomRightQuadrant);
         }
     }

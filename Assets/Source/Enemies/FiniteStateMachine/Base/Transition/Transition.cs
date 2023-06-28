@@ -13,7 +13,7 @@ namespace Cardificer.FiniteStateMachine
     /// <summary>
     /// Represents the base class of a finite state machine transition. If false, the state machine remains in the same state
     /// </summary>
-    [CreateAssetMenu(fileName = "NewTranistion", menuName = "FSM/Transition")]
+    [CreateAssetMenu(fileName = "NewTransition", menuName = "FSM/Transition")]
     public class Transition : ScriptableObject
     {
         [Tooltip("What state to enter on true")] [EditInline]

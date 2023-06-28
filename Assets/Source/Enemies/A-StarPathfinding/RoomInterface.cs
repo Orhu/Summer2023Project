@@ -32,7 +32,7 @@ namespace Cardificer
         private PathfindingTile[,] roomGrid;
 
         // the world position of this room
-        private Vector2 myWorldPosition;
+        [HideInInspector] public Vector2 myWorldPosition;
 
         // this instance
         public static RoomInterface instance;
@@ -48,9 +48,6 @@ namespace Cardificer
 
         [Tooltip("Draw Tiles detected as \"burrow\" during room-grid copying")]
         [SerializeField] private bool drawBurrowTiles;
-
-        // tracks list of null tiles during room copying for the purpose of displaying them as gizmos
-        private List<Vector2> debugNullTiles = new List<Vector2>();
 
         /// <summary>
         /// Sets the instance to this instance

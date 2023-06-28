@@ -18,9 +18,22 @@ namespace Cardificer.FiniteStateMachine
         
         [Tooltip("Number of cards to draw")]
         [SerializeField] private int numberCardsToDraw;
+
+        [Tooltip("Possible actions that could be drawn to play")]
+        [SerializeField] private List<AttackSequence> cardDrawPool;
         
-        [Tooltip("Possible actions that could be drawn to play")] [EditInline]
-        [SerializeField] private List<List<Action>> cardDrawPool;
+        /// <summary>
+        /// An attack sequence and its sprite
+        /// </summary>
+        [System.Serializable]
+        public class AttackSequence
+        {
+            [Tooltip("The sprite that represents this attack sequence")] 
+            public Sprite abilitySprite;
+
+            [Tooltip("List of actions to be performed")]
+            public List<Action> actionSequence;
+        }
         
         // tracks seeded random from save manager
         private Random random;
@@ -37,9 +50,12 @@ namespace Cardificer.FiniteStateMachine
             
             for (int i = 0; i < numberCardsToDraw; i++)
             {
+                stateMachine.trackedVariables.Remove("Card" + i); // try removing it if it exists already
+                
                 var selectedCard = PickRandomAttack();
                 stateMachine.trackedVariables.Add("Card" + i, selectedCard);
                 // display selectedCard
+                BaseStateMachine.print("Displaying Card " + i);
                 yield return new WaitForSeconds(displayCardTime);
                 stateMachine.trackedVariables["CardsDrawn"] = (int)stateMachine.trackedVariables["CardsDrawn"] + 1;
             }
@@ -47,10 +63,10 @@ namespace Cardificer.FiniteStateMachine
             stateMachine.cooldownData.cooldownReady[this] = true;
         }
 
-        private List<Action> PickRandomAttack()
+        private AttackSequence PickRandomAttack()
         {
-            List<Action> randomAction = cardDrawPool[random.Next(cardDrawPool.Count)];
-            return randomAction;
+            AttackSequence randomAttackSequence = cardDrawPool[random.Next(cardDrawPool.Count)];
+            return randomAttackSequence;
         }
     }
 }
