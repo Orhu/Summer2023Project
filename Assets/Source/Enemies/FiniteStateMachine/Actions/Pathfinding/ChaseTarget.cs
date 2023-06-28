@@ -27,7 +27,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         /// <param name="stateMachine"> stateMachine to be used </param>
         /// <returns> Waits pathLockout seconds before allowing another request. </returns>
-        protected sealed override IEnumerator PlayAction(BaseStateMachine stateMachine)
+        protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             RequestPath(stateMachine);
             yield return new WaitForSeconds(pathLockout);
