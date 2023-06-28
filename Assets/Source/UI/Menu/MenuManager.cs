@@ -47,6 +47,8 @@ namespace Cardificer
             {
                 instance = this;
                 playerGameObject = Player.Get();
+
+                // Assign menu if they aren't found
                 if (boosterPackMenu == null)
                 {
                     boosterPackMenu = GetComponentInChildren<BoosterPackMenu>();
@@ -64,6 +66,7 @@ namespace Cardificer
                     mapMenu = GetComponentInChildren<MapMenu>();
                 }
 
+                // The current menu is set to pause menu
                 currentMenu = MenuTypes.Pause;
             }
         }
