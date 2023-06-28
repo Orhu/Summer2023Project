@@ -11,7 +11,7 @@ namespace Cardificer
     public class DamageOnInteract : MonoBehaviour
     {
         [Tooltip("The damage that will be dealt.")]
-        [SerializeField] private DamageData damageData;
+        public DamageData damageData;
 
         [Tooltip("The frequency at which damage will be dealt.")]
         [SerializeField] private float damageInterval = 0.5f;

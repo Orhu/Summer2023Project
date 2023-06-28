@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -64,6 +65,35 @@ namespace Cardificer
                 return autosaver.latestAutosave.playerMoney;
             }
         }
+        // The currently saved player max health. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+        public static int savedPlayerMaxHealth
+        {
+            get
+            {
+                if (!autosaveExists) { return 0; }
+                return autosaver.latestAutosave.playerMaxHealth;
+            }
+        }
+
+        // The currently saved player max speed. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+        public static float savedPlayerSpeed
+        {
+            get
+            {
+                if (!autosaveExists) { return 0; }
+                return autosaver.latestAutosave.playerSpeed;
+            }
+        }
+
+        // The currently saved player damage multiplier. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+        public static float savedPlayerDamage
+        {
+            get
+            {
+                if (!autosaveExists) { return 0; }
+                return autosaver.latestAutosave.playerDamage;
+            }
+        }
 
         // The currently saved floor seed. Saving handled by autosaves. Use autosaveExists to check if data Valid.
         public static int savedFloorSeed
@@ -102,6 +132,16 @@ namespace Cardificer
             {
                 if (!autosaveExists) { return Vector2.zero; }
                 return autosaver.latestAutosave.playerPos;
+            }
+        }
+
+        // The saved list of destroyed tile world positions
+        public static List<Vector2> savedDestroyedTiles
+        {
+            get
+            {
+                if (!autosaveExists) { return new List<Vector2>(); }
+                return autosaver.latestAutosave.destroyedTiles;
             }
         }
 
@@ -272,6 +312,18 @@ namespace Cardificer
                 // The last amount of money the player had.
                 public int playerMoney;
 
+                // The last max health of the player.
+                public int playerMaxHealth;
+
+                // The last max speed of the player.
+                public float playerSpeed;
+
+                // The last damage multiplier of the player.
+                public float playerDamage;
+
+                // The last cooldown multiplier of the player.
+                public float playerCooldownReduction;
+
                 // The locations and current card count of visited rooms
                 public List<Vector3Int> visitedRooms = new List<Vector3Int>();
 
@@ -280,23 +332,14 @@ namespace Cardificer
 
                 // The current state of the deck.
                 public Deck.State deckState;
+                
+                // The current destroyed tiles world positions
+                public List<Vector2> destroyedTiles;
 
                 /// <summary>
                 /// Default constructor.
                 /// </summary>
                 public AutosaveData() { }
-
-                /// <summary>
-                /// Copy constructor.
-                /// </summary>
-                /// <param name="other"> The instance to copy. </param>
-                public AutosaveData(AutosaveData other)
-                {
-                    floorSeed = other.floorSeed;
-                    playerPos = other.playerPos;
-                    visitedRooms = other.visitedRooms;
-                    deckState = other.deckState;
-                }
             }
 
             /// <summary>
@@ -312,8 +355,13 @@ namespace Cardificer
                 saveData.playerPos = Player.Get().transform.position;
                 saveData.playerHealth = Player.health.currentHealth;
                 saveData.playerMoney = Player.GetMoney();
+                saveData.playerMaxHealth = Player.health.maxHealth;
+                saveData.playerSpeed = Player.Get().GetComponent<SimpleMovement>().maxSpeed;
+                saveData.playerDamage = Player.Get().GetComponent<PlayerController>().damageMultiplier;
+                saveData.playerCooldownReduction = Deck.playerDeck.cooldownReduction;
                 saveData.deckState = new Deck.State(Deck.playerDeck);
                 saveData.floorSeed = FloorGenerator.floorGeneratorInstance.seed;
+                saveData.destroyedTiles = DestroyableTile.destroyedTiles != null ? DestroyableTile.destroyedTiles.ToList() : savedDestroyedTiles;
                 Vector2Int loc = FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation;
                 saveData.visitedRooms.Add(new Vector3Int(loc.x, loc.y, Deck.playerDeck.cards.Count));
                 saveData.remainingShopBuys = ShopSlot.savableRemainingShopBuys;

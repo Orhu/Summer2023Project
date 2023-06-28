@@ -40,6 +40,10 @@ namespace Cardificer
         /// <returns></returns>
         public abstract AudioSource GetAudioSource();
 
-
+        /// <summary>
+        /// Gets the damage multiplier of this IActor
+        /// </summary>
+        /// <returns> The damage multiplier. </returns>
+        public abstract float GetDamageMultiplier();
     }
 }
