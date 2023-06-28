@@ -40,30 +40,22 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> The stateMachine to be used. </param>
         private void RequestPath(BaseStateMachine stateMachine)
         {
-            PathRequestManager.RequestPath(stateMachine, OnPathFound);
-        }
-
-        /// <summary>
-        /// Called when a path is successfully found
-        /// </summary>
-        /// <param name="newPath"> The new path </param>
-        /// <param name="success"> Whether the path was successfully found or not </param>
-        /// <param name="stateMachine"> The stateMachine to be used. </param>
-        private void OnPathFound(Vector2[] newPath, bool success, BaseStateMachine stateMachine)
-        {
-            if (!success || stateMachine == null || stateMachine.pathData.ignorePathRequests) return;
-
-            stateMachine.pathData.path = new Path(newPath, stateMachine.GetFeetPos(), stoppingDist);
-
-            if (stateMachine.pathData.prevFollowCoroutine != null)
+            PathRequestManager.AsyncRequestPath(stateMachine, (Vector2[] path, bool successful) => 
             {
-                stateMachine.StopCoroutine(stateMachine.pathData.prevFollowCoroutine);
-            }
+                if (!successful || stateMachine == null || stateMachine.pathData.ignorePathRequests) return;
 
-            var newCoroutine = FollowPath(stateMachine);
-            stateMachine.pathData.prevFollowCoroutine = newCoroutine;
-            stateMachine.pathData.targetIndex = 0;
-            stateMachine.StartCoroutine(newCoroutine);
+                stateMachine.pathData.path = new Path(path, stateMachine.GetFeetPos(), stoppingDist);
+
+                if (stateMachine.pathData.prevFollowCoroutine != null)
+                {
+                    stateMachine.StopCoroutine(stateMachine.pathData.prevFollowCoroutine);
+                }
+
+                var newCoroutine = FollowPath(stateMachine);
+                stateMachine.pathData.prevFollowCoroutine = newCoroutine;
+                stateMachine.pathData.targetIndex = 0;
+                stateMachine.StartCoroutine(newCoroutine);
+            });
         }
 
         /// <summary>
