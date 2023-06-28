@@ -7,7 +7,7 @@ namespace Cardificer.FiniteStateMachine
     /// <summary>
     /// Represents an action to update our target to be the player
     /// </summary>
-    [CreateAssetMenu(menuName = "FSM/Actions/Randomly Offset Target")]
+    [CreateAssetMenu(menuName = "FSM/Actions/Targeting/Randomly Offset Target")]
     public class RandomlyOffsetTarget : SingleAction
     {
         [Tooltip("The radius of the circle to offset the target in.?")] [Min(0f)]

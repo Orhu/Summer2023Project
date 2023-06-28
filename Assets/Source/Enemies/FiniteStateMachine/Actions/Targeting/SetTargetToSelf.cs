@@ -5,10 +5,10 @@ using UnityEngine;
 namespace Cardificer.FiniteStateMachine
 {
     /// <summary>
-    /// Represents an action to update our target to be the player
+    /// Represents an action to update our target to be at the enemy's current position.
     /// </summary>
-    [CreateAssetMenu(menuName = "FSM/Actions/Targeting/Set Target To Player")]
-    public class SetTargetToPlayer : SingleAction
+    [CreateAssetMenu(menuName = "FSM/Actions/Targeting/Set Target To Self")]
+    public class SetTargetToSelf : SingleAction
     {
         /// <summary>
         /// Enum representing targeting modes for setting a target
@@ -33,12 +33,12 @@ namespace Cardificer.FiniteStateMachine
         {
             if (targetType.HasFlag(TargetType.Pathfinding))
             {
-                stateMachine.currentPathfindingTarget = Player.GetFeetPosition();
+                stateMachine.currentPathfindingTarget = stateMachine.GetFeetPos();
             }
 
             if (targetType.HasFlag(TargetType.Attack))
             {
-                stateMachine.currentAttackTarget = Player.Get().transform.position;
+                stateMachine.currentAttackTarget = stateMachine.GetFeetPos();
             }
 
             stateMachine.cooldownData.cooldownReady[this] = true;
