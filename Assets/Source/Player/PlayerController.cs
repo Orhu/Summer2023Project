@@ -8,7 +8,9 @@ namespace Cardificer
     [RequireComponent(typeof(Movement), typeof(AnimatorController), typeof(ChannelAbility))]
     public class PlayerController : MonoBehaviour, IActor
     {
-
+        // Damage multiplier of this actor
+        [HideInInspector] public float damageMultiplier = 1f;
+        
         // Movement component to allow the agent to move
         private Movement movementComponent;
 
@@ -38,10 +40,13 @@ namespace Cardificer
             transform.position = SaveManager.savedPlayerPosition;
             // TODO: There is a small probability that the player position is invalid and is not caught by the default save file corruption detection.
 
+            damageMultiplier = SaveManager.savedPlayerDamage;
+            (movementComponent as SimpleMovement).maxSpeed = SaveManager.savedPlayerSpeed;
+
             Health health = GetComponent<Health>();
-            health.maxHealth = health.maxHealth;
+            health.maxHealth = SaveManager.savedPlayerMaxHealth;
             health.currentHealth = SaveManager.savedPlayerHealth;
-            if (health.currentHealth > health.maxHealth || health.currentHealth <= 0)
+            if (health.currentHealth > health.maxHealth || health.currentHealth <= 0 || health.maxHealth <= 0)
             {
                 SaveManager.AutosaveCorrupted("Invalid player health");
                 return;
@@ -170,11 +175,24 @@ namespace Cardificer
             return ref _canAct;
         }
 
+        /// <summary>
+        /// Returns AudioSource component of this actor
+        /// </summary>
+        /// <returns> The AudioSource. </returns>
         public AudioSource GetAudioSource()
         {
             
                 return GetComponent<AudioSource>(); 
-        }        
+        }
+
+        /// <summary>
+        /// Gets damage multiplier of this actor
+        /// </summary>
+        /// <returns> The damage multiplier. </returns>
+        public float GetDamageMultiplier()
+        {
+            return damageMultiplier;
+        }
 
         #endregion
     }

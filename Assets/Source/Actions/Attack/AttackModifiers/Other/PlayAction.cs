@@ -27,6 +27,9 @@ namespace Cardificer
             OnDestroyed,
             Repeately,
         }
+        
+        [Tooltip("The damage multiplier of this action")]
+        [SerializeField] private float damageMultiplier = 1f;
 
 
         // The objects ignored by this.
@@ -179,11 +182,20 @@ namespace Cardificer
         /// <summary>
         /// Get the attached audiosource component. 
         /// </summary>
-        /// <returns></returns>
+        /// <returns> The audiosource. </returns>
         public AudioSource GetAudioSource()
         {
             return sourceTransform.GetComponent<AudioSource>();
-        }        
+        }
+
+        /// <summary>
+        /// Gets the damage multiplier of this actor
+        /// </summary>
+        /// <returns> The damage multiplier. </returns>
+        public float GetDamageMultiplier()
+        {
+            return damageMultiplier;
+        }
 
         #endregion
 
