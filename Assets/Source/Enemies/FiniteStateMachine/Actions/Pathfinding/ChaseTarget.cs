@@ -14,7 +14,10 @@ namespace Cardificer.FiniteStateMachine
     public class ChaseTarget : SingleAction
     {
         [Tooltip("After a Path request is submitted, how long before another one is allowed?")]
-        [SerializeField] private float pathLockout = 0.25f;
+        [SerializeField] private float pathLockout = 0.03f;
+
+        [Tooltip("Starting at stopping dist from the target destination, move speed rapidly drops until target destination is reached.")]
+        [SerializeField] private float stoppingDist = 0.5f;
         
         // need to track our current data
         private ChaseData chaseData;
@@ -50,7 +53,7 @@ namespace Cardificer.FiniteStateMachine
         {
             if (!success || stateMachine == null || stateMachine.pathData.ignorePathRequests) return;
 
-            stateMachine.pathData.path = new Path(newPath, stateMachine.GetFeetPos());
+            stateMachine.pathData.path = new Path(newPath, stateMachine.GetFeetPos(), stoppingDist);
 
             if (stateMachine.pathData.prevFollowCoroutine != null)
             {
@@ -70,13 +73,12 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> Allows other code to execute in between iterations of the while (true) loop </returns>
         private IEnumerator FollowPath(BaseStateMachine stateMachine)
         {
-            if (stateMachine.pathData.path.lookPoints.Length == 0)
+            stateMachine.speedPercent = 1f; // reset speed percent to normal
+            
+            if (stateMachine.pathData.path.waypoints.Length == 0)
             {
                 yield break;
             }
-
-            Vector2 currentWaypoint = stateMachine.pathData.path.lookPoints[0];
-            stateMachine.currentWaypoint = currentWaypoint;
 
             while (stateMachine.pathData.keepFollowingPath)
             {
@@ -96,8 +98,19 @@ namespace Cardificer.FiniteStateMachine
 
                 if (stateMachine.pathData.keepFollowingPath)
                 {
+                    if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.slowDownIndex && stoppingDist > 0)
+                    {
+                        stateMachine.speedPercent = Mathf.Clamp01(stateMachine.pathData.path
+                                                         .turnBoundaries[stateMachine.pathData.path.finishLineIndex]
+                                                         .DistanceFromPoint(stateMachine.GetFeetPos()) /
+                                                     stoppingDist);
+                        if (stateMachine.speedPercent < 0.01f)
+                        {
+                            stateMachine.pathData.keepFollowingPath = false;
+                        }
+                    }
                     stateMachine.GetComponent<Movement>().movementInput =
-                        (stateMachine.pathData.path.lookPoints[stateMachine.pathData.targetIndex] - stateMachine.GetFeetPos()).normalized;
+                        (stateMachine.pathData.path.waypoints[stateMachine.pathData.targetIndex] - stateMachine.GetFeetPos()).normalized;
                 }
                 
                 yield return null;
