@@ -33,7 +33,7 @@ namespace Cardificer
 
 
         // The locations mapped to the remaining buy count of every shop slot that has been bought from.
-        public static Dictionary<Vector2Int, int> _locationsToRemainingShopBuys;
+        private static Dictionary<Vector2Int, int> _locationsToRemainingShopBuys;
         private static Dictionary<Vector2Int, int> locationsToRemainingShopBuys
         {
             get

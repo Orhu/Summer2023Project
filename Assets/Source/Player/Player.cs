@@ -66,7 +66,7 @@ namespace Cardificer
         /// <summary>
         /// Adds an amount to the player's money.
         /// </summary>
-        /// <param name="amount"> The number of coins to add. </param>
+        /// <param name="amount"> The number of coins to add. Can be negative </param>
         /// <returns> Whether or not the player had enough money. </returns>
         public static bool AddMoney(int amount)
         {

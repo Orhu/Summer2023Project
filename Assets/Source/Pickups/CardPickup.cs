@@ -4,7 +4,9 @@ using UnityEngine;
 
 namespace Cardificer
 {
-    // A pickup that will give a player a card.
+    /// <summary>
+    /// A pickup that will give the player a new card.
+    /// </summary>
     [RequireComponent(typeof(Collider2D))]
     public class CardPickup : MonoBehaviour
     {
@@ -15,14 +17,20 @@ namespace Cardificer
         // The card this will give.
         private Card card;
 
-        // Start is called before the first frame update
-        void Start()
+        /// <summary>
+        /// Gets card and sets visuals.
+        /// </summary>
+        private void Start()
         {
             card = lootTable.PullFromTable(transform.position);
             GetComponentInChildren<CardRenderer>(true).card = card;
             GetComponentInChildren<SpriteRenderer>().sprite = card.runeImage;
         }
 
+        /// <summary>
+        /// Give the player the card
+        /// </summary>
+        /// <param name="collision"> The thing that could be the player. </param>
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!collision.CompareTag("Player")) { return; }

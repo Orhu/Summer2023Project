@@ -70,7 +70,7 @@ namespace Cardificer
         /// </summary>
         /// <param name="seed"> A position to us as a seed to pull from the table. </param>
         /// <param name="copyOfWeightedLoot">A copy of the weighted loot list</param>
-        /// <returns>A random card</returns>
+        /// <returns> A random item. </returns>
         public T PullAndRemoveFromTable(Vector3 seed, List<WeightedLootItems<T>> copyOfWeightedLoot)
         {
             float totalWeight = 0;
@@ -105,7 +105,7 @@ namespace Cardificer
         /// </summary>
         /// <param name="seed"> A position to us as a seed to pull from the table. </param>
         /// <param name="pullCount">Number of items pulled from the table</param>
-        /// <returns>List of items pulled from the table</returns>
+        /// <returns> List of items pulled from the table </returns>
         public List<T> PullMultipleFromTable(Vector3 seed, int pullCount)
         {
             if (pullCount <= weightedLoot.Count)
@@ -157,13 +157,13 @@ namespace Cardificer
         /// Maps a position to a unique seed.
         /// </summary>
         /// <param name="position"> The position to convert. </param>
-        /// <returns></returns>
+        /// <returns> The seed corresponding to the position. </returns>
         private int PositionToSeed(Vector3 position)
         {
             // Szudzik's function:
-            int A = (int)position.x >= 0 ? 2 * (int)position.x : -2 * (int)position.x - 1;
-            int B = (int)position.y >= 0 ? 2 * (int)position.y : -2 * (int)position.y - 1;
-            int result = A >= B ? A * A + A + B : A + B * B;
+            int x = (int)position.x >= 0 ? 2 * (int)position.x : -2 * (int)position.x - 1;
+            int y = (int)position.y >= 0 ? 2 * (int)position.y : -2 * (int)position.y - 1;
+            int result = x >= y ? x * x + x + y : x + y * y;
 
             return result + FloorGenerator.floorGeneratorInstance.seed;
         }
