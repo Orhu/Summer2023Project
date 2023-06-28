@@ -14,25 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
   attack:
-    damage: 0
+    damage: 2
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
-  hitCount: 1
+  hitCount: 999
   applyDamageOnHit: 1
-  modifiers: []
-  shape: {fileID: 0}
-  lifetime: 10
-  initialSpeed: 10
-  acceleration: -1
-  minSpeed: 5
-  maxSpeed: 10
+  modifiers:
+  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
+  - {fileID: 11400000, guid: b7736abd7c48835489e2838e20e76263, type: 2}
+  shape: {fileID: 11400000, guid: 4bdbe3ff20bb38c4a890d3ebdf472865, type: 2}
+  lifetime: 15
+  initialSpeed: 0
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 0
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
   homingAimMode: 0
   switchAfterHit: 0
-  visualObject: {fileID: 0}
+  visualObject: {fileID: 1648533002748833322, guid: 2f865795552d0c94cb0a3d9dc6b7ed0a, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
   spawnLocation: 0
@@ -44,6 +46,6 @@ MonoBehaviour:
   _spawnSequence:
   - delay: 0
     angle: 0
-    offset: {x: 0, y: 0}
+    offset: {x: 1, y: 0}
   randomAngle: 0
   randomOffset: 0
