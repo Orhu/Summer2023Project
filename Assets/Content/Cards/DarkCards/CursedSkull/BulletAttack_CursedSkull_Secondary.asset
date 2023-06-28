@@ -10,40 +10,39 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
-  m_Name: BulletAttack_Smite
+  m_Name: BulletAttack_CursedSkull_Secondary
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
   attack:
-    damage: 10
-    damageType: 1
-    statusEffects:
-    - {fileID: 11400000, guid: f402b60c09a13814e9854c1069dd2fa4, type: 2}
+    damage: 0
+    damageType: 0
+    statusEffects: []
     invertInvincibility: 0
-  hitCount: 999
+  hitCount: 1
   applyDamageOnHit: 1
   modifiers: []
-  shape: {fileID: 11400000, guid: 8604c3528f654124caed49a71602bda9, type: 2}
-  lifetime: 0.2
-  initialSpeed: 0
-  acceleration: 0
-  minSpeed: 0
-  maxSpeed: 0
+  shape: {fileID: 0}
+  lifetime: 10
+  initialSpeed: 10
+  acceleration: -1
+  minSpeed: 5
+  maxSpeed: 10
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
   homingAimMode: 0
   switchAfterHit: 0
-  visualObject: {fileID: 8888398881415896788, guid: 2726eee889487e346a0824846207a179, type: 3}
-  detachVisualsBeforeDestroy: 1
+  visualObject: {fileID: 0}
+  detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  spawnLocation: 1
-  aimMode: 3
+  spawnLocation: 0
+  aimMode: 0
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   _spawnSequence:
-  - delay: 0.75
+  - delay: 0
     angle: 0
     offset: {x: 0, y: 0}
   randomAngle: 0
