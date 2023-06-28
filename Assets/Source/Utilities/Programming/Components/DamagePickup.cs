@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Cardificer
 {
     /// <summary>
-    /// Decreases the players cooldowns in an exponential decay fashion.
+    /// Increases the players damage linearly.
     /// </summary>
     [RequireComponent(typeof(Collider2D))]
     public class DamagePickup : MonoBehaviour
@@ -12,7 +12,7 @@ namespace Cardificer
         [SerializeField] private float damageIncrease = 0.9f;
 
         /// <summary>
-        /// Pickup reduced cooldowns.
+        /// Pickup increased damage.
         /// </summary>
         /// <param name="collision"> The thing to test if it is the player. </param>
         private void OnTriggerEnter2D(Collider2D collision)
