@@ -12,7 +12,7 @@ namespace Cardificer.FiniteStateMachine
     public class FleeFromAttackTarget : ChaseTarget
     {
         [Tooltip("The maximum number of tiles to flee at a time. Larger number means its better at getting out of dead ends.")] [Range(1,5)]
-        [SerializeField] private int fleeTiles;
+        [SerializeField] private int fleeTiles = 1;
 
         /// <summary>
         /// Moves directly towards the pathfinding target.

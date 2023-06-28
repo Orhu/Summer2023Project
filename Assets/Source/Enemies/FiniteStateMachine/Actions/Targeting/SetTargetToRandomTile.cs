@@ -48,10 +48,11 @@ namespace Cardificer.FiniteStateMachine
 
             for (int i = 0; i < RoomInterface.instance.GetMaxRoomSize() && !tileNavicable; i++)
             {
-                tileLocation = new Vector2(UnityEngine.Random.Range(roomSize.x / -2f, roomSize.x / 2f), UnityEngine.Random.Range(roomSize.y / -2f, roomSize.y / 2f));
+                tileLocation = new Vector2(Mathf.RoundToInt(UnityEngine.Random.Range(roomSize.x / -2f, roomSize.x / 2f)), Mathf.RoundToInt(UnityEngine.Random.Range(roomSize.y / -2f, roomSize.y / 2f)));
                 tileNavicable = RoomInterface.instance.WorldPosToTile(tileLocation + RoomInterface.instance.myWorldPosition).Item1.allowedMovementTypes.HasFlag(stateMachine.currentMovementType);
 
-                float sqrDistance = (tileLocation - stateMachine.GetFeetPos()).sqrMagnitude;
+                float sqrDistance = (tileLocation + RoomInterface.instance.myWorldPosition - stateMachine.GetFeetPos()).sqrMagnitude;
+
                 tileNavicable = tileNavicable && sqrDistance <= maxDistance * maxDistance && sqrDistance >= minDistance * minDistance;
             }
             if (!tileNavicable)

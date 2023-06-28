@@ -247,7 +247,7 @@ namespace Cardificer
         Vector2[] PathToVectors(List<PathfindingTile> path, PathRequest request)
         {
             List<Vector2> waypoints = new List<Vector2>();
-            waypoints.Add(request.startPos);
+            waypoints.Add(request.endPos);
             foreach (var tile in path)
             {
                 waypoints.Add(roomInterface.TileToWorldPos(tile));
