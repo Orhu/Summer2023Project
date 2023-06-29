@@ -12,7 +12,7 @@ namespace Cardificer
         [Tooltip("A list of room types, and their layout parameters")]
         public RoomTypesToLayoutParameters roomTypesToLayoutParameters;
 
-        [Tooltip("The number of boss rooms to generate")]
+        [Tooltip("The number of boss rooms to generate")] [Min(1)]
         public int numBossRooms;
 
         [Tooltip("The number of doors that is preferred")] [Range(1, 4)]
