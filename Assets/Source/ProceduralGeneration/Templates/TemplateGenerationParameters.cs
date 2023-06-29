@@ -13,10 +13,6 @@ namespace Cardificer
         [Tooltip("The pool of templates to draw from and their associated room types")]
         [SerializeField] public RoomTypesToDifficultiesToTemplates templatesPool;
 
-        [Tooltip("How much the percentage chance of generating a hard room increases when generating a new room")]
-        [Range(0, 100)]
-        [SerializeField] public float hardRoomPercentageIncrease;
-
         [Tooltip("The tile types and the possible tiles they can spawn. Use this to specify the generics of this floor")]
         [SerializeField] public TileTypesToPossibleTiles tileTypesToPossibleTiles;
 
@@ -125,7 +121,7 @@ namespace Cardificer
                 else
                 {
                     difficulty = Difficulty.Easy;
-                    hardRoomPercentage += hardRoomPercentageIncrease;
+                    hardRoomPercentage += DifficultyProgressionManager.hardRoomPercentageIncrease; 
                 }
 
                 return difficultiesToTemplates.At(difficulty);
