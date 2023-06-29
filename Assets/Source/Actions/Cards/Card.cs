@@ -62,6 +62,19 @@ namespace Cardificer
         [Tooltip("The chord specific color of the rune, to be displayed with the chord in the UI")]
         public Color chordColor;
 
+        [Tooltip("Whether a specific card is rare or not, to be displayed in the UI")]
+        public bool isRare = false;
+
+        [Tooltip("The card specific sprite representing the type of damage the card does.")]
+        public Sprite damageTypeSprite;
+
+        [Tooltip("How much damage a specific card does. Also is displayed in the UI.")]
+        public int damage = 1;
+
+        [Tooltip("The text displayed in the card UI explaining what happens when you chord the card.")]
+        public string chordEffectText = "Bees";
+
+
 
         /// <summary>
         /// Gets the description of this card by collecting all the formated descriptions from the card's mechanics.

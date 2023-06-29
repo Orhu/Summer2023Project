@@ -28,22 +28,44 @@ namespace Cardificer
                     // Name of the card
                     links.nameTextBox.text = _card.displayName;
 
-                    // TODO Description of the card
-                    //links.descriptionTextBox.text = _card.GetDescription(renderActionSide);
+                    // Description of the card
+                    links.descriptionTextBox.text = _card.GetDescription(renderActionSide);
 
-                    // TODO Rarity of the card
-                    //links.rarityImage.enabled = _card.rarity;
+                    // Rarity of the card
+                    links.rarityImage.enabled = _card.isRare;
 
-                    // TODO Projectile type
-                    //links.projectileTypeImage = _card.projectileType;
+                    // Projectile type
+                    if (_card.damageTypeSprite != null)
+                    {
+                        links.projectileTypeImage.sprite = _card.damageTypeSprite;
+                    }
+                    else
+                    {
+                        links.projectileTypeImage.enabled = false;
+                    }
 
                     // Cooldown of the card
                     links.coolDownOverlayText.text = _card.cooldownTime.ToString();
 
-                    // TODO For managing damage container colors
-                    for (int i = 0; i < 3; i++)
+                    // Chord effect of the card
+                    links.chordEffectText.text = _card.chordEffectText;
+
+                    // For managing damage container colors
+                    for (int i = 0; i < _card.damage; i++)
                     {
-                        //links.damageContainer;
+                        if(i < 3)
+                        {
+                            links.damageContainer.transform.GetChild(i%3).GetComponent<Image>().color = Color.black;
+                        }
+                        else if (i < 6)
+                        {
+                            links.damageContainer.transform.GetChild(i%3).GetComponent<Image>().color = Color.blue;
+                        }
+                        else if (i < 9)
+                        {
+                            links.damageContainer.transform.GetChild(i % 3).GetComponent<Image>().color = Color.red;
+                        }
+
                     }
 
                     if (!renderActionSide)
@@ -119,6 +141,9 @@ namespace Cardificer
 
             [Tooltip("The image associated with the card's rarity.")]
             public Image rarityImage;
+
+            [Tooltip("The text displaying the card's chord effect.")]
+            public TMP_Text chordEffectText;
         }
     }
 }
