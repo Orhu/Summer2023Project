@@ -45,6 +45,36 @@ namespace Cardificer
             }
         }
 
+        // The currently saved player max health. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+        public static int savedPlayerMaxHealth
+        {
+            get
+            {
+                if (!autosaveExists) { return 0; }
+                return autosaver.latestAutosave.playerMaxHealth;
+            }
+        }
+
+        // The currently saved player max speed. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+        public static float savedPlayerSpeed
+        {
+            get
+            {
+                if (!autosaveExists) { return 0; }
+                return autosaver.latestAutosave.playerSpeed;
+            }
+        }
+
+        // The currently saved player damage multiplier. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+        public static float savedPlayerDamage
+        {
+            get
+            {
+                if (!autosaveExists) { return 0; }
+                return autosaver.latestAutosave.playerDamage;
+            }
+        }
+
         // The currently saved floor seed. Saving handled by autosaves. Use autosaveExists to check if data Valid.
         public static int savedFloorSeed
         {
@@ -246,6 +276,18 @@ namespace Cardificer
                 // The last health of the player.
                 public int playerHealth;
 
+                // The last max health of the player.
+                public int playerMaxHealth;
+
+                // The last max speed of the player.
+                public float playerSpeed;
+
+                // The last damage multiplier of the player.
+                public float playerDamage;
+
+                // The last cooldown multiplier of the player.
+                public float playerCooldownReduction;
+
                 // The locations and current card count of visited rooms
                 public List<Vector2Int> visitedRooms = new List<Vector2Int>();
 
@@ -273,6 +315,10 @@ namespace Cardificer
                 // Add new save data Here:
                 saveData.playerPos = Player.Get().transform.position;
                 saveData.playerHealth = Player.health.currentHealth;
+                saveData.playerMaxHealth = Player.health.maxHealth;
+                saveData.playerSpeed = Player.Get().GetComponent<SimpleMovement>().maxSpeed;
+                saveData.playerDamage = Player.Get().GetComponent<PlayerController>().damageMultiplier;
+                saveData.playerCooldownReduction = Deck.playerDeck.cooldownReduction;
                 saveData.deckState = new Deck.State(Deck.playerDeck);
                 saveData.floorSeed = FloorGenerator.floorGeneratorInstance.seed;
 
