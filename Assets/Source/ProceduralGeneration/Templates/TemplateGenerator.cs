@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Cardificer
@@ -18,6 +19,7 @@ namespace Cardificer
             room.template = ScriptableObject.CreateInstance<Template>();
             room.template.roomSize = template.roomSize;
             room.template.tiles = template.tiles;
+            room.livingEnemies = new List<GameObject>();
 
             if (template.enemyPools != null && template.enemyPools.enemyPools.Count != 0)
             {
