@@ -15,43 +15,33 @@ namespace Cardificer.FiniteStateMachine
     [CreateAssetMenu(menuName = "FSM/Floor Boss/Cauldron of Desire/Play Cards")]
     public class COD_PlayCards : SingleAction
     {
-        [Tooltip("How long to wait after an attack sequence is played before playing the next one")]
-        [SerializeField] private float delayBetweenAttacks;
-        
-        [Tooltip("After playing one attack in the sequence, how long should we wait before playing the next?")]
-        [SerializeField] private float delayBetweenProjectiles;
-        
-        // tracks number of cards to play based on how many were drawn
-        private int numberCardsToPlay;
-
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
-            numberCardsToPlay = (int)stateMachine.trackedVariables["CardsDrawn"];
-
             stateMachine.trackedVariables.TryAdd("CardsPlayed", 0);
-            stateMachine.trackedVariables["CardsPlayed"] =
-                0; // if it was already added, the TryAdd wont update the value
+            stateMachine.trackedVariables.TryAdd("CardsDone", 0);
 
             if (!stateMachine.trackedVariables.ContainsKey("Card0"))
             {
                 Debug.LogError("Cauldron of Desire has no cards to play even though it is in its attack state!");
             }
+
+            var cardPlayIndex = (int)stateMachine.trackedVariables["CardsPlayed"];
             
-            for (int i = 0; i < numberCardsToPlay; i++)
+            AttackSequence currentAttackSequence = stateMachine.trackedVariables["Card" + cardPlayIndex] as AttackSequence;
+            BaseStateMachine.print("Attack " + cardPlayIndex + " being fired!");
+
+            var actionSequence = currentAttackSequence.actionSequence;
+            var actionDelaySequence = currentAttackSequence.actionDelaySequence;
+            for (int i = 0; i < currentAttackSequence.actionSequence.Count; i++)
             {
-                AttackSequence currentAttack = stateMachine.trackedVariables["Card" + i] as AttackSequence;
-                BaseStateMachine.print("Attack " + i + " firing!");
-                foreach (var attack in currentAttack.actionSequence)
-                {
-                    yield return new WaitForSeconds(delayBetweenProjectiles);
-                    stateMachine.currentAttackTarget = Player.Get().transform.position;
-                    attack.Play(stateMachine);
-                }
-                BaseStateMachine.print("Attack " + i + " finished firing");
-                yield return new WaitForSeconds(delayBetweenAttacks);
-                stateMachine.trackedVariables["CardsPlayed"] = (int)stateMachine.trackedVariables["CardsPlayed"] + 1;
+                stateMachine.currentAttackTarget = Player.Get().transform.position;
+                actionSequence[i].Play(stateMachine);
+                BaseStateMachine.print("Just fired index " + i);
+                yield return new WaitForSeconds(actionDelaySequence[i]);
             }
             
+            stateMachine.trackedVariables["CardsPlayed"] = (int)stateMachine.trackedVariables["CardsPlayed"] + 1;
+            stateMachine.trackedVariables["CardsDone"] = (int)stateMachine.trackedVariables["CardsDone"] + 1;
             stateMachine.cooldownData.cooldownReady[this] = true;
         }
     }

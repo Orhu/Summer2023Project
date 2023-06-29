@@ -331,6 +331,8 @@ namespace Cardificer
 
                 case AimMode.Right:
                     return transform.position + actor.GetActionSourceTransform().right;
+                case AimMode.AtPlayer :
+                    return Player.Get().transform.position;
             }
             return transform.position + transform.right;
         }

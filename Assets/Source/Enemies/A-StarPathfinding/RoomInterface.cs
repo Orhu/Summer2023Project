@@ -180,38 +180,10 @@ namespace Cardificer
                             try
                             {
                                 // this tile is a corner, make sure it is reachable by both of its adjacent tiles (not blocked) (prevents enemies getting stuck on corners)
-                                switch (movementType)
+                                if (roomGrid[checkX - x, checkY].allowedMovementTypes.HasFlag(movementType) &&
+                                    roomGrid[checkX, checkY - y].allowedMovementTypes.HasFlag(movementType))
                                 {
-                                    case MovementType.Walk:
-                                        if (roomGrid[checkX - x, checkY].allowedMovementTypes
-                                                .HasFlag(MovementType.Walk) &&
-                                            roomGrid[checkX, checkY - y].allowedMovementTypes
-                                                .HasFlag(MovementType.Walk))
-                                        {
-                                            neighbors.Add(roomGrid[checkX, checkY]);
-                                        }
-
-                                        break;
-                                    case MovementType.Fly:
-                                        if (roomGrid[checkX - x, checkY].allowedMovementTypes
-                                                .HasFlag(MovementType.Fly) &&
-                                            roomGrid[checkX, checkY - y].allowedMovementTypes
-                                                .HasFlag(MovementType.Fly))
-                                        {
-                                            neighbors.Add(roomGrid[checkX, checkY]);
-                                        }
-
-                                        break;
-                                    case MovementType.Burrow:
-                                        if (roomGrid[checkX - x, checkY].allowedMovementTypes
-                                                .HasFlag(MovementType.Burrow) &&
-                                            roomGrid[checkX, checkY - y].allowedMovementTypes
-                                                .HasFlag(MovementType.Burrow))
-                                        {
-                                            neighbors.Add(roomGrid[checkX, checkY]);
-                                        }
-
-                                        break;
+                                    neighbors.Add(roomGrid[checkX, checkY]);
                                 }
                             }
                             catch

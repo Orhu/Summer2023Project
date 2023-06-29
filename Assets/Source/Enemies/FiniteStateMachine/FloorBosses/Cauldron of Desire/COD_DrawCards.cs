@@ -15,9 +15,6 @@ namespace Cardificer.FiniteStateMachine
     {
         [Tooltip("How long to display a card before drawing the next")]
         [SerializeField] private float displayCardTime;
-        
-        [Tooltip("Number of cards to draw")]
-        [SerializeField] private int numberCardsToDraw;
 
         [Tooltip("Possible actions that could be drawn to play")]
         [SerializeField] private List<AttackSequence> cardDrawPool;
@@ -33,6 +30,9 @@ namespace Cardificer.FiniteStateMachine
 
             [Tooltip("List of actions to be performed")]
             public List<Action> actionSequence;
+
+            [Tooltip("Amount to delay between each action")]
+            public List<float> actionDelaySequence;
         }
         
         // tracks seeded random from save manager
@@ -44,22 +44,20 @@ namespace Cardificer.FiniteStateMachine
             random = stateMachine.trackedVariables["Random"] as Random;
             
             stateMachine.trackedVariables.TryAdd("CardsDrawn", 0);
-            stateMachine.trackedVariables["CardsDrawn"] = 0; // if it was already added, the TryAdd wont update the value
+            stateMachine.trackedVariables.TryAdd("CardsDisplayed", 0);
+            
+            stateMachine.trackedVariables.Remove("Card"  + stateMachine.trackedVariables["CardsDrawn"]); // if the card exists already, remove it
 
-            stateMachine.trackedVariables.TryAdd("CardsToDraw", numberCardsToDraw); // only needs to be added once, never modified
+            var selectedAttackSequence = PickRandomAttack();
             
-            for (int i = 0; i < numberCardsToDraw; i++)
-            {
-                stateMachine.trackedVariables.Remove("Card" + i); // try removing it if it exists already
-                
-                var selectedCard = PickRandomAttack();
-                stateMachine.trackedVariables.Add("Card" + i, selectedCard);
-                // display selectedCard
-                BaseStateMachine.print("Displaying Card " + i);
-                yield return new WaitForSeconds(displayCardTime);
-                stateMachine.trackedVariables["CardsDrawn"] = (int)stateMachine.trackedVariables["CardsDrawn"] + 1;
-            }
+            stateMachine.trackedVariables.Add("Card" + (int)stateMachine.trackedVariables["CardsDrawn"], selectedAttackSequence);
+            stateMachine.trackedVariables["CardsDrawn"] = (int)stateMachine.trackedVariables["CardsDrawn"] + 1;
             
+            var cardDisplay = DisplayCard(stateMachine, selectedAttackSequence);
+            yield return new WaitForSeconds(displayCardTime);
+            Destroy(cardDisplay);
+            stateMachine.trackedVariables["CardsDisplayed"] = (int)stateMachine.trackedVariables["CardsDisplayed"] + 1;
+
             stateMachine.cooldownData.cooldownReady[this] = true;
         }
 
@@ -67,6 +65,19 @@ namespace Cardificer.FiniteStateMachine
         {
             AttackSequence randomAttackSequence = cardDrawPool[random.Next(cardDrawPool.Count)];
             return randomAttackSequence;
+        }
+
+        private GameObject DisplayCard(BaseStateMachine stateMachine, AttackSequence cardToDisplay)
+        {
+            var gameObject = new GameObject();
+            gameObject.AddComponent<SpriteRenderer>();
+            gameObject.GetComponent<SpriteRenderer>().sprite = cardToDisplay.abilitySprite;
+            gameObject.AddComponent<Rigidbody2D>();
+            gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
+            gameObject.GetComponent<Rigidbody2D>().velocity += Vector2.up;
+            gameObject.transform.position = stateMachine.transform.position;
+            gameObject.SetActive(true);
+            return gameObject;
         }
     }
 }
