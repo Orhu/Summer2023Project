@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Skaillz.EditInline;
 
 namespace Cardificer
 {
@@ -15,11 +16,8 @@ namespace Cardificer
         [Tooltip("The generation parameters for the layout of this floor")]
         public LayoutGenerationParameters layoutGenerationParameters;
 
-        [Tooltip("The template generation parameters for this floor")]
-        [SerializeField] private TemplateGenerationParameters templateGenerationParameters;
-
-        // The copy of the template generation parameters for this floor
-        [System.NonSerialized] public TemplateGenerationParameters templateGenerationParametersInstance;
+        [Tooltip("The template generation parameters for this floor")] [EditInline]
+        [SerializeField] public TemplateGenerationParameters templateGenerationParameters;
 
         [Tooltip("The size of a map cell on this floor")]
         public Vector2Int cellSize;
@@ -64,7 +62,7 @@ namespace Cardificer
         /// <summary>
         /// Sets up the singleton
         /// </summary>
-        void Awake()
+        private void Awake()
         {
             if (floorGeneratorInstance != null && floorGeneratorInstance != this)
             {
@@ -111,7 +109,7 @@ namespace Cardificer
             GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, cellSize);
             SaveLayoutGenerationSettings();
 
-            templateGenerationParametersInstance = templateGenerationParameters.Copy();
+            templateGenerationParameters = Instantiate(templateGenerationParameters);
 
             // Autosave loading
             if (!SaveManager.autosaveExists) 
@@ -168,7 +166,7 @@ namespace Cardificer
         /// Invokes room change after 1 frame. This allows for room change to be called *after* the new room is set to active.
         /// </summary>
         /// <returns> Waits 1 frame before invoking </returns>
-        IEnumerator InvokeRoomChangeAfterFrame()
+        private IEnumerator InvokeRoomChangeAfterFrame()
         {
             yield return null; // wait one frame
             onRoomChange?.Invoke();

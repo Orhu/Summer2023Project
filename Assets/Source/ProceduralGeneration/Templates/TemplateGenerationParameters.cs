@@ -36,18 +36,6 @@ namespace Cardificer
         {
             usedTemplates = new RoomTypesToDifficultiesToTemplates();
         }
-
-        public TemplateGenerationParameters Copy()
-        {
-            TemplateGenerationParameters copy = ScriptableObject.CreateInstance<TemplateGenerationParameters>();
-            copy.templatesPool = templatesPool.Copy();
-            copy.hardRoomPercentage = hardRoomPercentageIncrease;
-            copy.tileTypesToPossibleTiles = tileTypesToPossibleTiles;
-            copy.genericTiles = genericTiles;
-            copy.usedTemplates = usedTemplates.Copy();
-            copy.hardRoomPercentage = hardRoomPercentage;
-            return copy;
-        }
         
         /// <summary>
         /// Sees if it's possible to spawn the preferred tile. If not, then gets a random tile of the same type. If there are
@@ -168,18 +156,6 @@ namespace Cardificer
         [Tooltip("The room types and their associated difficulties and their associated templates")]
         public List<RoomTypeToDifficultiesToTemplates> roomTypesToDifficultiesToTemplates = new List<RoomTypeToDifficultiesToTemplates>();
 
-        public RoomTypesToDifficultiesToTemplates Copy()
-        {
-            RoomTypesToDifficultiesToTemplates copy = new RoomTypesToDifficultiesToTemplates();
-            copy.roomTypesToDifficultiesToTemplates = new List<RoomTypeToDifficultiesToTemplates>();
-            foreach (RoomTypeToDifficultiesToTemplates roomTypeToDifficultiesToTemplates in roomTypesToDifficultiesToTemplates)
-            {
-                copy.roomTypesToDifficultiesToTemplates.Add(roomTypeToDifficultiesToTemplates.Copy());
-            }
-
-            return copy;
-        }
-
         public bool Contains(RoomType roomType)
         {
             foreach (RoomTypeToDifficultiesToTemplates roomTypeToDifficultiesToTemplates in roomTypesToDifficultiesToTemplates)
@@ -240,14 +216,6 @@ namespace Cardificer
 
         [Tooltip("The room type's associated difficulties and templates")]
         public DifficultiesToTemplates difficultiesToTemplates;
-
-        public RoomTypeToDifficultiesToTemplates Copy()
-        {
-            RoomTypeToDifficultiesToTemplates copy = new RoomTypeToDifficultiesToTemplates();
-            copy.roomType = roomType;
-            copy.difficultiesToTemplates = difficultiesToTemplates.Copy();
-            return copy;
-        }
     }
 
     /// <summary>
@@ -281,16 +249,6 @@ namespace Cardificer
         {
             difficultiesToTemplates.Add(difficultyToTemplates);
         }
-
-        public DifficultiesToTemplates Copy()
-        {
-            DifficultiesToTemplates copy = new DifficultiesToTemplates();
-            foreach (DifficultyToTemplates difficultyToTemplates in difficultiesToTemplates)
-            {
-                copy.difficultiesToTemplates.Add(difficultyToTemplates.Copy());
-            }
-            return copy;
-        }
     }
 
     /// <summary>
@@ -304,20 +262,6 @@ namespace Cardificer
 
         [Tooltip("The associated templates of that difficulty")]
         public List<Template> templates;
-
-        public DifficultyToTemplates Copy()
-        {
-            DifficultyToTemplates copy = new DifficultyToTemplates();
-            copy.difficulty = difficulty;
-            copy.templates = new List<Template>();
-            foreach (Template template in templates)
-            {
-                // Shallow copy since templates aren't changed
-                copy.templates.Add(template);
-            }
-
-            return copy;
-        }
     }
 
     /// <summary>

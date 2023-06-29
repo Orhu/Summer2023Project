@@ -90,11 +90,11 @@ namespace Cardificer
                 MapCell roomCell = map.map[(i / room.cellSize.x) + room.roomLocation.x, room.roomLocation.y];
                 if ((i % room.cellSize.x == room.cellSize.x / 2 - 1) && roomCell.direction.HasFlag(Direction.Down))
                 {
-                    randomWallSprite = exteriorParameters.besideBottomDoorLeftSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParameters.bottomDoorLeftDoorFrameSprites.GetRandomThing(FloorGenerator.random);
                 }
                 else if ((i % room.cellSize.x == room.cellSize.x / 2 + 1) && roomCell.direction.HasFlag(Direction.Down))
                 {
-                    randomWallSprite = exteriorParameters.besideBottomDoorRightSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParameters.bottomDoorRightDoorFrameSprites.GetRandomThing(FloorGenerator.random);
                 }
                 else if (i % room.cellSize.x != room.cellSize.x / 2 || !roomCell.direction.HasFlag(Direction.Down))
                 {
@@ -109,11 +109,11 @@ namespace Cardificer
                 roomCell = map.map[(i / room.cellSize.x) + room.roomLocation.x, room.roomType.sizeMultiplier.y + room.roomLocation.y - 1];
                 if ((i % room.cellSize.x == room.cellSize.x / 2 - 1) && roomCell.direction.HasFlag(Direction.Up))
                 {
-                    randomWallSprite = exteriorParameters.besideTopDoorLeftSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParameters.topDoorLeftDoorFrameSprites.GetRandomThing(FloorGenerator.random);
                 }
                 else if ((i % room.cellSize.x == room.cellSize.x / 2 + 1) && roomCell.direction.HasFlag(Direction.Up))
                 {
-                    randomWallSprite = exteriorParameters.besideTopDoorRightSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParameters.topDoorRightDoorFrameSprites.GetRandomThing(FloorGenerator.random);
                 }
                 else if (i % room.cellSize.x != room.cellSize.x / 2 || !roomCell.direction.HasFlag(Direction.Up))
                 {
@@ -132,11 +132,11 @@ namespace Cardificer
                 MapCell roomCell = map.map[room.roomLocation.x, (j / room.cellSize.y) + room.roomLocation.y];
                 if ((j % room.cellSize.y == room.cellSize.y / 2 - 1) && roomCell.direction.HasFlag(Direction.Left))
                 {
-                    randomWallSprite = exteriorParameters.belowLeftDoorSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParameters.leftDoorBottomDoorFrameSprites.GetRandomThing(FloorGenerator.random);
                 }
                 else if ((j % room.cellSize.y == room.cellSize.y / 2 + 1) && roomCell.direction.HasFlag(Direction.Left))
                 {
-                    randomWallSprite = exteriorParameters.aboveLeftDoorSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParameters.leftDoorTopDoorFrameSprites.GetRandomThing(FloorGenerator.random);
                 }
                 else if (j % room.cellSize.y != room.cellSize.y / 2 || !roomCell.direction.HasFlag(Direction.Left))
                 {
@@ -151,11 +151,11 @@ namespace Cardificer
                 roomCell = map.map[room.roomLocation.x + room.roomType.sizeMultiplier.x - 1, (j / room.cellSize.y) + room.roomLocation.y];
                 if ((j % room.cellSize.y == room.cellSize.y / 2 - 1) && roomCell.direction.HasFlag(Direction.Right))
                 {
-                    randomWallSprite = exteriorParameters.belowRightDoorSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParameters.rightDoorBottomDoorFrameSprites.GetRandomThing(FloorGenerator.random);
                 }
                 else if ((j % room.cellSize.y == room.cellSize.y / 2 + 1) && roomCell.direction.HasFlag(Direction.Right))
                 {
-                    randomWallSprite = exteriorParameters.aboveRightDoorSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParameters.rightDoorTopDoorFrameSprites.GetRandomThing(FloorGenerator.random);
                 }
                 else if (j % room.cellSize.y != room.cellSize.y / 2 || !roomCell.direction.HasFlag(Direction.Right))
                 {

@@ -247,7 +247,7 @@ namespace Cardificer
         {
             if (!generated)
             {
-                Template template = FloorGenerator.floorGeneratorInstance.templateGenerationParametersInstance.GetRandomTemplate(roomType);
+                Template template = FloorGenerator.floorGeneratorInstance.templateGenerationParameters.GetRandomTemplate(roomType);
                 GetComponent<TemplateGenerator>().Generate(this, template, spawnEnemies);
                 generated = true;
             }

@@ -41,7 +41,7 @@ namespace Cardificer
         /// <summary>
         /// Initializes the height, floor generator, and player references
         /// </summary>
-        void Start()
+        private void Start()
         {
             Vector2 roomScale = FloorGenerator.floorGeneratorInstance.cellSize;
 
@@ -70,7 +70,7 @@ namespace Cardificer
         /// <summary>
         /// Updates the position.
         /// </summary>
-        void FixedUpdate()
+        private void FixedUpdate()
         {
             if (floorGenerator.currentRoom == null)
             {

@@ -61,6 +61,7 @@ MonoBehaviour:
       - roomType: {fileID: 11400000, guid: 3dc6d5686bf40a745a17111823c27f78, type: 2}
         numRooms: 1
         numRoomsVariance: 0
+    numBossRooms: 0
     preferredNumDoors: 4
     strictnessNumDoors: 12
   templateGenerationParameters: {fileID: 11400000, guid: edf9c76c7f360e4459a24604646906f9, type: 2}
@@ -79,9 +80,11 @@ MonoBehaviour:
       roomExteriorGenerationParameters: {fileID: 11400000, guid: c0c5c6192de14794f8d7613b745c2a98, type: 2}
     - roomType: {fileID: 11400000, guid: 4143f222eb18ba8408c4fb5a4c2d3ae7, type: 2}
       roomExteriorGenerationParameters: {fileID: 11400000, guid: c0c5c6192de14794f8d7613b745c2a98, type: 2}
+    - roomType: {fileID: 11400000, guid: 18f0bce901f87ed4a8e97560ceb38a58, type: 2}
+      roomExteriorGenerationParameters: {fileID: 11400000, guid: c0c5c6192de14794f8d7613b745c2a98, type: 2}
   seed: 0
   randomizeSeed: 1
-  generationLogFileName: 
+  generationSettingsFileName: GenerationSettings
   onRoomChange:
     m_PersistentCalls:
       m_Calls:
