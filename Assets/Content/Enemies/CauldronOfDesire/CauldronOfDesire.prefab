@@ -15,6 +15,10 @@ PrefabInstance:
       propertyPath: acceleration
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 5097362261395317995, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: knockbackMultiplier
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: _maxHealth
       value: 200
@@ -25,15 +29,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442667, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_LocalScale.x
-      value: 20
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442667, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_LocalScale.y
-      value: 20
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442667, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_LocalScale.z
-      value: 20
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442667, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -78,26 +82,50 @@ PrefabInstance:
     - target: {fileID: 7281680880204442676, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: d9a86cc444902b141a937b7f4a1889a4, type: 3}
+      objectReference: {fileID: 21300000, guid: e5d32c47b72e9584d8ef422686d31af9, type: 3}
+    - target: {fileID: 7281680880204442676, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442677, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Name
       value: CauldronOfDesire
       objectReference: {fileID: 0}
     - target: {fileID: 7771620888905133544, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Size.x
-      value: 0.33
+      value: 2.9545567
       objectReference: {fileID: 0}
     - target: {fileID: 7771620888905133544, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Size.y
-      value: 0.33
+      value: 2.5594652
+      objectReference: {fileID: 0}
+    - target: {fileID: 7771620888905133544, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.014110342
+      objectReference: {fileID: 0}
+    - target: {fileID: 7771620888905133544, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.11288454
+      objectReference: {fileID: 0}
+    - target: {fileID: 7771620888905133544, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Direction
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8576139625026935080, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Size.x
+      value: 2.6708944
+      objectReference: {fileID: 0}
+    - target: {fileID: 8576139625026935080, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Size.y
+      value: 2.2616923
       objectReference: {fileID: 0}
     - target: {fileID: 8576139625026935080, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Offset.x
-      value: 0
+      value: 0.0000035855303
       objectReference: {fileID: 0}
     - target: {fileID: 8576139625026935080, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Offset.y
-      value: 0
+      value: 0.07760502
       objectReference: {fileID: 0}
     - target: {fileID: 8941374239524879921, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: drawGizmos

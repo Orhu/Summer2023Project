@@ -10,64 +10,43 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
-  m_Name: COD_BulletAttack_Bubble
+  m_Name: COD_BulletAttack_EjectSatellite
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
   attack:
-    damage: 4
+    damage: 0
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
-  hitCount: 999
+  hitCount: 8
   applyDamageOnHit: 1
   modifiers:
-  - {fileID: 11400000, guid: 4db00e30cb485914980b8d29faa3969e, type: 2}
-  - {fileID: 11400000, guid: 9f37278c341a3cd4c82f3b4dbe46201e, type: 2}
-  - {fileID: 11400000, guid: 36b360444cd13b7478707d29f836db6a, type: 2}
-  shape: {fileID: 11400000, guid: edbb2c85e0e6841b286928e679a41be5, type: 2}
-  lifetime: 8
-  initialSpeed: 8
-  acceleration: -0.25
-  minSpeed: 6
-  maxSpeed: 10
+  - {fileID: 11400000, guid: ca1ca5c908abfa847804e1e805337ce1, type: 2}
+  - {fileID: 11400000, guid: 6d3865a8ee4c61a468d929b3c76c04fd, type: 2}
+  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
+  shape: {fileID: 11400000, guid: d66dacfc75790ed46b50cf2b04725031, type: 2}
+  lifetime: 3
+  initialSpeed: 4
+  acceleration: 4
+  minSpeed: 0
+  maxSpeed: 12
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
-  homingAimMode: 1
+  homingAimMode: 0
   switchAfterHit: 0
-  visualObject: {fileID: 5105573067353007232, guid: 6e853b44fdd74468b9c6ddaf7bab24e2, type: 3}
+  visualObject: {fileID: 5228815503458858761, guid: 1ec6b52aea4e5c640938c3f792053e96, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
   spawnLocation: 0
-  aimMode: 0
+  aimMode: 5
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   _spawnSequence:
-  - delay: 0.25
+  - delay: 0
     angle: 0
     offset: {x: 0, y: 0}
-  - delay: 0.25
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.25
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.25
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.25
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.25
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.25
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.25
-    angle: 0
-    offset: {x: 0, y: 0}
-  randomAngle: 360
+  randomAngle: 0
   randomOffset: 0
