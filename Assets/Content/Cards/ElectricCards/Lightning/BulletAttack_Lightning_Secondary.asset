@@ -10,35 +10,33 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
-  m_Name: BulletAttack_BonfireSecondary
+  m_Name: BulletAttack_Lightning_Secondary
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
   attack:
-    damage: 2
+    damage: 4
     damageType: 1
-    statusEffects:
-    - {fileID: 11400000, guid: 6582cb2ec20bdde4d80f48c0c1d17bc0, type: 2}
+    statusEffects: []
     invertInvincibility: 0
   hitCount: 1
   applyDamageOnHit: 1
-  modifiers:
-  - {fileID: 11400000, guid: ab6489c00396f284686f979b797b051a, type: 2}
-  shape: {fileID: 11400000, guid: 3d7e4ba87ce9f954ca760f73f5d7a2d4, type: 2}
-  lifetime: 1.3333334
-  initialSpeed: 4
-  acceleration: -3
+  modifiers: []
+  shape: {fileID: 11400000, guid: f77cddef266b1e54b84a6b0499049178, type: 2}
+  lifetime: 0.5
+  initialSpeed: 150
+  acceleration: 0
   minSpeed: 0
-  maxSpeed: 5
-  homingSpeed: 0
-  homingTime: 0
+  maxSpeed: 150
+  homingSpeed: 1500
+  homingTime: 0.5
   homingDelay: 0
   homingAimMode: 1
   switchAfterHit: 0
-  visualObject: {fileID: 7328043406772725304, guid: 9b05330ee0b8e254183773e53812113b, type: 3}
-  detachVisualsBeforeDestroy: 0
+  visualObject: {fileID: 1353898179390652710, guid: 100b999ba1df74143836093c002d115c, type: 3}
+  detachVisualsBeforeDestroy: 1
   detatchedVisualsTimeBeforeDestroy: 0
   spawnLocation: 0
-  aimMode: 3
+  aimMode: 1
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
@@ -46,6 +44,9 @@ MonoBehaviour:
   _spawnSequence:
   - delay: 0
     angle: 0
-    offset: {x: 0, y: 0}
-  randomAngle: 360
+    offset: {x: 1, y: 0}
+  - delay: 0
+    angle: 0
+    offset: {x: 0, y: 1}
+  randomAngle: 0
   randomOffset: 0
