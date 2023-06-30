@@ -1,10 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Cardificer
 {
-    public class TemplateTile : MonoBehaviour
+    /// <summary>
+    /// A tile for storing inside a template
+    /// </summary>
+    [System.Serializable]
+    public class TemplateTile
     {
         [Tooltip("The sprite to use to display this tile during template creation")]
         public Sprite sprite;
@@ -14,5 +16,18 @@ namespace Cardificer
 
         [Tooltip("The preferred tile to spawn")]
         public Tile preferredTile;
+
+        /// <summary>
+        /// No defuault instantiate function for regular classes, so here's a copy function
+        /// </summary>
+        /// <returns></returns>
+        public TemplateTile Copy()
+        {
+            TemplateTile copy = new TemplateTile();
+            copy.sprite = sprite;
+            copy.tileType = tileType;
+            copy.preferredTile = preferredTile;
+            return copy;
+        }
     }
 }

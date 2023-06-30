@@ -17,7 +17,8 @@ namespace Cardificer
         public void Generate(Room room, Template template, bool spawnEnemies = true)
         {
             room.template = ScriptableObject.CreateInstance<Template>();
-            room.template.roomSize = template.roomSize;
+            room.template.mapCellSize = template.mapCellSize;
+            room.template.sizeMultiplier = template.sizeMultiplier;
             room.template.tiles = template.tiles;
             room.livingEnemies = new List<GameObject>();
 

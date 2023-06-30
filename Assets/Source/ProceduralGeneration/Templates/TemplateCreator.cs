@@ -37,18 +37,38 @@ namespace Cardificer
         [Tooltip("The sprite to use when the preferred object is null")]
         public Sprite nullSprite;
 
-        [Tooltip("The size of the room this template is for")]
-        [field: SerializeField] private Vector2Int _roomSize;
+        [Tooltip("The template to load when load template is called")]
+        public Template templateToLoad;
 
-        public Vector2Int roomSize
+        [Tooltip("The size a singular cell in the map")]
+        [SerializeField] private Vector2Int _mapCellSize = new Vector2Int(17, 11);
+
+        public Vector2Int mapCellSize
         {
-            get { return _roomSize; }
             set
             {
-                _roomSize = value;
+                _mapCellSize = value;
+                roomSize = sizeMultiplier * _mapCellSize;
                 Reload();
             }
+            get { return _mapCellSize; }
         }
+
+        [Tooltip("The size multiplier of this template")]
+        [SerializeField] private Vector2Int _sizeMultiplier = new Vector2Int(1, 1);
+
+        public Vector2Int sizeMultiplier
+        {
+            set
+            {
+                _sizeMultiplier = value;
+                roomSize = _sizeMultiplier * mapCellSize;
+                Reload();
+            }
+            get { return _sizeMultiplier; }
+        }
+
+        public Vector2Int roomSize { private set; get; }
 
         // The actual template being created
         private Template createdTemplate;
@@ -56,14 +76,22 @@ namespace Cardificer
         // A container that holds all the sprite game objects
         private GameObject spriteContainer;
 
+        // A container that holds the visual bounding box
+        private GameObject visualsContainer;
+
         // The sprite game objects
         private GameObject[,] sprites;
+
+        // Tracks whether start has been called or not
+        private bool started;
 
         /// <summary>
         /// Initializes the template creator
         /// </summary>
         private void Start()
         {
+            started = true;
+            roomSize = sizeMultiplier * mapCellSize;
             Reload();
         }
 
@@ -75,20 +103,13 @@ namespace Cardificer
             string path = "Assets/Content/Templates/" + templateName + ".asset";
 
 #if UNITY_EDITOR
-
-            Debug.Log("path: " + path);
-
             path = AssetDatabase.GenerateUniqueAssetPath(path);
-
-            Debug.Log("path: " + path);
-
             AssetDatabase.CreateAsset(createdTemplate, path);
             AssetDatabase.Refresh();
 
             Debug.Log("Template saved to " + path);
 
             Reload();
-
 #endif
         }
 
@@ -105,9 +126,35 @@ namespace Cardificer
             sprites = new GameObject[roomSize.x, roomSize.y];
 
             createdTemplate = ScriptableObject.CreateInstance<Template>();
-            createdTemplate.roomSize = roomSize;
+            createdTemplate.mapCellSize = mapCellSize;
+            createdTemplate.sizeMultiplier = sizeMultiplier;
             transform.position = new Vector3(-roomSize.x / 2, -roomSize.y / 2);
             CreateVisualBoundingBox();
+        }
+
+        /// <summary>
+        /// Loads a template into the template creator
+        /// </summary>
+        public void LoadTemplate()
+        {
+            if (templateToLoad == null)
+            {
+                Debug.LogWarning("To load a template, set the template to load in the template creator!");
+                return;
+            }
+            Debug.Log("Loading template " + templateToLoad.name);
+            mapCellSize = templateToLoad.mapCellSize;
+            sizeMultiplier = templateToLoad.sizeMultiplier;
+            for (int i = 0; i < roomSize.x; i++)
+            {
+                for (int j = 0; j < roomSize.y; j++)
+                {
+                    if (templateToLoad.tiles[i][j] != null)
+                    {
+                        PlaceTile(templateToLoad.tiles[i][j], new Vector2Int(i, j));
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -115,7 +162,8 @@ namespace Cardificer
         /// </summary>
         private void CreateVisualBoundingBox()
         {
-            GameObject visualsContainer = new GameObject();
+            Destroy(visualsContainer);
+            visualsContainer = new GameObject();
             visualsContainer.name = "Visuals container";
             visualsContainer.transform.parent = transform;
 
@@ -194,11 +242,14 @@ namespace Cardificer
         {
             if (gridPos.x >= 1 && gridPos.x < roomSize.x - 1 && gridPos.y >= 1 && gridPos.y < roomSize.y - 1)
             {
-                sprites[gridPos.x, gridPos.y] = Instantiate(tile.gameObject);
-                sprites[gridPos.x, gridPos.y].transform.parent = spriteContainer.transform;
-                sprites[gridPos.x, gridPos.y].transform.localPosition = new Vector3(gridPos.x, gridPos.y, 0);
-                sprites[gridPos.x, gridPos.y].AddComponent<SpriteRenderer>().sprite = tile.sprite;
-                createdTemplate.tiles[gridPos.x][gridPos.y] = sprites[gridPos.x, gridPos.y].GetComponent<TemplateTile>();
+                sprites[gridPos.x, gridPos.y] = new GameObject();
+                GameObject createdTile = sprites[gridPos.x, gridPos.y];
+                createdTile.transform.parent = spriteContainer.transform;
+                createdTile.transform.localPosition = new Vector3(gridPos.x, gridPos.y, 0);
+                createdTile.AddComponent<SpriteRenderer>().sprite = tile.sprite;
+                TemplateTileEditor templateTileEditor = createdTile.AddComponent<TemplateTileEditor>();
+                templateTileEditor.templateTile = tile.Copy();
+                createdTemplate.tiles[gridPos.x][gridPos.y] = templateTileEditor.templateTile;
             }
         }
 
@@ -230,6 +281,20 @@ namespace Cardificer
         }
 
         /// <summary>
+        /// Gets the tile editor at the given grid pos
+        /// </summary>
+        /// <param name="gridPos"> The pos of the tile editor </param>
+        /// <returns> The tile editor </returns>
+        public TemplateTileEditor GetTileEditor(Vector2Int gridPos)
+        {
+            if (IsGridPosOutsideBounds(gridPos))
+            {
+                return null;
+            }
+            return sprites[gridPos.x, gridPos.y].GetComponent<TemplateTileEditor>();
+        }
+
+        /// <summary>
         /// Determines whether a given grid pos is outside the bounds of the template
         /// </summary>
         /// <param name="gridPos"> The grid pos</param>
@@ -237,6 +302,19 @@ namespace Cardificer
         public bool IsGridPosOutsideBounds(Vector2Int gridPos)
         {
             return gridPos.x < 0 || gridPos.x >= roomSize.x || gridPos.y < 0 || gridPos.y >= roomSize.y;
+        }
+
+        /// <summary>
+        /// Reloads the template if the room size has changed
+        /// </summary>
+        private void OnValidate()
+        {
+            if (started && roomSize != sizeMultiplier * mapCellSize)
+            {
+                // Disabling this warning because it's only relevant for on validate when it's called outside of play time
+                roomSize = sizeMultiplier * mapCellSize;
+                EditorApplication.delayCall += Reload;
+            }
         }
     }
 }

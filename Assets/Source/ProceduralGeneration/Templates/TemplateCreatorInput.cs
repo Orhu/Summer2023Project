@@ -42,6 +42,7 @@ namespace Cardificer
         private void Start()
         {
             templateCreator = GetComponent<TemplateCreator>();
+            templateTileChooser = templateCreator.transform.GetChild(0).gameObject;
             templateCamera = templateCreator.templateCamera;
             templateTileChooser = Instantiate(templateCreator.templateTileChooser);
             templateTileChooser.transform.parent = transform;
@@ -55,9 +56,6 @@ namespace Cardificer
         /// </summary>
         private void InitializeTileHUD()
         {
-            Button saveButton = templateTileChooser.GetComponentInChildren<Button>();
-            saveButton.onClick.AddListener(templateCreator.SaveTemplate);
-
             VerticalLayoutGroup layout = templateTileChooser.GetComponentInChildren<VerticalLayoutGroup>();
             foreach (TileTypeToGenericTile genericTile in templateCreator.genericTiles.tileTypesToGenericTiles)
             {
@@ -79,8 +77,7 @@ namespace Cardificer
                 Image imageComponent = button.AddComponent<Image>();
 
                 // Add click listener
-                GameObject templateTileObject = new GameObject();
-                TemplateTile templateTile = templateTileObject.AddComponent<TemplateTile>();
+                TemplateTile templateTile = new TemplateTile();
 
                 if (genericTile.genericTile.spawnedObject == null || genericTile.genericTile.spawnedObject.GetComponent<SpriteRenderer>() != null)
                 {
@@ -132,12 +129,18 @@ namespace Cardificer
                 if (templateCreator.IsGridPosOutsideBounds(gridPos))
                 {
                     heldTile = null;
+                    #if UNITY_EDITOR
+                    Selection.activeGameObject = templateCreator.gameObject;
+                    #endif
                 }
                 else if (heldTile == null)
                 {
                     // TODO: Actually implement this
                 #if UNITY_EDITOR
-                    Selection.activeGameObject = templateCreator.GetTile(gridPos).gameObject;
+                    if (templateCreator.GetTile(gridPos) != null)
+                    {
+                        Selection.activeGameObject = templateCreator.GetTileEditor(gridPos).gameObject;
+                    }
                 #endif
                 }
                 else

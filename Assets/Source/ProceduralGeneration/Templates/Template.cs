@@ -14,12 +14,36 @@ namespace Cardificer
         [Tooltip("The enemy pools that this template has")]
         public EnemyPools enemyPools;
 
-        [Tooltip("The size of the room this template is for")]
-        [field: SerializeField] private Vector2Int _roomSize;
+        [Tooltip("The map cell size")]
+        [SerializeField] private Vector2Int _mapCellSize = new Vector2Int(17, 11);
+        public Vector2Int mapCellSize
+        {
+            set
+            {
+                _mapCellSize = value;
+                roomSize = sizeMultiplier * _mapCellSize;
+            }
+            get { return _mapCellSize; }
+        }
+
+        [Tooltip("The size multiplier for this template")]
+        [SerializeField] private Vector2Int _sizeMultiplier = new Vector2Int(1, 1);
+        public Vector2Int sizeMultiplier
+        {
+            set
+            {
+                _sizeMultiplier = value;
+                roomSize = _sizeMultiplier * mapCellSize;
+            }
+            get { return _sizeMultiplier; }
+        }
+
+        // The size of the room this template is for
+        private Vector2Int _roomSize;
         public Vector2Int roomSize
         {
             get { return _roomSize; }
-            set
+            private set
             {
                 _roomSize = value;
                 tiles = new List<TilesList>();
