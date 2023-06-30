@@ -18,10 +18,10 @@ namespace Cardificer
         public Tile preferredTile;
 
         /// <summary>
-        /// No defuault instantiate function for regular classes, so here's a copy function
+        /// No default instantiate function for regular classes, so here's a copy function
         /// </summary>
-        /// <returns></returns>
-        public TemplateTile Copy()
+        /// <returns> The copy </returns>
+        virtual public TemplateTile Copy()
         {
             TemplateTile copy = new TemplateTile();
             copy.sprite = sprite;
