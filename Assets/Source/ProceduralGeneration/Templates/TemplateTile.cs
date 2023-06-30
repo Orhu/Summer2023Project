@@ -21,7 +21,7 @@ namespace Cardificer
         /// No default instantiate function for regular classes, so here's a copy function
         /// </summary>
         /// <returns> The copy </returns>
-        virtual public TemplateTile Copy()
+        public TemplateTile Copy()
         {
             TemplateTile copy = new TemplateTile();
             copy.sprite = sprite;
