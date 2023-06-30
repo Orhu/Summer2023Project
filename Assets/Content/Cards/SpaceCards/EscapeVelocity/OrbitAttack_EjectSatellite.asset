@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
   m_Name: OrbitAttack_EjectSatellite
   m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 0}
   attack:
     damage: 4
     damageType: 0
@@ -24,18 +25,23 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c10c4eea0e70fcf45a90c17019b46004, type: 2}
   - {fileID: 11400000, guid: d3b5a797c781d4144b70f303206f0484, type: 2}
   shape: {fileID: 11400000, guid: d66dacfc75790ed46b50cf2b04725031, type: 2}
-  lifetime: 5
-  initialSpeed: 1
-  acceleration: 3
+  lifetime: 7
+  initialSpeed: 2
+  acceleration: 2
   minSpeed: 0
   maxSpeed: 16
   homingSpeed: 0
   homingTime: 0
+  homingDelay: 0
   homingAimMode: 0
+  switchAfterHit: 0
   visualObject: {fileID: 5228815503458858761, guid: 1ec6b52aea4e5c640938c3f792053e96, type: 3}
   detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
   spawnLocation: 0
   aimMode: 3
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
   previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   _spawnSequence:
