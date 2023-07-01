@@ -27,11 +27,11 @@ namespace Cardificer
         /// </summary>
         private void SpawnEnemy()
         {
-            List<GameObject> enemies = FloorGenerator.floorGeneratorInstance.currentRoom.template.chosenEnemyPool.enemies;
+            /*List<GameObject> enemies = FloorGenerator.floorGeneratorInstance.currentRoom.template.chosenEnemyPool.enemies;
             GameObject randomEnemy = enemies[Random.Range(0, enemies.Count)];
             FloorGenerator.floorGeneratorInstance.currentRoom.template.chosenEnemyPool.enemies.Remove(randomEnemy);
             randomEnemy = Instantiate(randomEnemy, transform);
-            randomEnemy.SetActive(true);
+            randomEnemy.SetActive(true);*/
         }
     }
 }

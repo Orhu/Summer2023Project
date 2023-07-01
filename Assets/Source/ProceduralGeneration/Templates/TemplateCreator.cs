@@ -12,24 +12,11 @@ namespace Cardificer
     /// </summary>
     public class TemplateCreator : MonoBehaviour
     {
-        /// <summary>
-        /// Tracks tile types and their associated sprites
-        /// </summary>
-        [System.Serializable]
-        public struct TileTypeToSprite
-        {
-            public TileType tileType;
-            public Sprite sprite;
-        }
-
-        [Tooltip("The UI for choosing the template tiles")]
-        public GameObject templateTileChooser;
+        [Tooltip("The template creator UI")]
+        public GameObject templateUI;
 
         [Tooltip("The camera")]
         public TemplateCreatorCamera templateCamera;
-
-        [Tooltip("The generic tiles (to load into the tile holder")]
-        public GenericTiles genericTiles;
 
         [Tooltip("The name to give the template")]
         public string templateName;
@@ -68,19 +55,23 @@ namespace Cardificer
             get { return _sizeMultiplier; }
         }
 
+        // The size of the room being created
         public Vector2Int roomSize { private set; get; }
+
+        // A null sprite game object
+        [System.NonSerialized] public GameObject nullSpriteObject;
 
         // The actual template being created
         private Template createdTemplate;
 
-        // A container that holds all the sprite game objects
-        private GameObject spriteContainer;
-
         // A container that holds the visual bounding box
         private GameObject visualsContainer;
 
-        // The sprite game objects
-        private GameObject[,] sprites;
+        // A container for holding null sprites
+        private GameObject nullSpritesContainer;
+
+        // The null sprite game objects
+        private GameObject[,] nullSprites;
 
         // Tracks whether start has been called or not
         private bool started;
@@ -92,6 +83,10 @@ namespace Cardificer
         {
             started = true;
             roomSize = sizeMultiplier * mapCellSize;
+            nullSpriteObject = new GameObject();
+            nullSpriteObject.name = "Null Sprite Object";
+            nullSpriteObject.transform.parent = transform;
+            nullSpriteObject.AddComponent<SpriteRenderer>().sprite = nullSprite;
             Reload();
         }
 
@@ -118,16 +113,13 @@ namespace Cardificer
         /// </summary>
         private void Reload()
         {
-            Destroy(spriteContainer);
-            spriteContainer = new GameObject();
-            spriteContainer.transform.parent = transform;
-            spriteContainer.name = "Sprite container";
-            spriteContainer.transform.localPosition = new Vector3(0, 0, 0);
-            sprites = new GameObject[roomSize.x, roomSize.y];
-
-            createdTemplate = ScriptableObject.CreateInstance<Template>();
-            createdTemplate.mapCellSize = mapCellSize;
-            createdTemplate.sizeMultiplier = sizeMultiplier;
+            Destroy(createdTemplate);
+            createdTemplate = new GameObject().AddComponent<Template>();
+            createdTemplate.name = "Created Template";
+            Destroy(nullSpritesContainer);
+            nullSpritesContainer = new GameObject();
+            nullSpritesContainer.transform.parent = transform;
+            nullSpritesContainer.name = "Null Sprites Container";
             transform.position = new Vector3(-roomSize.x / 2, -roomSize.y / 2);
             CreateVisualBoundingBox();
         }
@@ -145,13 +137,16 @@ namespace Cardificer
             Debug.Log("Loading template " + templateToLoad.name);
             mapCellSize = templateToLoad.mapCellSize;
             sizeMultiplier = templateToLoad.sizeMultiplier;
+
+            createdTemplate = Instantiate(templateToLoad);
+
             for (int i = 0; i < roomSize.x; i++)
             {
                 for (int j = 0; j < roomSize.y; j++)
                 {
-                    if (templateToLoad.tiles[i][j] != null)
+                    if (createdTemplate[i, j] != null && createdTemplate[i, j].GetComponent<SpriteRenderer>() == null)
                     {
-                        PlaceTile(templateToLoad.tiles[i][j], new Vector2Int(i, j));
+                        PlaceTile(createdTemplate[i, j], new Vector2Int(i, j));
                     }
                 }
             }
@@ -238,18 +233,23 @@ namespace Cardificer
         /// </summary>
         /// <param name="tile"> The tile to place </param>
         /// <param name="gridPos"> The grid position to place the tile in </param>
-        public void PlaceTile(TemplateTile tile, Vector2Int gridPos)
+        public void PlaceTile(Tile tile, Vector2Int gridPos)
         {
             if (gridPos.x >= 1 && gridPos.x < roomSize.x - 1 && gridPos.y >= 1 && gridPos.y < roomSize.y - 1)
             {
-                sprites[gridPos.x, gridPos.y] = new GameObject();
-                GameObject createdTile = sprites[gridPos.x, gridPos.y];
-                createdTile.transform.parent = spriteContainer.transform;
+                Tile createdTile = Instantiate(tile);
+                createdTile.transform.parent = createdTemplate.transform;
                 createdTile.transform.localPosition = new Vector3(gridPos.x, gridPos.y, 0);
-                createdTile.AddComponent<SpriteRenderer>().sprite = tile.sprite;
-                TemplateTileEditor templateTileEditor = createdTile.AddComponent<TemplateTileEditor>();
-                templateTileEditor.templateTile = tile.Copy();
-                createdTemplate.tiles[gridPos.x][gridPos.y] = templateTileEditor.templateTile;
+                createdTile.gridLocation = gridPos;
+                createdTemplate[gridPos.x, gridPos.y] = createdTile;
+
+                if (createdTile.GetComponent<SpriteRenderer>() == null || createdTile.GetComponent<SpriteRenderer>().sprite == null)
+                {
+                    GameObject createdNullSprite = Instantiate(nullSpriteObject);
+                    nullSprites[gridPos.x, gridPos.y] = createdNullSprite;
+                    createdNullSprite.transform.parent = nullSpritesContainer.transform;
+                    createdNullSprite.transform.localPosition = new Vector3(gridPos.x, gridPos.y, 0);
+                }
             }
         }
 
@@ -261,9 +261,9 @@ namespace Cardificer
         {
             if (gridPos.x >= 1 && gridPos.x < roomSize.x - 1 && gridPos.y >= 1 && gridPos.y < roomSize.y - 1)
             {
-                Destroy(sprites[gridPos.x, gridPos.y]);
-                sprites[gridPos.x, gridPos.y] = null;
-                createdTemplate.tiles[gridPos.x][gridPos.y] = null;
+                Destroy(nullSprites[gridPos.x, gridPos.y]);
+                nullSprites[gridPos.x, gridPos.y] = null;
+                createdTemplate[gridPos.x, gridPos.y] = null;
             }
         }
 
@@ -271,27 +271,13 @@ namespace Cardificer
         /// Gets the tile at a given position
         /// </summary>
         /// <returns> The tile </returns>
-        public TemplateTile GetTile(Vector2Int gridPos)
+        public Tile GetTile(Vector2Int gridPos)
         {
             if (IsGridPosOutsideBounds(gridPos))
             {
                 return null;
             }
-            return createdTemplate.tiles[gridPos.x][gridPos.y];
-        }
-
-        /// <summary>
-        /// Gets the tile editor at the given grid pos
-        /// </summary>
-        /// <param name="gridPos"> The pos of the tile editor </param>
-        /// <returns> The tile editor </returns>
-        public TemplateTileEditor GetTileEditor(Vector2Int gridPos)
-        {
-            if (IsGridPosOutsideBounds(gridPos))
-            {
-                return null;
-            }
-            return sprites[gridPos.x, gridPos.y].GetComponent<TemplateTileEditor>();
+            return createdTemplate[gridPos.x, gridPos.y];
         }
 
         /// <summary>

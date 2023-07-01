@@ -13,12 +13,6 @@ namespace Cardificer
         [Tooltip("The pool of templates to draw from and their associated room types")]
         [SerializeField] public RoomTypesToDifficultiesToTemplates templatesPool;
 
-        [Tooltip("The tile types and the possible tiles they can spawn. Use this to specify the generics of this floor")]
-        [SerializeField] public TileTypesToPossibleTiles tileTypesToPossibleTiles;
-
-        [Tooltip("The tile types and their associated generic tiles")]
-        public GenericTiles genericTiles;
-
         // The templates that have been used
         [HideInInspector] private RoomTypesToDifficultiesToTemplates usedTemplates;
 
@@ -39,7 +33,7 @@ namespace Cardificer
         /// </summary>
         /// <param name="preferredTile"> The preferred tile to spawn </param>
         /// <returns> The random tile </returns>
-        public Tile GetRandomTile(TemplateTile preferredTile)
+        /*public Tile GetRandomTile(TemplateTile preferredTile)
         {
             List<Tile> possibleTiles = tileTypesToPossibleTiles.At(preferredTile.tileType);
 
@@ -47,10 +41,10 @@ namespace Cardificer
             {
                 return preferredTile.preferredTile.ShallowCopy();
             }
-            /*if (possibleTiles.Contains(preferredTile.preferredTile))
+            *//*if (possibleTiles.Contains(preferredTile.preferredTile))
             {
                 return preferredTile.preferredTile.ShallowCopy();
-            }*/
+            }*//*
 
             if (possibleTiles.Count != 0)
             {
@@ -58,7 +52,7 @@ namespace Cardificer
             }
 
             return genericTiles.At(preferredTile.tileType).ShallowCopy();
-        }
+        }*/
 
         /// <summary>
         /// Gets a random template that can be used with the room type
@@ -258,46 +252,5 @@ namespace Cardificer
 
         [Tooltip("The associated templates of that difficulty")]
         public List<Template> templates;
-    }
-
-    /// <summary>
-    /// Holds tile types and their associated possible tiles that could be spawned
-    /// </summary>
-    [System.Serializable]
-    public class TileTypesToPossibleTiles
-    {
-        [Tooltip("Tile types and their associated possible tiles")]
-        public List<TileTypeToPossibleTiles> tileTypesToPossibleTiles = new List<TileTypeToPossibleTiles>();
-
-        /// <summary>
-        /// Gets the associated possible tiles with the given tile type
-        /// </summary>
-        /// <param name="tileType"> The tile type </param>
-        /// <returns> The possible tiles </returns>
-        public List<Tile> At(TileType tileType)
-        {
-            for (int i = 0; i < tileTypesToPossibleTiles.Count; i++)
-            {
-                if (tileTypesToPossibleTiles[i].tileType == tileType)
-                {
-                    return tileTypesToPossibleTiles[i].possibleTiles;
-                }
-            }
-
-            throw new System.Exception("No tiles associated with tile type " + tileType.ToString());
-        }
-    }
-
-    /// <summary>
-    /// Holds a tile type and its associated possible spawnable tiles
-    /// </summary>
-    [System.Serializable]
-    public struct TileTypeToPossibleTiles
-    {
-        [Tooltip("The tile type")]
-        public TileType tileType;
-
-        [Tooltip("The possible spawnable tiles (from the player deck)")]
-        public List<Tile> possibleTiles;
     }
 }

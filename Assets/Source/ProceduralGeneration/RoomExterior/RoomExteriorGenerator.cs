@@ -180,12 +180,16 @@ namespace Cardificer
         /// <returns> The created wall </returns>
         private Tile CreateWallTile(Sprite sprite, Vector2Int location, Tile wallTile, GameObject wallContainer)
         {
-            Tile tile = wallTile.ShallowCopy();
-            tile.spawnedObject = Instantiate(tile.spawnedObject);
-            tile.spawnedObject.transform.parent = wallContainer.transform;
-            tile.spawnedObject.transform.localPosition = new Vector3(location.x, location.y, 0);
-            tile.spawnedObject.GetComponent<SpriteRenderer>().sprite = sprite;
-            tile.spawnedObject.SetActive(true);
+            Tile tile = Instantiate(wallTile);
+            tile.transform.parent = wallContainer.transform;
+            tile.transform.localPosition = new Vector3(location.x, location.y, 0);
+            SpriteRenderer spriteRenderer = tile.GetComponent<SpriteRenderer>();
+            if (spriteRenderer = null)
+            {
+                throw new System.Exception("The wall tile " + wallTile + " must have a sprite renderer!");
+            }
+            spriteRenderer.sprite = sprite;
+            tile.gameObject.SetActive(true);
             tile.gridLocation = location;
             return tile;
         }
@@ -240,7 +244,7 @@ namespace Cardificer
                         }
 
                         room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, direction, connectedCell, exteriorParameters.doorTile, doorContainer);
-                        room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].spawnedObject.GetComponent<Door>());
+                        room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].GetComponent<Door>());
                     }
                 }
             }
@@ -263,15 +267,18 @@ namespace Cardificer
         /// <returns> The created tile </returns>
         private Tile CreateDoorTile(DoorSprites doorSprites, Vector2Int location, Direction direction, MapCell connectedCell, Tile doorTile, GameObject doorContainer)
         {
-            Tile tile = doorTile.ShallowCopy();
-            tile.spawnedObject = Instantiate(tile.spawnedObject);
-            tile.spawnedObject.transform.parent = doorContainer.transform;
-            tile.spawnedObject.transform.localPosition = new Vector3(location.x, location.y, 0);
+            Tile tile = Instantiate(doorTile);
+            tile.transform.parent = doorContainer.transform;
+            tile.transform.localPosition = new Vector3(location.x, location.y, 0);
 
-            Door door = tile.spawnedObject.GetComponent<Door>();
+            Door door = tile.GetComponent<Door>();
+            if (door == null)
+            {
+                throw new System.Exception("The door tile must have a door component!");
+            }
             door.Initialize(doorSprites, connectedCell, direction);
 
-            tile.spawnedObject.SetActive(true);
+            tile.gameObject.SetActive(true);
             tile.gridLocation = location;
 
             return tile;

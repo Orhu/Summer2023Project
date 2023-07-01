@@ -81,7 +81,8 @@ namespace Cardificer
             bool shouldCloseDoors = !generated;
             Generate(spawnEnemies);
 
-            bool enemiesPresent = template.chosenEnemyPool.enemies != null && template.chosenEnemyPool.enemies.Count != 0;
+            // TODO make enemy spawning good
+            bool enemiesPresent = false;//template.chosenEnemyPool.enemies != null && template.chosenEnemyPool.enemies.Count != 0;
 
             FloorGenerator.floorGeneratorInstance.currentRoom = this;
 
