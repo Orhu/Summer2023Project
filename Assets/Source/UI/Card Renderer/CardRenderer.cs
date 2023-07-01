@@ -11,6 +11,9 @@ namespace Cardificer
     {
         [Tooltip("The card to render.")]
         [SerializeField] private Card _card;
+
+        [Tooltip("The half sword image if a card has half damage.")]
+        [SerializeField] private Sprite halfSwordImage;
         public Card card
         {
             set
@@ -23,13 +26,17 @@ namespace Cardificer
                 links.backgroundSprite.enabled = shouldEnable;
                 links.cardSprite.enabled = shouldEnable;
                 links.projectileTypeImage.enabled = shouldEnable;
+                links.flavorTextBox.enabled = shouldEnable;
                 if (shouldEnable)
                 {
                     // Name of the card
                     links.nameTextBox.text = _card.displayName;
 
                     // Description of the card
-                    links.descriptionTextBox.text = _card.GetDescription(renderActionSide);
+                    links.descriptionTextBox.text = _card.description;
+
+                    // Flavor text of the card
+                    links.flavorTextBox.text = _card.flavorText;
 
                     // Rarity of the card
                     links.rarityImage.enabled = _card.isRare;
@@ -50,22 +57,19 @@ namespace Cardificer
                     // Chord effect of the card
                     links.chordEffectText.text = _card.chordEffectText;
 
-                    // For managing damage container colors
-                    for (int i = 0; i < _card.damage; i++)
-                    {
-                        if(i < 3)
-                        {
-                            links.damageContainer.transform.GetChild(i%3).GetComponent<Image>().color = Color.black;
-                        }
-                        else if (i < 6)
-                        {
-                            links.damageContainer.transform.GetChild(i%3).GetComponent<Image>().color = Color.blue;
-                        }
-                        else if (i < 9)
-                        {
-                            links.damageContainer.transform.GetChild(i % 3).GetComponent<Image>().color = Color.red;
-                        }
 
+                    // filling all full swords
+                    for (int i = 0; i < Mathf.Floor(_card.damage); i++)
+                    {
+                        links.damageContainer.transform.GetChild(i).GetComponent<Image>().color = _card.chordColor; 
+                    }
+
+                    // If there is some remainder leftover, assign the last image to be a half sword
+                    if (_card.damage % 1 != 0)
+                    {
+                        int lastImageIndex = Mathf.CeilToInt(_card.damage) - 1;
+                        links.damageContainer.transform.GetChild(lastImageIndex).GetComponent<Image>().sprite = halfSwordImage;
+                        links.damageContainer.transform.GetChild(lastImageIndex).GetComponent<Image>().color = _card.chordColor;
                     }
 
                     if (!renderActionSide)
@@ -123,6 +127,9 @@ namespace Cardificer
 
             [Tooltip("The text boxed used to display the description of the card.")]
             public TMP_Text descriptionTextBox;
+
+            [Tooltip("The text box used to display the flavor text of the card.")]
+            public TMP_Text flavorTextBox;
 
             [Tooltip("The image used to render the background of the card.")]
             public Image backgroundSprite;

@@ -41,6 +41,10 @@ namespace Cardificer
         [Multiline]
         public string description = "No Description";
 
+        [Tooltip("The flavor text of the card as shown to the players.")]
+        [Multiline]
+        public string flavorText;
+
         [Tooltip("The card specific sprite on the Actions side of the card.")]
         public Sprite actionImage;
 
@@ -69,7 +73,7 @@ namespace Cardificer
         public Sprite damageTypeSprite;
 
         [Tooltip("How much damage a specific card does. Also is displayed in the UI.")]
-        public int damage = 1;
+        public float damage = 1;
 
         [Tooltip("The text displayed in the card UI explaining what happens when you chord the card.")]
         public string chordEffectText = "Bees";
