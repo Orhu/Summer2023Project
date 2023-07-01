@@ -7,14 +7,11 @@ namespace Cardificer
     /// The parameters to use when generating a template
     /// </summary>
     [System.Serializable]
-    public class TemplateGenerationParameters
+    [CreateAssetMenu(fileName = "NewTemplateGenerationParameters", menuName = "Generation/TemplateGenerationParameters")]
+    public class TemplateGenerationParameters : ScriptableObject
     {
         [Tooltip("The pool of templates to draw from and their associated room types")]
         [SerializeField] public RoomTypesToDifficultiesToTemplates templatesPool;
-
-        [Tooltip("How much the percentage chance of generating a hard room increases when generating a new room")]
-        [Range(0, 100)]
-        [SerializeField] public float hardRoomPercentageIncrease;
 
         [Tooltip("The tile types and the possible tiles they can spawn. Use this to specify the generics of this floor")]
         [SerializeField] public TileTypesToPossibleTiles tileTypesToPossibleTiles;
@@ -34,24 +31,8 @@ namespace Cardificer
         public TemplateGenerationParameters()
         {
             usedTemplates = new RoomTypesToDifficultiesToTemplates();
-
-            foreach (RoomType roomType in System.Enum.GetValues(typeof(RoomType)))
-            {
-                RoomTypeToDifficultiesToTemplates roomTypeToDifficultiesToTemplates = new RoomTypeToDifficultiesToTemplates();
-                roomTypeToDifficultiesToTemplates.roomType = roomType;
-                DifficultiesToTemplates difficultiesToTemplates = new DifficultiesToTemplates();
-                foreach (Difficulty difficulty in System.Enum.GetValues(typeof(Difficulty)))
-                {
-                    DifficultyToTemplates difficultyToTemplates = new DifficultyToTemplates();
-                    difficultyToTemplates.difficulty = difficulty;
-                    difficultyToTemplates.templates = new List<Template>();
-                    difficultiesToTemplates.difficultiesToTemplates.Add(difficultyToTemplates);
-                }
-                roomTypeToDifficultiesToTemplates.difficultiesToTemplates = difficultiesToTemplates;
-                usedTemplates.roomTypesToDifficultiesToTemplates.Add(roomTypeToDifficultiesToTemplates);
-            }
         }
-
+        
         /// <summary>
         /// Sees if it's possible to spawn the preferred tile. If not, then gets a random tile of the same type. If there are
         /// no possible tiles of that type, spawns the generic version of that type.
@@ -90,7 +71,22 @@ namespace Cardificer
             List<Template> possibleTemplates = GetPossibleTemplates(roomType, out difficulty);
             Template randomTemplate = possibleTemplates[FloorGenerator.random.Next(0, possibleTemplates.Count)];
             templatesPool.Remove(roomType, difficulty, randomTemplate);
-            usedTemplates.At(roomType).At(difficulty).Add(randomTemplate);
+            if (!usedTemplates.Contains(roomType))
+            {
+                RoomTypeToDifficultiesToTemplates roomTypeToDifficultiesToTemplates = new RoomTypeToDifficultiesToTemplates();
+                roomTypeToDifficultiesToTemplates.roomType = roomType;
+                DifficultyToTemplates difficultyToTemplates = new DifficultyToTemplates();
+                difficultyToTemplates.difficulty = difficulty;
+                difficultyToTemplates.templates = new List<Template>();
+                difficultyToTemplates.templates.Add(randomTemplate);
+                roomTypeToDifficultiesToTemplates.difficultiesToTemplates = new DifficultiesToTemplates();
+                roomTypeToDifficultiesToTemplates.difficultiesToTemplates.Add(difficultyToTemplates);
+                usedTemplates.Add(roomTypeToDifficultiesToTemplates);
+            }
+            else
+            {
+                usedTemplates.At(roomType).At(difficulty).Add(randomTemplate);
+            }
 
             if (templatesPool.At(roomType).At(difficulty).Count == 0)
             {
@@ -115,8 +111,7 @@ namespace Cardificer
         {
             DifficultiesToTemplates difficultiesToTemplates = templatesPool.At(roomType);
 
-            // Normal is the only type of room that difficulty matters for
-            if (roomType == RoomType.Normal)
+            if (roomType.useDifficulty)
             {
                 if (hardRoomPercentage / 100 > FloorGenerator.random.NextDouble())
                 {
@@ -126,7 +121,7 @@ namespace Cardificer
                 else
                 {
                     difficulty = Difficulty.Easy;
-                    hardRoomPercentage += hardRoomPercentageIncrease;
+                    hardRoomPercentage += DifficultyProgressionManager.hardRoomPercentageIncrease; 
                 }
 
                 return difficultiesToTemplates.At(difficulty);
@@ -156,6 +151,24 @@ namespace Cardificer
     {
         [Tooltip("The room types and their associated difficulties and their associated templates")]
         public List<RoomTypeToDifficultiesToTemplates> roomTypesToDifficultiesToTemplates = new List<RoomTypeToDifficultiesToTemplates>();
+
+        public bool Contains(RoomType roomType)
+        {
+            foreach (RoomTypeToDifficultiesToTemplates roomTypeToDifficultiesToTemplates in roomTypesToDifficultiesToTemplates)
+            {
+                if (roomTypeToDifficultiesToTemplates.roomType == roomType)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void Add(RoomTypeToDifficultiesToTemplates roomTypeToDifficultiesToTemplates)
+        {
+            roomTypesToDifficultiesToTemplates.Add(roomTypeToDifficultiesToTemplates);
+        }
 
         /// <summary>
         /// Gets the difficulties to templates associated with the given room type
@@ -226,6 +239,11 @@ namespace Cardificer
             }
 
             throw new System.Exception("No templates associated with difficulty " + difficulty.ToString());
+        }
+
+        public void Add(DifficultyToTemplates difficultyToTemplates)
+        {
+            difficultiesToTemplates.Add(difficultyToTemplates);
         }
     }
 

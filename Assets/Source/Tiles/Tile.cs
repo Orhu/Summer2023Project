@@ -9,7 +9,7 @@ namespace Cardificer
     /// Tiles for use in the room grid. Holds information for pathfinding and spawning the tiles
     /// </summary>
     [System.Serializable]
-    [CreateAssetMenu(fileName = "NewTile", menuName = "Generation/Tile", order = 1)]
+    [CreateAssetMenu(fileName = "NewTile", menuName = "Generation/Tile")]
     public class Tile : ScriptableObject
     {
         [Tooltip("Movement types this tile supports")]
