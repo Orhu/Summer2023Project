@@ -12,11 +12,7 @@ namespace Cardificer
     /// </summary>
     public class TemplateCreator : MonoBehaviour
     {
-        [Tooltip("The template creator UI")]
-        public GameObject templateUI;
-
-        [Tooltip("The camera")]
-        public TemplateCreatorCamera templateCamera;
+        [Header("Template parameters")]
 
         [Tooltip("The name to give the template")]
         public string templateName;
@@ -54,6 +50,14 @@ namespace Cardificer
             }
             get { return _sizeMultiplier; }
         }
+
+        [Header("Scene variables")]
+
+        [Tooltip("The template creator UI")]
+        public GameObject templateUI;
+
+        [Tooltip("The camera")]
+        public TemplateCreatorCamera templateCamera;
 
         // The size of the room being created
         public Vector2Int roomSize { private set; get; }

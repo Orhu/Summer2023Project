@@ -18,13 +18,13 @@ namespace Cardificer
         {
             room.template = Instantiate(template);
             room.template.transform.parent = room.transform;
-            //room.template.transform.localPosition = new Vector2(0, 0);
+            room.template.transform.localPosition = (Vector2) (-room.roomSize / 2);
             room.livingEnemies = new List<GameObject>();
 
             GameObject tileContainer = new GameObject();
             tileContainer.name = "Tile Container";
             tileContainer.transform.parent = room.template.transform;
-            tileContainer.transform.localPosition = new Vector3(-room.roomSize.x / 2, -room.roomSize.y / 2, 0);
+            tileContainer.transform.localPosition = new Vector3(-room.roomSize.x / 2, -room.roomSize.y / 2);
 
             for (int i = 1; i < room.roomSize.x - 1; i++)
             {
@@ -44,6 +44,7 @@ namespace Cardificer
                     }
 
                     createdTile.transform.localPosition = new Vector3(i, j);
+                    createdTile.transform.parent = tileContainer.transform;
                     room.roomGrid[i, j] = createdTile;
                 }
             }

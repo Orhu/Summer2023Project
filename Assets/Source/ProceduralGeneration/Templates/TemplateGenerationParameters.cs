@@ -77,6 +77,14 @@ namespace Cardificer
                 roomTypeToDifficultiesToTemplates.difficultiesToTemplates.Add(difficultyToTemplates);
                 usedTemplates.Add(roomTypeToDifficultiesToTemplates);
             }
+            else if (!usedTemplates.At(roomType).Contains(difficulty))
+            {
+                DifficultyToTemplates difficultyToTemplates = new DifficultyToTemplates();
+                difficultyToTemplates.difficulty = difficulty;
+                difficultyToTemplates.templates = new List<Template>();
+                difficultyToTemplates.templates.Add(randomTemplate);
+                usedTemplates.At(roomType).Add(difficultyToTemplates);
+            }
             else
             {
                 usedTemplates.At(roomType).At(difficulty).Add(randomTemplate);
@@ -146,6 +154,11 @@ namespace Cardificer
         [Tooltip("The room types and their associated difficulties and their associated templates")]
         public List<RoomTypeToDifficultiesToTemplates> roomTypesToDifficultiesToTemplates = new List<RoomTypeToDifficultiesToTemplates>();
 
+        /// <summary>
+        /// Checks whether the templates pool contains the room type
+        /// </summary>
+        /// <param name="roomType"> The room type to check </param>
+        /// <returns> Whether or not the templates pool contains the room type </returns>
         public bool Contains(RoomType roomType)
         {
             foreach (RoomTypeToDifficultiesToTemplates roomTypeToDifficultiesToTemplates in roomTypesToDifficultiesToTemplates)
@@ -159,6 +172,10 @@ namespace Cardificer
             return false;
         }
 
+        /// <summary>
+        /// Adds a room type to difficulties to templates to the pool
+        /// </summary>
+        /// <param name="roomTypeToDifficultiesToTemplates"> The room type to difficulties to templates to add </param>
         public void Add(RoomTypeToDifficultiesToTemplates roomTypeToDifficultiesToTemplates)
         {
             roomTypesToDifficultiesToTemplates.Add(roomTypeToDifficultiesToTemplates);
@@ -235,9 +252,31 @@ namespace Cardificer
             throw new System.Exception("No templates associated with difficulty " + difficulty.ToString());
         }
 
+        /// <summary>
+        /// Adds a difficulty to templates to the list
+        /// </summary>
+        /// <param name="difficultyToTemplates"> The difficulty to templates to add </param>
         public void Add(DifficultyToTemplates difficultyToTemplates)
         {
             difficultiesToTemplates.Add(difficultyToTemplates);
+        }
+
+        /// <summary>
+        /// Checks if the list contains the given difficulty
+        /// </summary>
+        /// <param name="difficulty"> The difficulty to check </param>
+        /// <returns> Whether or not the list contains the given difficulty </returns>
+        public bool Contains(Difficulty difficulty)
+        {
+            for (int i = 0; i < difficultiesToTemplates.Count; i++)
+            {
+                if (difficultiesToTemplates[i].difficulty == difficulty)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
