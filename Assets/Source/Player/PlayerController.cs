@@ -90,6 +90,11 @@ namespace Cardificer
                 }
             }
 
+            if (Input.GetKeyDown(KeyCode.T))
+            {
+                FloorGenerator.floorGeneratorInstance.ShowLayout();
+            }
+
             // Open Pause Menu
             if (Input.GetKeyDown(KeyCode.Escape))
             {

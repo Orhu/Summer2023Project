@@ -29,6 +29,11 @@ namespace Cardificer
         [SerializeField] private float _moveSpeedMultiplier = 1f;
         public static float moveSpeedMultiplier => instance._moveSpeedMultiplier;
 
+        [Header("Templates")]
+        [Tooltip("How much the percentage chance of generating a hard room increases when generating a new room")] [Range(0, 100)]
+        [SerializeField] private float _hardRoomPercentageIncrease;
+        public static float hardRoomPercentageIncrease => instance._hardRoomPercentageIncrease;
+
         [Header("Traps and Turrets")]
         [Tooltip("Turret damage multiplier (1.33 = 133% base)")] [Min(1f)]
         [SerializeField] private float _turretDamageMultiplier = 1f;
