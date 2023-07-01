@@ -18,7 +18,7 @@ namespace Cardificer
         {
             room.template = Instantiate(template);
             room.template.transform.parent = room.transform;
-            room.template.transform.localPosition = new Vector2(0, 0);
+            //room.template.transform.localPosition = new Vector2(0, 0);
             room.livingEnemies = new List<GameObject>();
 
             GameObject tileContainer = new GameObject();
@@ -26,14 +26,26 @@ namespace Cardificer
             tileContainer.transform.parent = room.template.transform;
             tileContainer.transform.localPosition = new Vector3(-room.roomSize.x / 2, -room.roomSize.y / 2, 0);
 
-            for (int i = 0; i < room.template.transform.childCount; i++)
+            for (int i = 1; i < room.roomSize.x - 1; i++)
             {
-                Tile tile = room.template.transform.GetChild(i).GetComponent<Tile>();
-                if (tile == null)
+                for (int j = 1; j < room.roomSize.y - 1; j++)
                 {
-                    throw new System.Exception(room.template.transform.GetChild(i) + " does not have a tile component!");
+                    if (i >= room.template.roomSize.x || j >= room.template.roomSize.y)
+                    {
+                        continue;
+                    }
+
+                    Tile createdTile = room.template[i, j];
+                    if (createdTile == null)
+                    {
+                        createdTile = new GameObject().AddComponent<Tile>();
+                        createdTile.gridLocation = new Vector2Int(i, j);
+                        createdTile.allowedMovementTypes = RoomInterface.MovementType.Walk | RoomInterface.MovementType.Burrow | RoomInterface.MovementType.Fly;
+                    }
+
+                    createdTile.transform.localPosition = new Vector3(i, j);
+                    room.roomGrid[i, j] = createdTile;
                 }
-                room.roomGrid[tile.gridLocation.x, tile.gridLocation.y] = tile;
             }
         }
     }

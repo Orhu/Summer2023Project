@@ -34,25 +34,68 @@ namespace Cardificer
         }
 
         // The size of the room this template is for
-        private Vector2Int _roomSize;
         public Vector2Int roomSize
         {
-            get { return _roomSize; }
+            get 
+            { 
+                return mapCellSize * sizeMultiplier; 
+            }
             private set
             {
-                _roomSize = value;
-                tiles = new Tile[value.x, value.y];
+                tiles = new List<TilesList>();
+                for (int i = 0; i < roomSize.x; i++)
+                {
+                    tiles.Add(new TilesList());
+                    for (int j = 0; j < roomSize.y; j++)
+                    {
+                        tiles[i].tiles.Add(null);
+                    }
+                }
             }
         }
 
-        // The tiles on the template
-        public Tile[,] tiles;
+        /// <summary>
+        /// Class that contains a list of tiles so the templates can be serialized correctly
+        /// </summary>
+        [System.Serializable]
+        public class TilesList
+        {
+            [Tooltip("The list of tiles")]
+            public List<Tile> tiles;
 
-        // Indexer
+            /// <summary>
+            /// Constructor that initializes the tiles
+            /// </summary>
+            public TilesList()
+            {
+                tiles = new List<Tile>();
+            }
+
+            /// <summary>
+            /// Indexer
+            /// </summary>
+            /// <param name="i"> The index </param>
+            /// <returns> The tile at that index </returns>
+            public Tile this[int i]
+            {
+                get => tiles[i];
+                set => tiles[i] = value;
+            }
+        }
+
+        [Tooltip("The tiles on the template")]
+        public List<TilesList> tiles;
+
+        /// <summary>
+        /// Indexer
+        /// </summary>
+        /// <param name="i"> the first index </param>
+        /// <param name="j"> The second index </param>
+        /// <returns> The tile at those indices </returns>
         public Tile this[int i, int j]
         {
-            get => tiles[i, j];
-            set => tiles[i, j] = value;
+            get => tiles[i][j];
+            set => tiles[i][j] = value;
         }
     }
 }

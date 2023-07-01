@@ -47,7 +47,7 @@ namespace Cardificer
         private void OnDestroy()
         {
             // if scene is loaded
-            if (gameObject.scene.isLoaded)
+            if (gameObject.scene.isLoaded && RoomInterface.instance != null)
             {
                 // false because OnDestroy means something else destroyed us
                 InitiateDestruction(false);

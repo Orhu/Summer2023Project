@@ -184,7 +184,7 @@ namespace Cardificer
             tile.transform.parent = wallContainer.transform;
             tile.transform.localPosition = new Vector3(location.x, location.y, 0);
             SpriteRenderer spriteRenderer = tile.GetComponent<SpriteRenderer>();
-            if (spriteRenderer = null)
+            if (spriteRenderer == null)
             {
                 throw new System.Exception("The wall tile " + wallTile + " must have a sprite renderer!");
             }

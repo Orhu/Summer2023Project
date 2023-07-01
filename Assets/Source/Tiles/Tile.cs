@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using MovementType = Cardificer.RoomInterface.MovementType;
 
@@ -24,6 +22,28 @@ namespace Cardificer
         public int burrowMovementPenalty;
 
         // the x and y location of this tile within the 2D array grid
-        [HideInInspector] public Vector2Int gridLocation;
+         public Vector2Int gridLocation;
+
+        /// <summary>
+        /// Disables the game object from starting if in template creation mode
+        /// </summary>
+        private void Start()
+        {
+            if (FloorGenerator.floorGeneratorInstance == null)
+            {
+                foreach (MonoBehaviour component in gameObject.GetComponents<MonoBehaviour>())
+                {
+                    component.enabled = false;
+                }
+
+                enabled = true;
+
+                SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+                if (spriteRenderer != null)
+                {
+                    spriteRenderer.enabled = true;
+                }
+            }
+        }
     }
 }
