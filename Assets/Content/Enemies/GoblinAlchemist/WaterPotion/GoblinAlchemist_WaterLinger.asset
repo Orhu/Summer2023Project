@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
+  m_Name: GoblinAlchemist_WaterLinger
+  m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 0}
+  attack:
+    damage: 1
+    damageType: 0
+    statusEffects:
+    - {fileID: 11400000, guid: 8db6d7d64a6645d4e8f89e17d60b8217, type: 2}
+    invertInvincibility: 0
+  hitCount: 999999
+  applyDamageOnHit: 1
+  modifiers:
+  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
+  - {fileID: 11400000, guid: 3d5caf586f830254b89f0277f6475072, type: 2}
+  shape: {fileID: 11400000, guid: f6452c4c336a12d43aee41db59512b12, type: 2}
+  lifetime: 10
+  initialSpeed: 0
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 0
+  homingSpeed: 0
+  homingTime: 0
+  homingDelay: 0
+  homingAimMode: 0
+  switchAfterHit: 0
+  visualObject: {fileID: 6365975272701914270, guid: 768e3c8b5fbb6c14c86984e7d344ed72, type: 3}
+  detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
+  spawnLocation: 0
+  aimMode: 5
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  _spawnSequence:
+  - delay: 0
+    angle: 0
+    offset: {x: 0, y: 0}
+  randomAngle: 360
+  randomOffset: 0
