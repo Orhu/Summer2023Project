@@ -71,12 +71,12 @@ namespace Cardificer
             if (Input.GetKeyDown(KeyCode.M))
             {
                 GetComponent<Camera>().orthographicSize *= 10;
-                FloorGenerator.floorGeneratorInstance.ShowLayout(false);
+                FloorGenerator.ShowLayout(false);
             }
             if (Input.GetKeyUp(KeyCode.M))
             {
                 GetComponent<Camera>().orthographicSize /= 10;
-                FloorGenerator.floorGeneratorInstance.HideLayout();
+                FloorGenerator.HideLayout();
             }
         }
         #endregion Stuff to Delete

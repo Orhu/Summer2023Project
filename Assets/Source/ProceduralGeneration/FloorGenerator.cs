@@ -200,9 +200,9 @@ namespace Cardificer
         /// </summary>
         static public void ShowLayout(bool showUnvisited = true)
         {
-            for (int i = 0; i < transform.GetChild(0).childCount; i++)
+            for (int i = 0; i < instance.transform.GetChild(0).childCount; i++)
             {
-                for (int j = 0; j < transform.GetChild(0).GetChild(i).childCount; j++)
+                for (int j = 0; j < instance.transform.GetChild(0).GetChild(i).childCount; j++)
                 {
                     GameObject room = instance.transform.GetChild(0).GetChild(i).GetChild(j).gameObject;
                     room.SetActive(showUnvisited || room.transform.GetComponentInParent<Room>().generated);
@@ -213,13 +213,13 @@ namespace Cardificer
         /// <summary>
         /// Reverses ShowLayout
         /// </summary>
-        public void HideLayout()
+        static public void HideLayout()
         {
             for (int i = 0; i < instance.transform.GetChild(0).childCount; i++)
             {
                 for (int j = 0; j < instance.transform.GetChild(0).GetChild(i).childCount; j++)
                 {
-                    GameObject room = transform.GetChild(0).GetChild(i).GetChild(j).gameObject;
+                    GameObject room = instance.transform.GetChild(0).GetChild(i).GetChild(j).gameObject;
                     room.SetActive(currentRoom.gameObject == room.transform.parent.gameObject);
                 }
             }
