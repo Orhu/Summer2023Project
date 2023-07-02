@@ -37,6 +37,12 @@ namespace Cardificer
         [Tooltip("The explicit offset to use if use random offset is false")]
         public Vector2Int offset = new Vector2Int(0, 0);
 
+        [Tooltip("Whether or not the camera should use the extra height of this room or the default extra height")]
+        public bool overrideExtraHeight = false;
+
+        [Tooltip("The extra height the camera should have in this type of room (only applies if there is an extra height override)")]
+        public float extraHeight = 0.0f;
+
         [Tooltip("Whether or not this room type uses the difficulty meter")]
         public bool useDifficulty = false;
 
