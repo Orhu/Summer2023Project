@@ -251,12 +251,14 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Invokes room change after 1 frame. This allows for room change to be called *after* the new room is set to active.
+        /// Invokes room change after 2 frames. This allows for room change to be called *after* the new room is set to active and *after* all the tiles are enabled
+        /// (including tiles created through tile type spawners).
         /// </summary>
-        /// <returns> Waits 1 frame before invoking </returns>
+        /// <returns> Waits 2 frames before invoking </returns>
         private IEnumerator InvokeRoomChangeAfterFrame()
         {
-            yield return null; // wait one frame
+            yield return null; // wait two frames
+            yield return null;
             onRoomChange?.Invoke();
         }
     }

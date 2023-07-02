@@ -53,9 +53,6 @@ namespace Cardificer
 
         [Header("Scene variables")]
 
-        [Tooltip("The template creator UI")]
-        public GameObject templateUI;
-
         [Tooltip("The camera")]
         public TemplateCreatorCamera templateCamera;
 

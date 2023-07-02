@@ -11,9 +11,6 @@ namespace Cardificer
     {
         #region RUNTIME_FUNCTIONALITY
 
-        // The tile container of this room
-        [HideInInspector] public GameObject tileContainer;
-
         // The enemies alive in this room
         [HideInInspector] public List<GameObject> livingEnemies;
 

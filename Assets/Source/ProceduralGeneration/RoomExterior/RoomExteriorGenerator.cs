@@ -187,7 +187,7 @@ namespace Cardificer
         /// <returns> The created wall </returns>
         private Tile CreateWallTile(Sprite sprite, Vector2Int location, Tile wallTile, GameObject wallContainer)
         {
-            Tile tile = Instantiate(wallTile);
+            Tile tile = Instantiate(wallTile.gameObject).GetComponent<Tile>();
             tile.transform.parent = wallContainer.transform;
             tile.transform.localPosition = new Vector3(location.x, location.y, 0);
             SpriteRenderer spriteRenderer = tile.GetComponent<SpriteRenderer>();
@@ -227,7 +227,15 @@ namespace Cardificer
                         mapOffset.x = System.Convert.ToInt32(direction == Direction.Right) - System.Convert.ToInt32(direction == Direction.Left);
                         mapOffset.y = System.Convert.ToInt32(direction == Direction.Up) - System.Convert.ToInt32(direction == Direction.Down);
                         MapCell connectedCell = map.map[roomCell.location.x + mapOffset.x, roomCell.location.y + mapOffset.y];
-                        RoomExteriorParams exteriorParams = FloorGenerator.roomTypesToExteriorParams.At(connectedCell.room.roomType);
+                        RoomExteriorParams exteriorParams;
+                        if (FloorGenerator.roomTypesToExteriorParams.Contains(connectedCell.room.roomType))
+                        {
+                            exteriorParams = FloorGenerator.roomTypesToExteriorParams.At(connectedCell.room.roomType);
+                        }
+                        else
+                        {
+                            exteriorParams = FloorGenerator.roomTypesToExteriorParams.defaultRoomExteriorParams;
+                        }
 
                         Vector2Int doorLocation = (mapOffset * room.cellSize / 2) + room.cellSize / 2 + (roomCell.location - room.roomLocation) * room.cellSize;
 
@@ -274,7 +282,7 @@ namespace Cardificer
         /// <returns> The created tile </returns>
         private Tile CreateDoorTile(DoorSprites doorSprites, Vector2Int location, Direction direction, MapCell connectedCell, Tile doorTile, GameObject doorContainer)
         {
-            Tile tile = Instantiate(doorTile);
+            Tile tile = Instantiate(doorTile.gameObject).GetComponent<Tile>();
             tile.transform.parent = doorContainer.transform;
             tile.transform.localPosition = new Vector3(location.x, location.y, 0);
 

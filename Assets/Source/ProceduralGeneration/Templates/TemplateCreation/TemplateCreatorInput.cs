@@ -39,6 +39,9 @@ namespace Cardificer
         // Whether or not one click is needed to allow placement (so that when you select a tile in the content drawer then go back it doesn't place the tile)
         private bool initialClickNeeded = false;
 
+        // The last selected game object (so it doesn't print a warning 9 million times)
+        private string lastSelectedObjectName = "";
+
         /// <summary>
         /// Toggles whether tiles are being placed or not
         /// </summary>
@@ -81,6 +84,7 @@ namespace Cardificer
                     {
                         Destroy(heldTile);
                         heldTile = null;
+                        nullSprite.SetActive(false);
                         #if UNITY_EDITOR
                         Selection.activeGameObject = templateCreator.gameObject;
                         #endif
@@ -168,6 +172,7 @@ namespace Cardificer
             {
                 Destroy(heldTile);
                 heldTile = null;
+                nullSprite.SetActive(false);
                 return;
             }
 
@@ -182,9 +187,15 @@ namespace Cardificer
 
                     if (selectedObject.GetComponent<Tile>() == null)
                     {
-                        Debug.LogWarning("The object placed in a template must have a tile component!");
-                        Destroy(heldTile);
-                        heldTile = null;
+                        if (selectedObject.name != lastSelectedObjectName)
+                        {
+                            lastSelectedObjectName = selectedObject.name;
+                            Debug.LogWarning("The object placed in a template must have a tile component!");
+                            Destroy(heldTile);
+                            heldTile = null;
+                            nullSprite.SetActive(false);
+                        }
+                        Destroy(selectedObject);
                     }
                     else
                     {

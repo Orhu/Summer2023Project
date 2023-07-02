@@ -32,9 +32,13 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
-            // Disable all the components except this and the sprite rendere
+            // Disable all the components except this and the sprite renderer
             foreach (MonoBehaviour component in gameObject.GetComponents<MonoBehaviour>())
             {
+                if (GetComponent<TileTypeSpawner>() != null && GetComponent<TileTypeSpawner>() == component)
+                {
+                    Debug.Log("disable tile type spawner");
+                }
                 component.enabled = false;
             }
 
@@ -54,6 +58,10 @@ namespace Cardificer
         {
             foreach (MonoBehaviour component in gameObject.GetComponents<MonoBehaviour>())
             {
+                if (GetComponent<TileTypeSpawner>() != null && GetComponent<TileTypeSpawner>() == component)
+                {
+                    Debug.Log("enable tile type spawner");
+                }
                 component.enabled = true;
             }
         }

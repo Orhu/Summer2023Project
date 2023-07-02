@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,38 +18,56 @@ namespace Cardificer
         public void Generate(Room room, Template template, bool spawnEnemies = true)
         {
             room.template = Instantiate(template);
+            room.template.name = template.name;
             room.template.transform.parent = room.transform;
             room.template.transform.localPosition = (Vector2) (-room.roomSize / 2);
             room.livingEnemies = new List<GameObject>();
-
-            GameObject tileContainer = new GameObject();
-            tileContainer.name = "Tile Container";
-            tileContainer.transform.parent = room.template.transform;
-            tileContainer.transform.localPosition = new Vector3(-room.roomSize.x / 2, -room.roomSize.y / 2);
-            room.tileContainer = tileContainer;
 
             for (int i = 1; i < room.roomSize.x - 1; i++)
             {
                 for (int j = 1; j < room.roomSize.y - 1; j++)
                 {
-                    if (i >= room.template.roomSize.x || j >= room.template.roomSize.y)
+                    Tile createdTile = null;
+                    if (i < room.template.roomSize.x && j < room.template.roomSize.y && i >= 0 && j >= 0)
                     {
-                        continue;
+                        createdTile = room.template[i, j];
                     }
 
-                    Tile createdTile = room.template[i, j];
                     if (createdTile == null)
                     {
                         createdTile = new GameObject().AddComponent<Tile>();
+                        createdTile.name = "Empty tile (" + i + ", " + j + ")";
                         createdTile.gridLocation = new Vector2Int(i, j);
                         createdTile.allowedMovementTypes = RoomInterface.MovementType.Walk | RoomInterface.MovementType.Burrow | RoomInterface.MovementType.Fly;
                     }
-
+                    else
+                    {
+                        createdTile.name = createdTile.name + " (" + i + ", " + j + ")";
+                    }
+                    createdTile.transform.parent = room.template.transform;
                     createdTile.transform.localPosition = new Vector3(i, j);
-                    createdTile.transform.parent = tileContainer.transform;
                     createdTile.room = room;
                     room.roomGrid[i, j] = createdTile;
-                    createdTile.Enable();
+                }
+            }
+
+            StartCoroutine(EnableTilesAfterOneFrame(room.roomSize, room.roomGrid));
+        }
+
+        /// <summary>
+        /// Enables all the tiles after waiting one frame to ensure the tiles have initialized themselves correctly
+        /// </summary>
+        /// <param name="roomSize"> The room size </param>
+        /// <param name="roomGrid"> The room grid </param>
+        /// <returns> Waits one frame </returns>
+        private IEnumerator EnableTilesAfterOneFrame(Vector2Int roomSize, Tile[,] roomGrid)
+        {
+            yield return null;
+            for (int i = 0; i < roomSize.x; i++)
+            {
+                for (int j = 0; j < roomSize.y; j++)
+                {
+                    roomGrid[i, j].Enable();
                 }
             }
         }

@@ -108,8 +108,7 @@ namespace Cardificer
         {
             // TODO subdividing unimplemented
             // add to appropriate lists (if there is a Null Reference in this area, it is most likely because a null tile slipped through the cracks)
-            roomGrid[pos.x, pos.y] =
-                new PathfindingTile(tile, tile.walkMovementPenalty);
+            roomGrid[pos.x, pos.y] = new PathfindingTile(tile, tile.walkMovementPenalty);
         }
 
         /// <summary>
