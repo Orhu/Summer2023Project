@@ -51,16 +51,20 @@ namespace Cardificer
             {
                 bouncyProjectile.StartCoroutine(ClearLastNormal());
 
-                bouncyProjectile.transform.right = Vector2.Reflect(bouncyProjectile.transform.right, bounceNormal);
-                bouncyProjectile.velocity = bouncyProjectile.speed * bouncyProjectile.transform.right;
-                lastBounceNormal = bounceNormal;
+                Bounce(bounceNormal);
             }
             else if (Vector2.Dot(bounceNormal, lastBounceNormal) < DOUBLE_BOUNCE_PROTECTION_FACTOR)
             {
-                bouncyProjectile.transform.right = Vector2.Reflect(bouncyProjectile.transform.right, bounceNormal);
-                bouncyProjectile.velocity = bouncyProjectile.speed * bouncyProjectile.transform.right;
-                lastBounceNormal = bounceNormal;
+                Bounce(bounceNormal);
             }
+        }
+
+        private void Bounce(Vector2 bounceNormal)
+        {
+            bouncyProjectile.transform.right = Vector2.Reflect(bouncyProjectile.transform.right, bounceNormal);
+            bouncyProjectile.velocity = bouncyProjectile.velocity.magnitude * Vector2.Reflect(bouncyProjectile.velocity.normalized, bounceNormal);
+            bouncyProjectile.homingVelocity = bouncyProjectile.homingVelocity.magnitude * Vector2.Reflect(bouncyProjectile.homingVelocity.normalized, bounceNormal);
+            lastBounceNormal = bounceNormal;
         }
 
         /// <summary>
