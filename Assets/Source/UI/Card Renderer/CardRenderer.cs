@@ -14,6 +14,10 @@ namespace Cardificer
 
         [Tooltip("The half sword image if a card has half damage.")]
         [SerializeField] private Sprite halfSwordImage;
+
+        [Tooltip("Reference to the card's compendium button")]
+        [SerializeField] private Button compendiumButton;
+
         public Card card
         {
             set
@@ -106,6 +110,30 @@ namespace Cardificer
         public void Update()
         {
             renderActionSide = _renderActionSide;
+        }
+
+        /// <summary>
+        /// Called when the card is toggled on and off
+        /// </summary>
+        public void OnToggle()
+        {
+            // See if the toggle is on or off
+            // (this function is called before this value is set)
+            bool isToggled = GetComponent<Toggle>().isOn;
+            if (!isToggled) // about to turn the toggle on
+            {
+                // Make the card grow
+                GetComponent<Animator>().Play("A_CardRenderer_Enlarge");
+                // Turn on the compendium button
+                compendiumButton.gameObject.SetActive(false);
+            }
+            else // about to turn the toggle off
+            {
+                // Shrink the card
+                GetComponent<Animator>().Play("A_CardRenderer_Shrink");
+                // turn the compendium button off
+                compendiumButton.gameObject.SetActive(true);
+            }
         }
 
         /// <summary>
