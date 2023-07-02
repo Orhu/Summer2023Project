@@ -10,7 +10,7 @@ namespace Cardificer
     public class Tile : MonoBehaviour
     {
         [Tooltip("Movement types this tile supports")]
-        public MovementType allowedMovementTypes;
+        public MovementType allowedMovementTypes = MovementType.Burrow | MovementType.Walk | MovementType.Fly;
 
         [Tooltip("How much this tile costs to walk on (higher is avoided more, lower is preferred)")]
         public int walkMovementPenalty;
@@ -24,6 +24,9 @@ namespace Cardificer
         [Tooltip("the x and y location of this tile within the 2D array grid")]
         public Vector2Int gridLocation;
 
+        // Whether or not this tile should disable it's components on start
+        [HideInInspector] public bool shouldDisable = true;
+
         // The room that this tile is a part of 
         public Room room;
 
@@ -32,6 +35,8 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
+            if (!shouldDisable) { return; }
+
             // Disable all the components except this and the sprite renderer
             foreach (MonoBehaviour component in gameObject.GetComponents<MonoBehaviour>())
             {

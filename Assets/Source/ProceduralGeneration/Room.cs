@@ -79,10 +79,7 @@ namespace Cardificer
             }
 
             bool shouldCloseDoors = !generated;
-            Generate(spawnEnemies);
-
-            // TODO make enemy spawning good
-            bool enemiesPresent = false;//template.chosenEnemyPool.enemies != null && template.chosenEnemyPool.enemies.Count != 0;
+            bool enemiesPresent = Generate(spawnEnemies);
 
             FloorGenerator.currentRoom = this;
 
@@ -130,6 +127,7 @@ namespace Cardificer
         /// </summary>
         /// <param name="direction"> The direction the player entered in </param>
         /// <param name="shouldCloseDoors"> Whether or not the doors should close </param>
+        /// <param name="clearRoom"> Whether or not on cleared should be called </param>
         /// <returns> Enumerator so other functions can wait for this to finish </returns>
         public IEnumerator MovePlayer(Direction direction, bool shouldCloseDoors, bool clearRoom)
         {
@@ -244,14 +242,16 @@ namespace Cardificer
         /// Generates the template of the room
         /// </summary>
         /// <param name="spawnEnemies"> Whether or not to spawn enemies </param>
-        public void Generate(bool spawnEnemies = true)
+        /// <returns> Whether or not enemies were spawned </returns>
+        public bool Generate(bool spawnEnemies = true)
         {
             if (!generated)
             {
                 Template template = FloorGenerator.templateParams.GetRandomTemplate(roomType);
-                GetComponent<TemplateGenerator>().Generate(this, template, spawnEnemies);
                 generated = true;
+                return GetComponent<TemplateGenerator>().Generate(this, template, spawnEnemies);
             }
+            return false;
         }
 
         /// <summary>

@@ -224,7 +224,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void OnDestroy()
         {
-            if (!gameObject.scene.isLoaded)
+            if (!gameObject.scene.isLoaded || !FloorGenerator.IsValid())
             {
                 return;
             }

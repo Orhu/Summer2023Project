@@ -9,11 +9,19 @@ namespace Cardificer
         [Tooltip("The tile types that this spawner can spawn")]
         public TileType tileTypes;
 
+        // The tile that was chosen
+        private Tile chosenTile;
+
         /// <summary>
-        /// Spawns the tile
+        /// Chooses the tile to spawn
         /// </summary>
-        private void Start()
+        private void Awake()
         {
+            if (!FloorGenerator.IsValid())
+            {
+                return;
+            }
+
             if (tileTypes == TileType.None)
             {
                 Debug.LogError("Tile type spawner in " + GetComponent<Tile>().room.template + " has no tile types specified!");
@@ -21,13 +29,20 @@ namespace Cardificer
             }
 
             GenericWeightedThings<Tile> possibleTiles = FloorGenerator.templateParams.tileTypesToTiles.At(tileTypes);
-            if (possibleTiles == null || possibleTiles.things == null)
+            if (possibleTiles == null || possibleTiles.things == null || possibleTiles.things.Count == 0)
             {
                 Debug.LogWarning("No tiles associated with tile types " + tileTypes);
                 return;
             }
 
-            Tile chosenTile = possibleTiles.GetRandomThing(FloorGenerator.random);
+            chosenTile = possibleTiles.GetRandomThing(FloorGenerator.random);
+        }
+
+        /// <summary>
+        /// Spawns the tile
+        /// </summary>
+        private void Start()
+        {
             string name = chosenTile.name;
             chosenTile = Instantiate(chosenTile.gameObject).GetComponent<Tile>();
             Tile currentTile = GetComponent<Tile>();
@@ -47,7 +62,6 @@ namespace Cardificer
         {
             yield return null;
             tile.Enable();
-            Destroy(this);
         }
     }
 }

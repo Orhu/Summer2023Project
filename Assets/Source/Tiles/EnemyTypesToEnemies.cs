@@ -10,7 +10,7 @@ namespace Cardificer
     public class EnemyTypesToEnemies : ScriptableObject
     {
         [Tooltip("Enemy types and the enemies they can spawn")]
-        List<EnemyTypeEnemies> enemyTypesToEnemies;
+        public List<EnemyTypeEnemies> enemyTypesToEnemies;
 
         /// <summary>
         /// Gets the enemies with the associated enemy types. Averages the weight if a enemy appears in multiple enemy types.

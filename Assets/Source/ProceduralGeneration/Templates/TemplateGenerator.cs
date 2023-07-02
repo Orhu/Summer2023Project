@@ -15,8 +15,11 @@ namespace Cardificer
         /// <param name="room"> The room that is having the template generated </param>
         /// <param name="template"> The template to generate </param>
         /// <param name="spawnEnemies"> Whether or not to spawn enemies </param>
-        public void Generate(Room room, Template template, bool spawnEnemies = true)
+        /// <returns> Whether or not any enemies were spawned </returns>
+        public bool Generate(Room room, Template template, bool spawnEnemies = true)
         {
+            bool enemiesSpawned = false;
+
             room.template = Instantiate(template);
             room.template.name = template.name;
             room.template.transform.parent = room.transform;
@@ -48,10 +51,18 @@ namespace Cardificer
                     createdTile.transform.localPosition = new Vector3(i, j);
                     createdTile.room = room;
                     room.roomGrid[i, j] = createdTile;
+
+                    
+                    if (createdTile.GetComponent<EnemySpawner>() != null || createdTile.GetComponent<FiniteStateMachine.BaseStateMachine>() != null)
+                    {
+                        enemiesSpawned = true;
+                    }
                 }
             }
 
-            StartCoroutine(EnableTilesAfterOneFrame(room.roomSize, room.roomGrid));
+            StartCoroutine(EnableTilesAfterOneFrame(room.roomSize, room.roomGrid, spawnEnemies));
+
+            return spawnEnemies && enemiesSpawned;
         }
 
         /// <summary>
@@ -59,15 +70,23 @@ namespace Cardificer
         /// </summary>
         /// <param name="roomSize"> The room size </param>
         /// <param name="roomGrid"> The room grid </param>
+        /// <param name="spawnEnemies"> Whether or not to spawn enemies </param>
         /// <returns> Waits one frame </returns>
-        private IEnumerator EnableTilesAfterOneFrame(Vector2Int roomSize, Tile[,] roomGrid)
+        private IEnumerator EnableTilesAfterOneFrame(Vector2Int roomSize, Tile[,] roomGrid, bool spawnEnemies)
         {
             yield return null;
             for (int i = 0; i < roomSize.x; i++)
             {
                 for (int j = 0; j < roomSize.y; j++)
                 {
-                    roomGrid[i, j].Enable();
+                    if ((roomGrid[i, j].GetComponent<EnemySpawner>() == null && roomGrid[i, j].GetComponent<FiniteStateMachine.BaseStateMachine>() == null)|| spawnEnemies)
+                    {
+                        roomGrid[i, j].Enable();
+                    }
+                    else
+                    {
+                        roomGrid[i, j].gameObject.SetActive(false);
+                    }
                 }
             }
         }

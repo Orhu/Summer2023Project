@@ -48,13 +48,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d82efb32dcf4d62428507eac6829baeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  templateUI: {fileID: 0}
-  templateCamera: {fileID: 0}
   templateName: Test
   nullSprite: {fileID: 21300000, guid: b81f267f3ea133e47b89d1b25e6f06e7, type: 3}
   templateToLoad: {fileID: 0}
   _mapCellSize: {x: 17, y: 11}
   _sizeMultiplier: {x: 1, y: 1}
+  templateCamera: {fileID: 0}
   nullSpriteObject: {fileID: 0}
 --- !u!114 &6691206213538125780
 MonoBehaviour:
@@ -139,6 +138,34 @@ PrefabInstance:
       value: Cardificer.TemplateCreator, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1460456978819010439, guid: f19525368b39b3646b73bb2501c864a3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817582422551334086, guid: f19525368b39b3646b73bb2501c864a3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817582422551334086, guid: f19525368b39b3646b73bb2501c864a3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817582422551334086, guid: f19525368b39b3646b73bb2501c864a3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6691206213538125782}
+    - target: {fileID: 1817582422551334086, guid: f19525368b39b3646b73bb2501c864a3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817582422551334086, guid: f19525368b39b3646b73bb2501c864a3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Reload
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817582422551334086, guid: f19525368b39b3646b73bb2501c864a3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Cardificer.TemplateCreator, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1817582422551334086, guid: f19525368b39b3646b73bb2501c864a3, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}

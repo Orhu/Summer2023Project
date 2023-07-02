@@ -113,8 +113,21 @@ namespace Cardificer
         /// <summary>
         /// Updates everything when the room size is changed
         /// </summary>
-        private void Reload()
+        public void Reload()
         {
+            if (createdTemplate != null)
+            {
+                for (int i = 0; i < createdTemplate.roomSize.x; i++)
+                {
+                    for (int j = 0; j < createdTemplate.roomSize.y; j++)
+                    {
+                        if (createdTemplate[i, j] != null)
+                        {
+                            Destroy(createdTemplate[i, j].gameObject);
+                        }
+                    }
+                }
+            }
             Destroy(createdTemplate);
             createdTemplate = new GameObject().AddComponent<Template>();
             createdTemplate.name = "Created Template";
@@ -127,6 +140,7 @@ namespace Cardificer
             nullSpritesContainer.transform.parent = transform;
             nullSpritesContainer.name = "Null Sprites Container";
             transform.position = new Vector3(-roomSize.x / 2, -roomSize.y / 2);
+            nullSpritesContainer.transform.localPosition = new Vector3(0, 0);
 
             nullSprites = new GameObject[roomSize.x, roomSize.y];
 
@@ -204,7 +218,7 @@ namespace Cardificer
             wallBoundingBox.SetPosition(4, new Vector3(-roomSize.x / 2 - 0.5f + 1, -roomSize.y / 2 - 0.5f + 1));
             wallBoundingBox.enabled = true;
 
-            for (int i = 2; i < roomSize.x - 1; i++)
+            for (int i = 2; i < roomSize.x - 1 + System.Convert.ToInt32(roomSize.x % 2 == 0); i++)
             {
                 GameObject gridLineContainer = new GameObject();
                 gridLineContainer.name = "Grid Line";
@@ -218,9 +232,38 @@ namespace Cardificer
                 gridLine.positionCount = 2;
                 gridLine.SetPosition(0, new Vector3(-roomSize.x / 2 - 0.5f + i, -roomSize.y / 2 - 0.5f + 1));
                 gridLine.SetPosition(1, new Vector3(-roomSize.x / 2 - 0.5f + i, roomSize.y / 2 + 0.5f - 1));
+
+                if (i == roomSize.x / 2 || i == roomSize.x / 2 + 1)
+                {
+                    GameObject doorLineContainer = new GameObject();
+                    doorLineContainer.name = "Door Line";
+                    doorLineContainer.transform.parent = visualsContainer.transform;
+
+                    LineRenderer doorLine = doorLineContainer.AddComponent<LineRenderer>();
+                    doorLine.material = gridLine.material;
+                    doorLine.endColor = Color.white;
+                    doorLine.startColor = Color.white;
+                    doorLine.widthMultiplier = 0.05f;
+                    doorLine.positionCount = 2;
+                    doorLine.SetPosition(0, new Vector3(-roomSize.x / 2 - 0.5f + i, -roomSize.y / 2 - 0.5f));
+                    doorLine.SetPosition(1, new Vector3(-roomSize.x / 2 - 0.5f + i, -roomSize.y / 2 - 0.5f + 1));
+
+                    doorLineContainer = new GameObject();
+                    doorLineContainer.name = "Door Line";
+                    doorLineContainer.transform.parent = visualsContainer.transform;
+
+                    doorLine = doorLineContainer.AddComponent<LineRenderer>();
+                    doorLine.material = gridLine.material;
+                    doorLine.endColor = Color.white;
+                    doorLine.startColor = Color.white;
+                    doorLine.widthMultiplier = 0.05f;
+                    doorLine.positionCount = 2;
+                    doorLine.SetPosition(0, new Vector3(-roomSize.x / 2 - 0.5f + i, roomSize.y / 2 + 0.5f));
+                    doorLine.SetPosition(1, new Vector3(-roomSize.x / 2 - 0.5f + i, roomSize.y / 2 + 0.5f - 1));
+                }
             }
 
-            for (int j = 2; j < roomSize.y - 1; j++)
+            for (int j = 2; j < roomSize.y - 1 + System.Convert.ToInt32(roomSize.x % 2 == 0); j++)
             {
                 GameObject gridLineContainer = new GameObject();
                 gridLineContainer.name = "Grid Line";
@@ -234,7 +277,37 @@ namespace Cardificer
                 gridLine.positionCount = 2;
                 gridLine.SetPosition(0, new Vector3(-roomSize.x / 2 - 0.5f + 1, -roomSize.y / 2 - 0.5f + j));
                 gridLine.SetPosition(1, new Vector3(roomSize.x / 2 + 0.5f - 1, -roomSize.y / 2 - 0.5f + j));
+
+                if (j == roomSize.y / 2 || j == roomSize.y / 2 + 1)
+                {
+                    GameObject doorLineContainer = new GameObject();
+                    doorLineContainer.name = "Door Line";
+                    doorLineContainer.transform.parent = visualsContainer.transform;
+
+                    LineRenderer doorLine = doorLineContainer.AddComponent<LineRenderer>();
+                    doorLine.material = gridLine.material;
+                    doorLine.endColor = Color.white;
+                    doorLine.startColor = Color.white;
+                    doorLine.widthMultiplier = 0.05f;
+                    doorLine.positionCount = 2;
+                    doorLine.SetPosition(0, new Vector3(-roomSize.x / 2 - 0.5f, -roomSize.y / 2 - 0.5f + j));
+                    doorLine.SetPosition(1, new Vector3(-roomSize.x / 2 - 0.5f + 1, -roomSize.y / 2 - 0.5f + j));
+
+                    doorLineContainer = new GameObject();
+                    doorLineContainer.name = "Door Line";
+                    doorLineContainer.transform.parent = visualsContainer.transform;
+
+                    doorLine = doorLineContainer.AddComponent<LineRenderer>();
+                    doorLine.material = gridLine.material;
+                    doorLine.endColor = Color.white;
+                    doorLine.startColor = Color.white;
+                    doorLine.widthMultiplier = 0.05f;
+                    doorLine.positionCount = 2;
+                    doorLine.SetPosition(0, new Vector3(roomSize.x / 2 + 0.5f, -roomSize.y / 2 - 0.5f + j));
+                    doorLine.SetPosition(1, new Vector3(roomSize.x / 2 + 0.5f - 1, -roomSize.y / 2 - 0.5f + j));
+                }
             }
+
         }
 
         /// <summary>
@@ -246,6 +319,7 @@ namespace Cardificer
         {
             if (gridPos.x >= 1 && gridPos.x < roomSize.x - 1 && gridPos.y >= 1 && gridPos.y < roomSize.y - 1)
             {
+                EraseTile(gridPos);
                 Tile createdTile = Instantiate(tile);
                 createdTile.name = tile.name;
                 createdTile.transform.parent = createdTemplate.transform;
@@ -256,6 +330,7 @@ namespace Cardificer
                 if (createdTile.GetComponent<SpriteRenderer>() == null || createdTile.GetComponent<SpriteRenderer>().sprite == null)
                 {
                     GameObject createdNullSprite = Instantiate(nullSpriteObject);
+                    createdNullSprite.SetActive(true);
                     nullSprites[gridPos.x, gridPos.y] = createdNullSprite;
                     createdNullSprite.transform.parent = nullSpritesContainer.transform;
                     createdNullSprite.transform.localPosition = new Vector3(gridPos.x, gridPos.y, 0);

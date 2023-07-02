@@ -174,6 +174,15 @@ namespace Cardificer
         }
 
         /// <summary>
+        /// Checks if the instance is initialized yet
+        /// </summary>
+        /// <returns> Whether or not the instance is initialized </returns>
+        static public bool IsValid()
+        {
+            return instance != null;
+        }
+
+        /// <summary>
         /// Transforms a map location to a world location
         /// </summary>
         /// <param name="mapLocation"> The location to transform </param>
@@ -184,6 +193,7 @@ namespace Cardificer
         {
             return new Vector2((mapLocation.x - startLocation.x) * cellSize.x, (mapLocation.y - startLocation.y) * cellSize.y);
         }
+
 
         /// <summary>
         /// Sets all the rooms to active for debugging purposes
@@ -246,7 +256,6 @@ namespace Cardificer
             }
 
             fileText += "==============================================\n";
-            Debug.Log("Saved to file " + generationSettingsFileName + ".log");
             File.WriteAllText("logs/" + generationSettingsFileName + ".log", fileText);
         }
 

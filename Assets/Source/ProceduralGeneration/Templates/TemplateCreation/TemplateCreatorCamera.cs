@@ -11,7 +11,7 @@ namespace Cardificer
         float cameraZoomSpeed = 1;
 
         [Tooltip("The minimum zoom the camera can have")]
-        float minZoom = 0.01f;
+        float minZoom = 2.1f;
 
         /// <summary>
         /// Zooms the camera
@@ -19,7 +19,7 @@ namespace Cardificer
         /// <param name="scrollDelta"></param>
         public void Zoom(Vector2 scrollDelta)
         {
-            if (GetComponent<Camera>().orthographicSize + -scrollDelta.y * cameraZoomSpeed < minZoom)
+            if (GetComponent<Camera>().orthographicSize + -scrollDelta.y * cameraZoomSpeed <= minZoom)
             {
                 GetComponent<Camera>().orthographicSize = minZoom;
             }
