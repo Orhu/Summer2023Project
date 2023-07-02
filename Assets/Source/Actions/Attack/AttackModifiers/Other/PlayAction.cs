@@ -44,12 +44,19 @@ namespace Cardificer
         // The projectile this modifies
         private GameObject causer;
 
+        // The root of all projectiles
+        private static GameObject playActionRoot;
 
         // The projectile this modifies
         public override Projectile modifiedProjectile
         {
             set
             {
+                if (playActionRoot == null)
+                {
+                    playActionRoot = new GameObject("Play Action Roots");
+                }
+
                 causer = value.causer;
                 parentActor = value.actor;
                 sourceTransform = value.transform;
@@ -87,6 +94,7 @@ namespace Cardificer
                                 GameObject coroutineRunner = new GameObject(value.name + " Play " + action.name + " Source");
                                 coroutineRunner.transform.position = sourceTransform.position;
                                 coroutineRunner.transform.rotation = sourceTransform.rotation;
+                                coroutineRunner.transform.parent = playActionRoot.transform;
                                 sourceTransform = coroutineRunner.transform;
                                 MonoBehaviour mono = sourceTransform.gameObject.AddComponent<Empty>();
                                 FloorGenerator.floorGeneratorInstance.onRoomChange.AddListener(() =>
