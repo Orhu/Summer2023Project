@@ -44,6 +44,8 @@ namespace Cardificer
                 GameObject tempCardRendererGameObject = Instantiate(cardRendererTemplate.gameObject, scrollCardLayoutArea.transform);
                 // Assign the game object a card.
                 tempCardRendererGameObject.GetComponent<CardRenderer>().card = Deck.playerDeck.cards[i];
+
+                tempCardRendererGameObject.transform.localScale = new Vector3(0.85f, 0.9f, 1);
                 // Adds the cardRenderer to the list of cardRenderers
                 cardRenderers.Add(tempCardRendererGameObject.GetComponent<CardRenderer>());
             }
