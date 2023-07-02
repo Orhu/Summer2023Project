@@ -137,6 +137,11 @@ namespace Cardificer
                 roomToUse = room;
             }
 
+            if (roomToUse == null)
+            {
+                return;
+            }
+
             Vector2Int roomLocation = roomToUse.roomLocation;
             Vector2 roomWorldBottomLeftCellMiddleLocation = FloorGenerator.TransformMapToWorld(roomLocation, FloorGenerator.map.startRoom.roomLocation, FloorGenerator.cellSize);
             Vector2 roomWorldBottomLeftLocation = roomWorldBottomLeftCellMiddleLocation - FloorGenerator.cellSize / 2;
