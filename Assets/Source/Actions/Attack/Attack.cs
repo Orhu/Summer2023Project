@@ -16,19 +16,16 @@ namespace Cardificer
         [Tooltip("The damage, damage type, status effects, and knockback this projectile will deal.")]
         public DamageData attack;
 
-        [Tooltip("The number of objects this can hit before being destroyed.")]
-        [Min(1)]
+        [Tooltip("The number of objects this can hit before being destroyed.")] [Min(1)]
         public int hitCount = 1;
 
         [Tooltip("Whether or not this projectile should apply damage on hit.")]
         public bool applyDamageOnHit = true;
 
-        [Tooltip("The modifiers that are always applied to this projectile")]
-        [EditInline]
+        [Tooltip("The modifiers that are always applied to this projectile")] [EditInline]
         public List<AttackModifier> modifiers;
 
-        [Tooltip("The radius of the projectile.")]
-        [EditInline]
+        [Tooltip("The radius of the projectile.")] [EditInline]
         public ProjectileShape shape;
 
 
@@ -38,16 +35,16 @@ namespace Cardificer
         [Tooltip("The lifetime of projectiles spawned by this.")]
         public float lifetime = 10f;
 
-        [Tooltip("The speed projectile will start traveling at. In tiles/second")]
+        [Tooltip("The speed projectile will start traveling at. In tiles/second")] [Min(0)]
         public float initialSpeed = 10f;
 
         [Tooltip("The acceleration this projectile will experience. In tiles/second^2")]
         public float acceleration = -1f;
 
-        [Tooltip("The minimum speed projectile will travel at. In tiles/second")]
+        [Tooltip("The minimum speed projectile will travel at. In tiles/second")] [Min(0)]
         public float minSpeed = 5f;
 
-        [Tooltip("The maximum speed projectile will travel at. In tiles/second")]
+        [Tooltip("The maximum speed projectile will travel at. In tiles/second")] [Min(0)]
         public float maxSpeed = 10f;
 
 
@@ -109,6 +106,9 @@ namespace Cardificer
         public Projectile projectilePrefab;
         // The previewer prefab to use.
         public AttackPreviewer previewerPrefab;
+
+        // The root of all projectiles
+        private static GameObject projectileRoot;
 
 
 
@@ -213,6 +213,11 @@ namespace Cardificer
         /// <returns> The projectile that was spawned. </returns>
         protected virtual Projectile SpawnProjectile(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects, int index, List<ProjectileSpawnInfo> spawnSequence)
         {
+            if (projectileRoot == null)
+            {
+                projectileRoot = new GameObject("Projectiles");
+            }
+
             Projectile projectile = Instantiate(projectilePrefab.gameObject).GetComponent<Projectile>();
             projectile.attack = this;
             projectile.actor = actor;
@@ -222,6 +227,7 @@ namespace Cardificer
             projectile.ignoredObjects = ignoredObjects;
             projectile.index = index;
             projectile.spawnSequence = spawnSequence;
+            projectile.transform.parent = projectileRoot.transform;
             return projectile;
         }
 
