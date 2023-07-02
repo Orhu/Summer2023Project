@@ -63,9 +63,6 @@ namespace Cardificer
         // The speed that this projectile will turn at.
         [NonSerialized] public float homingSpeed;
 
-        // The max speed that this projectile will turn at.
-        [NonSerialized] public float homingMaxSpeed;
-
         // The shape of the projectile.
         [NonSerialized] public ProjectileShape shape;
 
@@ -74,9 +71,6 @@ namespace Cardificer
 
         // The sequence that spawned this.
         [NonSerialized] public List<ProjectileSpawnInfo> spawnSequence;
-
-        // The current randomly picked target.
-        [NonSerialized] public Vector2 homingVelocity;
 
         // The object for this to ignore.
         List<GameObject> _ignoredObjects;
@@ -149,7 +143,6 @@ namespace Cardificer
             remainingHomingTime = attack.homingTime;
             remainingHomingDelay = attack.homingDelay;
             homingSpeed = attack.homingSpeed;
-            homingMaxSpeed = attack.homingMaxSpeed;
             maxSpeed = attack.maxSpeed;
             minSpeed = attack.minSpeed;
             acceleration = attack.acceleration;
@@ -232,30 +225,19 @@ namespace Cardificer
         /// </summary>
         protected void FixedUpdate()
         {
-            Vector2 lastVelocity = velocity;
             velocity += (Vector2)transform.right * acceleration * Time.fixedDeltaTime;
 
             if (remainingHomingDelay <= 0 && remainingHomingTime > 0 && homingSpeed > 0)
             {
-                Vector2 targetVelocity = (GetAimTarget(attack.homingAimMode) - transform.position).normalized * homingMaxSpeed;
+                Vector2 targetVelocity = (GetAimTarget(attack.homingAimMode) - transform.position).normalized * maxSpeed;
                 if (targetVelocity.sqrMagnitude > Vector2.kEpsilon)
                 {
-                    homingVelocity += (targetVelocity - velocity).normalized * homingSpeed * Time.fixedDeltaTime;
-                    homingVelocity = homingVelocity.normalized * Math.Min(homingVelocity.magnitude, homingMaxSpeed);
+                    velocity += (targetVelocity - velocity).normalized * homingSpeed * Time.fixedDeltaTime;
                 }
             }
 
-            speed = Mathf.Clamp(Vector2.Dot(velocity, transform.right), minSpeed, maxSpeed);
-            velocity = velocity.normalized * Math.Abs(speed);
-
-            Vector2 combinedVelocity = velocity + homingVelocity;
-            rigidBody.velocity = combinedVelocity;
-
-
-            if (combinedVelocity.sqrMagnitude > Vector2.kEpsilon)
-            {
-                visualObject.transform.right = combinedVelocity;
-            }
+            speed = Mathf.Clamp(velocity.magnitude, minSpeed, maxSpeed);
+            rigidBody.velocity = velocity.normalized * speed;
         }
 
         /// <summary>
