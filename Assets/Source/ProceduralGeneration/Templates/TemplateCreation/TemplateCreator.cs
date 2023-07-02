@@ -117,18 +117,8 @@ namespace Cardificer
         {
             if (createdTemplate != null)
             {
-                for (int i = 0; i < createdTemplate.roomSize.x; i++)
-                {
-                    for (int j = 0; j < createdTemplate.roomSize.y; j++)
-                    {
-                        if (createdTemplate[i, j] != null)
-                        {
-                            Destroy(createdTemplate[i, j].gameObject);
-                        }
-                    }
-                }
+                Destroy(createdTemplate.gameObject);
             }
-            Destroy(createdTemplate);
             createdTemplate = new GameObject().AddComponent<Template>();
             createdTemplate.name = "Created Template";
             createdTemplate.sizeMultiplier = sizeMultiplier;
@@ -307,7 +297,6 @@ namespace Cardificer
                     doorLine.SetPosition(1, new Vector3(roomSize.x / 2 + 0.5f - 1, -roomSize.y / 2 - 0.5f + j));
                 }
             }
-
         }
 
         /// <summary>
