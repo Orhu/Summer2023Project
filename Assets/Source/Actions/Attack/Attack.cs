@@ -57,6 +57,9 @@ namespace Cardificer
         [Tooltip("The speed in tile/s^2 that projectiles will accelerate towards the closest enemy")] [Min(0)]
         public float homingSpeed = 0;
 
+        [Tooltip("The maximum homing velocity in tile/s that projectiles will move towards the closest enemy in addition to normal velocity")] [Min(0)]
+        public float homingMaxSpeed = 10;
+
         [Tooltip("The duration that this will home for.")] [Min(0)]
         public float homingTime = 0;
 
