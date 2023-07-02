@@ -237,7 +237,7 @@ namespace Cardificer
         }
 
         // Whether this room has been generated or not
-        private bool generated = false;
+        public bool generated { get; private set; } = false;
 
         /// <summary>
         /// Generates the template of the room

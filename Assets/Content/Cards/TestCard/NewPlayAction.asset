@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34e985cd228911342ae7aa9b5be31726, type: 3}
-  m_Name: SpiderWeb_Slowed
+  m_Script: {fileID: 11500000, guid: ae521aad527ed7e449352281fbf9e980, type: 3}
+  m_Name: NewPlayAction
   m_EditorClassIdentifier: 
-  duration: 0.15
-  visualEffect: {fileID: 8746605495414823843, guid: 485231a676926554e9e763a5473e83a0, type: 3}
-  slowAmount: 0.25
+  action: {fileID: 11400000, guid: 2ba847e33aec27742a296095c2a5eb15, type: 2}
+  delay: 0
+  playTime: 3
+  damageMultiplier: 1
