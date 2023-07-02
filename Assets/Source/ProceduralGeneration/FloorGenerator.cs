@@ -198,16 +198,33 @@ namespace Cardificer
         /// <summary>
         /// Sets all the rooms to active for debugging purposes
         /// </summary>
-        static public void ShowLayout()
+        static public void ShowLayout(bool showUnvisited = true)
+        {
+            for (int i = 0; i < transform.GetChild(0).childCount; i++)
+            {
+                for (int j = 0; j < transform.GetChild(0).GetChild(i).childCount; j++)
+                {
+                    GameObject room = instance.transform.GetChild(0).GetChild(i).GetChild(j).gameObject;
+                    room.SetActive(showUnvisited || room.transform.GetComponentInParent<Room>().generated);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reverses ShowLayout
+        /// </summary>
+        public void HideLayout()
         {
             for (int i = 0; i < instance.transform.GetChild(0).childCount; i++)
             {
                 for (int j = 0; j < instance.transform.GetChild(0).GetChild(i).childCount; j++)
                 {
-                    instance.transform.GetChild(0).GetChild(i).GetChild(j).gameObject.SetActive(true);
+                    GameObject room = transform.GetChild(0).GetChild(i).GetChild(j).gameObject;
+                    room.SetActive(currentRoom.gameObject == room.transform.parent.gameObject);
                 }
             }
         }
+
 
         /// <summary>
         /// Saves the layout generation settings to a file for later reference
