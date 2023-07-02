@@ -12,7 +12,7 @@ namespace Cardificer
     /// </summary>
     public class TemplateCreator : MonoBehaviour
     {
-        [Header("Template parameters")]
+        [Header("Template")]
 
         [Tooltip("The name to give the template")]
         public string templateName;

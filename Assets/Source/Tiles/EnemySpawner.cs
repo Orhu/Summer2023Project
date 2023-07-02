@@ -21,12 +21,12 @@ namespace Cardificer
                 spriteRenderer.enabled = false;
             }
 
-            HashSet<GameObject> possibleEnemies = FloorGenerator.templateGenerationParameters.enemyTypesToEnemies.At(enemyTypes);
+            GenericWeightedThings<GameObject> possibleEnemies = FloorGenerator.templateParams.enemyTypesToEnemies.At(enemyTypes);
             if (possibleEnemies == null)
             {
                 Debug.LogError("No enemies associated with enemy type " + enemyTypes);
             }
-            GameObject chosenEnemy = possibleEnemies.ElementAt(FloorGenerator.random.Next(0, possibleEnemies.Count));
+            GameObject chosenEnemy = possibleEnemies.GetRandomThing();
             chosenEnemy = Instantiate(chosenEnemy);
             Tile currentTile = GetComponent<Tile>();
             currentTile.room.AddEnemy(chosenEnemy);

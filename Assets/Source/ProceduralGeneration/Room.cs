@@ -251,7 +251,7 @@ namespace Cardificer
         {
             if (!generated)
             {
-                Template template = FloorGenerator.templateGenerationParameters.GetRandomTemplate(roomType);
+                Template template = FloorGenerator.templateParams.GetRandomTemplate(roomType);
                 GetComponent<TemplateGenerator>().Generate(this, template, spawnEnemies);
                 generated = true;
             }
@@ -308,46 +308,5 @@ namespace Cardificer
         }
 
         #endregion
-    }
-
-    /// <summary>
-    /// A dictionary that maps room types to exterior generation parameters
-    /// </summary>
-    [System.Serializable]
-    public class RoomTypesToRoomExteriorGenerationParameters : ScriptableObject
-    {
-        [Tooltip("A list of room types to exterior generation parameters")]
-        [SerializeField] public List<RoomTypeToRoomExteriorGenerationParameters> roomTypesToRoomExteriorGenerationParameters;
-
-        /// <summary>
-        /// Gets the exterior generation parameters associated with the given room type
-        /// </summary>
-        /// <param name="roomType"> The room type to find the exterior generation parameters of </param>
-        /// <returns> The exterior generation parameters </returns>
-        public RoomExteriorGenerationParameters At(RoomType roomType)
-        {
-            for (int i = 0; i < roomTypesToRoomExteriorGenerationParameters.Count; i++)
-            {
-                if (roomTypesToRoomExteriorGenerationParameters[i].roomType == roomType)
-                {
-                    return roomTypesToRoomExteriorGenerationParameters[i].roomExteriorGenerationParameters;
-                }
-            }
-
-            throw new System.Exception("No room of type " + roomType.ToString() + " in dictionary of room types to room exterior generation parameters");
-        }
-    }
-
-    /// <summary>
-    /// A sturct that holds a room type and its associated exterior generation parameters
-    /// </summary>
-    [System.Serializable]
-    public struct RoomTypeToRoomExteriorGenerationParameters
-    {
-        [Tooltip("The type")]
-        [SerializeField] public RoomType roomType;
-
-        [Tooltip("The generation parameters associated with that type")]
-        [SerializeField] public RoomExteriorGenerationParameters roomExteriorGenerationParameters;
     }
 }

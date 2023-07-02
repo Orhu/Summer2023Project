@@ -11,10 +11,10 @@ namespace Cardificer
         /// <summary>
         /// Generates the exteriors of the rooms (walls, doors, and floors)
         /// </summary>
-        /// <param name="roomTypesToExteriorParameters"> The parameters for each type of room </param>
+        /// <param name="roomTypesToExteriorParams"> The Params for each type of room </param>
         /// <param name="map"> The map to generate the rooms for </param>
         /// <param name="cellSize"> The size of a single cell </param>
-        public void Generate(RoomTypesToRoomExteriorGenerationParameters roomTypesToExteriorParameters, Map map, Vector2Int cellSize)
+        public void Generate(RoomTypesToRoomExteriorParams roomTypesToExteriorParams, Map map, Vector2Int cellSize)
         {
             HashSet<Room> generatedRooms = new HashSet<Room>();
             // Iterate over every room and create it
@@ -28,7 +28,14 @@ namespace Cardificer
                     }
 
                     generatedRooms.Add(map.map[i, j].room);
-                    CreateRoomExterior(map.map[i, j].room, roomTypesToExteriorParameters.At(map.map[i, j].room.roomType), map, cellSize);
+                    if (roomTypesToExteriorParams.Contains(map.map[i, j].room.roomType))
+                    {
+                        CreateRoomExterior(map.map[i, j].room, roomTypesToExteriorParams.At(map.map[i, j].room.roomType), map, cellSize);
+                    }
+                    else
+                    {
+                        CreateRoomExterior(map.map[i, j].room, roomTypesToExteriorParams.defaultRoomExteriorParams, map, cellSize);
+                    }
                 }
             }
         }
@@ -37,22 +44,22 @@ namespace Cardificer
         /// Creates the room for the given cell
         /// </summary>
         /// <param name="createdRoom"> The cell to create the room for </param>
-        /// <param name="exteriorParameters"> The parameters for this type of room </param>
+        /// <param name="exteriorParams"> The Params for this type of room </param>
         /// <param name="map"> The map </param>
         /// <param name="cellSize"> The size of a single cell </param>
-        private void CreateRoomExterior(Room createdRoom, RoomExteriorGenerationParameters exteriorParameters, Map map, Vector2Int cellSize)
+        private void CreateRoomExterior(Room createdRoom, RoomExteriorParams exteriorParams, Map map, Vector2Int cellSize)
         {
             createdRoom.cellSize = cellSize;
             createdRoom.roomGrid = new Tile[createdRoom.roomSize.x, createdRoom.roomSize.y];
 
-            CreateWalls(map, createdRoom, exteriorParameters);
+            CreateWalls(map, createdRoom, exteriorParams);
 
             CreateDoors(map, createdRoom);
 
-            CreateFloor(map, createdRoom, exteriorParameters);
+            CreateFloor(map, createdRoom, exteriorParams);
 
-            // Reset the exterior parameters (leave things as they were)
-            exteriorParameters.Reset();
+            // Reset the exterior Params (leave things as they were)
+            exteriorParams.Reset();
         }
 
         /// <summary>
@@ -60,8 +67,8 @@ namespace Cardificer
         /// </summary>
         /// <param name="map"> The map </param>
         /// <param name="room"> The room to create the walls for </param>
-        /// <param name="exteriorParameters"> The parameters of this type of room </param>
-        private void CreateWalls(Map map, Room room, RoomExteriorGenerationParameters exteriorParameters)
+        /// <param name="exteriorParams"> The Params of this type of room </param>
+        private void CreateWalls(Map map, Room room, RoomExteriorParams exteriorParams)
         {
             Vector2Int roomSize = room.roomSize;
 
@@ -71,17 +78,17 @@ namespace Cardificer
             wallContainer.name = "Wall Container";
 
             // Add the corners
-            Sprite randomCornerSprite = exteriorParameters.bottomLeftWallCornerSprites.GetRandomThing(FloorGenerator.random);
-            room.roomGrid[0, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(0, 0), exteriorParameters.wallTile, wallContainer);
+            Sprite randomCornerSprite = exteriorParams.bottomLeftWallCornerSprites.GetRandomThing(FloorGenerator.random);
+            room.roomGrid[0, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(0, 0), exteriorParams.wallTile, wallContainer);
 
-            randomCornerSprite = exteriorParameters.topLeftWallCornerSprites.GetRandomThing(FloorGenerator.random);
-            room.roomGrid[0, roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(0, roomSize.y - 1), exteriorParameters.wallTile, wallContainer);
+            randomCornerSprite = exteriorParams.topLeftWallCornerSprites.GetRandomThing(FloorGenerator.random);
+            room.roomGrid[0, roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(0, roomSize.y - 1), exteriorParams.wallTile, wallContainer);
 
-            randomCornerSprite = exteriorParameters.bottomRightWallCornerSprites.GetRandomThing(FloorGenerator.random);
-            room.roomGrid[roomSize.x - 1, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(roomSize.x - 1, 0), exteriorParameters.wallTile, wallContainer);
+            randomCornerSprite = exteriorParams.bottomRightWallCornerSprites.GetRandomThing(FloorGenerator.random);
+            room.roomGrid[roomSize.x - 1, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(roomSize.x - 1, 0), exteriorParams.wallTile, wallContainer);
 
-            randomCornerSprite = exteriorParameters.topRightWallCornerSprites.GetRandomThing(FloorGenerator.random);
-            room.roomGrid[roomSize.x - 1, roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(roomSize.x - 1, roomSize.y - 1), exteriorParameters.wallTile, wallContainer);
+            randomCornerSprite = exteriorParams.topRightWallCornerSprites.GetRandomThing(FloorGenerator.random);
+            room.roomGrid[roomSize.x - 1, roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(roomSize.x - 1, roomSize.y - 1), exteriorParams.wallTile, wallContainer);
 
             // Add the top and bottom walls
             for (int i = 1; i < roomSize.x - 1; i++)
@@ -90,38 +97,38 @@ namespace Cardificer
                 MapCell roomCell = map.map[(i / room.cellSize.x) + room.roomLocation.x, room.roomLocation.y];
                 if ((i % room.cellSize.x == room.cellSize.x / 2 - 1) && roomCell.direction.HasFlag(Direction.Down))
                 {
-                    randomWallSprite = exteriorParameters.bottomDoorLeftDoorFrameSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParams.bottomDoorLeftDoorFrameSprites.GetRandomThing(FloorGenerator.random);
                 }
                 else if ((i % room.cellSize.x == room.cellSize.x / 2 + 1) && roomCell.direction.HasFlag(Direction.Down))
                 {
-                    randomWallSprite = exteriorParameters.bottomDoorRightDoorFrameSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParams.bottomDoorRightDoorFrameSprites.GetRandomThing(FloorGenerator.random);
                 }
                 else if (i % room.cellSize.x != room.cellSize.x / 2 || !roomCell.direction.HasFlag(Direction.Down))
                 {
-                    randomWallSprite = exteriorParameters.bottomWallSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParams.bottomWallSprites.GetRandomThing(FloorGenerator.random);
                 }
                 if (randomWallSprite != null)
                 {
-                    room.roomGrid[i, 0] = CreateWallTile(randomWallSprite, new Vector2Int(i, 0), exteriorParameters.wallTile, wallContainer);
+                    room.roomGrid[i, 0] = CreateWallTile(randomWallSprite, new Vector2Int(i, 0), exteriorParams.wallTile, wallContainer);
                 }
 
                 randomWallSprite = null;
                 roomCell = map.map[(i / room.cellSize.x) + room.roomLocation.x, room.roomType.sizeMultiplier.y + room.roomLocation.y - 1];
                 if ((i % room.cellSize.x == room.cellSize.x / 2 - 1) && roomCell.direction.HasFlag(Direction.Up))
                 {
-                    randomWallSprite = exteriorParameters.topDoorLeftDoorFrameSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParams.topDoorLeftDoorFrameSprites.GetRandomThing(FloorGenerator.random);
                 }
                 else if ((i % room.cellSize.x == room.cellSize.x / 2 + 1) && roomCell.direction.HasFlag(Direction.Up))
                 {
-                    randomWallSprite = exteriorParameters.topDoorRightDoorFrameSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParams.topDoorRightDoorFrameSprites.GetRandomThing(FloorGenerator.random);
                 }
                 else if (i % room.cellSize.x != room.cellSize.x / 2 || !roomCell.direction.HasFlag(Direction.Up))
                 {
-                    randomWallSprite = exteriorParameters.topWallSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParams.topWallSprites.GetRandomThing(FloorGenerator.random);
                 }
                 if (randomWallSprite != null)
                 {
-                    room.roomGrid[i, roomSize.y - 1] = CreateWallTile(randomWallSprite, new Vector2Int(i, roomSize.y - 1), exteriorParameters.wallTile, wallContainer);
+                    room.roomGrid[i, roomSize.y - 1] = CreateWallTile(randomWallSprite, new Vector2Int(i, roomSize.y - 1), exteriorParams.wallTile, wallContainer);
                 }
             }
 
@@ -132,38 +139,38 @@ namespace Cardificer
                 MapCell roomCell = map.map[room.roomLocation.x, (j / room.cellSize.y) + room.roomLocation.y];
                 if ((j % room.cellSize.y == room.cellSize.y / 2 - 1) && roomCell.direction.HasFlag(Direction.Left))
                 {
-                    randomWallSprite = exteriorParameters.leftDoorBottomDoorFrameSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParams.leftDoorBottomDoorFrameSprites.GetRandomThing(FloorGenerator.random);
                 }
                 else if ((j % room.cellSize.y == room.cellSize.y / 2 + 1) && roomCell.direction.HasFlag(Direction.Left))
                 {
-                    randomWallSprite = exteriorParameters.leftDoorTopDoorFrameSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParams.leftDoorTopDoorFrameSprites.GetRandomThing(FloorGenerator.random);
                 }
                 else if (j % room.cellSize.y != room.cellSize.y / 2 || !roomCell.direction.HasFlag(Direction.Left))
                 {
-                    randomWallSprite = exteriorParameters.leftWallSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParams.leftWallSprites.GetRandomThing(FloorGenerator.random);
                 }
                 if (randomWallSprite != null)
                 {
-                    room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), exteriorParameters.wallTile, wallContainer);
+                    room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), exteriorParams.wallTile, wallContainer);
                 }
 
                 randomWallSprite = null;
                 roomCell = map.map[room.roomLocation.x + room.roomType.sizeMultiplier.x - 1, (j / room.cellSize.y) + room.roomLocation.y];
                 if ((j % room.cellSize.y == room.cellSize.y / 2 - 1) && roomCell.direction.HasFlag(Direction.Right))
                 {
-                    randomWallSprite = exteriorParameters.rightDoorBottomDoorFrameSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParams.rightDoorBottomDoorFrameSprites.GetRandomThing(FloorGenerator.random);
                 }
                 else if ((j % room.cellSize.y == room.cellSize.y / 2 + 1) && roomCell.direction.HasFlag(Direction.Right))
                 {
-                    randomWallSprite = exteriorParameters.rightDoorTopDoorFrameSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParams.rightDoorTopDoorFrameSprites.GetRandomThing(FloorGenerator.random);
                 }
                 else if (j % room.cellSize.y != room.cellSize.y / 2 || !roomCell.direction.HasFlag(Direction.Right))
                 {
-                    randomWallSprite = exteriorParameters.rightWallSprites.GetRandomThing(FloorGenerator.random);
+                    randomWallSprite = exteriorParams.rightWallSprites.GetRandomThing(FloorGenerator.random);
                 }
                 if (randomWallSprite != null)
                 {
-                    room.roomGrid[roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), exteriorParameters.wallTile, wallContainer);
+                    room.roomGrid[roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), exteriorParams.wallTile, wallContainer);
                 }
             }
             
@@ -220,7 +227,7 @@ namespace Cardificer
                         mapOffset.x = System.Convert.ToInt32(direction == Direction.Right) - System.Convert.ToInt32(direction == Direction.Left);
                         mapOffset.y = System.Convert.ToInt32(direction == Direction.Up) - System.Convert.ToInt32(direction == Direction.Down);
                         MapCell connectedCell = map.map[roomCell.location.x + mapOffset.x, roomCell.location.y + mapOffset.y];
-                        RoomExteriorGenerationParameters exteriorParameters = FloorGenerator.roomTypesToExteriorGenerationParameters.At(connectedCell.room.roomType);
+                        RoomExteriorParams exteriorParams = FloorGenerator.roomTypesToExteriorParams.At(connectedCell.room.roomType);
 
                         Vector2Int doorLocation = (mapOffset * room.cellSize / 2) + room.cellSize / 2 + (roomCell.location - room.roomLocation) * room.cellSize;
 
@@ -228,22 +235,22 @@ namespace Cardificer
 
                         if (direction == Direction.Right)
                         {
-                            doorSprites = exteriorParameters.rightDoorSprites.GetRandomThing(FloorGenerator.random);
+                            doorSprites = exteriorParams.rightDoorSprites.GetRandomThing(FloorGenerator.random);
                         }
                         else if (direction ==  Direction.Up)
                         {
-                            doorSprites = exteriorParameters.topDoorSprites.GetRandomThing(FloorGenerator.random);
+                            doorSprites = exteriorParams.topDoorSprites.GetRandomThing(FloorGenerator.random);
                         }
                         else if (direction == Direction.Left)
                         {
-                            doorSprites = exteriorParameters.leftDoorSprites.GetRandomThing(FloorGenerator.random);
+                            doorSprites = exteriorParams.leftDoorSprites.GetRandomThing(FloorGenerator.random);
                         }
                         else if (direction == Direction.Down)
                         {
-                            doorSprites = exteriorParameters.bottomDoorSprites.GetRandomThing(FloorGenerator.random);
+                            doorSprites = exteriorParams.bottomDoorSprites.GetRandomThing(FloorGenerator.random);
                         }
 
-                        room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, direction, connectedCell, exteriorParameters.doorTile, doorContainer);
+                        room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, direction, connectedCell, exteriorParams.doorTile, doorContainer);
                         room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].GetComponent<Door>());
                     }
                 }
@@ -289,8 +296,8 @@ namespace Cardificer
         /// </summary>
         /// <param name="map"> The map </param>
         /// <param name="room"> The room to create the floor for </param>
-        /// <param name="exteriorGenerationParameters"> The exterior generation parameters of this room </param>
-        private void CreateFloor(Map map, Room room, RoomExteriorGenerationParameters exteriorGenerationParameters)
+        /// <param name="exteriorParams"> The exterior generation Params of this room </param>
+        private void CreateFloor(Map map, Room room, RoomExteriorParams exteriorParams)
         {
             Vector2Int roomSize = room.roomSize;
 
@@ -302,7 +309,7 @@ namespace Cardificer
             {
                 for (int j = 0; j < roomSize.y; j++)
                 {
-                    Sprite floorSprite = exteriorGenerationParameters.floorSprites.GetRandomThing(FloorGenerator.random);
+                    Sprite floorSprite = exteriorParams.floorSprites.GetRandomThing(FloorGenerator.random);
                     CreateFloorTile(floorSprite, new Vector2Int(i, j), floorContainer);
                 }
             }
@@ -313,12 +320,12 @@ namespace Cardificer
             {
                 if (map.map[room.roomLocation.x, j + room.roomLocation.y].direction.HasFlag(Direction.Left))
                 {
-                    Sprite floorSprite = exteriorGenerationParameters.floorSprites.GetRandomThing(FloorGenerator.random);
+                    Sprite floorSprite = exteriorParams.floorSprites.GetRandomThing(FloorGenerator.random);
                     CreateFloorTile(floorSprite, new Vector2Int(0, (room.cellSize.y * j) + room.cellSize.y / 2), floorContainer);
                 }
                 if (map.map[room.roomLocation.x + room.roomType.sizeMultiplier.x - 1, j + room.roomLocation.y].direction.HasFlag(Direction.Right))
                 {
-                    Sprite floorSprite = exteriorGenerationParameters.floorSprites.GetRandomThing(FloorGenerator.random);
+                    Sprite floorSprite = exteriorParams.floorSprites.GetRandomThing(FloorGenerator.random);
                     CreateFloorTile(floorSprite, new Vector2Int(roomSize.x - 1, (room.cellSize.y * j) + room.cellSize.y / 2), floorContainer);
                 }
             }

@@ -15,12 +15,14 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
-            HashSet<Tile> possibleTiles = FloorGenerator.templateGenerationParameters.tileTypesToTiles.At(tileTypes);
+            GenericWeightedThings<Tile> possibleTiles = FloorGenerator.templateParams.tileTypesToTiles.At(tileTypes);
             if (possibleTiles == null)
             {
                 Debug.LogWarning("No tiles associated with tile types " + tileTypes);
+                return;
             }
-            Tile chosenTile = possibleTiles.ElementAt(FloorGenerator.random.Next(0, possibleTiles.Count));
+
+            Tile chosenTile = possibleTiles.GetRandomThing(FloorGenerator.random);
             chosenTile = Instantiate(chosenTile.gameObject).GetComponent<Tile>();
             Tile currentTile = GetComponent<Tile>();
             chosenTile.transform.parent = currentTile.room.tileContainer.transform;
