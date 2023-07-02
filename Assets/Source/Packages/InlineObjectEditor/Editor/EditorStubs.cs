@@ -22,3 +22,6 @@ public partial class TransitionEditorStub : UnityEditor.Editor { }
 [UnityEditor.CustomEditor(typeof(Cardificer.FiniteStateMachine.ConditionalSingleAction))]
 public partial class ConditionalSingleActionEditorStub : UnityEditor.Editor { }
 
+[UnityEditor.CustomEditor(typeof(Cardificer.FloorGenerator))]
+public partial class FloorGeneratorEditorStub : UnityEditor.Editor { }
+
