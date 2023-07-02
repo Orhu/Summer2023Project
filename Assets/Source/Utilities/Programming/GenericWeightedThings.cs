@@ -111,6 +111,10 @@ namespace Cardificer
             choosableThings.Add(newThing);
             if (addToPermanentListOfThings)
             {
+                if (things == null)
+                {
+                    things = new List<GenericWeightedThing<T>>();
+                }
                 things.Add(newThing);
             }
             totalWeight += newThing.weight;

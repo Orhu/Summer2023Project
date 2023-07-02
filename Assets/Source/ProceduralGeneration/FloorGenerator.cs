@@ -1,7 +1,9 @@
 using System.Collections;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Skaillz.EditInline;
 
 namespace Cardificer
 {
@@ -14,11 +16,11 @@ namespace Cardificer
         [Tooltip("The generation parameters for the layout of this floor")]
         public LayoutGenerationParameters layoutGenerationParameters;
 
-        [Tooltip("The template generation parameters for this floor")]
-        public TemplateGenerationParameters templateGenerationParameters;
+        [Tooltip("The template generation parameters for this floor")] [EditInline]
+        [SerializeField] public TemplateGenerationParameters templateGenerationParameters;
 
-        [Tooltip("The size of a room on this floor")]
-        public Vector2Int roomSize;
+        [Tooltip("The size of a map cell on this floor")]
+        public Vector2Int cellSize;
 
         [Tooltip("A dictionary that holds room types and their associated exterior generation parameters for this floor")]
         public RoomTypesToRoomExteriorGenerationParameters roomTypesToExteriorGenerationParameters;
@@ -28,6 +30,9 @@ namespace Cardificer
 
         [Tooltip("Whether or not to randomize the seed on start")]
         public bool randomizeSeed;
+
+        [Tooltip("The file to save the generation settings in")]
+        public string generationSettingsFileName = "GenerationSettings";
 
         // Event called when the room is changed
         [HideInInspector] public UnityEvent onRoomChange;
@@ -57,7 +62,7 @@ namespace Cardificer
         /// <summary>
         /// Sets up the singleton
         /// </summary>
-        void Awake()
+        private void Awake()
         {
             if (floorGeneratorInstance != null && floorGeneratorInstance != this)
             {
@@ -84,172 +89,138 @@ namespace Cardificer
 
             random = new System.Random(seed);
 
-            GetSpecialRoomsFromDeck();
-            GetTilesFromDeck();
-            Deck.playerDeck.onCardAdded += OnCardAdded;
-            Deck.playerDeck.onCardRemoved += OnCardRemoved;
-            map = GetComponent<LayoutGenerator>().Generate(layoutGenerationParameters);
-            GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, roomSize);
+            Dictionary<RoomType, int> templateCounts = new Dictionary<RoomType, int>();
+            foreach (RoomTypeToLayoutParameters roomType in layoutGenerationParameters.roomTypesToLayoutParameters.roomTypesToLayoutParameters)
+            {
+                templateCounts.Add(roomType.roomType, 0);
+                try
+                {
+                    foreach (DifficultyToTemplates difficultyToTemplates in templateGenerationParameters.templatesPool.At(roomType.roomType).difficultiesToTemplates)
+                    {
+                        templateCounts[roomType.roomType] += difficultyToTemplates.templates.Count;
+                    }
+                }
+                catch
+                {
+                    Debug.LogError("No templates associated with room type " + roomType.roomType);
+                }
+            }
+            map = GetComponent<LayoutGenerator>().Generate(layoutGenerationParameters, templateCounts);
+            GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, cellSize);
+            SaveLayoutGenerationSettings();
+
+            templateGenerationParameters = Instantiate(templateGenerationParameters);
 
             // Autosave loading
             if (!SaveManager.autosaveExists) 
             {
-                Room startRoom = map.startCell.room.GetComponent<Room>();
+                Room startRoom = map.startRoom.GetComponent<Room>();
                 startRoom.Enter(Direction.None, callCleared: false);
                 return; 
             }
 
-            List<Vector3Int> vistedRooms = SaveManager.savedVisitedRooms;
-            Room lastRoom = map.startCell.room.GetComponent<Room>();
-            int nextCardIndex = vistedRooms[0].z;
-            foreach (Vector3Int vistedRoom in vistedRooms)
+            List<Vector2Int> visitedRooms = SaveManager.savedVisitedRooms;
+            Room lastRoom = map.startRoom.GetComponent<Room>();
+            foreach (Vector2Int visitedRoom in visitedRooms)
             {
-                if (vistedRoom.x >= map.mapSize.x || vistedRoom.y >= map.mapSize.y || map.map[vistedRoom.x, vistedRoom.y].room == null)
+                if (visitedRoom.x >= map.mapSize.x || visitedRoom.y >= map.mapSize.y || map.map[visitedRoom.x, visitedRoom.y].room == null)
                 {
                     SaveManager.AutosaveCorrupted("Invalid room index");
                     return;
                 }
 
                 lastRoom.Exit();
-                lastRoom = map.map[vistedRoom.x, vistedRoom.y].room.GetComponent<Room>();
+                lastRoom = map.map[visitedRoom.x, visitedRoom.y].room.GetComponent<Room>();
                 lastRoom.Generate(false);
-
-                if (nextCardIndex > vistedRoom.z)
-                {
-                    SaveManager.AutosaveCorrupted("Card index too small");
-                    return;
-                }
-
-                while (nextCardIndex < vistedRoom.z)
-                {
-                    if (nextCardIndex >= Deck.playerDeck.cards.Count || nextCardIndex < 0)
-                    {
-                        SaveManager.AutosaveCorrupted("Card index out of bounds");
-                        return;
-                    }
-
-                    OnCardAdded(Deck.playerDeck.cards[nextCardIndex]);
-                    nextCardIndex++;
-                }
             }
             lastRoom.Enter(callCleared: false);
         }
 
         /// <summary>
-        /// Initializes the floor generator with the special rooms found in the deck
-        /// </summary>
-        private void GetSpecialRoomsFromDeck()
-        {
-            int max = SaveManager.autosaveExists ? SaveManager.savedVisitedRooms[0].z : Deck.playerDeck.cards.Count;
-            for (int i = 0; i < max; i++)
-            {
-                if (i >= Deck.playerDeck.cards.Count) { continue; }
-
-                Card card = Deck.playerDeck.cards[i];
-                if (card == null || card.effects == null) { continue; }
-
-                foreach (DungeonEffect effect in card.effects)
-                {
-                    if (effect == null)
-                    {
-                        continue;
-                    }
-                    if (effect.specialRooms == null)
-                    {
-                        return;
-                    }
-                    foreach (Template specialRoom in effect.specialRooms)
-                    {
-                        layoutGenerationParameters.numSpecialRooms++;
-                        templateGenerationParameters.templatesPool.At(RoomType.Special).At(Difficulty.NotApplicable).Add(specialRoom);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Initializes the floor generator with tiles found in the deck
-        /// </summary>
-        private void GetTilesFromDeck()
-        {
-            foreach (TileType tileType in System.Enum.GetValues(typeof(TileType)))
-            {
-                TileTypeToPossibleTiles tileTypeToPossibleTiles;
-                tileTypeToPossibleTiles.tileType = tileType;
-                tileTypeToPossibleTiles.possibleTiles = new List<Tile>();
-                templateGenerationParameters.tileTypesToPossibleTiles.tileTypesToPossibleTiles.Add(tileTypeToPossibleTiles);
-            }
-
-            int max = SaveManager.autosaveExists ? SaveManager.savedVisitedRooms[0].z : Deck.playerDeck.cards.Count;
-            for (int i = 0; i < max; i++)
-            {
-                if (i >= Deck.playerDeck.cards.Count) { continue; }
-                OnCardAdded(Deck.playerDeck.cards[i]);
-            }
-        }
-
-        /// <summary>
-        /// Adds the added tiles from the card
-        /// </summary>
-        /// <param name="card"> The card </param>
-        private void OnCardAdded(Card card)
-        {
-            if (card == null || card.effects == null)
-            {
-                return;
-            }
-
-            foreach (DungeonEffect effect in card.effects)
-            {
-                if (effect == null)
-                {
-                    continue;
-                }
-                if (effect.tiles == null)
-                {
-                    return;
-                }
-                foreach (Tile tile in effect.tiles)
-                {
-                    templateGenerationParameters.tileTypesToPossibleTiles.At(tile.type).Add(tile);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Removes the added tiles from the card
-        /// </summary>
-        /// <param name="card"> The card </param>
-        private void OnCardRemoved(Card card)
-        {
-            foreach (DungeonEffect effect in card.effects)
-            {
-                foreach (Tile tile in effect.tiles)
-                {
-                    templateGenerationParameters.tileTypesToPossibleTiles.At(tile.type).Remove(tile);
-                }
-            }
-        }
-
         /// Transforms a map location to a world location
         /// </summary>
         /// <param name="mapLocation"> The location to transform </param>
         /// <param name="startLocation"> The start location (aka midpoint of the map) </param>
-        /// <param name="roomSize"> The room size </param>
+        /// <param name="cellSize"> The size of a cell in the map </param>
         /// <returns> The world location </returns>
-        static public Vector2 TransformMapToWorld(Vector2Int mapLocation, Vector2Int startLocation, Vector2Int roomSize)
+        static public Vector2 TransformMapToWorld(Vector2Int mapLocation, Vector2Int startLocation, Vector2Int cellSize)
         {
-            return new Vector2((mapLocation.x - startLocation.x) * roomSize.x, (mapLocation.y - startLocation.y) * roomSize.y);
+            return new Vector2((mapLocation.x - startLocation.x) * cellSize.x, (mapLocation.y - startLocation.y) * cellSize.y);
+        }
+
+        /// <summary>
+        /// Sets all the rooms to active for debugging purposes
+        /// </summary>
+        public void ShowLayout()
+        {
+            for (int i = 0; i < transform.GetChild(0).childCount; i++)
+            {
+                for (int j = 0; j < transform.GetChild(0).GetChild(i).childCount; j++)
+                {
+                    transform.GetChild(0).GetChild(i).GetChild(j).gameObject.SetActive(true);
+                }
+            }
         }
         
         /// <summary>
         /// Invokes room change after 1 frame. This allows for room change to be called *after* the new room is set to active.
         /// </summary>
         /// <returns> Waits 1 frame before invoking </returns>
-        IEnumerator InvokeRoomChangeAfterFrame()
+        private IEnumerator InvokeRoomChangeAfterFrame()
         {
             yield return null; // wait one frame
             onRoomChange?.Invoke();
+        }
+
+        /// <summary>
+        /// Saves the layout generation settings to a file for later reference
+        /// </summary>
+        public void SaveLayoutGenerationSettings()
+        {
+            string fileText = "Seed: " + seed.ToString() + "\n\n";
+            fileText += "Room Types and their layout parameters: \n\n";
+            
+            foreach(RoomTypeToLayoutParameters roomTypeToLayoutParameters in layoutGenerationParameters.roomTypesToLayoutParameters.roomTypesToLayoutParameters)
+            {
+                fileText += "==============================================\n";
+                RoomType roomType = roomTypeToLayoutParameters.roomType;
+                fileText += "Room Type: " + roomType.displayName + "\n";
+                fileText += "Is start room: " + roomType.startRoom.ToString() + "\n";
+                fileText += "Size multiplier: " + roomType.sizeMultiplier.ToString() + "\n";
+                fileText += "Is dead end: " + roomType.deadEnd.ToString() + "\n";
+                if (roomType.attachedRoom == null)
+                {
+                    fileText += "Attached room: null" + "\n";
+                }
+                else
+                {
+                    fileText += "-------------------------------------\n";
+                    fileText += "Attached room: " + roomType.attachedRoom.displayName + "\n";
+                    fileText += "Attachement location: " + roomType.attachmentLocation.ToString() + "\n";
+                    fileText += "Is start room: " + roomType.attachedRoom.startRoom.ToString() + "\n";
+                    fileText += "Size multiplier: " + roomType.attachedRoom.sizeMultiplier.ToString() + "\n";
+                    fileText += "Use random offset: " + roomType.attachedRoom.useRandomOffset.ToString() + "\n";
+                    if (roomType.attachedRoom.useRandomOffset)
+                    {
+                        fileText += "Offset: " + roomType.attachedRoom.offset.ToString() + "\n";
+                    }
+                    fileText += "Use difficulty: " + roomType.attachedRoom.useDifficulty.ToString() + "\n";
+                    fileText += "-------------------------------------\n";
+                }
+                fileText += "Use random offset: " + roomType.useRandomOffset.ToString() + "\n";
+                if (roomType.useRandomOffset)
+                {
+                    fileText += "Offset: " + roomType.offset.ToString() + "\n";
+                }
+                fileText += "Use difficulty: " + roomType.useDifficulty.ToString() + "\n";
+                fileText += "Emergency room: " + roomType.emergencyRoom.ToString() + "\n";
+                fileText += "Number of rooms: " + roomTypeToLayoutParameters.numRooms.ToString() + "\n";
+                fileText += "Number of rooms variance: " + roomTypeToLayoutParameters.numRoomsVariance.ToString() + "\n";
+            }
+
+            fileText += "==============================================\n";
+            Debug.Log("Saved to file " + generationSettingsFileName + ".log");
+            File.WriteAllText("logs/" + generationSettingsFileName + ".log", fileText);
         }
     }
 }
