@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b067eac9463a37f41b382167fcdf564f, type: 3}
-  m_Name: ApplyStatusEffect_Fireball_Flowing
+  m_Script: {fileID: 11500000, guid: 34e985cd228911342ae7aa9b5be31726, type: 3}
+  m_Name: Slow_PlasmaActiveChargeEffect
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 0}
-  statusEffects:
-  - {fileID: 11400000, guid: 7f5b859d6d92a1e4da35e1f97c878138, type: 2}
-  delay: 0
+  duration: 1
+  visualEffect: {fileID: 8746605495414823843, guid: 485231a676926554e9e763a5473e83a0, type: 3}
+  slowAmount: 0.25
