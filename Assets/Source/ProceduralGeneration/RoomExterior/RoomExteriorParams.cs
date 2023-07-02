@@ -5,10 +5,9 @@ namespace Cardificer
     /// <summary>
     /// The tiles that make up the exterior of the rooms
     /// </summary>
-    [System.Serializable]
-    [CreateAssetMenu(fileName = "NewRoomExteriorGenerationParameters", menuName = "Generation/RoomExteriorGenerationParameters")]
+    [System.Serializable] [CreateAssetMenu(fileName = "NewRoomExteriorParams", menuName = "Generation/RoomExteriorParams")]
 
-    public class RoomExteriorGenerationParameters : ScriptableObject
+    public class RoomExteriorParams : ScriptableObject
     {
         [Header("Tiles")]
         [Tooltip("The wall tile")]

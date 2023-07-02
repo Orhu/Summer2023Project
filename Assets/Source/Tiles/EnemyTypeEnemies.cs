@@ -6,13 +6,14 @@ namespace Cardificer
     /// <summary>
     /// Stores an enemy type and the enemies that are part of that enemy type
     /// </summary>
+    [System.Serializable] [CreateAssetMenu(fileName = "NewEnemyTypeEnemies", menuName = "Generation/EnemyTypeEnemies")]
     public class EnemyTypeEnemies : ScriptableObject
     {
         [Tooltip("The enemy type")]
-        public EnemyType tileType;
+        public EnemyType enemyType;
 
         [Tooltip("The enemies that are part of that enemy type")]
-        public List<GameObject> enemies;
+        public GenericWeightedThings<GameObject> enemies;
     }
 
     /// <summary>

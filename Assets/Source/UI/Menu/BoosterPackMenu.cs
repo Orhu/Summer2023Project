@@ -45,7 +45,11 @@ namespace Cardificer
             if (table != null)
             {
                 // List of cards to be displayed in UI
-                List<Card> packCards = table.PullMultipleFromTable(numCards);
+                List<Card> packCards = new List<Card>();
+                for (int i = 0; i < numCards; i++)
+                {
+                    packCards.Add(table.weightedLoot.GetRandomThing());
+                }
 
                 // Loop through total number of spawned cards
                 for (int i = 0; i < numCards; i++)

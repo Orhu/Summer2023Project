@@ -15,7 +15,7 @@ namespace Cardificer
         public T thing;
 
         [Tooltip("The weight that the thing has")]
-        public float weight = 0;
+        public float weight = 1;
 
         [Tooltip("The maximum number of times this thing can be chosen. Make this less than 0 for no max")]
         public int maxChosen = -1;

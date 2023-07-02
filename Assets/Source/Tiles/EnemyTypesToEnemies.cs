@@ -6,31 +6,49 @@ namespace Cardificer
     /// <summary>
     /// Stores enemy types and their associated enemies
     /// </summary>
+    [System.Serializable] [CreateAssetMenu(fileName = "NewEnemyTypesToEnemies", menuName = "Generation/EnemyTypesToEnemies")]
     public class EnemyTypesToEnemies : ScriptableObject
     {
-        [Tooltip("Tile types and the tiles they can spawn")]
+        [Tooltip("Enemy types and the enemies they can spawn")]
         List<EnemyTypeEnemies> enemyTypesToEnemies;
 
         /// <summary>
-        /// Gets the enemies with the associated enemy types
+        /// Gets the enemies with the associated enemy types. Averages the weight if a enemy appears in multiple enemy types.
         /// </summary>
-        /// <param name="enemyTypes"> The enemy types to get the tiles of </param>
+        /// <param name="enemyTypes"> The enemy types to get the enemies of </param>
         /// <returns> The enemies associated with those enemy types </returns>
-        public HashSet<GameObject> At(EnemyType enemyTypes)
+        public GenericWeightedThings<GameObject> At(EnemyType enemyTypes)
         {
-            HashSet<GameObject> enemies = new HashSet<GameObject>();
+            Dictionary<GameObject, int> enemyCounts = new Dictionary<GameObject, int>();
+            Dictionary<GameObject, float> enemyTotalWeights = new Dictionary<GameObject, float>();
             foreach (EnemyTypeEnemies enemyTypeEnemies in enemyTypesToEnemies)
             {
-                if (enemyTypes.HasFlag(enemyTypeEnemies.tileType))
+                if (enemyTypes.HasFlag(enemyTypeEnemies.enemyType))
                 {
-                    foreach (GameObject enemy in enemyTypeEnemies.enemies)
+                    foreach (GenericWeightedThing<GameObject> enemy in enemyTypeEnemies.enemies.things)
                     {
-                        enemies.Add(enemy);
+                        if (enemyCounts.ContainsKey(enemy.thing))
+                        {
+                            enemyCounts[enemy.thing]++;
+                            enemyTotalWeights[enemy.thing] += enemy.weight;
+                        }
+                        else
+                        {
+                            enemyCounts.Add(enemy.thing, 1);
+                            enemyTotalWeights.Add(enemy.thing, enemy.weight);
+                        }
                     }
                 }
             }
 
-            return enemies;
+            GenericWeightedThings<GameObject> enemys = new GenericWeightedThings<GameObject>();
+            foreach (KeyValuePair<GameObject, int> enemyCount in enemyCounts)
+            {
+                GenericWeightedThing<GameObject> newTile = new GenericWeightedThing<GameObject>(enemyCount.Key, enemyTotalWeights[enemyCount.Key] / enemyCount.Value);
+                enemys.Add(newTile, true);
+            }
+
+            return enemys;
         }
     }
 

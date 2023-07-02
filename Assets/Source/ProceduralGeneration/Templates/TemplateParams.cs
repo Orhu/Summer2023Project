@@ -4,11 +4,11 @@ using UnityEngine;
 namespace Cardificer
 {
     /// <summary>
-    /// The parameters to use when generating a template
+    /// The Params to use when generating a template
     /// </summary>
     [System.Serializable]
-    [CreateAssetMenu(fileName = "NewTemplateGenerationParameters", menuName = "Generation/TemplateGenerationParameters")]
-    public class TemplateGenerationParameters : ScriptableObject
+    [CreateAssetMenu(fileName = "NewTemplateParams", menuName = "Generation/TemplateParams")]
+    public class TemplateParams : ScriptableObject
     {
         [Tooltip("The pool of templates to draw from and their associated room types")]
         public RoomTypesToDifficultiesToTemplates templatesPool;
@@ -28,7 +28,7 @@ namespace Cardificer
         /// <summary>
         /// Constructor that makes sure the used templates variable is initialized
         /// </summary>
-        public TemplateGenerationParameters()
+        public TemplateParams()
         {
             usedTemplates = new RoomTypesToDifficultiesToTemplates();
         }

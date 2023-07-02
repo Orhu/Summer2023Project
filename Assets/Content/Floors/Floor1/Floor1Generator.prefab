@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6816320395962278883
 Transform:
   m_ObjectHideFlags: 0
@@ -46,60 +46,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e63de1514ff48147a82161e152674ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layoutGenerationParameters:
-    roomTypesToLayoutParameters:
-      roomTypesToLayoutParameters:
-      - roomType: {fileID: 11400000, guid: 29c9d6ab9c6b80043953eff27129ce32, type: 2}
-        numRooms: 10
-        numRoomsVariance: 0
-      - roomType: {fileID: 11400000, guid: 5bae505bbc2ecc74db87ad27d3504366, type: 2}
-        numRooms: 1
-        numRoomsVariance: 0
-      - roomType: {fileID: 11400000, guid: 8ea4753689fee3b41a2a217d1e6e2e58, type: 2}
-        numRooms: 1
-        numRoomsVariance: 0
-      - roomType: {fileID: 11400000, guid: 3dc6d5686bf40a745a17111823c27f78, type: 2}
-        numRooms: 1
-        numRoomsVariance: 0
-    numBossRooms: 1
-    preferredNumDoors: 4
-    strictnessNumDoors: 12
-  templateGenerationParameters: {fileID: 11400000, guid: edf9c76c7f360e4459a24604646906f9, type: 2}
-  cellSize: {x: 17, y: 11}
-  roomTypesToExteriorGenerationParameters:
-    roomTypesToRoomExteriorGenerationParameters:
-    - roomType: {fileID: 11400000, guid: 29c9d6ab9c6b80043953eff27129ce32, type: 2}
-      roomExteriorGenerationParameters: {fileID: 11400000, guid: c0c5c6192de14794f8d7613b745c2a98, type: 2}
-    - roomType: {fileID: 11400000, guid: 5bae505bbc2ecc74db87ad27d3504366, type: 2}
-      roomExteriorGenerationParameters: {fileID: 11400000, guid: c0c5c6192de14794f8d7613b745c2a98, type: 2}
-    - roomType: {fileID: 11400000, guid: 8ea4753689fee3b41a2a217d1e6e2e58, type: 2}
-      roomExteriorGenerationParameters: {fileID: 11400000, guid: c0c5c6192de14794f8d7613b745c2a98, type: 2}
-    - roomType: {fileID: 11400000, guid: 3dc6d5686bf40a745a17111823c27f78, type: 2}
-      roomExteriorGenerationParameters: {fileID: 11400000, guid: c0c5c6192de14794f8d7613b745c2a98, type: 2}
-    - roomType: {fileID: 11400000, guid: c78aee0530486514c9ebd3b152988085, type: 2}
-      roomExteriorGenerationParameters: {fileID: 11400000, guid: c0c5c6192de14794f8d7613b745c2a98, type: 2}
-    - roomType: {fileID: 11400000, guid: 4143f222eb18ba8408c4fb5a4c2d3ae7, type: 2}
-      roomExteriorGenerationParameters: {fileID: 11400000, guid: c0c5c6192de14794f8d7613b745c2a98, type: 2}
-    - roomType: {fileID: 11400000, guid: 18f0bce901f87ed4a8e97560ceb38a58, type: 2}
-      roomExteriorGenerationParameters: {fileID: 11400000, guid: c0c5c6192de14794f8d7613b745c2a98, type: 2}
-  seed: 0
-  randomizeSeed: 1
-  generationSettingsFileName: GenerationSettings
-  onRoomChange:
+  _seed: 0
+  _randomizeSeed: 1
+  _generationSettingsFileName: GenerationSettings
+  _cellSize: {x: 17, y: 11}
+  _onRoomChange:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RoomInterface, Assembly-CSharp
-        m_MethodName: GrabCurrentRoom
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+  _layoutParams: {fileID: 11400000, guid: b6bc28eb883e9604a93e3a7353b6c1f7, type: 2}
+  _templateParams: {fileID: 11400000, guid: edf9c76c7f360e4459a24604646906f9, type: 2}
+  _roomTypesToExteriorParams: {fileID: 11400000, guid: d02e7153e87fabd4394bee407c272248, type: 2}
 --- !u!114 &6816320395962278880
 MonoBehaviour:
   m_ObjectHideFlags: 0

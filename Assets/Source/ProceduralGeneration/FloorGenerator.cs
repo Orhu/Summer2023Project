@@ -9,46 +9,32 @@ namespace Cardificer
 {
     /// <summary>
     /// Handles generation for an entire floor: The layout and the external rooms. 
-    /// The rooms handle their own internal generation, but they will use the parameters on this generator (the templates).
+    /// The rooms handle their own internal generation, but they will use the Params on this generator (the templates).
     /// </summary>
     public class FloorGenerator : MonoBehaviour
     {
-        [Tooltip("The generation parameters for the layout of this floor")]
-        [SerializeField] private LayoutGenerationParameters _layoutGenerationParameters;
-        static public LayoutGenerationParameters layoutGenerationParameters => instance._layoutGenerationParameters;
-
-
-        [Tooltip("The template generation parameters for this floor")] [EditInline]
-        [SerializeField] private TemplateGenerationParameters _templateGenerationParameters;
-        static public TemplateGenerationParameters templateGenerationParameters
-        {
-            get => instance._templateGenerationParameters;
-            private set => instance._templateGenerationParameters = value;
-        }
-
-        [Tooltip("The size of a map cell on this floor")]
-        [SerializeField] private Vector2Int _cellSize;
-        static public Vector2Int cellSize => instance._cellSize;
-
-        [Tooltip("A dictionary that holds room types and their associated exterior generation parameters for this floor")]
-        [SerializeField] private RoomTypesToRoomExteriorGenerationParameters _roomTypesToExteriorGenerationParameters;
-        static public RoomTypesToRoomExteriorGenerationParameters roomTypesToExteriorGenerationParameters => instance._roomTypesToExteriorGenerationParameters;
-
+        [Header("Seed Params")]
         [Tooltip("The seed to use for generation")]
         [SerializeField] private int _seed = 0;
         static public int seed
         {
             get => instance._seed;
-            set => instance._seed = value;
+            private set => instance._seed = value;
         }
 
         [Tooltip("Whether or not to randomize the seed on start")]
         [SerializeField] private bool _randomizeSeed;
         static public bool randomizeSeed => instance._randomizeSeed;
 
+        [Header("General Params")]
+
         [Tooltip("The file to save the generation settings in")]
         [SerializeField] private string _generationSettingsFileName = "GenerationSettings";
         static public string generationSettingsFileName => instance._generationSettingsFileName;
+
+        [Tooltip("The size of a map cell on this floor")]
+        [SerializeField] private Vector2Int _cellSize;
+        static public Vector2Int cellSize => instance._cellSize;
 
         // Event called when the room is changed
         [SerializeField] private UnityEvent _onRoomChange;
@@ -56,6 +42,33 @@ namespace Cardificer
         {
             get => instance._onRoomChange;
             set => instance._onRoomChange = value;
+        }
+
+        [Header("Specific Params")]
+
+        [Tooltip("The generation Params for the layout of this floor")] [EditInline]
+        [SerializeField] private LayoutParams _layoutParams;
+        static public LayoutParams layoutParams
+        {
+            get => instance._layoutParams;
+            private set => instance._layoutParams = value;
+        }
+
+        [Tooltip("A dictionary that holds room types and their associated exterior generation Params for this floor")]
+        [EditInline]
+        [SerializeField] private RoomTypesToRoomExteriorParams _roomTypesToExteriorParams;
+        static public RoomTypesToRoomExteriorParams roomTypesToExteriorParams
+        {
+            get => instance._roomTypesToExteriorParams;
+            private set => instance._roomTypesToExteriorParams = value;
+        }
+
+        [Tooltip("The template generation Params for this floor")] [EditInline]
+        [SerializeField] private TemplateParams _templateParams;
+        static public TemplateParams templateParams
+        {
+            get => instance._templateParams;
+            private set => instance._templateParams = value;
         }
 
         // The random instance
@@ -110,12 +123,12 @@ namespace Cardificer
             random = new System.Random(seed);
 
             Dictionary<RoomType, int> templateCounts = new Dictionary<RoomType, int>();
-            foreach (RoomTypeToLayoutParameters roomType in layoutGenerationParameters.roomTypesToLayoutParameters.roomTypesToLayoutParameters)
+            foreach (RoomTypeToLayoutParams roomType in layoutParams.roomTypesToLayoutParams.roomTypesToLayoutParams)
             {
                 templateCounts.Add(roomType.roomType, 0);
                 try
                 {
-                    foreach (DifficultyToTemplates difficultyToTemplates in templateGenerationParameters.templatesPool.At(roomType.roomType).difficultiesToTemplates)
+                    foreach (DifficultyToTemplates difficultyToTemplates in templateParams.templatesPool.At(roomType.roomType).difficultiesToTemplates)
                     {
                         templateCounts[roomType.roomType] += difficultyToTemplates.templates.Count;
                     }
@@ -125,11 +138,15 @@ namespace Cardificer
                     Debug.LogError("No templates associated with room type " + roomType.roomType);
                 }
             }
-            map = GetComponent<LayoutGenerator>().Generate(layoutGenerationParameters, templateCounts);
-            GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, cellSize);
+
+            layoutParams = Instantiate(layoutParams);
+            roomTypesToExteriorParams = Instantiate(roomTypesToExteriorParams);
+
+            map = GetComponent<LayoutGenerator>().Generate(layoutParams, templateCounts);
+            GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorParams, map, cellSize);
             SaveLayoutGenerationSettings();
 
-            templateGenerationParameters = Instantiate(templateGenerationParameters);
+            templateParams = Instantiate(templateParams);
 
             // Autosave loading
             if (!SaveManager.autosaveExists) 
@@ -188,12 +205,12 @@ namespace Cardificer
         static public void SaveLayoutGenerationSettings()
         {
             string fileText = "Seed: " + seed.ToString() + "\n\n";
-            fileText += "Room Types and their layout parameters: \n\n";
+            fileText += "Room Types and their layout\n\n";
             
-            foreach(RoomTypeToLayoutParameters roomTypeToLayoutParameters in layoutGenerationParameters.roomTypesToLayoutParameters.roomTypesToLayoutParameters)
+            foreach(RoomTypeToLayoutParams roomTypeToLayoutParams in layoutParams.roomTypesToLayoutParams.roomTypesToLayoutParams)
             {
                 fileText += "==============================================\n";
-                RoomType roomType = roomTypeToLayoutParameters.roomType;
+                RoomType roomType = roomTypeToLayoutParams.roomType;
                 fileText += "Room Type: " + roomType.displayName + "\n";
                 fileText += "Is start room: " + roomType.startRoom.ToString() + "\n";
                 fileText += "Size multiplier: " + roomType.sizeMultiplier.ToString() + "\n";
@@ -224,8 +241,8 @@ namespace Cardificer
                 }
                 fileText += "Use difficulty: " + roomType.useDifficulty.ToString() + "\n";
                 fileText += "Emergency room: " + roomType.emergencyRoom.ToString() + "\n";
-                fileText += "Number of rooms: " + roomTypeToLayoutParameters.numRooms.ToString() + "\n";
-                fileText += "Number of rooms variance: " + roomTypeToLayoutParameters.numRoomsVariance.ToString() + "\n";
+                fileText += "Number of rooms: " + roomTypeToLayoutParams.numRooms.ToString() + "\n";
+                fileText += "Number of rooms variance: " + roomTypeToLayoutParams.numRoomsVariance.ToString() + "\n";
             }
 
             fileText += "==============================================\n";
