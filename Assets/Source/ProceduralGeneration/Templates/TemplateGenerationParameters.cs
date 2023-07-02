@@ -11,7 +11,13 @@ namespace Cardificer
     public class TemplateGenerationParameters : ScriptableObject
     {
         [Tooltip("The pool of templates to draw from and their associated room types")]
-        [SerializeField] public RoomTypesToDifficultiesToTemplates templatesPool;
+        public RoomTypesToDifficultiesToTemplates templatesPool;
+
+        [Tooltip("The tile types and the tiles they can spawn")]
+        public TileTypesToTiles tileTypesToTiles;
+
+        [Tooltip("The enemy types and the enemies they can spawn")]
+        public EnemyTypesToEnemies enemyTypesToEnemies;
 
         // The templates that have been used
         [HideInInspector] private RoomTypesToDifficultiesToTemplates usedTemplates;

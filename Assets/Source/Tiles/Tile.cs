@@ -21,28 +21,40 @@ namespace Cardificer
         [Tooltip("How much this tile costs to burrow below (higher is avoided more, lower is preferred)")]
         public int burrowMovementPenalty;
 
-        // the x and y location of this tile within the 2D array grid
-         public Vector2Int gridLocation;
+        [Tooltip("the x and y location of this tile within the 2D array grid")]
+        public Vector2Int gridLocation;
+
+        // The room that this tile is a part of 
+        public Room room;
 
         /// <summary>
-        /// Disables the game object from starting if in template creation mode
+        /// Disables the game object from starting before it's ready to
         /// </summary>
         private void Start()
         {
-            if (FloorGenerator.floorGeneratorInstance == null)
+            // Disable all the components except this and the sprite rendere
+            foreach (MonoBehaviour component in gameObject.GetComponents<MonoBehaviour>())
             {
-                foreach (MonoBehaviour component in gameObject.GetComponents<MonoBehaviour>())
-                {
-                    component.enabled = false;
-                }
+                component.enabled = false;
+            }
 
-                enabled = true;
+            enabled = true;
 
-                SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-                if (spriteRenderer != null)
-                {
-                    spriteRenderer.enabled = true;
-                }
+            SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Enables the game object
+        /// </summary>
+        public void Enable()
+        {
+            foreach (MonoBehaviour component in gameObject.GetComponents<MonoBehaviour>())
+            {
+                component.enabled = true;
             }
         }
     }

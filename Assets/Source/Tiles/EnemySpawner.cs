@@ -1,37 +1,35 @@
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Cardificer
 {
-    /// <summary>
-    /// Spawns a random enemy from the chosen enemy pool
-    /// </summary>
+    [RequireComponent(typeof(Tile))]
     public class EnemySpawner : MonoBehaviour
     {
+        [Tooltip("The enemy types that this spawner can spawn")]
+        public EnemyType enemyTypes;
+
         /// <summary>
-        /// Calls the spawn enemy function
+        /// Spawns the enemy
         /// </summary>
         private void Start()
         {
-            SpawnEnemy();
-
-            // Turn off the sprite renderer (This is so the enemy spawner can have a sprite in template creator but not in game)
-            if (GetComponent<SpriteRenderer>() != null)
+            SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null)
             {
-                GetComponent<SpriteRenderer>().enabled = false;
+                spriteRenderer.enabled = false;
             }
-        }
 
-        /// <summary>
-        /// Spawns a random enemy from the room enemy pool
-        /// </summary>
-        private void SpawnEnemy()
-        {
-            /*List<GameObject> enemies = FloorGenerator.floorGeneratorInstance.currentRoom.template.chosenEnemyPool.enemies;
-            GameObject randomEnemy = enemies[Random.Range(0, enemies.Count)];
-            FloorGenerator.floorGeneratorInstance.currentRoom.template.chosenEnemyPool.enemies.Remove(randomEnemy);
-            randomEnemy = Instantiate(randomEnemy, transform);
-            randomEnemy.SetActive(true);*/
+            HashSet<GameObject> possibleEnemies = FloorGenerator.templateGenerationParameters.enemyTypesToEnemies.At(enemyTypes);
+            if (possibleEnemies == null)
+            {
+                Debug.LogError("No enemies associated with enemy type " + enemyTypes);
+            }
+            GameObject chosenEnemy = possibleEnemies.ElementAt(FloorGenerator.random.Next(0, possibleEnemies.Count));
+            chosenEnemy = Instantiate(chosenEnemy);
+            Tile currentTile = GetComponent<Tile>();
+            currentTile.room.AddEnemy(chosenEnemy);
         }
     }
 }

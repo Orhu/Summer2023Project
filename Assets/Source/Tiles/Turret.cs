@@ -44,7 +44,7 @@ namespace Cardificer
 
             if (!playAfterClear)
             {
-                FloorGenerator.floorGeneratorInstance.currentRoom.onCleared += () => { StopAllCoroutines(); };
+                FloorGenerator.currentRoom.onCleared += () => { StopAllCoroutines(); };
             }
         }
 

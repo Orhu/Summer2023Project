@@ -11,6 +11,9 @@ namespace Cardificer
     {
         #region RUNTIME_FUNCTIONALITY
 
+        // The tile container of this room
+        [HideInInspector] public GameObject tileContainer;
+
         // The enemies alive in this room
         [HideInInspector] public List<GameObject> livingEnemies;
 
@@ -84,7 +87,7 @@ namespace Cardificer
             // TODO make enemy spawning good
             bool enemiesPresent = false;//template.chosenEnemyPool.enemies != null && template.chosenEnemyPool.enemies.Count != 0;
 
-            FloorGenerator.floorGeneratorInstance.currentRoom = this;
+            FloorGenerator.currentRoom = this;
 
             // Move player into room, then close/activate doors (so player doesn't get trapped in door)
             StartCoroutine(MovePlayer(direction, shouldCloseDoors && enemiesPresent, callCleared && (!enemiesPresent && shouldCloseDoors)));
@@ -248,7 +251,7 @@ namespace Cardificer
         {
             if (!generated)
             {
-                Template template = FloorGenerator.floorGeneratorInstance.templateGenerationParameters.GetRandomTemplate(roomType);
+                Template template = FloorGenerator.templateGenerationParameters.GetRandomTemplate(roomType);
                 GetComponent<TemplateGenerator>().Generate(this, template, spawnEnemies);
                 generated = true;
             }
@@ -311,7 +314,7 @@ namespace Cardificer
     /// A dictionary that maps room types to exterior generation parameters
     /// </summary>
     [System.Serializable]
-    public class RoomTypesToRoomExteriorGenerationParameters
+    public class RoomTypesToRoomExteriorGenerationParameters : ScriptableObject
     {
         [Tooltip("A list of room types to exterior generation parameters")]
         [SerializeField] public List<RoomTypeToRoomExteriorGenerationParameters> roomTypesToRoomExteriorGenerationParameters;

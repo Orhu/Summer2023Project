@@ -220,7 +220,7 @@ namespace Cardificer
                         mapOffset.x = System.Convert.ToInt32(direction == Direction.Right) - System.Convert.ToInt32(direction == Direction.Left);
                         mapOffset.y = System.Convert.ToInt32(direction == Direction.Up) - System.Convert.ToInt32(direction == Direction.Down);
                         MapCell connectedCell = map.map[roomCell.location.x + mapOffset.x, roomCell.location.y + mapOffset.y];
-                        RoomExteriorGenerationParameters exteriorParameters = FloorGenerator.floorGeneratorInstance.roomTypesToExteriorGenerationParameters.At(connectedCell.room.roomType);
+                        RoomExteriorGenerationParameters exteriorParameters = FloorGenerator.roomTypesToExteriorGenerationParameters.At(connectedCell.room.roomType);
 
                         Vector2Int doorLocation = (mapOffset * room.cellSize / 2) + room.cellSize / 2 + (roomCell.location - room.roomLocation) * room.cellSize;
 

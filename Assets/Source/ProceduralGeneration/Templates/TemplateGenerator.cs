@@ -25,6 +25,7 @@ namespace Cardificer
             tileContainer.name = "Tile Container";
             tileContainer.transform.parent = room.template.transform;
             tileContainer.transform.localPosition = new Vector3(-room.roomSize.x / 2, -room.roomSize.y / 2);
+            room.tileContainer = tileContainer;
 
             for (int i = 1; i < room.roomSize.x - 1; i++)
             {
@@ -45,7 +46,9 @@ namespace Cardificer
 
                     createdTile.transform.localPosition = new Vector3(i, j);
                     createdTile.transform.parent = tileContainer.transform;
+                    createdTile.room = room;
                     room.roomGrid[i, j] = createdTile;
+                    createdTile.Enable();
                 }
             }
         }

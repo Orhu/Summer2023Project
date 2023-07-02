@@ -89,7 +89,7 @@ namespace Cardificer
                                 coroutineRunner.transform.rotation = sourceTransform.rotation;
                                 sourceTransform = coroutineRunner.transform;
                                 MonoBehaviour mono = sourceTransform.gameObject.AddComponent<Empty>();
-                                FloorGenerator.floorGeneratorInstance.onRoomChange.AddListener(() =>
+                                FloorGenerator.onRoomChange.AddListener(() =>
                                 {
                                     Destroy(coroutineRunner);
                                 });

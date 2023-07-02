@@ -14,62 +14,82 @@ namespace Cardificer
     public class FloorGenerator : MonoBehaviour
     {
         [Tooltip("The generation parameters for the layout of this floor")]
-        public LayoutGenerationParameters layoutGenerationParameters;
+        [SerializeField] private LayoutGenerationParameters _layoutGenerationParameters;
+        static public LayoutGenerationParameters layoutGenerationParameters => instance._layoutGenerationParameters;
+
 
         [Tooltip("The template generation parameters for this floor")] [EditInline]
-        [SerializeField] public TemplateGenerationParameters templateGenerationParameters;
+        [SerializeField] private TemplateGenerationParameters _templateGenerationParameters;
+        static public TemplateGenerationParameters templateGenerationParameters
+        {
+            get => instance._templateGenerationParameters;
+            private set => instance._templateGenerationParameters = value;
+        }
 
         [Tooltip("The size of a map cell on this floor")]
-        public Vector2Int cellSize;
+        [SerializeField] private Vector2Int _cellSize;
+        static public Vector2Int cellSize => instance._cellSize;
 
         [Tooltip("A dictionary that holds room types and their associated exterior generation parameters for this floor")]
-        public RoomTypesToRoomExteriorGenerationParameters roomTypesToExteriorGenerationParameters;
+        [SerializeField] private RoomTypesToRoomExteriorGenerationParameters _roomTypesToExteriorGenerationParameters;
+        static public RoomTypesToRoomExteriorGenerationParameters roomTypesToExteriorGenerationParameters => instance._roomTypesToExteriorGenerationParameters;
 
         [Tooltip("The seed to use for generation")]
-        public int seed = 0;
+        [SerializeField] private int _seed = 0;
+        static public int seed
+        {
+            get => instance._seed;
+            set => instance._seed = value;
+        }
 
         [Tooltip("Whether or not to randomize the seed on start")]
-        public bool randomizeSeed;
+        [SerializeField] private bool _randomizeSeed;
+        static public bool randomizeSeed => instance._randomizeSeed;
 
         [Tooltip("The file to save the generation settings in")]
-        public string generationSettingsFileName = "GenerationSettings";
+        [SerializeField] private string _generationSettingsFileName = "GenerationSettings";
+        static public string generationSettingsFileName => instance._generationSettingsFileName;
 
         // Event called when the room is changed
-        [HideInInspector] public UnityEvent onRoomChange;
+        [SerializeField] private UnityEvent _onRoomChange;
+        static public UnityEvent onRoomChange
+        {
+            get => instance._onRoomChange;
+            set => instance._onRoomChange = value;
+        }
 
         // The random instance
         [HideInInspector] static public System.Random random;
 
         // A reference to the generated map
-        [HideInInspector] public Map map;
+        [HideInInspector] static public Map map;
 
         // The room the player is currently in
         private Room _currentRoom;
-        [HideInInspector]
-        public Room currentRoom
+        static public Room currentRoom
         {
-            get { return _currentRoom; }
+            get { return instance._currentRoom; }
             set
             {
-                _currentRoom = value;
-                StartCoroutine(InvokeRoomChangeAfterFrame());
+                instance._currentRoom = value;
+                instance.StartCoroutine(instance.InvokeRoomChangeAfterFrame());
             }
         }
-        
+
         // The instance
-        public static FloorGenerator floorGeneratorInstance { get; private set; }
+        private static FloorGenerator instance;
 
         /// <summary>
         /// Sets up the singleton
         /// </summary>
         private void Awake()
         {
-            if (floorGeneratorInstance != null && floorGeneratorInstance != this)
+            if (instance != null && instance != this)
             {
                 Destroy(gameObject);
                 return;
             }
-            floorGeneratorInstance = this;
+            instance = this;
         }
 
 
@@ -151,31 +171,21 @@ namespace Cardificer
         /// <summary>
         /// Sets all the rooms to active for debugging purposes
         /// </summary>
-        public void ShowLayout()
+        static public void ShowLayout()
         {
-            for (int i = 0; i < transform.GetChild(0).childCount; i++)
+            for (int i = 0; i < instance.transform.GetChild(0).childCount; i++)
             {
-                for (int j = 0; j < transform.GetChild(0).GetChild(i).childCount; j++)
+                for (int j = 0; j < instance.transform.GetChild(0).GetChild(i).childCount; j++)
                 {
-                    transform.GetChild(0).GetChild(i).GetChild(j).gameObject.SetActive(true);
+                    instance.transform.GetChild(0).GetChild(i).GetChild(j).gameObject.SetActive(true);
                 }
             }
-        }
-        
-        /// <summary>
-        /// Invokes room change after 1 frame. This allows for room change to be called *after* the new room is set to active.
-        /// </summary>
-        /// <returns> Waits 1 frame before invoking </returns>
-        private IEnumerator InvokeRoomChangeAfterFrame()
-        {
-            yield return null; // wait one frame
-            onRoomChange?.Invoke();
         }
 
         /// <summary>
         /// Saves the layout generation settings to a file for later reference
         /// </summary>
-        public void SaveLayoutGenerationSettings()
+        static public void SaveLayoutGenerationSettings()
         {
             string fileText = "Seed: " + seed.ToString() + "\n\n";
             fileText += "Room Types and their layout parameters: \n\n";
@@ -221,6 +231,16 @@ namespace Cardificer
             fileText += "==============================================\n";
             Debug.Log("Saved to file " + generationSettingsFileName + ".log");
             File.WriteAllText("logs/" + generationSettingsFileName + ".log", fileText);
+        }
+
+        /// <summary>
+        /// Invokes room change after 1 frame. This allows for room change to be called *after* the new room is set to active.
+        /// </summary>
+        /// <returns> Waits 1 frame before invoking </returns>
+        private IEnumerator InvokeRoomChangeAfterFrame()
+        {
+            yield return null; // wait one frame
+            onRoomChange?.Invoke();
         }
     }
 }

@@ -165,7 +165,7 @@ namespace Cardificer.FiniteStateMachine
         {
             SetStats();
             timeStarted = Time.time;
-            FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Add(gameObject);
+            FloorGenerator.currentRoom.livingEnemies.Add(gameObject);
             currentState.OnStateEnter(this);
         }
 
@@ -229,7 +229,7 @@ namespace Cardificer.FiniteStateMachine
                 return;
             }
 
-            FloorGenerator.floorGeneratorInstance.currentRoom.RemoveEnemy(gameObject);
+            FloorGenerator.currentRoom.RemoveEnemy(gameObject);
         }
 
         /// <summary>

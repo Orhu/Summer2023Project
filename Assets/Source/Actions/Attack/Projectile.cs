@@ -274,7 +274,7 @@ namespace Cardificer
                     return actor.GetActionAimPosition();
 
                 case SpawnLocation.RoomCenter:
-                    return FloorGenerator.floorGeneratorInstance.currentRoom.transform.position;
+                    return FloorGenerator.currentRoom.transform.position;
 
                 case SpawnLocation.Causer:
                     return causer.transform.position;
@@ -313,7 +313,7 @@ namespace Cardificer
                         return randomTarget.transform.position;
                     }
 
-                    List<GameObject> possibleTargets = new List<GameObject>(FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies);
+                    List<GameObject> possibleTargets = new List<GameObject>(FloorGenerator.currentRoom.livingEnemies);
                     possibleTargets.Add(Player.Get());
                     possibleTargets.RemoveAll(
                         // Removes ignored objects
@@ -348,7 +348,7 @@ namespace Cardificer
                 return currentTarget.transform.position;
             }
 
-            List<GameObject> possibleTargets = new List<GameObject>(FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies);
+            List<GameObject> possibleTargets = new List<GameObject>(FloorGenerator.currentRoom.livingEnemies);
             possibleTargets.Add(Player.Get());
 
             foreach (GameObject possibleTarget in possibleTargets)

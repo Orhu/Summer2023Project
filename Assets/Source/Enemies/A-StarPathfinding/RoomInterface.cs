@@ -58,7 +58,7 @@ namespace Cardificer
         private void Start()
         {
             instance = this;
-            FloorGenerator.floorGeneratorInstance.onRoomChange.AddListener(GrabCurrentRoom);
+            FloorGenerator.onRoomChange.AddListener(GrabCurrentRoom);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Cardificer
         /// </summary>
         public void GrabCurrentRoom()
         {
-            myRoom = FloorGenerator.floorGeneratorInstance.currentRoom;
+            myRoom = FloorGenerator.currentRoom;
             myRoomSize = myRoom.roomSize;
             myWorldPosition = myRoom.transform.position;
             DeepCopyGrid(myRoom.roomGrid);

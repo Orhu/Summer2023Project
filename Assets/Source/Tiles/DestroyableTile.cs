@@ -21,7 +21,7 @@ namespace Cardificer
         /// </summary>
         void Start()
         {
-            FloorGenerator.floorGeneratorInstance.onRoomChange.AddListener(OnRoomEnter);
+            FloorGenerator.onRoomChange.AddListener(OnRoomEnter);
             destroyedTiles ??=
                 SaveManager.savedDestroyedTiles.ToHashSet(); // if destroyedTiles doesnt exist, load it from the save
         }

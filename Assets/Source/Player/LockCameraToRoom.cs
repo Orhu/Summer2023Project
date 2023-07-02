@@ -23,9 +23,6 @@ namespace Cardificer
         // The width of the camera (determined from the height and aspect ratio)
         private float width;
 
-        // A reference to the floor generator
-        private FloorGenerator floorGenerator;
-
         // A reference to the player
         private GameObject player;
 
@@ -43,7 +40,7 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
-            Vector2 roomScale = FloorGenerator.floorGeneratorInstance.cellSize;
+            Vector2 roomScale = FloorGenerator.cellSize;
 
             if (roomScale.y > roomScale.x * (1 / GetComponent<Camera>().aspect))
             {
@@ -60,11 +57,10 @@ namespace Cardificer
             extraWidth = extraHeight * GetComponent<Camera>().aspect / 2;
             width = height * GetComponent<Camera>().aspect;
 
-            floorGenerator = FloorGenerator.floorGeneratorInstance;
-            floorGenerator.onRoomChange.AddListener(OnRoomChange);
+            FloorGenerator.onRoomChange.AddListener(OnRoomChange);
             player = Player.Get();
 
-            DetermineMinAndMax(floorGenerator.map.startRoom);
+            DetermineMinAndMax(FloorGenerator.map.startRoom);
         }
 
         /// <summary>
@@ -72,7 +68,7 @@ namespace Cardificer
         /// </summary>
         private void FixedUpdate()
         {
-            if (floorGenerator.currentRoom == null)
+            if (FloorGenerator.currentRoom == null)
             {
                 return;
             }
@@ -134,7 +130,7 @@ namespace Cardificer
             Room roomToUse;
             if (room == null)
             {
-                roomToUse = floorGenerator.currentRoom;
+                roomToUse = FloorGenerator.currentRoom;
             }
             else
             {
@@ -142,11 +138,11 @@ namespace Cardificer
             }
 
             Vector2Int roomLocation = roomToUse.roomLocation;
-            Vector2 roomWorldBottomLeftCellMiddleLocation = FloorGenerator.TransformMapToWorld(roomLocation, floorGenerator.map.startRoom.roomLocation, floorGenerator.cellSize);
-            Vector2 roomWorldBottomLeftLocation = roomWorldBottomLeftCellMiddleLocation - floorGenerator.cellSize / 2;
-            Vector2 roomWorldTopRightCellMiddleLocation = FloorGenerator.TransformMapToWorld(roomLocation + roomToUse.roomType.sizeMultiplier - new Vector2Int(1, 1), floorGenerator.map.startRoom.roomLocation, floorGenerator.cellSize);
-            Vector2 roomWorldTopRightLocation = roomWorldTopRightCellMiddleLocation - floorGenerator.cellSize / 2 - Vector2.one;
-            roomWorldTopRightLocation += floorGenerator.cellSize;
+            Vector2 roomWorldBottomLeftCellMiddleLocation = FloorGenerator.TransformMapToWorld(roomLocation, FloorGenerator.map.startRoom.roomLocation, FloorGenerator.cellSize);
+            Vector2 roomWorldBottomLeftLocation = roomWorldBottomLeftCellMiddleLocation - FloorGenerator.cellSize / 2;
+            Vector2 roomWorldTopRightCellMiddleLocation = FloorGenerator.TransformMapToWorld(roomLocation + roomToUse.roomType.sizeMultiplier - new Vector2Int(1, 1), FloorGenerator.map.startRoom.roomLocation, FloorGenerator.cellSize);
+            Vector2 roomWorldTopRightLocation = roomWorldTopRightCellMiddleLocation - FloorGenerator.cellSize / 2 - Vector2.one;
+            roomWorldTopRightLocation += FloorGenerator.cellSize;
 
             minPosition.x = roomWorldBottomLeftCellMiddleLocation.x - width / 2;
             minPosition.y = roomWorldBottomLeftLocation.y - extraHeight / 2 - 0.5f;
@@ -159,7 +155,7 @@ namespace Cardificer
         /// </summary>
         private void OnRoomChange()
         {
-            if (floorGenerator.currentRoom == null) { return; }
+            if (FloorGenerator.currentRoom == null) { return; }
             DetermineMinAndMax();
             StartCoroutine(MoveCameraToRoom());
         }
