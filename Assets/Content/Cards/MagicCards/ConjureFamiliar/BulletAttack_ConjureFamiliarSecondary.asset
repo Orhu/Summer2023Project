@@ -10,25 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
-  m_Name: BulletAttack_RewindOrb
+  m_Name: BulletAttack_ConjureFamiliarSecondary
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 8300000, guid: 1556da8adf328074486e70081be3c5a4, type: 3}
+  actionAudioClip: {fileID: 0}
   attack:
-    damage: 4
+    damage: 2
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
-  hitCount: 3
+  hitCount: 1
   applyDamageOnHit: 1
   modifiers:
   - {fileID: 11400000, guid: 778c97ac480f9bf48974337f86b16722, type: 2}
-  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
-  shape: {fileID: 11400000, guid: e2bbf15f0326f054bae90f2373102dc9, type: 2}
-  lifetime: 4
-  initialSpeed: 8
-  acceleration: -8
-  minSpeed: -16
-  maxSpeed: 8
+  shape: {fileID: 11400000, guid: 8d688b5ccd80b624586abf79a76fce75, type: 2}
+  lifetime: 1
+  initialSpeed: 10
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 10
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
@@ -38,14 +37,14 @@ MonoBehaviour:
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
   spawnLocation: 0
-  aimMode: 0
-  travelAudioClip: {fileID: 8300000, guid: c228b51c3f35d5445b61f245abe676b4, type: 3}
+  aimMode: 1
+  travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   _spawnSequence:
   - delay: 0
     angle: 0
-    offset: {x: 0.5, y: 0}
-  randomAngle: 0
+    offset: {x: 0, y: 0}
+  randomAngle: 30
   randomOffset: 0
