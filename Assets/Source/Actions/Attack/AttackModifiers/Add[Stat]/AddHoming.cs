@@ -12,9 +12,6 @@ namespace Cardificer
         [Tooltip("The speed in tile/s^2 that projectiles will accelerate towards the closest enemy, to add. 10% = 1")]
         [SerializeField] private float homingSpeed;
 
-        [Tooltip("The number of seconds until the homing speed will be at max velocity")]
-        [SerializeField] private float homingTimeToMaxVelocity = 1f;
-
         [Tooltip("The amount of duration that this will home for, in seconds to add.")]
         [SerializeField] private float homingTime;
 
@@ -26,8 +23,7 @@ namespace Cardificer
         {
             set
             {
-                value.homingSpeed += homingSpeed * value.maxSpeed; // This allows homing to scale appropriately based on the velocity of the projectile
-                value.homingSpeed += value.homingSpeed * homingTimeToMaxVelocity;
+                value.homingSpeed += homingSpeed*value.maxSpeed; // This allows homing to scale appropriately based on the velocity of the projectile
                 value.remainingHomingTime += homingTime;
             }
         }

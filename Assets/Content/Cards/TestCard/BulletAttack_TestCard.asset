@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_TestCard
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 0}
   attack:
     damage: 1
     damageType: 0
@@ -26,21 +25,16 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: 9009f0e272fb0964b84d5e019d3ea5b4, type: 2}
   lifetime: 8
   initialSpeed: 5
-  acceleration: -5
-  minSpeed: 0.01
+  acceleration: 1
+  minSpeed: 0
   maxSpeed: 20
-  homingSpeed: 0
-  homingTime: 0
-  homingDelay: 0
+  homingSpeed: 5
+  homingTime: 10
   homingAimMode: 1
-  switchAfterHit: 0
   visualObject: {fileID: 815138696641318384, guid: 5a43758f167be394badf944662ecc2c3, type: 3}
   detachVisualsBeforeDestroy: 0
-  detatchedVisualsTimeBeforeDestroy: 0
   spawnLocation: 0
   aimMode: 0
-  travelAudioClip: {fileID: 0}
-  impactAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   _spawnSequence:

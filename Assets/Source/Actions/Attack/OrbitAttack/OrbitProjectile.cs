@@ -58,18 +58,18 @@ namespace Cardificer
         new void FixedUpdate()
         {
             timeAlive += Time.fixedDeltaTime;
-            speed = Mathf.Clamp(speed + acceleration * Time.fixedDeltaTime, minSpeed, maxSpeed);
+            speed += acceleration * Time.fixedDeltaTime;
 
             transform.rotation = Quaternion.AngleAxis(startingRotation + OrbitSign() * Mathf.Rad2Deg * speed * timeAlive / radius, Vector3.forward);
 
 
             if (remainingHomingDelay <= 0 && remainingHomingTime > 0 && homingSpeed > 0)
             {
-                Vector2 targetVelocity = (GetAimTarget(attack.homingAimMode) - transform.position).normalized * homingMaxSpeed;
+                Vector2 targetVelocity = (GetAimTarget(attack.homingAimMode) - transform.position).normalized * maxSpeed;
                 if (targetVelocity.sqrMagnitude > Vector2.kEpsilon)
                 {
                     velocity += (targetVelocity - velocity).normalized * homingSpeed * Time.fixedDeltaTime;
-                    velocity = velocity.normalized * Mathf.Min(velocity.magnitude, homingMaxSpeed);
+                    velocity = velocity.normalized * Mathf.Clamp(velocity.magnitude, minSpeed, maxSpeed);
                 }
             }
 
