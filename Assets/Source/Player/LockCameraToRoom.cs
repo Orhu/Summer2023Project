@@ -67,6 +67,24 @@ namespace Cardificer
             DetermineMinAndMax(floorGenerator.map.startRoom);
         }
 
+        //TODO: DELETE
+        #region Stuff to Delete
+        private bool mapping;
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                GetComponent<Camera>().orthographicSize *= 10;
+                FloorGenerator.floorGeneratorInstance.ShowLayout(false);
+            }
+            if (Input.GetKeyUp(KeyCode.M))
+            {
+                GetComponent<Camera>().orthographicSize /= 10;
+                FloorGenerator.floorGeneratorInstance.HideLayout();
+            }
+        }
+        #endregion Stuff to Delete
+
         /// <summary>
         /// Updates the position.
         /// </summary>
@@ -76,8 +94,8 @@ namespace Cardificer
             {
                 return;
             }
-
-            if (!snapping)
+            
+            if (!snapping && !mapping)
             {
                 transform.position = GetCameraPosition();
             }
