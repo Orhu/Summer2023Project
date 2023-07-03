@@ -60,9 +60,11 @@ namespace Cardificer
                         {
                             // Sets the selected card to the cardRenderer
                             SelectCard(tempCardRendererGameObject.GetComponent<CardRenderer>());
-                            // Opens the confirmation window
-                            confirmationWindow.SetActive(true);
+                            // Turns on or off the confirmation button
+                            confirmationWindow.SetActive(tempCardRendererGameObject.GetComponent<Toggle>().isOn);
                         });
+                        // Allows for toggling in groups of card renderers
+                        tempCardRendererGameObject.GetComponent<Toggle>().group = cardLayoutArea.GetComponent<ToggleGroup>();
                         // Adds the cardRenderer to the list of cardRenderers
                         cardRenderers.Add(tempCardRendererGameObject.GetComponent<CardRenderer>());
                     }
