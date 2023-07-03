@@ -15,7 +15,7 @@ namespace Cardificer
         /// </summary>
         public void Drop()
         {
-            GameObject loot = lootTable.PullFromTable();
+            GameObject loot = lootTable.PullFromTable(transform.position);
 
             if (loot == null) { return; }
 
