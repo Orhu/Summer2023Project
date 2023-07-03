@@ -28,6 +28,8 @@ namespace Cardificer
             movementComponent = GetComponent<Movement>();
             animatorComponent = GetComponent<AnimatorController>();
             channelAbility = GetComponent<ChannelAbility>();
+
+            Random.state = SaveManager.savedRandomState;
         }
 
         /// <summary>
@@ -36,6 +38,12 @@ namespace Cardificer
         private void Start()
         {
             if (!SaveManager.autosaveExists) { return; }
+
+            if (!Player.SetMoney(SaveManager.savedPlayerMoney))
+            {
+                SaveManager.AutosaveCorrupted("Invalid player money");
+                return;
+            }
 
             transform.position = SaveManager.savedPlayerPosition;
             // TODO: There is a small probability that the player position is invalid and is not caught by the default save file corruption detection.
@@ -114,7 +122,7 @@ namespace Cardificer
         /// Gets the card preview button being pressed.
         /// </summary>
         /// <returns> The number corresponding to the current button, -1 if none pressed. </returns>
-        static int GetPressedPreviewButton()
+        private static int GetPressedPreviewButton()
         {
             for (int i = 1; i <= Deck.playerDeck.handSize; i++)
             {
@@ -127,6 +135,10 @@ namespace Cardificer
             return -1;
         }
 
+        private void OnDestroy()
+        {
+            Player.SetMoney(0);
+        }
         #region IActor Implementation
 
         // Gets whether or not this actor can act.

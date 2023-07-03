@@ -31,34 +31,7 @@ namespace Cardificer
         public TemplateParams()
         {
             usedTemplates = new RoomTypesToDifficultiesToTemplates();
-        }
-        
-        /// <summary>
-        /// Sees if it's possible to spawn the preferred tile. If not, then gets a random tile of the same type. If there are
-        /// no possible tiles of that type, spawns the generic version of that type.
-        /// </summary>
-        /// <param name="preferredTile"> The preferred tile to spawn </param>
-        /// <returns> The random tile </returns>
-        /*public Tile GetRandomTile(TemplateTile preferredTile)
-        {
-            List<Tile> possibleTiles = tileTypesToPossibleTiles.At(preferredTile.tileType);
-
-            if (preferredTile.preferredTile != null)
-            {
-                return preferredTile.preferredTile.ShallowCopy();
-            }
-            *//*if (possibleTiles.Contains(preferredTile.preferredTile))
-            {
-                return preferredTile.preferredTile.ShallowCopy();
-            }*//*
-
-            if (possibleTiles.Count != 0)
-            {
-                return possibleTiles[FloorGenerator.random.Next(0, possibleTiles.Count)].ShallowCopy();
-            }
-
-            return genericTiles.At(preferredTile.tileType).ShallowCopy();
-        }*/
+        }       
 
         /// <summary>
         /// Gets a random template that can be used with the room type

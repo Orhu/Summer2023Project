@@ -1,33 +1,39 @@
 using TMPro;
 using UnityEngine;
 
-public class TogglePlacingText : MonoBehaviour
+namespace Cardificer
 {
-    // Whether or not tiles are being placed
-    private bool inPlacingMode = true;
-
-    // A reference to the text component
-    private TextMeshProUGUI text;
-
     /// <summary>
-    /// Toggles the placing mode text
+    /// Toggles the text to show whether you are in placing mode or not
     /// </summary>
-    public void TogglePlacingModeText()
+    public class TogglePlacingText : MonoBehaviour
     {
-        if (text == null)
-        {
-            text = GetComponent<TextMeshProUGUI>();
-        }
+        // Whether or not tiles are being placed
+        private bool inPlacingMode = true;
 
-        inPlacingMode = !inPlacingMode;
+        // A reference to the text component
+        private TextMeshProUGUI text;
 
-        if (inPlacingMode)
+        /// <summary>
+        /// Toggles the placing mode text
+        /// </summary>
+        public void TogglePlacingModeText()
         {
-            text.text = "Placing: True";
-        }
-        else
-        {
-            text.text = "Placing: False";
+            if (text == null)
+            {
+                text = GetComponent<TextMeshProUGUI>();
+            }
+
+            inPlacingMode = !inPlacingMode;
+
+            if (inPlacingMode)
+            {
+                text.text = "Placing: True";
+            }
+            else
+            {
+                text.text = "Placing: False";
+            }
         }
     }
 }
