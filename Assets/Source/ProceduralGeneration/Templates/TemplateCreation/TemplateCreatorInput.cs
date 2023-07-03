@@ -177,6 +177,7 @@ namespace Cardificer
                     }
                     else
                     {
+                        Destroy(heldTile);
                         Selection.activeGameObject = selectedObject;
                         heldTile = Selection.activeGameObject;
                         if (heldTile.GetComponent<SpriteRenderer>() == null)

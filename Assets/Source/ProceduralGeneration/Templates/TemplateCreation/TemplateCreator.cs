@@ -104,8 +104,6 @@ namespace Cardificer
             AssetDatabase.Refresh();
 
             Debug.Log("Template saved to " + path);
-
-            Reload();
 #endif
         }
 

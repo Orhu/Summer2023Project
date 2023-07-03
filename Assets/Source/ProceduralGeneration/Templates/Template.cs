@@ -84,7 +84,7 @@ namespace Cardificer
         }
 
         [Tooltip("The tiles on the template")]
-        private List<TilesList> tiles;
+        [SerializeField] private List<TilesList> tiles;
 
         /// <summary>
         /// Indexer
