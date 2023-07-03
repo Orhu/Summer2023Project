@@ -9,7 +9,7 @@ namespace Cardificer
     [CreateAssetMenu(fileName = "NewAddHoming", menuName = "Cards/AttackModifers/Add[Stat]/AddHoming")]
     public class AddHoming : AttackModifier
     {
-        [Tooltip("The speed in tile/s^2 that projectiles will accelerate towards the closest enemy, to add. 10% = 1")]
+        [Tooltip("The percentage of the max speed to add to the acceleration towards the target. 1 = 100%")]
         [SerializeField] private float homingSpeed;
 
         [Tooltip("The amount of duration that this will home for, in seconds to add.")]
@@ -23,7 +23,7 @@ namespace Cardificer
         {
             set
             {
-                value.homingSpeed += homingSpeed*value.maxSpeed; // This allows homing to scale appropriately based on the velocity of the projectile
+                value.homingSpeed += homingSpeed * value.maxSpeed; // This allows homing to scale appropriately based on the velocity of the projectile
                 value.remainingHomingTime += homingTime;
             }
         }

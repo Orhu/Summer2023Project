@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
   m_Name: OrbitAttack_BlackHoleGravityWell
   m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 0}
   attack:
     damage: 0
     damageType: 0
@@ -30,15 +31,20 @@ MonoBehaviour:
   maxSpeed: 0
   homingSpeed: 0
   homingTime: 0
+  homingDelay: 0
   homingAimMode: 0
+  switchAfterHit: 0
   visualObject: {fileID: 1471303780206332900, guid: 88b068a8d02932b4cbe2fe2ff5658824, type: 3}
   detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
   spawnLocation: 1
   aimMode: 0
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
   previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   _spawnSequence:
-  - delay: 0
+  - delay: 3
     startingAngle: 0
     radius: 0
     orbitDirection: 0

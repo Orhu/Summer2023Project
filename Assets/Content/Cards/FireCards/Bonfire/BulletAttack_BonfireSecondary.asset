@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_BonfireSecondary
   m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 0}
   attack:
     damage: 2
     damageType: 1
     statusEffects:
-    - {fileID: 11400000, guid: a7795ac2bb081394493bc3295edaefc1, type: 2}
+    - {fileID: 11400000, guid: 6582cb2ec20bdde4d80f48c0c1d17bc0, type: 2}
     invertInvincibility: 0
   hitCount: 1
   applyDamageOnHit: 1
@@ -30,11 +31,16 @@ MonoBehaviour:
   maxSpeed: 5
   homingSpeed: 0
   homingTime: 0
+  homingDelay: 0
   homingAimMode: 1
+  switchAfterHit: 0
   visualObject: {fileID: 7328043406772725304, guid: 9b05330ee0b8e254183773e53812113b, type: 3}
   detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
   spawnLocation: 0
   aimMode: 3
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   _spawnSequence:
