@@ -36,9 +36,6 @@ namespace Cardificer
         // Whether or not we are in placing mode
         private bool inPlacingMode = true;
 
-        // Whether or not one click is needed to allow placement (so that when you select a tile in the content drawer then go back it doesn't place the tile)
-        private bool initialClickNeeded = false;
-
         // The last selected game object (so it doesn't print a warning 9 million times)
         private string lastSelectedObjectName = "";
 
@@ -71,44 +68,37 @@ namespace Cardificer
 
             if (Input.GetMouseButtonUp(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() && !isOutside)
             {
-                if (initialClickNeeded)
+                Vector2Int gridPos = MousePosToGridPos(Input.mousePosition);
+
+                // Unselecting tile
+                if (templateCreator.IsGridPosOutsideBounds(gridPos))
                 {
-                    initialClickNeeded = false;
+                    Destroy(heldTile);
+                    heldTile = null;
+                    nullSprite.SetActive(false);
+                    #if UNITY_EDITOR
+                    Selection.activeGameObject = templateCreator.gameObject;
+                    #endif
                 }
+
+                // Placing tile
+                if (inPlacingMode)
+                {
+                    if (heldTile != null)
+                    {
+                        templateCreator.PlaceTile(heldTile.GetComponent<Tile>(), gridPos);
+                    }
+                }
+
+                // Selecting tile
                 else
                 {
-                    Vector2Int gridPos = MousePosToGridPos(Input.mousePosition);
-
-                    // Unselecting tile
-                    if (templateCreator.IsGridPosOutsideBounds(gridPos))
+                    #if UNITY_EDITOR
+                    if (templateCreator.GetTile(gridPos) != null)
                     {
-                        Destroy(heldTile);
-                        heldTile = null;
-                        nullSprite.SetActive(false);
-                        #if UNITY_EDITOR
-                        Selection.activeGameObject = templateCreator.gameObject;
-                        #endif
+                        Selection.activeGameObject = templateCreator.GetTile(gridPos).gameObject;
                     }
-
-                    // Placing tile
-                    if (inPlacingMode)
-                    {
-                        if (heldTile != null)
-                        {
-                            templateCreator.PlaceTile(heldTile.GetComponent<Tile>(), gridPos);
-                        }
-                    }
-
-                    // Selecting tile
-                    else
-                    {
-                        #if UNITY_EDITOR
-                        if (templateCreator.GetTile(gridPos) != null)
-                        {
-                            Selection.activeGameObject = templateCreator.GetTile(gridPos).gameObject;
-                        }
-                        #endif
-                    }
+                    #endif
                 }
             }
 
@@ -149,18 +139,6 @@ namespace Cardificer
 
             UpdateHeldTile();
             lastMousePosition = Input.mousePosition;
-        }
-
-        /// <summary>
-        /// Sets that you need an initial click when the game window loses focus
-        /// </summary>
-        /// <param name="focus"> The new focus </param>
-        private void OnApplicationFocus(bool focus)
-        {
-            if (!focus)
-            {
-                initialClickNeeded = true;
-            }
         }
 
         /// <summary>
