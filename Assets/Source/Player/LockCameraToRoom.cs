@@ -12,7 +12,10 @@ namespace Cardificer
         public float speed = 10;
 
         [Tooltip("The extra height that is added onto the size of the rooms")]
-        public float extraHeight;
+        public float defaultExtraHeight;
+
+        // The current extra height
+        private float extraHeight;
 
         // The extra width (determined from the extra height and aspect ratio)
         private float extraWidth;
@@ -22,9 +25,6 @@ namespace Cardificer
 
         // The width of the camera (determined from the height and aspect ratio)
         private float width;
-
-        // A reference to the floor generator
-        private FloorGenerator floorGenerator;
 
         // A reference to the player
         private GameObject player;
@@ -38,12 +38,24 @@ namespace Cardificer
         // The maximum position of the camera
         private Vector2 maxPosition;
 
+        // The speed at which the camera zooms (determined by the regular speed)
+        public float zoomSpeed = 5;
+
         /// <summary>
         /// Initializes the height, floor generator, and player references
         /// </summary>
         private void Start()
         {
-            Vector2 roomScale = FloorGenerator.floorGeneratorInstance.cellSize;
+            if (FloorGenerator.map.startRoom.roomType.overrideExtraHeight)
+            {
+                extraHeight = FloorGenerator.map.startRoom.roomType.extraHeight;
+            }
+            else
+            {
+                extraHeight = defaultExtraHeight;
+            }
+
+            Vector2 roomScale = FloorGenerator.cellSize;
 
             if (roomScale.y > roomScale.x * (1 / GetComponent<Camera>().aspect))
             {
@@ -60,11 +72,10 @@ namespace Cardificer
             extraWidth = extraHeight * GetComponent<Camera>().aspect / 2;
             width = height * GetComponent<Camera>().aspect;
 
-            floorGenerator = FloorGenerator.floorGeneratorInstance;
-            floorGenerator.onRoomChange.AddListener(OnRoomChange);
+            FloorGenerator.onRoomChange.AddListener(OnRoomChange);
             player = Player.Get();
 
-            DetermineMinAndMax(floorGenerator.map.startRoom);
+            DetermineMinAndMax(FloorGenerator.map.startRoom);
         }
 
         //TODO: DELETE
@@ -75,12 +86,12 @@ namespace Cardificer
             if (Input.GetKeyDown(KeyCode.M))
             {
                 GetComponent<Camera>().orthographicSize *= 10;
-                FloorGenerator.floorGeneratorInstance.ShowLayout(false);
+                FloorGenerator.ShowLayout(false);
             }
             if (Input.GetKeyUp(KeyCode.M))
             {
                 GetComponent<Camera>().orthographicSize /= 10;
-                FloorGenerator.floorGeneratorInstance.HideLayout();
+                FloorGenerator.HideLayout();
             }
         }
         #endregion Stuff to Delete
@@ -90,7 +101,7 @@ namespace Cardificer
         /// </summary>
         private void FixedUpdate()
         {
-            if (floorGenerator.currentRoom == null)
+            if (!FloorGenerator.IsValid() || FloorGenerator.currentRoom == null)
             {
                 return;
             }
@@ -152,23 +163,29 @@ namespace Cardificer
             Room roomToUse;
             if (room == null)
             {
-                roomToUse = floorGenerator.currentRoom;
+                roomToUse = FloorGenerator.currentRoom;
             }
             else
             {
                 roomToUse = room;
             }
 
-            Vector2Int roomLocation = roomToUse.roomLocation;
-            Vector2 roomWorldBottomLeftCellMiddleLocation = FloorGenerator.TransformMapToWorld(roomLocation, floorGenerator.map.startRoom.roomLocation, floorGenerator.cellSize);
-            Vector2 roomWorldBottomLeftLocation = roomWorldBottomLeftCellMiddleLocation - floorGenerator.cellSize / 2;
-            Vector2 roomWorldTopRightCellMiddleLocation = FloorGenerator.TransformMapToWorld(roomLocation + roomToUse.roomType.sizeMultiplier - new Vector2Int(1, 1), floorGenerator.map.startRoom.roomLocation, floorGenerator.cellSize);
-            Vector2 roomWorldTopRightLocation = roomWorldTopRightCellMiddleLocation - floorGenerator.cellSize / 2 - Vector2.one;
-            roomWorldTopRightLocation += floorGenerator.cellSize;
+            if (roomToUse == null)
+            {
+                return;
+            }
 
-            minPosition.x = roomWorldBottomLeftCellMiddleLocation.x - width / 2;
+            Vector2Int roomLocation = roomToUse.roomLocation;
+            Vector2 roomWorldBottomLeftCellMiddleLocation = FloorGenerator.TransformMapToWorld(roomLocation, FloorGenerator.map.startRoom.roomLocation, FloorGenerator.cellSize);
+            Vector2 roomWorldBottomLeftLocation = roomWorldBottomLeftCellMiddleLocation - FloorGenerator.cellSize / 2;
+            Vector2 roomWorldTopRightCellMiddleLocation = FloorGenerator.TransformMapToWorld(roomLocation + roomToUse.roomType.sizeMultiplier - new Vector2Int(1, 1), FloorGenerator.map.startRoom.roomLocation, FloorGenerator.cellSize);
+            Vector2 roomWorldTopRightLocation = roomWorldTopRightCellMiddleLocation - FloorGenerator.cellSize / 2 - Vector2.one;
+            roomWorldTopRightLocation += FloorGenerator.cellSize;
+
+            float newWidth = (height - extraHeight + extraHeight) * GetComponent<Camera>().aspect;
+            minPosition.x = roomWorldBottomLeftCellMiddleLocation.x - newWidth / 2;
             minPosition.y = roomWorldBottomLeftLocation.y - extraHeight / 2 - 0.5f;
-            maxPosition.x = roomWorldTopRightCellMiddleLocation.x + width / 2;
+            maxPosition.x = roomWorldTopRightCellMiddleLocation.x + newWidth / 2;
             maxPosition.y = roomWorldTopRightLocation.y + extraHeight / 2 + 0.5f;
         }
 
@@ -177,30 +194,88 @@ namespace Cardificer
         /// </summary>
         private void OnRoomChange()
         {
-            if (floorGenerator.currentRoom == null) { return; }
+            if (FloorGenerator.currentRoom == null) { return; }
+            float newExtraHeight;
+            if (FloorGenerator.currentRoom.roomType.overrideExtraHeight)
+            {
+                newExtraHeight = FloorGenerator.currentRoom.roomType.extraHeight;
+            }
+            else
+            {
+                newExtraHeight = defaultExtraHeight;
+            }
+
+            // Get the zoom speed so that zooming takes the same time as moving
+            // (or at least a pretty close approximation since determine min and max might change a bit)
             DetermineMinAndMax();
-            StartCoroutine(MoveCameraToRoom());
+            Vector3 position = GetCameraPosition();
+            Vector2 vector2Transform = new Vector2(transform.position.x, transform.position.y);
+            Vector2 vector2Position = new Vector2(position.x, position.y);
+            zoomSpeed = (Mathf.Abs(extraHeight - newExtraHeight) * (speed)) / ((vector2Transform - vector2Position).magnitude);
+
+            StartCoroutine(MoveCameraToRoom(newExtraHeight));
         }
 
         /// <summary>
         /// Moves the camera into a room
         /// </summary>
         /// <returns> IEnumerator so the camera doesn't try to move regularly; it waits for this to finish </returns>
-        private IEnumerator MoveCameraToRoom()
+        private IEnumerator MoveCameraToRoom(float newExtraHeight)
         {
             snapping = true;
 
-            Vector3 position = GetCameraPosition();
-
-            Vector2 vector2Transform = new Vector2(transform.position.x, transform.position.y);
-            Vector2 vector2Position = new Vector2(position.x, position.y);
-
-            while ((vector2Transform - vector2Position).magnitude > Time.fixedDeltaTime * speed)
+            bool zoomIn = height > (height - extraHeight) + defaultExtraHeight;
+            bool moving = true;
+            bool zooming = extraHeight != newExtraHeight;
+            while (moving || zooming)
             {
-                Vector2 offset = (vector2Position - vector2Transform).normalized * Time.fixedDeltaTime * speed;
-                transform.position = new Vector3(offset.x + transform.position.x, offset.y + transform.position.y, position.z);
-                vector2Transform = new Vector2(transform.position.x, transform.position.y);
-                vector2Position = new Vector2(position.x, position.y);
+                DetermineMinAndMax();
+                Vector3 position = GetCameraPosition();
+                Vector2 vector2Transform = new Vector2(transform.position.x, transform.position.y);
+                Vector2 vector2Position = new Vector2(position.x, position.y);
+
+                moving = (vector2Transform - vector2Position).magnitude > Time.fixedDeltaTime * speed;
+                if (moving)
+                {
+                    Vector2 offset = (vector2Position - vector2Transform).normalized * Time.fixedDeltaTime * speed;
+                    transform.position = new Vector3(offset.x + transform.position.x, offset.y + transform.position.y, position.z);
+                }
+                else
+                {
+                    transform.position = GetCameraPosition();
+                }
+
+                float zoomOffset = Time.fixedDeltaTime * zoomSpeed;
+                if (zoomIn)
+                {
+                    zoomOffset = -zoomOffset;
+                }
+
+                if (zoomIn)
+                {
+                    zooming = extraHeight + zoomOffset > newExtraHeight;
+                }
+                else
+                {
+                    zooming = extraHeight + zoomOffset < newExtraHeight;
+                }
+                if (zooming)
+                {
+                    height += zoomOffset;
+                    extraHeight += zoomOffset;
+                    GetComponent<Camera>().orthographicSize = height / 2;
+                    extraWidth = extraHeight * GetComponent<Camera>().aspect / 2;
+                    width = height * GetComponent<Camera>().aspect;
+                }
+                else
+                {
+                    height -= extraHeight;
+                    extraHeight = newExtraHeight;
+                    height += extraHeight;
+                    GetComponent<Camera>().orthographicSize = height / 2;
+                    extraWidth = extraHeight * GetComponent<Camera>().aspect / 2;
+                    width = height * GetComponent<Camera>().aspect;
+                }
                 yield return null;
             }
 

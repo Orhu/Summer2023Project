@@ -4,98 +4,98 @@ using UnityEngine;
 namespace Cardificer
 {
     /// <summary>
-    /// A template, to be used for generating the interior of rooms
+    /// A template, to be used for generating the interior of rooms.
+    /// The prefab this component is on will have several children that have tile components
     /// </summary>
-    public class Template : ScriptableObject
+    public class Template : MonoBehaviour
     {
-        [Tooltip("The tiles in this template")]
-        public List<TilesList> tiles;
-
-        [Tooltip("The enemy pools that this template has")]
-        public EnemyPools enemyPools;
-
-        [Tooltip("The size of the room this template is for")]
-        [field: SerializeField] private Vector2Int _roomSize;
-        public Vector2Int roomSize
+        [Tooltip("The map cell size")]
+        [SerializeField] private Vector2Int _mapCellSize = new Vector2Int(17, 11);
+        public Vector2Int mapCellSize
         {
-            get { return _roomSize; }
             set
             {
-                _roomSize = value;
+                _mapCellSize = value;
+                roomSize = sizeMultiplier * _mapCellSize;
+            }
+            get { return _mapCellSize; }
+        }
+
+        [Tooltip("The size multiplier for this template")]
+        [SerializeField] private Vector2Int _sizeMultiplier = new Vector2Int(1, 1);
+        public Vector2Int sizeMultiplier
+        {
+            set
+            {
+                _sizeMultiplier = value;
+                roomSize = _sizeMultiplier * mapCellSize;
+            }
+            get { return _sizeMultiplier; }
+        }
+
+        // The size of the room this template is for
+        public Vector2Int roomSize
+        {
+            get 
+            { 
+                return mapCellSize * sizeMultiplier; 
+            }
+            private set
+            {
                 tiles = new List<TilesList>();
-                for (int i = 0; i < _roomSize.x; i++)
+                for (int i = 0; i < roomSize.x; i++)
                 {
                     tiles.Add(new TilesList());
-                    for (int j = 0; j < _roomSize.y; j++)
+                    for (int j = 0; j < roomSize.y; j++)
                     {
-                        tiles[i].Add(new TemplateTile());
-                        tiles[i][j].tileType = TileType.None;
+                        tiles[i].tiles.Add(null);
                     }
                 }
             }
         }
 
-        // The enemy pool that was chosen for this template
-        [HideInInspector] public EnemyPool chosenEnemyPool;
-    }
-
-    /// <summary>
-    /// A pared-down version of a tile for use in the template. This information will be used to generate the tilemaps
-    /// </summary>
-    [System.Serializable]
-    public class TemplateTile
-    {
-        [Tooltip("The sprite to use to display this tile during template creation")]
-        public Sprite sprite;
-
-        [Tooltip("The type of this tile")]
-        public TileType tileType = TileType.None;
-
-        [Tooltip("The preferred tile to spawn")]
-        public Tile preferredTile;
-    }
-
-    /// <summary>
-    /// List wrapper so unity properly serializes a multi-dimensional list (why isn't this built in)
-    /// </summary>
-    [System.Serializable]
-    public class TilesList
-    {
-        [Tooltip("A row of tiles")]
-        public List<TemplateTile> tiles;
-
         /// <summary>
-        /// Constructor that constructs the inner tiles list
+        /// Class that contains a list of tiles so the templates can be serialized correctly
         /// </summary>
-        public TilesList()
+        [System.Serializable]
+        private class TilesList
         {
-            tiles = new List<TemplateTile>();
-        }
+            [Tooltip("The list of tiles")]
+            public List<Tile> tiles;
 
-        /// <summary>
-        /// Operator overload so the wrapper can still be used as a regular list
-        /// </summary>
-        /// <param name="index"> The index within the list to access </param>
-        /// <returns> The tile at the given index </returns>
-        public TemplateTile this[int index]
-        {
-            get
+            /// <summary>
+            /// Constructor that initializes the tiles
+            /// </summary>
+            public TilesList()
             {
-                return tiles[index];
+                tiles = new List<Tile>();
             }
-            set
+
+            /// <summary>
+            /// Indexer
+            /// </summary>
+            /// <param name="i"> The index </param>
+            /// <returns> The tile at that index </returns>
+            public Tile this[int i]
             {
-                tiles[index] = value;
+                get => tiles[i];
+                set => tiles[i] = value;
             }
         }
 
+        [Tooltip("The tiles on the template")]
+        [SerializeField] private List<TilesList> tiles;
+
         /// <summary>
-        /// Wraps the normal list with another add so it's possible to add directly to the wrapper
+        /// Indexer
         /// </summary>
-        /// <param name="addedTile"> The added tile </param>
-        public void Add(TemplateTile addedTile)
+        /// <param name="i"> the first index </param>
+        /// <param name="j"> The second index </param>
+        /// <returns> The tile at those indices </returns>
+        public Tile this[int i, int j]
         {
-            tiles.Add(addedTile);
+            get => tiles[i][j];
+            set => tiles[i][j] = value;
         }
     }
 }

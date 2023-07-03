@@ -79,11 +79,9 @@ namespace Cardificer
             }
 
             bool shouldCloseDoors = !generated;
-            Generate(spawnEnemies);
+            bool enemiesPresent = Generate(spawnEnemies);
 
-            bool enemiesPresent = template.chosenEnemyPool.enemies != null && template.chosenEnemyPool.enemies.Count != 0;
-
-            FloorGenerator.floorGeneratorInstance.currentRoom = this;
+            FloorGenerator.currentRoom = this;
 
             // Move player into room, then close/activate doors (so player doesn't get trapped in door)
             StartCoroutine(MovePlayer(direction, shouldCloseDoors && enemiesPresent, callCleared && (!enemiesPresent && shouldCloseDoors)));
@@ -129,6 +127,7 @@ namespace Cardificer
         /// </summary>
         /// <param name="direction"> The direction the player entered in </param>
         /// <param name="shouldCloseDoors"> Whether or not the doors should close </param>
+        /// <param name="clearRoom"> Whether or not on cleared should be called </param>
         /// <returns> Enumerator so other functions can wait for this to finish </returns>
         public IEnumerator MovePlayer(Direction direction, bool shouldCloseDoors, bool clearRoom)
         {
@@ -243,14 +242,16 @@ namespace Cardificer
         /// Generates the template of the room
         /// </summary>
         /// <param name="spawnEnemies"> Whether or not to spawn enemies </param>
-        public void Generate(bool spawnEnemies = true)
+        /// <returns> Whether or not enemies were spawned </returns>
+        public bool Generate(bool spawnEnemies = true)
         {
             if (!generated)
             {
-                Template template = FloorGenerator.floorGeneratorInstance.templateGenerationParameters.GetRandomTemplate(roomType);
-                GetComponent<TemplateGenerator>().Generate(this, template, spawnEnemies);
+                Template template = FloorGenerator.templateParams.GetRandomTemplate(roomType);
                 generated = true;
+                return GetComponent<TemplateGenerator>().Generate(this, template, spawnEnemies);
             }
+            return false;
         }
 
         /// <summary>
@@ -304,46 +305,5 @@ namespace Cardificer
         }
 
         #endregion
-    }
-
-    /// <summary>
-    /// A dictionary that maps room types to exterior generation parameters
-    /// </summary>
-    [System.Serializable]
-    public class RoomTypesToRoomExteriorGenerationParameters
-    {
-        [Tooltip("A list of room types to exterior generation parameters")]
-        [SerializeField] public List<RoomTypeToRoomExteriorGenerationParameters> roomTypesToRoomExteriorGenerationParameters;
-
-        /// <summary>
-        /// Gets the exterior generation parameters associated with the given room type
-        /// </summary>
-        /// <param name="roomType"> The room type to find the exterior generation parameters of </param>
-        /// <returns> The exterior generation parameters </returns>
-        public RoomExteriorGenerationParameters At(RoomType roomType)
-        {
-            for (int i = 0; i < roomTypesToRoomExteriorGenerationParameters.Count; i++)
-            {
-                if (roomTypesToRoomExteriorGenerationParameters[i].roomType == roomType)
-                {
-                    return roomTypesToRoomExteriorGenerationParameters[i].roomExteriorGenerationParameters;
-                }
-            }
-
-            throw new System.Exception("No room of type " + roomType.ToString() + " in dictionary of room types to room exterior generation parameters");
-        }
-    }
-
-    /// <summary>
-    /// A sturct that holds a room type and its associated exterior generation parameters
-    /// </summary>
-    [System.Serializable]
-    public struct RoomTypeToRoomExteriorGenerationParameters
-    {
-        [Tooltip("The type")]
-        [SerializeField] public RoomType roomType;
-
-        [Tooltip("The generation parameters associated with that type")]
-        [SerializeField] public RoomExteriorGenerationParameters roomExteriorGenerationParameters;
     }
 }

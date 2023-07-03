@@ -87,7 +87,7 @@ namespace Cardificer
         {
             if (enterable)
             {
-                FloorGenerator.floorGeneratorInstance.currentRoom.Exit();
+                FloorGenerator.currentRoom.Exit();
 
                 // Get the opposite direction (since the bottom door of this room goes to the top door of the next room)
                 int oppositeDirection = (int)direction;

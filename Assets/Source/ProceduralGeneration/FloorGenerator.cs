@@ -9,67 +9,100 @@ namespace Cardificer
 {
     /// <summary>
     /// Handles generation for an entire floor: The layout and the external rooms. 
-    /// The rooms handle their own internal generation, but they will use the parameters on this generator (the templates).
+    /// The rooms handle their own internal generation, but they will use the Params on this generator (the templates).
     /// </summary>
     public class FloorGenerator : MonoBehaviour
     {
-        [Tooltip("The generation parameters for the layout of this floor")]
-        public LayoutGenerationParameters layoutGenerationParameters;
-
-        [Tooltip("The template generation parameters for this floor")] [EditInline]
-        [SerializeField] public TemplateGenerationParameters templateGenerationParameters;
-
-        [Tooltip("The size of a map cell on this floor")]
-        public Vector2Int cellSize;
-
-        [Tooltip("A dictionary that holds room types and their associated exterior generation parameters for this floor")]
-        public RoomTypesToRoomExteriorGenerationParameters roomTypesToExteriorGenerationParameters;
-
+        [Header("Seed Params")]
         [Tooltip("The seed to use for generation")]
-        public int seed = 0;
+        [SerializeField] private int _seed = 0;
+        static public int seed
+        {
+            get => instance._seed;
+            private set => instance._seed = value;
+        }
 
         [Tooltip("Whether or not to randomize the seed on start")]
-        public bool randomizeSeed;
+        [SerializeField] private bool _randomizeSeed;
+        static public bool randomizeSeed => instance._randomizeSeed;
+
+        [Header("General Params")]
 
         [Tooltip("The file to save the generation settings in")]
-        public string generationSettingsFileName = "GenerationSettings";
+        [SerializeField] private string _generationSettingsFileName = "GenerationSettings";
+        static public string generationSettingsFileName => instance._generationSettingsFileName;
+
+        [Tooltip("The size of a map cell on this floor")]
+        [SerializeField] private Vector2Int _cellSize;
+        static public Vector2Int cellSize => instance._cellSize;
 
         // Event called when the room is changed
-        [HideInInspector] public UnityEvent onRoomChange;
+        [SerializeField] private UnityEvent _onRoomChange;
+        static public UnityEvent onRoomChange
+        {
+            get => instance._onRoomChange;
+            set => instance._onRoomChange = value;
+        }
+
+        [Header("Specific Params")]
+
+        [Tooltip("The generation Params for the layout of this floor")] [EditInline]
+        [SerializeField] private LayoutParams _layoutParams;
+        static public LayoutParams layoutParams
+        {
+            get => instance._layoutParams;
+            private set => instance._layoutParams = value;
+        }
+
+        [Tooltip("A dictionary that holds room types and their associated exterior generation Params for this floor")]
+        [EditInline]
+        [SerializeField] private RoomTypesToRoomExteriorParams _roomTypesToExteriorParams;
+        static public RoomTypesToRoomExteriorParams roomTypesToExteriorParams
+        {
+            get => instance._roomTypesToExteriorParams;
+            private set => instance._roomTypesToExteriorParams = value;
+        }
+
+        [Tooltip("The template generation Params for this floor")] [EditInline]
+        [SerializeField] private TemplateParams _templateParams;
+        static public TemplateParams templateParams
+        {
+            get => instance._templateParams;
+            private set => instance._templateParams = value;
+        }
 
         // The random instance
         [HideInInspector] static public System.Random random;
 
         // A reference to the generated map
-        [HideInInspector] public Map map;
+        [HideInInspector] static public Map map;
 
         // The room the player is currently in
         private Room _currentRoom;
-        [HideInInspector]
-        public Room currentRoom
+        static public Room currentRoom
         {
-            get { return _currentRoom; }
+            get { return instance._currentRoom; }
             set
             {
-                _currentRoom = value;
-                StartCoroutine(InvokeRoomChangeAfterFrame());
+                instance._currentRoom = value;
+                instance.StartCoroutine(instance.InvokeRoomChangeAfterFrame());
             }
         }
-        
+
         // The instance
-        public static FloorGenerator floorGeneratorInstance { get; private set; }
+        private static FloorGenerator instance;
 
         /// <summary>
         /// Sets up the singleton
         /// </summary>
         private void Awake()
         {
-            if (floorGeneratorInstance != null && floorGeneratorInstance != this)
+            if (instance != null && instance != this)
             {
                 Destroy(gameObject);
                 return;
             }
-            floorGeneratorInstance = this;
+            instance = this;
         }
 
 
@@ -90,12 +123,12 @@ namespace Cardificer
             random = new System.Random(seed);
 
             Dictionary<RoomType, int> templateCounts = new Dictionary<RoomType, int>();
-            foreach (RoomTypeToLayoutParameters roomType in layoutGenerationParameters.roomTypesToLayoutParameters.roomTypesToLayoutParameters)
+            foreach (RoomTypeToLayoutParams roomType in layoutParams.roomTypesToLayoutParams.roomTypesToLayoutParams)
             {
                 templateCounts.Add(roomType.roomType, 0);
                 try
                 {
-                    foreach (DifficultyToTemplates difficultyToTemplates in templateGenerationParameters.templatesPool.At(roomType.roomType).difficultiesToTemplates)
+                    foreach (DifficultyToTemplates difficultyToTemplates in templateParams.templatesPool.At(roomType.roomType).difficultiesToTemplates)
                     {
                         templateCounts[roomType.roomType] += difficultyToTemplates.templates.Count;
                     }
@@ -105,11 +138,15 @@ namespace Cardificer
                     Debug.LogError("No templates associated with room type " + roomType.roomType);
                 }
             }
-            map = GetComponent<LayoutGenerator>().Generate(layoutGenerationParameters, templateCounts);
-            GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorGenerationParameters, map, cellSize);
+
+            layoutParams = Instantiate(layoutParams);
+            roomTypesToExteriorParams = Instantiate(roomTypesToExteriorParams);
+
+            map = GetComponent<LayoutGenerator>().Generate(layoutParams, templateCounts);
+            GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorParams, map, cellSize);
             SaveLayoutGenerationSettings();
 
-            templateGenerationParameters = Instantiate(templateGenerationParameters);
+            templateParams = Instantiate(templateParams);
 
             // Autosave loading
             if (!SaveManager.autosaveExists) 
@@ -137,6 +174,15 @@ namespace Cardificer
         }
 
         /// <summary>
+        /// Checks if the instance is initialized yet
+        /// </summary>
+        /// <returns> Whether or not the instance is initialized </returns>
+        static public bool IsValid()
+        {
+            return instance != null;
+        }
+
+        /// <summary>
         /// Transforms a map location to a world location
         /// </summary>
         /// <param name="mapLocation"> The location to transform </param>
@@ -148,16 +194,17 @@ namespace Cardificer
             return new Vector2((mapLocation.x - startLocation.x) * cellSize.x, (mapLocation.y - startLocation.y) * cellSize.y);
         }
 
+
         /// <summary>
         /// Sets all the rooms to active for debugging purposes
         /// </summary>
-        public void ShowLayout(bool showUnvisited = true)
+        static public void ShowLayout(bool showUnvisited = true)
         {
-            for (int i = 0; i < transform.GetChild(0).childCount; i++)
+            for (int i = 0; i < instance.transform.GetChild(0).childCount; i++)
             {
-                for (int j = 0; j < transform.GetChild(0).GetChild(i).childCount; j++)
+                for (int j = 0; j < instance.transform.GetChild(0).GetChild(i).childCount; j++)
                 {
-                    GameObject room = transform.GetChild(0).GetChild(i).GetChild(j).gameObject;
+                    GameObject room = instance.transform.GetChild(0).GetChild(i).GetChild(j).gameObject;
                     room.SetActive(showUnvisited || room.transform.GetComponentInParent<Room>().generated);
                 }
             }
@@ -166,40 +213,31 @@ namespace Cardificer
         /// <summary>
         /// Reverses ShowLayout
         /// </summary>
-        public void HideLayout()
+        static public void HideLayout()
         {
-            for (int i = 0; i < transform.GetChild(0).childCount; i++)
+            for (int i = 0; i < instance.transform.GetChild(0).childCount; i++)
             {
-                for (int j = 0; j < transform.GetChild(0).GetChild(i).childCount; j++)
+                for (int j = 0; j < instance.transform.GetChild(0).GetChild(i).childCount; j++)
                 {
-                    GameObject room = transform.GetChild(0).GetChild(i).GetChild(j).gameObject;
+                    GameObject room = instance.transform.GetChild(0).GetChild(i).GetChild(j).gameObject;
                     room.SetActive(currentRoom.gameObject == room.transform.parent.gameObject);
                 }
             }
         }
 
-        /// <summary>
-        /// Invokes room change after 1 frame. This allows for room change to be called *after* the new room is set to active.
-        /// </summary>
-        /// <returns> Waits 1 frame before invoking </returns>
-        private IEnumerator InvokeRoomChangeAfterFrame()
-        {
-            yield return null; // wait one frame
-            onRoomChange?.Invoke();
-        }
 
         /// <summary>
         /// Saves the layout generation settings to a file for later reference
         /// </summary>
-        public void SaveLayoutGenerationSettings()
+        static public void SaveLayoutGenerationSettings()
         {
             string fileText = "Seed: " + seed.ToString() + "\n\n";
-            fileText += "Room Types and their layout parameters: \n\n";
+            fileText += "Room Types and their layout\n\n";
             
-            foreach(RoomTypeToLayoutParameters roomTypeToLayoutParameters in layoutGenerationParameters.roomTypesToLayoutParameters.roomTypesToLayoutParameters)
+            foreach(RoomTypeToLayoutParams roomTypeToLayoutParams in layoutParams.roomTypesToLayoutParams.roomTypesToLayoutParams)
             {
                 fileText += "==============================================\n";
-                RoomType roomType = roomTypeToLayoutParameters.roomType;
+                RoomType roomType = roomTypeToLayoutParams.roomType;
                 fileText += "Room Type: " + roomType.displayName + "\n";
                 fileText += "Is start room: " + roomType.startRoom.ToString() + "\n";
                 fileText += "Size multiplier: " + roomType.sizeMultiplier.ToString() + "\n";
@@ -230,13 +268,24 @@ namespace Cardificer
                 }
                 fileText += "Use difficulty: " + roomType.useDifficulty.ToString() + "\n";
                 fileText += "Emergency room: " + roomType.emergencyRoom.ToString() + "\n";
-                fileText += "Number of rooms: " + roomTypeToLayoutParameters.numRooms.ToString() + "\n";
-                fileText += "Number of rooms variance: " + roomTypeToLayoutParameters.numRoomsVariance.ToString() + "\n";
+                fileText += "Number of rooms: " + roomTypeToLayoutParams.numRooms.ToString() + "\n";
+                fileText += "Number of rooms variance: " + roomTypeToLayoutParams.numRoomsVariance.ToString() + "\n";
             }
 
             fileText += "==============================================\n";
-            Debug.Log("Saved to file " + generationSettingsFileName + ".log");
             File.WriteAllText("logs/" + generationSettingsFileName + ".log", fileText);
+        }
+
+        /// <summary>
+        /// Invokes room change after 2 frames. This allows for room change to be called *after* the new room is set to active and *after* all the tiles are enabled
+        /// (including tiles created through tile type spawners).
+        /// </summary>
+        /// <returns> Waits 2 frames before invoking </returns>
+        private IEnumerator InvokeRoomChangeAfterFrame()
+        {
+            yield return null; // wait two frames
+            yield return null;
+            onRoomChange?.Invoke();
         }
     }
 }

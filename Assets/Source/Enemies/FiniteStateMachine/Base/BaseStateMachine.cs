@@ -222,8 +222,9 @@ namespace Cardificer.FiniteStateMachine
         {
             SetStats();
             timeStarted = Time.time;
+
             GetComponent<SimpleMovement>().requestSpeedModifications += AdjustMovement;
-            FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies.Add(gameObject);
+            FloorGenerator.currentRoom.livingEnemies.Add(gameObject);
         }
 
         /// <summary>
@@ -305,12 +306,12 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void OnDestroy()
         {
-            if (!gameObject.scene.isLoaded)
+            if (!gameObject.scene.isLoaded || !FloorGenerator.IsValid())
             {
                 return;
             }
 
-            FloorGenerator.floorGeneratorInstance.currentRoom.RemoveEnemy(gameObject);
+            FloorGenerator.currentRoom.RemoveEnemy(gameObject);
         }
 
         /// <summary>

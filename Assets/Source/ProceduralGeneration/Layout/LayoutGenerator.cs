@@ -87,10 +87,10 @@ namespace Cardificer
         /// <summary>
         /// Generates the layout.
         /// </summary>
-        /// <param name="layoutParameters"> The layout generation parameters. </param>
+        /// <param name="layoutParams"> The layout generation Params. </param>
         /// <param name="templateCounts"> The room types and their associated template counts </param>
         /// <param name="generateCallCount"> The number of times generate has been called </param>
-        public Map Generate(LayoutGenerationParameters layoutParameters, Dictionary<RoomType, int> templateCounts, int generateCallCount = 0)
+        public Map Generate(LayoutParams layoutParams, Dictionary<RoomType, int> templateCounts, int generateCallCount = 0)
         {
             Dictionary<RoomType, int> normalRooms = new Dictionary<RoomType, int>();
             Dictionary<RoomType, int> deadEndRooms = new Dictionary<RoomType, int>();
@@ -99,54 +99,54 @@ namespace Cardificer
 
             GenericWeightedThings<RoomType> bossRooms = new GenericWeightedThings<RoomType>();
 
-            foreach (RoomTypeToLayoutParameters roomTypeToLayoutParameters in layoutParameters.roomTypesToLayoutParameters.roomTypesToLayoutParameters)
+            foreach (RoomTypeToLayoutParams roomTypeToLayoutParams in layoutParams.roomTypesToLayoutParams.roomTypesToLayoutParams)
             {
-                if (roomTypeToLayoutParameters.roomType.startRoom)
+                if (roomTypeToLayoutParams.roomType.startRoom)
                 {
                     if (startRoomType == null)
                     {
-                        startRoomType = roomTypeToLayoutParameters.roomType;
+                        startRoomType = roomTypeToLayoutParams.roomType;
                     }
                     else
                     {
-                        Debug.LogWarning("Only one start room will be generated! Disregarding this room type: " + roomTypeToLayoutParameters.roomType.displayName);
+                        Debug.LogWarning("Only one start room will be generated! Disregarding this room type: " + roomTypeToLayoutParams.roomType.displayName);
                     }
 
                     continue;
                 }
 
-                if (roomTypeToLayoutParameters.roomType.bossRoom)
+                if (roomTypeToLayoutParams.roomType.bossRoom)
                 {
-                    bossRooms.Add(roomTypeToLayoutParameters.roomType, templateCounts[roomTypeToLayoutParameters.roomType], 1, true);
+                    bossRooms.Add(roomTypeToLayoutParams.roomType, templateCounts[roomTypeToLayoutParams.roomType], 1, true);
                 }
                 else
                 {
-                    int variance = roomTypeToLayoutParameters.numRoomsVariance;
-                    int numRooms = roomTypeToLayoutParameters.numRooms;
+                    int variance = roomTypeToLayoutParams.numRoomsVariance;
+                    int numRooms = roomTypeToLayoutParams.numRooms;
                     numRooms += FloorGenerator.random.Next(-variance, variance + 1);
-                    if (roomTypeToLayoutParameters.roomType.deadEnd)
+                    if (roomTypeToLayoutParams.roomType.deadEnd)
                     {
-                        deadEndRooms.Add(roomTypeToLayoutParameters.roomType, numRooms);
+                        deadEndRooms.Add(roomTypeToLayoutParams.roomType, numRooms);
                     }
                     else
                     {
-                        normalRooms.Add(roomTypeToLayoutParameters.roomType, numRooms);
+                        normalRooms.Add(roomTypeToLayoutParams.roomType, numRooms);
                     }
                 }
 
-                if (roomTypeToLayoutParameters.roomType.emergencyRoom)
+                if (roomTypeToLayoutParams.roomType.emergencyRoom)
                 {
-                    if (roomTypeToLayoutParameters.roomType.sizeMultiplier != new Vector2Int(1, 1))
+                    if (roomTypeToLayoutParams.roomType.sizeMultiplier != new Vector2Int(1, 1))
                     {
-                        Debug.LogWarning("Emergency rooms may not have a size multiplier other than 1, 1! Disregarding " + roomTypeToLayoutParameters.roomType.displayName + " as a valid emergency room");
+                        Debug.LogWarning("Emergency rooms may not have a size multiplier other than 1, 1! Disregarding " + roomTypeToLayoutParams.roomType.displayName + " as a valid emergency room");
                     }
-                    else if (roomTypeToLayoutParameters.roomType.attachedRoom != null)
+                    else if (roomTypeToLayoutParams.roomType.attachedRoom != null)
                     {
-                        Debug.LogWarning("Emergency rooms may not have an attached room! Disregarding " + roomTypeToLayoutParameters.roomType.displayName + " as a valid emergency room");
+                        Debug.LogWarning("Emergency rooms may not have an attached room! Disregarding " + roomTypeToLayoutParams.roomType.displayName + " as a valid emergency room");
                     }
                     else
                     {
-                        emergencyRooms.Add(roomTypeToLayoutParameters.roomType);
+                        emergencyRooms.Add(roomTypeToLayoutParams.roomType);
                     }
                 }
 
@@ -156,7 +156,7 @@ namespace Cardificer
                 }
             }
 
-            for (int i = 0; i < layoutParameters.numBossRooms; i++)
+            for (int i = 0; i < layoutParams.numBossRooms; i++)
             {
                 RoomType randomBossRoom = bossRooms.GetRandomThing(FloorGenerator.random);
                 if (deadEndRooms.ContainsKey(randomBossRoom))
@@ -181,7 +181,7 @@ namespace Cardificer
             Room startRoom = GenerateStartRoom(genMap, roomContainer, mapSize, startRoomType);
 
             // Get all the branchable cells (which will start out as all the edge normal cells, then cells will be removed from them as it goes along
-            List<MapCell> branchableCells = GenerateNormalRooms(genMap, roomContainer, startRoom, normalRooms, emergencyRooms, layoutParameters.preferredNumDoors, layoutParameters.strictnessNumDoors);
+            List<MapCell> branchableCells = GenerateNormalRooms(genMap, roomContainer, startRoom, normalRooms, emergencyRooms, layoutParams.preferredNumDoors, layoutParams.strictnessNumDoors);
 
             if (!GenerateDeadEnds(genMap, roomContainer, startRoom.startLocation, branchableCells, deadEndRooms))
             {
@@ -189,7 +189,7 @@ namespace Cardificer
                 {
                     throw new System.Exception("Failed to generate all the dead ends three times in a row! Aborting generation. Please remove some dead end rooms or add more normal rooms.");
                 }
-                return Generate(layoutParameters, templateCounts, generateCallCount + 1);
+                return Generate(layoutParams, templateCounts, generateCallCount + 1);
             }
 
             return CreateMap(genMap, startRoom, mapSize);
