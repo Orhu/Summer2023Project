@@ -148,24 +148,25 @@ namespace Cardificer
         /// <param name="actor"> The actor that will be playing this action. </param>
         /// <param name="modifiers"> The modifiers to be applied to this attack. </param>
         /// <param name="causer"> The causer of damage dealt by this attack. </param>
+        /// <param name="attackFinished"> A callback for when the action is finished playing. </param>
         /// <param name="ignoredObjects"> The objects this action will ignore. </param>
-        public virtual void Play(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects = null)
+        public virtual void Play(IActor actor, List<AttackModifier> modifiers, GameObject causer, System.Action attackFinished = null, List<GameObject> ignoredObjects = null)
         {
             AudioManager.instance.PlayAudioAtActor(actionAudioClip, actor);
-            actor.GetActionSourceTransform().GetComponent<MonoBehaviour>().StartCoroutine(PlaySpawnSequence(actor, modifiers, causer, ignoredObjects));
+            actor.GetActionSourceTransform().GetComponent<MonoBehaviour>().StartCoroutine(PlaySpawnSequence(actor, modifiers, causer, attackFinished, ignoredObjects));
 
         }
         public void Play(IActor actor, GameObject causer, List<GameObject> ignoredObjects = null)
         {
-            Play(actor, new List<AttackModifier>(), causer, ignoredObjects);
+            Play(actor, new List<AttackModifier>(), causer, ignoredObjects: ignoredObjects);
         }
-        public void Play(IActor actor, List<AttackModifier> modifiers, List<GameObject> ignoredObjects = null)
+        public void Play(IActor actor, List<AttackModifier> modifiers, System.Action attackFinished = null, List < GameObject> ignoredObjects = null)
         {
-            Play(actor, modifiers, actor.GetActionSourceTransform().gameObject, ignoredObjects);
+            Play(actor, modifiers, actor.GetActionSourceTransform().gameObject, attackFinished, ignoredObjects);
         }
         public sealed override void Play(IActor actor, List<GameObject> ignoredObjects = null)
         {
-            Play(actor, new List<AttackModifier>(), actor.GetActionSourceTransform().gameObject, ignoredObjects);
+            Play(actor, new List<AttackModifier>(), actor.GetActionSourceTransform().gameObject, ignoredObjects: ignoredObjects);
         }
 
 
@@ -175,8 +176,9 @@ namespace Cardificer
         /// <param name="actor"> The actor that is playing this action. </param>
         /// <param name="modifiers"> The modifiers that are applied to this attack. </param>
         /// <param name="causer"> The causer of damage dealt by this attack. </param>
+        /// <param name="attackFinished"> A callback for when the action is finished playing. </param>
         /// <param name="ignoredObjects"> The objects this action will ignore. </param>
-        protected IEnumerator PlaySpawnSequence(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects)
+        protected IEnumerator PlaySpawnSequence(IActor actor, List<AttackModifier> modifiers, GameObject causer, System.Action attackFinished, List<GameObject> ignoredObjects)
         {
             List<ProjectileSpawnInfo> spawnSequence = new List<ProjectileSpawnInfo>(this.spawnSequence);
             var projectileList = new List<Projectile>();
@@ -197,6 +199,7 @@ namespace Cardificer
                     yield return new WaitForEndOfFrame();
                 }
             }
+            attackFinished?.Invoke();
             AudioManager.instance.GetAverageAudioSource(projectileList, travelAudioClip, projectileList.Count > 1);
         }
 

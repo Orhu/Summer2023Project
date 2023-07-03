@@ -41,8 +41,8 @@ namespace Cardificer
         // The indices in the hand of the cards currently being previewed.
         [NonSerialized] public List<int> previewedCardIndices = new List<int>();
 
-        // The indices of the cards on being acted mapped to the remaining action time.
-        [HideInInspector] public Dictionary<int, float> cardIndicesToActionTimes = new Dictionary<int, float>();
+        // The indices of the cards on being acted.
+        [HideInInspector] public List<int> actingCardIndices = new List<int>();
 
         // The indices of the cards on cooldown mapped to the time remaining on the cooldown.
         [HideInInspector] public Dictionary<int, float> cardIndicesToCooldowns = new Dictionary<int, float>();
@@ -64,7 +64,7 @@ namespace Cardificer
         // Whether or not an action is currently being played.
         public bool isActing
         {
-            get => cardIndicesToActionTimes.Count > 0;
+            get => actingCardIndices.Count > 0;
         }
         #endregion
 
@@ -216,7 +216,7 @@ namespace Cardificer
         /// <param name="handIndex"> The index in the hand of the card to discard. </param>
         public void DiscardCard(int handIndex)
         {
-            if (cardIndicesToActionTimes.ContainsKey(handIndex)) { return; }
+            if (actingCardIndices.Contains(handIndex)) { return; }
 
             discardedCards.Add(inHandCards[handIndex]);
             inHandCards[handIndex] = null;
@@ -274,20 +274,6 @@ namespace Cardificer
                     cardIndicesToCooldowns[cardIndexToCooldown.Key] = newValue;
                 }
             }
-
-            foreach (KeyValuePair<int, float> cardIndexToActionTime in new Dictionary<int, float>(cardIndicesToActionTimes))
-            {
-                float newValue = cardIndexToActionTime.Value - Time.deltaTime;
-                if (newValue <= 0)
-                {
-                    cardIndicesToActionTimes.Remove(cardIndexToActionTime.Key);
-                    DiscardCard(cardIndexToActionTime.Key);
-                }
-                else
-                {
-                    cardIndicesToActionTimes[cardIndexToActionTime.Key] = newValue;
-                }
-            }
         }
         #endregion
 
@@ -298,7 +284,7 @@ namespace Cardificer
         /// <param name="handIndex"> The index in the hand of the card. </param>
         public void SelectCard(int handIndex)
         {
-            if (inHandCards.Count <= handIndex || inHandCards[handIndex] == null || cardIndicesToCooldowns.ContainsKey(handIndex) || cardIndicesToActionTimes.ContainsKey(handIndex))
+            if (inHandCards.Count <= handIndex || inHandCards[handIndex] == null || cardIndicesToCooldowns.ContainsKey(handIndex) || actingCardIndices.Contains(handIndex))
             {
                 return;
             }
@@ -363,14 +349,14 @@ namespace Cardificer
         public void PlayCard(int handIndex)
         {
             if (handIndex >= inHandCards.Count) { return; }
-            if (cardIndicesToActionTimes.ContainsKey(handIndex) || cardIndicesToCooldowns.ContainsKey(handIndex)) { return; }
+            if (actingCardIndices.Contains(handIndex) || cardIndicesToCooldowns.ContainsKey(handIndex)) { return; }
 
             Card card = inHandCards[handIndex];
             if (card == null) { return; }
 
             card.PlayActions(actor);
-            cardIndicesToActionTimes.Add(handIndex, card.actionTime);
-            cardIndicesToCooldowns.Add(handIndex, card.cooldownTime + card.actionTime);
+            cardIndicesToCooldowns.Add(handIndex, card.cooldownTime);
+            DiscardCard(handIndex);
         }
 
         /// <summary>
@@ -383,26 +369,27 @@ namespace Cardificer
             List<AttackCard> chordedCards = new List<AttackCard>();
             bool returnValue = false;
 
+            List<int> chordedIndices = new List<int>();
+
             foreach (int handIndex in handIndices)
             {
                 Card card = inHandCards[handIndex];
                 if (card == null) { continue; }
-                if(cardIndicesToActionTimes.ContainsKey(handIndex) || cardIndicesToCooldowns.ContainsKey(handIndex)) { continue; }
+                if(actingCardIndices.Contains(handIndex) || cardIndicesToCooldowns.ContainsKey(handIndex)) { continue; }
 
                 returnValue = true;
                 if (cardToPlay == null && card is AttackCard)
                 {
                     cardToPlay = card as AttackCard;
-                    cardIndicesToActionTimes.Add(handIndex, cardToPlay.actionTime);
-                    cardIndicesToCooldowns.Add(handIndex, cardToPlay.cooldownTime + cardToPlay.actionTime);
+                    chordedIndices.Add(handIndex);
+                    actingCardIndices.Add(handIndex);
                     continue;
                 }
 
-                cardIndicesToActionTimes.Add(handIndex, cardToPlay.actionTime);
-                cardIndicesToCooldowns.Add(handIndex, cardToPlay.cooldownTime + cardToPlay.actionTime);
-
                 if (card is AttackCard)
                 {
+                    chordedIndices.Add(handIndex);
+                    actingCardIndices.Add(handIndex);
                     chordedCards.Add(card as AttackCard);
                 }
                 else
@@ -411,7 +398,17 @@ namespace Cardificer
                 }
             }
 
-            cardToPlay?.PlayActions(actor, chordedCards);
+            cardToPlay?.PlayActions(actor, chordedCards, 
+                // Removes played cards from the acting cards, and starts cooldowns
+                () => 
+                {
+                    actingCardIndices = actingCardIndices.Except(chordedIndices).ToList();
+                    foreach (int chordedIndex in chordedIndices)
+                    {
+                        cardIndicesToCooldowns.Add(chordedIndex, cardToPlay.cooldownTime);
+                        DiscardCard(chordedIndex);
+                    }
+                });
             return returnValue;
         }
 
