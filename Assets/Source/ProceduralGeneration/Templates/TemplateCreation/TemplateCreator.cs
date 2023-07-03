@@ -100,7 +100,6 @@ namespace Cardificer
             string path = "Assets/Content/Templates/" + templateName + ".prefab";
 
 #if UNITY_EDITOR
-            path = AssetDatabase.GenerateUniqueAssetPath(path);
             PrefabUtility.SaveAsPrefabAsset(createdTemplate.gameObject, path);
             AssetDatabase.Refresh();
 
