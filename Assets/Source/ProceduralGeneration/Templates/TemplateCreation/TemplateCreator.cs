@@ -36,7 +36,6 @@ namespace Cardificer
 
         [Tooltip("The size a singular cell in the map")]
         [SerializeField] private Vector2Int _mapCellSize = new Vector2Int(17, 11);
-
         public Vector2Int mapCellSize
         {
             set
@@ -50,7 +49,6 @@ namespace Cardificer
 
         [Tooltip("The size multiplier of this template")]
         [SerializeField] private Vector2Int _sizeMultiplier = new Vector2Int(1, 1);
-
         public Vector2Int sizeMultiplier
         {
             set
@@ -88,8 +86,10 @@ namespace Cardificer
             get => sizeMultiplier.x.ToString();
         }
 
-        [Tooltip("Called when the sizeMultiplierY is edited")]
+        [Tooltip("Called when the sizeMultiplierX is edited")]
         public UnityEvent<string> onSizeMultiplierChangedX;
+
+        [Tooltip("Called when the sizeMultiplierY is edited")]
         public UnityEvent<string> onSizeMultiplierChangedY;
 
         [Header("Scene variables")]
