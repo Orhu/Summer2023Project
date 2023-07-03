@@ -16,7 +16,7 @@ namespace Cardificer
         /// <summary>
         /// Zooms the camera
         /// </summary>
-        /// <param name="scrollDelta"></param>
+        /// <param name="scrollDelta"> The amount the scroll wheel was moved by. </param>
         public void Zoom(Vector2 scrollDelta)
         {
             if (GetComponent<Camera>().orthographicSize + -scrollDelta.y * cameraZoomSpeed <= minZoom)

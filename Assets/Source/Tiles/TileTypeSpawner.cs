@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Cardificer
 {
+    /// <summary>
+    /// Spawns a tile of a certain type.
+    /// </summary>
     [RequireComponent(typeof(Tile))]
     public class TileTypeSpawner : MonoBehaviour
     {
