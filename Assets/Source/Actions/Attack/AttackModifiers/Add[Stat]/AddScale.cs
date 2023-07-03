@@ -5,7 +5,7 @@ namespace Cardificer
     /// <summary>
     /// Makes an attack's projectile bigger.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewAddScale", menuName = "Cards/AttackModifers/Add[Stat]/AddScalse", order = 1)]
+    [CreateAssetMenu(fileName = "NewAddScale", menuName = "Cards/AttackModifers/Add[Stat]/AddScale", order = 1)]
     public class AddScale : AttackModifier
     {
         [Tooltip("The amount to add to the scale.")]
