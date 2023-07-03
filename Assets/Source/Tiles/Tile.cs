@@ -22,13 +22,13 @@ namespace Cardificer
         public int burrowMovementPenalty;
 
         [Tooltip("the x and y location of this tile within the 2D array grid")]
-        public Vector2Int gridLocation;
+        [HideInInspector] public Vector2Int gridLocation;
 
         // Whether or not this tile should disable it's components on start
         [HideInInspector] public bool shouldDisable = true;
 
         // The room that this tile is a part of 
-        public Room room;
+        [HideInInspector] public Room room;
 
         /// <summary>
         /// Disables the game object from starting before it's ready to

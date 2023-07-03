@@ -225,7 +225,8 @@ namespace Cardificer
         /// </summary>
         protected void FixedUpdate()
         {
-            velocity += (Vector2)transform.right * acceleration * Time.fixedDeltaTime;
+            speed = Mathf.Clamp(speed + acceleration * Time.fixedDeltaTime, minSpeed, maxSpeed);
+            velocity = (Vector2)transform.right * speed;
 
             if (remainingHomingDelay <= 0 && remainingHomingTime > 0 && homingSpeed > 0)
             {
@@ -237,7 +238,14 @@ namespace Cardificer
             }
 
             speed = Mathf.Clamp(velocity.magnitude, minSpeed, maxSpeed);
-            rigidBody.velocity = velocity.normalized * speed;
+            velocity = velocity.normalized * speed;
+            if (speed > Mathf.Abs(acceleration) * Time.fixedDeltaTime)
+            {
+                transform.right = velocity;
+                Debug.Log(velocity.magnitude);
+            }
+            rigidBody.velocity = velocity;
+
         }
 
         /// <summary>
