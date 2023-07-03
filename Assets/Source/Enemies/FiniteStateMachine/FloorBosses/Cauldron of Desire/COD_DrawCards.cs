@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Skaillz.EditInline;
 using UnityEngine;
 using Random = System.Random;
@@ -70,12 +71,12 @@ namespace Cardificer.FiniteStateMachine
         private GameObject DisplayCard(BaseStateMachine stateMachine, AttackSequence cardToDisplay)
         {
             var gameObject = new GameObject();
-            gameObject.AddComponent<SpriteRenderer>();
-            gameObject.GetComponent<SpriteRenderer>().sprite = cardToDisplay.abilitySprite;
-            gameObject.AddComponent<Rigidbody2D>();
-            gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
-            gameObject.GetComponent<Rigidbody2D>().velocity += Vector2.up;
-            gameObject.transform.position = stateMachine.transform.position;
+            var spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+            spriteRenderer.sprite = cardToDisplay.abilitySprite;
+            gameObject.transform.position = stateMachine.transform.position + (Vector3.up * 2f);
+            var rigidbody = gameObject.AddComponent<Rigidbody2D>();
+            rigidbody.velocity = Vector3.up;
+            rigidbody.isKinematic = true;
             gameObject.SetActive(true);
             return gameObject;
         }

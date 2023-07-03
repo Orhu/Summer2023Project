@@ -25,10 +25,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
   shape: {fileID: 11400000, guid: 3284061d3059940068ffd1bd5c43f960, type: 2}
   lifetime: 6
-  initialSpeed: 8
-  acceleration: 0
-  minSpeed: 0
-  maxSpeed: 8
+  initialSpeed: 4
+  acceleration: 4
+  minSpeed: 1
+  maxSpeed: 10
   homingSpeed: 24
   homingTime: 1
   homingDelay: 1
@@ -38,35 +38,23 @@ MonoBehaviour:
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
   spawnLocation: 0
-  aimMode: 0
+  aimMode: 6
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   _spawnSequence:
   - delay: 0
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 45
-    offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 90
-    offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 135
+    angle: 180
     offset: {x: 0, y: 0}
   - delay: 0
     angle: 180
     offset: {x: 0, y: 0}
   - delay: 0
-    angle: 225
+    angle: 180
     offset: {x: 0, y: 0}
   - delay: 0
-    angle: 270
+    angle: 180
     offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 315
-    offset: {x: 0, y: 0}
-  randomAngle: 0
+  randomAngle: 180
   randomOffset: 0

@@ -50,9 +50,4 @@ public class BossHealthbarManager : MonoBehaviour
             yield return null; // wait one frame between each loop
         }
     }
-
-   public void DestroyHealthbar()
-    {
-        gameObject.SetActive(false);
-    }
 }

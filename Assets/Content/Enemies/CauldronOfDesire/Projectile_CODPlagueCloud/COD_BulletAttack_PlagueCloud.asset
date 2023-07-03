@@ -25,10 +25,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
   shape: {fileID: 11400000, guid: ac891ee7e012f48419e08e0e8e76f0aa, type: 2}
   lifetime: 10
-  initialSpeed: 5
-  acceleration: 1
+  initialSpeed: 4
+  acceleration: -0.5
   minSpeed: 0
-  maxSpeed: 10
+  maxSpeed: 4
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
@@ -38,7 +38,7 @@ MonoBehaviour:
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
   spawnLocation: 0
-  aimMode: 0
+  aimMode: 6
   travelAudioClip: {fileID: 8300000, guid: 239862206791b59408e3f36496280f72, type: 3}
   impactAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
@@ -48,25 +48,25 @@ MonoBehaviour:
     angle: 0
     offset: {x: 0, y: 0}
   - delay: 0
-    angle: 90
-    offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 180
-    offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 270
-    offset: {x: 0, y: 0}
-  - delay: 5
     angle: 0
     offset: {x: 0, y: 0}
   - delay: 0
-    angle: 90
+    angle: 0
     offset: {x: 0, y: 0}
   - delay: 0
-    angle: 180
+    angle: 0
     offset: {x: 0, y: 0}
   - delay: 0
-    angle: 270
+    angle: 0
     offset: {x: 0, y: 0}
-  randomAngle: 0
+  - delay: 0
+    angle: 0
+    offset: {x: 0, y: 0}
+  - delay: 0
+    angle: 0
+    offset: {x: 0, y: 0}
+  - delay: 0
+    angle: 0
+    offset: {x: 0, y: 0}
+  randomAngle: 180
   randomOffset: 0

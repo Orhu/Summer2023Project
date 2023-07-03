@@ -26,9 +26,9 @@ MonoBehaviour:
   shape: {fileID: 11400000, guid: 250b94653b8ae447fbe32f0d7e6691cf, type: 2}
   lifetime: 8.5
   initialSpeed: 0
-  acceleration: 0.025
+  acceleration: 0.075
   minSpeed: 0
-  maxSpeed: 0.1
+  maxSpeed: 0.2
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
@@ -46,19 +46,11 @@ MonoBehaviour:
   _spawnSequence:
   - delay: 0
     startingAngle: 0
-    radius: 0.5
+    radius: 1.5
     orbitDirection: 0
   - delay: 0
     startingAngle: 90
-    radius: 0.5
-    orbitDirection: 0
-  - delay: 0
-    startingAngle: 180
-    radius: 0.5
-    orbitDirection: 0
-  - delay: 0
-    startingAngle: 270
-    radius: 0.5
+    radius: 1.5
     orbitDirection: 0
   randomStartingAngle: 0
   randomRadius: 0
