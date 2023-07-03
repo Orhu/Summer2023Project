@@ -13,13 +13,19 @@ MonoBehaviour:
   m_Name: PotLoot
   m_EditorClassIdentifier: 
   weightedLoot:
-  - lootItem: {fileID: 0}
-    weight: 0.332
-  - lootItem: {fileID: 783618382500738565, guid: dce001ab3d4a9694b8c3a1ddd2d88ec8, type: 3}
-    weight: 0.167
-  - lootItem: {fileID: 6714493042362316648, guid: 224a920c69bccc64e82d991756b2bf28, type: 3}
-    weight: 0.167
-  - lootItem: {fileID: 8150222507826746130, guid: ef09fcc92358676438d392ec321c60b7, type: 3}
-    weight: 0.167
-  - lootItem: {fileID: 62660331182214947, guid: ef1d62afd5416bb4491972aa3b50760b, type: 3}
-    weight: 0.167
+    things:
+    - thing: {fileID: 0}
+      weight: 0.33333334
+      maxChosen: 0
+    - thing: {fileID: 8150222507826746130, guid: ef09fcc92358676438d392ec321c60b7, type: 3}
+      weight: 0.16666667
+      maxChosen: 0
+    - thing: {fileID: 62660331182214947, guid: ef1d62afd5416bb4491972aa3b50760b, type: 3}
+      weight: 0.1666667
+      maxChosen: 0
+    - thing: {fileID: 6714493042362316648, guid: 224a920c69bccc64e82d991756b2bf28, type: 3}
+      weight: 0.1666667
+      maxChosen: 0
+    - thing: {fileID: 783618382500738565, guid: dce001ab3d4a9694b8c3a1ddd2d88ec8, type: 3}
+      weight: 0.1666667
+      maxChosen: 0
