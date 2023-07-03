@@ -282,7 +282,6 @@ namespace Cardificer
                 {
                     cardIndicesToActionTimes.Remove(cardIndexToActionTime.Key);
                     DiscardCard(cardIndexToActionTime.Key);
-                    cardIndicesToCooldowns.Add(cardIndexToActionTime.Key, inHandCards[cardIndexToActionTime.Key].cooldownTime * cooldownReduction);
                 }
                 else
                 {
@@ -363,19 +362,15 @@ namespace Cardificer
         /// <param name="handIndex"> The index in the hand of the card to play. </param>
         public void PlayCard(int handIndex)
         {
-            if (handIndex >= inHandCards.Count)
-            {
-                return;
-            }
+            if (handIndex >= inHandCards.Count) { return; }
+            if (cardIndicesToActionTimes.ContainsKey(handIndex) || cardIndicesToCooldowns.ContainsKey(handIndex)) { return; }
 
             Card card = inHandCards[handIndex];
-            if (card == null)
-            {
-                return;
-            }
+            if (card == null) { return; }
 
             card.PlayActions(actor);
             cardIndicesToActionTimes.Add(handIndex, card.actionTime);
+            cardIndicesToCooldowns.Add(handIndex, card.cooldownTime + card.actionTime);
         }
 
         /// <summary>
@@ -391,18 +386,20 @@ namespace Cardificer
             foreach (int handIndex in handIndices)
             {
                 Card card = inHandCards[handIndex];
-                if (card == null)
-                {
-                    continue;
-                }
+                if (card == null) { continue; }
+                if(cardIndicesToActionTimes.ContainsKey(handIndex) || cardIndicesToCooldowns.ContainsKey(handIndex)) { continue; }
 
                 returnValue = true;
-                cardIndicesToActionTimes.Add(handIndex, card.actionTime);
                 if (cardToPlay == null && card is AttackCard)
                 {
                     cardToPlay = card as AttackCard;
+                    cardIndicesToActionTimes.Add(handIndex, cardToPlay.actionTime);
+                    cardIndicesToCooldowns.Add(handIndex, cardToPlay.cooldownTime + cardToPlay.actionTime);
                     continue;
                 }
+
+                cardIndicesToActionTimes.Add(handIndex, cardToPlay.actionTime);
+                cardIndicesToCooldowns.Add(handIndex, cardToPlay.cooldownTime + cardToPlay.actionTime);
 
                 if (card is AttackCard)
                 {
