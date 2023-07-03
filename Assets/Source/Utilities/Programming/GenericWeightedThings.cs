@@ -15,7 +15,7 @@ namespace Cardificer
         public T thing;
 
         [Tooltip("The weight that the thing has")]
-        public float weight = 0;
+        public float weight = 1;
 
         [Tooltip("The maximum number of times this thing can be chosen. Make this less than 0 for no max")]
         public int maxChosen = -1;
@@ -186,6 +186,45 @@ namespace Cardificer
         }
 
         /// <summary>
+        /// Gets a random thing, using a unique seed created by the given position
+        /// </summary>
+        /// <param name="position"> The position to use to get the seed </param>
+        /// <returns> The random thing </returns>
+        public T GetRandomThing(Vector3 position)
+        {
+            System.Random random = new System.Random(PositionToSeed(position));
+            return GetRandomThing(random);
+        }
+
+        /// <summary>
+        /// Gets multiple random things
+        /// </summary>
+        /// <param name="num"> The number of random things to get </param>
+        /// <param name="random"> The random to use (if null, will use Unity's default random) </param>
+        /// <returns> The random things </returns>
+        public List<T> GetRandomThings(int num, System.Random random = null)
+        {
+            List<T> randomThings = new List<T>();
+            for (int i = 0; i < num; i++)
+            {
+                randomThings.Add(GetRandomThing(random));
+            }
+            return randomThings;
+        }
+
+        /// <summary>
+        /// Gets multiple random things, using a unique seed created by the given position
+        /// </summary>
+        /// <param name="num"> The number of random things to get </param>
+        /// <param name="position"> The position to use to get the seed </param>
+        /// <returns> The random thigns </returns>
+        public List<T> GetRandomThings(int num, Vector3 position)
+        {
+            System.Random random = new System.Random(PositionToSeed(position));
+            return GetRandomThings(num, random);
+        }
+
+        /// <summary>
         /// Resets the choosable things list, initializing it with the list of permanent things
         /// </summary>
         public void Reset()
@@ -196,6 +235,21 @@ namespace Cardificer
             }
             totalWeight = 0;
             AddThingsToChoosableThings();
+        }
+
+        /// <summary>
+        /// Maps a position to a unique seed, using the floor generator seed.
+        /// </summary>
+        /// <param name="position"> The position to convert. </param>
+        /// <returns> The seed corresponding to the position. </returns>
+        private int PositionToSeed(Vector3 position)
+        {
+            // Szudzik's function:
+            int x = (int)position.x >= 0 ? 2 * (int)position.x : -2 * (int)position.x - 1;
+            int y = (int)position.y >= 0 ? 2 * (int)position.y : -2 * (int)position.y - 1;
+            int result = x >= y ? x * x + x + y : x + y * y;
+
+            return result + FloorGenerator.seed;
         }
     }
 }

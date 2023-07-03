@@ -1,37 +1,45 @@
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 namespace Cardificer
 {
     /// <summary>
-    /// Spawns a random enemy from the chosen enemy pool
+    /// Spawns an enemy that has the types of this spawner
     /// </summary>
+    [RequireComponent(typeof(Tile))]
     public class EnemySpawner : MonoBehaviour
     {
+        [Tooltip("The enemy types that this spawner can spawn")]
+        public EnemyType enemyTypes;
+
         /// <summary>
-        /// Calls the spawn enemy function
+        /// Spawns the enemy
         /// </summary>
         private void Start()
         {
-            SpawnEnemy();
-
-            // Turn off the sprite renderer (This is so the enemy spawner can have a sprite in template creator but not in game)
-            if (GetComponent<SpriteRenderer>() != null)
+            SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null)
             {
-                GetComponent<SpriteRenderer>().enabled = false;
+                spriteRenderer.enabled = false;
             }
-        }
 
-        /// <summary>
-        /// Spawns a random enemy from the room enemy pool
-        /// </summary>
-        private void SpawnEnemy()
-        {
-            List<GameObject> enemies = FloorGenerator.floorGeneratorInstance.currentRoom.template.chosenEnemyPool.enemies;
-            GameObject randomEnemy = enemies[Random.Range(0, enemies.Count)];
-            FloorGenerator.floorGeneratorInstance.currentRoom.template.chosenEnemyPool.enemies.Remove(randomEnemy);
-            randomEnemy = Instantiate(randomEnemy, transform);
-            randomEnemy.SetActive(true);
+            GenericWeightedThings<GameObject> possibleEnemies = FloorGenerator.templateParams.enemyTypesToEnemies.At(enemyTypes);
+            if (possibleEnemies == null || possibleEnemies.things == null || possibleEnemies.things.Count == 0)
+            {
+                Debug.LogError("No enemies associated with enemy type " + enemyTypes);
+            }
+            GameObject chosenEnemy = possibleEnemies.GetRandomThing();
+            string name = chosenEnemy.name;
+            chosenEnemy = Instantiate(chosenEnemy);
+            chosenEnemy.name = name;
+            Tile currentTile = GetComponent<Tile>();
+            chosenEnemy.transform.parent = currentTile.room.template.transform;
+            chosenEnemy.transform.localPosition = (Vector2)currentTile.gridLocation;
+
+            if (chosenEnemy.GetComponent<Tile>() != null)
+            {
+                chosenEnemy.GetComponent<Tile>().shouldDisable = false;
+            }
         }
     }
 }

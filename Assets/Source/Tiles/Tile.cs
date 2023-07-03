@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using MovementType = Cardificer.RoomInterface.MovementType;
 
@@ -9,14 +7,13 @@ namespace Cardificer
     /// Tiles for use in the room grid. Holds information for pathfinding and spawning the tiles
     /// </summary>
     [System.Serializable]
-    [CreateAssetMenu(fileName = "NewTile", menuName = "Generation/Tile")]
-    public class Tile : ScriptableObject
+    public class Tile : MonoBehaviour
     {
         [Tooltip("Movement types this tile supports")]
-        [SerializeField] public MovementType allowedMovementTypes;
+        public MovementType allowedMovementTypes = MovementType.Burrow | MovementType.Walk | MovementType.Fly;
 
         [Tooltip("How much this tile costs to walk on (higher is avoided more, lower is preferred)")]
-        [SerializeField] public int walkMovementPenalty;
+        public int walkMovementPenalty;
 
         [Tooltip("How much this tile costs to fly over (higher is avoided more, lower is preferred)")]
         public int flyMovementPenalty;
@@ -24,47 +21,46 @@ namespace Cardificer
         [Tooltip("How much this tile costs to burrow below (higher is avoided more, lower is preferred)")]
         public int burrowMovementPenalty;
 
-        // the x and y location of this tile within the 2D array grid
+        [Tooltip("the x and y location of this tile within the 2D array grid")]
         [HideInInspector] public Vector2Int gridLocation;
 
-        [Tooltip("The type of this tile")]
-        [SerializeField] public TileType type = TileType.None;
+        // Whether or not this tile should disable it's components on start
+        [HideInInspector] public bool shouldDisable = true;
 
-        [Tooltip("The game object on this tile (or to spawn on this tile)")]
-        [SerializeField] public GameObject spawnedObject;
+        // The room that this tile is a part of 
+        [HideInInspector] public Room room;
 
         /// <summary>
-        /// Creates a shallow copy of the tile
+        /// Disables the game object from starting before it's ready to
         /// </summary>
-        /// <returns> The shallow copy </returns>
-        public Tile ShallowCopy()
+        private void Start()
         {
-            Tile copiedTile = ScriptableObject.CreateInstance<Tile>();
-            copiedTile.allowedMovementTypes = allowedMovementTypes;
-            copiedTile.walkMovementPenalty = walkMovementPenalty;
-            copiedTile.flyMovementPenalty = flyMovementPenalty;
-            copiedTile.burrowMovementPenalty = burrowMovementPenalty;
-            copiedTile.gridLocation = gridLocation;
-            copiedTile.type = type;
-            copiedTile.spawnedObject = spawnedObject;
-            return copiedTile;
-        }
-    }
+            if (!shouldDisable) { return; }
 
-    /// <summary>
-    /// The type of a tile
-    /// </summary>
-    [System.Serializable]
-    public enum TileType
-    {
-        None,
-        Blocker,
-        Container,
-        EnemySpawner,
-        FloorTrap,
-        Loot,
-        Pit,
-        Staircase,
-        Turret,
+            // Disable all the components except this and the sprite renderer
+            foreach (MonoBehaviour component in gameObject.GetComponents<MonoBehaviour>())
+            {
+                component.enabled = false;
+            }
+
+            enabled = true;
+
+            SpriteRenderer spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null)
+            {
+                spriteRenderer.enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Enables the game object
+        /// </summary>
+        public void Enable()
+        {
+            foreach (MonoBehaviour component in gameObject.GetComponents<MonoBehaviour>())
+            {
+                component.enabled = true;
+            }
+        }
     }
 }

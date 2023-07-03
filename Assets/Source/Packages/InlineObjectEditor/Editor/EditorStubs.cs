@@ -19,3 +19,6 @@ public partial class TransitionAndEditorStub : UnityEditor.Editor { }
 [UnityEditor.CustomEditor(typeof(Cardificer.FiniteStateMachine.PerformAttack))]
 public partial class PerformAttackEditorStub : UnityEditor.Editor { }
 
+[UnityEditor.CustomEditor(typeof(Cardificer.FloorGenerator))]
+public partial class FloorGeneratorEditorStub : UnityEditor.Editor { }
+

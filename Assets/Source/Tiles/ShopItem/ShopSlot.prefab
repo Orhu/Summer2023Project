@@ -183,6 +183,7 @@ GameObject:
   - component: {fileID: 8886533939355100948}
   - component: {fileID: -5260592214974729956}
   - component: {fileID: 5993028078129329666}
+  - component: {fileID: -2582596120435268546}
   m_Layer: 21
   m_Name: ShopSlot
   m_TagString: Inanimate
@@ -392,6 +393,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-2582596120435268546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2421945517821168587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b1feef127a8c424ab5758a744b45cc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowedMovementTypes: 7
+  walkMovementPenalty: 0
+  flyMovementPenalty: 0
+  burrowMovementPenalty: 0
+  gridLocation: {x: 0, y: 0}
+  shouldDisable: 1
+  room: {fileID: 0}
 --- !u!1 &5636558807405695465
 GameObject:
   m_ObjectHideFlags: 0

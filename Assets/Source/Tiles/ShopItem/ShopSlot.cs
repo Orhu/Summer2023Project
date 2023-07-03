@@ -230,7 +230,7 @@ namespace Cardificer
                 yield return new WaitForSeconds(1f);
             }
 
-            PricedObject pricedObject = possibleItems.PullFromTable(transform.position);
+            PricedObject pricedObject = possibleItems.weightedLoot.GetRandomThing(transform.position);
 
             GameObject sellableItem = Instantiate(pricedObject.gameObject);
             sellableItem.transform.parent = transform;

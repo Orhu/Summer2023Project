@@ -44,7 +44,7 @@ namespace Cardificer.FiniteStateMachine
             {
                 foreach (var action in actions)
                 {
-                    action.Play(stateMachine, FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies);
+                    action.Play(stateMachine, FloorGenerator.currentRoom.livingEnemies);
                 }
                 yield return new WaitForSeconds(actionCooldownTime);
             }

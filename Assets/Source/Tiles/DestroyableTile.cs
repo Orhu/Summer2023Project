@@ -21,7 +21,7 @@ namespace Cardificer
         /// </summary>
         void Start()
         {
-            FloorGenerator.floorGeneratorInstance.onRoomChange.AddListener(OnRoomEnter);
+            FloorGenerator.onRoomChange.AddListener(OnRoomEnter);
             destroyedTiles ??=
                 SaveManager.savedDestroyedTiles.ToHashSet(); // if destroyedTiles doesnt exist, load it from the save
         }
@@ -47,7 +47,7 @@ namespace Cardificer
         private void OnDestroy()
         {
             // if scene is loaded
-            if (gameObject.scene.isLoaded)
+            if (gameObject.scene.isLoaded && RoomInterface.instance != null)
             {
                 // false because OnDestroy means something else destroyed us
                 InitiateDestruction(false);

@@ -360,9 +360,9 @@ namespace Cardificer
                 saveData.playerDamage = Player.Get().GetComponent<PlayerController>().damageMultiplier;
                 saveData.playerCooldownReduction = Deck.playerDeck.cooldownReduction;
                 saveData.deckState = new Deck.State(Deck.playerDeck);
-                saveData.floorSeed = FloorGenerator.floorGeneratorInstance.seed;
+                saveData.floorSeed = FloorGenerator.seed;
 
-                saveData.visitedRooms.Add(FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation);
+                saveData.visitedRooms.Add(FloorGenerator.currentRoom.roomLocation);
                 saveData.destroyedTiles = DestroyableTile.destroyedTiles != null ? DestroyableTile.destroyedTiles.ToList() : savedDestroyedTiles;
                 saveData.remainingShopBuys = ShopSlot.savableRemainingShopBuys;
                 saveData.randomState = Random.state;
@@ -488,10 +488,10 @@ namespace Cardificer
             /// </summary>
             private void Start()
             {
-                FloorGenerator.floorGeneratorInstance.onRoomChange.AddListener(
+                FloorGenerator.onRoomChange.AddListener(
                     () =>
                     {
-                        FloorGenerator.floorGeneratorInstance.currentRoom.onCleared += Autosave;
+                        FloorGenerator.currentRoom.onCleared += Autosave;
                     });
 
                 Player.health.onDeath.AddListener(

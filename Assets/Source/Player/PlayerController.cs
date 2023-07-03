@@ -100,7 +100,7 @@ namespace Cardificer
 
             if (Input.GetKeyDown(KeyCode.T))
             {
-                FloorGenerator.floorGeneratorInstance.ShowLayout();
+                FloorGenerator.ShowLayout();
             }
 
             // Open Pause Menu

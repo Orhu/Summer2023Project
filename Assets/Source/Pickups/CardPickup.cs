@@ -22,7 +22,7 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
-            card = lootTable.PullFromTable(transform.position);
+            card = lootTable.weightedLoot.GetRandomThing(transform.position);
             GetComponentInChildren<CardRenderer>(true).card = card;
             GetComponentInChildren<SpriteRenderer>().sprite = card.runeImage;
         }
