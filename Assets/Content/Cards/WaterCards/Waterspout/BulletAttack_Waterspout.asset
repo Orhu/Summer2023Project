@@ -24,19 +24,21 @@ MonoBehaviour:
   modifiers:
   - {fileID: 11400000, guid: dab24373dbf4ac848a9bc1f38d15cfa4, type: 2}
   - {fileID: 11400000, guid: 4db00e30cb485914980b8d29faa3969e, type: 2}
+  - {fileID: 11400000, guid: 81fef6478ea74ac4b90a4b571a0d33ab, type: 2}
   shape: {fileID: 11400000, guid: 85f407012245c734a89f3c93240cb1f3, type: 2}
-  lifetime: 8
-  initialSpeed: 6
+  lifetime: 2
+  initialSpeed: 4
   acceleration: 0
   minSpeed: 0
-  maxSpeed: 6
+  maxSpeed: 5
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
-  homingAimMode: 1
+  homingAimMode: 0
   switchAfterHit: 0
   visualObject: {fileID: 1890156799454768057, guid: ff4b1c5fdbcdcd245bff561cb75c4b3b, type: 3}
   detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
   spawnLocation: 0
   aimMode: 0
   travelAudioClip: {fileID: 0}
@@ -47,5 +49,5 @@ MonoBehaviour:
   - delay: 0
     angle: 0
     offset: {x: 0.5, y: 0}
-  randomAngle: 60
+  randomAngle: 90
   randomOffset: 0

@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5dd09abb2f10ba48b1ad730fbb847cf, type: 3}
   m_Name: GammaBurst
   m_EditorClassIdentifier: 
-  actionTime: 0.4
+  actionTime: 0.9
   cooldownTime: 6
   actions:
+  - {fileID: 11400000, guid: f21dc4c2dea3e0549a37dd4f9ba6a4e3, type: 2}
   - {fileID: 11400000, guid: 0b7fed9aafbd55f4a9d054ab388aebdb, type: 2}
   effects: []
   displayName: Gamma Burst
-  description: No Description
+  description: Unleash a stream of cosmic energy.
   actionImage: {fileID: 21300000, guid: 79a3e76c917226b46a2b9a2d0b792ba0, type: 3}
   actionBackground: {fileID: 21300000, guid: 1d3e10ede9181be46be82c8c8cf052fc, type: 3}
   effectImage: {fileID: 0}
@@ -26,7 +27,9 @@ MonoBehaviour:
   runeImage: {fileID: 21300000, guid: 08df8f66127d62e4b9ddf61e497ea780, type: 3}
   chordImage: {fileID: 21300000, guid: e3af7bc12e817c848a9a1b12e17f0234, type: 3}
   chordColor: {r: 0.33333334, g: 0.078431375, b: 0.6039216, a: 1}
-  chordModifiers: []
+  chordModifiers:
+  - {fileID: 11400000, guid: 15b5494638f488c4cad8cb289ac81a46, type: 2}
+  - {fileID: 11400000, guid: 15b5494638f488c4cad8cb289ac81a46, type: 2}
   duplicateModifiers:
   - {fileID: 11400000, guid: eab30ae9d4f21254ea17467a1f4af326, type: 2}
-  - {fileID: 11400000, guid: de120888ea3656f4bb93c6a008ac2985, type: 2}
+  - {fileID: 11400000, guid: 242cc6af0d895354f9e30d0c478b39fa, type: 2}

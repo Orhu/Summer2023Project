@@ -35,6 +35,17 @@ namespace Cardificer
             }
         }
 
+        // The currently saved random state. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+        public static Random.State savedRandomState
+        {
+            get
+            {
+                if (!autosaveExists) { return Random.state; }
+                return autosaver.latestAutosave.randomState;
+            }
+        }
+
+
         // The currently saved player health. Saving handled by autosaves. Use autosaveExists to check if data Valid.
         public static int savedPlayerHealth
         {
@@ -45,6 +56,15 @@ namespace Cardificer
             }
         }
 
+        // The currently saved player money. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+        public static int savedPlayerMoney
+        {
+            get
+            {
+                if (!autosaveExists) { return 0; }
+                return autosaver.latestAutosave.playerMoney;
+            }
+        }
         // The currently saved player max health. Saving handled by autosaves. Use autosaveExists to check if data Valid.
         public static int savedPlayerMaxHealth
         {
@@ -92,6 +112,16 @@ namespace Cardificer
             {
                 if (!autosaveExists) { return null; }
                 return autosaver.latestAutosave.visitedRooms;
+            }
+        }
+
+        // The currently saved visited room data. X,Y = room location, Z = size of deck at the time of clearing. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+        public static Vector3Int[] savedRemainingShopBuys
+        {
+            get
+            {
+                if (!autosaveExists) { return null; }
+                return autosaver.latestAutosave.remainingShopBuys;
             }
         }
 
@@ -238,7 +268,7 @@ namespace Cardificer
 
 
         /// <summary>
-        /// Class for managing storing and loading autosaves.
+        /// Class for managing and storing autosaves.
         /// </summary>
         /// <example>
         /// To use save more data during an autosave:
@@ -270,11 +300,17 @@ namespace Cardificer
                 // The seed of the current floor.
                 public int floorSeed;
 
+                // The random state at the time of the autosave.
+                public Random.State randomState;
+
                 // The last position of the player.
                 public Vector2 playerPos;
 
                 // The last health of the player.
                 public int playerHealth;
+
+                // The last amount of money the player had.
+                public int playerMoney;
 
                 // The last max health of the player.
                 public int playerMaxHealth;
@@ -290,6 +326,9 @@ namespace Cardificer
 
                 // The locations and current card count of visited rooms
                 public List<Vector2Int> visitedRooms = new List<Vector2Int>();
+
+                // The locations and current card count of visited rooms
+                public Vector3Int[] remainingShopBuys;
 
                 // The current state of the deck.
                 public Deck.State deckState;
@@ -315,6 +354,7 @@ namespace Cardificer
                 // Add new save data Here:
                 saveData.playerPos = Player.Get().transform.position;
                 saveData.playerHealth = Player.health.currentHealth;
+                saveData.playerMoney = Player.GetMoney();
                 saveData.playerMaxHealth = Player.health.maxHealth;
                 saveData.playerSpeed = Player.Get().GetComponent<SimpleMovement>().maxSpeed;
                 saveData.playerDamage = Player.Get().GetComponent<PlayerController>().damageMultiplier;
@@ -324,7 +364,8 @@ namespace Cardificer
 
                 saveData.visitedRooms.Add(FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation);
                 saveData.destroyedTiles = DestroyableTile.destroyedTiles != null ? DestroyableTile.destroyedTiles.ToList() : savedDestroyedTiles;
-
+                saveData.remainingShopBuys = ShopSlot.savableRemainingShopBuys;
+                saveData.randomState = Random.state;
 
                 latestAutosave = saveData;
             }

@@ -45,7 +45,7 @@ namespace Cardificer
             if (table != null)
             {
                 // List of cards to be displayed in UI
-                List<Card> packCards = table.PullMultipleFromTable(numCards);
+                List<Card> packCards = table.PullMultipleFromTable(boosterPackObject.transform.position, numCards);
 
                 // Loop through total number of spawned cards
                 for (int i = 0; i < numCards; i++)
@@ -60,9 +60,11 @@ namespace Cardificer
                         {
                             // Sets the selected card to the cardRenderer
                             SelectCard(tempCardRendererGameObject.GetComponent<CardRenderer>());
-                            // Opens the confirmation window
-                            confirmationWindow.SetActive(true);
+                            // Turns on or off the confirmation button
+                            confirmationWindow.SetActive(tempCardRendererGameObject.GetComponent<Toggle>().isOn);
                         });
+                        // Allows for toggling in groups of card renderers
+                        tempCardRendererGameObject.GetComponent<Toggle>().group = cardLayoutArea.GetComponent<ToggleGroup>();
                         // Adds the cardRenderer to the list of cardRenderers
                         cardRenderers.Add(tempCardRendererGameObject.GetComponent<CardRenderer>());
                     }

@@ -11,6 +11,13 @@ namespace Cardificer
     {
         [Tooltip("The card to render.")]
         [SerializeField] private Card _card;
+
+        [Tooltip("The half sword image if a card has half damage.")]
+        [SerializeField] private Sprite halfSwordImage;
+
+        [Tooltip("Reference to the card's compendium button")]
+        [SerializeField] private Button compendiumButton;
+
         public Card card
         {
             set
@@ -23,27 +30,50 @@ namespace Cardificer
                 links.backgroundSprite.enabled = shouldEnable;
                 links.cardSprite.enabled = shouldEnable;
                 links.projectileTypeImage.enabled = shouldEnable;
+                links.flavorTextBox.enabled = shouldEnable;
                 if (shouldEnable)
                 {
                     // Name of the card
                     links.nameTextBox.text = _card.displayName;
 
-                    // TODO Description of the card
-                    //links.descriptionTextBox.text = _card.GetDescription(renderActionSide);
+                    // Description of the card
+                    links.descriptionTextBox.text = _card.description;
 
-                    // TODO Rarity of the card
-                    //links.rarityImage.enabled = _card.rarity;
+                    // Flavor text of the card
+                    links.flavorTextBox.text = _card.flavorText;
 
-                    // TODO Projectile type
-                    //links.projectileTypeImage = _card.projectileType;
+                    // Rarity of the card
+                    links.rarityImage.enabled = _card.isRare;
+
+                    // Projectile type
+                    if (_card.damageTypeSprite != null)
+                    {
+                        links.projectileTypeImage.sprite = _card.damageTypeSprite;
+                    }
+                    else
+                    {
+                        links.projectileTypeImage.enabled = false;
+                    }
 
                     // Cooldown of the card
                     links.coolDownOverlayText.text = _card.cooldownTime.ToString();
 
-                    // TODO For managing damage container colors
-                    for (int i = 0; i < 3; i++)
+                    // Chord effect of the card
+                    links.chordEffectText.text = _card.chordEffectText;
+
+
+                    // filling all full swords
+                    for (int i = 0; i < Mathf.Floor(_card.damage); i++)
                     {
-                        //links.damageContainer;
+                        links.damageContainer.transform.GetChild(i).GetComponent<Image>().color = _card.chordColor; 
+                    }
+
+                    // If there is some remainder leftover, assign the last image to be a half sword
+                    if (_card.damage % 1 != 0)
+                    {
+                        int lastImageIndex = Mathf.CeilToInt(_card.damage) - 1;
+                        links.damageContainer.transform.GetChild(lastImageIndex).GetComponent<Image>().sprite = halfSwordImage;
+                        links.damageContainer.transform.GetChild(lastImageIndex).GetComponent<Image>().color = _card.chordColor;
                     }
 
                     if (!renderActionSide)
@@ -83,6 +113,30 @@ namespace Cardificer
         }
 
         /// <summary>
+        /// Called when the card is toggled on and off
+        /// </summary>
+        public void OnToggle()
+        {
+            // See if the toggle is on or off
+            // (this function is called before this value is set)
+            bool isToggled = GetComponent<Toggle>().isOn;
+            if (!isToggled) // about to turn the toggle on
+            {
+                // Make the card grow
+                GetComponent<Animator>().Play("A_CardRenderer_Enlarge");
+                // Turn on the compendium button
+                compendiumButton.gameObject.SetActive(false);
+            }
+            else // about to turn the toggle off
+            {
+                // Shrink the card
+                GetComponent<Animator>().Play("A_CardRenderer_Shrink");
+                // turn the compendium button off
+                compendiumButton.gameObject.SetActive(true);
+            }
+        }
+
+        /// <summary>
         /// Used to flip rendered card from effect to action and back
         /// </summary>
         public void FlipRenderActionSide()
@@ -102,6 +156,9 @@ namespace Cardificer
             [Tooltip("The text boxed used to display the description of the card.")]
             public TMP_Text descriptionTextBox;
 
+            [Tooltip("The text box used to display the flavor text of the card.")]
+            public TMP_Text flavorTextBox;
+
             [Tooltip("The image used to render the background of the card.")]
             public Image backgroundSprite;
 
@@ -119,6 +176,9 @@ namespace Cardificer
 
             [Tooltip("The image associated with the card's rarity.")]
             public Image rarityImage;
+
+            [Tooltip("The text displaying the card's chord effect.")]
+            public TMP_Text chordEffectText;
         }
     }
 }

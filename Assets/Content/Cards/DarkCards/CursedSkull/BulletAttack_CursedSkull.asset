@@ -14,22 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
   attack:
-    damage: 4
+    damage: 0
     damageType: 0
     statusEffects:
-    - {fileID: 11400000, guid: a7795ac2bb081394493bc3295edaefc1, type: 2}
     - {fileID: 11400000, guid: 2397f2eb8d291da4c9efc62a275046b2, type: 2}
     invertInvincibility: 0
-  hitCount: 1
+  hitCount: 999
   applyDamageOnHit: 1
   modifiers:
-  - {fileID: 11400000, guid: 130a2b3c1b418e94193dd070d5b614da, type: 2}
+  - {fileID: 11400000, guid: 4db00e30cb485914980b8d29faa3969e, type: 2}
+  - {fileID: 11400000, guid: 7e47433d8b99f7e49a0f0982dc644200, type: 2}
   shape: {fileID: 11400000, guid: 7a7ec2dcd130dc24696c8ff5b6b46a08, type: 2}
-  lifetime: 3
-  initialSpeed: 1
-  acceleration: 12
+  lifetime: 12
+  initialSpeed: 2
+  acceleration: 2
   minSpeed: 0
-  maxSpeed: 25
+  maxSpeed: 26
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
@@ -37,6 +37,7 @@ MonoBehaviour:
   switchAfterHit: 0
   visualObject: {fileID: 720244782990949267, guid: 98a0fcb06c0dee244a864fce06367313, type: 3}
   detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
   spawnLocation: 0
   aimMode: 0
   travelAudioClip: {fileID: 0}
