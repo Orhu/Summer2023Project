@@ -12,6 +12,10 @@ namespace Cardificer
     [RequireComponent(typeof(TemplateCreator))]
     public class TemplateCreatorInput : MonoBehaviour
     {
+        [Tooltip("The color of the tile placement preview")]
+        [SerializeField] private Color previewColor;
+
+
         // The tile being held
         private GameObject heldTile;
 
@@ -86,7 +90,17 @@ namespace Cardificer
                 {
                     if (heldTile != null)
                     {
+                        foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
+                        {
+                            spriteRenderer.color = Color.white;
+                            spriteRenderer.sortingOrder--;
+                        }
                         templateCreator.PlaceTile(heldTile.GetComponent<Tile>(), gridPos);
+                        foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
+                        {
+                            spriteRenderer.color = previewColor;
+                            spriteRenderer.sortingOrder++;
+                        }
                     }
                 }
 
@@ -162,6 +176,12 @@ namespace Cardificer
                 {
                     GameObject selectedObject = Instantiate(Selection.activeGameObject);
                     selectedObject.name = Selection.activeGameObject.name;
+                    foreach (SpriteRenderer spriteRenderer in selectedObject.GetComponents<SpriteRenderer>())
+                    {
+                        spriteRenderer.color = previewColor;
+                        spriteRenderer.sortingOrder++;
+                    }
+
 
                     if (selectedObject.GetComponent<Tile>() == null)
                     {
@@ -180,10 +200,7 @@ namespace Cardificer
                         Destroy(heldTile);
                         Selection.activeGameObject = selectedObject;
                         heldTile = Selection.activeGameObject;
-                        if (heldTile.GetComponent<SpriteRenderer>() == null)
-                        {
-                            nullSprite.SetActive(true);
-                        }
+                        nullSprite.SetActive(heldTile.GetComponent<SpriteRenderer>() == null);
                     }
                 }
             
