@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
+using System.Linq;
 
 #if UNITY_EDITOR
-    using UnityEditor;
+using UnityEditor;
 #endif
 
 namespace Cardificer
@@ -15,13 +17,22 @@ namespace Cardificer
         [Header("Template")]
 
         [Tooltip("The name to give the template")]
-        public string templateName;
+        [SerializeField] private string _templateName;
+        public string templateName
+        {
+            set
+            {
+                _templateName = value;
+                onTemplateNameChange?.Invoke(_templateName);
+            }
+            get => _templateName;
+        }
+
+        [Tooltip("Called when the template name is edited")]
+        public UnityEvent<string> onTemplateNameChange;
 
         [Tooltip("The sprite to use when the preferred object is null")]
         public Sprite nullSprite;
-
-        [Tooltip("The template to load when load template is called")]
-        public Template templateToLoad;
 
         [Tooltip("The size a singular cell in the map")]
         [SerializeField] private Vector2Int _mapCellSize = new Vector2Int(17, 11);
@@ -46,10 +57,40 @@ namespace Cardificer
             {
                 _sizeMultiplier = value;
                 roomSize = _sizeMultiplier * mapCellSize;
+                onSizeMultiplierChangedX?.Invoke(value.x.ToString());
+                onSizeMultiplierChangedY?.Invoke(value.y.ToString());
                 Reload();
             }
             get { return _sizeMultiplier; }
         }
+
+        //The x axis size multiplier.
+        public string sizeMultiplierX
+        {
+            set
+            {
+                _sizeMultiplier.x = int.Parse(value); 
+                roomSize = _sizeMultiplier * mapCellSize;
+                Reload();
+            }
+            get => sizeMultiplier.x.ToString();
+        }
+
+        //The y axis size multiplier.
+        public string sizeMultiplierY
+        {
+            set
+            {
+                _sizeMultiplier.y = int.Parse(value);
+                roomSize = _sizeMultiplier * mapCellSize;
+                Reload();
+            }
+            get => sizeMultiplier.x.ToString();
+        }
+
+        [Tooltip("Called when the sizeMultiplierY is edited")]
+        public UnityEvent<string> onSizeMultiplierChangedX;
+        public UnityEvent<string> onSizeMultiplierChangedY;
 
         [Header("Scene variables")]
 
@@ -83,6 +124,7 @@ namespace Cardificer
         private void Start()
         {
             started = true;
+            onTemplateNameChange?.Invoke(_templateName);
             roomSize = sizeMultiplier * mapCellSize;
             nullSpriteObject = new GameObject();
             nullSpriteObject.name = "Null Sprite Object";
@@ -97,6 +139,12 @@ namespace Cardificer
         /// </summary>
         public void SaveTemplate()
         {
+            if (templateName.Length == 0)
+            {
+                Debug.LogWarning("Please enter a file name");
+                return;
+            }
+
             string path = "Assets/Content/Templates/" + templateName + ".prefab";
 
 #if UNITY_EDITOR
@@ -139,9 +187,15 @@ namespace Cardificer
         /// </summary>
         public void LoadTemplate()
         {
+            if (templateName.Length == 0) 
+            {
+                Debug.LogWarning("Please enter a file name");
+                return; 
+            } 
+            Template templateToLoad = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Content/Templates/" + templateName + ".prefab")?.GetComponent<Template>();
             if (templateToLoad == null)
             {
-                Debug.LogWarning("To load a template, set the template to load in the template creator!");
+                Debug.LogWarning("Template file not found");
                 return;
             }
             Debug.Log("Loading template " + templateToLoad.name);

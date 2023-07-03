@@ -16,9 +16,6 @@ namespace Cardificer
         [SerializeField] private Color previewColor;
 
 
-        // The tile being held
-        private GameObject heldTile;
-
         // Shows the null sprite when the held tile doesn't have a sprite component
         private GameObject nullSprite;
 
@@ -37,19 +34,40 @@ namespace Cardificer
         // A reference to the template camera
         private TemplateCreatorCamera templateCamera;
 
-        // Whether or not we are in placing mode
-        private bool inPlacingMode = true;
-
         // The last selected game object (so it doesn't print a warning 9 million times)
         private string lastSelectedObjectName = "";
 
-        /// <summary>
-        /// Toggles whether tiles are being placed or not
-        /// </summary>
-        public void TogglePlacingMode()
+        // The tile being held
+        private GameObject _heldTile;
+        private GameObject heldTile
         {
-            inPlacingMode = !inPlacingMode;
+            set
+            {
+                if (_heldTile != null)
+                {
+                    Destroy(_heldTile);
+                }
+
+                _heldTile = value;
+                Selection.activeGameObject = _heldTile;
+
+                if (_heldTile == null) 
+                {
+                    nullSprite.SetActive(false);
+                    return;
+                }
+
+                foreach (SpriteRenderer spriteRenderer in _heldTile.GetComponents<SpriteRenderer>())
+                {
+                    spriteRenderer.color = previewColor;
+                    spriteRenderer.sortingOrder++;
+                }
+
+                nullSprite.SetActive(heldTile?.GetComponent<SpriteRenderer>() == null);
+            }
+            get => _heldTile;
         }
+
 
         /// <summary>
         /// Initialize variables
@@ -77,30 +95,25 @@ namespace Cardificer
                 // Unselecting tile
                 if (templateCreator.IsGridPosOutsideBounds(gridPos))
                 {
-                    Destroy(heldTile);
                     heldTile = null;
-                    nullSprite.SetActive(false);
                     #if UNITY_EDITOR
                     Selection.activeGameObject = templateCreator.gameObject;
                     #endif
                 }
 
                 // Placing tile
-                if (inPlacingMode)
+                else if (heldTile != null)
                 {
-                    if (heldTile != null)
+                    foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
                     {
-                        foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
-                        {
-                            spriteRenderer.color = Color.white;
-                            spriteRenderer.sortingOrder--;
-                        }
-                        templateCreator.PlaceTile(heldTile.GetComponent<Tile>(), gridPos);
-                        foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
-                        {
-                            spriteRenderer.color = previewColor;
-                            spriteRenderer.sortingOrder++;
-                        }
+                        spriteRenderer.color = Color.white;
+                        spriteRenderer.sortingOrder--;
+                    }
+                    templateCreator.PlaceTile(heldTile.GetComponent<Tile>(), gridPos);
+                    foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
+                    {
+                        spriteRenderer.color = previewColor;
+                        spriteRenderer.sortingOrder++;
                     }
                 }
 
@@ -144,11 +157,20 @@ namespace Cardificer
                 {
                     mouseMoved = false;
                 }
-                else if (inPlacingMode)
+                else
                 {
                     Vector2Int gridPos = MousePosToGridPos(Input.mousePosition);
                     templateCreator.EraseTile(gridPos);
                 }
+            }
+
+
+            // Copying
+            if (Input.GetKeyDown(KeyCode.Q) && !isOutside)
+            {
+                Vector2Int gridPos = MousePosToGridPos(Input.mousePosition);
+                Tile tile = templateCreator.GetTile(gridPos);
+                heldTile = tile == null ? null : Instantiate(tile.gameObject);
             }
 
             UpdateHeldTile();
@@ -160,50 +182,32 @@ namespace Cardificer
         /// </summary>
         private void UpdateHeldTile()
         {
-            if (!inPlacingMode)
-            {
-                Destroy(heldTile);
-                heldTile = null;
-                nullSprite.SetActive(false);
-                return;
-            }
-
             #if UNITY_EDITOR
-
-            if (Selection.activeGameObject != null && !Selection.activeGameObject.activeInHierarchy)
+            // Select from project tab
+            if (
+                Selection.activeGameObject != null 
+                && !Selection.activeGameObject.activeInHierarchy 
+                && (heldTile == null || Selection.activeGameObject.name != heldTile.name)
+                )
             {
-                if (heldTile == null || Selection.activeGameObject.name != heldTile.name)
+                GameObject selectedObject = Instantiate(Selection.activeGameObject);
+                selectedObject.name = Selection.activeGameObject.name;
+
+
+                if (selectedObject.GetComponent<Tile>() == null)
                 {
-                    GameObject selectedObject = Instantiate(Selection.activeGameObject);
-                    selectedObject.name = Selection.activeGameObject.name;
-                    foreach (SpriteRenderer spriteRenderer in selectedObject.GetComponents<SpriteRenderer>())
+                    if (selectedObject.name != lastSelectedObjectName)
                     {
-                        spriteRenderer.color = previewColor;
-                        spriteRenderer.sortingOrder++;
+                        lastSelectedObjectName = selectedObject.name;
+                        Debug.LogWarning("The object placed in a template must have a tile component!");
+                        heldTile = null;
                     }
-
-
-                    if (selectedObject.GetComponent<Tile>() == null)
-                    {
-                        if (selectedObject.name != lastSelectedObjectName)
-                        {
-                            lastSelectedObjectName = selectedObject.name;
-                            Debug.LogWarning("The object placed in a template must have a tile component!");
-                            Destroy(heldTile);
-                            heldTile = null;
-                            nullSprite.SetActive(false);
-                        }
-                        Destroy(selectedObject);
-                    }
-                    else
-                    {
-                        Destroy(heldTile);
-                        Selection.activeGameObject = selectedObject;
-                        heldTile = Selection.activeGameObject;
-                        nullSprite.SetActive(heldTile.GetComponent<SpriteRenderer>() == null);
-                    }
+                    Destroy(selectedObject);
                 }
-            
+                else
+                {
+                    heldTile = selectedObject;
+                }
             }
             #endif
 
