@@ -37,17 +37,5 @@ namespace Cardificer
             base.Start();
             velocity = speed * transform.right;
         }
-
-        /// <summary>
-        /// Updates the visual's rotation.
-        /// </summary>
-        private new void Update()
-        {
-            if (speed > Vector2.kEpsilon)
-            {
-                visualObject.transform.right = velocity;
-            }
-            base.Update();
-        }
     }
 }

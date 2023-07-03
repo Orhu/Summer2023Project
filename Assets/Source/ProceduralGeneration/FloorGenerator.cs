@@ -151,17 +151,33 @@ namespace Cardificer
         /// <summary>
         /// Sets all the rooms to active for debugging purposes
         /// </summary>
-        public void ShowLayout()
+        public void ShowLayout(bool showUnvisited = true)
         {
             for (int i = 0; i < transform.GetChild(0).childCount; i++)
             {
                 for (int j = 0; j < transform.GetChild(0).GetChild(i).childCount; j++)
                 {
-                    transform.GetChild(0).GetChild(i).GetChild(j).gameObject.SetActive(true);
+                    GameObject room = transform.GetChild(0).GetChild(i).GetChild(j).gameObject;
+                    room.SetActive(showUnvisited || room.transform.GetComponentInParent<Room>().generated);
                 }
             }
         }
-        
+
+        /// <summary>
+        /// Reverses ShowLayout
+        /// </summary>
+        public void HideLayout()
+        {
+            for (int i = 0; i < transform.GetChild(0).childCount; i++)
+            {
+                for (int j = 0; j < transform.GetChild(0).GetChild(i).childCount; j++)
+                {
+                    GameObject room = transform.GetChild(0).GetChild(i).GetChild(j).gameObject;
+                    room.SetActive(currentRoom.gameObject == room.transform.parent.gameObject);
+                }
+            }
+        }
+
         /// <summary>
         /// Invokes room change after 1 frame. This allows for room change to be called *after* the new room is set to active.
         /// </summary>
