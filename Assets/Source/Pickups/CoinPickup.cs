@@ -4,8 +4,7 @@ namespace Cardificer
 {
     public class CoinPickup : MonoBehaviour
     {
-        [Tooltip("The number of coins to give")]
-        [Min(1)]
+        [Tooltip("The number of coins to give")] [Min(1)]
         public int coins = 1;
 
         /// <summary>
@@ -16,7 +15,7 @@ namespace Cardificer
         {
             if (collision.CompareTag("Player"))
             {
-                // TODO: Make work.
+                Player.AddMoney(coins);
                 Destroy(gameObject);
             }
         }
