@@ -58,7 +58,7 @@ namespace Cardificer
         /// Class that contains a list of tiles so the templates can be serialized correctly
         /// </summary>
         [System.Serializable]
-        public class TilesList
+        private class TilesList
         {
             [Tooltip("The list of tiles")]
             public List<Tile> tiles;
@@ -84,7 +84,7 @@ namespace Cardificer
         }
 
         [Tooltip("The tiles on the template")]
-        public List<TilesList> tiles;
+        private List<TilesList> tiles;
 
         /// <summary>
         /// Indexer

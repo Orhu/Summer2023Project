@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Cardificer
 {
+    /// <summary>
+    /// Spawns an enemy that has the types of this spawner
+    /// </summary>
     [RequireComponent(typeof(Tile))]
     public class EnemySpawner : MonoBehaviour
     {
