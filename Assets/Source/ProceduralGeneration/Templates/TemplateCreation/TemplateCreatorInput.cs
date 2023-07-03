@@ -15,6 +15,9 @@ namespace Cardificer
         [Tooltip("The color of the tile placement preview")]
         [SerializeField] private Color previewColor;
 
+        [Tooltip("The color of the tile placement preview")]
+        [SerializeField] private Color selectedColor;
+
 
         // Shows the null sprite when the held tile doesn't have a sprite component
         private GameObject nullSprite;
@@ -92,13 +95,18 @@ namespace Cardificer
             {
                 Vector2Int gridPos = MousePosToGridPos(Input.mousePosition);
 
+                if (Selection.activeGameObject != heldTile)
+                {
+                    foreach (SpriteRenderer spriteRenderer in Selection.activeGameObject.GetComponents<SpriteRenderer>())
+                    {
+                        spriteRenderer.color = Color.white;
+                    }
+                }
+
                 // Unselecting tile
                 if (templateCreator.IsGridPosOutsideBounds(gridPos))
                 {
                     heldTile = null;
-                    #if UNITY_EDITOR
-                    Selection.activeGameObject = templateCreator.gameObject;
-                    #endif
                 }
 
                 // Placing tile
@@ -124,6 +132,10 @@ namespace Cardificer
                     if (templateCreator.GetTile(gridPos) != null)
                     {
                         Selection.activeGameObject = templateCreator.GetTile(gridPos).gameObject;
+                        foreach (SpriteRenderer spriteRenderer in Selection.activeGameObject.GetComponents<SpriteRenderer>())
+                        {
+                            spriteRenderer.color = selectedColor;
+                        }
                     }
                     #endif
                 }
@@ -168,6 +180,14 @@ namespace Cardificer
             // Copying
             if (Input.GetKeyDown(KeyCode.Q) && !isOutside)
             {
+                if (Selection.activeGameObject != heldTile)
+                {
+                    foreach (SpriteRenderer spriteRenderer in Selection.activeGameObject.GetComponents<SpriteRenderer>())
+                    {
+                        spriteRenderer.color = Color.white;
+                    }
+                }
+
                 Vector2Int gridPos = MousePosToGridPos(Input.mousePosition);
                 Tile tile = templateCreator.GetTile(gridPos);
                 heldTile = tile == null ? null : Instantiate(tile.gameObject);
