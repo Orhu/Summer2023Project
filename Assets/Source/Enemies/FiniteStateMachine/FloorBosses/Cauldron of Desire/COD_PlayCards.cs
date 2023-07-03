@@ -34,7 +34,6 @@ namespace Cardificer.FiniteStateMachine
             var actionDelaySequence = currentAttackSequence.actionDelaySequence;
             for (int i = 0; i < currentAttackSequence.actionSequence.Count; i++)
             {
-                stateMachine.currentAttackTarget = Player.Get().transform.position;
                 actionSequence[i].Play(stateMachine);
                 BaseStateMachine.print("Just fired index " + i);
                 yield return new WaitForSeconds(actionDelaySequence[i]);

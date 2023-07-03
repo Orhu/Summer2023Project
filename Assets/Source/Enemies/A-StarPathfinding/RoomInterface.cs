@@ -204,7 +204,7 @@ namespace Cardificer
         /// </summary>
         private void OnDrawGizmos()
         {
-            if ((drawWalkTiles || drawFlyTiles || drawBurrowTiles) && Application.isPlaying && roomGrid != null)
+            if ((drawWalkTiles || drawFlyTiles || drawBurrowTiles || drawNullTiles) && Application.isPlaying && roomGrid != null)
             {
                 for (int x = 0; x < roomGrid.GetLength(0); x++)
                 {
@@ -212,14 +212,17 @@ namespace Cardificer
                     {
                         var t = roomGrid[x, y];
 
-                        if (t == null && drawNullTiles)
+                        if (t == null)
                         {
-                            Gizmos.color = Color.blue;
-                            Vector2 worldPos = new Vector2(
-                                x + myWorldPosition.x - myRoomSize.x / 2,
-                                y + myWorldPosition.y - myRoomSize.y / 2
-                            );
-                            Gizmos.DrawCube(worldPos, Vector3.one);
+                            if (drawNullTiles)
+                            {
+                                Gizmos.color = Color.blue;
+                                Vector2 worldPos = new Vector2(
+                                    x + myWorldPosition.x - myRoomSize.x / 2,
+                                    y + myWorldPosition.y - myRoomSize.y / 2
+                                );
+                                Gizmos.DrawCube(worldPos, Vector3.one);
+                            }
                         }
                         else
                         {

@@ -182,6 +182,9 @@ namespace Cardificer.FiniteStateMachine
         // Percent of attempted speed this unit should go
         [HideInInspector] public float speedPercent = 1f;
 
+        [Tooltip("Ignore difficulty progression scaling HP, DMG, or other stats?")]
+        [SerializeField] private bool ignoreDifficultyProgression;
+        
         [Tooltip("Draw debug gizmos? Pathfinding target is magenta, attack target is yellow, current waypoint is cyan")]
         [SerializeField]
         private bool drawGizmos;
@@ -228,6 +231,11 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         void SetStats()
         {
+            if (ignoreDifficultyProgression)
+            {
+                return;
+            }
+            
             // assign health
             var startingHealth =
                 Mathf.RoundToInt(GetComponent<Health>().maxHealth * DifficultyProgressionManager.healthMultiplier);
