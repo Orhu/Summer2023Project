@@ -158,7 +158,7 @@ namespace Cardificer
 
             if (Selection.activeGameObject != null && !Selection.activeGameObject.activeInHierarchy)
             {
-                if (heldTile == null || Selection.activeGameObject.GetType() != heldTile.GetType())
+                if (heldTile == null || Selection.activeGameObject.name != heldTile.name)
                 {
                     GameObject selectedObject = Instantiate(Selection.activeGameObject);
                     selectedObject.name = Selection.activeGameObject.name;
