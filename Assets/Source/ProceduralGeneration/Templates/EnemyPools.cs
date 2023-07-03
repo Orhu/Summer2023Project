@@ -7,7 +7,7 @@ namespace Cardificer
     /// Scriptable object that holds a list of enemy pools
     /// </summary>
     [System.Serializable]
-    [CreateAssetMenu(fileName = "NewEnemyPool", menuName = "Generation/EnemyPools", order = 1)]
+    [CreateAssetMenu(fileName = "NewEnemyPool", menuName = "Generation/EnemyPools")]
     public class EnemyPools : ScriptableObject
     {
         [Tooltip("The enemy pools")]

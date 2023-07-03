@@ -106,7 +106,7 @@ namespace Cardificer
         }
 
         // The currently saved visited room data. X,Y = room location, Z = size of deck at the time of clearing. Saving handled by autosaves. Use autosaveExists to check if data Valid.
-        public static List<Vector3Int> savedVisitedRooms
+        public static List<Vector2Int> savedVisitedRooms
         {
             get
             {
@@ -325,7 +325,7 @@ namespace Cardificer
                 public float playerCooldownReduction;
 
                 // The locations and current card count of visited rooms
-                public List<Vector3Int> visitedRooms = new List<Vector3Int>();
+                public List<Vector2Int> visitedRooms = new List<Vector2Int>();
 
                 // The locations and current card count of visited rooms
                 public Vector3Int[] remainingShopBuys;
@@ -361,9 +361,9 @@ namespace Cardificer
                 saveData.playerCooldownReduction = Deck.playerDeck.cooldownReduction;
                 saveData.deckState = new Deck.State(Deck.playerDeck);
                 saveData.floorSeed = FloorGenerator.floorGeneratorInstance.seed;
+
+                saveData.visitedRooms.Add(FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation);
                 saveData.destroyedTiles = DestroyableTile.destroyedTiles != null ? DestroyableTile.destroyedTiles.ToList() : savedDestroyedTiles;
-                Vector2Int loc = FloorGenerator.floorGeneratorInstance.currentRoom.roomLocation;
-                saveData.visitedRooms.Add(new Vector3Int(loc.x, loc.y, Deck.playerDeck.cards.Count));
                 saveData.remainingShopBuys = ShopSlot.savableRemainingShopBuys;
                 saveData.randomState = Random.state;
 

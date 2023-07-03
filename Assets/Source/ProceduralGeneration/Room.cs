@@ -9,29 +9,13 @@ namespace Cardificer
     /// </summary>
     public class Room : MonoBehaviour
     {
-        // The template used to generate this room
-        [HideInInspector] public Template template;
-
-        // The grid of tiles
-        [HideInInspector] public Tile[,] roomGrid;
-
-        // The size of the room
-        [HideInInspector] public Vector2Int roomSize;
-
-        // The type of the room
-        [HideInInspector] public RoomType roomType;
-
-        // The location of the room in the map
-        [HideInInspector] public Vector2Int roomLocation;
+        #region RUNTIME_FUNCTIONALITY
 
         // The enemies alive in this room
-        public List<GameObject> livingEnemies;
+        [HideInInspector] public List<GameObject> livingEnemies;
 
         // The doors of this room
         [HideInInspector] public List<Door> doors = new List<Door>();
-
-        // Whether this room has been generated or not
-        private bool generated = false;
 
         // Called when all enemies in this room are killed.
         public System.Action onCleared;
@@ -202,8 +186,61 @@ namespace Cardificer
             }
         }
 
+        #endregion
+
+        #region GENERATION
+
+        // The template used to generate this room
+        [HideInInspector] public Template template;
+
+        // The grid of tiles
+        [HideInInspector] public Tile[,] roomGrid;
+
+        // The size of a cell
+        [HideInInspector] private Vector2Int _cellSize;
+        
+        public Vector2Int cellSize 
+        { 
+            set
+            {
+                _cellSize = value;
+                roomSize = _cellSize * roomType.sizeMultiplier;
+                // Transform map to world gives middle of bottom left cell
+                Vector2 offset = new Vector2();
+                offset.x = ((roomType.sizeMultiplier.x - 1) / 2.0f) * _cellSize.x + (((roomType.sizeMultiplier.x - 1) % 2) * 0.5f);
+                offset.y = ((roomType.sizeMultiplier.y - 1) / 2.0f) * _cellSize.y + (((roomType.sizeMultiplier.y - 1) % 2) * 0.5f);
+                transform.position = FloorGenerator.TransformMapToWorld(roomLocation, startLocation, cellSize) + offset;
+            }
+            get { return _cellSize; }
+        }
+
+        // The size of the room
+        [HideInInspector] public Vector2Int roomSize { private set; get; }
+
+        // The type of the room
+        [HideInInspector] public RoomType roomType;
+
+        // The location of the start room in the map
+        [HideInInspector] public Vector2Int startLocation;
+
+        // The bottom left location of the room in the map
+        [HideInInspector] private Vector2Int _roomLocation;
+        public Vector2Int roomLocation 
+        { 
+            set
+            {
+                _roomLocation = value;
+                transform.position = FloorGenerator.TransformMapToWorld(value, startLocation, cellSize) + (roomType.sizeMultiplier / 2) * (cellSize / 2);
+                name = roomType.displayName + " Room " + value.ToString();
+            }
+            get { return _roomLocation; } 
+        }
+
+        // Whether this room has been generated or not
+        public bool generated { get; private set; } = false;
+
         /// <summary>
-        /// Generates the layout of the room
+        /// Generates the template of the room
         /// </summary>
         /// <param name="spawnEnemies"> Whether or not to spawn enemies </param>
         public void Generate(bool spawnEnemies = true)
@@ -215,20 +252,58 @@ namespace Cardificer
                 generated = true;
             }
         }
-    }
 
-    /// <summary>
-    /// Stores the type of a room
-    /// </summary>
-    [System.Serializable]
-    public enum RoomType
-    {
-        None,
-        Normal,
-        Start,
-        Special,
-        Boss,
-        Exit
+        /// <summary>
+        /// Gets the edge cells of the room using the given map
+        /// </summary>
+        /// <param name="map"> The map to get the cells from </param>
+        /// <returns> The edge cells </returns>
+        public List<MapCell> GetEdgeCells(MapCell[,] map)
+        {
+            List<MapCell> edgeCells = new List<MapCell>();
+
+            if (roomType.sizeMultiplier == new Vector2Int(1, 1))
+            {
+                edgeCells.Add(map[roomLocation.x, roomLocation.y]);
+                return edgeCells;
+            }
+
+            if (roomType.sizeMultiplier.x == 1)
+            {
+                for (int j = 0; j < roomType.sizeMultiplier.y; j++)
+                {
+                    edgeCells.Add(map[roomLocation.x, roomLocation.y + j]);
+                }
+
+                return edgeCells;
+            }
+
+            if (roomType.sizeMultiplier.y == 1)
+            {
+                for (int i = 0; i < roomType.sizeMultiplier.x; i++)
+                {
+                    edgeCells.Add(map[roomLocation.x + i, roomLocation.y]);
+                }
+
+                return edgeCells;
+            }
+
+            for (int i = 0; i < roomType.sizeMultiplier.x; i++)
+            {
+                edgeCells.Add(map[roomLocation.x + i, roomLocation.y]);
+                edgeCells.Add(map[roomLocation.x + i, roomLocation.y + roomType.sizeMultiplier.y - 1]);
+            }
+
+            for (int j = 1; j < roomType.sizeMultiplier.y - 1; j++)
+            {
+                edgeCells.Add(map[roomLocation.x, roomLocation.y + j]);
+                edgeCells.Add(map[roomLocation.x + roomType.sizeMultiplier.x - 1, roomLocation.y + j]);
+            }
+
+            return edgeCells;
+        }
+
+        #endregion
     }
 
     /// <summary>
