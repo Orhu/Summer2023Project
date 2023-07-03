@@ -42,7 +42,7 @@ namespace Cardificer.FiniteStateMachine
             yield return new WaitForSeconds(actionChargeUpTime);
             if (stateMachine.canAct)
             {
-                actions.GetRandomThing().Play(stateMachine, FloorGenerator.floorGeneratorInstance.currentRoom.livingEnemies);
+                actions.GetRandomThing().Play(stateMachine, FloorGenerator.currentRoom.livingEnemies);
                 yield return new WaitForSeconds(actionCooldownTime);
             }
             stateMachine.cooldownData.cooldownReady[this] = true;
