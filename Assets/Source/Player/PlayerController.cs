@@ -149,7 +149,7 @@ namespace Cardificer
             {
                 bool shouldAct = true;
                 _canAct?.Invoke(ref shouldAct);
-                return shouldAct;
+                return shouldAct && !Deck.playerDeck.isActing;
             }
         }
 
