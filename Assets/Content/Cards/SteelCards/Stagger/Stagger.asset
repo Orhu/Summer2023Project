@@ -22,6 +22,7 @@ MonoBehaviour:
   displayName: Stagger
   description: <b>Delayed,</b> <b>Exhaust 1.</b> Channel your magic to unleash a
     powerful blow.
+  flavorText: <i>* Your strength comes at a cost</i>
   actionImage: {fileID: 21300000, guid: 9cb45d4afa72bbd4a84a16ef45086bfd, type: 3}
   actionBackground: {fileID: 21300000, guid: 1d3e10ede9181be46be82c8c8cf052fc, type: 3}
   effectImage: {fileID: 0}
@@ -29,6 +30,10 @@ MonoBehaviour:
   runeImage: {fileID: 21300000, guid: d198d475f6265244783a9911ef440665, type: 3}
   chordImage: {fileID: 21300000, guid: f1c2db86bf488784385c71b9a8be5c6a, type: 3}
   chordColor: {r: 0.34509805, g: 0.7960785, b: 0.6784314, a: 1}
+  isRare: 0
+  damageTypeSprite: {fileID: 0}
+  damage: 3
+  chordEffectText: ++ Damage*
   chordModifiers:
   - {fileID: 11400000, guid: 49199374179dd8641b0cc950c1d00117, type: 2}
   - {fileID: 11400000, guid: 51f2d235f44c32045b41a7610136c7c8, type: 2}
