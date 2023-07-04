@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_CursedSkull
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 0}
+  actionAudioClip: {fileID: 8300000, guid: d46ab631315a70f489ad8a7eab112b38, type: 3}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 0
     damageType: 0
@@ -38,12 +40,12 @@ MonoBehaviour:
   visualObject: {fileID: 720244782990949267, guid: 98a0fcb06c0dee244a864fce06367313, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
+  travelAudioClip: {fileID: 8300000, guid: 4b68972755264974281c76ef46050c2c, type: 3}
+  impactAudioClip: {fileID: 0}
   spawnLocation: 0
   aimMode: 0
-  travelAudioClip: {fileID: 0}
-  impactAudioClip: {fileID: 0}
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  waitForProjectileDeath: 0
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     angle: 0

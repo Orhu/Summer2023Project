@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: BulletAttack_Haze
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 0
     damageType: 1
@@ -36,12 +38,13 @@ MonoBehaviour:
   switchAfterHit: 0
   visualObject: {fileID: 3557441830315568726, guid: 34f4f145927a5f349a20926930db79da, type: 3}
   detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
+  travelAudioClip: {fileID: 8300000, guid: 0eea41ce4e7f976469b52deb56cf7f89, type: 3}
+  impactAudioClip: {fileID: 0}
   spawnLocation: 0
   aimMode: 5
-  travelAudioClip: {fileID: 0}
-  impactAudioClip: {fileID: 0}
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  waitForProjectileDeath: 0
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     angle: 0

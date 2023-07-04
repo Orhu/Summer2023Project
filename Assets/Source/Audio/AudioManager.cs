@@ -92,9 +92,8 @@ namespace Cardificer
 
 
             var audioSource = new GameObject().AddComponent<AudioSource>();
-
+            audioSource.transform.name = "PlayAudioAtPos";
             audioSource.transform.position = vector;
-
 
             audioSource.clip = audioClip;
             audioSource.loop = false;
@@ -117,6 +116,8 @@ namespace Cardificer
             if (averageOrFirst == true)
             {
                 var averageAudioGameObject = new GameObject().AddComponent<AverageAudio>();
+                averageAudioGameObject.transform.name = "AverageAudioGameObj";
+
                 var averageAudioComponent = averageAudioGameObject.GetComponent<AverageAudio>();
                 averageAudioComponent.SetProjectiles(projectiles);
                 averageAudioComponent.SetAudioClip(audioClip);
@@ -135,6 +136,7 @@ namespace Cardificer
                  }
                  var audioSource = projectiles[0].gameObject.AddComponent<AudioSource>();
                  audioSource.clip = audioClip;
+
                  audioSource.loop = true;
                  //audioSource.playOnAwake = true; 
                  audioSource.spatialBlend = .5f;
