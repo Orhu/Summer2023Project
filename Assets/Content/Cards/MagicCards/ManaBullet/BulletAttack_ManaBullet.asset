@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_ManaBullet
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 8300000, guid: 503c0eb1a5116ee48813c6c68f5997bd, type: 3}
+  actionAudioClip: {fileID: 8300000, guid: 33f0393cf968a374492f8c793498d180, type: 3}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 4
     damageType: 0
@@ -36,12 +38,12 @@ MonoBehaviour:
   visualObject: {fileID: 2238662938685823967, guid: d30dac2222e24914097423291f8d6df0, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  spawnLocation: 0
-  aimMode: 0
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  spawnLocation: 0
+  aimMode: 0
+  waitForProjectileDeath: 0
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     angle: 0

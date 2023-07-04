@@ -12,7 +12,7 @@ namespace Cardificer
     /// </summary>
     public class AudioManager : MonoBehaviour
     {
-        //Singleton Pattern
+        // Singleton Pattern
         public static AudioManager instance;
 
         [Tooltip("Sound Arrays for later Random Container Use")]
@@ -23,10 +23,7 @@ namespace Cardificer
 
         [Tooltip("List of Projectiles to pull the average audio position from")]
         private List<AverageAudio> averageAudioList = new List<AverageAudio>();
-
-
-
-
+        
         /// <summary>
         /// Implementing the singleton pattern. 
         /// </summary>
@@ -52,8 +49,6 @@ namespace Cardificer
             //         
             // }
         }
-
-
 
         /// <summary>
         /// Play attack card SFX when those cards are played that originate from the player.  
@@ -89,17 +84,15 @@ namespace Cardificer
         /// <param name="vector">The location for the audio clip to be played.</param>
         public void PlayAudioAtPos(AudioClip audioClip, Vector2 vector)
         {
+            GameObject audioSourceGameObject = new GameObject();
+            audioSourceGameObject.transform.name = "PlayAudioAtPosGameObj";
+            audioSourceGameObject.transform.position = vector;
 
-
-            var audioSource = new GameObject().AddComponent<AudioSource>();
-
-            audioSource.transform.position = vector;
-
-
+            AudioSource audioSource = audioSourceGameObject.AddComponent<AudioSource>();
             audioSource.clip = audioClip;
             audioSource.loop = false;
             audioSource.spatialBlend = .5f;
-            audioSource.pitch = UnityEngine.Random.Range(.8f, 1.1f);
+            audioSource.pitch = Random.Range(.8f, 1.1f);
             audioSource.Play();
 
             audioSourcesList.Add(audioSource);
@@ -116,8 +109,10 @@ namespace Cardificer
 
             if (averageOrFirst == true)
             {
-                var averageAudioGameObject = new GameObject().AddComponent<AverageAudio>();
-                var averageAudioComponent = averageAudioGameObject.GetComponent<AverageAudio>();
+                AverageAudio averageAudioGameObject = new GameObject().AddComponent<AverageAudio>();
+                averageAudioGameObject.transform.name = "AverageAudioGameObj";
+
+                AverageAudio averageAudioComponent = averageAudioGameObject.GetComponent<AverageAudio>();
                 averageAudioComponent.SetProjectiles(projectiles);
                 averageAudioComponent.SetAudioClip(audioClip);
 
@@ -135,10 +130,11 @@ namespace Cardificer
                  }
                  var audioSource = projectiles[0].gameObject.AddComponent<AudioSource>();
                  audioSource.clip = audioClip;
+
                  audioSource.loop = true;
                  //audioSource.playOnAwake = true; 
                  audioSource.spatialBlend = .5f;
-                 audioSource.pitch = UnityEngine.Random.Range(.8f, 1.1f);
+                 audioSource.pitch = Random.Range(.8f, 1.1f);
                  audioSource.Play();
             }
         }
@@ -150,7 +146,7 @@ namespace Cardificer
         public static void KillAverageAudio(AverageAudio averageAudio)
         {
 
-            AudioManager.instance.averageAudioList.Remove(averageAudio);
+            instance.averageAudioList.Remove(averageAudio);
             Destroy(averageAudio.gameObject);
 
         }
