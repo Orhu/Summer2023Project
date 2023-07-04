@@ -83,6 +83,9 @@ namespace Cardificer
 
             FloorGenerator.currentRoom = this;
 
+            // Enables all the tiles in the room
+            StartCoroutine(EnableTilesAfterOneFrame(spawnEnemies));
+
             // Move player into room, then close/activate doors (so player doesn't get trapped in door)
             StartCoroutine(MovePlayer(direction, shouldCloseDoors && enemiesPresent, callCleared && (!enemiesPresent && shouldCloseDoors)));
         }
@@ -302,6 +305,32 @@ namespace Cardificer
             }
 
             return edgeCells;
+        }
+
+        /// <summary>
+        /// Enables all the tiles after waiting one frame to ensure the tiles have initialized themselves correctly
+        /// </summary>
+        /// <param name="roomSize"> The room size </param>
+        /// <param name="roomGrid"> The room grid </param>
+        /// <param name="spawnEnemies"> Whether or not to spawn enemies </param>
+        /// <returns> Waits one frame </returns>
+        private IEnumerator EnableTilesAfterOneFrame(bool spawnEnemies)
+        {
+            yield return null;
+            for (int i = 0; i < roomSize.x; i++)
+            {
+                for (int j = 0; j < roomSize.y; j++)
+                {
+                    if ((roomGrid[i, j].GetComponent<EnemySpawner>() == null && roomGrid[i, j].GetComponent<FiniteStateMachine.BaseStateMachine>() == null) || spawnEnemies)
+                    {
+                        roomGrid[i, j].Enable();
+                    }
+                    else
+                    {
+                        roomGrid[i, j].gameObject.SetActive(false);
+                    }
+                }
+            }
         }
 
         #endregion
