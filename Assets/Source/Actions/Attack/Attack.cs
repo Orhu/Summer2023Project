@@ -11,6 +11,11 @@ namespace Cardificer
     /// </summary>
     public abstract class Attack : Action
     {
+        // The projectile to spawn
+        public Projectile projectilePrefab;
+        // The previewer prefab to use.
+        public AttackPreviewer previewerPrefab;
+
         [Header("Hits")]
 
         [Tooltip("The damage, damage type, status effects, and knockback this projectile will deal.")]
@@ -81,6 +86,19 @@ namespace Cardificer
 
 
 
+        [Header("Projectile Audio")]
+
+        [Tooltip("AudioClip for projectile travel")]
+        [SerializeField] protected AudioClip travelAudioClip;
+
+        [Tooltip("AudioClip for projectile impact.")]
+        [SerializeField] protected AudioClip impactAudioClip;
+
+        // The root of all projectiles
+        private static GameObject projectileRoot;
+
+
+
         [Header("Spawning")]
 
         [Tooltip("The location to spawn the projectiles at.")]
@@ -92,23 +110,11 @@ namespace Cardificer
         [Tooltip("The sequence of when and where to spawn projectiles")]
         public abstract List<ProjectileSpawnInfo> spawnSequence { set; get; }
 
-        [Header("Projectile Audio")]
+        [Tooltip("Whether or not to wait for all spawned projectiles to die before the action is complete.")]
+        public bool waitForProjectileDeath = false;
 
-        [Tooltip("AudioClip for projectile travel")]
-        [SerializeField] protected AudioClip travelAudioClip;
-
-        [Tooltip("AudioClip for projectile impact.")]
-        [SerializeField] protected AudioClip impactAudioClip;
-
-
-
-        // The projectile to spawn
-        public Projectile projectilePrefab;
-        // The previewer prefab to use.
-        public AttackPreviewer previewerPrefab;
-
-        // The root of all projectiles
-        private static GameObject projectileRoot;
+        [Tooltip("The time to wait after the spawn sequence is finished and (optionally) all projectile have died until the action is officially complete.")] [Min(0f)]
+        public float additionalActionTime = 0f;
 
 
 
@@ -182,6 +188,8 @@ namespace Cardificer
         {
             List<ProjectileSpawnInfo> spawnSequence = new List<ProjectileSpawnInfo>(this.spawnSequence);
             var projectileList = new List<Projectile>();
+            int destroyedProejectiles = 0;
+            
             for (int i = 0; i < spawnSequence.Count; i++)
             {
                 if (spawnSequence[i].delay > 0)
@@ -192,14 +200,29 @@ namespace Cardificer
                 projectileList.Add(spawnedProjectile);
                 spawnedProjectile.playImpactAudio += (Vector2 pos) => PlayImpactAtPos(pos);
 
+                if (waitForProjectileDeath)
+                {
+                    spawnedProjectile.onDestroyed += () => { destroyedProejectiles++; };
+                }
+
+
                 // Wait to ensure the sequence doesn't miss new additions
                 if (i + 1 >= spawnSequence.Count)
                 {
-                    yield return new WaitForEndOfFrame();
-                    yield return new WaitForEndOfFrame();
+                    yield return null;
+                    yield return null;
                 }
             }
+            
+            // Wait for projectile death
+            while (waitForProjectileDeath && destroyedProejectiles != spawnSequence.Count)
+            {
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(additionalActionTime);
             attackFinished?.Invoke();
+            
             AudioManager.instance.GetAverageAudioSource(projectileList, travelAudioClip, projectileList.Count > 1);
         }
 
