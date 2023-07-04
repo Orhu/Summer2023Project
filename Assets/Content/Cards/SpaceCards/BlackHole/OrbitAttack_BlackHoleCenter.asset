@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
   m_Name: OrbitAttack_BlackHoleCenter
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 0}
+  actionAudioClip: {fileID: 8300000, guid: fa0b9c81744f68e4bb2acaa6000be53f, type: 3}
+  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
+  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   attack:
     damage: 2
     damageType: 1
@@ -37,12 +39,12 @@ MonoBehaviour:
   visualObject: {fileID: 7940671346844068234, guid: 1c0c6f27def431a42b35402df9f22f31, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
+  travelAudioClip: {fileID: 8300000, guid: f87ed7677e8e7304185095bd6d3afe6e, type: 3}
+  impactAudioClip: {fileID: 0}
   spawnLocation: 3
   aimMode: 0
-  travelAudioClip: {fileID: 0}
-  impactAudioClip: {fileID: 0}
-  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
-  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
+  waitForProjectileDeath: 0
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 3
     startingAngle: 0
