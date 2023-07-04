@@ -455,6 +455,7 @@ namespace Cardificer
             }
 
             onCardAdded?.Invoke(card);
+            DrawCard();
         }
 
         /// <summary>
