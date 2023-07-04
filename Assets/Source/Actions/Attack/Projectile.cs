@@ -118,6 +118,9 @@ namespace Cardificer
 
         // The current randomly picked target.
         private GameObject randomTarget;
+
+        // Whether or not the on destroy function should be ignored.
+        private bool forceDestroy = false;
         #endregion
 
 
@@ -197,6 +200,15 @@ namespace Cardificer
                     }
                 }
             }
+
+
+            FloorGenerator.onRoomChange.AddListener(
+                // Destroys this when the room is changed without triggering on destroy.
+                () => 
+                {
+                    forceDestroy = true;
+                    Destroy(gameObject); 
+                });
         }
 
         /// <summary>
@@ -431,7 +443,7 @@ namespace Cardificer
         /// </summary>
         protected void OnDestroy()
         {
-            if (!gameObject.scene.isLoaded) { return; }
+            if (!gameObject.scene.isLoaded || forceDestroy) { return; }
 
             onDestroyed?.Invoke();
             if (attack.detachVisualsBeforeDestroy)
