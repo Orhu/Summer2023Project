@@ -306,6 +306,8 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void OnDestroy()
         {
+            StopAllCoroutines();
+            
             if (!gameObject.scene.isLoaded || !FloorGenerator.IsValid())
             {
                 return;
