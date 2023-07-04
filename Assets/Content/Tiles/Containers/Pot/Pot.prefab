@@ -186,15 +186,6 @@ MonoBehaviour:
   _maxHealth: 1
   invincibilityDuration: 0
   immuneStatusEffects: []
-  onHealthChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onMaxHealthChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  onAttacked:
-    m_PersistentCalls:
-      m_Calls: []
   onDeath:
     m_PersistentCalls:
       m_Calls:
@@ -222,6 +213,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  hasBossHealthbar: 0
 --- !u!114 &6258890840212835944
 MonoBehaviour:
   m_ObjectHideFlags: 0
