@@ -242,7 +242,6 @@ namespace Cardificer
             if (speed > Mathf.Abs(acceleration) * Time.fixedDeltaTime)
             {
                 transform.right = velocity;
-                Debug.Log(velocity.magnitude);
             }
             rigidBody.velocity = velocity;
 
