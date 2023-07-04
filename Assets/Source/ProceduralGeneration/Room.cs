@@ -310,8 +310,6 @@ namespace Cardificer
         /// <summary>
         /// Enables all the tiles after waiting one frame to ensure the tiles have initialized themselves correctly
         /// </summary>
-        /// <param name="roomSize"> The room size </param>
-        /// <param name="roomGrid"> The room grid </param>
         /// <param name="spawnEnemies"> Whether or not to spawn enemies </param>
         /// <returns> Waits one frame </returns>
         private IEnumerator EnableTilesAfterOneFrame(bool spawnEnemies)
