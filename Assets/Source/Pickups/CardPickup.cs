@@ -20,6 +20,7 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
+            lootTable = Instantiate(lootTable);
             card = lootTable.weightedLoot.GetRandomThing(transform.position);
             GetComponentInChildren<CardRenderer>(true).card = card;
             GetComponentInChildren<SpriteRenderer>().sprite = card.runeImage;
