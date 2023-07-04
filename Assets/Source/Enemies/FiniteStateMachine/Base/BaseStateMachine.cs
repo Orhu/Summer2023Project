@@ -136,8 +136,8 @@ namespace Cardificer.FiniteStateMachine
         {
             set
             {
-                feetCollider.gameObject.layer = LayerMask.NameToLayer(currentMovementType.ToString());
-                GetComponent<SpriteRenderer>().sortingLayerName = currentMovementType.ToString();
+                feetCollider.gameObject.layer = LayerMask.NameToLayer(value.ToString());
+                GetComponent<SpriteRenderer>().sortingLayerName = value.ToString();
                 _currentMovementType = value;
             }
             get => _currentMovementType;
