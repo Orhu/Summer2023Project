@@ -25,10 +25,10 @@ namespace Cardificer
         {
             set
             {
-                value.speed *= initialSpeedFactor;
-                value.acceleration *= accelerationFactor;
-                value.maxSpeed *= maxSpeedFactor;
-                value.minSpeed *= minSpeedFactor;
+                value.speed += (initialSpeedFactor - 1) * value.attack.initialSpeed;
+                value.acceleration += (accelerationFactor - 1) * value.attack.acceleration;
+                value.maxSpeed += (maxSpeedFactor - 1) * value.attack.maxSpeed;
+                value.minSpeed += (minSpeedFactor - 1) * value.attack.minSpeed;
             }
         }
     }

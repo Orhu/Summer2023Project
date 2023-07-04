@@ -18,7 +18,8 @@ namespace Cardificer
         {
             set
             {
-                value.transform.localScale = new Vector3(value.transform.localScale.x * scaleFactor, value.transform.localScale.y * scaleFactor, value.transform.localScale.z * scaleFactor);
+                float newScale = value.transform.localScale.x + scaleFactor - 1;
+                value.transform.localScale = new Vector3(newScale, newScale, newScale);
             }
         }
     }
