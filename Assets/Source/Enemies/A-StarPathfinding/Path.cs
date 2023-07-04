@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cardificer.FiniteStateMachine;
 using UnityEngine;
 
 namespace Cardificer
@@ -9,30 +10,34 @@ namespace Cardificer
     /// </summary>
     public class Path
     {
-        // array of waypoints to travel down
-        public readonly Vector2[] lookPoints;
+        // Array of waypoints to travel down
+        public readonly Vector2[] waypoints;
 
-        // array of turn boundaries
+        // Array of turn boundaries
         public readonly Line[] turnBoundaries;
 
-        // final index of the turn boundaries array
+        // Final index of the turn boundaries array
         public readonly int finishLineIndex;
+
+        // What index waypoint should slowdown start
+        public readonly int slowDownIndex;
 
         /// <summary>
         /// Initialize a new instance of a Path, creating a Line object between each waypoint
         /// </summary>
         /// <param name="waypoints"> Array of waypoints to travel down </param>
         /// <param name="startPos"> Starting position </param>
-        public Path(Vector2[] waypoints, Vector3 startPos)
+        /// <param name="stoppingDist"> Distance from endpoint to begin slowing down and stopping </param>
+        public Path(Vector2[] waypoints, Vector3 startPos, float stoppingDist)
         {
-            lookPoints = waypoints;
-            turnBoundaries = new Line[lookPoints.Length];
+            this.waypoints = waypoints;
+            turnBoundaries = new Line[this.waypoints.Length];
             finishLineIndex = turnBoundaries.Length - 1;
 
             Vector2 previousPoint = startPos;
-            for (int i = 0; i < lookPoints.Length; i++)
+            for (int i = 0; i < this.waypoints.Length; i++)
             {
-                Vector2 currentPoint = lookPoints[i];
+                Vector2 currentPoint = this.waypoints[i];
                 Vector2 dirToCurrentPoint = (currentPoint - previousPoint).normalized;
                 // calculate the turn boundary point based on whether it's the finish line or not
                 Vector2 turnBoundaryPoint = (i == finishLineIndex) ? currentPoint : currentPoint - dirToCurrentPoint;
@@ -40,23 +45,14 @@ namespace Cardificer
                 turnBoundaries[i] = new Line(turnBoundaryPoint, previousPoint - dirToCurrentPoint);
                 previousPoint = turnBoundaryPoint;
             }
-        }
 
-        /// <summary>
-        /// Draw debug gizmos
-        /// </summary>
-        public void DrawWithGizmos()
-        {
-            Gizmos.color = Color.black;
-            foreach (Vector3 p in lookPoints)
-            {
-                Gizmos.DrawCube(p + Vector3.up, Vector3.one);
-            }
-
-            Gizmos.color = Color.white;
-            foreach (Line l in turnBoundaries)
-            {
-                l.DrawWithGizmos(10);
+            float dstFromEndPoint = 0;
+            for (int i = this.waypoints.Length - 1; i > 0; i--) {
+                dstFromEndPoint += Vector3.Distance (this.waypoints [i], this.waypoints [i - 1]);
+                if (dstFromEndPoint > stoppingDist) {
+                    slowDownIndex = i;
+                    break;
+                }
             }
         }
     }

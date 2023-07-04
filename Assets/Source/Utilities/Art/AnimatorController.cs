@@ -10,6 +10,9 @@ namespace Cardificer
     [RequireComponent(typeof(Animator))]
     public class AnimatorController : MonoBehaviour
     {
+        [Tooltip("The default mirror parameter, if empty no parameter will be set by default.")]
+        [SerializeField] private string defaultMirrorParam;
+
         [Tooltip("The states to the parameter name to use to mirror")]
         [SerializeField] private List<ClipToParameter> _animactionClipsToMirrorParameters;
         private Dictionary<AnimationClip, string> animactionClipsToMirrorParameters = new Dictionary<AnimationClip, string>();
@@ -30,9 +33,12 @@ namespace Cardificer
             foreach (ClipToParameter animactionClipToMirrorParameter in _animactionClipsToMirrorParameters)
             {
                 animactionClipsToMirrorParameters.Add(animactionClipToMirrorParameter.clip, animactionClipToMirrorParameter.parameterName);
+                mirrorParametersToValues.TryAdd(animactionClipToMirrorParameter.parameterName, false);
+            }
 
-                if (mirrorParametersToValues.ContainsKey(animactionClipToMirrorParameter.parameterName)) { continue; }
-                mirrorParametersToValues.Add(animactionClipToMirrorParameter.parameterName, false);
+            if (defaultMirrorParam.Length > 0)
+            {
+                mirrorParametersToValues.TryAdd(defaultMirrorParam, false);
             }
         }
 
@@ -44,7 +50,15 @@ namespace Cardificer
             if (!animator.hasBoundPlayables) { return; }
 
             AnimationClip currentClip = animator.GetCurrentAnimatorClipInfo(0)[0].clip;
-            if (currentClip == null || !animactionClipsToMirrorParameters.ContainsKey(currentClip)) { return; }
+            if (currentClip == null) { return; } 
+            if (!animactionClipsToMirrorParameters.ContainsKey(currentClip)) 
+            { 
+                if (defaultMirrorParam.Length > 0)
+                {
+                    transform.localScale = new Vector3(mirrorParametersToValues[defaultMirrorParam] ? -1 : 1, 1, 1);
+                }
+                return; 
+            }
             transform.localScale = new Vector3(mirrorParametersToValues[animactionClipsToMirrorParameters[currentClip]] ? -1 : 1, 1, 1);
         }
 

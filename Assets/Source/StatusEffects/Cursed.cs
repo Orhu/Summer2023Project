@@ -26,7 +26,7 @@ namespace Cardificer
         {
             Cursed instance = (Cursed)base.CreateCopy(gameObject);
 
-            gameObject.GetComponent<Health>().onRequestIncomingAttackModification += instance.MutiplyDamage;
+            gameObject.GetComponent<Health>().onRequestIncomingAttackModification += instance.MultiplyDamage;
 
             return instance;
         }
@@ -51,7 +51,7 @@ namespace Cardificer
         /// Responds to a health's incoming damage modification request, and prevents the attack from passing.
         /// </summary>
         /// <param name="attack"> The attack to prevent. </param>
-        private void MutiplyDamage(ref DamageData attack)
+        private void MultiplyDamage(ref DamageData attack)
         {
             attack.damage = (int)(attack.damage * damageMultiplier);
         }
@@ -65,7 +65,7 @@ namespace Cardificer
 
             if (gameObject == null) { return; }
 
-            gameObject.GetComponent<Health>().onRequestIncomingAttackModification -= MutiplyDamage;
+            gameObject.GetComponent<Health>().onRequestIncomingAttackModification -= MultiplyDamage;
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using ChaseData = Cardificer.FiniteStateMachine.BaseStateMachine.ChaseData;
 
@@ -13,15 +14,10 @@ namespace Cardificer.FiniteStateMachine
     public class ChaseTarget : SingleAction
     {
         [Tooltip("After a Path request is submitted, how long before another one is allowed?")]
-        [SerializeField] private float pathLockout = 0.25f;
-        
-        // Default value found by testing units traveled every frame with movement speed of 4.
-        // Essentially, this number allows us to avoid the "zigzagging" effect that happens when an enemy overshoots its
-        // target (due to moving too fast in one frame) by providing a buffer for Vector2 position float comparison.
-        // But, if the number is too high, the leniency will cause the enemy to not get close enough to their target pos before
-        // turning, leading to unpredictable behavior.
-        [Tooltip("When reaching a waypoint, how close do we have to be before we stop? (Vector2 position float comparison buffer)")]
-        [SerializeField] private float distanceBuffer = 0.061f;
+        [SerializeField] private float pathLockout = 0.03f;
+
+        [Tooltip("Starting at stopping dist from the target destination, move speed rapidly drops until target destination is reached.")]
+        [SerializeField] private float stoppingDist = 0.5f;
         
         // need to track our current data
         private ChaseData chaseData;
@@ -31,7 +27,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         /// <param name="stateMachine"> stateMachine to be used </param>
         /// <returns> Waits pathLockout seconds before allowing another request. </returns>
-        protected sealed override IEnumerator PlayAction(BaseStateMachine stateMachine)
+        protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             RequestPath(stateMachine);
             yield return new WaitForSeconds(pathLockout);
@@ -44,30 +40,22 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> The stateMachine to be used. </param>
         private void RequestPath(BaseStateMachine stateMachine)
         {
-            PathRequestManager.RequestPath(stateMachine, OnPathFound);
-        }
-
-        /// <summary>
-        /// Called when a path is successfully found
-        /// </summary>
-        /// <param name="newPath"> The new path </param>
-        /// <param name="success"> Whether the path was successfully found or not </param>
-        /// <param name="stateMachine"> The stateMachine to be used. </param>
-        private void OnPathFound(Vector2[] newPath, bool success, BaseStateMachine stateMachine)
-        {
-            if (!success || stateMachine == null || stateMachine.pathData.ignorePathRequests) return;
-
-            stateMachine.pathData.path = new Path(newPath, stateMachine.GetFeetPos());
-
-            if (stateMachine.pathData.prevFollowCoroutine != null)
+            PathRequestManager.AsyncRequestPath(stateMachine, (Vector2[] path, bool successful) => 
             {
-                stateMachine.StopCoroutine(stateMachine.pathData.prevFollowCoroutine);
-            }
+                if (!successful || stateMachine == null || stateMachine.pathData.ignorePathRequests) return;
 
-            var newCoroutine = FollowPath(stateMachine);
-            stateMachine.pathData.prevFollowCoroutine = newCoroutine;
-            stateMachine.pathData.targetIndex = 0;
-            stateMachine.StartCoroutine(newCoroutine);
+                stateMachine.pathData.path = new Path(path, stateMachine.GetFeetPos(), stoppingDist);
+
+                if (stateMachine.pathData.prevFollowCoroutine != null)
+                {
+                    stateMachine.StopCoroutine(stateMachine.pathData.prevFollowCoroutine);
+                }
+
+                var newCoroutine = FollowPath(stateMachine);
+                stateMachine.pathData.prevFollowCoroutine = newCoroutine;
+                stateMachine.pathData.targetIndex = 0;
+                stateMachine.StartCoroutine(newCoroutine);
+            });
         }
 
         /// <summary>
@@ -77,31 +65,46 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> Allows other code to execute in between iterations of the while (true) loop </returns>
         private IEnumerator FollowPath(BaseStateMachine stateMachine)
         {
-            if (stateMachine.pathData.path.lookPoints.Length == 0)
+            stateMachine.speedPercent = 1f; // reset speed percent to normal
+            
+            if (stateMachine.pathData.path.waypoints.Length == 0)
             {
                 yield break;
             }
 
-            Vector2 currentWaypoint = stateMachine.pathData.path.lookPoints[0];
-            stateMachine.currentWaypoint = currentWaypoint;
-
             while (stateMachine.pathData.keepFollowingPath)
             {
-                if (ArrivedAtPoint(currentWaypoint, stateMachine))
+                while (stateMachine.pathData.path.turnBoundaries[stateMachine.pathData.targetIndex]
+                       .HasCrossedLine(stateMachine.GetFeetPos()))
                 {
-                    stateMachine.pathData.targetIndex++;
-                    if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.lookPoints.Length)
+                    if (stateMachine.pathData.targetIndex == stateMachine.pathData.path.finishLineIndex)
                     {
-                        // reached the end of the waypoints, stop moving here
-                        stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
-                        yield break;
+                        stateMachine.pathData.keepFollowingPath = false;
+                        break;
                     }
-
-                    currentWaypoint = stateMachine.pathData.path.lookPoints[stateMachine.pathData.targetIndex];
+                    else
+                    {
+                        stateMachine.pathData.targetIndex++;
+                    }
                 }
 
-                stateMachine.GetComponent<Movement>().movementInput =
-                    (currentWaypoint - (Vector2)stateMachine.GetFeetPos()).normalized;
+                if (stateMachine.pathData.keepFollowingPath)
+                {
+                    if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.slowDownIndex && stoppingDist > 0)
+                    {
+                        stateMachine.speedPercent = Mathf.Clamp01(stateMachine.pathData.path
+                                                         .turnBoundaries[stateMachine.pathData.path.finishLineIndex]
+                                                         .DistanceFromPoint(stateMachine.GetFeetPos()) /
+                                                     stoppingDist);
+                        if (stateMachine.speedPercent < 0.01f)
+                        {
+                            stateMachine.pathData.keepFollowingPath = false;
+                        }
+                    }
+                    stateMachine.GetComponent<Movement>().movementInput =
+                        (stateMachine.pathData.path.waypoints[stateMachine.pathData.targetIndex] - stateMachine.GetFeetPos()).normalized;
+                }
+                
                 yield return null;
             }
         }
@@ -113,7 +116,7 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> The stateMachine to be used. </param>
         private bool ArrivedAtPoint(Vector2 point, BaseStateMachine stateMachine)
         {
-            return Vector2.Distance(point, stateMachine.GetFeetPos()) <= distanceBuffer;
+            return Vector2.Distance(point, stateMachine.GetFeetPos()) <= stateMachine.distanceBuffer;
         }
     }
 }

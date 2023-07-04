@@ -295,6 +295,7 @@ namespace Cardificer
         AtClosestEnemyToActor,
         AtRandomEnemy,
         Right,
+        AtPlayer,
     }
 
     /// <summary>

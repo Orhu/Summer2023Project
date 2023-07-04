@@ -153,8 +153,8 @@ namespace Cardificer
             
             // Set up attack
             attackData = new DamageData(attack.attack, causer);
-            IActor causedBy = causer.GetComponent<IActor>();
-            if (causedBy != null)
+
+            if (causer != null && causer?.GetComponent<IActor>() is IActor causedBy)
             {
                 attackData.damage = Mathf.RoundToInt(attackData.damage * causedBy.GetDamageMultiplier());
             }
@@ -350,6 +350,8 @@ namespace Cardificer
 
                 case AimMode.Right:
                     return transform.position + actor.GetActionSourceTransform().right;
+                case AimMode.AtPlayer :
+                    return Player.Get().transform.position;
             }
             return transform.position + transform.right;
         }
