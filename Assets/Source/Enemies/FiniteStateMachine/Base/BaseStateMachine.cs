@@ -136,25 +136,7 @@ namespace Cardificer.FiniteStateMachine
         {
             set
             {
-                switch (value)
-                {
-                    case MovementType.Burrow:
-                        feetCollider.gameObject.layer = LayerMask.NameToLayer("Burrowing");
-                        GetComponent<SpriteRenderer>().sortingLayerName = "Burrowing";
-                        break;
-                    case MovementType.Fly:
-                        feetCollider.gameObject.layer = LayerMask.NameToLayer("Flying");
-                        GetComponent<SpriteRenderer>().sortingLayerName = "Flying";
-                        break;
-                    case MovementType.Walk:
-                        feetCollider.gameObject.layer = LayerMask.NameToLayer("Walking");
-                        GetComponent<SpriteRenderer>().sortingLayerName = "Default";
-                        break;
-                    default:
-                        Debug.LogError("Tried to set " + name + " to an invalid movement type");
-                        return;
-                }
-
+                feetCollider.gameObject.layer = LayerMask.NameToLayer(currentMovementType.ToString());
                 _currentMovementType = value;
             }
             get => _currentMovementType;

@@ -1,10 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Random = System.Random;
 using AttackSequence = Cardificer.FiniteStateMachine.COD_DrawCards.AttackSequence;
 
 namespace Cardificer.FiniteStateMachine

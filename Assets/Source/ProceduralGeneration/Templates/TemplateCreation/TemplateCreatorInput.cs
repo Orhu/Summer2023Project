@@ -1,4 +1,3 @@
-using UnityEngine.UI;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
