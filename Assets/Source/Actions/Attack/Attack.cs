@@ -113,6 +113,9 @@ namespace Cardificer
         [Tooltip("Whether or not to wait for all spawned projectiles to die before the action is complete.")]
         public bool waitForProjectileDeath = false;
 
+        [Tooltip("The time to wait before starting the attack sequence.")] [Min(0f)]
+        public float chargeTime = 0f;
+
         [Tooltip("The time to wait after the spawn sequence is finished and (optionally) all projectile have died until the action is officially complete.")] [Min(0f)]
         public float additionalActionTime = 0f;
 
@@ -189,7 +192,9 @@ namespace Cardificer
             List<ProjectileSpawnInfo> spawnSequence = new List<ProjectileSpawnInfo>(this.spawnSequence);
             var projectileList = new List<Projectile>();
             int destroyedProejectiles = 0;
-            
+
+            yield return new WaitForSeconds(chargeTime);
+
             for (int i = 0; i < spawnSequence.Count; i++)
             {
                 if (spawnSequence[i].delay > 0)
