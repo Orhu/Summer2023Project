@@ -82,8 +82,8 @@ namespace Cardificer
             if (grabbedTile.Item2)
             {
                 grabbedTile.Item1.allowedMovementTypes |=
-                    RoomInterface.MovementType.Walk | RoomInterface.MovementType.Fly |
-                    RoomInterface.MovementType.Burrow;
+                    RoomInterface.MovementType.Walking | RoomInterface.MovementType.Flying |
+                    RoomInterface.MovementType.Burrowing;
                 destroyedTiles.Add(myWorldPos);
                 if (shouldDestroy)
                 {
