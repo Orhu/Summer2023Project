@@ -71,6 +71,7 @@ namespace Cardificer.FiniteStateMachine
         private GameObject DisplayCard(BaseStateMachine stateMachine, AttackSequence cardToDisplay)
         {
             var gameObject = new GameObject();
+            gameObject.transform.name = "CardPickDisplay";
             var spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
             spriteRenderer.sprite = cardToDisplay.abilitySprite;
             gameObject.transform.position = stateMachine.transform.position + (Vector3.up * 2f);
