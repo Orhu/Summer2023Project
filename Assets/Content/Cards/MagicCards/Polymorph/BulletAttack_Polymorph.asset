@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_Polymorph
   m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 0}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 0
     damageType: 1
@@ -30,13 +33,18 @@ MonoBehaviour:
   maxSpeed: 6
   homingSpeed: 0
   homingTime: 0
+  homingDelay: 0
   homingAimMode: 1
+  switchAfterHit: 0
   visualObject: {fileID: 4148704924226945896, guid: 2a845ee2209df2648ac322aa97fd81a3, type: 3}
   detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
   spawnLocation: 0
   aimMode: 0
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  waitForProjectileDeath: 1
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     angle: 0

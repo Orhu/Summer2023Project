@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: OrbitAttack_Slash
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 8300000, guid: b817808265bdb2e44a7bae6dfe84708e, type: 3}
+  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
+  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   attack:
     damage: 4
     damageType: 1
@@ -37,12 +39,12 @@ MonoBehaviour:
   visualObject: {fileID: 293521835147723709, guid: 32c525403adfffb4e98835cb379cac84, type: 3}
   detachVisualsBeforeDestroy: 1
   detatchedVisualsTimeBeforeDestroy: 0.25
-  spawnLocation: 0
-  aimMode: 0
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
-  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
-  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
+  spawnLocation: 0
+  aimMode: 0
+  waitForProjectileDeath: 1
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     startingAngle: 90

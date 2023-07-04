@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
   m_Name: OrbitAttack_LeechingTouch
   m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 0}
+  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
+  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   attack:
     damage: 2
     damageType: 0
@@ -31,13 +34,18 @@ MonoBehaviour:
   maxSpeed: 4.712389
   homingSpeed: 0
   homingTime: 0
+  homingDelay: 0
   homingAimMode: 0
+  switchAfterHit: 0
   visualObject: {fileID: 6147264819674008988, guid: ec7afea880b70324d844b62e5048d9da, type: 3}
   detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
   spawnLocation: 0
   aimMode: 3
-  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
-  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
+  waitForProjectileDeath: 1
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     startingAngle: 0
