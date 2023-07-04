@@ -227,19 +227,19 @@ namespace Cardificer
                         {
                             if (drawWalkTiles)
                             {
-                                Gizmos.color = t.allowedMovementTypes.HasFlag(MovementType.Walk)
+                                Gizmos.color = t.allowedMovementTypes.HasFlag(MovementType.Walking)
                                     ? Color.green
                                     : Color.red;
                             }
                             else if (drawFlyTiles)
                             {
-                                Gizmos.color = t.allowedMovementTypes.HasFlag(MovementType.Fly)
+                                Gizmos.color = t.allowedMovementTypes.HasFlag(MovementType.Flying)
                                     ? Color.green
                                     : Color.red;
                             }
                             else if (drawBurrowTiles)
                             {
-                                Gizmos.color = t.allowedMovementTypes.HasFlag(MovementType.Burrow)
+                                Gizmos.color = t.allowedMovementTypes.HasFlag(MovementType.Burrowing)
                                     ? Color.green
                                     : Color.red;
                             }
