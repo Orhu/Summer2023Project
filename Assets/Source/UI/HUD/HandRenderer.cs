@@ -100,10 +100,10 @@ namespace Cardificer
                     chordContainer.ResetChord();
                 }
 
-                if (Deck.playerDeck.cardIndicesToActionTimes.ContainsKey(i))
+                if (Deck.playerDeck.actingCardIndices.Contains(i))
                 {
                     runeRenderers[i].cooldownTime = 0;
-                    runeRenderers[i].actionTime = Deck.playerDeck.cardIndicesToActionTimes[i];
+                    runeRenderers[i].actionTime = 1;
                 }
                 else if (Deck.playerDeck.cardIndicesToCooldowns.ContainsKey(i))
                 {
