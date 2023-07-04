@@ -60,7 +60,7 @@ public class BossHealthbarManager : MonoBehaviour
     /// </summary>
     /// <param name="healthVal"> New value to set the health bar to </param>
     /// <returns> Waits one frame between every fill step </returns>
-    IEnumerator FillHealthbar(float healthVal)
+    private IEnumerator FillHealthbar(float healthVal)
     {
         while (Mathf.Abs(slider.value - healthVal) > 0.01)
         {
