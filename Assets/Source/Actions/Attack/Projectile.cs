@@ -256,7 +256,6 @@ namespace Cardificer
                 transform.right = velocity;
             }
             rigidBody.velocity = velocity;
-
         }
 
         /// <summary>
