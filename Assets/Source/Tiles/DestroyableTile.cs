@@ -14,16 +14,34 @@ namespace Cardificer
     public class DestroyableTile : MonoBehaviour
     {
         // Stores a shared list of destroyed tile positions
-        public static HashSet<Vector2> destroyedTiles;
+        private static HashSet<Vector2> _destroyedTiles;
+        public static HashSet<Vector2> destroyedTiles
+        {
+            get
+            {
+                if (_destroyedTiles != null) { return _destroyedTiles; }
+
+                if (SaveManager.autosaveExists)
+                {
+                    _destroyedTiles = SaveManager.savedDestroyedTiles.ToHashSet();
+                }
+                else
+                {
+                    _destroyedTiles = new HashSet<Vector2>();
+                }
+                SceneManager.sceneUnloaded += (Scene scene) => { _destroyedTiles = null; };
+
+                return _destroyedTiles;
+            }
+            set => _destroyedTiles = value;
+        }
 
         /// <summary>
         /// Adds the room change listener and initializes destroyedTiles if needed
         /// </summary>
-        void Start()
+        void Awake()
         {
             FloorGenerator.onRoomChange.AddListener(OnRoomEnter);
-            destroyedTiles ??=
-                SaveManager.savedDestroyedTiles.ToHashSet(); // if destroyedTiles doesnt exist, load it from the save
         }
 
         /// <summary>
@@ -47,7 +65,7 @@ namespace Cardificer
         private void OnDestroy()
         {
             // if scene is loaded
-            if (gameObject.scene.isLoaded && RoomInterface.instance != null)
+            if (!destroyedTiles.Contains(transform.position) && gameObject.scene.isLoaded && RoomInterface.instance != null)
             {
                 // false because OnDestroy means something else destroyed us
                 InitiateDestruction(false);
@@ -72,10 +90,6 @@ namespace Cardificer
                 {
                     Destroy(gameObject);
                 }
-            }
-            else
-            {
-                Debug.LogWarning("Attempted to update grid on destroy, but Tile at " + myWorldPos + " does not exist.");
             }
         }
     }
