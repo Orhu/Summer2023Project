@@ -17,9 +17,9 @@ namespace Cardificer
         public enum MovementType
         {
             None = 0,
-            Walk = 1,
-            Fly = 2,
-            Burrow = 4
+            Walking = 1,
+            Flying = 2,
+            Burrowing = 4
         }
 
         // the room this class represents
