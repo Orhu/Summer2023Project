@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: BulletAttack_BallLightning
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 6
     damageType: 0
@@ -37,14 +39,15 @@ MonoBehaviour:
   visualObject: {fileID: 501237703940796473, guid: 1499b314b78f8cd4db68b79e32d0cee1, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  spawnLocation: 0
-  aimMode: 0
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  spawnLocation: 0
+  aimMode: 0
+  waitForProjectileDeath: 0
+  chargeTime: 1.1
+  additionalActionTime: 0
   _spawnSequence:
-  - delay: 1.1
+  - delay: 0
     angle: 0
     offset: {x: 0.55, y: 0}
   randomAngle: 0
