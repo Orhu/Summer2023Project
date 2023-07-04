@@ -10,7 +10,7 @@ namespace Cardificer
     public class Tile : MonoBehaviour
     {
         [Tooltip("Movement types this tile supports")]
-        public MovementType allowedMovementTypes = MovementType.Burrow | MovementType.Walk | MovementType.Fly;
+        public MovementType allowedMovementTypes = MovementType.Burrowing | MovementType.Walking | MovementType.Flying;
 
         [Tooltip("How much this tile costs to walk on (higher is avoided more, lower is preferred)")]
         public int walkMovementPenalty;
