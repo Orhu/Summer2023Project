@@ -5,7 +5,7 @@ namespace Cardificer.FiniteStateMachine
     /// <summary>
     /// Represents a decision that returns true if both given keys exist and are equal as ints
     /// </summary>
-    [CreateAssetMenu(menuName = "FSM/Tracked Variables/Integer/State Variable Comparison")]
+    [CreateAssetMenu(menuName = "FSM/Tracked Variables/Integer/Decisions/State Variable Comparison")]
     public class IntCompareStateVariableToStateVariable : Decision
     {
         [Tooltip("State variable to compare")]
@@ -24,8 +24,8 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> true if the given key exists and its value is equal to the given int value, false otherwise </returns>
         protected override bool Evaluate(BaseStateMachine state)
         {
-            var stateVariable1Exists = state.trackedVariables.TryGetValue(stateVariable1Name, out var variable1Value);
-            var stateVariable2Exists = state.trackedVariables.TryGetValue(stateVariable2Name, out var variable2Value);
+            bool stateVariable1Exists = state.trackedVariables.TryGetValue(stateVariable1Name, out var variable1Value);
+            bool stateVariable2Exists = state.trackedVariables.TryGetValue(stateVariable2Name, out var variable2Value);
             return stateVariable1Exists &&
                    stateVariable2Exists &&
                    (int)variable1Value >= minValue &&

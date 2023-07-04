@@ -31,19 +31,26 @@ namespace Cardificer
             /// <summary>
             /// Constructor for a pathfinding request
             /// </summary>
-            /// <param name="myStateMachine"> The state machine that is requesting a path </param>
-            /// <param name="myCallback"> What function to call when path calculation is complete </param>
-            public PathRequest(BaseStateMachine stateMachine, Action<Vector2[], bool> myCallback = null)
+            /// <param name="stateMachine"> The state machine that is requesting a path </param>
+            /// <param name="callback"> What function to call when path calculation is complete </param>
+            public PathRequest(BaseStateMachine stateMachine, Action<Vector2[], bool> callback = null)
             {
-                callback = myCallback;
+                this.callback = callback;
                 startPos = stateMachine.GetFeetPos();
                 endPos = stateMachine.currentPathfindingTarget;
                 movementType = stateMachine.currentMovementType;
             }
 
-            public PathRequest(Vector2 startPos, Vector2 endPos, MovementType movementType, Action<Vector2[], bool> myCallback = null)
+            /// <summary>
+            /// Constructor for pathfinding request
+            /// </summary>
+            /// <param name="startPos"> Starting position to path from </param>
+            /// <param name="endPos"> End position to path to </param>
+            /// <param name="movementType"> Movement type of the path request </param>
+            /// <param name="callback"> What function to call when path calculation is complete </param>
+            public PathRequest(Vector2 startPos, Vector2 endPos, MovementType movementType, Action<Vector2[], bool> callback = null)
             {
-                callback = myCallback;
+                this.callback = callback;
                 this.startPos = startPos;
                 this.endPos = endPos;
                 this.movementType = movementType;
@@ -75,7 +82,7 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Request a path from start to end asynchronously.
+        /// Request a path from start to end asynchronously (more performant)
         /// </summary>
         /// <param name="stateMachine"> The state machine that is requesting a path </param>
         /// <param name="callback"> Action that will receive the found path and a boolean saying if the path was found </param>
@@ -87,10 +94,11 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Request a path from start to end asynchronously
+        /// Request a path from start to end asynchronously (more performant)
         /// </summary>
         /// <param name="startPos"> Starting position </param>
         /// <param name="endPos"> Ending position </param>
+        /// <param name="movementType"> Movement type of the path requested </param>
         /// <param name="callback"> Action that will receive the found path and a boolean saying if the path was found </param>
         public static void AsyncRequestPath(Vector2 startPos, Vector2 endPos, MovementType movementType,
             Action<Vector2[], bool> callback)
@@ -100,6 +108,12 @@ namespace Cardificer
             instance.TryProcessNext();
         }
 
+        /// <summary>
+        /// Request a path from start to end synchronously (less performant, but instant)
+        /// </summary>
+        /// <param name="stateMachine"> The state machine that is requesting a path </param>
+        /// <param name="path"> The found path </param>
+        /// <returns> True if pathfinding found a path, false otherwise </returns>
         public static bool SyncRequestPath(BaseStateMachine stateMachine, out Vector2[] path)
         {
             PathRequest newRequest = new PathRequest(stateMachine);
@@ -108,6 +122,14 @@ namespace Cardificer
             return pathResult.Item2;
         }
         
+        /// <summary>
+        /// Request a path from start to end synchronously (less performant, but instant)
+        /// </summary>
+        /// <param name="startPos"> Starting position </param>
+        /// <param name="endPos"> Ending position </param>
+        /// <param name="movementType"> Movement type of the path requested </param>
+        /// <param name="path"> The found path </param>
+        /// <returns> True if pathfinding found a path, false otherwise </returns>
         public static bool SyncRequestPath(Vector2 startPos, Vector2 endPos, MovementType movementType, out Vector2[] path)
         {
             PathRequest newRequest = new PathRequest(startPos, endPos, movementType);
@@ -134,7 +156,6 @@ namespace Cardificer
         /// </summary>
         /// <param name="path"> The new path </param>
         /// <param name="success"> Whether a path was successfully found to the target </param>
-        /// <param name="stateMachine"> The stateMachine to be used. </param>
         public void FinishedProcessingPath(Vector2[] path, bool success)
         {
             if (currentPathRequest.callback.Target != null)

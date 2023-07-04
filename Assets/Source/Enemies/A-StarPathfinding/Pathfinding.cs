@@ -10,14 +10,14 @@ using MovementType = Cardificer.RoomInterface.MovementType;
 namespace Cardificer
 {
     /// <summary>
-    /// Handles A* pathfinding for enemies
+    /// Handles A* pathfinding calculations
     /// </summary>
     public class Pathfinding : MonoBehaviour
     {
-        // the request manager component that sends us requests
+        // The request manager component that sends us requests
         private PathRequestManager requestManager;
 
-        // the room interface that allows us to mess with room properties without having to mess with the room itself
+        // The room interface that allows us to mess with room properties without having to mess with the room itself
         private RoomInterface roomInterface;
         
         // The Pathfinding singleton
@@ -36,7 +36,7 @@ namespace Cardificer
         /// <summary>
         /// Starts the AsyncFindPath coroutine from start to target pos
         /// </summary>
-        /// <param name="stateMachine"> The state machine that is requesting a path </param>
+        /// <param name="request"> The path request data </param>
         public void StartFindPath(PathRequest request)
         {
             StartCoroutine(AsyncFindPath(request));
@@ -45,15 +45,15 @@ namespace Cardificer
         /// <summary>
         /// Find a path from a given pos to a target pos
         /// </summary>
-        /// <param name="stateMachine"> The state machine that is requesting a path </param>
+        /// <param name="request"> The path request data </param>
         /// <returns> Sends a signal to the request manager that a path has been found </returns>
-        IEnumerator AsyncFindPath(PathRequest request)
+        private IEnumerator AsyncFindPath(PathRequest request)
         {
             Vector2[] waypoints = new Vector2[0];
             bool pathSuccess = false;
 
-            var startNodeResult = roomInterface.WorldPosToTile(request.startPos);
-            var targetNodeResult = roomInterface.WorldPosToTile(request.endPos);
+            (PathfindingTile, bool) startNodeResult = roomInterface.WorldPosToTile(request.startPos);
+            (PathfindingTile, bool) targetNodeResult = roomInterface.WorldPosToTile(request.endPos);
 
             PathfindingTile startNode;
             PathfindingTile targetNode;
@@ -133,7 +133,7 @@ namespace Cardificer
         /// <summary>
         /// Instantaneously seeks a path. May cause lag if used too much.
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="request"> The path request data </param>
         public (Vector2[], bool) FindPathSync(PathRequest request)
         {
             Vector2[] waypoints = new Vector2[0];

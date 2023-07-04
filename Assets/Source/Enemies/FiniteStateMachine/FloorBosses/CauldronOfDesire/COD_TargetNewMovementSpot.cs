@@ -51,11 +51,16 @@ namespace Cardificer.FiniteStateMachine
             yield break;
         }
 
+        /// <summary>
+        /// Given a list of Vector2 points, determines the closest one to the given state machine's feet position and removes it from the list
+        /// </summary>
+        /// <param name="points"> List of Vector2 points </param>
+        /// <param name="stateMachine"> The state machine to use </param>
         private void FindClosestAndRemove(List<Vector2> points, BaseStateMachine stateMachine)
         {
             if (points == null || points.Count == 0)
             {
-                Debug.LogError("Cauldron of Desire tried to find next movement point but list provided empty or null!");
+                Debug.LogError("Cauldron of Desire tried to find next movement point but list provided is empty or null!");
                 return;
             }
 
@@ -84,6 +89,10 @@ namespace Cardificer.FiniteStateMachine
             }
         }
 
+        /// <summary>
+        /// Calculates movement point Vector2s in the Cauldron of Desire's room, then stores them as state machine tracked variables
+        /// </summary>
+        /// <param name="stateMachine"> The state machine to use </param>
         private void CacheMovementPoints(BaseStateMachine stateMachine)
         {
             Vector2Int roomDimensions = RoomInterface.instance.myRoomSize;

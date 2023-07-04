@@ -36,9 +36,15 @@ namespace Cardificer.FiniteStateMachine
             public List<float> actionDelaySequence;
         }
         
-        // tracks seeded random from save manager
+        // Tracks seeded random from save manager
         private Random random;
 
+        /// <summary>
+        /// Draws a random card, displays it to the player, and updates CardsDrawn and CardsDisplayed variables accordingly.
+        /// This ScriptableObject also serves as the draw pool itself.
+        /// </summary>
+        /// <param name="stateMachine"> The state machine to be used. </param>
+        /// <returns> Waits cardDisplayTime before incrementing CardsDisplayed & destroying the display game object. </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             stateMachine.trackedVariables.TryAdd("Random", new Random(SaveManager.savedFloorSeed));
@@ -49,12 +55,12 @@ namespace Cardificer.FiniteStateMachine
             
             stateMachine.trackedVariables.Remove("Card"  + stateMachine.trackedVariables["CardsDrawn"]); // if the card exists already, remove it
 
-            var selectedAttackSequence = PickRandomAttack();
+            AttackSequence selectedAttackSequence = PickRandomAttack();
             
             stateMachine.trackedVariables.Add("Card" + (int)stateMachine.trackedVariables["CardsDrawn"], selectedAttackSequence);
             stateMachine.trackedVariables["CardsDrawn"] = (int)stateMachine.trackedVariables["CardsDrawn"] + 1;
             
-            var cardDisplay = DisplayCard(stateMachine, selectedAttackSequence);
+            GameObject cardDisplay = DisplayCard(stateMachine, selectedAttackSequence);
             yield return new WaitForSeconds(displayCardTime);
             Destroy(cardDisplay);
             stateMachine.trackedVariables["CardsDisplayed"] = (int)stateMachine.trackedVariables["CardsDisplayed"] + 1;
@@ -62,22 +68,35 @@ namespace Cardificer.FiniteStateMachine
             stateMachine.cooldownData.cooldownReady[this] = true;
         }
 
+        /// <summary>
+        /// Selects a random attack sequence from the card draw pool and returns it
+        /// </summary>
+        /// <returns> The randomly selected attack sequence. </returns>
         private AttackSequence PickRandomAttack()
         {
             AttackSequence randomAttackSequence = cardDrawPool[random.Next(cardDrawPool.Count)];
             return randomAttackSequence;
         }
 
+        /// <summary>
+        /// Summons a game object that displays the icon associated with the given attack sequence
+        /// </summary>
+        /// <param name="stateMachine"> The state machine to be used. </param>
+        /// <param name="cardToDisplay"> The attack sequence to be displayed. </param>
+        /// <returns> The display game object. </returns>
         private GameObject DisplayCard(BaseStateMachine stateMachine, AttackSequence cardToDisplay)
         {
-            var gameObject = new GameObject();
+            GameObject gameObject = new GameObject();
             gameObject.transform.name = "CardPickDisplay";
-            var spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
+            gameObject.transform.position = stateMachine.transform.position + (Vector3.up * 2f); 
+            
+            SpriteRenderer spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
             spriteRenderer.sprite = cardToDisplay.abilitySprite;
-            gameObject.transform.position = stateMachine.transform.position + (Vector3.up * 2f);
-            var rigidbody = gameObject.AddComponent<Rigidbody2D>();
+
+            Rigidbody2D rigidbody = gameObject.AddComponent<Rigidbody2D>();
             rigidbody.velocity = Vector3.up;
             rigidbody.isKinematic = true;
+            
             gameObject.SetActive(true);
             return gameObject;
         }

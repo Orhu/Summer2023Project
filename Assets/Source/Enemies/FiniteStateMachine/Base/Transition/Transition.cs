@@ -52,7 +52,7 @@ namespace Cardificer.FiniteStateMachine
                 position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
 
                 // Don't make child fields be indented
-                var indent = EditorGUI.indentLevel;
+                int indent = EditorGUI.indentLevel;
                 EditorGUI.indentLevel = 0;
 
                 // Calculate rects

@@ -99,8 +99,8 @@ namespace Cardificer.FiniteStateMachine
                 }
 
                 Collider2D enemyFeetCollider = null;
-                var enemyColliders = GetComponentsInChildren<Collider2D>();
-                foreach (var enemyCollider in enemyColliders)
+                Collider2D[] enemyColliders = GetComponentsInChildren<Collider2D>();
+                foreach (Collider2D enemyCollider in enemyColliders)
                 {
                     if (!enemyCollider.isTrigger)
                     {
@@ -123,7 +123,7 @@ namespace Cardificer.FiniteStateMachine
             }
         }
 
-        // Cached moment component
+        // Cached movement component
         private SimpleMovement movementComponent;
 
         [Tooltip("Movement type this enemy begins in")] [SerializeField]
@@ -189,8 +189,7 @@ namespace Cardificer.FiniteStateMachine
         [SerializeField] private bool ignoreDifficultyProgression;
         
         [Tooltip("Draw debug gizmos? Pathfinding target is magenta, attack target is yellow, current waypoint is cyan")]
-        [SerializeField]
-        private bool drawGizmos;
+        [SerializeField] private bool drawGizmos;
 
         /// <summary>
         /// Initialize variables
@@ -241,7 +240,7 @@ namespace Cardificer.FiniteStateMachine
             }
             
             // assign health
-            var startingHealth =
+            int startingHealth =
                 Mathf.RoundToInt(GetComponent<Health>().maxHealth * DifficultyProgressionManager.healthMultiplier);
             GetComponent<Health>().maxHealth = startingHealth;
             GetComponent<Health>().currentHealth = startingHealth;
@@ -295,7 +294,7 @@ namespace Cardificer.FiniteStateMachine
             if (cachedComponents.ContainsKey(typeof(T)))
                 return cachedComponents[typeof(T)] as T;
 
-            var component = base.GetComponent<T>();
+            T component = base.GetComponent<T>();
             if (component != null)
             {
                 cachedComponents.Add(typeof(T), component);

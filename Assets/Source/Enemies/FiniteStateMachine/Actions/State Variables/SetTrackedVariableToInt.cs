@@ -10,7 +10,7 @@ namespace Cardificer.FiniteStateMachine
     /// <summary>
     /// Represents an action that draws some number of cards and adds them to the state machine.
     /// </summary>
-    [CreateAssetMenu(menuName = "FSM/Floor Boss/Cauldron of Desire/Set Tracked Variable to Int")]
+    [CreateAssetMenu(menuName = "FSM/Tracked Variables/Integer/Actions/Set Tracked Variable to Int")]
     public class COD_SetTrackedVariable : SingleAction
     {
         [Tooltip("Tracked variable to set")]
@@ -19,6 +19,11 @@ namespace Cardificer.FiniteStateMachine
         [Tooltip("Number to set it to")]
         [SerializeField] private int numberToSetVarTo;
 
+        /// <summary>
+        /// Sets the requested name variable to the requested int.
+        /// </summary>
+        /// <param name="stateMachine"></param>
+        /// <returns></returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             stateMachine.trackedVariables[trackedVariableName] = numberToSetVarTo;
