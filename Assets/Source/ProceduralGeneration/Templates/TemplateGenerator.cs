@@ -60,35 +60,7 @@ namespace Cardificer
                 }
             }
 
-            StartCoroutine(EnableTilesAfterOneFrame(room.roomSize, room.roomGrid, spawnEnemies));
-
             return spawnEnemies && enemiesSpawned;
-        }
-
-        /// <summary>
-        /// Enables all the tiles after waiting one frame to ensure the tiles have initialized themselves correctly
-        /// </summary>
-        /// <param name="roomSize"> The room size </param>
-        /// <param name="roomGrid"> The room grid </param>
-        /// <param name="spawnEnemies"> Whether or not to spawn enemies </param>
-        /// <returns> Waits one frame </returns>
-        private IEnumerator EnableTilesAfterOneFrame(Vector2Int roomSize, Tile[,] roomGrid, bool spawnEnemies)
-        {
-            yield return null;
-            for (int i = 0; i < roomSize.x; i++)
-            {
-                for (int j = 0; j < roomSize.y; j++)
-                {
-                    if ((roomGrid[i, j].GetComponent<EnemySpawner>() == null && roomGrid[i, j].GetComponent<FiniteStateMachine.BaseStateMachine>() == null)|| spawnEnemies)
-                    {
-                        roomGrid[i, j].Enable();
-                    }
-                    else
-                    {
-                        roomGrid[i, j].gameObject.SetActive(false);
-                    }
-                }
-            }
         }
     }
 }
