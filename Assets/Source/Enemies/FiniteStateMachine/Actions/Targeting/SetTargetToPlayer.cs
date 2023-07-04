@@ -7,7 +7,7 @@ namespace Cardificer.FiniteStateMachine
     /// <summary>
     /// Represents an action to update our target to be the player
     /// </summary>
-    [CreateAssetMenu(menuName = "FSM/Actions/Set Target To Player")]
+    [CreateAssetMenu(menuName = "FSM/Actions/Targeting/Set Target To Player")]
     public class SetTargetToPlayer : SingleAction
     {
         /// <summary>

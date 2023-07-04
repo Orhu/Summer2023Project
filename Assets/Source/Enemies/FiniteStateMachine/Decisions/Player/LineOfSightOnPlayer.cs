@@ -14,6 +14,9 @@ namespace Cardificer.FiniteStateMachine
         [Tooltip("Which layers the raycast can hit, by their name")]
         [SerializeField] private LayerMask layerMask;
 
+        [Tooltip("The width of the path to ensure a line of sight in.")] [Min(0)]
+        [SerializeField] private float sightRadius;
+
         /// <summary>
         /// Evaluates whether the current target is within the requested range
         /// </summary>
@@ -21,9 +24,17 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> True if the target is at or below the specified range from this stateMachine, false otherwise </returns>
         protected override bool Evaluate(BaseStateMachine state)
         {
-            var currentPos = state.transform.position;
-            Vector2 direction = Player.Get().transform.position - currentPos;
-            RaycastHit2D hit = Physics2D.Raycast(currentPos, direction, direction.magnitude, layerMask);
+            Vector2 currentPos = state.transform.position;
+            Vector2 direction = Player.GetFeetPosition() - currentPos;
+            RaycastHit2D hit;
+            if (sightRadius == 0)
+            {
+                hit = Physics2D.Raycast(currentPos, direction, direction.magnitude, layerMask);
+            }
+            else
+            {
+                hit = Physics2D.CircleCast(currentPos, sightRadius, direction, direction.magnitude, layerMask);
+            }
 
             return hit.collider == null || hit.collider.CompareTag("Player");
         }
