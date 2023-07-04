@@ -26,7 +26,7 @@ namespace Cardificer.FiniteStateMachine
         /// Fire an attack
         /// </summary>
         /// <param name="stateMachine"> The stateMachine performing the attack </param>
-        /// <returns></returns>
+        /// <returns> The time to wait until this is finished. </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             stateMachine.StartCoroutine(LaunchAttack(stateMachine));
@@ -37,7 +37,7 @@ namespace Cardificer.FiniteStateMachine
         /// Performs an attack if canAct is enabled, otherwise does nothing
         /// </summary>
         /// <param name="stateMachine"> The stateMachine performing the attack </param>
-        IEnumerator LaunchAttack(BaseStateMachine stateMachine)
+        private IEnumerator LaunchAttack(BaseStateMachine stateMachine)
         {
             yield return new WaitForSeconds(actionChargeUpTime);
             if (stateMachine.canAct)

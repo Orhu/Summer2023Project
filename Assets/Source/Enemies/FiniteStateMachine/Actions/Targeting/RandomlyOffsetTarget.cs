@@ -15,6 +15,7 @@ namespace Cardificer.FiniteStateMachine
 
         [Tooltip("Target type to use. Should we set the pathfinding target, attack target, or both for this unit?")]
         [SerializeField] private TargetType targetType;
+
         [Flags]
         enum TargetType
         {
