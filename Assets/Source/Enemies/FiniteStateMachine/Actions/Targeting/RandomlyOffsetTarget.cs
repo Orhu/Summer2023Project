@@ -17,7 +17,7 @@ namespace Cardificer.FiniteStateMachine
         [SerializeField] private TargetType targetType;
 
         [Flags]
-        enum TargetType
+        private enum TargetType
         {
             None = 0,
             Pathfinding = 1,
