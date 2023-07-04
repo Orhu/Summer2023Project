@@ -34,6 +34,7 @@ namespace Cardificer
             {
                 return false;
             }
+            other.remainingDuration = Mathf.Max(other.remainingDuration, duration);
             return true;
         }
 
