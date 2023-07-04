@@ -16,9 +16,6 @@ namespace Cardificer
     {
         [Header("Mechanics")]
 
-        [Tooltip("The amount of time this card takes to be played.")]
-        public float actionTime = 1.0f;
-
         [Tooltip("The amount of time this card reserves the hand slot for after being played.")]
         public float cooldownTime = 1.0f;
 
