@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: OrbitAttack_ConjureFamiliar
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
+  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
+  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   attack:
     damage: 1
     damageType: 0
@@ -38,12 +40,12 @@ MonoBehaviour:
   visualObject: {fileID: 6866347195849778357, guid: 29e713b6fe803504d84fd4ff3e6ea3ea, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  spawnLocation: 3
-  aimMode: 5
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
-  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
-  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
+  spawnLocation: 3
+  aimMode: 5
+  waitForProjectileDeath: 0
+  additionalActionTime: 1
   _spawnSequence:
   - delay: 0
     startingAngle: 0

@@ -363,7 +363,7 @@ namespace Cardificer
                 saveData.floorSeed = FloorGenerator.seed;
 
                 saveData.visitedRooms.Add(FloorGenerator.currentRoom.roomLocation);
-                saveData.destroyedTiles = DestroyableTile.destroyedTiles != null ? DestroyableTile.destroyedTiles.ToList() : savedDestroyedTiles;
+                saveData.destroyedTiles = DestroyableTile.destroyedTiles?.ToList();
                 saveData.remainingShopBuys = ShopSlot.savableRemainingShopBuys;
                 saveData.randomState = Random.state;
 

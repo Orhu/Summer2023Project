@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Cardificer;
+using Skaillz.EditInline;
 using UnityEngine;
 
 namespace Cardificer.FiniteStateMachine
@@ -10,14 +11,14 @@ namespace Cardificer.FiniteStateMachine
     [CreateAssetMenu(menuName="FSM/Actions/Conditional Single Action")]
     public class ConditionalSingleAction : BaseAction
     {
-        [Tooltip("Decision to evaluate.")]
+        [Tooltip("Decision to evaluate.")] [EditInline]
         [SerializeField] private BaseDecision decision;
 
-        [Tooltip("Action to perform if decision is true.")]
-        [SerializeField] private BaseAction trueAction;
+        [Tooltip("Invert decision result?")] 
+        [SerializeField] private bool invert;
 
-        [Tooltip("Action to perform if decision is false.")]
-        [SerializeField] private BaseAction falseAction;
+        [Tooltip("Action to perform if decision is true.")] [EditInline]
+        [SerializeField] private BaseAction trueAction;
 
         /// <summary>
         /// Evaluate the condition and execute the action if the condition is true.
@@ -25,13 +26,9 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> The state machine to be used. </param>
         public override void Execute(BaseStateMachine stateMachine)
         {
-            if (decision.Decide(stateMachine))
+            if (invert != decision.Decide(stateMachine))
             {
                 trueAction.Execute(stateMachine);
-            }
-            else
-            {
-                falseAction.Execute(stateMachine);
             }
         }
     }
