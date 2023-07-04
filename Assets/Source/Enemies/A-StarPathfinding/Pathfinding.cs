@@ -1,11 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Cardificer;
-using Cardificer.FiniteStateMachine;
 using UnityEngine;
 using PathRequest = Cardificer.PathRequestManager.PathRequest;
-using MovementType = Cardificer.RoomInterface.MovementType;
 
 namespace Cardificer
 {

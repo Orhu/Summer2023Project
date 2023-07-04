@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Cardificer;
 using UnityEngine;
 
 namespace Cardificer.FiniteStateMachine

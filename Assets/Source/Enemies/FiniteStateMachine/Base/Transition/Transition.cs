@@ -1,10 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Skaillz.EditInline;
-using UnityEditorInternal;
-using UnityEditor.UIElements;
-using UnityEngine.UIElements;
 using UnityEngine;
 using UnityEditor;
 

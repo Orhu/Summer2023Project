@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using Cardificer;
-using Skaillz.EditInline;
+﻿using Skaillz.EditInline;
 using UnityEngine;
 
 namespace Cardificer.FiniteStateMachine
