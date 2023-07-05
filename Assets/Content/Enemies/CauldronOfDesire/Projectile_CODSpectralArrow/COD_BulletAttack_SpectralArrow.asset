@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: COD_BulletAttack_SpectralArrow
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 8300000, guid: b7ca87ac2ea2d3942a06ae88e20d1bc6, type: 3}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 4
     damageType: 1
@@ -21,7 +23,7 @@ MonoBehaviour:
   hitCount: 1
   applyDamageOnHit: 1
   modifiers:
-  - {fileID: 11400000, guid: 9d82b16c265d53449abb862e4f1cf39f, type: 2}
+  - {fileID: 11400000, guid: 1efd2178360c7734aae0aac1ab5c89ee, type: 2}
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
   shape: {fileID: 11400000, guid: 3284061d3059940068ffd1bd5c43f960, type: 2}
   lifetime: 6
@@ -37,12 +39,13 @@ MonoBehaviour:
   visualObject: {fileID: 8356533455023832542, guid: 75ecde29bf99e458f97d424cbe156623, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  spawnLocation: 0
-  aimMode: 6
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  spawnLocation: 0
+  aimMode: 6
+  waitForProjectileDeath: 0
+  chargeTime: 0
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     angle: 180

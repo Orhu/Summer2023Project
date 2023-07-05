@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: COD_BulletAttack_EchoingShout2
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 1
     damageType: 1
@@ -21,8 +23,8 @@ MonoBehaviour:
   hitCount: 1
   applyDamageOnHit: 1
   modifiers:
-  - {fileID: 11400000, guid: 983f33c68b89d6f4db70ae60e7508528, type: 2}
-  shape: {fileID: 11400000, guid: a80cdd12837da664290f207130e228a6, type: 2}
+  - {fileID: 11400000, guid: d6297e6ceb1d7d6458f2197b31f22743, type: 2}
+  shape: {fileID: 11400000, guid: 192da02bcafeb4236a76e18cc00b4b9a, type: 2}
   lifetime: 4
   initialSpeed: 20
   acceleration: 10
@@ -36,12 +38,13 @@ MonoBehaviour:
   visualObject: {fileID: 4721454448969483725, guid: 3182f604296f9437d87915c95e2aee3b, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  spawnLocation: 0
-  aimMode: 5
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  spawnLocation: 0
+  aimMode: 5
+  waitForProjectileDeath: 0
+  chargeTime: 0
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     angle: 5.625
