@@ -153,7 +153,7 @@ namespace Cardificer
                 position.y = playerPos.y;
             }
 
-            position.z = -1;
+            position.z = -100;
 
             return position;
         }
