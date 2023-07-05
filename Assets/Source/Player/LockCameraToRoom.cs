@@ -46,40 +46,40 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
-            Invoke("DelayedStart", 0.1f);
-        }
-        private void DelayedStart()
-        {
-            if (FloorGenerator.map.startRoom.roomType.overrideExtraHeight)
-            {
-                extraHeight = FloorGenerator.map.startRoom.roomType.extraHeight;
-            }
-            else
-            {
-                extraHeight = defaultExtraHeight;
-            }
+            FloorGenerator.onGenerated +=
+                () =>
+                {
+                    if (FloorGenerator.map.startRoom.roomType.overrideExtraHeight)
+                    {
+                        extraHeight = FloorGenerator.map.startRoom.roomType.extraHeight;
+                    }
+                    else
+                    {
+                        extraHeight = defaultExtraHeight;
+                    }
 
-            Vector2 roomScale = FloorGenerator.cellSize;
+                    Vector2 roomScale = FloorGenerator.cellSize;
 
-            if (roomScale.y > roomScale.x * (1 / GetComponent<Camera>().aspect))
-            {
-                height = roomScale.y;
-            }
-            else
-            {
-                height = roomScale.x * (1 / GetComponent<Camera>().aspect);
-            }
+                    if (roomScale.y > roomScale.x * (1 / GetComponent<Camera>().aspect))
+                    {
+                        height = roomScale.y;
+                    }
+                    else
+                    {
+                        height = roomScale.x * (1 / GetComponent<Camera>().aspect);
+                    }
 
-            height += extraHeight;
-            GetComponent<Camera>().orthographicSize = height / 2;
+                    height += extraHeight;
+                    GetComponent<Camera>().orthographicSize = height / 2;
 
-            extraWidth = extraHeight * GetComponent<Camera>().aspect / 2;
-            width = height * GetComponent<Camera>().aspect;
+                    extraWidth = extraHeight * GetComponent<Camera>().aspect / 2;
+                    width = height * GetComponent<Camera>().aspect;
 
-            FloorGenerator.onRoomChange.AddListener(OnRoomChange);
-            player = Player.Get();
+                    FloorGenerator.onRoomChange.AddListener(OnRoomChange);
+                    player = Player.Get();
 
-            DetermineMinAndMax(FloorGenerator.map.startRoom);
+                    DetermineMinAndMax(FloorGenerator.map.startRoom);
+                };
         }
 
         //TODO: DELETE
