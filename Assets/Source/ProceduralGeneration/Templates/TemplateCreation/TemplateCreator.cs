@@ -1,7 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Events;
-using System.Linq;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -236,10 +234,13 @@ namespace Cardificer
             boundingBox.endColor = Color.white;
             boundingBox.startColor = Color.white;
             boundingBox.positionCount = 5;
+            Vector2Int edgeOffset = new Vector2Int();
+            edgeOffset.x = -1 * System.Convert.ToInt32(roomSize.x % 2 == 0);
+            edgeOffset.y = -1 * System.Convert.ToInt32(roomSize.y % 2 == 0);
             boundingBox.SetPosition(0, new Vector3(-roomSize.x / 2 - 0.5f, -roomSize.y / 2 - 0.5f));
-            boundingBox.SetPosition(1, new Vector3(-roomSize.x / 2 - 0.5f, roomSize.y / 2 + 0.5f));
-            boundingBox.SetPosition(2, new Vector3(roomSize.x / 2 + 0.5f, roomSize.y / 2 + 0.5f));
-            boundingBox.SetPosition(3, new Vector3(roomSize.x / 2 + 0.5f, -roomSize.y / 2 - 0.5f));
+            boundingBox.SetPosition(1, new Vector3(-roomSize.x / 2 - 0.5f, roomSize.y / 2 + 0.5f + edgeOffset.y));
+            boundingBox.SetPosition(2, new Vector3(roomSize.x / 2 + 0.5f + edgeOffset.x, roomSize.y / 2 + 0.5f + edgeOffset.y));
+            boundingBox.SetPosition(3, new Vector3(roomSize.x / 2 + 0.5f + edgeOffset.x, -roomSize.y / 2 - 0.5f));
             boundingBox.SetPosition(4, new Vector3(-roomSize.x / 2 - 0.5f, -roomSize.y / 2 - 0.5f));
             boundingBox.enabled = true;
 
@@ -253,13 +254,13 @@ namespace Cardificer
             wallBoundingBox.startColor = Color.white;
             wallBoundingBox.positionCount = 5;
             wallBoundingBox.SetPosition(0, new Vector3(-roomSize.x / 2 - 0.5f + 1, -roomSize.y / 2 - 0.5f + 1));
-            wallBoundingBox.SetPosition(1, new Vector3(-roomSize.x / 2 - 0.5f + 1, roomSize.y / 2 + 0.5f - 1));
-            wallBoundingBox.SetPosition(2, new Vector3(roomSize.x / 2 + 0.5f - 1, roomSize.y / 2 + 0.5f - 1));
-            wallBoundingBox.SetPosition(3, new Vector3(roomSize.x / 2 + 0.5f - 1, -roomSize.y / 2 - 0.5f + 1));
+            wallBoundingBox.SetPosition(1, new Vector3(-roomSize.x / 2 - 0.5f + 1, roomSize.y / 2 + 0.5f - 1 + edgeOffset.y));
+            wallBoundingBox.SetPosition(2, new Vector3(roomSize.x / 2 + 0.5f - 1 + edgeOffset.x, roomSize.y / 2 + 0.5f - 1 + edgeOffset.y));
+            wallBoundingBox.SetPosition(3, new Vector3(roomSize.x / 2 + 0.5f - 1 + edgeOffset.x, -roomSize.y / 2 - 0.5f + 1));
             wallBoundingBox.SetPosition(4, new Vector3(-roomSize.x / 2 - 0.5f + 1, -roomSize.y / 2 - 0.5f + 1));
             wallBoundingBox.enabled = true;
 
-            for (int i = 2; i < roomSize.x - 1 + System.Convert.ToInt32(roomSize.x % 2 == 0); i++)
+            for (int i = 2; i < roomSize.x - 1; i++)
             {
                 GameObject gridLineContainer = new GameObject();
                 gridLineContainer.name = "Grid Line";
@@ -272,9 +273,9 @@ namespace Cardificer
                 gridLine.widthMultiplier = 0.03f;
                 gridLine.positionCount = 2;
                 gridLine.SetPosition(0, new Vector3(-roomSize.x / 2 - 0.5f + i, -roomSize.y / 2 - 0.5f + 1));
-                gridLine.SetPosition(1, new Vector3(-roomSize.x / 2 - 0.5f + i, roomSize.y / 2 + 0.5f - 1));
+                gridLine.SetPosition(1, new Vector3(-roomSize.x / 2 - 0.5f + i, roomSize.y / 2 + 0.5f - 1 + edgeOffset.y));
 
-                if (i == roomSize.x / 2 || i == roomSize.x / 2 + 1)
+                if ((i % mapCellSize.x) == mapCellSize.x / 2 || (i % mapCellSize.x) == mapCellSize.x / 2 + 1)
                 {
                     GameObject doorLineContainer = new GameObject();
                     doorLineContainer.name = "Door Line";
@@ -299,12 +300,12 @@ namespace Cardificer
                     doorLine.startColor = Color.white;
                     doorLine.widthMultiplier = 0.05f;
                     doorLine.positionCount = 2;
-                    doorLine.SetPosition(0, new Vector3(-roomSize.x / 2 - 0.5f + i, roomSize.y / 2 + 0.5f));
-                    doorLine.SetPosition(1, new Vector3(-roomSize.x / 2 - 0.5f + i, roomSize.y / 2 + 0.5f - 1));
+                    doorLine.SetPosition(0, new Vector3(-roomSize.x / 2 - 0.5f + i, roomSize.y / 2 + 0.5f + edgeOffset.y));
+                    doorLine.SetPosition(1, new Vector3(-roomSize.x / 2 - 0.5f + i, roomSize.y / 2 + 0.5f - 1 + edgeOffset.y));
                 }
             }
 
-            for (int j = 2; j < roomSize.y - 1 + System.Convert.ToInt32(roomSize.x % 2 == 0); j++)
+            for (int j = 2; j < roomSize.y - 1; j++)
             {
                 GameObject gridLineContainer = new GameObject();
                 gridLineContainer.name = "Grid Line";
@@ -317,9 +318,9 @@ namespace Cardificer
                 gridLine.widthMultiplier = 0.03f;
                 gridLine.positionCount = 2;
                 gridLine.SetPosition(0, new Vector3(-roomSize.x / 2 - 0.5f + 1, -roomSize.y / 2 - 0.5f + j));
-                gridLine.SetPosition(1, new Vector3(roomSize.x / 2 + 0.5f - 1, -roomSize.y / 2 - 0.5f + j));
+                gridLine.SetPosition(1, new Vector3(roomSize.x / 2 + 0.5f - 1 + edgeOffset.x, -roomSize.y / 2 - 0.5f + j));
 
-                if (j == roomSize.y / 2 || j == roomSize.y / 2 + 1)
+                if ((j % mapCellSize.y) == mapCellSize.y / 2 || (j % mapCellSize.y) == mapCellSize.y / 2 + 1)
                 {
                     GameObject doorLineContainer = new GameObject();
                     doorLineContainer.name = "Door Line";
@@ -344,8 +345,8 @@ namespace Cardificer
                     doorLine.startColor = Color.white;
                     doorLine.widthMultiplier = 0.05f;
                     doorLine.positionCount = 2;
-                    doorLine.SetPosition(0, new Vector3(roomSize.x / 2 + 0.5f, -roomSize.y / 2 - 0.5f + j));
-                    doorLine.SetPosition(1, new Vector3(roomSize.x / 2 + 0.5f - 1, -roomSize.y / 2 - 0.5f + j));
+                    doorLine.SetPosition(0, new Vector3(roomSize.x / 2 + 0.5f + edgeOffset.x, -roomSize.y / 2 - 0.5f + j));
+                    doorLine.SetPosition(1, new Vector3(roomSize.x / 2 + 0.5f - 1 + edgeOffset.x, -roomSize.y / 2 - 0.5f + j));
                 }
             }
         }

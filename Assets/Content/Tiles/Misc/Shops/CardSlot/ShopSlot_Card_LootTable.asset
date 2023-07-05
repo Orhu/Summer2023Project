@@ -13,11 +13,14 @@ MonoBehaviour:
   m_Name: ShopSlot_Card_LootTable
   m_EditorClassIdentifier: 
   weightedLoot:
-  - lootItem:
-      price: 5
-      gameObject: {fileID: 8014440677777865569, guid: 557dfca862c02fe4e8150c1b41b52464, type: 3}
-    weight: 4
-  - lootItem:
-      price: 15
-      gameObject: {fileID: 8014440677777865569, guid: 7945486b480a19f43853283ce3f94551, type: 3}
-    weight: 1
+    things:
+    - thing:
+        price: 5
+        gameObject: {fileID: 8014440677777865569, guid: 557dfca862c02fe4e8150c1b41b52464, type: 3}
+      weight: 4
+      maxChosen: 0
+    - thing:
+        price: 10
+        gameObject: {fileID: 8014440677777865569, guid: 7945486b480a19f43853283ce3f94551, type: 3}
+      weight: 1
+      maxChosen: 0

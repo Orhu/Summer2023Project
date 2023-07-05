@@ -98,10 +98,10 @@ namespace Cardificer
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.T))
+            /*if (Input.GetKeyDown(KeyCode.T))
             {
                 FloorGenerator.ShowLayout();
-            }
+            }*/
 
             // Open Pause Menu
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -149,7 +149,7 @@ namespace Cardificer
             {
                 bool shouldAct = true;
                 _canAct?.Invoke(ref shouldAct);
-                return shouldAct;
+                return shouldAct && !Deck.playerDeck.isActing;
             }
         }
 

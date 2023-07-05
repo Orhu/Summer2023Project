@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Cardificer
@@ -47,7 +46,7 @@ namespace Cardificer
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (noTriggerDamage || other.CompareTag(tag)) { return; }
-            if (other.CompareTag("Inanimate")) { return; }
+            if (other.CompareTag("Inanimate") || other.CompareTag("Enemy")) { return; }
 
             Health health = other.GetComponentInParent<Health>();
             if (health == null) { return; }

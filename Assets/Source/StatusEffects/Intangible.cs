@@ -34,6 +34,7 @@ namespace Cardificer
             {
                 return false;
             }
+            other.remainingDuration = Mathf.Max(other.remainingDuration, duration);
             return true;
         }
 
@@ -44,6 +45,7 @@ namespace Cardificer
         {
             base.OnDestroy();
 
+            if (gameObject == null) { return; }
             gameObject.GetComponent<Collider2D>().enabled = true;
         }
     }

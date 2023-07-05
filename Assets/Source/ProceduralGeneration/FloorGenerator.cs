@@ -231,6 +231,7 @@ namespace Cardificer
         /// </summary>
         static public void SaveLayoutGenerationSettings()
         {
+            if (!Application.isEditor) return;
             string fileText = "Seed: " + seed.ToString() + "\n\n";
             fileText += "Room Types and their layout\n\n";
             

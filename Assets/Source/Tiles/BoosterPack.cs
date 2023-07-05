@@ -15,6 +15,14 @@ namespace Cardificer
         public CardLootTable lootTable;
 
         /// <summary>
+        /// Instantiates the loot table so all the booster packs don't share an instance
+        /// </summary>
+        private void Start()
+        {
+            lootTable = Instantiate(lootTable);
+        }
+
+        /// <summary>
         /// When the player enters the trigger zone, open booster pack menu,
         /// populate and display cards on the menu
         /// </summary>

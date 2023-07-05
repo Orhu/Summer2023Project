@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -18,7 +17,7 @@ namespace Cardificer
         {
             set
             {
-                value.attackData.damage = (int)(value.attackData.damage * damageFactor);
+                value.attackData.damage += (int)((damageFactor - 1) * value.attack.attack.damage);
             }
         }
     }

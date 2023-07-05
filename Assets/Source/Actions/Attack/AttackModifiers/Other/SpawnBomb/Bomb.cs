@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,7 +23,17 @@ namespace Cardificer
         // Invoked when this explodes.
         public System.Action onExploded;
 
-        // Update is called once per frame
+        /// <summary>
+        /// Bind destroy.
+        /// </summary>
+        private void Start()
+        {
+            FloorGenerator.onRoomChange.AddListener(() => { Destroy(gameObject); });
+        }
+
+        /// <summary>
+        /// Update fuse time.
+        /// </summary>
         private void Update()
         {
             fuseTime -= Time.deltaTime;

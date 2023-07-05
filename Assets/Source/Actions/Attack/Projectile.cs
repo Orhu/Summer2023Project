@@ -118,6 +118,9 @@ namespace Cardificer
 
         // The current randomly picked target.
         private GameObject randomTarget;
+
+        // Whether or not the on destroy function should be ignored.
+        private bool forceDestroy = false;
         #endregion
 
 
@@ -150,8 +153,8 @@ namespace Cardificer
             
             // Set up attack
             attackData = new DamageData(attack.attack, causer);
-            IActor causedBy = causer.GetComponent<IActor>();
-            if (causedBy != null)
+
+            if (causer != null && causer?.GetComponent<IActor>() is IActor causedBy)
             {
                 attackData.damage = Mathf.RoundToInt(attackData.damage * causedBy.GetDamageMultiplier());
             }
@@ -197,6 +200,15 @@ namespace Cardificer
                     }
                 }
             }
+
+
+            FloorGenerator.onRoomChange.AddListener(
+                // Destroys this when the room is changed without triggering on destroy.
+                () => 
+                {
+                    forceDestroy = true;
+                    Destroy(gameObject); 
+                });
         }
 
         /// <summary>
@@ -242,10 +254,8 @@ namespace Cardificer
             if (speed > Mathf.Abs(acceleration) * Time.fixedDeltaTime)
             {
                 transform.right = velocity;
-                Debug.Log(velocity.magnitude);
             }
             rigidBody.velocity = velocity;
-
         }
 
         /// <summary>
@@ -339,6 +349,8 @@ namespace Cardificer
 
                 case AimMode.Right:
                     return transform.position + actor.GetActionSourceTransform().right;
+                case AimMode.AtPlayer :
+                    return Player.Get().transform.position;
             }
             return transform.position + transform.right;
         }
@@ -432,7 +444,7 @@ namespace Cardificer
         /// </summary>
         protected void OnDestroy()
         {
-            if (!gameObject.scene.isLoaded) { return; }
+            if (!gameObject.scene.isLoaded || forceDestroy) { return; }
 
             onDestroyed?.Invoke();
             if (attack.detachVisualsBeforeDestroy)

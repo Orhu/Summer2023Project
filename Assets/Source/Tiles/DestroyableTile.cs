@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Cardificer;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,16 +12,35 @@ namespace Cardificer
     public class DestroyableTile : MonoBehaviour
     {
         // Stores a shared list of destroyed tile positions
-        public static HashSet<Vector2> destroyedTiles;
+        private static HashSet<Vector2> _destroyedTiles;
+        public static HashSet<Vector2> destroyedTiles
+        {
+            get
+            {
+                if (_destroyedTiles != null) { return _destroyedTiles; }
+
+                if (SaveManager.autosaveExists)
+                {
+                    _destroyedTiles = SaveManager.savedDestroyedTiles.ToHashSet();
+                }
+                else
+                {
+                    _destroyedTiles = new HashSet<Vector2>();
+                }
+                SceneManager.sceneUnloaded += (Scene scene) => { _destroyedTiles = null; };
+
+                return _destroyedTiles;
+            }
+            set => _destroyedTiles = value;
+        }
 
         /// <summary>
         /// Adds the room change listener and initializes destroyedTiles if needed
         /// </summary>
-        void Start()
+        void Awake()
         {
+            if (!FloorGenerator.IsValid()) { return; }
             FloorGenerator.onRoomChange.AddListener(OnRoomEnter);
-            destroyedTiles ??=
-                SaveManager.savedDestroyedTiles.ToHashSet(); // if destroyedTiles doesnt exist, load it from the save
         }
 
         /// <summary>
@@ -47,7 +64,7 @@ namespace Cardificer
         private void OnDestroy()
         {
             // if scene is loaded
-            if (gameObject.scene.isLoaded && RoomInterface.instance != null)
+            if (FloorGenerator.IsValid() && !destroyedTiles.Contains(transform.position) && gameObject.scene.isLoaded && RoomInterface.instance != null)
             {
                 // false because OnDestroy means something else destroyed us
                 InitiateDestruction(false);
@@ -65,17 +82,13 @@ namespace Cardificer
             if (grabbedTile.Item2)
             {
                 grabbedTile.Item1.allowedMovementTypes |=
-                    RoomInterface.MovementType.Walk | RoomInterface.MovementType.Fly |
-                    RoomInterface.MovementType.Burrow;
+                    RoomInterface.MovementType.Walking | RoomInterface.MovementType.Flying |
+                    RoomInterface.MovementType.Burrowing;
                 destroyedTiles.Add(myWorldPos);
                 if (shouldDestroy)
                 {
                     Destroy(gameObject);
                 }
-            }
-            else
-            {
-                Debug.LogWarning("Attempted to update grid on destroy, but Tile at " + myWorldPos + " does not exist.");
             }
         }
     }

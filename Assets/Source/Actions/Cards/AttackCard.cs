@@ -18,11 +18,11 @@ namespace Cardificer
     public class AttackCard : Card
     {
         [Header("Chording Modifiers")]
-        [EditInline]
-        [Tooltip("The how this card will modify actions when used in a combo.")]
+        
+        [Tooltip("The how this card will modify actions when used in a combo.")] [EditInline]
         public List<AttackModifier> chordModifiers;
-        [EditInline]
-        [Tooltip("The how this card will modify actions when used in a combo with itself.")]
+        
+        [Tooltip("The how this card will modify actions when used in a combo with itself.")] [EditInline]
         public List<AttackModifier> duplicateModifiers;
 
         #region Previewing
@@ -115,7 +115,8 @@ namespace Cardificer
         /// </summary>
         /// <param name="actor"> The actor playing the card. </param>
         /// <param name="chordedCards"> The cards being corded with this. </param>
-        public void PlayActions(IActor actor, List<AttackCard> chordedCards)
+        /// <param name="attackFinished"> A callback for when the action is finished. </param>
+        public void PlayActions(IActor actor, List<AttackCard> chordedCards, System.Action attackFinished = null)
         {
             List<AttackModifier> modifiers = new List<AttackModifier>();
             foreach (AttackCard chordedCard in chordedCards)
@@ -123,7 +124,7 @@ namespace Cardificer
                 modifiers.AddRange(GetAppliedModifers(chordedCard));
             }
 
-            PlayActions(actor, modifiers);
+            PlayActions(actor, modifiers, attackFinished);
         }
 
         /// <summary>
@@ -131,18 +132,35 @@ namespace Cardificer
         /// </summary>
         /// <param name="actor"> The actor playing the card. </param>
         /// <param name="modifiers"> The modifiers being applied to this. </param>
-        public void PlayActions(IActor actor, List<AttackModifier> modifiers)
+        /// <param name="attackFinished"> A callback for when the action is finished. </param>
+        public void PlayActions(IActor actor, List<AttackModifier> modifiers, System.Action attackFinished = null)
         {
+            int numUnfinishedAttacks = 0;
+
             foreach (Action action in actions)
             {
                 if (action is Attack)
                 {
-                    (action as Attack).Play(actor, modifiers);
+                    numUnfinishedAttacks++;
+                    (action as Attack).Play(actor, modifiers,
+                        // Calls attack finished when all attacks have been finished
+                        attackFinished: () =>
+                        {
+                            if (--numUnfinishedAttacks == 0)
+                            {
+                                attackFinished?.Invoke();
+                            }
+                        });
                 }
                 else
                 {
                     action.Play(actor);
                 }
+            }
+
+            if (numUnfinishedAttacks == 0)
+            {
+                attackFinished?.Invoke();
             }
         }
 

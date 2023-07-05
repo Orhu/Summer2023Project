@@ -218,6 +218,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: HUD
       objectReference: {fileID: 0}
+    - target: {fileID: 2547945102980390394, guid: 500bb8368d1e9424db6fdff88fb7c7e8, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2547945102980390394, guid: 500bb8368d1e9424db6fdff88fb7c7e8, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7455040429996825992, guid: 500bb8368d1e9424db6fdff88fb7c7e8, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -668,8 +676,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  zoomSpeed: 5
   defaultExtraHeight: 1
+  zoomSpeed: 5
 --- !u!114 &1776291742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -710,6 +718,34 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2036930054678835856, guid: 567d3dab6ca66fc4d924949862f27478, type: 3}
+      propertyPath: cards.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2036930054678835856, guid: 567d3dab6ca66fc4d924949862f27478, type: 3}
+      propertyPath: cards.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 57eb269862aab2842a11a2a6fddf2c50, type: 2}
+    - target: {fileID: 2036930054678835856, guid: 567d3dab6ca66fc4d924949862f27478, type: 3}
+      propertyPath: cards.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 57eb269862aab2842a11a2a6fddf2c50, type: 2}
+    - target: {fileID: 2036930054678835856, guid: 567d3dab6ca66fc4d924949862f27478, type: 3}
+      propertyPath: cards.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 57eb269862aab2842a11a2a6fddf2c50, type: 2}
+    - target: {fileID: 2036930054678835856, guid: 567d3dab6ca66fc4d924949862f27478, type: 3}
+      propertyPath: cards.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: edb2a1437d4d3b147a55dd2c1da089d8, type: 2}
+    - target: {fileID: 2036930054678835856, guid: 567d3dab6ca66fc4d924949862f27478, type: 3}
+      propertyPath: cards.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: edb2a1437d4d3b147a55dd2c1da089d8, type: 2}
+    - target: {fileID: 2036930054678835856, guid: 567d3dab6ca66fc4d924949862f27478, type: 3}
+      propertyPath: cards.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: edb2a1437d4d3b147a55dd2c1da089d8, type: 2}
     - target: {fileID: 2036930054678835859, guid: 567d3dab6ca66fc4d924949862f27478, type: 3}
       propertyPath: m_RootOrder
       value: 0

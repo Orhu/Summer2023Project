@@ -2,7 +2,6 @@ using Skaillz.EditInline;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 
 namespace Cardificer
 {
@@ -11,6 +10,11 @@ namespace Cardificer
     /// </summary>
     public abstract class Attack : Action
     {
+        // The projectile to spawn
+        public Projectile projectilePrefab;
+        // The previewer prefab to use.
+        public AttackPreviewer previewerPrefab;
+
         [Header("Hits")]
 
         [Tooltip("The damage, damage type, status effects, and knockback this projectile will deal.")]
@@ -81,6 +85,19 @@ namespace Cardificer
 
 
 
+        [Header("Projectile Audio")]
+
+        [Tooltip("AudioClip for projectile travel")]
+        [SerializeField] protected AudioClip travelAudioClip;
+
+        [Tooltip("AudioClip for projectile impact.")]
+        [SerializeField] protected AudioClip impactAudioClip;
+
+        // The root of all projectiles
+        private static GameObject projectileRoot;
+
+
+
         [Header("Spawning")]
 
         [Tooltip("The location to spawn the projectiles at.")]
@@ -92,23 +109,14 @@ namespace Cardificer
         [Tooltip("The sequence of when and where to spawn projectiles")]
         public abstract List<ProjectileSpawnInfo> spawnSequence { set; get; }
 
-        [Header("Projectile Audio")]
+        [Tooltip("Whether or not to wait for all spawned projectiles to die before the action is complete.")]
+        public bool waitForProjectileDeath = false;
 
-        [Tooltip("AudioClip for projectile travel")]
-        [SerializeField] protected AudioClip travelAudioClip;
+        [Tooltip("The time to wait before starting the attack sequence.")] [Min(0f)]
+        public float chargeTime = 0f;
 
-        [Tooltip("AudioClip for projectile impact.")]
-        [SerializeField] protected AudioClip impactAudioClip;
-
-
-
-        // The projectile to spawn
-        public Projectile projectilePrefab;
-        // The previewer prefab to use.
-        public AttackPreviewer previewerPrefab;
-
-        // The root of all projectiles
-        private static GameObject projectileRoot;
+        [Tooltip("The time to wait after the spawn sequence is finished and (optionally) all projectile have died until the action is officially complete.")] [Min(0f)]
+        public float additionalActionTime = 0f;
 
 
 
@@ -148,24 +156,25 @@ namespace Cardificer
         /// <param name="actor"> The actor that will be playing this action. </param>
         /// <param name="modifiers"> The modifiers to be applied to this attack. </param>
         /// <param name="causer"> The causer of damage dealt by this attack. </param>
+        /// <param name="attackFinished"> A callback for when the action is finished playing. </param>
         /// <param name="ignoredObjects"> The objects this action will ignore. </param>
-        public virtual void Play(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects = null)
+        public virtual void Play(IActor actor, List<AttackModifier> modifiers, GameObject causer, System.Action attackFinished = null, List<GameObject> ignoredObjects = null)
         {
             AudioManager.instance.PlayAudioAtActor(actionAudioClip, actor);
-            actor.GetActionSourceTransform().GetComponent<MonoBehaviour>().StartCoroutine(PlaySpawnSequence(actor, modifiers, causer, ignoredObjects));
+            actor.GetActionSourceTransform().GetComponent<MonoBehaviour>().StartCoroutine(PlaySpawnSequence(actor, modifiers, causer, attackFinished, ignoredObjects));
 
         }
         public void Play(IActor actor, GameObject causer, List<GameObject> ignoredObjects = null)
         {
-            Play(actor, new List<AttackModifier>(), causer, ignoredObjects);
+            Play(actor, new List<AttackModifier>(), causer, ignoredObjects: ignoredObjects);
         }
-        public void Play(IActor actor, List<AttackModifier> modifiers, List<GameObject> ignoredObjects = null)
+        public void Play(IActor actor, List<AttackModifier> modifiers, System.Action attackFinished = null, List < GameObject> ignoredObjects = null)
         {
-            Play(actor, modifiers, actor.GetActionSourceTransform().gameObject, ignoredObjects);
+            Play(actor, modifiers, actor.GetActionSourceTransform().gameObject, attackFinished, ignoredObjects);
         }
         public sealed override void Play(IActor actor, List<GameObject> ignoredObjects = null)
         {
-            Play(actor, new List<AttackModifier>(), actor.GetActionSourceTransform().gameObject, ignoredObjects);
+            Play(actor, new List<AttackModifier>(), actor.GetActionSourceTransform().gameObject, ignoredObjects: ignoredObjects);
         }
 
 
@@ -175,11 +184,16 @@ namespace Cardificer
         /// <param name="actor"> The actor that is playing this action. </param>
         /// <param name="modifiers"> The modifiers that are applied to this attack. </param>
         /// <param name="causer"> The causer of damage dealt by this attack. </param>
+        /// <param name="attackFinished"> A callback for when the action is finished playing. </param>
         /// <param name="ignoredObjects"> The objects this action will ignore. </param>
-        protected IEnumerator PlaySpawnSequence(IActor actor, List<AttackModifier> modifiers, GameObject causer, List<GameObject> ignoredObjects)
+        protected IEnumerator PlaySpawnSequence(IActor actor, List<AttackModifier> modifiers, GameObject causer, System.Action attackFinished, List<GameObject> ignoredObjects)
         {
             List<ProjectileSpawnInfo> spawnSequence = new List<ProjectileSpawnInfo>(this.spawnSequence);
             var projectileList = new List<Projectile>();
+            int destroyedProejectiles = 0;
+
+            yield return new WaitForSeconds(chargeTime);
+
             for (int i = 0; i < spawnSequence.Count; i++)
             {
                 if (spawnSequence[i].delay > 0)
@@ -190,13 +204,29 @@ namespace Cardificer
                 projectileList.Add(spawnedProjectile);
                 spawnedProjectile.playImpactAudio += (Vector2 pos) => PlayImpactAtPos(pos);
 
+                if (waitForProjectileDeath)
+                {
+                    spawnedProjectile.onDestroyed += () => { destroyedProejectiles++; };
+                }
+
+
                 // Wait to ensure the sequence doesn't miss new additions
                 if (i + 1 >= spawnSequence.Count)
                 {
-                    yield return new WaitForEndOfFrame();
-                    yield return new WaitForEndOfFrame();
+                    yield return null;
+                    yield return null;
                 }
             }
+            
+            // Wait for projectile death
+            while (waitForProjectileDeath && destroyedProejectiles != spawnSequence.Count)
+            {
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(additionalActionTime);
+            attackFinished?.Invoke();
+            
             AudioManager.instance.GetAverageAudioSource(projectileList, travelAudioClip, projectileList.Count > 1);
         }
 
@@ -264,6 +294,7 @@ namespace Cardificer
         AtClosestEnemyToActor,
         AtRandomEnemy,
         Right,
+        AtPlayer,
     }
 
     /// <summary>

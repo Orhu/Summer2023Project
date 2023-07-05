@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -23,12 +22,10 @@ namespace Cardificer
                 if (_maxHealth == value) { return; }
 
                 _maxHealth = value;
-                onMaxHealthChanged?.Invoke(value);
             }
             get => _maxHealth;
         }
-
-
+        
         // The current health of this object
         private int _currentHealth = 0;
         public int currentHealth
@@ -39,7 +36,10 @@ namespace Cardificer
                 if (_currentHealth == value) { return; }
 
                 _currentHealth = value;
-                onHealthChanged?.Invoke(value);
+                if (hasBossHealthbar)
+                {
+                    BossHealthbarManager.instance.UpdateHealth(value);
+                }
             }
         }
 
@@ -49,14 +49,11 @@ namespace Cardificer
         [Tooltip("All status effects this is immune to.")]
         public List<StatusEffect> immuneStatusEffects = new List<StatusEffect>();
 
-        [Tooltip("Called when health values are changed and passes the new health.")]
-        public UnityEvent<float> onHealthChanged, onMaxHealthChanged;
-
-        [Tooltip("Called when this is attacked and passes the attack.")]
-        public UnityEvent<DamageData> onAttacked;
-
         [Tooltip("Called when this dies")]
         public UnityEvent onDeath;
+        
+        [Tooltip("Indicates whether this enemy has an associated boss health bar")]
+        [SerializeField] private bool hasBossHealthbar = false;
 
         // Called when invincibility changes and passes the new invincibility
         public Action<bool> onInvincibilityChanged;
@@ -64,9 +61,7 @@ namespace Cardificer
         // Called before this processes an attack and passes the incoming attack so can be modified.   
         public RequestIncomingAttackModification onRequestIncomingAttackModification;
         public delegate void RequestIncomingAttackModification(ref DamageData attack);
-
-
-
+        
         // is this unit currently invincible?
         private bool _invincible = false;
         private bool invincible
@@ -93,8 +88,11 @@ namespace Cardificer
         /// </summary>
         void Start()
         {
-            onMaxHealthChanged?.Invoke(maxHealth);
-
+            if (hasBossHealthbar)
+            {
+                BossHealthbarManager.instance.StartHealthbar(maxHealth);
+            }
+            
             if (currentHealth != 0) { return; }
             currentHealth = maxHealth;
         }
@@ -130,7 +128,6 @@ namespace Cardificer
             var prevHealth = currentHealth;
             currentHealth -= attack.damage;
 
-            onAttacked?.Invoke(attack);
             if (currentHealth <= 0 && prevHealth > 0)
             {
                 onDeath?.Invoke();

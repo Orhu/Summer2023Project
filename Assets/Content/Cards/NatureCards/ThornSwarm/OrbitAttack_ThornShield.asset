@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
   m_Name: OrbitAttack_ThornShield
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 8300000, guid: c3075c30e1bb3864687115ad9019ec9a, type: 3}
+  actionAudioClip: {fileID: 8300000, guid: 6d8de4c5368fd304097010d4180b3d2a, type: 3}
+  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
+  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   attack:
     damage: 1
     damageType: 0
@@ -37,12 +39,12 @@ MonoBehaviour:
   visualObject: {fileID: 4662436964472314495, guid: d03b5893446d656409cf3c393f69e864, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
+  travelAudioClip: {fileID: 8300000, guid: 311d889dd276f4d46bc46e6badd08411, type: 3}
+  impactAudioClip: {fileID: 0}
   spawnLocation: 0
   aimMode: 0
-  travelAudioClip: {fileID: 0}
-  impactAudioClip: {fileID: 0}
-  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
-  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
+  waitForProjectileDeath: 1
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     startingAngle: 0

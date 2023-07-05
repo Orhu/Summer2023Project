@@ -35,13 +35,25 @@ namespace Cardificer
                     {
                         createdTile = room.template[i, j];
                     }
+                    // TODO: Make single enemies spawn on decorative layer instead so I don't have to do this nonsense
+                    bool isSingleEnemy = createdTile != null && createdTile.GetComponent<FiniteStateMachine.BaseStateMachine>() != null;
+                    if (isSingleEnemy && !spawnEnemies)
+                    {
+                        Destroy(createdTile.gameObject);
+                    }
 
-                    if (createdTile == null)
+                    if (isSingleEnemy && spawnEnemies)
+                    {
+                        createdTile.shouldDisable = false;
+                        createdTile.Enable();
+                    }
+
+                    if (createdTile == null || isSingleEnemy)
                     {
                         createdTile = new GameObject().AddComponent<Tile>();
                         createdTile.name = "Empty tile (" + i + ", " + j + ")";
                         createdTile.gridLocation = new Vector2Int(i, j);
-                        createdTile.allowedMovementTypes = RoomInterface.MovementType.Walk | RoomInterface.MovementType.Burrow | RoomInterface.MovementType.Fly;
+                        createdTile.allowedMovementTypes = RoomInterface.MovementType.Walking | RoomInterface.MovementType.Burrowing | RoomInterface.MovementType.Flying;
                     }
                     else
                     {
@@ -53,42 +65,14 @@ namespace Cardificer
                     room.roomGrid[i, j] = createdTile;
 
                     
-                    if (createdTile.GetComponent<EnemySpawner>() != null || createdTile.GetComponent<FiniteStateMachine.BaseStateMachine>() != null)
+                    if (createdTile.GetComponent<EnemySpawner>() != null || isSingleEnemy)
                     {
                         enemiesSpawned = true;
                     }
                 }
             }
 
-            StartCoroutine(EnableTilesAfterOneFrame(room.roomSize, room.roomGrid, spawnEnemies));
-
             return spawnEnemies && enemiesSpawned;
-        }
-
-        /// <summary>
-        /// Enables all the tiles after waiting one frame to ensure the tiles have initialized themselves correctly
-        /// </summary>
-        /// <param name="roomSize"> The room size </param>
-        /// <param name="roomGrid"> The room grid </param>
-        /// <param name="spawnEnemies"> Whether or not to spawn enemies </param>
-        /// <returns> Waits one frame </returns>
-        private IEnumerator EnableTilesAfterOneFrame(Vector2Int roomSize, Tile[,] roomGrid, bool spawnEnemies)
-        {
-            yield return null;
-            for (int i = 0; i < roomSize.x; i++)
-            {
-                for (int j = 0; j < roomSize.y; j++)
-                {
-                    if ((roomGrid[i, j].GetComponent<EnemySpawner>() == null && roomGrid[i, j].GetComponent<FiniteStateMachine.BaseStateMachine>() == null)|| spawnEnemies)
-                    {
-                        roomGrid[i, j].Enable();
-                    }
-                    else
-                    {
-                        roomGrid[i, j].gameObject.SetActive(false);
-                    }
-                }
-            }
         }
     }
 }

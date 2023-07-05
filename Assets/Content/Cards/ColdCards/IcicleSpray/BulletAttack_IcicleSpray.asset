@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_IcicleSpray
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 8300000, guid: 5671e16af164a9e4f8d86bca222c4a37, type: 3}
+  actionAudioClip: {fileID: 8300000, guid: f08398216d2ffed4db52d45c619ad268, type: 3}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 1
     damageType: 0
@@ -37,12 +39,12 @@ MonoBehaviour:
   visualObject: {fileID: 8372843719696061205, guid: 52c86cacb8340f64da2452cbfd01e0a7, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
+  travelAudioClip: {fileID: 8300000, guid: 13145fee271fd7f419c68bff198da894, type: 3}
+  impactAudioClip: {fileID: 8300000, guid: d252452035447734d89f5f6ea3f4e509, type: 3}
   spawnLocation: 0
   aimMode: 0
-  travelAudioClip: {fileID: 0}
-  impactAudioClip: {fileID: 8300000, guid: 7ef3d5dfc1b23b64fad3578cd490d60a, type: 3}
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  waitForProjectileDeath: 0
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     angle: 0

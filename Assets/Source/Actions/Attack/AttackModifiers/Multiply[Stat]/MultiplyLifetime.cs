@@ -17,7 +17,7 @@ namespace Cardificer
         {
             set
             {
-                value.remainingLifetime *= lifetimeFactor;
+                value.remainingLifetime += (lifetimeFactor - 1) * value.attack.lifetime;
             }
         }
     }

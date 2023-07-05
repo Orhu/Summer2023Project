@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
- using Cardificer;
 using Skaillz.EditInline;
 using UnityEngine;
 
@@ -21,7 +20,7 @@ using UnityEngine;
          public List<BaseAction> updateActions = new List<BaseAction>();
 
          [Tooltip("This state's transitions. Evaluated every frame.")] [EditInline]
-         public List<BaseTransition> transitions = new List<BaseTransition>();
+         public List<Transition> transitions = new List<Transition>();
 
          /// <summary>
          /// Run through all of this state's actions and transitions, executing them.

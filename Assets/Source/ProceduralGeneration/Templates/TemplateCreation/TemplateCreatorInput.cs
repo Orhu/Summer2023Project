@@ -1,4 +1,3 @@
-using UnityEngine.UI;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -91,11 +90,11 @@ namespace Cardificer
             Vector3 view = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Input.mousePosition);
             bool isOutside = view.x < 0 || view.x > 1 || view.y < 0 || view.y > 1;
 
+            Vector2Int gridPos = MousePosToGridPos(Input.mousePosition);
             if (Input.GetMouseButtonUp(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() && !isOutside)
             {
-                Vector2Int gridPos = MousePosToGridPos(Input.mousePosition);
 
-                if (Selection.activeGameObject != heldTile)
+                if (Selection.activeGameObject != null && Selection.activeGameObject != heldTile)
                 {
                     foreach (SpriteRenderer spriteRenderer in Selection.activeGameObject.GetComponents<SpriteRenderer>())
                     {
@@ -107,22 +106,6 @@ namespace Cardificer
                 if (templateCreator.IsGridPosOutsideBounds(gridPos))
                 {
                     heldTile = null;
-                }
-
-                // Placing tile
-                else if (heldTile != null)
-                {
-                    foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
-                    {
-                        spriteRenderer.color = Color.white;
-                        spriteRenderer.sortingOrder--;
-                    }
-                    templateCreator.PlaceTile(heldTile.GetComponent<Tile>(), gridPos);
-                    foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
-                    {
-                        spriteRenderer.color = previewColor;
-                        spriteRenderer.sortingOrder++;
-                    }
                 }
 
                 // Selecting tile
@@ -141,19 +124,31 @@ namespace Cardificer
                 }
             }
 
-            // Panning
-            if (Input.GetMouseButtonDown(1) && !isOutside)
+            // Placing tiles
+            if (Input.GetMouseButton(0) && !isOutside)
             {
-                mouseStartPosition = Input.mousePosition;
+                if (heldTile != null 
+                    && !templateCreator.IsGridPosOutsideBounds(gridPos) 
+                    && (templateCreator.GetTile(gridPos) == null || templateCreator.GetTile(gridPos).name != heldTile.name))
+                {
+                    foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
+                    {
+                        spriteRenderer.color = Color.white;
+                        spriteRenderer.sortingOrder--;
+                    }
+                    templateCreator.PlaceTile(heldTile.GetComponent<Tile>(), gridPos);
+                    foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
+                    {
+                        spriteRenderer.color = previewColor;
+                        spriteRenderer.sortingOrder++;
+                    }
+                }
             }
 
-            if (Input.GetMouseButton(1) && !isOutside)
+            // Panning
+            if ((Input.GetMouseButton(2) || (Input.GetMouseButton(1) && Input.GetKey(KeyCode.LeftShift))) && !isOutside)
             {
-                if (Input.mousePosition != mouseStartPosition)
-                {
-                    mouseMoved = true;
-                    templateCamera.Pan(Camera.main.ScreenToWorldPoint(lastMousePosition) - Camera.main.ScreenToWorldPoint(Input.mousePosition));
-                }
+                templateCamera.Pan(Camera.main.ScreenToWorldPoint(lastMousePosition) - Camera.main.ScreenToWorldPoint(Input.mousePosition));
             }
 
             // Scrolling
@@ -163,24 +158,16 @@ namespace Cardificer
             }
 
             // Erasing
-            if (Input.GetMouseButtonUp(1) && !isOutside)
+            if (Input.GetMouseButton(1) && !isOutside && templateCreator.GetTile(gridPos) != null && !Input.GetKey(KeyCode.LeftShift))
             {
-                if (mouseMoved)
-                {
-                    mouseMoved = false;
-                }
-                else
-                {
-                    Vector2Int gridPos = MousePosToGridPos(Input.mousePosition);
-                    templateCreator.EraseTile(gridPos);
-                }
+                templateCreator.EraseTile(gridPos);
             }
 
 
             // Copying
             if (Input.GetKeyDown(KeyCode.Q) && !isOutside)
             {
-                if (Selection.activeGameObject != heldTile)
+                if (Selection.activeGameObject != null && Selection.activeGameObject != heldTile)
                 {
                     foreach (SpriteRenderer spriteRenderer in Selection.activeGameObject.GetComponents<SpriteRenderer>())
                     {
@@ -188,7 +175,6 @@ namespace Cardificer
                     }
                 }
 
-                Vector2Int gridPos = MousePosToGridPos(Input.mousePosition);
                 Tile tile = templateCreator.GetTile(gridPos);
                 heldTile = tile == null ? null : Instantiate(tile.gameObject);
             }

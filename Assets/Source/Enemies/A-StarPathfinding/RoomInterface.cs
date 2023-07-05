@@ -17,9 +17,9 @@ namespace Cardificer
         public enum MovementType
         {
             None = 0,
-            Walk = 1,
-            Fly = 2,
-            Burrow = 4
+            Walking = 1,
+            Flying = 2,
+            Burrowing = 4
         }
 
         // the room this class represents
@@ -32,7 +32,7 @@ namespace Cardificer
         private PathfindingTile[,] roomGrid;
 
         // the world position of this room
-        private Vector2 myWorldPosition;
+        [HideInInspector] public Vector2 myWorldPosition;
 
         // this instance
         public static RoomInterface instance;
@@ -48,9 +48,6 @@ namespace Cardificer
 
         [Tooltip("Draw Tiles detected as \"burrow\" during room-grid copying")]
         [SerializeField] private bool drawBurrowTiles;
-
-        // tracks list of null tiles during room copying for the purpose of displaying them as gizmos
-        private List<Vector2> debugNullTiles = new List<Vector2>();
 
         /// <summary>
         /// Sets the instance to this instance
@@ -182,38 +179,10 @@ namespace Cardificer
                             try
                             {
                                 // this tile is a corner, make sure it is reachable by both of its adjacent tiles (not blocked) (prevents enemies getting stuck on corners)
-                                switch (movementType)
+                                if (roomGrid[checkX - x, checkY].allowedMovementTypes.HasFlag(movementType) &&
+                                    roomGrid[checkX, checkY - y].allowedMovementTypes.HasFlag(movementType))
                                 {
-                                    case MovementType.Walk:
-                                        if (roomGrid[checkX - x, checkY].allowedMovementTypes
-                                                .HasFlag(MovementType.Walk) &&
-                                            roomGrid[checkX, checkY - y].allowedMovementTypes
-                                                .HasFlag(MovementType.Walk))
-                                        {
-                                            neighbors.Add(roomGrid[checkX, checkY]);
-                                        }
-
-                                        break;
-                                    case MovementType.Fly:
-                                        if (roomGrid[checkX - x, checkY].allowedMovementTypes
-                                                .HasFlag(MovementType.Fly) &&
-                                            roomGrid[checkX, checkY - y].allowedMovementTypes
-                                                .HasFlag(MovementType.Fly))
-                                        {
-                                            neighbors.Add(roomGrid[checkX, checkY]);
-                                        }
-
-                                        break;
-                                    case MovementType.Burrow:
-                                        if (roomGrid[checkX - x, checkY].allowedMovementTypes
-                                                .HasFlag(MovementType.Burrow) &&
-                                            roomGrid[checkX, checkY - y].allowedMovementTypes
-                                                .HasFlag(MovementType.Burrow))
-                                        {
-                                            neighbors.Add(roomGrid[checkX, checkY]);
-                                        }
-
-                                        break;
+                                    neighbors.Add(roomGrid[checkX, checkY]);
                                 }
                             }
                             catch
@@ -234,7 +203,7 @@ namespace Cardificer
         /// </summary>
         private void OnDrawGizmos()
         {
-            if ((drawWalkTiles || drawFlyTiles || drawBurrowTiles) && Application.isPlaying && roomGrid != null)
+            if ((drawWalkTiles || drawFlyTiles || drawBurrowTiles || drawNullTiles) && Application.isPlaying && roomGrid != null)
             {
                 for (int x = 0; x < roomGrid.GetLength(0); x++)
                 {
@@ -242,32 +211,35 @@ namespace Cardificer
                     {
                         var t = roomGrid[x, y];
 
-                        if (t == null && drawNullTiles)
+                        if (t == null)
                         {
-                            Gizmos.color = Color.blue;
-                            Vector2 worldPos = new Vector2(
-                                x + myWorldPosition.x - myRoomSize.x / 2,
-                                y + myWorldPosition.y - myRoomSize.y / 2
-                            );
-                            Gizmos.DrawCube(worldPos, Vector3.one);
+                            if (drawNullTiles)
+                            {
+                                Gizmos.color = Color.blue;
+                                Vector2 worldPos = new Vector2(
+                                    x + myWorldPosition.x - myRoomSize.x / 2,
+                                    y + myWorldPosition.y - myRoomSize.y / 2
+                                );
+                                Gizmos.DrawCube(worldPos, Vector3.one);
+                            }
                         }
                         else
                         {
                             if (drawWalkTiles)
                             {
-                                Gizmos.color = t.allowedMovementTypes.HasFlag(MovementType.Walk)
+                                Gizmos.color = t.allowedMovementTypes.HasFlag(MovementType.Walking)
                                     ? Color.green
                                     : Color.red;
                             }
                             else if (drawFlyTiles)
                             {
-                                Gizmos.color = t.allowedMovementTypes.HasFlag(MovementType.Fly)
+                                Gizmos.color = t.allowedMovementTypes.HasFlag(MovementType.Flying)
                                     ? Color.green
                                     : Color.red;
                             }
                             else if (drawBurrowTiles)
                             {
-                                Gizmos.color = t.allowedMovementTypes.HasFlag(MovementType.Burrow)
+                                Gizmos.color = t.allowedMovementTypes.HasFlag(MovementType.Burrowing)
                                     ? Color.green
                                     : Color.red;
                             }
