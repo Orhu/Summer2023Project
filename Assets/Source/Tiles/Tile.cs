@@ -30,6 +30,11 @@ namespace Cardificer
         // The room that this tile is a part of 
         [HideInInspector] public Room room;
 
+#if UNITY_EDITOR
+        // The prefab this was derived from
+        [HideInInspector] public GameObject prefab;
+#endif
+
         /// <summary>
         /// Disables the game object from starting before it's ready to
         /// </summary>

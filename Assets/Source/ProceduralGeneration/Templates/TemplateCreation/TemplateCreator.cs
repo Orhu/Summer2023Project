@@ -146,13 +146,12 @@ namespace Cardificer
             }
 
             string path = "Assets/Content/Templates/" + templateName + ".prefab";
+            GetComponent<TemplateCreatorInput>().DeselectTile();
 
-#if UNITY_EDITOR
             PrefabUtility.SaveAsPrefabAsset(createdTemplate.gameObject, path);
             AssetDatabase.Refresh();
 
             Debug.Log("Template saved to " + path);
-#endif
         }
 
         /// <summary>
@@ -192,26 +191,28 @@ namespace Cardificer
                 Debug.LogWarning("Please enter a file name");
                 return; 
             } 
-            Template templateToLoad = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Content/Templates/" + templateName + ".prefab")?.GetComponent<Template>();
+            GameObject templateToLoad = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Content/Templates/" + templateName + ".prefab");
             if (templateToLoad == null)
             {
                 Debug.LogWarning("Template file not found");
                 return;
             }
             Debug.Log("Loading template " + templateToLoad.name);
-            mapCellSize = templateToLoad.mapCellSize;
-            sizeMultiplier = templateToLoad.sizeMultiplier;
+            mapCellSize = createdTemplate.mapCellSize;
+            sizeMultiplier = createdTemplate.sizeMultiplier;
 
-            createdTemplate = Instantiate(templateToLoad);
+            Destroy(createdTemplate.gameObject);
+            createdTemplate = Instantiate(templateToLoad).GetComponent<Template>();
 
-            for (int i = 0; i < roomSize.x; i++)
+            foreach (Tile tileComponent in createdTemplate.GetComponents<Tile>())
             {
-                for (int j = 0; j < roomSize.y; j++)
+                if (tileComponent.GetComponent<SpriteRenderer>() == null || tileComponent.GetComponent<SpriteRenderer>().sprite == null)
                 {
-                    if (createdTemplate[i, j] != null && createdTemplate[i, j].GetComponent<SpriteRenderer>() == null)
-                    {
-                        PlaceTile(createdTemplate[i, j], new Vector2Int(i, j));
-                    }
+                    GameObject createdNullSprite = Instantiate(nullSpriteObject);
+                    createdNullSprite.SetActive(true);
+                    nullSprites[tileComponent.gridLocation.x, tileComponent.gridLocation.y] = createdNullSprite;
+                    createdNullSprite.transform.parent = nullSpritesContainer.transform;
+                    createdNullSprite.transform.localPosition = new Vector3(tileComponent.gridLocation.x, tileComponent.gridLocation.y, 0);
                 }
             }
         }
@@ -358,16 +359,16 @@ namespace Cardificer
         /// </summary>
         /// <param name="tile"> The tile to place </param>
         /// <param name="gridPos"> The grid position to place the tile in </param>
-        public void PlaceTile(Tile tile, Vector2Int gridPos)
+        public void PlaceTile(GameObject tilePrefab, Vector2Int gridPos)
         {
             if (gridPos.x >= 1 && gridPos.x < roomSize.x - 1 && gridPos.y >= 1 && gridPos.y < roomSize.y - 1)
             {
                 EraseTile(gridPos);
-                Tile createdTile = Instantiate(tile);
-                createdTile.name = tile.name;
-                createdTile.transform.parent = createdTemplate.transform;
+                Tile createdTile = ((GameObject)PrefabUtility.InstantiatePrefab(tilePrefab, createdTemplate.transform)).GetComponent<Tile>();
+                createdTile.name = tilePrefab.name;
                 createdTile.transform.localPosition = new Vector3(gridPos.x, gridPos.y, 0);
                 createdTile.gridLocation = gridPos;
+                createdTile.prefab = tilePrefab;
                 createdTemplate[gridPos.x, gridPos.y] = createdTile;
 
                 if (createdTile.GetComponent<SpriteRenderer>() == null || createdTile.GetComponent<SpriteRenderer>().sprite == null)

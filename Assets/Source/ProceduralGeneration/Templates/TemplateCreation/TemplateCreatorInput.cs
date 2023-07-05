@@ -11,13 +11,13 @@ namespace Cardificer
     [RequireComponent(typeof(TemplateCreator))]
     public class TemplateCreatorInput : MonoBehaviour
     {
+#if UNITY_EDITOR
         [Tooltip("The color of the tile placement preview")]
         [SerializeField] private Color previewColor;
 
         [Tooltip("The color of the tile placement preview")]
         [SerializeField] private Color selectedColor;
 
-#if UNITY_EDITOR
         // Shows the null sprite when the held tile doesn't have a sprite component
         private GameObject nullSprite;
 
@@ -70,6 +70,8 @@ namespace Cardificer
             get => _heldTile;
         }
 
+        // The prefab that is selected.
+        private GameObject selectedPrefab;
 
         /// <summary>
         /// Initialize variables
@@ -106,12 +108,12 @@ namespace Cardificer
                 if (templateCreator.IsGridPosOutsideBounds(gridPos))
                 {
                     heldTile = null;
+                    selectedPrefab = null;
                 }
 
                 // Selecting tile
                 else
                 {
-                    #if UNITY_EDITOR
                     if (templateCreator.GetTile(gridPos) != null)
                     {
                         Selection.activeGameObject = templateCreator.GetTile(gridPos).gameObject;
@@ -120,7 +122,6 @@ namespace Cardificer
                             spriteRenderer.color = selectedColor;
                         }
                     }
-                    #endif
                 }
             }
 
@@ -136,7 +137,7 @@ namespace Cardificer
                         spriteRenderer.color = Color.white;
                         spriteRenderer.sortingOrder--;
                     }
-                    templateCreator.PlaceTile(heldTile.GetComponent<Tile>(), gridPos);
+                    templateCreator.PlaceTile(selectedPrefab, gridPos);
                     foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
                     {
                         spriteRenderer.color = previewColor;
@@ -176,11 +177,20 @@ namespace Cardificer
                 }
 
                 Tile tile = templateCreator.GetTile(gridPos);
-                heldTile = tile == null ? null : Instantiate(tile.gameObject);
+                heldTile = tile == null ? null : Instantiate(tile.prefab);
+                selectedPrefab = tile == null ? null : tile.prefab;
             }
 
             UpdateHeldTile();
             lastMousePosition = Input.mousePosition;
+        }
+
+        public void DeselectTile()
+        {
+            foreach (SpriteRenderer spriteRenderer in Selection.activeGameObject.GetComponents<SpriteRenderer>())
+            {
+                spriteRenderer.color = Color.white;
+            }
         }
 
         /// <summary>
@@ -207,11 +217,13 @@ namespace Cardificer
                         lastSelectedObjectName = selectedObject.name;
                         Debug.LogWarning("The object placed in a template must have a tile component!");
                         heldTile = null;
+                        selectedPrefab = null;
                     }
                     Destroy(selectedObject);
                 }
                 else
                 {
+                    selectedPrefab = Selection.activeGameObject;
                     heldTile = selectedObject;
                 }
             }
