@@ -502,7 +502,7 @@ namespace Cardificer
                     });
 
                 if (autosaveExists) { return; }
-                Invoke("Autosave", 0.5f);
+                Invoke("Autosave", 1f);
             }
             #endregion
         }
