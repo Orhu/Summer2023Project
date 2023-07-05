@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using MovementType = Cardificer.RoomInterface.MovementType;
 
@@ -6,7 +9,7 @@ namespace Cardificer
     /// <summary>
     /// Tiles for use in the room grid. Holds information for pathfinding and spawning the tiles
     /// </summary>
-    [System.Serializable]
+    [System.Serializable] [ExecuteAlways]
     public class Tile : MonoBehaviour
     {
         [Tooltip("Movement types this tile supports")]
@@ -31,8 +34,11 @@ namespace Cardificer
         [HideInInspector] public Room room;
 
 #if UNITY_EDITOR
-        // The prefab this was derived from
+        // The prefab this was derived from.
         [HideInInspector] public GameObject prefab;
+
+        // The overrides of this prefab.
+        public PropertyModification[] propertyModifications;
 #endif
 
         /// <summary>
@@ -56,6 +62,14 @@ namespace Cardificer
                 spriteRenderer.enabled = true;
             }
         }
+
+#if UNITY_EDITOR
+        private void Update()
+        {
+            propertyModifications = PrefabUtility.GetPropertyModifications(gameObject);
+        }
+#endif
+
 
         /// <summary>
         /// Enables the game object

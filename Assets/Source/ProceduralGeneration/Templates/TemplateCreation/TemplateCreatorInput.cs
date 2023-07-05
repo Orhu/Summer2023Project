@@ -67,6 +67,9 @@ namespace Cardificer
         // The prefab that is selected.
         private GameObject selectedPrefab;
 
+        // The prefab that is selected.
+        private PropertyModification[] selectedModifcations;
+
         /// <summary>
         /// Initialize variables
         /// </summary>
@@ -103,6 +106,7 @@ namespace Cardificer
                 {
                     heldTile = null;
                     selectedPrefab = null;
+                    selectedModifcations = null;
                 }
 
                 // Selecting tile
@@ -131,7 +135,7 @@ namespace Cardificer
                         spriteRenderer.color = Color.white;
                         spriteRenderer.sortingOrder--;
                     }
-                    templateCreator.PlaceTile(selectedPrefab, gridPos);
+                    templateCreator.PlaceTile(selectedPrefab, gridPos, selectedModifcations);
                     foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
                     {
                         spriteRenderer.color = previewColor;
@@ -173,6 +177,7 @@ namespace Cardificer
                 Tile tile = templateCreator.GetTile(gridPos);
                 heldTile = tile == null ? null : Instantiate(tile.prefab);
                 selectedPrefab = tile == null ? null : tile.prefab;
+                selectedModifcations = tile == null ? null : tile.propertyModifications;
             }
 
             UpdateHeldTile();

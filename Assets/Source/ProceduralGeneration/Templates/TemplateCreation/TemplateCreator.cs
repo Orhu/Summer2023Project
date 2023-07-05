@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -359,12 +361,15 @@ namespace Cardificer
         /// </summary>
         /// <param name="tile"> The tile to place </param>
         /// <param name="gridPos"> The grid position to place the tile in </param>
-        public void PlaceTile(GameObject tilePrefab, Vector2Int gridPos)
+        public void PlaceTile(GameObject tilePrefab, Vector2Int gridPos, PropertyModification[] propertyModifications = null)
         {
             if (gridPos.x >= 1 && gridPos.x < roomSize.x - 1 && gridPos.y >= 1 && gridPos.y < roomSize.y - 1)
             {
                 EraseTile(gridPos);
                 Tile createdTile = ((GameObject)PrefabUtility.InstantiatePrefab(tilePrefab, createdTemplate.transform)).GetComponent<Tile>();
+
+                PrefabUtility.SetPropertyModifications(createdTile, propertyModifications);
+
                 createdTile.name = tilePrefab.name;
                 createdTile.transform.localPosition = new Vector3(gridPos.x, gridPos.y, 0);
                 createdTile.gridLocation = gridPos;
