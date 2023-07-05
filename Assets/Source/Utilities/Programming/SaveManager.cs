@@ -490,11 +490,7 @@ namespace Cardificer
             {
                 if (!FloorGenerator.IsValid()) { return; }
 
-                FloorGenerator.onRoomChange +=
-                    () =>
-                    {
-                        FloorGenerator.currentRoom.onCleared += Autosave;
-                    };
+                FloorGenerator.onRoomChange += BindCleared;
 
                 Player.health.onDeath.AddListener(
                     () =>
@@ -505,6 +501,22 @@ namespace Cardificer
 
                 if (autosaveExists) { return; }
                 Invoke(nameof(Autosave), 1f);
+            }
+
+            /// <summary>
+            /// Unbinds cleared
+            /// </summary>
+            private void OnDestroy()
+            {
+                FloorGenerator.onRoomChange -= BindCleared;
+            }
+
+            /// <summary>
+            /// Binds cleared
+            /// </summary>
+            private void BindCleared()
+            {
+                FloorGenerator.currentRoom.onCleared += Autosave;
             }
             #endregion
         }
