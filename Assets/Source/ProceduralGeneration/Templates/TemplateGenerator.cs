@@ -35,8 +35,20 @@ namespace Cardificer
                     {
                         createdTile = room.template[i, j];
                     }
+                    // TODO: Make single enemies spawn on decorative layer instead so I don't have to do this nonsense
+                    bool isSingleEnemy = createdTile != null && createdTile.GetComponent<FiniteStateMachine.BaseStateMachine>() != null;
+                    if (isSingleEnemy && !spawnEnemies)
+                    {
+                        Destroy(createdTile.gameObject);
+                    }
 
-                    if (createdTile == null)
+                    if (isSingleEnemy && spawnEnemies)
+                    {
+                        createdTile.shouldDisable = false;
+                        createdTile.Enable();
+                    }
+
+                    if (createdTile == null || isSingleEnemy)
                     {
                         createdTile = new GameObject().AddComponent<Tile>();
                         createdTile.name = "Empty tile (" + i + ", " + j + ")";
@@ -53,7 +65,7 @@ namespace Cardificer
                     room.roomGrid[i, j] = createdTile;
 
                     
-                    if (createdTile.GetComponent<EnemySpawner>() != null || createdTile.GetComponent<FiniteStateMachine.BaseStateMachine>() != null)
+                    if (createdTile.GetComponent<EnemySpawner>() != null || isSingleEnemy)
                     {
                         enemiesSpawned = true;
                     }
