@@ -21,7 +21,7 @@ namespace Cardificer
         [SerializeField] private Button compendiumButton;
 
         // To remember the original scale of the card
-        [SerializeField]private Vector3 originalScale;
+        private Vector3 originalScale;
 
         [Tooltip("Scaling factor of the scaling animation")]
         public float scaleFactor = 1.5f;
@@ -204,16 +204,24 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// When cards 
+        /// Reset the toggle after the menu was closed
+        /// and opened back up again
+        /// </summary>
+        private void OnEnable()
+        {
+            if (!isSelected)
+            {
+                GetComponent<Toggle>().isOn = false;
+            }
+        }
+
+        /// <summary>
+        /// Make sure no cards are selected
+        /// when the menu is closed
         /// </summary>
         private void OnDisable()
         {
-            GetComponent<Toggle>().isOn = false;
-            if (isHovered)
-            {
-                transform.localScale = originalScale;
-            }
-            
+            isSelected = false; 
         }
 
         /// <summary>

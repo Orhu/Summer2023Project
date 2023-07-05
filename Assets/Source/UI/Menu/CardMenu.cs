@@ -48,7 +48,7 @@ namespace Cardificer
                 tempCardRendererGameObject.GetComponent<CardRenderer>().SetScale(new Vector3(0.85f, 0.9f, 1));
 
                 // Set the scaling factor of the CardRenderer's animation
-                tempCardRendererGameObject.GetComponent<CardRenderer>().scaleFactor = 1.15f;
+                tempCardRendererGameObject.GetComponent<CardRenderer>().scaleFactor = 1.05f;
 
                 // Set the scaling duration of the CardRenderer's animation
                 tempCardRendererGameObject.GetComponent<CardRenderer>().scaleDuration = 0.25f;
