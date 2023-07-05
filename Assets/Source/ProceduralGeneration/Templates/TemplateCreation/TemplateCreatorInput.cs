@@ -21,12 +21,6 @@ namespace Cardificer
         // Shows the null sprite when the held tile doesn't have a sprite component
         private GameObject nullSprite;
 
-        // Whether or not the mouse has been moved since the last time someone held down a mouse button
-        private bool mouseMoved;
-
-        // The mouse position when right click began being held
-        private Vector3 mouseStartPosition;
-
         // The mouse position on the last frame
         private Vector3 lastMousePosition;
 
