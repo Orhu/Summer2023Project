@@ -24,8 +24,8 @@ namespace Cardificer
         [Tooltip("the x and y location of this tile within the 2D array grid")]
         [HideInInspector] public Vector2Int gridLocation;
 
-        // Whether or not this tile should disable it's components on start
-        [HideInInspector] public bool shouldDisable = true;
+        [Tooltip("Whether or not this tile should disable it's components on start")]
+        public bool shouldDisable = true;
 
         // The room that this tile is a part of 
         [HideInInspector] public Room room;
