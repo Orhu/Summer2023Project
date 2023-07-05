@@ -41,46 +41,61 @@ namespace Cardificer
         // The speed at which the camera zooms (determined by the regular speed)
         public float zoomSpeed = 5;
 
+        #region Initialization
+        /// <summary>
+        /// Binds initialization.
+        /// </summary>
+        private void Awake()
+        {
+            FloorGenerator.onGenerated += Initialize;
+            FloorGenerator.onRoomChange += OnRoomChange;
+        }
+
+        /// <summary>
+        /// Unbinds initialization.
+        /// </summary>
+        private void OnDestroy()
+        {
+            FloorGenerator.onGenerated -= Initialize;
+            FloorGenerator.onRoomChange -= OnRoomChange;
+        }
+
         /// <summary>
         /// Initializes the height, floor generator, and player references
         /// </summary>
-        private void Start()
+        private void Initialize()
         {
-            FloorGenerator.onGenerated +=
-                () =>
-                {
-                    if (FloorGenerator.map.startRoom.roomType.overrideExtraHeight)
-                    {
-                        extraHeight = FloorGenerator.map.startRoom.roomType.extraHeight;
-                    }
-                    else
-                    {
-                        extraHeight = defaultExtraHeight;
-                    }
+            if (FloorGenerator.map.startRoom.roomType.overrideExtraHeight)
+            {
+                extraHeight = FloorGenerator.map.startRoom.roomType.extraHeight;
+            }
+            else
+            {
+                extraHeight = defaultExtraHeight;
+            }
 
-                    Vector2 roomScale = FloorGenerator.cellSize;
+            Vector2 roomScale = FloorGenerator.cellSize;
 
-                    if (roomScale.y > roomScale.x * (1 / GetComponent<Camera>().aspect))
-                    {
-                        height = roomScale.y;
-                    }
-                    else
-                    {
-                        height = roomScale.x * (1 / GetComponent<Camera>().aspect);
-                    }
+            if (roomScale.y > roomScale.x * (1 / GetComponent<Camera>().aspect))
+            {
+                height = roomScale.y;
+            }
+            else
+            {
+                height = roomScale.x * (1 / GetComponent<Camera>().aspect);
+            }
 
-                    height += extraHeight;
-                    GetComponent<Camera>().orthographicSize = height / 2;
+            height += extraHeight;
+            GetComponent<Camera>().orthographicSize = height / 2;
 
-                    extraWidth = extraHeight * GetComponent<Camera>().aspect / 2;
-                    width = height * GetComponent<Camera>().aspect;
+            extraWidth = extraHeight * GetComponent<Camera>().aspect / 2;
+            width = height * GetComponent<Camera>().aspect;
 
-                    FloorGenerator.onRoomChange.AddListener(OnRoomChange);
-                    player = Player.Get();
+            player = Player.Get();
 
-                    DetermineMinAndMax(FloorGenerator.map.startRoom);
-                };
+            DetermineMinAndMax(FloorGenerator.map.startRoom);
         }
+        #endregion
 
         //TODO: DELETE
         #region Stuff to Delete

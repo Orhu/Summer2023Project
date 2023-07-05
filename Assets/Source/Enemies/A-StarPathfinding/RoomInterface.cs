@@ -55,13 +55,22 @@ namespace Cardificer
         private void Start()
         {
             instance = this;
-            FloorGenerator.onRoomChange.AddListener(GrabCurrentRoom);
+            FloorGenerator.onRoomChange += GrabCurrentRoom;
         }
+
+        /// <summary>
+        /// Unbinds grab room.
+        /// </summary>
+        private void OnDestroy()
+        {
+            FloorGenerator.onRoomChange -= GrabCurrentRoom;
+        }
+
 
         /// <summary>
         /// Retrieves player's current room from the FloorGenerator singleton, updating this class' room reference
         /// </summary>
-        public void GrabCurrentRoom()
+        private void GrabCurrentRoom()
         {
             myRoom = FloorGenerator.currentRoom;
             myRoomSize = myRoom.roomSize;

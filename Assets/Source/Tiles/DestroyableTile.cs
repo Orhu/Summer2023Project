@@ -40,7 +40,7 @@ namespace Cardificer
         void Awake()
         {
             if (!FloorGenerator.IsValid()) { return; }
-            FloorGenerator.onRoomChange.AddListener(OnRoomEnter);
+            FloorGenerator.onRoomChange += OnRoomEnter;
         }
 
         /// <summary>
@@ -63,6 +63,7 @@ namespace Cardificer
         /// </summary>
         private void OnDestroy()
         {
+            FloorGenerator.onRoomChange -= OnRoomEnter;
             // if scene is loaded
             if (FloorGenerator.IsValid() && !destroyedTiles.Contains(transform.position) && gameObject.scene.isLoaded && RoomInterface.instance != null)
             {
