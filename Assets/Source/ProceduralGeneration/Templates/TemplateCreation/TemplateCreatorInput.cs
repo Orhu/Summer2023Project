@@ -146,7 +146,7 @@ namespace Cardificer
             }
 
             // Panning
-            if (Input.GetMouseButton(2) && !isOutside)
+            if ((Input.GetMouseButton(2) || (Input.GetMouseButton(1) && Input.GetKey(KeyCode.LeftShift))) && !isOutside)
             {
                 templateCamera.Pan(Camera.main.ScreenToWorldPoint(lastMousePosition) - Camera.main.ScreenToWorldPoint(Input.mousePosition));
             }
@@ -158,7 +158,7 @@ namespace Cardificer
             }
 
             // Erasing
-            if (Input.GetMouseButton(1) && !isOutside && templateCreator.GetTile(gridPos) != null)
+            if (Input.GetMouseButton(1) && !isOutside && templateCreator.GetTile(gridPos) != null && !Input.GetKey(KeyCode.LeftShift))
             {
                 templateCreator.EraseTile(gridPos);
             }
