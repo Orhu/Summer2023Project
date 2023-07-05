@@ -130,7 +130,11 @@ namespace Cardificer
             onRequestIncomingAttackModification?.Invoke(ref attack);
             var prevHealth = currentHealth;
             currentHealth -= attack.damage;
-            onDamageTaken?.Invoke();
+
+            if (attack.damage > 0)
+            {
+                onDamageTaken?.Invoke();
+            }
 
             if (currentHealth <= 0 && prevHealth > 0)
             {
