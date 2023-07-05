@@ -96,10 +96,11 @@ namespace Cardificer
             public State(Deck deck)
             {
                 cooldownReduction = deck.cooldownReduction;
-                pathToCards = deck.cards.Select(AssetDatabase.GetAssetPath).ToList();
-                pathToCardsDrawableCards = deck.drawableCards.Select(AssetDatabase.GetAssetPath).ToList();
-                pathToCardsInHandCards = deck.inHandCards.Select(AssetDatabase.GetAssetPath).ToList();
-                pathToCardsDiscardedCards = deck.discardedCards.Select(AssetDatabase.GetAssetPath).ToList();
+
+                pathToCards = deck.cards.Select(GetCardAssetName).ToList();
+                pathToCardsDrawableCards = deck.drawableCards.Select(GetCardAssetName).ToList();
+                pathToCardsInHandCards = deck.inHandCards.Select(GetCardAssetName).ToList();
+                pathToCardsDiscardedCards = deck.discardedCards.Select(GetCardAssetName).ToList();
             }
 
             /// <summary>
@@ -109,17 +110,23 @@ namespace Cardificer
             public void LoadInto(Deck deck)
             {
                 deck.cooldownReduction = cooldownReduction;
-                deck.cards = pathToCards.Select(AssetDatabase.LoadAssetAtPath<Card>).OfType<Card>().ToList();
 
+
+                AssetBundle assetBundle = AssetBundle.LoadFromFile(System.IO.Path.Combine(Application.streamingAssetsPath, "cards"));
+                deck.cards = pathToCards.Select(assetBundle.LoadAsset<Card>).OfType<Card>().ToList();
+                
                 if (pathToCards.Count != deck.cards.Count)
                 {
                     SaveManager.AutosaveCorrupted("Cards in deck failed to load");
+                    assetBundle.Unload(false);
                     return;
                 }
 
-                deck.drawableCards = pathToCardsDrawableCards.Select(AssetDatabase.LoadAssetAtPath<Card>).OfType<Card>().ToList();
-                deck.inHandCards = pathToCardsInHandCards.Select(AssetDatabase.LoadAssetAtPath<Card>).OfType<Card>().ToList();
-                deck.discardedCards = pathToCardsDiscardedCards.Select(AssetDatabase.LoadAssetAtPath<Card>).OfType<Card>().ToList();
+                deck.drawableCards = pathToCardsDrawableCards.Select(assetBundle.LoadAsset<Card>).OfType<Card>().ToList();
+                deck.inHandCards = pathToCardsInHandCards.Select(assetBundle.LoadAsset<Card>).OfType<Card>().ToList();
+                deck.discardedCards = pathToCardsDiscardedCards.Select(assetBundle.LoadAsset<Card>).OfType<Card>().ToList();
+
+                assetBundle.Unload(false);
 
                 if (deck.drawableCards.Count + deck.inHandCards.Count + deck.discardedCards.Count != deck.cards.Count)
                 {
@@ -127,6 +134,48 @@ namespace Cardificer
                     return;
                 }
             }
+
+            #region GetCardAssetName
+            // Cards mapped to their asset names.
+            static Dictionary<Card, string> cardsToAssetNames = new Dictionary<Card, string>();
+
+            // All of the asset names of all of the cards.
+            static string[] cardsAssetNames;
+
+            /// <summary>
+            /// Gets the name of a card.
+            /// </summary>
+            /// <param name="card"> The card who's name to find. </param>
+            /// <returns> The name as it appears in the asset bundle</returns>
+            private static string GetCardAssetName(Card card)
+            {
+                if (cardsToAssetNames.TryGetValue(card, out string name))
+                {
+                    return name;
+                }
+                else
+                {
+                    if (cardsAssetNames == null)
+                    {
+                        AssetBundle assetBundle = AssetBundle.LoadFromFile(System.IO.Path.Combine(Application.streamingAssetsPath, "cards"));
+                        cardsAssetNames = assetBundle.GetAllAssetNames();
+                        assetBundle.Unload(false);
+                    }
+
+                    string assetName = cardsAssetNames.First(
+                        // Gets the first path that contains the card's name
+                        (string path) =>
+                        {
+                            return path.Contains(card.name, StringComparison.OrdinalIgnoreCase);
+                        });
+
+                    cardsToAssetNames.Add(card, assetName);
+
+                    return assetName;
+                }
+
+            }
+            #endregion
         }
 
         #region Initialization
