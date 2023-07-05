@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 
@@ -9,3 +10,4 @@ public class SetDisplayNameAttributeEditor : PropertyDrawer
 		EditorGUI.PropertyField(position, property, new GUIContent((attribute as SetDisplayNameAttribute).NewName));
 	}
 }
+#endif

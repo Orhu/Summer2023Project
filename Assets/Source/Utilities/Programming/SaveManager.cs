@@ -488,11 +488,13 @@ namespace Cardificer
             /// </summary>
             private void Start()
             {
-                FloorGenerator.onRoomChange.AddListener(
+                if (!FloorGenerator.IsValid()) { return; }
+
+                FloorGenerator.onRoomChange +=
                     () =>
                     {
                         FloorGenerator.currentRoom.onCleared += Autosave;
-                    });
+                    };
 
                 Player.health.onDeath.AddListener(
                     () =>
@@ -502,7 +504,7 @@ namespace Cardificer
                     });
 
                 if (autosaveExists) { return; }
-                Invoke("Autosave", 0.5f);
+                Invoke(nameof(Autosave), 1f);
             }
             #endregion
         }

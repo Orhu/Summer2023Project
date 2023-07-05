@@ -12,6 +12,8 @@ namespace Cardificer
     /// </summary>
     public class TemplateCreator : MonoBehaviour
     {
+
+#if UNITY_EDITOR
         [Header("Template")]
 
         [Tooltip("The name to give the template")]
@@ -432,5 +434,6 @@ namespace Cardificer
                 EditorApplication.delayCall += Reload;
             }
         }
+#endif
     }
 }

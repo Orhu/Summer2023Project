@@ -28,7 +28,7 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
-            FloorGenerator.onRoomChange.AddListener(() => { Destroy(gameObject); });
+            FloorGenerator.onRoomChange += () => { Destroy(gameObject); };
         }
 
         /// <summary>

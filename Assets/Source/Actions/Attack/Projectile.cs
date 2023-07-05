@@ -202,13 +202,7 @@ namespace Cardificer
             }
 
 
-            FloorGenerator.onRoomChange.AddListener(
-                // Destroys this when the room is changed without triggering on destroy.
-                () => 
-                {
-                    forceDestroy = true;
-                    Destroy(gameObject); 
-                });
+            FloorGenerator.onRoomChange += ForceDestroy;
         }
 
         /// <summary>
@@ -439,11 +433,19 @@ namespace Cardificer
         #endregion
 
 
+        private void ForceDestroy()
+        {
+            forceDestroy = true;
+            Destroy(gameObject);
+        }
+
+
         /// <summary>
         /// Allows for visuals to be detached and calls delegate.
         /// </summary>
         protected void OnDestroy()
         {
+            FloorGenerator.onRoomChange -= ForceDestroy;
             if (!gameObject.scene.isLoaded || forceDestroy) { return; }
 
             onDestroyed?.Invoke();

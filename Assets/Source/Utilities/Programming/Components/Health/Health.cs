@@ -62,6 +62,9 @@ namespace Cardificer
         public RequestIncomingAttackModification onRequestIncomingAttackModification;
         public delegate void RequestIncomingAttackModification(ref DamageData attack);
         
+        // Called when damage is taken.
+        public System.Action onDamageTaken;
+
         // is this unit currently invincible?
         private bool _invincible = false;
         private bool invincible
@@ -127,6 +130,7 @@ namespace Cardificer
             onRequestIncomingAttackModification?.Invoke(ref attack);
             var prevHealth = currentHealth;
             currentHealth -= attack.damage;
+            onDamageTaken?.Invoke();
 
             if (currentHealth <= 0 && prevHealth > 0)
             {

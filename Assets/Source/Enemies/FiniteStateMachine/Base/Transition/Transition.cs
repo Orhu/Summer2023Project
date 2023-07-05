@@ -30,6 +30,7 @@ namespace Cardificer.FiniteStateMachine
             public LogicalOperator nextOperator;
         }
 
+#if UNITY_EDITOR
         /// <summary>
         /// Class for making the DecisionPair easier to read in the inspector.
         /// </summary>
@@ -64,6 +65,7 @@ namespace Cardificer.FiniteStateMachine
                 EditorGUI.EndProperty();
             }
         }
+#endif
 
         /// <summary>
         /// Represents a logical operator that can be used to combine 2 decisions

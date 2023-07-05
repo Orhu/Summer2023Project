@@ -97,10 +97,7 @@ namespace Cardificer
                                 coroutineRunner.transform.parent = playActionRoot.transform;
                                 sourceTransform = coroutineRunner.transform;
                                 MonoBehaviour mono = sourceTransform.gameObject.AddComponent<Empty>();
-                                FloorGenerator.onRoomChange.AddListener(() =>
-                                {
-                                    Destroy(coroutineRunner);
-                                });
+                                FloorGenerator.onRoomChange += () => { Destroy(coroutineRunner); };
 
                                 mono.GetComponent<MonoBehaviour>().StartCoroutine(DelayedPlayAction());
                             };
