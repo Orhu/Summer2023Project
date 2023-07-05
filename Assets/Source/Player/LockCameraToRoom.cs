@@ -46,6 +46,10 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
+            Invoke("DelayedStart", 0.1f);
+        }
+        private void DelayedStart()
+        {
             if (FloorGenerator.map.startRoom.roomType.overrideExtraHeight)
             {
                 extraHeight = FloorGenerator.map.startRoom.roomType.extraHeight;
