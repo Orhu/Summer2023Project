@@ -113,7 +113,7 @@ namespace Cardificer
 
 
                 AssetBundle assetBundle = AssetBundle.LoadFromFile(System.IO.Path.Combine(Application.streamingAssetsPath, "cards"));
-                deck.cards = pathToCards.Select(assetBundle.LoadAsset<Card>).OfType<Card>().ToList();
+                deck.cards = pathToCards.Select(assetBundle.LoadAsset<Card>).ToList();
                 
                 if (pathToCards.Count != deck.cards.Count)
                 {
