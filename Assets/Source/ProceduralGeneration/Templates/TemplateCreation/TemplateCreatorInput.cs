@@ -167,7 +167,7 @@ namespace Cardificer
             // Copying
             if (Input.GetKeyDown(KeyCode.Q) && !isOutside)
             {
-                if (Selection.activeGameObject != heldTile)
+                if (Selection.activeGameObject != null && Selection.activeGameObject != heldTile)
                 {
                     foreach (SpriteRenderer spriteRenderer in Selection.activeGameObject.GetComponents<SpriteRenderer>())
                     {

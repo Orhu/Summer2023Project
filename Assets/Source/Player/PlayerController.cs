@@ -98,10 +98,10 @@ namespace Cardificer
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.T))
+            /*if (Input.GetKeyDown(KeyCode.T))
             {
                 FloorGenerator.ShowLayout();
-            }
+            }*/
 
             // Open Pause Menu
             if (Input.GetKeyDown(KeyCode.Escape))
