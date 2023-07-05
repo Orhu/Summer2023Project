@@ -319,6 +319,11 @@ namespace Cardificer
             {
                 for (int j = 0; j < roomSize.y; j++)
                 {
+                    if (roomGrid[i, j] == null)
+                    {
+                        Debug.LogWarning("Destroyable tiles are not updating the room grid! Please fix that bug please Liam or Zak.");
+                        continue;
+                    }
                     if ((roomGrid[i, j].GetComponent<EnemySpawner>() == null && roomGrid[i, j].GetComponent<FiniteStateMachine.BaseStateMachine>() == null) || spawnEnemies)
                     {
                         roomGrid[i, j].Enable();
