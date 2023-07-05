@@ -124,13 +124,16 @@ namespace Cardificer
                     int variance = roomTypeToLayoutParams.numRoomsVariance;
                     int numRooms = roomTypeToLayoutParams.numRooms;
                     numRooms += FloorGenerator.random.Next(-variance, variance + 1);
-                    if (roomTypeToLayoutParams.roomType.deadEnd)
+                    if (numRooms > 0)
                     {
-                        deadEndRooms.Add(roomTypeToLayoutParams.roomType, numRooms);
-                    }
-                    else
-                    {
-                        normalRooms.Add(roomTypeToLayoutParams.roomType, numRooms);
+                        if (roomTypeToLayoutParams.roomType.deadEnd)
+                        {
+                            deadEndRooms.Add(roomTypeToLayoutParams.roomType, numRooms);
+                        }
+                        else
+                        {
+                            normalRooms.Add(roomTypeToLayoutParams.roomType, numRooms);
+                        }
                     }
                 }
 
@@ -294,7 +297,7 @@ namespace Cardificer
                 else
                 {
                     roomTypeCounts[newRoom.roomType]++;
-                    if (roomTypeCounts[newRoom.roomType] == normalRooms[newRoom.roomType])
+                    if (roomTypeCounts[newRoom.roomType] >= normalRooms[newRoom.roomType])
                     {
                         normalRooms.Remove(newRoom.roomType);
                     }
