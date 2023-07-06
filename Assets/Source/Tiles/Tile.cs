@@ -33,14 +33,6 @@ namespace Cardificer
         // The room that this tile is a part of 
         [HideInInspector] public Room room;
 
-#if UNITY_EDITOR
-        // The prefab this was derived from.
-        [HideInInspector] public GameObject prefab;
-
-        // The overrides of this prefab.
-        public PropertyModification[] propertyModifications;
-#endif
-
         /// <summary>
         /// Disables the game object from starting before it's ready to
         /// </summary>
@@ -62,14 +54,6 @@ namespace Cardificer
                 spriteRenderer.enabled = true;
             }
         }
-
-#if UNITY_EDITOR
-        private void Update()
-        {
-            propertyModifications = PrefabUtility.GetPropertyModifications(gameObject);
-        }
-#endif
-
 
         /// <summary>
         /// Enables the game object

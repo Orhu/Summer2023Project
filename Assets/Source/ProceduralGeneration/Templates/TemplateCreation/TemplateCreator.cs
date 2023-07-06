@@ -148,7 +148,7 @@ namespace Cardificer
             }
 
             string path = "Assets/Content/Templates/" + templateName + ".prefab";
-            GetComponent<TemplateCreatorInput>().DeselectTile();
+            GetComponent<TemplateCreatorInput>().DeselectObject();
 
             PrefabUtility.SaveAsPrefabAsset(createdTemplate.gameObject, path);
             AssetDatabase.Refresh();
@@ -204,7 +204,8 @@ namespace Cardificer
             sizeMultiplier = createdTemplate.sizeMultiplier;
 
             Destroy(createdTemplate.gameObject);
-            createdTemplate = Instantiate(templateToLoad).GetComponent<Template>();
+            createdTemplate = ((GameObject) PrefabUtility.InstantiatePrefab(templateToLoad)).GetComponent<Template>();
+            PrefabUtility.UnpackPrefabInstance(createdTemplate.gameObject, PrefabUnpackMode.OutermostRoot, InteractionMode.AutomatedAction);
 
             foreach (Tile tileComponent in createdTemplate.GetComponents<Tile>())
             {
@@ -361,19 +362,18 @@ namespace Cardificer
         /// </summary>
         /// <param name="tile"> The tile to place </param>
         /// <param name="gridPos"> The grid position to place the tile in </param>
-        public void PlaceTile(GameObject tilePrefab, Vector2Int gridPos, PropertyModification[] propertyModifications = null)
+        public void PlaceTile(GameObject tilePrefab, Vector2Int gridPos)
         {
             if (gridPos.x >= 1 && gridPos.x < roomSize.x - 1 && gridPos.y >= 1 && gridPos.y < roomSize.y - 1)
             {
                 EraseTile(gridPos);
-                Tile createdTile = ((GameObject)PrefabUtility.InstantiatePrefab(tilePrefab, createdTemplate.transform)).GetComponent<Tile>();
+                Tile createdTile = ((GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tilePrefab), createdTemplate.transform)).GetComponent<Tile>();
 
-                PrefabUtility.SetPropertyModifications(createdTile, propertyModifications);
+                PrefabUtility.SetPropertyModifications(createdTile, PrefabUtility.GetPropertyModifications(tilePrefab));
 
                 createdTile.name = tilePrefab.name;
                 createdTile.transform.localPosition = new Vector3(gridPos.x, gridPos.y, 0);
                 createdTile.gridLocation = gridPos;
-                createdTile.prefab = tilePrefab;
                 createdTemplate[gridPos.x, gridPos.y] = createdTile;
 
                 if (createdTile.GetComponent<SpriteRenderer>() == null || createdTile.GetComponent<SpriteRenderer>().sprite == null)

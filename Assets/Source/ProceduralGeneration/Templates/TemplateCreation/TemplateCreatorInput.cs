@@ -33,6 +33,9 @@ namespace Cardificer
         // The last selected game object (so it doesn't print a warning 9 million times)
         private string lastSelectedObjectName = "";
 
+        // The currently selected object
+        GameObject selectedObject;
+
         // The tile being held
         private GameObject _heldTile;
         private GameObject heldTile
@@ -64,12 +67,6 @@ namespace Cardificer
             get => _heldTile;
         }
 
-        // The prefab that is selected.
-        private GameObject selectedPrefab;
-
-        // The prefab that is selected.
-        private PropertyModification[] selectedModifcations;
-
         /// <summary>
         /// Initialize variables
         /// </summary>
@@ -93,7 +90,7 @@ namespace Cardificer
             if (Input.GetMouseButtonUp(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() && !isOutside)
             {
 
-                if (Selection.activeGameObject != null && Selection.activeGameObject != heldTile)
+                if (Selection.activeGameObject != null && Selection.activeGameObject != heldTile && Selection.activeGameObject.activeInHierarchy)
                 {
                     foreach (SpriteRenderer spriteRenderer in Selection.activeGameObject.GetComponents<SpriteRenderer>())
                     {
@@ -105,8 +102,7 @@ namespace Cardificer
                 if (templateCreator.IsGridPosOutsideBounds(gridPos))
                 {
                     heldTile = null;
-                    selectedPrefab = null;
-                    selectedModifcations = null;
+                    SelectObject(templateCreator.gameObject);
                 }
 
                 // Selecting tile
@@ -114,11 +110,7 @@ namespace Cardificer
                 {
                     if (templateCreator.GetTile(gridPos) != null)
                     {
-                        Selection.activeGameObject = templateCreator.GetTile(gridPos).gameObject;
-                        foreach (SpriteRenderer spriteRenderer in Selection.activeGameObject.GetComponents<SpriteRenderer>())
-                        {
-                            spriteRenderer.color = selectedColor;
-                        }
+                        SelectObject(templateCreator.GetTile(gridPos).gameObject);
                     }
                 }
             }
@@ -135,12 +127,14 @@ namespace Cardificer
                         spriteRenderer.color = Color.white;
                         spriteRenderer.sortingOrder--;
                     }
-                    templateCreator.PlaceTile(selectedPrefab, gridPos, selectedModifcations);
+                    templateCreator.PlaceTile(heldTile, gridPos);
                     foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
                     {
                         spriteRenderer.color = previewColor;
                         spriteRenderer.sortingOrder++;
                     }
+                    //DeselectObject();
+                    //SelectObject(templateCreator.GetTile(gridPos).gameObject);
                 }
             }
 
@@ -166,7 +160,7 @@ namespace Cardificer
             // Copying
             if (Input.GetKeyDown(KeyCode.Q) && !isOutside)
             {
-                if (Selection.activeGameObject != null && Selection.activeGameObject != heldTile)
+                if (Selection.activeGameObject != null && Selection.activeGameObject != heldTile && Selection.activeGameObject.activeInHierarchy)
                 {
                     foreach (SpriteRenderer spriteRenderer in Selection.activeGameObject.GetComponents<SpriteRenderer>())
                     {
@@ -175,18 +169,41 @@ namespace Cardificer
                 }
 
                 Tile tile = templateCreator.GetTile(gridPos);
-                heldTile = tile == null ? null : Instantiate(tile.prefab);
-                selectedPrefab = tile == null ? null : tile.prefab;
-                selectedModifcations = tile == null ? null : tile.propertyModifications;
+
+                heldTile = tile == null ? null : (GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile.gameObject));
+                PrefabUtility.SetPropertyModifications(heldTile, PrefabUtility.GetPropertyModifications(tile));
+                if (heldTile != null)
+                {
+                    heldTile.name = tile.name;
+                }
             }
 
             UpdateHeldTile();
             lastMousePosition = Input.mousePosition;
         }
 
-        public void DeselectTile()
+        /// <summary>
+        /// Selects the given object
+        /// </summary>
+        /// <param name="selectedObject"> The selected object </param>
+        private void SelectObject(GameObject selectedObject)
         {
+            Selection.activeGameObject = selectedObject.gameObject;
+            this.selectedObject = selectedObject;
             foreach (SpriteRenderer spriteRenderer in Selection.activeGameObject.GetComponents<SpriteRenderer>())
+            {
+                spriteRenderer.color = selectedColor;
+            }
+        }
+
+        /// <summary>
+        /// Deselects the selected object 
+        /// </summary>
+        public void DeselectObject()
+        {
+            if (selectedObject == null) { return; }
+
+            foreach (SpriteRenderer spriteRenderer in selectedObject.GetComponents<SpriteRenderer>())
             {
                 spriteRenderer.color = Color.white;
             }
@@ -205,7 +222,7 @@ namespace Cardificer
                 && (heldTile == null || Selection.activeGameObject.name != heldTile.name)
                 )
             {
-                GameObject selectedObject = Instantiate(Selection.activeGameObject);
+                GameObject selectedObject = (GameObject) PrefabUtility.InstantiatePrefab(Selection.activeGameObject);
                 selectedObject.name = Selection.activeGameObject.name;
 
 
@@ -214,15 +231,13 @@ namespace Cardificer
                     if (selectedObject.name != lastSelectedObjectName)
                     {
                         lastSelectedObjectName = selectedObject.name;
-                        Debug.LogWarning("The object placed in a template must have a tile component!");
                         heldTile = null;
-                        selectedPrefab = null;
                     }
                     Destroy(selectedObject);
                 }
                 else
                 {
-                    selectedPrefab = Selection.activeGameObject;
+                    DeselectObject();
                     heldTile = selectedObject;
                 }
             }
