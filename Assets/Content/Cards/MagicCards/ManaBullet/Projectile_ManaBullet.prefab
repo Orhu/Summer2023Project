@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2377517891435569198}
   - component: {fileID: 4636303054207300658}
   - component: {fileID: 967384954051736028}
+  - component: {fileID: 7935356216972858610}
   m_Layer: 0
   m_Name: Projectile_ManaBullet
   m_TagString: Untagged
@@ -74,14 +75,14 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1830944795
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 631a876c787299f4f9a955e60a2b9741, type: 3}
+  m_Sprite: {fileID: -1422807143, guid: 631a876c787299f4f9a955e60a2b9741, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.5, y: 0.5}
+  m_Size: {x: 0.86, y: 1.18}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -179,6 +180,27 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 5df761e1c738d0943bb1c8d8bd79f291, type: 2}
+--- !u!95 &7935356216972858610
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2238662938685823967}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 107dd807ddee24f46b84a457218f4a83, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &9214140324428859680
 GameObject:
   m_ObjectHideFlags: 0
