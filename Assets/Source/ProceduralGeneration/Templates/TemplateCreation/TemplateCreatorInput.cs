@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -30,6 +32,9 @@ namespace Cardificer
 
         // Whether or not the erase button is down
         private bool eraseButtonPressed = false;
+
+        // Whether or not the mouse is currently over the template creator UI
+        private bool mouseOverUI = false;
 
         // The mouse position on the last frame
         private Vector3 lastMousePosition;
@@ -91,13 +96,15 @@ namespace Cardificer
         /// </summary>
         private void Update()
         {
+            mouseOverUI = EventSystem.current.IsPointerOverGameObject();
+
             Vector3 mouseViewportPos = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Mouse.current.position.value);
             bool isOutside = mouseViewportPos.x < 0 || mouseViewportPos.x > 1 || mouseViewportPos.y < 0 || mouseViewportPos.y > 1;
 
             Vector2Int gridPos = MousePosToGridPos(Mouse.current.position.value);
            
             // Placing tiles
-            if (selectButtonPressed && !isOutside)
+            if (selectButtonPressed && !isOutside && !mouseOverUI)
             {
                 if (heldTile != null 
                     && !templateCreator.IsGridPosOutsideBounds(gridPos) 
@@ -118,13 +125,13 @@ namespace Cardificer
             }
 
             // Panning
-            if (panButtonPressed && !isOutside)
+            if (panButtonPressed && !isOutside && !mouseOverUI)
             {
                 templateCamera.Pan(Camera.main.ScreenToWorldPoint(lastMousePosition) - Camera.main.ScreenToWorldPoint(Mouse.current.position.value));
             }
 
             // Erasing
-            if (eraseButtonPressed && !isOutside && templateCreator.GetTile(gridPos) != null && !panButtonPressed)
+            if (eraseButtonPressed && !isOutside && templateCreator.GetTile(gridPos) != null && !panButtonPressed && !mouseOverUI)
             {
                 templateCreator.EraseTile(gridPos);
             }
@@ -141,7 +148,7 @@ namespace Cardificer
             Vector3 mouseViewportPos = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Mouse.current.position.value);
             bool isOutside = mouseViewportPos.x < 0 || mouseViewportPos.x > 1 || mouseViewportPos.y < 0 || mouseViewportPos.y > 1;
             Vector2Int gridPos = MousePosToGridPos(Mouse.current.position.value);
-            if (!isOutside && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            if (!isOutside && !mouseOverUI)
             {
 
                 if (Selection.activeGameObject != null && Selection.activeGameObject != heldTile)
@@ -284,8 +291,8 @@ namespace Cardificer
                 return;
             }
 
-            //heldTile.transform.position = QuantizeMousePos(Input.mousePosition);
-            //nullSprite.transform.position = QuantizeMousePos(Input.mousePosition);
+            heldTile.transform.position = QuantizeMousePos(Mouse.current.position.value);
+            nullSprite.transform.position = QuantizeMousePos(Mouse.current.position.value);
         }
 
         /// <summary>

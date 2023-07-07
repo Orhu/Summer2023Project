@@ -27,7 +27,6 @@ namespace Cardificer
             {
                 GetComponent<Camera>().orthographicSize += -scrollDelta.y * cameraZoomSpeed;
             }
-            GetComponent<Camera>().orthographicSize += -scrollDelta.y * cameraZoomSpeed;
         }
 
         /// <summary>
