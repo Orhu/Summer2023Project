@@ -121,6 +121,7 @@ namespace Cardificer
         /// </summary>
         public void Initialize()
         {
+            Application.runInBackground = true;
             templateCreator = GetComponent<TemplateCreator>();
             templateCamera = templateCreator.templateCamera;
             nullSprite = templateCreator.nullSpriteObject;
