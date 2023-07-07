@@ -17,7 +17,7 @@ namespace Cardificer
         [Tooltip("The color of the tile placement preview")]
         [SerializeField] private Color selectedColor;
 
-
+#if UNITY_EDITOR
         // Shows the null sprite when the held tile doesn't have a sprite component
         private GameObject nullSprite;
 
@@ -253,5 +253,6 @@ namespace Cardificer
             gridPos.y = (int) quantizedMousePos.y + templateCreator.roomSize.y / 2;
             return gridPos;
         }
+#endif
     }
 }

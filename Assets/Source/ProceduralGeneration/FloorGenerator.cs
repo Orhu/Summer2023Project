@@ -37,12 +37,7 @@ namespace Cardificer
         static public Vector2Int cellSize => instance._cellSize;
 
         // Event called when the room is changed
-        [SerializeField] private UnityEvent _onRoomChange;
-        static public UnityEvent onRoomChange
-        {
-            get => instance._onRoomChange;
-            set => instance._onRoomChange = value;
-        }
+        [SerializeField] static public System.Action onRoomChange;
 
         [Header("Specific Params")]
 
@@ -76,6 +71,9 @@ namespace Cardificer
 
         // A reference to the generated map
         [HideInInspector] static public Map map;
+
+        // Called when the floor has been generated.
+        public static System.Action onGenerated;
 
         // The room the player is currently in
         private Room _currentRoom;
@@ -153,6 +151,7 @@ namespace Cardificer
             {
                 Room startRoom = map.startRoom.GetComponent<Room>();
                 startRoom.Enter(Direction.None, callCleared: false);
+                onGenerated?.Invoke();
                 return; 
             }
 
@@ -171,6 +170,8 @@ namespace Cardificer
                 lastRoom.Generate(false);
             }
             lastRoom.Enter(callCleared: false);
+
+            onGenerated?.Invoke();
         }
 
         /// <summary>

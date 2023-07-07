@@ -318,7 +318,7 @@ namespace Cardificer
                 for (int j = 0; j < roomSize.y; j++)
                 {
                     Sprite floorSprite = exteriorParams.floorSprites.GetRandomThing(FloorGenerator.random);
-                    CreateFloorTile(floorSprite, new Vector2Int(i, j), floorContainer);
+                    CreateFloorTile(floorSprite, new Vector2Int(i, j), exteriorParams.floorTile, floorContainer);
                 }
             }
 
@@ -329,12 +329,12 @@ namespace Cardificer
                 if (map.map[room.roomLocation.x, j + room.roomLocation.y].direction.HasFlag(Direction.Left))
                 {
                     Sprite floorSprite = exteriorParams.floorSprites.GetRandomThing(FloorGenerator.random);
-                    CreateFloorTile(floorSprite, new Vector2Int(0, (room.cellSize.y * j) + room.cellSize.y / 2), floorContainer);
+                    CreateFloorTile(floorSprite, new Vector2Int(0, (room.cellSize.y * j) + room.cellSize.y / 2), exteriorParams.floorTile, floorContainer);
                 }
                 if (map.map[room.roomLocation.x + room.roomType.sizeMultiplier.x - 1, j + room.roomLocation.y].direction.HasFlag(Direction.Right))
                 {
                     Sprite floorSprite = exteriorParams.floorSprites.GetRandomThing(FloorGenerator.random);
-                    CreateFloorTile(floorSprite, new Vector2Int(roomSize.x - 1, (room.cellSize.y * j) + room.cellSize.y / 2), floorContainer);
+                    CreateFloorTile(floorSprite, new Vector2Int(roomSize.x - 1, (room.cellSize.y * j) + room.cellSize.y / 2), exteriorParams.floorTile, floorContainer);
                 }
             }
 
@@ -346,18 +346,16 @@ namespace Cardificer
         /// </summary>
         /// <param name="sprite"> The sprite to create the tile with </param>
         /// <param name="location"> The location within in the room to create the tile at </param>
+        /// <param name="floorTile"> The floor prefab to instantiate </param>
         /// <param name="floorContainer"> The container to hold the tiles </param>
         /// <returns> The created floor tile </returns>
-        private GameObject CreateFloorTile(Sprite sprite, Vector2Int location, GameObject floorContainer)
+        private GameObject CreateFloorTile(Sprite sprite, Vector2Int location, GameObject floorTile, GameObject floorContainer)
         {
-            GameObject floorTile = new GameObject();
+            floorTile = Instantiate(floorTile);
             floorTile.transform.parent = floorContainer.transform;
             floorTile.transform.localPosition = new Vector3(location.x, location.y, 0);
-            floorTile.AddComponent<SpriteRenderer>().sprite = sprite;
+            floorTile.GetComponent<SpriteRenderer>().sprite = sprite;
             floorTile.SetActive(true);
-            floorTile.name = "Floor";
-            floorTile.GetComponent<SpriteRenderer>().sortingLayerName = "Floors";
-
             return floorTile;
         }
     }

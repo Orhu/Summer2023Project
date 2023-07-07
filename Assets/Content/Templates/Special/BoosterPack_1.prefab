@@ -6922,6 +6922,7 @@ GameObject:
   - component: {fileID: 3481771863829028947}
   - component: {fileID: 6525172387012267742}
   - component: {fileID: 8001014941231881528}
+  - component: {fileID: 8972619751446162289}
   m_Layer: 21
   m_Name: BoosterPack
   m_TagString: Inanimate
@@ -7048,13 +7049,25 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7868929527767257098}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 575f95e556ba0924eb9ddb097eb72de1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   numCards: 3
   lootTable: {fileID: 11400000, guid: ffaac468cf8e0b640864b4356f8f45f4, type: 2}
+--- !u!114 &8972619751446162289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7868929527767257098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69334c49175041147bd701976551d731, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8282050877285983111
 GameObject:
   m_ObjectHideFlags: 0

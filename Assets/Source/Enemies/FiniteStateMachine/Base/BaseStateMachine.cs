@@ -207,9 +207,11 @@ namespace Cardificer.FiniteStateMachine
         {
             SetStats();
             timeStarted = Time.time;
-
+            
             GetComponent<SimpleMovement>().requestSpeedModifications += AdjustMovement;
             FloorGenerator.currentRoom.livingEnemies.Add(gameObject);
+
+            gameObject.AddComponent<DamageFlash>(); // TODO: delete this line once templates have been fixed
         }
 
         /// <summary>

@@ -41,10 +41,29 @@ namespace Cardificer
         // The speed at which the camera zooms (determined by the regular speed)
         public float zoomSpeed = 5;
 
+        #region Initialization
+        /// <summary>
+        /// Binds initialization.
+        /// </summary>
+        private void Awake()
+        {
+            FloorGenerator.onGenerated += Initialize;
+            FloorGenerator.onRoomChange += OnRoomChange;
+        }
+
+        /// <summary>
+        /// Unbinds initialization.
+        /// </summary>
+        private void OnDestroy()
+        {
+            FloorGenerator.onGenerated -= Initialize;
+            FloorGenerator.onRoomChange -= OnRoomChange;
+        }
+
         /// <summary>
         /// Initializes the height, floor generator, and player references
         /// </summary>
-        private void Start()
+        private void Initialize()
         {
             if (FloorGenerator.map.startRoom.roomType.overrideExtraHeight)
             {
@@ -72,11 +91,11 @@ namespace Cardificer
             extraWidth = extraHeight * GetComponent<Camera>().aspect / 2;
             width = height * GetComponent<Camera>().aspect;
 
-            FloorGenerator.onRoomChange.AddListener(OnRoomChange);
             player = Player.Get();
 
             DetermineMinAndMax(FloorGenerator.map.startRoom);
         }
+        #endregion
 
         //TODO: DELETE
         #region Stuff to Delete
@@ -149,7 +168,7 @@ namespace Cardificer
                 position.y = playerPos.y;
             }
 
-            position.z = -1;
+            position.z = -100;
 
             return position;
         }
