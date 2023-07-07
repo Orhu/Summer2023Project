@@ -259,6 +259,12 @@ namespace Cardificer
             }
         }
 
+        /// <summary>
+        /// Set's the scale for the cardRenderer
+        /// Only needed if you want the card renderer
+        /// to start at a different base scale.
+        /// </summary>
+        /// <param name="theScale">The scale you want the card renderer at</param>
         public void SetScale(Vector3 theScale)
         {
             transform.localScale = theScale;
