@@ -186,25 +186,16 @@ namespace Cardificer
         /// <summary>
         /// Loads a template into the template creator
         /// </summary>
-        public void LoadTemplate()
+        /// <param name="template"> The template to load </param>
+        public void LoadTemplate(Template template)
         {
-            if (templateName.Length == 0) 
-            {
-                Debug.LogWarning("Please enter a file name");
-                return; 
-            } 
-            GameObject templateToLoad = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Content/Templates/" + templateName + ".prefab");
-            if (templateToLoad == null)
-            {
-                Debug.LogWarning("Template file not found");
-                return;
-            }
-            Debug.Log("Loading template " + templateToLoad.name);
-            mapCellSize = createdTemplate.mapCellSize;
-            sizeMultiplier = createdTemplate.sizeMultiplier;
 
+            Debug.Log("Loading template " + template.name);
+
+            mapCellSize = template.mapCellSize;
+            sizeMultiplier = template.sizeMultiplier;
             Destroy(createdTemplate.gameObject);
-            createdTemplate = ((GameObject) PrefabUtility.InstantiatePrefab(templateToLoad)).GetComponent<Template>();
+            createdTemplate = ((GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(template.gameObject))).GetComponent<Template>();
             PrefabUtility.UnpackPrefabInstance(createdTemplate.gameObject, PrefabUnpackMode.OutermostRoot, InteractionMode.AutomatedAction);
 
             foreach (Tile tileComponent in createdTemplate.GetComponents<Tile>())
@@ -364,7 +355,7 @@ namespace Cardificer
         /// <param name="gridPos"> The grid position to place the tile in </param>
         public void PlaceTile(GameObject tilePrefab, Vector2Int gridPos)
         {
-            if (gridPos.x >= 1 && gridPos.x < roomSize.x - 1 && gridPos.y >= 1 && gridPos.y < roomSize.y - 1)
+            if (!IsGridPosOutsidePathfindingBounds(gridPos))
             {
                 EraseTile(gridPos);
                 Tile createdTile = ((GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tilePrefab), createdTemplate.transform)).GetComponent<Tile>();
@@ -393,7 +384,7 @@ namespace Cardificer
         /// <param name="gridPos"> The position to erase the tile at </param>
         public void EraseTile(Vector2Int gridPos)
         {
-            if (gridPos.x >= 1 && gridPos.x < roomSize.x - 1 && gridPos.y >= 1 && gridPos.y < roomSize.y - 1)
+            if (!IsGridPosOutsidePathfindingBounds(gridPos))
             {
                 Destroy(nullSprites[gridPos.x, gridPos.y]);
                 nullSprites[gridPos.x, gridPos.y] = null;
@@ -421,11 +412,21 @@ namespace Cardificer
         /// <summary>
         /// Determines whether a given grid pos is outside the bounds of the template
         /// </summary>
-        /// <param name="gridPos"> The grid pos</param>
+        /// <param name="gridPos"> The grid pos </param>
         /// <returns> Whether or not the grid pos is within the bounds </returns>
         public bool IsGridPosOutsideBounds(Vector2Int gridPos)
         {
             return gridPos.x < 0 || gridPos.x >= roomSize.x || gridPos.y < 0 || gridPos.y >= roomSize.y;
+        }
+
+        /// <summary>
+        /// Determines whether a given grid pos is outside the pathfinding bounds of the template
+        /// </summary>
+        /// <param name="gridPos"> The grid pos </param>
+        /// <returns> Whether or not the grid pos is within the bounds </returns>
+        public bool IsGridPosOutsidePathfindingBounds(Vector2Int gridPos)
+        {
+            return gridPos.x < 1 || gridPos.x >= roomSize.x - 1 || gridPos.y < 1 || gridPos.y >= roomSize.y - 1;
         }
 
         /// <summary>
