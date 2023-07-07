@@ -121,7 +121,6 @@ namespace Cardificer
         /// </summary>
         public void Initialize()
         {
-            Application.runInBackground = true;
             templateCreator = GetComponent<TemplateCreator>();
             templateCamera = templateCreator.templateCamera;
             nullSprite = templateCreator.nullSpriteObject;
@@ -141,7 +140,7 @@ namespace Cardificer
             if (Input.GetMouseButtonUp(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
                 // Placing template
-                if (heldTemplate != null)
+                if (heldTemplate != null && !templateCreator.IsGridPosOutsideBounds(gridPos))
                 {
                     templateCreator.LoadTemplate(heldTemplate.GetComponent<Template>());
                     heldTemplate = null;
@@ -152,6 +151,7 @@ namespace Cardificer
                     DeselectObject();
                     SelectObject(templateCreator.gameObject);
                     heldTile = null;
+                    heldTemplate = null;
 
                 }
                 else if (heldTile == null)
