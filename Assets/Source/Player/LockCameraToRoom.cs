@@ -102,7 +102,7 @@ namespace Cardificer
         private bool mapping;
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.M))
+            /*if (Input.GetKeyDown(KeyCode.M))
             {
                 GetComponent<Camera>().orthographicSize *= 10;
                 FloorGenerator.ShowLayout(false);
@@ -111,7 +111,7 @@ namespace Cardificer
             {
                 GetComponent<Camera>().orthographicSize /= 10;
                 FloorGenerator.HideLayout();
-            }
+            }*/
         }
         #endregion Stuff to Delete
 

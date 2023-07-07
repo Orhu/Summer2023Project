@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -87,11 +88,11 @@ namespace Cardificer
         /// </summary>
         private void Update()
         {
-            Vector3 view = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Input.mousePosition);
+            Vector3 view = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Mouse.current.position.value);
             bool isOutside = view.x < 0 || view.x > 1 || view.y < 0 || view.y > 1;
 
-            Vector2Int gridPos = MousePosToGridPos(Input.mousePosition);
-            if (Input.GetMouseButtonUp(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() && !isOutside)
+            Vector2Int gridPos = MousePosToGridPos(Mouse.current.position.value);
+            /*if (Input.GetMouseButtonUp(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() && !isOutside)
             {
 
                 if (Selection.activeGameObject != null && Selection.activeGameObject != heldTile)
@@ -180,7 +181,7 @@ namespace Cardificer
             }
 
             UpdateHeldTile();
-            lastMousePosition = Input.mousePosition;
+            lastMousePosition = Input.mousePosition;*/
         }
 
         /// <summary>
@@ -222,8 +223,8 @@ namespace Cardificer
                 return;
             }
 
-            heldTile.transform.position = QuantizeMousePos(Input.mousePosition);
-            nullSprite.transform.position = QuantizeMousePos(Input.mousePosition);
+            //heldTile.transform.position = QuantizeMousePos(Input.mousePosition);
+            //nullSprite.transform.position = QuantizeMousePos(Input.mousePosition);
         }
 
         /// <summary>
