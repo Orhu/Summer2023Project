@@ -27,9 +27,11 @@ namespace Cardificer
             OnDestroyed,
             Repeately,
         }
-        
+        [Tooltip("The number of times this can plays an action.")] [Min(1)]
+        [SerializeField] private int playCount = 1000;
+
         [Tooltip("The damage multiplier of this action")]
-        [SerializeField] private float damageMultiplier = 1f;
+        [System.NonSerialized] private float damageMultiplier = 1f;
 
 
         // The objects ignored by this.
@@ -61,18 +63,20 @@ namespace Cardificer
                 parentActor = value.actor;
                 sourceTransform = value.transform;
                 ignoredObjects = value.ignoredObjects;
+                int playCount = this.playCount;
 
                 switch (playTime)
                 {
                     case PlayTime.Repeately:
                     case PlayTime.OnSpawned:
-                        value.StartCoroutine(DelayedPlayAction());
+                        value.StartCoroutine(DelayedPlayAction(playCount));
                         break;
 
                     case PlayTime.OnHit:
                         value.onHit += collision =>
                         {
                             ignoredObjects.Add(collision.gameObject);
+                            if (--playCount < 0) { return; }
                             value.StartCoroutine(DelayedPlayAction());
                         };
                         break;
@@ -81,6 +85,7 @@ namespace Cardificer
                         value.onOverlap += hitCollider =>
                         {
                             ignoredObjects.Add(hitCollider.gameObject);
+                            if (--playCount < 0) { return; }
                             value.StartCoroutine(DelayedPlayAction());
                         };
                         break;
@@ -110,10 +115,11 @@ namespace Cardificer
         /// Plays the action.
         /// </summary>
         /// <returns> The time to wait to play it. </returns>
-        private IEnumerator DelayedPlayAction()
+        private IEnumerator DelayedPlayAction(int playCount = 1)
         {
             do
             {
+                if (--playCount < 0) { yield break; }
                 if (delay > 0)
                 {
                     yield return new WaitForSeconds(delay);
