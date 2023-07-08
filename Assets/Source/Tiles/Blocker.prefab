@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7363848154315481730}
   - component: {fileID: -4724084244524278477}
   - component: {fileID: -2087583925777743025}
+  - component: {fileID: -5813329326092990348}
   m_Layer: 20
   m_Name: Blocker
   m_TagString: Inanimate
@@ -102,3 +103,17 @@ MonoBehaviour:
   flyMovementPenalty: 0
   burrowMovementPenalty: 0
   gridLocation: {x: 0, y: 0}
+  shouldDisable: 1
+  room: {fileID: 0}
+--- !u!114 &-5813329326092990348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7659582125508961819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69334c49175041147bd701976551d731, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
