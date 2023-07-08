@@ -54,6 +54,12 @@ namespace Cardificer
                     {
                         // Instantiate the cardRenderer Game Object in the cardLayout area
                         GameObject tempCardRendererGameObject = Instantiate(cardRendererTemplate.gameObject, cardLayoutArea.transform);
+
+                        // Set the CardRenderer's scaling factor for its scaling animation
+                        tempCardRendererGameObject.GetComponent<CardRenderer>().scaleFactor = 1.5f;
+
+                        // Set the CardRenderer's scaling duration for its scaling animation
+                        tempCardRendererGameObject.GetComponent<CardRenderer>().scaleDuration = 0.25f;
                         // Give the cardRenderer Game Object's toggle some listeners
                         tempCardRendererGameObject.GetComponent<Toggle>().onValueChanged.AddListener(delegate
                         {

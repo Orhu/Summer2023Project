@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7730459975528726324}
   - component: {fileID: 4221122026767441012}
   - component: {fileID: 1454978534211676652}
+  - component: {fileID: -248564280386326632}
   m_Layer: 0
   m_Name: Projectile_IcicleSpray
   m_TagString: Untagged
@@ -72,14 +73,14 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1830944795
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 65c8ce7a8d357bd4aa68b35fd94178a8, type: 3}
+  m_Sprite: {fileID: 434117727, guid: 65c8ce7a8d357bd4aa68b35fd94178a8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.2, y: 0.06}
+  m_Size: {x: 0.37890625, y: 0.08203125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -98,3 +99,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   onDeathParticlePrefab: {fileID: 2661191735661589657, guid: 72c2d7ee32122094781a9c3d837c18d2, type: 3}
+--- !u!95 &-248564280386326632
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8372843719696061205}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: cc70302f8091a4886a033b04c9da089e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
