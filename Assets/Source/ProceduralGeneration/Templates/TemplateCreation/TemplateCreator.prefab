@@ -100,6 +100,7 @@ MonoBehaviour:
         m_CallState: 2
   templateCamera: {fileID: 0}
   nullSpriteObject: {fileID: 0}
+  activeLayer: 0
 --- !u!114 &-705020086504253307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,6 +115,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   previewColor: {r: 0.33490568, g: 0.82324666, b: 1, a: 0.49411765}
   selectedColor: {r: 0.7924528, g: 0.7757621, b: 0, a: 1}
+  layerUI: {fileID: 0}
+  layerUIContainer: {fileID: 0}
 --- !u!114 &7212936415264582787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -312,6 +315,18 @@ PrefabInstance:
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 6691206213538125782}
+    - target: {fileID: 6138362513036869438, guid: f19525368b39b3646b73bb2501c864a3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: -705020086504253307}
+    - target: {fileID: 6138362513036869438, guid: f19525368b39b3646b73bb2501c864a3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: AddLayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 6138362513036869438, guid: f19525368b39b3646b73bb2501c864a3, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Cardificer.TemplateCreatorInput, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 6499275388558812972, guid: f19525368b39b3646b73bb2501c864a3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
