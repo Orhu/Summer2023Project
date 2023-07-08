@@ -110,6 +110,24 @@ namespace Cardificer
                         spriteRenderer.color = previewColor;
                     }
 
+                    for (int i = 0; i < value.GetComponent<Template>().GetLayers().Count; i++)
+                    {
+                        for (int j = 0; j < value.GetComponent<Template>().roomSize.x; j++)
+                        {
+                            for (int k = 0; k < value.GetComponent<Template>().roomSize.y; k++)
+                            {
+                                if (value.GetComponent<Template>()[i, j, k].GetComponent<SpriteRenderer>() == null || value.GetComponent<Template>()[i, j, k].GetComponent<SpriteRenderer>().sprite == null)
+                                {
+                                    GameObject createdNullSprite = Instantiate(nullSprite);
+                                    createdNullSprite.SetActive(true);
+                                    createdNullSprite.transform.parent = nullSpritesContainer.transform;
+                                    createdNullSprite.transform.localPosition = new Vector3(j, k, 0);
+                                    createdNullSprite.GetComponent<SpriteRenderer>().color = previewColor;
+                                }
+                            }
+                        }
+                    }
+
                     foreach (Tile tileComponent in value.GetComponents<Tile>())
                     {
                         if (tileComponent.GetComponent<SpriteRenderer>() == null || tileComponent.GetComponent<SpriteRenderer>().sprite == null)
