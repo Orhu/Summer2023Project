@@ -1,4 +1,7 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -20,6 +23,18 @@ namespace Cardificer
 
         // Shows the null sprite when the held tile doesn't have a sprite component
         private GameObject nullSprite;
+
+        // Whether or not the select button is down
+        private bool selectButtonPressed = false;
+
+        // Whether or not the pan button is down
+        private bool panButtonPressed = false;
+
+        // Whether or not the erase button is down
+        private bool eraseButtonPressed = false;
+
+        // Whether or not the mouse is currently over the template creator UI
+        private bool mouseOverUI = false;
 
         // The mouse position on the last frame
         private Vector3 lastMousePosition;
@@ -132,37 +147,15 @@ namespace Cardificer
         /// </summary>
         private void Update()
         {
-            Vector3 view = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Input.mousePosition);
-            bool isOutside = view.x < 0 || view.x > 1 || view.y < 0 || view.y > 1;
+            mouseOverUI = EventSystem.current.IsPointerOverGameObject();
 
-            Vector2Int gridPos = MousePosToGridPos(Input.mousePosition);
+            Vector3 mouseViewportPos = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Mouse.current.position.value);
+            bool isOutside = mouseViewportPos.x < 0 || mouseViewportPos.x > 1 || mouseViewportPos.y < 0 || mouseViewportPos.y > 1;
 
-            if (Input.GetMouseButtonUp(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
-            {
-                // Placing template
-                if (heldTemplate != null && !templateCreator.IsGridPosOutsideBounds(gridPos))
-                {
-                    templateCreator.LoadTemplate(heldTemplate.GetComponent<Template>());
-                    heldTemplate = null;
-                }
-
-                if (templateCreator.IsGridPosOutsidePathfindingBounds(gridPos) || templateCreator.GetTile(gridPos) == null)
-                {
-                    DeselectObject();
-                    SelectObject(templateCreator.gameObject);
-                    heldTile = null;
-                    heldTemplate = null;
-
-                }
-                else if (heldTile == null)
-                {
-                    DeselectObject();
-                    SelectObject(templateCreator.GetTile(gridPos).gameObject);
-                }
-            }
-
+            Vector2Int gridPos = MousePosToGridPos(Mouse.current.position.value);
+           
             // Placing tiles
-            if (Input.GetMouseButton(0) && !isOutside)
+            if (selectButtonPressed && !isOutside && !mouseOverUI)
             {
                 if (heldTile != null 
                     && !templateCreator.IsGridPosOutsidePathfindingBounds(gridPos) 
@@ -185,26 +178,113 @@ namespace Cardificer
             }
 
             // Panning
-            if ((Input.GetMouseButton(2) || (Input.GetMouseButton(1) && Input.GetKey(KeyCode.LeftShift))) && !isOutside)
+            if (panButtonPressed && !isOutside && !mouseOverUI)
             {
-                templateCamera.Pan(Camera.main.ScreenToWorldPoint(lastMousePosition) - Camera.main.ScreenToWorldPoint(Input.mousePosition));
-            }
-
-            // Scrolling
-            if (!isOutside)
-            {
-                templateCamera.Zoom(Input.mouseScrollDelta);
+                templateCamera.Pan(Camera.main.ScreenToWorldPoint(lastMousePosition) - Camera.main.ScreenToWorldPoint(Mouse.current.position.value));
             }
 
             // Erasing
-            if (Input.GetMouseButton(1) && !isOutside && templateCreator.GetTile(gridPos) != null && !Input.GetKey(KeyCode.LeftShift))
+            if (eraseButtonPressed && !isOutside && templateCreator.GetTile(gridPos) != null && !panButtonPressed && !mouseOverUI)
             {
                 templateCreator.EraseTile(gridPos);
             }
 
+            UpdateHeldTile();
+            lastMousePosition = Mouse.current.position.value;
+        }
 
-            // Copying
-            if (Input.GetKeyDown(KeyCode.Q) && !isOutside)
+        /// <summary>
+        /// Handles select up
+        /// </summary>
+        public void OnSelectUp()
+        {
+            Vector3 mouseViewportPos = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Mouse.current.position.value);
+            bool isOutside = mouseViewportPos.x < 0 || mouseViewportPos.x > 1 || mouseViewportPos.y < 0 || mouseViewportPos.y > 1;
+            Vector2Int gridPos = MousePosToGridPos(Mouse.current.position.value);
+
+            if (!isOutside && !mouseOverUI)
+            {
+
+                // Placing template
+                if (heldTemplate != null && !templateCreator.IsGridPosOutsideBounds(gridPos))
+                {
+                    templateCreator.LoadTemplate(heldTemplate.GetComponent<Template>());
+                    heldTemplate = null;
+                }
+
+
+                if (templateCreator.IsGridPosOutsidePathfindingBounds(gridPos) || templateCreator.GetTile(gridPos) == null)
+                {
+                    DeselectObject();
+                    SelectObject(templateCreator.gameObject);
+                    heldTile = null;
+                    heldTemplate = null;
+
+                }
+                else if (heldTile == null)
+                {
+                    DeselectObject();
+                    SelectObject(templateCreator.GetTile(gridPos).gameObject);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Called when the select button is pressed or released
+        /// </summary>
+        /// <param name="input"> The input </param>
+        public void OnSelect(InputValue input)
+        {
+            selectButtonPressed = input.isPressed;
+            if (!input.isPressed)
+            {
+                OnSelectUp();
+            }
+        }
+
+        /// <summary>
+        /// Called when the pan button is pressed or released
+        /// </summary>
+        /// <param name="input"> The input </param>
+        public void OnPan(InputValue input)
+        {
+            panButtonPressed = input.isPressed;
+        }
+
+        /// <summary>
+        /// Called when the erase button is pressed or released
+        /// </summary>
+        /// <param name="input"> The input </param>
+        public void OnErase(InputValue input)
+        {
+            eraseButtonPressed = input.isPressed;
+        }
+
+        /// <summary>
+        /// Handles zoom input
+        /// </summary>
+        /// <param name="input"> The input </param>
+        public void OnZoom(InputValue input)
+        {
+            Vector3 mouseViewportPos = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Mouse.current.position.value);
+            bool isOutside = mouseViewportPos.x < 0 || mouseViewportPos.x > 1 || mouseViewportPos.y < 0 || mouseViewportPos.y > 1;
+            // Scrolling
+            if (!isOutside)
+            {
+                templateCamera.Zoom(new Vector2(0, input.Get<float>() * Time.deltaTime));
+            }
+        }
+
+        /// <summary>
+        /// Called when the copy button is pressed
+        /// </summary>
+        public void OnCopy()
+        {
+            Vector3 mouseViewportPos = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Mouse.current.position.value);
+            bool isOutside = mouseViewportPos.x < 0 || mouseViewportPos.x > 1 || mouseViewportPos.y < 0 || mouseViewportPos.y > 1;
+            Vector2Int gridPos = MousePosToGridPos(Mouse.current.position.value);
+
+            if (!isOutside)
             {
                 if (Selection.activeGameObject != null && Selection.activeGameObject != heldTile && Selection.activeGameObject.activeInHierarchy)
                 {
@@ -219,9 +299,6 @@ namespace Cardificer
                 heldTile = tile == null ? null : (GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile.gameObject));
                 PrefabUtility.SetPropertyModifications(heldTile, PrefabUtility.GetPropertyModifications(tile));
             }
-
-            UpdateHeldTile();
-            lastMousePosition = Input.mousePosition;
         }
 
         /// <summary>
@@ -256,11 +333,10 @@ namespace Cardificer
         /// </summary>
         private void UpdateHeldTile()
         {
-            #if UNITY_EDITOR
             // Select from project tab
             if (
-                Selection.activeGameObject != null 
-                && !Selection.activeGameObject.activeInHierarchy 
+                Selection.activeGameObject != null
+                && !Selection.activeGameObject.activeInHierarchy
                 && (heldTile == null || Selection.activeGameObject.name != heldTile.name)
                 )
             {
@@ -308,15 +384,14 @@ namespace Cardificer
                     heldTemplate = selectedObject;
                 }
             }
-#endif
 
             if (heldTile == null)
             {
                 return;
             }
 
-            heldTile.transform.position = QuantizeMousePos(Input.mousePosition);
-            nullSprite.transform.position = QuantizeMousePos(Input.mousePosition);
+            heldTile.transform.position = QuantizeMousePos(Mouse.current.position.value);
+            nullSprite.transform.position = QuantizeMousePos(Mouse.current.position.value);
         }
 
         /// <summary>
@@ -342,8 +417,8 @@ namespace Cardificer
         {
             Vector3 quantizedMousePos = QuantizeMousePos(mousePos);
             Vector2Int gridPos = new Vector2Int();
-            gridPos.x = (int) quantizedMousePos.x + templateCreator.roomSize.x / 2;
-            gridPos.y = (int) quantizedMousePos.y + templateCreator.roomSize.y / 2;
+            gridPos.x = (int)quantizedMousePos.x + templateCreator.roomSize.x / 2;
+            gridPos.y = (int)quantizedMousePos.y + templateCreator.roomSize.y / 2;
             return gridPos;
         }
 #endif
