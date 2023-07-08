@@ -11,6 +11,9 @@ namespace Cardificer
         // The damage dealt by this bomb.
         public DamageData damageData;
 
+        // The knockback caused by this.
+        public KnockbackInfo knockback;
+
         // The radius in tiles of the explosion caused by the bomb.
         public float explosionRadius = 2f;
 
@@ -56,6 +59,7 @@ namespace Cardificer
                 if (ignoredObjects.Contains(hitCollider.gameObject)) { continue; }
 
                 hitCollider.GetComponent<Health>()?.ReceiveAttack(damageData);
+                hitCollider.GetComponent<Movement>()?.Knockback((hitCollider.transform.position - transform.position).normalized, knockback);
             }
 
             transform.GetChild(0).transform.parent = null;

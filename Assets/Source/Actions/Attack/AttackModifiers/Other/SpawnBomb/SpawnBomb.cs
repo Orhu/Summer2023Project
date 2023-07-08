@@ -8,12 +8,13 @@ namespace Cardificer
     [CreateAssetMenu(fileName = "NewSpawnBomb", menuName = "Cards/AttackModifers/SpawnBomb")]
     public class SpawnBomb : AttackModifier
     {
-        [Tooltip("The radius in tiles of the explosion caused by the bomb.")]
-        [Min(0f)]
+        [Tooltip("The radius in tiles of the explosion caused by the bomb.")] [Min(0f)]
         public float explosionRadius = 2f;
 
-        [Tooltip("The time in seconds after the bomb is spawned until it detonates.")]
-        [Min(0f)]
+        [Tooltip("The knockback caused by the explosion in tiles.")] [Min(0f)]
+        public KnockbackInfo knockback;
+
+        [Tooltip("The time in seconds after the bomb is spawned until it detonates.")] [Min(0f)]
         public float fuseTime = 2f;
 
         [Tooltip("Whether or not this should stick to the hit object.")]
@@ -64,6 +65,7 @@ namespace Cardificer
         {
             bomb = new GameObject().AddComponent<Bomb>();
             bomb.name = "Bomb";
+            bomb.knockback = knockback;
             bomb.explosionRadius = explosionRadius;
             bomb.fuseTime = fuseTime;
             bomb.damageData = _modifiedProjectile.attackData;
