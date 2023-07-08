@@ -288,16 +288,19 @@ namespace Cardificer
             {
                 if (Selection.activeGameObject != null && Selection.activeGameObject != heldTile && Selection.activeGameObject.activeInHierarchy)
                 {
-                    foreach (SpriteRenderer spriteRenderer in Selection.activeGameObject.GetComponents<SpriteRenderer>())
-                    {
-                        spriteRenderer.color = Color.white;
-                    }
+                    DeselectObject();
                 }
 
                 Tile tile = templateCreator.GetTile(gridPos);
 
                 heldTile = tile == null ? null : (GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile.gameObject));
                 PrefabUtility.SetPropertyModifications(heldTile, PrefabUtility.GetPropertyModifications(tile));
+
+                foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
+                {
+                    spriteRenderer.color = previewColor;
+                    spriteRenderer.sortingOrder++;
+                }
             }
         }
 
