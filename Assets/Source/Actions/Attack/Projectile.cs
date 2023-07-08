@@ -72,6 +72,9 @@ namespace Cardificer
         // The sequence that spawned this.
         [NonSerialized] public List<ProjectileSpawnInfo> spawnSequence;
 
+        // Whether or not this projectile passes through shields.
+        [NonSerialized] public bool immuneToShield = false;
+
         // The object for this to ignore.
         List<GameObject> _ignoredObjects;
         public List<GameObject> ignoredObjects
@@ -120,7 +123,10 @@ namespace Cardificer
         private GameObject randomTarget;
 
         // Whether or not the on destroy function should be ignored.
-        private bool forceDestroy = false;
+        public bool forceDestroy = false;
+
+        // Invoked when this is destroyed.
+        private bool isDestroyed = false;
         #endregion
 
 
@@ -150,7 +156,8 @@ namespace Cardificer
             minSpeed = attack.minSpeed;
             acceleration = attack.acceleration;
             shape = Instantiate(attack.shape);
-            
+            immuneToShield = attack.immuneToShield;
+
             // Set up attack
             attackData = new DamageData(attack.attack, causer);
 
@@ -446,7 +453,10 @@ namespace Cardificer
         protected void OnDestroy()
         {
             FloorGenerator.onRoomChange -= ForceDestroy;
-            if (!gameObject.scene.isLoaded || forceDestroy) { return; }
+            if (!gameObject.scene.isLoaded) { return; }
+            if (isDestroyed) { return; }
+
+            isDestroyed = true;
 
             onDestroyed?.Invoke();
             if (attack.detachVisualsBeforeDestroy)

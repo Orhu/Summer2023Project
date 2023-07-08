@@ -63,6 +63,12 @@ namespace Cardificer
         /// <param name="bomb"> The bomb that was created. </param>
         protected virtual void CreateBomb(Collider2D collision, out Bomb bomb)
         {
+            if (_modifiedProjectile.forceDestroy) 
+            {
+                bomb = null;
+                return;
+            }
+
             bomb = new GameObject().AddComponent<Bomb>();
             bomb.name = "Bomb";
             bomb.knockback = knockback;

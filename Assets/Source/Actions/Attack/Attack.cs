@@ -30,6 +30,9 @@ namespace Cardificer
         [Tooltip("The modifiers that are always applied to this projectile")] [EditInline]
         public List<AttackModifier> modifiers;
 
+        [Tooltip("Whether or not this projectile passes through shields.")]
+        public bool immuneToShield = false;
+
         [Tooltip("The radius of the projectile.")] [EditInline]
         public ProjectileShape shape;
 
