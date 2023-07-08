@@ -22,7 +22,7 @@ namespace Cardificer
         [Tooltip("Whether or not this should ignore the same objects as it's parent projectile.")]
         public bool inheritIgnore = false;
 
-        private enum SpawnMode { OnHit, OnDestroyed }
+        private enum SpawnMode { OnHit, OnDestroyed, onHitOrDestroy }
         [Tooltip("When bombs are spawned.")]
         [SerializeField] private SpawnMode spawnMode;
 
@@ -41,8 +41,14 @@ namespace Cardificer
                 {
                     _modifiedProjectile.onDestroyed += CreateBomb;
                 }
+                else if (spawnMode == SpawnMode.OnDestroyed)
+                {
+                    _modifiedProjectile.onOverlap += CreateBomb;
+                    _modifiedProjectile.onHit += (Collision2D collision) => CreateBomb(collision.collider);
+                }
                 else
                 {
+                    _modifiedProjectile.onDestroyed += CreateBomb;
                     _modifiedProjectile.onOverlap += CreateBomb;
                     _modifiedProjectile.onHit += (Collision2D collision) => CreateBomb(collision.collider);
                 }
