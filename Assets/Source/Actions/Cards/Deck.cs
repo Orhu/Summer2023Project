@@ -162,14 +162,22 @@ namespace Cardificer
                         assetBundle.Unload(false);
                     }
 
-                    string assetName = cardsAssetNames.First(
-                        // Gets the first path that contains the card's name
-                        (string path) =>
-                        {
-                            return path.Contains(card.name, StringComparison.OrdinalIgnoreCase);
-                        });
+                    string assetName = "Unknown Card";
+                    try
+                    {
+                        assetName = cardsAssetNames.First(
+                            // Gets the first path that contains the card's name
+                            (string path) =>
+                            {
+                                return path.Contains(card.name, StringComparison.OrdinalIgnoreCase);
+                            });
 
-                    cardsToAssetNames.Add(card, assetName);
+                        cardsToAssetNames.Add(card, assetName);
+                    }
+                    catch
+                    {
+                        throw new Exception("Can't save " + card.name + ", is not in the 'cards' asset bundle, add it to the bundle if it should appear in a build.");
+                    }
 
                     return assetName;
                 }
