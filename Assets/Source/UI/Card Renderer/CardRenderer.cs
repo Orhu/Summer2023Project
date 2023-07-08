@@ -17,6 +17,9 @@ namespace Cardificer
         [Tooltip("The half sword image if a card has half damage.")]
         [SerializeField] private Sprite halfSwordImage;
 
+        [Tooltip("The full sword image for resetting damage counters.")]
+        [SerializeField] private Sprite fullSwordImage;
+
         [Tooltip("Reference to the card's compendium button")]
         [SerializeField] private Button compendiumButton;
 
@@ -84,6 +87,12 @@ namespace Cardificer
                     // Chord effect of the card
                     links.chordEffectText.text = _card.chordEffectText;
 
+                    // resetting all swords
+                    for(int i = 0; i < links.damageContainer.transform.childCount; i++)
+                    {
+                        links.damageContainer.transform.GetChild(i).GetComponent<Image>().color = Color.white;
+                        links.damageContainer.transform.GetChild(i).GetComponent<Image>().sprite = fullSwordImage;
+                    }
 
                     // filling all full swords
                     for (int i = 0; i < Mathf.Floor(_card.damage); i++)
