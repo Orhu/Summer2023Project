@@ -176,7 +176,7 @@ namespace Cardificer
                     }
                     catch
                     {
-                        throw new Exception("Can't save " + card.name + ", is not in the 'cards' asset bundle, add it to the bundle if it should appear in a build.");
+                        throw new Exception("Can't save " + card.name + "; it is not in the 'cards' asset bundle, add it to the bundle if it should appear in a build.");
                     }
 
                     return assetName;
