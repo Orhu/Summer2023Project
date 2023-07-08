@@ -53,34 +53,39 @@ namespace Cardificer
         /// Spawns the bomb on a collision.
         /// </summary>
         /// <param name="collision"> The thing collided with. </param>
-        private void CreateBomb(Collider2D collision)
+        /// <param name="bomb"> The bomb that was created. </param>
+        protected virtual void CreateBomb(Collider2D collision, out Bomb bomb)
         {
-            Bomb newBomb = new GameObject().AddComponent<Bomb>();
-            newBomb.name = "Bomb";
-            newBomb.explosionRadius = explosionRadius;
-            newBomb.fuseTime = fuseTime;
-            newBomb.damageData = _modifiedProjectile.attackData;
+            bomb = new GameObject().AddComponent<Bomb>();
+            bomb.name = "Bomb";
+            bomb.explosionRadius = explosionRadius;
+            bomb.fuseTime = fuseTime;
+            bomb.damageData = _modifiedProjectile.attackData;
 
             if (bombVisuals != null)
             {
-                Instantiate(bombVisuals).transform.parent = newBomb.transform;
+                Instantiate(bombVisuals).transform.parent = bomb.transform;
             }
 
             if (inheritIgnore)
             {
-                newBomb.ignoredObjects = _modifiedProjectile.ignoredObjects;
+                bomb.ignoredObjects = _modifiedProjectile.ignoredObjects;
             }
 
             if (sticky && collision != null)
             {
-                newBomb.transform.parent = collision.transform;
+                bomb.transform.parent = collision.transform;
             }
 
-            newBomb.transform.position = _modifiedProjectile.transform.position;
+            bomb.transform.position = _modifiedProjectile.transform.position;
+        }
+        private void CreateBomb(Collider2D collision)
+        {
+            CreateBomb(collision, out Bomb bomb);
         }
         private void CreateBomb()
         {
-            CreateBomb(null);
+            CreateBomb(null, out Bomb bomb);
         }
     }
 }
