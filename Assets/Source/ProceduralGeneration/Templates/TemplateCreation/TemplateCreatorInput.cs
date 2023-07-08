@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+using TMPro;
 using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -20,6 +22,15 @@ namespace Cardificer
 
         [Tooltip("The color of the tile placement preview")]
         [SerializeField] private Color selectedColor;
+
+        [Tooltip("The layer UI")]
+        [SerializeField] private GameObject layerUI;
+
+        [Tooltip("The layer UI container")]
+        [SerializeField] private VerticalLayoutGroup layerUIContainer;
+
+        // The list of layer UIs
+        private List<GameObject> layerUIs;
 
         // Shows the null sprite when the held tile doesn't have a sprite component
         private GameObject nullSprite;
@@ -135,6 +146,75 @@ namespace Cardificer
 
         // The container to hold (temporary) null sprites
         GameObject nullSpritesContainer;
+
+        /// <summary>
+        /// Adds a new layer
+        /// </summary>
+        public void AddLayer()
+        {
+            AddLayerUI();
+            templateCreator.AddLayer("");
+        }
+
+        /// <summary>
+        /// Removes the given layer 
+        /// </summary>
+        /// <param name="layer"> The layer to remove </param>
+        public void RemoveLayer(int layer)
+        {
+            GameObject removedLayerUI = layerUIs[layer];
+            layerUIs.RemoveAt(layer);
+            Destroy(removedLayerUI);
+
+            for (int i = 0; i < layerUIs.Count; i++)
+            {
+                TemplateLayerUI layerUIComponent = layerUIs[i].GetComponent<TemplateLayerUI>();
+                layerUIComponent.onLayerActivated = () => templateCreator.activeLayer = i;
+                layerUIComponent.onLayerHiddenToggled = () => templateCreator.ToggleLayerVisibility(i);
+                layerUIComponent.onLayerNamed = (string name) => templateCreator.RenameLayer(i, name);
+                layerUIComponent.onLayerRemoved = () => RemoveLayer(i);
+            }
+
+            templateCreator.RemoveLayer(layer);
+        }
+
+        /// <summary>
+        /// Resets the list of layer UIs
+        /// </summary>
+        public void ResetLayerUIs()
+        {
+            foreach (GameObject layerUI in layerUIs)
+            {
+                Destroy(layerUI);
+            }
+            layerUIs = new List<GameObject>();
+        }
+
+        /// <summary>
+        /// Adds a layer to the UI
+        /// </summary>
+        /// <param name="name"> The name of the layer UI </param>
+        public void AddLayerUI(string name = "")
+        {
+            GameObject newLayerUI = Instantiate(layerUI);
+            if (layerUIs.Count == 0)
+            {
+                newLayerUI.GetComponent<TemplateLayerUI>().removable = false;
+                name = "Pathfinding Layer";
+            }
+            if (name != "")
+            {
+                newLayerUI.GetComponent<TemplateLayerUI>().Name(name);
+            }
+            layerUIs.Add(newLayerUI);
+            newLayerUI.transform.parent = layerUIContainer.transform;
+
+            TemplateLayerUI layerUIComponent = newLayerUI.GetComponent<TemplateLayerUI>();
+            layerUIComponent.onLayerActivated = () => templateCreator.activeLayer = layerUIs.Count - 1;
+            layerUIComponent.onLayerHiddenToggled = () => templateCreator.ToggleLayerVisibility(layerUIs.Count - 1);
+            layerUIComponent.onLayerNamed = (string name) => templateCreator.RenameLayer(layerUIs.Count - 1, name);
+            layerUIComponent.onLayerRemoved = () => RemoveLayer(layerUIs.Count - 1);
+        }
 
         /// <summary>
         /// Initialize variables

@@ -233,5 +233,15 @@ namespace Cardificer
             }
             return returnVal;
         }
+
+        /// <summary>
+        /// Gets a specific layer this template has
+        /// </summary>
+        /// <param name="layer"> The layer to get </param>
+        /// <returns> The layer </returns>
+        public GameObject GetLayer(int layer)
+        {
+            return layers[layer];
+        }
     }
 }

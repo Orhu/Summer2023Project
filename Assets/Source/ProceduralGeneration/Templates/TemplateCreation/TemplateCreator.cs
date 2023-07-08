@@ -105,6 +105,9 @@ namespace Cardificer
         // A null sprite game object
         [HideInInspector] public GameObject nullSpriteObject;
 
+        // The active layer
+        [HideInInspector] public int activeLayer = 0;
+
         // The actual template being created
         private Template createdTemplate;
 
@@ -116,9 +119,6 @@ namespace Cardificer
 
         // The null sprite game objects (organized by layer)
         private List<GameObject[,]> nullSprites;
-
-        // The active layer
-        private int activeLayer = 0;
 
         // Tracks whether start has been called or not
         private bool started;
@@ -384,7 +384,7 @@ namespace Cardificer
             if (!IsGridPosOutsidePathfindingBounds(gridPos))
             {
                 EraseTile(gridPos);
-                GameObject layer = createdTemplate.GetLayers()[activeLayer];
+                GameObject layer = createdTemplate.GetLayer(activeLayer);
                 GameObject createdTile = ((GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tilePrefab), layer.transform));
 
                 PrefabUtility.SetPropertyModifications(createdTile, PrefabUtility.GetPropertyModifications(tilePrefab));
@@ -494,12 +494,22 @@ namespace Cardificer
 
 
         /// <summary>
+        /// Renames a layer
+        /// </summary>
+        /// <param name="layer"> The layer to rename </param>
+        /// <param name="name"> The name of the layer </param>
+        public void RenameLayer(int layer, string name)
+        {
+            createdTemplate.GetLayer(layer).name = name;
+        }
+
+        /// <summary>
         /// Toggles the given layer's visibility
         /// </summary>
         /// <param name="layer"> The layer to toggle </param>
         public void ToggleLayerVisibility(int layer)
         {
-            GameObject toggledLayer = createdTemplate.GetLayers()[layer];
+            GameObject toggledLayer = createdTemplate.GetLayer(layer);
             toggledLayer.SetActive(toggledLayer.activeSelf);
         }
 

@@ -388,6 +388,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8119140538868298320}
+  - component: {fileID: 2845307689066714046}
   m_Layer: 0
   m_Name: TemplateLayerUI
   m_TagString: Untagged
@@ -411,6 +412,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2845307689066714046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4097879702649742913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d8d16281275e004dab44d5759708f5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputField: {fileID: 5106351516604192744}
+  visibleImage: {fileID: 8076787888381708497}
+  hiddenImage: {fileID: 4379824105499618431}
+  removeButton: {fileID: 6202805432751624215}
+  removable: 1
 --- !u!1 &4588376904092890065
 GameObject:
   m_ObjectHideFlags: 0
@@ -764,7 +782,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2029049412502000404}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2845307689066714046}
+        m_TargetAssemblyTypeName: TemplateLayerUI, Assembly-CSharp
+        m_MethodName: OnActivated
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5700139168369979375
 GameObject:
   m_ObjectHideFlags: 0
@@ -1022,7 +1052,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4441750033145477289}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2845307689066714046}
+        m_TargetAssemblyTypeName: TemplateLayerUI, Assembly-CSharp
+        m_MethodName: OnHiddenToggled
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6202805432751624215
 GameObject:
   m_ObjectHideFlags: 0
@@ -1144,7 +1186,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9041270289780835783}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2845307689066714046}
+        m_TargetAssemblyTypeName: TemplateLayerUI, Assembly-CSharp
+        m_MethodName: OnRemoved
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7395032031994105007
 GameObject:
   m_ObjectHideFlags: 0
@@ -1473,10 +1527,10 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Cardificer.TemplateCreator, Assembly-CSharp
-        m_MethodName: set_templateName
-        m_Mode: 0
+      - m_Target: {fileID: 2845307689066714046}
+        m_TargetAssemblyTypeName: TemplateLayerUI, Assembly-CSharp
+        m_MethodName: OnNamed
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
