@@ -14,6 +14,9 @@ namespace Cardificer
         // The knockback caused by this.
         public KnockbackInfo knockback;
 
+        // Whether or not this should destroy blockers
+        public bool destroyBlockers;
+
         // The radius in tiles of the explosion caused by the bomb.
         public float explosionRadius = 2f;
 
@@ -25,14 +28,6 @@ namespace Cardificer
 
         // Invoked when this explodes.
         public System.Action onExploded;
-
-        /// <summary>
-        /// Bind destroy.
-        /// </summary>
-        private void Start()
-        {
-            FloorGenerator.onRoomChange += () => { Destroy(gameObject); };
-        }
 
         /// <summary>
         /// Update fuse time.
@@ -60,6 +55,10 @@ namespace Cardificer
 
                 hitCollider.GetComponent<Health>()?.ReceiveAttack(damageData);
                 hitCollider.GetComponent<Movement>()?.Knockback((hitCollider.transform.position - transform.position).normalized, knockback);
+                if (destroyBlockers && hitCollider.gameObject.layer == LayerMask.NameToLayer("Blockers"))
+                {
+                    Destroy(hitCollider.gameObject);
+                }
             }
 
             transform.GetChild(0).transform.parent = null;

@@ -17,6 +17,9 @@ namespace Cardificer
         [Tooltip("The time in seconds after the bomb is spawned until it detonates.")] [Min(0f)]
         public float fuseTime = 2f;
 
+        [Tooltip("Whether or not this should destroy blockers.")]
+        public bool destroyBlockers = false;
+
         [Tooltip("Whether or not this should stick to the hit object.")]
         public bool sticky = false;
 
@@ -73,6 +76,7 @@ namespace Cardificer
             bomb.name = "Bomb";
             bomb.knockback = knockback;
             bomb.explosionRadius = explosionRadius;
+            bomb.destroyBlockers = destroyBlockers;
             bomb.fuseTime = fuseTime;
             bomb.damageData = _modifiedProjectile.attackData;
 
