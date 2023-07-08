@@ -127,19 +127,6 @@ namespace Cardificer
                             }
                         }
                     }
-
-                    foreach (Tile tileComponent in value.GetComponents<Tile>())
-                    {
-                        if (tileComponent.GetComponent<SpriteRenderer>() == null || tileComponent.GetComponent<SpriteRenderer>().sprite == null)
-                        {
-                            GameObject createdNullSprite = Instantiate(nullSprite);
-                            createdNullSprite.SetActive(true);
-                            createdNullSprite.transform.parent = nullSpritesContainer.transform;
-                            createdNullSprite.transform.localPosition = new Vector3(tileComponent.gridLocation.x, tileComponent.gridLocation.y, 0);
-                            createdNullSprite.GetComponent<SpriteRenderer>().color = previewColor;
-                        }
-                    }
-
                 }
                 _heldTemplate = value;
             }
