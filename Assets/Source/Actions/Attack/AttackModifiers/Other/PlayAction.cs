@@ -131,7 +131,7 @@ namespace Cardificer
                 }
                 else
                 {
-                    action.Play(this, ignoredObjects);
+                    action.Play(parentActor, ignoredObjects);
                 }
 
                 yield return null;
