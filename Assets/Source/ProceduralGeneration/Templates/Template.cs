@@ -54,6 +54,9 @@ namespace Cardificer
             }
         }
 
+        // The list of layers (first layer is always pathfinding layer)
+        [HideInInspector] public List<GameObject> layers;
+
         /// <summary>
         /// Class that contains a list of tiles so the templates can be serialized correctly
         /// </summary>

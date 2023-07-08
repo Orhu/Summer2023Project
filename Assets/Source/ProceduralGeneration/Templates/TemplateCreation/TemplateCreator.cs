@@ -117,6 +117,9 @@ namespace Cardificer
         // The null sprite game objects
         private GameObject[,] nullSprites;
 
+        // The active layer
+        private int activeLayer = 0;
+
         // Tracks whether start has been called or not
         private bool started;
 
@@ -149,6 +152,10 @@ namespace Cardificer
 
             string path = "Assets/Content/Templates/" + templateName + ".prefab";
             GetComponent<TemplateCreatorInput>().DeselectObject();
+            foreach (GameObject layer in createdTemplate.layers)
+            {
+                layer.SetActive(true);
+            }
 
             PrefabUtility.SaveAsPrefabAsset(createdTemplate.gameObject, path);
             AssetDatabase.Refresh();
@@ -170,6 +177,12 @@ namespace Cardificer
             createdTemplate.sizeMultiplier = sizeMultiplier;
             createdTemplate.mapCellSize = mapCellSize;
             createdTemplate.transform.localPosition = new Vector3(-roomSize.x / 2, -roomSize.y / 2);
+
+            GameObject pathfindingLayer = new GameObject();
+            pathfindingLayer.transform.parent = createdTemplate.transform;
+            pathfindingLayer.transform.localPosition = new Vector3(0, 0);
+            createdTemplate.layers.Add(pathfindingLayer);
+            activeLayer = 0;
 
             Destroy(nullSpritesContainer);
             nullSpritesContainer = new GameObject();
@@ -349,7 +362,7 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Places a tile in the template
+        /// Places a tile in the template in the current layer
         /// </summary>
         /// <param name="tile"> The tile to place </param>
         /// <param name="gridPos"> The grid position to place the tile in </param>
@@ -358,7 +371,8 @@ namespace Cardificer
             if (!IsGridPosOutsidePathfindingBounds(gridPos))
             {
                 EraseTile(gridPos);
-                Tile createdTile = ((GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tilePrefab), createdTemplate.transform)).GetComponent<Tile>();
+                GameObject layer = createdTemplate.layers[activeLayer];
+                Tile createdTile = ((GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tilePrefab), layer.transform)).GetComponent<Tile>();
 
                 PrefabUtility.SetPropertyModifications(createdTile, PrefabUtility.GetPropertyModifications(tilePrefab));
 
@@ -376,6 +390,39 @@ namespace Cardificer
                     createdNullSprite.transform.localPosition = new Vector3(gridPos.x, gridPos.y, 0);
                 }
             }
+        }
+
+        /// <summary>
+        /// Adds a layer
+        /// </summary>
+        public void AddLayer(string layerName)
+        {
+            GameObject newLayer = new GameObject();
+            newLayer.name = layerName;
+            newLayer.transform.parent = createdTemplate.transform;
+            createdTemplate.layers.Add(newLayer);
+        }
+
+        /// <summary>
+        /// Removes a layer
+        /// </summary>
+        /// <param name="layer"> The layer to remove </param>
+        public void RemoveLayer(int layer)
+        {
+            GameObject removedLayer = createdTemplate.layers[layer];
+            createdTemplate.layers.RemoveAt(layer);
+            Destroy(removedLayer);
+        }
+
+
+        /// <summary>
+        /// Toggles the given layer's visibility
+        /// </summary>
+        /// <param name="layer"> The layer to toggle </param>
+        public void ToggleLayerVisibility(int layer)
+        {
+            GameObject toggledLayer = createdTemplate.layers[layer];
+            toggledLayer.SetActive(toggledLayer.activeSelf);
         }
 
         /// <summary>
