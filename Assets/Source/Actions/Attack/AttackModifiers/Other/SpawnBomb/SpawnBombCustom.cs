@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Cardificer
 {
     /// <summary>
-    /// An action modifier that spawns explosive bombs when the projectile hits or is destroyed has a custom damage that is unrelated to the projectile that spawned it.
+    /// An action modifier that spawns explosive bombs when the projectile hits an object or is destroyed. This has a custom damage unrelated to the projectile that spawned it.
     /// </summary>
     [CreateAssetMenu(fileName = "NewSpawnBomb", menuName = "Cards/AttackModifers/Spawn Custom Damage Bomb")]
     public class SpawnBombCustom : SpawnBomb

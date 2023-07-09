@@ -27,7 +27,7 @@ namespace Cardificer
             OnDestroyed,
             Repeately,
         }
-        [Tooltip("The number of times this can plays an action.")] [Min(1)]
+        [Tooltip("The number of times this can play an action.")] [Min(1)]
         [SerializeField] private int playCount = 1000;
 
         [Tooltip("The damage multiplier of this action")]

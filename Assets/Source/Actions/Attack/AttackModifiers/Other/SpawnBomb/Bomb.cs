@@ -9,25 +9,25 @@ namespace Cardificer
     public class Bomb : MonoBehaviour
     {
         // The damage dealt by this bomb.
-        public DamageData damageData;
+        [System.NonSerialized] public DamageData damageData;
 
         // The knockback caused by this.
-        public KnockbackInfo knockback;
+        [System.NonSerialized] public KnockbackInfo knockback;
 
         // Whether or not this should destroy blockers
-        public bool destroyBlockers;
+        [System.NonSerialized] public bool destroyBlockers;
 
         // The radius in tiles of the explosion caused by the bomb.
-        public float explosionRadius = 2f;
+        [System.NonSerialized] public float explosionRadius = 2f;
 
         // The time in seconds after the bomb is spawned until it detonates.
-        public float fuseTime = 2f;
+        [System.NonSerialized] public float fuseTime = 2f;
 
         // The objects not to damage when exploding.
-        public List<GameObject> ignoredObjects = new List<GameObject>();
+        [System.NonSerialized] public List<GameObject> ignoredObjects = new List<GameObject>();
 
         // Invoked when this explodes.
-        public System.Action onExploded;
+        [System.NonSerialized] public System.Action onExploded;
 
         /// <summary>
         /// Update fuse time.

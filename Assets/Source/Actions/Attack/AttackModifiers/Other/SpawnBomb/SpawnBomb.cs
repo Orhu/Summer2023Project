@@ -11,7 +11,7 @@ namespace Cardificer
         [Tooltip("The radius in tiles of the explosion caused by the bomb.")] [Min(0f)]
         public float explosionRadius = 2f;
 
-        [Tooltip("The knockback caused by the explosion in tiles.")] [Min(0f)]
+        [Tooltip("The knockback caused by the explosion in tiles.")]
         public KnockbackInfo knockback;
 
         [Tooltip("The time in seconds after the bomb is spawned until it detonates.")] [Min(0f)]
