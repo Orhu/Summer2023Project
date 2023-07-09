@@ -50,6 +50,12 @@ namespace Cardificer
             {
                 layerTiles = new List<GameObjects2DList>();
 
+                if (layers == null)
+                {
+                    layers = new List<GameObject>();
+                    return;
+                }
+
                 for (int i = 0; i < layers.Count; i++)
                 {
                     layerTiles.Add(new GameObjects2DList());
