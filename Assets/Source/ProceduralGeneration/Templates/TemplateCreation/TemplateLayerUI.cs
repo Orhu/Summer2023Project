@@ -84,7 +84,15 @@ public class TemplateLayerUI : MonoBehaviour
     public void OnActivated()
     {
         onLayerActivated?.Invoke();
-        activeText.gameObject.SetActive(true);
+        activeText.enabled = true;
+    }
+
+    /// <summary>
+    /// Activates the active star
+    /// </summary>
+    public void Activate()
+    {
+        activeText.enabled = true;
     }
 
     /// <summary>
@@ -92,7 +100,7 @@ public class TemplateLayerUI : MonoBehaviour
     /// </summary>
     public void Deactivate()
     {
-        activeText.gameObject.SetActive(false);
+        activeText.enabled = false;
     }
 
     /// <summary>

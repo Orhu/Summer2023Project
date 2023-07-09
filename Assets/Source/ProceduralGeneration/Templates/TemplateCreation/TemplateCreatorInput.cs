@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using TMPro;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -152,8 +152,8 @@ namespace Cardificer
         /// </summary>
         public void AddLayer()
         {
-            AddLayerUI();
             templateCreator.AddLayer("");
+            AddLayerUI();
         }
 
         /// <summary>
@@ -168,14 +168,33 @@ namespace Cardificer
 
             for (int i = 0; i < layerUIs.Count; i++)
             {
+                // Lambdas be weird
+                int currentIndex = i;
                 TemplateLayerUI layerUIComponent = layerUIs[i].GetComponent<TemplateLayerUI>();
-                layerUIComponent.onLayerActivated = () => templateCreator.activeLayer = i;
-                layerUIComponent.onLayerHiddenToggled = () => templateCreator.ToggleLayerVisibility(i);
-                layerUIComponent.onLayerNamed = (string name) => templateCreator.RenameLayer(i, name);
-                layerUIComponent.onLayerRemoved = () => RemoveLayer(i);
+                layerUIComponent.onLayerActivated = () => ActivateLayer(currentIndex);
+                layerUIComponent.onLayerHiddenToggled = () => templateCreator.ToggleLayerVisibility(currentIndex);
+                layerUIComponent.onLayerNamed = (string name) => templateCreator.RenameLayer(currentIndex, name);
+                layerUIComponent.onLayerRemoved = () => RemoveLayer(currentIndex);
             }
 
             templateCreator.RemoveLayer(layer);
+
+            if (layer == templateCreator.activeLayer)
+            {
+                layerUIs[0].GetComponent<TemplateLayerUI>().Activate();
+                ActivateLayer(0);
+            }
+            StartCoroutine(UpdateLayout());
+        }
+
+        /// <summary>
+        /// Activates the given layer 
+        /// </summary>
+        /// <param name="layer"> The layer to activate </param>
+        public void ActivateLayer(int layer)
+        {
+            layerUIs[templateCreator.activeLayer].GetComponent<TemplateLayerUI>().Deactivate();
+            templateCreator.activeLayer = layer;
         }
 
         /// <summary>
@@ -183,11 +202,15 @@ namespace Cardificer
         /// </summary>
         public void ResetLayerUIs()
         {
-            foreach (GameObject layerUI in layerUIs)
+            if (layerUIs != null)
             {
-                Destroy(layerUI);
+                foreach (GameObject layerUI in layerUIs)
+                {
+                    Destroy(layerUI);
+                }
             }
             layerUIs = new List<GameObject>();
+            StartCoroutine(UpdateLayout());
         }
 
         /// <summary>
@@ -197,23 +220,48 @@ namespace Cardificer
         public void AddLayerUI(string name = "")
         {
             GameObject newLayerUI = Instantiate(layerUI);
+            if (layerUIs == null)
+            {
+                layerUIs = new List<GameObject>();
+            }
+
             if (layerUIs.Count == 0)
             {
                 newLayerUI.GetComponent<TemplateLayerUI>().removable = false;
                 name = "Pathfinding Layer";
             }
+            else
+            {
+                newLayerUI.GetComponent<TemplateLayerUI>().Deactivate();
+            }
+
             if (name != "")
             {
                 newLayerUI.GetComponent<TemplateLayerUI>().Name(name);
             }
             layerUIs.Add(newLayerUI);
-            newLayerUI.transform.parent = layerUIContainer.transform;
-
+            newLayerUI.transform.SetParent(layerUIContainer.transform, false);
+            StartCoroutine(UpdateLayout());
             TemplateLayerUI layerUIComponent = newLayerUI.GetComponent<TemplateLayerUI>();
-            layerUIComponent.onLayerActivated = () => templateCreator.activeLayer = layerUIs.Count - 1;
-            layerUIComponent.onLayerHiddenToggled = () => templateCreator.ToggleLayerVisibility(layerUIs.Count - 1);
-            layerUIComponent.onLayerNamed = (string name) => templateCreator.RenameLayer(layerUIs.Count - 1, name);
-            layerUIComponent.onLayerRemoved = () => RemoveLayer(layerUIs.Count - 1);
+            int currentCount = layerUIs.Count;
+            layerUIComponent.onLayerActivated = () => ActivateLayer(currentCount - 1);
+            layerUIComponent.onLayerHiddenToggled = () => templateCreator.ToggleLayerVisibility(currentCount - 1);
+            layerUIComponent.onLayerNamed = (string name) => templateCreator.RenameLayer(currentCount - 1, name);
+            layerUIComponent.onLayerRemoved = () => RemoveLayer(currentCount - 1);
+            templateCreator.RenameLayer(currentCount - 1, name);
+        }
+
+        /// <summary>
+        /// Updates the layouts after a frame, waiting for the children to be fully born
+        /// </summary>
+        /// <returns> Waits for a frame </returns>
+        public IEnumerator UpdateLayout()
+        {
+            yield return null;
+            layerUIContainer.CalculateLayoutInputVertical();
+            layerUIContainer.SetLayoutVertical();
+            layerUIContainer.transform.parent.gameObject.GetComponent<VerticalLayoutGroup>().CalculateLayoutInputVertical();
+            layerUIContainer.transform.parent.gameObject.GetComponent<VerticalLayoutGroup>().SetLayoutVertical();
         }
 
         /// <summary>
@@ -283,6 +331,8 @@ namespace Cardificer
         /// </summary>
         public void OnSelectUp()
         {
+            if (!templateCreator.IsValid()) { return; }
+
             Vector3 mouseViewportPos = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Mouse.current.position.value);
             bool isOutside = mouseViewportPos.x < 0 || mouseViewportPos.x > 1 || mouseViewportPos.y < 0 || mouseViewportPos.y > 1;
             Vector2Int gridPos = MousePosToGridPos(Mouse.current.position.value);

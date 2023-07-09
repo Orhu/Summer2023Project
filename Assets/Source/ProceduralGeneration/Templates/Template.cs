@@ -249,5 +249,14 @@ namespace Cardificer
         {
             return layers[layer];
         }
+
+        /// <summary>
+        /// Checks if the template is valid yet
+        /// </summary>
+        /// <returns> Whether or not the template is valid </returns>
+        public bool IsValid()
+        {
+            return layerTiles != null;
+        }
     }
 }

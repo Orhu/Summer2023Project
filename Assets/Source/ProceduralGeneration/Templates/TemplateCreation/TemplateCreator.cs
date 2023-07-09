@@ -108,6 +108,9 @@ namespace Cardificer
         // The active layer
         [HideInInspector] public int activeLayer = 0;
 
+        // Tracks whether start has been called or not
+        private bool started;
+
         // The actual template being created
         private Template createdTemplate;
 
@@ -119,9 +122,6 @@ namespace Cardificer
 
         // The null sprite game objects (organized by layer)
         private List<GameObject[,]> nullSprites;
-
-        // Tracks whether start has been called or not
-        private bool started;
 
         /// <summary>
         /// Initializes the template creator
@@ -174,6 +174,10 @@ namespace Cardificer
             {
                 Destroy(createdTemplate.gameObject);
             }
+
+            TemplateCreatorInput input = GetComponent<TemplateCreatorInput>();
+            input.ResetLayerUIs();
+
             createdTemplate = new GameObject().AddComponent<Template>();
             createdTemplate.name = "Created Template";
             createdTemplate.sizeMultiplier = sizeMultiplier;
@@ -182,6 +186,7 @@ namespace Cardificer
 
             GameObject pathfindingLayer = new GameObject();
             createdTemplate.AddLayer(pathfindingLayer);
+            input.AddLayerUI();
             activeLayer = 0;
 
             Destroy(nullSpritesContainer);
@@ -469,6 +474,15 @@ namespace Cardificer
             return gridPos.x < 1 || gridPos.x >= roomSize.x - 1 || gridPos.y < 1 || gridPos.y >= roomSize.y - 1;
         }
 
+        /// <summary>
+        /// Checks if the template creator is valid yet
+        /// </summary>
+        /// <returns> Whether or not the template creator is valid </returns>
+        public bool IsValid()
+        {
+            return started && createdTemplate.IsValid();
+        }
+
         #endregion
 
         #region Layers
@@ -510,7 +524,7 @@ namespace Cardificer
         public void ToggleLayerVisibility(int layer)
         {
             GameObject toggledLayer = createdTemplate.GetLayer(layer);
-            toggledLayer.SetActive(toggledLayer.activeSelf);
+            toggledLayer.SetActive(!toggledLayer.activeSelf);
         }
 
         #endregion
