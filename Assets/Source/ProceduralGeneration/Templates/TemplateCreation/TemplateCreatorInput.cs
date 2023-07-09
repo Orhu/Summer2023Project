@@ -17,23 +17,35 @@ namespace Cardificer
     public class TemplateCreatorInput : MonoBehaviour
     {
 #if UNITY_EDITOR
-        [Tooltip("The color of the tile placement preview")]
-        [SerializeField] private Color previewColor;
 
-        [Tooltip("The color of the tile placement preview")]
-        [SerializeField] private Color selectedColor;
+        #region Initialization
 
-        [Tooltip("The layer UI")]
-        [SerializeField] private GameObject layerUI;
+        // A reference to the template creator
+        private TemplateCreator templateCreator;
 
-        [Tooltip("The layer UI container")]
-        [SerializeField] private VerticalLayoutGroup layerUIContainer;
+        // A reference to the template camera
+        private TemplateCreatorCamera templateCamera;
 
-        // The list of layer UIs
-        private List<GameObject> layerUIs;
+        /// <summary>
+        /// Initialize variables
+        /// </summary>
+        public void Initialize()
+        {
+            templateCreator = GetComponent<TemplateCreator>();
+            templateCamera = templateCreator.templateCamera;
+            nullSprite = templateCreator.nullSpriteObject;
+            nullSprite.SetActive(false);
 
-        // Shows the null sprite when the held tile doesn't have a sprite component
-        private GameObject nullSprite;
+            undoHistory = new Stack<List<UndoRedoAction>>();
+            redoHistory = new Stack<List<UndoRedoAction>>();
+            currentAction = new List<UndoRedoAction>();
+            ClearRedoHistory();
+            ClearUndoHistory();
+        }
+
+        #endregion
+
+        #region Input parsing
 
         // Whether or not the select button is down
         private bool selectButtonPressed = false;
@@ -47,20 +59,236 @@ namespace Cardificer
         // Whether or not the mouse is currently over the template creator UI
         private bool mouseOverUI = false;
 
-        // The mouse position on the last frame
-        private Vector3 lastMousePosition;
-
-        // A reference to the template creator
-        private TemplateCreator templateCreator;
-
-        // A reference to the template camera
-        private TemplateCreatorCamera templateCamera;
-
         // The last selected game object (so it doesn't print a warning 9 million times)
         private string lastSelectedObjectName = "";
 
         // The currently selected object
-        GameObject selectedObject;
+        private GameObject selectedObject;
+
+        /// <summary>
+        /// Handles placing and removing tiles
+        /// </summary>
+        private void Update()
+        {
+            mouseOverUI = EventSystem.current.IsPointerOverGameObject();
+
+            Vector3 mouseViewportPos = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Mouse.current.position.value);
+            bool isOutside = mouseViewportPos.x < 0 || mouseViewportPos.x > 1 || mouseViewportPos.y < 0 || mouseViewportPos.y > 1;
+
+            Vector2Int gridPos = MousePosToGridPos(Mouse.current.position.value);
+
+            // Placing tiles
+            if (selectButtonPressed && !isOutside && !mouseOverUI)
+            {
+                if (heldTile != null
+                    && !templateCreator.IsGridPosOutsidePathfindingBounds(gridPos)
+                    && (templateCreator.GetObject(gridPos) == null || templateCreator.GetObject(gridPos).name != heldTile.name))
+                {
+                    PlaceTile(heldTile, gridPos);
+                }
+            }
+
+            // Panning
+            if (panButtonPressed && !isOutside && !mouseOverUI)
+            {
+                templateCamera.Pan(Camera.main.ScreenToWorldPoint(lastMousePosition) - Camera.main.ScreenToWorldPoint(Mouse.current.position.value));
+            }
+
+            // Erasing
+            if (eraseButtonPressed && !isOutside && templateCreator.GetObject(gridPos) != null && !panButtonPressed && !mouseOverUI)
+            {
+                EraseTile(gridPos);
+            }
+
+            UpdateHeldTile();
+            lastMousePosition = Mouse.current.position.value;
+        }
+
+        /// <summary>
+        /// Handles select up
+        /// </summary>
+        public void OnSelectUp()
+        {
+            if (!templateCreator.IsValid()) { return; }
+
+            if (currentAction.Count > 0)
+            {
+                List<UndoRedoAction> completedAction = new List<UndoRedoAction>();
+                foreach (UndoRedoAction action in currentAction)
+                {
+                    completedAction.Add(action);
+                    foreach (GameObject relevantObject in action.relevantObjects)
+                    {
+                        relevantObject.transform.parent = undoObjectsContainer.transform;
+                    }
+                }
+                undoHistory.Push(completedAction);
+                currentAction.Clear();
+            }
+
+            Vector3 mouseViewportPos = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Mouse.current.position.value);
+            bool isOutside = mouseViewportPos.x < 0 || mouseViewportPos.x > 1 || mouseViewportPos.y < 0 || mouseViewportPos.y > 1;
+            Vector2Int gridPos = MousePosToGridPos(Mouse.current.position.value);
+
+            if (!isOutside && !mouseOverUI)
+            {
+                // Placing template
+                if (heldTemplate != null && !templateCreator.IsGridPosOutsideBounds(gridPos))
+                {
+                    templateCreator.LoadTemplate(heldTemplate.GetComponent<Template>());
+                    DeselectObject();
+                    SelectObject(templateCreator.gameObject);
+                    heldTile = null;
+                    heldTemplate = null;
+                    ClearUndoHistory();
+                    ClearRedoHistory();
+                    return;
+                }
+
+                if (templateCreator.IsGridPosOutsidePathfindingBounds(gridPos) || templateCreator.GetObject(gridPos) == null)
+                {
+                    DeselectObject();
+                    SelectObject(templateCreator.gameObject);
+                    heldTile = null;
+                    heldTemplate = null;
+
+                }
+                else if (heldTile == null)
+                {
+                    DeselectObject();
+                    SelectObject(templateCreator.GetObject(gridPos).gameObject);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Called when the select button is pressed or released
+        /// </summary>
+        /// <param name="input"> The input </param>
+        public void OnSelect(InputValue input)
+        {
+            selectButtonPressed = input.isPressed;
+            if (!input.isPressed)
+            {
+                OnSelectUp();
+            }
+
+            Vector3 mouseViewportPos = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Mouse.current.position.value);
+            bool isOutside = mouseViewportPos.x < 0 || mouseViewportPos.x > 1 || mouseViewportPos.y < 0 || mouseViewportPos.y > 1;
+            Vector2Int gridPos = MousePosToGridPos(Mouse.current.position.value);
+
+            if (!mouseOverUI && !isOutside && input.isPressed 
+                && !templateCreator.IsGridPosOutsidePathfindingBounds(gridPos)
+                && heldTile != null)
+            {
+                ClearRedoHistory();
+            }
+        }
+
+        /// <summary>
+        /// Called when the erase button is pressed or released
+        /// </summary>
+        /// <param name="input"> The input </param>
+        public void OnErase(InputValue input)
+        {
+            eraseButtonPressed = input.isPressed;
+        }
+
+        /// <summary>
+        /// Called when the copy button is pressed
+        /// </summary>
+        public void OnCopy()
+        {
+            Vector3 mouseViewportPos = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Mouse.current.position.value);
+            bool isOutside = mouseViewportPos.x < 0 || mouseViewportPos.x > 1 || mouseViewportPos.y < 0 || mouseViewportPos.y > 1;
+            Vector2Int gridPos = MousePosToGridPos(Mouse.current.position.value);
+
+            if (!isOutside)
+            {
+                if (Selection.activeGameObject != null && Selection.activeGameObject != heldTile && Selection.activeGameObject.activeInHierarchy)
+                {
+                    DeselectObject();
+                }
+
+                GameObject tile = templateCreator.GetObject(gridPos);
+
+                heldTile = tile == null ? null : (GameObject)PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile));
+                PrefabUtility.SetPropertyModifications(heldTile, PrefabUtility.GetPropertyModifications(tile));
+
+                foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
+                {
+                    spriteRenderer.color = previewColor;
+                    spriteRenderer.sortingOrder++;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Selects the given object
+        /// </summary>
+        /// <param name="selectedObject"> The selected object </param>
+        private void SelectObject(GameObject selectedObject)
+        {
+            Selection.activeGameObject = selectedObject.gameObject;
+            this.selectedObject = selectedObject;
+            foreach (SpriteRenderer spriteRenderer in Selection.activeGameObject.GetComponents<SpriteRenderer>())
+            {
+                spriteRenderer.color = selectedColor;
+            }
+        }
+
+        /// <summary>
+        /// Deselects the selected object 
+        /// </summary>
+        public void DeselectObject()
+        {
+            if (selectedObject == null) { return; }
+
+            foreach (SpriteRenderer spriteRenderer in selectedObject.GetComponents<SpriteRenderer>())
+            {
+                spriteRenderer.color = Color.white;
+            }
+        }
+
+        /// <summary>
+        /// Converts the mouse position to world space, then rounds it to an integer
+        /// </summary>
+        /// <param name="mousePos"> The mouse position </param>
+        /// <returns> The quantized world position </returns>
+        private Vector3 QuantizeMousePos(Vector3 mousePos)
+        {
+            Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
+            Vector3 quantizedWorldPos = new Vector3();
+            quantizedWorldPos.x = Mathf.Round(worldPos.x);
+            quantizedWorldPos.y = Mathf.Round(worldPos.y);
+            return quantizedWorldPos;
+        }
+
+        /// <summary>
+        /// Converts a mouse position to a grid position 
+        /// </summary>
+        /// <param name="mousePos"> The mouse position </param>
+        /// <returns> The grid position </returns>
+        private Vector2Int MousePosToGridPos(Vector3 mousePos)
+        {
+            Vector3 quantizedMousePos = QuantizeMousePos(mousePos);
+            Vector2Int gridPos = new Vector2Int();
+            gridPos.x = (int)quantizedMousePos.x + templateCreator.roomSize.x / 2;
+            gridPos.y = (int)quantizedMousePos.y + templateCreator.roomSize.y / 2;
+            return gridPos;
+        }
+
+        #endregion
+
+        #region Placing and Erasing
+
+        [Header("Placing and Erasing")]
+
+        [Tooltip("The color of the tile placement preview")]
+        [SerializeField] private Color previewColor;
+
+        [Tooltip("The color of the tile placement preview")]
+        [SerializeField] private Color selectedColor;
 
         // The tile being held
         private GameObject _heldTile;
@@ -79,7 +307,7 @@ namespace Cardificer
                     Selection.activeGameObject = _heldTile;
                 }
 
-                if (_heldTile == null) 
+                if (_heldTile == null)
                 {
                     nullSprite.SetActive(false);
                     return;
@@ -128,7 +356,7 @@ namespace Cardificer
                             for (int k = 0; k < value.GetComponent<Template>().roomSize.y; k++)
                             {
                                 if (value.GetComponent<Template>()[i, j, k] == null) { continue; }
-                                
+
                                 if (value.GetComponent<Template>()[i, j, k].GetComponent<SpriteRenderer>() != null && value.GetComponent<Template>()[i, j, k].GetComponent<SpriteRenderer>().sprite != null)
                                 {
                                     continue;
@@ -136,6 +364,7 @@ namespace Cardificer
 
                                 GameObject createdNullSprite = Instantiate(nullSprite);
                                 createdNullSprite.SetActive(true);
+                                Debug.Log("null sprite??");
                                 createdNullSprite.transform.parent = nullSpritesContainer.transform;
                                 createdNullSprite.transform.localPosition = new Vector3(j, k, 0);
                                 createdNullSprite.GetComponent<SpriteRenderer>().color = previewColor;
@@ -149,11 +378,150 @@ namespace Cardificer
         }
 
         // The container to hold (temporary) null sprites
-        GameObject nullSpritesContainer;
+        private GameObject nullSpritesContainer;
 
+        // Shows the null sprite when the held tile doesn't have a sprite component
+        private GameObject nullSprite;
+
+        /// <summary>
+        /// Erases the tile at the given position
+        /// </summary>
+        /// <param name="gridPos"> The position </param>
+        /// <param name="addToUndoHistory"> Whether or not to add this action to the undo history; Adds it to the redo history instead if false </param>
+        public void EraseTile(Vector2Int gridPos)
+        {
+            GameObject tile = templateCreator.GetObject(gridPos);
+            UndoRedoAction action = new UndoRedoAction();
+            GameObject undoActionTile = (GameObject)PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile));
+            PrefabUtility.SetPropertyModifications(undoActionTile, PrefabUtility.GetPropertyModifications(tile));
+            undoActionTile.name = tile.name;
+            action.redoAction = () => EraseTile(gridPos);
+            action.undoAction = () => PlaceTile(undoActionTile, gridPos);
+            action.relevantObjects.Add(undoActionTile);
+            currentAction.Add(action);
+
+            templateCreator.EraseTile(gridPos);
+        }
+
+        /// <summary>
+        /// Places a tile at the given position
+        /// </summary>
+        /// <param name="tile"> The tile to place </param>
+        /// <param name="gridPos"> The grid pos </param>
+        public void PlaceTile(GameObject tile, Vector2Int gridPos)
+        {
+            foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
+            {
+                spriteRenderer.color = Color.white;
+                spriteRenderer.sortingOrder--;
+            }
+
+            templateCreator.PlaceTile(tile, gridPos);
+
+            UndoRedoAction action = new UndoRedoAction();
+            GameObject undoActionTile = (GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile));
+            PrefabUtility.SetPropertyModifications(undoActionTile, PrefabUtility.GetPropertyModifications(tile));
+            undoActionTile.name = tile.name;
+            action.redoAction = () => PlaceTile(undoActionTile, gridPos);
+            action.undoAction = () => EraseTile(gridPos);
+            action.relevantObjects.Add(undoActionTile);
+            currentAction.Add(action);
+
+            foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
+            {
+                spriteRenderer.color = previewColor;
+                spriteRenderer.sortingOrder++;
+            }
+            DeselectObject();
+            SelectObject(templateCreator.GetObject(gridPos).gameObject);
+        }
+
+        /// <summary>
+        /// Updates the held tile
+        /// </summary>
+        private void UpdateHeldTile()
+        {
+            // Select from project tab
+            if (
+                Selection.activeGameObject != null
+                && !Selection.activeGameObject.activeInHierarchy
+                && (heldTile == null || Selection.activeGameObject.name != heldTile.name)
+                && (heldTemplate == null || heldTemplate.name != Selection.activeGameObject.name)
+                )
+            {
+                GameObject selectedObject = (GameObject)PrefabUtility.InstantiatePrefab(Selection.activeGameObject);
+                selectedObject.name = Selection.activeGameObject.name;
+
+                if (selectedObject.GetComponent<Template>() == null)
+                {
+                    if (templateCreator.activeLayer == 0 && selectedObject.GetComponent<Tile>() == null)
+                    {
+                        if (selectedObject.name != lastSelectedObjectName)
+                        {
+                            Debug.LogWarning("The selected held object to add must have a tile component when trying to add to the pathfinding layer! If you are trying to load a template, it must have a template component!");
+                            lastSelectedObjectName = selectedObject.name;
+                            heldTile = null;
+                        }
+                        Destroy(selectedObject);
+                    }
+                    else
+                    {
+                        DeselectObject();
+                        heldTile = selectedObject;
+                    }
+                }
+                else
+                {
+                    DeselectObject();
+                    Destroy(selectedObject);
+                    heldTile = null;
+                }
+            }
+
+            // Select template from project tab
+            if (
+                heldTile == null &&
+                Selection.activeGameObject != null
+                && !Selection.activeGameObject.activeInHierarchy
+                && (heldTemplate == null || Selection.activeGameObject.name != heldTemplate.name)
+                )
+            {
+                GameObject selectedObject = (GameObject)PrefabUtility.InstantiatePrefab(Selection.activeGameObject);
+                selectedObject.name = Selection.activeGameObject.name;
+
+                if (selectedObject.GetComponent<Template>() == null)
+                {
+                    Destroy(selectedObject);
+                    heldTemplate = null;
+                }
+                else
+                {
+                    heldTemplate = selectedObject;
+                }
+            }
+
+            if (heldTile == null)
+            {
+                return;
+            }
+
+            heldTile.transform.position = QuantizeMousePos(Mouse.current.position.value);
+            nullSprite.transform.position = QuantizeMousePos(Mouse.current.position.value);
+        }
+
+        #endregion
 
         #region Layers
-        
+
+        [Tooltip("The layer UI")]
+        [SerializeField] private GameObject layerUI;
+
+        [Tooltip("The layer UI container")]
+        [SerializeField] private VerticalLayoutGroup layerUIContainer;
+
+        // The list of layer UIs
+        private List<GameObject> layerUIs;
+
         /// <summary>
         /// Adds a new layer
         /// </summary>
@@ -288,117 +656,10 @@ namespace Cardificer
 
         #endregion
 
-        /// <summary>
-        /// Initialize variables
-        /// </summary>
-        public void Initialize()
-        {
-            templateCreator = GetComponent<TemplateCreator>();
-            templateCamera = templateCreator.templateCamera;
-            nullSprite = templateCreator.nullSpriteObject;
-            nullSprite.SetActive(false);
-        }
+        #region Moving
 
-        /// <summary>
-        /// Handles placing and removing tiles
-        /// </summary>
-        private void Update()
-        {
-            mouseOverUI = EventSystem.current.IsPointerOverGameObject();
-
-            Vector3 mouseViewportPos = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Mouse.current.position.value);
-            bool isOutside = mouseViewportPos.x < 0 || mouseViewportPos.x > 1 || mouseViewportPos.y < 0 || mouseViewportPos.y > 1;
-
-            Vector2Int gridPos = MousePosToGridPos(Mouse.current.position.value);
-           
-            // Placing tiles
-            if (selectButtonPressed && !isOutside && !mouseOverUI)
-            {
-                if (heldTile != null 
-                    && !templateCreator.IsGridPosOutsidePathfindingBounds(gridPos) 
-                    && (templateCreator.GetObject(gridPos) == null || templateCreator.GetObject(gridPos).name != heldTile.name))
-                {
-                    foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
-                    {
-                        spriteRenderer.color = Color.white;
-                        spriteRenderer.sortingOrder--;
-                    }
-                    templateCreator.PlaceTile(heldTile, gridPos);
-                    foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
-                    {
-                        spriteRenderer.color = previewColor;
-                        spriteRenderer.sortingOrder++;
-                    }
-                    DeselectObject();
-                    SelectObject(templateCreator.GetObject(gridPos).gameObject);
-                }
-            }
-
-            // Panning
-            if (panButtonPressed && !isOutside && !mouseOverUI)
-            {
-                templateCamera.Pan(Camera.main.ScreenToWorldPoint(lastMousePosition) - Camera.main.ScreenToWorldPoint(Mouse.current.position.value));
-            }
-
-            // Erasing
-            if (eraseButtonPressed && !isOutside && templateCreator.GetObject(gridPos) != null && !panButtonPressed && !mouseOverUI)
-            {
-                templateCreator.EraseTile(gridPos);
-            }
-
-            UpdateHeldTile();
-            lastMousePosition = Mouse.current.position.value;
-        }
-
-        /// <summary>
-        /// Handles select up
-        /// </summary>
-        public void OnSelectUp()
-        {
-            if (!templateCreator.IsValid()) { return; }
-
-            Vector3 mouseViewportPos = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Mouse.current.position.value);
-            bool isOutside = mouseViewportPos.x < 0 || mouseViewportPos.x > 1 || mouseViewportPos.y < 0 || mouseViewportPos.y > 1;
-            Vector2Int gridPos = MousePosToGridPos(Mouse.current.position.value);
-
-            if (!isOutside && !mouseOverUI)
-            {
-
-                // Placing template
-                if (heldTemplate != null && !templateCreator.IsGridPosOutsideBounds(gridPos))
-                {
-                    templateCreator.LoadTemplate(heldTemplate.GetComponent<Template>());
-                    heldTemplate = null;
-                }
-
-                if (templateCreator.IsGridPosOutsidePathfindingBounds(gridPos) || templateCreator.GetObject(gridPos) == null)
-                {
-                    DeselectObject();
-                    SelectObject(templateCreator.gameObject);
-                    heldTile = null;
-                    heldTemplate = null;
-
-                }
-                else if (heldTile == null)
-                {
-                    DeselectObject();
-                    SelectObject(templateCreator.GetObject(gridPos).gameObject);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Called when the select button is pressed or released
-        /// </summary>
-        /// <param name="input"> The input </param>
-        public void OnSelect(InputValue input)
-        {
-            selectButtonPressed = input.isPressed;
-            if (!input.isPressed)
-            {
-                OnSelectUp();
-            }
-        }
+        // The mouse position on the last frame
+        private Vector3 lastMousePosition;
 
         /// <summary>
         /// Called when the pan button is pressed or released
@@ -407,15 +668,6 @@ namespace Cardificer
         public void OnPan(InputValue input)
         {
             panButtonPressed = input.isPressed;
-        }
-
-        /// <summary>
-        /// Called when the erase button is pressed or released
-        /// </summary>
-        /// <param name="input"> The input </param>
-        public void OnErase(InputValue input)
-        {
-            eraseButtonPressed = input.isPressed;
         }
 
         /// <summary>
@@ -433,163 +685,109 @@ namespace Cardificer
             }
         }
 
+        #endregion
+
+        #region Undo and Redo
+
+        // The undo history
+        private Stack<List<UndoRedoAction>> undoHistory;
+
+        // The redo history
+        private Stack<List<UndoRedoAction>> redoHistory;
+
+        // The current action being performed
+        private List<UndoRedoAction> currentAction;
+
+        // The container to hold undo objects
+        private GameObject undoObjectsContainer;
+
+        // The container to hold any redo objects
+        private GameObject redoObjectsContainer;
+
         /// <summary>
-        /// Called when the copy button is pressed
+        /// Un-does the last action
         /// </summary>
-        public void OnCopy()
+        public void OnUndo()
         {
-            Vector3 mouseViewportPos = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Mouse.current.position.value);
-            bool isOutside = mouseViewportPos.x < 0 || mouseViewportPos.x > 1 || mouseViewportPos.y < 0 || mouseViewportPos.y > 1;
-            Vector2Int gridPos = MousePosToGridPos(Mouse.current.position.value);
+            if (undoHistory.Count <= 0) { return; }
 
-            if (!isOutside)
+            List<UndoRedoAction> lastAction = undoHistory.Peek();
+            foreach (UndoRedoAction action in lastAction)
             {
-                if (Selection.activeGameObject != null && Selection.activeGameObject != heldTile && Selection.activeGameObject.activeInHierarchy)
+                action.undoAction?.Invoke();
+                foreach (GameObject relevantObject in action.relevantObjects)
                 {
-                    DeselectObject();
-                }
-
-                GameObject tile = templateCreator.GetObject(gridPos);
-
-                Debug.Log("Copy?");
-                heldTile = tile == null ? null : (GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile));
-                PrefabUtility.SetPropertyModifications(heldTile, PrefabUtility.GetPropertyModifications(tile));
-
-                foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
-                {
-                    spriteRenderer.color = previewColor;
-                    spriteRenderer.sortingOrder++;
+                    relevantObject.transform.SetParent(redoObjectsContainer.transform);
                 }
             }
+            redoHistory.Push(lastAction);
+            undoHistory.Pop();
+
+            foreach (UndoRedoAction action in currentAction)
+            {
+                foreach (GameObject relevantObject in action.relevantObjects)
+                {
+                    Destroy(relevantObject);
+                }
+            }
+            currentAction.Clear();
         }
 
         /// <summary>
-        /// Selects the given object
+        /// Re-does the last undone action
         /// </summary>
-        /// <param name="selectedObject"> The selected object </param>
-        private void SelectObject(GameObject selectedObject)
+        public void OnRedo()
         {
-            Selection.activeGameObject = selectedObject.gameObject;
-            this.selectedObject = selectedObject;
-            foreach (SpriteRenderer spriteRenderer in Selection.activeGameObject.GetComponents<SpriteRenderer>())
+            if (redoHistory.Count <= 0) { return; }
+
+            List<UndoRedoAction> lastAction = redoHistory.Peek();
+            foreach (UndoRedoAction action in lastAction)
             {
-                spriteRenderer.color = selectedColor;
+                action.redoAction?.Invoke();
+                foreach (GameObject relevantObject in action.relevantObjects)
+                {
+                    relevantObject.transform.parent = undoObjectsContainer.transform;
+                }
             }
+            undoHistory.Push(lastAction);
+            redoHistory.Pop();
+
+            foreach (UndoRedoAction action in currentAction)
+            {
+                foreach (GameObject relevantObject in action.relevantObjects)
+                {
+                    Destroy(relevantObject);
+                }
+            }
+            currentAction.Clear();
         }
 
         /// <summary>
-        /// Deselects the selected object 
+        /// Clears the redo history (getting rid of any stray objects)
         /// </summary>
-        public void DeselectObject()
+        public void ClearRedoHistory()
         {
-            if (selectedObject == null) { return; }
-
-            foreach (SpriteRenderer spriteRenderer in selectedObject.GetComponents<SpriteRenderer>())
-            {
-                spriteRenderer.color = Color.white;
-            }
+            Destroy(redoObjectsContainer);
+            redoObjectsContainer = new GameObject();
+            redoObjectsContainer.name = "Redo Objects container";
+            redoObjectsContainer.SetActive(false);
+            redoHistory.Clear();
         }
 
         /// <summary>
-        /// Updates the held tile
+        /// Clears the undo history (getting rid of any stray objects)
         /// </summary>
-        private void UpdateHeldTile()
+        public void ClearUndoHistory()
         {
-            // Select from project tab
-            if (
-                Selection.activeGameObject != null
-                && !Selection.activeGameObject.activeInHierarchy
-                && (heldTile == null || Selection.activeGameObject.name != heldTile.name)
-                && (heldTemplate == null || heldTemplate.name != Selection.activeGameObject.name)
-                )
-            {
-                GameObject selectedObject = (GameObject) PrefabUtility.InstantiatePrefab(Selection.activeGameObject);
-                selectedObject.name = Selection.activeGameObject.name;
-
-                if (selectedObject.GetComponent<Template>() == null)
-                {
-                    if (templateCreator.activeLayer == 0 && selectedObject.GetComponent<Tile>() == null)
-                    {
-                        if (selectedObject.name != lastSelectedObjectName)
-                        {
-                            Debug.LogWarning("The selected held object to add must have a tile component when trying to add to the pathfinding layer! If you are trying to load a template, it must have a template component!");
-                            lastSelectedObjectName = selectedObject.name;
-                            heldTile = null;
-                        }
-                        Destroy(selectedObject);
-                    }
-                    else
-                    {
-                        DeselectObject();
-                        heldTile = selectedObject;
-                    }
-                }
-                else
-                {
-                    DeselectObject();
-                    Destroy(selectedObject);
-                    heldTile = null;
-                }
-            }
-
-            // Select template from project tab
-            if (
-                heldTile == null &&
-                Selection.activeGameObject != null
-                && !Selection.activeGameObject.activeInHierarchy
-                && (heldTemplate == null || Selection.activeGameObject.name != heldTemplate.name)
-                )
-            {
-                GameObject selectedObject = (GameObject) PrefabUtility.InstantiatePrefab(Selection.activeGameObject);
-                selectedObject.name = Selection.activeGameObject.name;
-
-                if (selectedObject.GetComponent<Template>() == null)
-                {
-                    Destroy(selectedObject);
-                    heldTemplate = null;
-                }
-                else
-                {
-                    heldTemplate = selectedObject;
-                }
-            }
-
-            if (heldTile == null)
-            {
-                return;
-            }
-
-            heldTile.transform.position = QuantizeMousePos(Mouse.current.position.value);
-            nullSprite.transform.position = QuantizeMousePos(Mouse.current.position.value);
+            Destroy(undoObjectsContainer);
+            undoObjectsContainer = new GameObject();
+            undoObjectsContainer.name = "Undo Objects Container";
+            undoObjectsContainer.SetActive(false);
+            undoHistory.Clear();
         }
 
-        /// <summary>
-        /// Converts the mouse position to world space, then rounds it to an integer
-        /// </summary>
-        /// <param name="mousePos"> The mouse position </param>
-        /// <returns> The quantized world position </returns>
-        private Vector3 QuantizeMousePos(Vector3 mousePos)
-        {
-            Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
-            Vector3 quantizedWorldPos = new Vector3();
-            quantizedWorldPos.x = Mathf.Round(worldPos.x);
-            quantizedWorldPos.y = Mathf.Round(worldPos.y);
-            return quantizedWorldPos;
-        }
+        #endregion
 
-        /// <summary>
-        /// Converts a mouse position to a grid position 
-        /// </summary>
-        /// <param name="mousePos"> The mouse position </param>
-        /// <returns> The grid position </returns>
-        private Vector2Int MousePosToGridPos(Vector3 mousePos)
-        {
-            Vector3 quantizedMousePos = QuantizeMousePos(mousePos);
-            Vector2Int gridPos = new Vector2Int();
-            gridPos.x = (int)quantizedMousePos.x + templateCreator.roomSize.x / 2;
-            gridPos.y = (int)quantizedMousePos.y + templateCreator.roomSize.y / 2;
-            return gridPos;
-        }
 #endif
     }
 }

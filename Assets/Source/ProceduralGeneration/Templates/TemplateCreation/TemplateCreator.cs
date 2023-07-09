@@ -399,7 +399,6 @@ namespace Cardificer
         {
             if (!IsGridPosOutsidePathfindingBounds(gridPos))
             {
-                Debug.Log("place tile?");
                 EraseTile(gridPos);
                 GameObject layer = createdTemplate.GetLayer(activeLayer);
                 GameObject createdTile = ((GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tilePrefab), layer.transform));
