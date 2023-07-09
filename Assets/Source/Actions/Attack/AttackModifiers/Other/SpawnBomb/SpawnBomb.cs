@@ -43,17 +43,17 @@ namespace Cardificer
                 _modifiedProjectile = value;
                 if (spawnMode == SpawnMode.OnDestroyed)
                 {
-                    _modifiedProjectile.onDestroyed += CreateBomb;
+                    _modifiedProjectile.onDestroyed += () => CreateBomb(); 
                 }
                 else if (spawnMode == SpawnMode.OnDestroyed)
                 {
-                    _modifiedProjectile.onOverlap += CreateBomb;
+                    _modifiedProjectile.onOverlap += (Collider2D collider) => CreateBomb(collider);
                     _modifiedProjectile.onHit += (Collision2D collision) => CreateBomb(collision.collider);
                 }
                 else
                 {
-                    _modifiedProjectile.onDestroyed += CreateBomb;
-                    _modifiedProjectile.onOverlap += CreateBomb;
+                    _modifiedProjectile.onDestroyed += () => CreateBomb();
+                    _modifiedProjectile.onOverlap += (Collider2D collider) => CreateBomb(collider);
                     _modifiedProjectile.onHit += (Collision2D collision) => CreateBomb(collision.collider);
                 }
             }
@@ -63,16 +63,15 @@ namespace Cardificer
         /// Spawns the bomb on a collision.
         /// </summary>
         /// <param name="collision"> The thing collided with. </param>
-        /// <param name="bomb"> The bomb that was created. </param>
-        protected virtual void CreateBomb(Collider2D collision, out Bomb bomb)
+        /// <returns> The bomb that was created. </returns>
+        protected virtual Bomb CreateBomb(Collider2D collision = null)
         {
             if (_modifiedProjectile.forceDestroy) 
             {
-                bomb = null;
-                return;
+                return null;
             }
 
-            bomb = new GameObject().AddComponent<Bomb>();
+            Bomb bomb = new GameObject().AddComponent<Bomb>();
             bomb.name = "Bomb";
             bomb.knockback = knockback;
             bomb.explosionRadius = explosionRadius;
@@ -96,14 +95,7 @@ namespace Cardificer
             }
 
             bomb.transform.position = _modifiedProjectile.transform.position;
-        }
-        private void CreateBomb(Collider2D collision)
-        {
-            CreateBomb(collision, out Bomb bomb);
-        }
-        private void CreateBomb()
-        {
-            CreateBomb(null, out Bomb bomb);
+            return bomb;
         }
     }
 }

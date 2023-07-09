@@ -25,11 +25,12 @@ namespace Cardificer
         /// Spawns the bomb on a collision.
         /// </summary>
         /// <param name="collision"> The thing collided with. </param>
-        /// <param name="bomb"> The bomb that was created. </param>
-        protected override void CreateBomb(Collider2D collision, out Bomb bomb)
+        /// <returns> The bomb that was created. </returns>
+        protected override Bomb CreateBomb(Collider2D collision)
         {
-            base.CreateBomb(collision, out bomb);
+            Bomb bomb = base.CreateBomb(collision);
             bomb.damageData = damageData;
+            return bomb;
         }
     }
 }
