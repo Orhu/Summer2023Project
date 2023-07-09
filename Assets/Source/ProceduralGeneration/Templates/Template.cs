@@ -180,7 +180,14 @@ namespace Cardificer
         public Tile this[int i, int j]
         {
             // The first index in layer tiles is always the pathfinding layer
-            get => layerTiles[0][i][j].GetComponent<Tile>();
+            get
+            {
+                if (layerTiles[0][i][j] == null)
+                {
+                    return null;
+                }
+                return layerTiles[0][i][j].GetComponent<Tile>();
+            }
             set => layerTiles[0][i][j] = value.gameObject;
         }
 

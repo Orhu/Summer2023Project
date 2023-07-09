@@ -154,9 +154,13 @@ namespace Cardificer
 
             string path = "Assets/Content/Templates/" + templateName + ".prefab";
             GetComponent<TemplateCreatorInput>().DeselectObject();
-            foreach (GameObject layer in createdTemplate.GetLayers())
+
+            List<GameObject> layers = createdTemplate.GetLayers();
+            TemplateCreatorInput input = GetComponent<TemplateCreatorInput>();
+            for (int i = 0; i < layers.Count; i++)
             {
-                layer.SetActive(true);
+                layers[i].SetActive(true);
+                input.UnhideLayerUI(i);
             }
 
             PrefabUtility.SaveAsPrefabAsset(createdTemplate.gameObject, path);
@@ -217,14 +221,21 @@ namespace Cardificer
             createdTemplate = ((GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(template.gameObject))).GetComponent<Template>();
             PrefabUtility.UnpackPrefabInstance(createdTemplate.gameObject, PrefabUnpackMode.OutermostRoot, InteractionMode.AutomatedAction);
 
+            List<GameObject> layers = createdTemplate.GetLayers();
+
+            TemplateCreatorInput input = GetComponent<TemplateCreatorInput>();
+            input.ResetLayerUIs();
             nullSprites = new List<GameObject[,]>();
-            for (int i = 0; i < createdTemplate.GetLayers().Count; i++)
+            for (int i = 0; i < layers.Count; i++)
             {
+                input.AddLayerUI(layers[i].name);
                 nullSprites.Add(new GameObject[roomSize.x, roomSize.y]);
                 for (int j = 0; j < roomSize.x; j++)
                 {
                     for (int k = 0; k < roomSize.y; k++)
                     {
+                        if (createdTemplate[i, j, k] == null) { continue; }
+
                         if (createdTemplate[i, j, k].GetComponent<SpriteRenderer>() == null || createdTemplate[i, j, k].GetComponent<SpriteRenderer>().sprite == null)
                         {
                             GameObject createdNullSprite = Instantiate(nullSpriteObject);
@@ -388,6 +399,7 @@ namespace Cardificer
         {
             if (!IsGridPosOutsidePathfindingBounds(gridPos))
             {
+                Debug.Log("place tile?");
                 EraseTile(gridPos);
                 GameObject layer = createdTemplate.GetLayer(activeLayer);
                 GameObject createdTile = ((GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tilePrefab), layer.transform));
@@ -438,8 +450,9 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Gets the tile at a given position
+        /// Gets the pathfinding tile at a given position
         /// </summary>
+        /// <param name="gridPos"> The grid position </param>
         /// <returns> The tile </returns>
         public Tile GetTile(Vector2Int gridPos)
         {
@@ -448,6 +461,20 @@ namespace Cardificer
                 return null;
             }
             return createdTemplate[gridPos.x, gridPos.y];
+        }
+
+        /// <summary>
+        /// Gets the game object at the given grid position 
+        /// </summary>
+        /// <param name="gridPos"> The grid position </param>
+        /// <returns> The object </returns>
+        public GameObject GetObject(Vector2Int gridPos)
+        {
+            if (IsGridPosOutsideBounds(gridPos))
+            {
+                return null;
+            }
+            return createdTemplate[activeLayer, gridPos.x, gridPos.y];
         }
 
         #endregion
@@ -495,6 +522,7 @@ namespace Cardificer
             GameObject newLayer = new GameObject();
             newLayer.name = layerName;
             createdTemplate.AddLayer(newLayer);
+            nullSprites.Add(new GameObject[roomSize.x, roomSize.y]);
         }
 
         /// <summary>
@@ -504,6 +532,14 @@ namespace Cardificer
         public void RemoveLayer(int layer)
         {
             createdTemplate.RemoveLayer(layer);
+            for (int i = 0; i < roomSize.x; i++)
+            {
+                for (int j = 0; j < roomSize.y; j++)
+                {
+                    Destroy(nullSprites[layer][i, j]);
+                }
+            }
+            nullSprites.RemoveAt(layer);
         }
 
 

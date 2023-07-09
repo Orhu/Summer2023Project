@@ -127,14 +127,18 @@ namespace Cardificer
                         {
                             for (int k = 0; k < value.GetComponent<Template>().roomSize.y; k++)
                             {
-                                if (value.GetComponent<Template>()[i, j, k].GetComponent<SpriteRenderer>() == null || value.GetComponent<Template>()[i, j, k].GetComponent<SpriteRenderer>().sprite == null)
+                                if (value.GetComponent<Template>()[i, j, k] == null) { continue; }
+                                
+                                if (value.GetComponent<Template>()[i, j, k].GetComponent<SpriteRenderer>() != null && value.GetComponent<Template>()[i, j, k].GetComponent<SpriteRenderer>().sprite != null)
                                 {
-                                    GameObject createdNullSprite = Instantiate(nullSprite);
-                                    createdNullSprite.SetActive(true);
-                                    createdNullSprite.transform.parent = nullSpritesContainer.transform;
-                                    createdNullSprite.transform.localPosition = new Vector3(j, k, 0);
-                                    createdNullSprite.GetComponent<SpriteRenderer>().color = previewColor;
+                                    continue;
                                 }
+
+                                GameObject createdNullSprite = Instantiate(nullSprite);
+                                createdNullSprite.SetActive(true);
+                                createdNullSprite.transform.parent = nullSpritesContainer.transform;
+                                createdNullSprite.transform.localPosition = new Vector3(j, k, 0);
+                                createdNullSprite.GetComponent<SpriteRenderer>().color = previewColor;
                             }
                         }
                     }
@@ -147,6 +151,9 @@ namespace Cardificer
         // The container to hold (temporary) null sprites
         GameObject nullSpritesContainer;
 
+
+        #region Layers
+        
         /// <summary>
         /// Adds a new layer
         /// </summary>
@@ -162,6 +169,12 @@ namespace Cardificer
         /// <param name="layer"> The layer to remove </param>
         public void RemoveLayer(int layer)
         {
+            if (layer == templateCreator.activeLayer)
+            {
+                layerUIs[0].GetComponent<TemplateLayerUI>().Activate();
+                ActivateLayer(0);
+            }
+
             GameObject removedLayerUI = layerUIs[layer];
             layerUIs.RemoveAt(layer);
             Destroy(removedLayerUI);
@@ -179,11 +192,6 @@ namespace Cardificer
 
             templateCreator.RemoveLayer(layer);
 
-            if (layer == templateCreator.activeLayer)
-            {
-                layerUIs[0].GetComponent<TemplateLayerUI>().Activate();
-                ActivateLayer(0);
-            }
             StartCoroutine(UpdateLayout());
         }
 
@@ -193,8 +201,22 @@ namespace Cardificer
         /// <param name="layer"> The layer to activate </param>
         public void ActivateLayer(int layer)
         {
-            layerUIs[templateCreator.activeLayer].GetComponent<TemplateLayerUI>().Deactivate();
+            if (templateCreator.activeLayer < layerUIs.Count)
+            {
+                layerUIs[templateCreator.activeLayer].GetComponent<TemplateLayerUI>().Deactivate(); 
+            }
             templateCreator.activeLayer = layer;
+            DeselectObject();
+            heldTile = null;
+        }
+
+        /// <summary>
+        /// Sets the layer UI to be unhidden
+        /// </summary>
+        /// <param name="layer"> The layer </param>
+        public void UnhideLayerUI(int layer)
+        {
+            layerUIs[layer].GetComponent<TemplateLayerUI>().Unhide();
         }
 
         /// <summary>
@@ -264,6 +286,8 @@ namespace Cardificer
             layerUIContainer.transform.parent.gameObject.GetComponent<VerticalLayoutGroup>().SetLayoutVertical();
         }
 
+        #endregion
+
         /// <summary>
         /// Initialize variables
         /// </summary>
@@ -292,7 +316,7 @@ namespace Cardificer
             {
                 if (heldTile != null 
                     && !templateCreator.IsGridPosOutsidePathfindingBounds(gridPos) 
-                    && (templateCreator.GetTile(gridPos) == null || templateCreator.GetTile(gridPos).name != heldTile.name))
+                    && (templateCreator.GetObject(gridPos) == null || templateCreator.GetObject(gridPos).name != heldTile.name))
                 {
                     foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
                     {
@@ -306,7 +330,7 @@ namespace Cardificer
                         spriteRenderer.sortingOrder++;
                     }
                     DeselectObject();
-                    SelectObject(templateCreator.GetTile(gridPos).gameObject);
+                    SelectObject(templateCreator.GetObject(gridPos).gameObject);
                 }
             }
 
@@ -317,7 +341,7 @@ namespace Cardificer
             }
 
             // Erasing
-            if (eraseButtonPressed && !isOutside && templateCreator.GetTile(gridPos) != null && !panButtonPressed && !mouseOverUI)
+            if (eraseButtonPressed && !isOutside && templateCreator.GetObject(gridPos) != null && !panButtonPressed && !mouseOverUI)
             {
                 templateCreator.EraseTile(gridPos);
             }
@@ -347,8 +371,7 @@ namespace Cardificer
                     heldTemplate = null;
                 }
 
-
-                if (templateCreator.IsGridPosOutsidePathfindingBounds(gridPos) || templateCreator.GetTile(gridPos) == null)
+                if (templateCreator.IsGridPosOutsidePathfindingBounds(gridPos) || templateCreator.GetObject(gridPos) == null)
                 {
                     DeselectObject();
                     SelectObject(templateCreator.gameObject);
@@ -359,7 +382,7 @@ namespace Cardificer
                 else if (heldTile == null)
                 {
                     DeselectObject();
-                    SelectObject(templateCreator.GetTile(gridPos).gameObject);
+                    SelectObject(templateCreator.GetObject(gridPos).gameObject);
                 }
             }
         }
@@ -426,9 +449,10 @@ namespace Cardificer
                     DeselectObject();
                 }
 
-                Tile tile = templateCreator.GetTile(gridPos);
+                GameObject tile = templateCreator.GetObject(gridPos);
 
-                heldTile = tile == null ? null : (GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile.gameObject));
+                Debug.Log("Copy?");
+                heldTile = tile == null ? null : (GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile));
                 PrefabUtility.SetPropertyModifications(heldTile, PrefabUtility.GetPropertyModifications(tile));
 
                 foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
@@ -476,28 +500,35 @@ namespace Cardificer
                 Selection.activeGameObject != null
                 && !Selection.activeGameObject.activeInHierarchy
                 && (heldTile == null || Selection.activeGameObject.name != heldTile.name)
+                && (heldTemplate == null || heldTemplate.name != Selection.activeGameObject.name)
                 )
             {
                 GameObject selectedObject = (GameObject) PrefabUtility.InstantiatePrefab(Selection.activeGameObject);
                 selectedObject.name = Selection.activeGameObject.name;
 
-                if (selectedObject.GetComponent<Tile>() == null)
+                if (selectedObject.GetComponent<Template>() == null)
                 {
-                    if (selectedObject.name != lastSelectedObjectName)
+                    if (templateCreator.activeLayer == 0 && selectedObject.GetComponent<Tile>() == null)
                     {
-                        if (selectedObject.GetComponent<Template>() == null)
+                        if (selectedObject.name != lastSelectedObjectName)
                         {
-                            Debug.LogWarning("The selected held object to add must have a tile component! If you are trying to load a template, it must have a template component!");
+                            Debug.LogWarning("The selected held object to add must have a tile component when trying to add to the pathfinding layer! If you are trying to load a template, it must have a template component!");
+                            lastSelectedObjectName = selectedObject.name;
+                            heldTile = null;
                         }
-                        lastSelectedObjectName = selectedObject.name;
-                        heldTile = null;
+                        Destroy(selectedObject);
                     }
-                    Destroy(selectedObject);
+                    else
+                    {
+                        DeselectObject();
+                        heldTile = selectedObject;
+                    }
                 }
                 else
                 {
                     DeselectObject();
-                    heldTile = selectedObject;
+                    Destroy(selectedObject);
+                    heldTile = null;
                 }
             }
 

@@ -79,6 +79,16 @@ public class TemplateLayerUI : MonoBehaviour
     }
 
     /// <summary>
+    /// Sets the hidden variable to false
+    /// </summary>
+    public void Unhide()
+    {
+        hidden = false;
+        hiddenImage.gameObject.SetActive(hidden);
+        visibleImage.gameObject.SetActive(!hidden);
+    }
+
+    /// <summary>
     /// Called when the activate button was pressed
     /// </summary>
     public void OnActivated()
