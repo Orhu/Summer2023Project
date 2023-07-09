@@ -402,8 +402,9 @@ namespace Cardificer
         /// Called when the projectile hits something it can pass though.
         /// </summary>
         /// <param name="collision"></param>
-        private void OnTriggerEnter2D(Collider2D collision)
+        public void OnTriggerEnter2D(Collider2D collision)
         {
+            Debug.Log("hit");
             if (ignoredObjects.Contains(collision.gameObject))
             {
                 return;
