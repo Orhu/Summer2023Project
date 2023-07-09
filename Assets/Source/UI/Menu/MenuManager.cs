@@ -70,43 +70,49 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Handles the changing and closing of menus when menus are open
+        /// Toggles whether the pause menu is open
         /// </summary>
-        private void Update()
+        public static void TogglePause()
         {
+            // Toggling pause always closes all menus
             if (instance.menuOpen)
             {
-                // Always close menus with escape
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    CloseMenu();
-                }
-                // Closes card menu if its open, if not, open card menu
-                else if (Input.GetKeyDown(KeyCode.C))
-                {
-                    if (instance.currentMenu == MenuTypes.Card)
-                    {
-                        CloseMenu();
-                    }
-                    else
-                    {
-                        CloseMenu();
-                        OpenCardMenu();
-                    }
-                }
-                // Closes Map menu if its open, if not, open map menu
-                else if (Input.GetKeyDown(KeyCode.Tab))
-                {
-                    if (instance.currentMenu == MenuTypes.Map)
-                    {
-                        CloseMenu();
-                    }
-                    else
-                    {
-                        CloseMenu();
-                        OpenMapMenu();
-                    }
-                }
+                instance.CloseMenu();
+            }
+            else
+            {
+                OpenPauseMenu();
+            }
+        }
+
+        /// <summary>
+        /// Toggles whether the card menu is open
+        /// </summary>
+        public static void ToggleCardMenu()
+        {
+            if (instance.menuOpen && instance.currentMenu == MenuTypes.Card)
+            {
+                instance.CloseMenu();
+            }
+            else
+            {
+                OpenCardMenu();
+            }
+        }
+
+        /// <summary>
+        /// Toggles whether the map menu is open
+        /// </summary>
+        public static void ToggleMap()
+        {
+
+            if (instance.menuOpen && instance.currentMenu == MenuTypes.Map)
+            {
+                instance.CloseMenu();
+            }
+            else
+            {
+                OpenMapMenu();
             }
         }
 
