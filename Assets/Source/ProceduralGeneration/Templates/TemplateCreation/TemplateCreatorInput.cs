@@ -437,6 +437,16 @@ namespace Cardificer
         }
 
         /// <summary>
+        /// Clears the template
+        /// </summary>
+        public void Clear()
+        {
+            templateCreator.Reload();
+            ClearUndoHistory();
+            ClearRedoHistory();
+        }
+
+        /// <summary>
         /// Updates the held tile
         /// </summary>
         private void UpdateHeldTile()
@@ -529,6 +539,8 @@ namespace Cardificer
         {
             templateCreator.AddLayer("");
             AddLayerUI();
+            ClearUndoHistory();
+            ClearRedoHistory();
         }
 
         /// <summary>
@@ -561,6 +573,8 @@ namespace Cardificer
             templateCreator.RemoveLayer(layer);
 
             StartCoroutine(UpdateLayout());
+            ClearUndoHistory();
+            ClearRedoHistory();
         }
 
         /// <summary>
@@ -576,6 +590,8 @@ namespace Cardificer
             templateCreator.activeLayer = layer;
             DeselectObject();
             heldTile = null;
+            ClearUndoHistory();
+            ClearRedoHistory();
         }
 
         /// <summary>
