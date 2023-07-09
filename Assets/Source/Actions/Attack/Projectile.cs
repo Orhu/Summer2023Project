@@ -75,6 +75,9 @@ namespace Cardificer
         // Whether or not this projectile passes through shields.
         [NonSerialized] public bool immuneToShield = false;
 
+        // Whether or the projectile should directly deal damage.
+        [NonSerialized] public bool applyDamageOnHit = true;
+
         // The object for this to ignore.
         List<GameObject> _ignoredObjects;
         public List<GameObject> ignoredObjects
@@ -157,6 +160,7 @@ namespace Cardificer
             acceleration = attack.acceleration;
             shape = Instantiate(attack.shape);
             immuneToShield = attack.immuneToShield;
+            applyDamageOnHit = attack.applyDamageOnHit;
 
             // Set up attack
             attackData = new DamageData(attack.attack, causer);
@@ -407,7 +411,7 @@ namespace Cardificer
 
             onOverlap?.Invoke(collision);
             Health hitHealth = collision.gameObject.GetComponent<Health>();
-            if (hitHealth != null && attack.applyDamageOnHit)
+            if (hitHealth != null && applyDamageOnHit)
             {
                 hitHealth.ReceiveAttack(attackData);
 
