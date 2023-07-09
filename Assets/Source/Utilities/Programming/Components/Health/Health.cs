@@ -170,9 +170,27 @@ namespace Cardificer
             currentHealth = Mathf.Min(Math.Max(healAmount, 0) + currentHealth, maxHealth);
         }
 
+        /// <summary>
+        /// Whether or not this has a given status effect.
+        /// </summary>
+        /// <param name="statusEffect"> The effect to check for. </param>
+        /// <returns> True if this has the given effect. </returns>
         public bool HasStatusEffect(StatusEffect statusEffect)
         {
             return statusEffects.FirstOrDefault((StatusEffect eachEffect) => { return eachEffect.GetType() == statusEffect.GetType(); }) != null;
+        }
+
+
+        /// <summary>
+        /// Removes all status effects
+        /// </summary>
+        public void Cleanse()
+        {
+            while(statusEffects.Count > 0)
+            {
+                Destroy(statusEffects[statusEffects.Count - 1]);
+                statusEffects.RemoveAt(statusEffects.Count - 1);
+            }
         }
 
         /// <summary>
