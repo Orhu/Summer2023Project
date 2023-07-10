@@ -15,7 +15,7 @@ namespace Cardificer
         private GameObjectLootTable things;
 
         // The thing that was chosen
-        private GameObject chosenThing;
+        [HideInInspector] public GameObject chosenThing;
 
         /// <summary>
         /// Chooses the thing to spawn
@@ -30,6 +30,7 @@ namespace Cardificer
             if (things == null || things.weightedLoot.things == null || things.weightedLoot.things.Count <= 0)
             {
                 Debug.LogError("Thing spawner in " + GetComponent<Tile>().room.template + " has no things specified!");
+                chosenThing = null;
                 return;
             }
 
@@ -44,6 +45,8 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
+            if (chosenThing == null) { return; }
+
             string name = chosenThing.name;
             chosenThing = Instantiate(chosenThing.gameObject);
             Tile currentTile = GetComponent<Tile>();

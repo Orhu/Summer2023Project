@@ -36,7 +36,7 @@ namespace Cardificer
                         GameObject tile = room.template[i, j, k];
 
                         // Check if the tile at this location is an enemy
-                        if (tile != null && tile.CompareTag("Enemy"))
+                        if (tile != null && (tile.CompareTag("Enemy") || (tile.GetComponent<ThingSpawner>() != null && tile.GetComponent<ThingSpawner>().chosenThing != null && tile.GetComponent<ThingSpawner>().chosenThing.CompareTag("Enemy"))))
                         {
                             enemiesSpawned = true;
                             tile.SetActive(spawnEnemies);
