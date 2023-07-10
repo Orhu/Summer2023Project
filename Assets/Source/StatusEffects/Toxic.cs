@@ -54,7 +54,7 @@ namespace Cardificer
             timeToDamage -= Time.deltaTime;
             if (timeToDamage <= 0)
             {
-                gameObject.GetComponent<Health>().ReceiveAttack(new DamageData(damage, DamageData.DamageType.Special, this, false), true);
+                gameObject.GetComponent<Health>().ReceiveAttack(new DamageData(damage, DamageData.DamageType.Special, null, false), true);
                 timeToDamage += tickInterval;
             }
         }

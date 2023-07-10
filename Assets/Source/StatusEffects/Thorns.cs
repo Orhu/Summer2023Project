@@ -3,11 +3,14 @@ using UnityEngine;
 namespace Cardificer
 {
     /// <summary>
-    /// A status effect that causes things to move in the opposite direction as intended.
+    /// A status effect that causes this to deal damage back to the attacker.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewPanicked", menuName = "Status Effects/Panicked")]
-    public class Panicked : StatusEffect
+    [CreateAssetMenu(fileName = "NewThorns", menuName = "Status Effects/Thorns")]
+    public class Thorns : StatusEffect
     {
+        [Tooltip("The damage that will be dealt back to attackers")]
+        public DamageData damage;
+
         /// <summary>
         /// Creates a new status effect that is a copy of the caller.
         /// </summary>
@@ -15,13 +18,12 @@ namespace Cardificer
         /// <returns> The status effect that was created. </returns>
         public override StatusEffect CreateCopy(GameObject gameObject)
         {
-            Panicked instance = (Panicked)base.CreateCopy(gameObject);
+            Thorns instance = (Thorns)base.CreateCopy(gameObject);
 
-            gameObject.GetComponent<Movement>().requestSpeedModifications += instance.ReverseMovement;
+            gameObject.GetComponent<Health>().onRequestIncomingAttackModification += instance.AttackBack;
 
             return instance;
         }
-
 
         /// <summary>
         /// Stacks this effect onto another status effect.
@@ -30,7 +32,7 @@ namespace Cardificer
         /// <returns> Whether or not this status effect was consumed by the stacking. </returns>
         public override bool Stack(StatusEffect other)
         {
-            if (!base.Stack(other))
+            if (other.GetType() != GetType())
             {
                 return false;
             }
@@ -40,12 +42,12 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Responds to a movement components speed modification request, and sets the speed to 0.
+        /// Responds to a health's incoming damage modification request, and prevents the attack from passing.
         /// </summary>
-        /// <param name="speed"> The speed variable to be modified. </param>
-        private void ReverseMovement(ref float speed)
+        /// <param name="attack"> The attack to prevent. </param>
+        private void AttackBack(ref DamageData attack)
         {
-            speed *= -1;
+            attack.causer?.GetComponent<Health>()?.ReceiveAttack(damage);
         }
 
         /// <summary>
@@ -53,11 +55,11 @@ namespace Cardificer
         /// </summary>
         private new void OnDestroy()
         {
-            if (gameObject != null)
-            {
-                gameObject.GetComponent<Movement>().requestSpeedModifications -= ReverseMovement;
-            }
             base.OnDestroy();
+
+            if (gameObject == null) { return; }
+
+            gameObject.GetComponent<Health>().onRequestIncomingAttackModification -= AttackBack;
         }
     }
 }
