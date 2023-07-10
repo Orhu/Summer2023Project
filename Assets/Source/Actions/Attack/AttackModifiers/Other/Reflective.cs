@@ -5,8 +5,8 @@ namespace Cardificer
     /// <summary>
     /// An action modifier that changes the attack of an action modifier.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewShield", menuName = "Cards/AttackModifers/Shield")]
-    public class Shield : AttackModifier
+    [CreateAssetMenu(fileName = "NewReflective", menuName = "Cards/AttackModifers/Reflective")]
+    public class Reflective : AttackModifier
     {
         // The owners of projectiles to ignore.
         private Projectile projectile;
@@ -24,7 +24,7 @@ namespace Cardificer
                 shieldObject.layer = LayerMask.NameToLayer("Shield");
                 value.shape.CreateCollider(shieldObject).isTrigger = true;
 
-                value.onOverlap += DestroyProjectiles;
+                value.onOverlap += ReflectProjectiles;
                 projectile = value;
             }
         }
@@ -33,13 +33,14 @@ namespace Cardificer
         /// Destroys any projectiles that collide with the shield.
         /// </summary>
         /// <param name="collider"> The collided object. </param>
-        private void DestroyProjectiles(Collider2D collider)
+        private void ReflectProjectiles(Collider2D collider)
         {
             if (collider.GetComponent<Projectile>() is Projectile hitProjectile
                 && !hitProjectile.immuneToShield
                 && !projectile.ignoredObjects.Contains(hitProjectile.causer))
             {
-                Destroy(collider.gameObject);
+                hitProjectile.transform.right *= -1;
+                hitProjectile.ignoredObjects = projectile.ignoredObjects;
 
                 if (--projectile.remainingHits <= 0)
                 {

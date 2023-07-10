@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 2939038239829249596}
   - component: {fileID: 542899057510882649}
   - component: {fileID: 7400328270181020654}
+  - component: {fileID: -3882222479646728806}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
@@ -334,3 +335,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultMirrorParam: lookingLeft
   _animactionClipsToMirrorParameters: []
+--- !u!114 &-3882222479646728806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7281680880204442677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b1feef127a8c424ab5758a744b45cc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allowedMovementTypes: -1
+  walkMovementPenalty: 0
+  flyMovementPenalty: 0
+  burrowMovementPenalty: 0
+  gridLocation: {x: 0, y: 0}
+  shouldDisable: 0
+  room: {fileID: 0}

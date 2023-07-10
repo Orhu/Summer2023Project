@@ -6,7 +6,7 @@ namespace Cardificer
     /// <summary>
     /// Overrides projectile speed.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewOverrideSpeed", menuName = "Cards/AttackModifers/OverrideSpeed")]
+    [CreateAssetMenu(fileName = "NewOverrideSpeed", menuName = "Cards/AttackModifers/Override[Stat]/OverrideSpeed")]
     public class OverrideSpeed : AttackModifier
     {
         [Tooltip("The new initial speed to add in tiles/s.")]
