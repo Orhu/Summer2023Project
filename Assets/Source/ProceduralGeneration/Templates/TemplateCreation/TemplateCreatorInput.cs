@@ -35,6 +35,7 @@ namespace Cardificer
             templateCamera = templateCreator.templateCamera;
             nullSprite = templateCreator.nullSpriteObject;
             nullSprite.SetActive(false);
+            nullSprite.GetComponent<SpriteRenderer>().color = previewColor;
 
             undoHistory = new Stack<List<UndoRedoAction>>();
             redoHistory = new Stack<List<UndoRedoAction>>();
