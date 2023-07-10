@@ -32,6 +32,11 @@ namespace Cardificer
         // Whether or not the camera is currently snapping between rooms
         private bool snapping = true;
 
+        // @ALEX TODO: Delete this when you get your map
+        private bool mapping = false;
+
+        // Whether or not the camera is currently in mapping mode
+
         // The minimum position of the camera
         private Vector2 minPosition;
 
@@ -93,27 +98,29 @@ namespace Cardificer
 
             player = Player.Get();
 
+            //@ALEX TODO: DELETE (delete the mapping variable also)
+            #region Stuff to Delete
+            player.GetComponent<PlayerController>().mapOpened +=
+                () =>
+                {
+                    mapping = true;
+                    GetComponent<Camera>().orthographicSize *= 10;
+                    FloorGenerator.ShowLayout(false);
+                };
+
+            player.GetComponent<PlayerController>().mapClosed +=
+                () =>
+                {
+                    mapping = false;
+                    GetComponent<Camera>().orthographicSize /= 10;
+                    FloorGenerator.HideLayout();
+                };
+
+            #endregion Stuff to Delete
+
             DetermineMinAndMax(FloorGenerator.map.startRoom);
         }
         #endregion
-
-        //TODO: DELETE
-        #region Stuff to Delete
-        private bool mapping;
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                GetComponent<Camera>().orthographicSize *= 10;
-                FloorGenerator.ShowLayout(false);
-            }
-            if (Input.GetKeyUp(KeyCode.M))
-            {
-                GetComponent<Camera>().orthographicSize /= 10;
-                FloorGenerator.HideLayout();
-            }
-        }
-        #endregion Stuff to Delete
 
         /// <summary>
         /// Updates the position.

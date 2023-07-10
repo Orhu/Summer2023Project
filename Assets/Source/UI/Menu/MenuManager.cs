@@ -9,28 +9,39 @@ namespace Cardificer
     {
         // Singleton for the menu manager
         [HideInInspector] public static MenuManager instance;
+
         [Tooltip("Booster pack menu reference, assigned in inspector")]
         [SerializeField] private BoosterPackMenu boosterPackMenu;
+
         [Tooltip("Pause Menu reference, assigned in inspector")]
         [SerializeField] private PauseMenu pauseMenu;
+
         [Tooltip("Map Menu reference, assigned in inspector")]
         [SerializeField] private MapMenu mapMenu;
+
         [Tooltip("Card Menu reference, assigned in inspector")]
         [SerializeField] private CardMenu cardMenu;
+
+        [Tooltip("Game Over Menu reference, assigned in inspector")]
+        [SerializeField] private GameOverMenu gameOverMenu;
+
         // Reference to the player's game object
         private GameObject playerGameObject;
+
         // Know whether we currently have a menu open or not
         public bool menuOpen { get; private set; }
 
         /// <summary>
         /// Enum for each of the menu types
         /// </summary>
-        private enum MenuTypes
+        public enum MenuTypes
         {
+            Default,
             Pause,
             Booster,
             Map,
-            Card
+            Card,
+            GameOver
         }
 
         // Internally know which menu is open
@@ -63,6 +74,10 @@ namespace Cardificer
                 {
                     mapMenu = GetComponentInChildren<MapMenu>();
                 }
+                if (gameOverMenu == null)
+                {
+                    gameOverMenu = GetComponentInChildren<GameOverMenu>();
+                }
 
                 // The current menu is set to pause menu
                 currentMenu = MenuTypes.Pause;
@@ -70,43 +85,49 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Handles the changing and closing of menus when menus are open
+        /// Toggles whether the pause menu is open
         /// </summary>
-        private void Update()
+        public static void TogglePause()
         {
+            // Toggling pause always closes all menus
             if (instance.menuOpen)
             {
-                // Always close menus with escape
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    CloseMenu();
-                }
-                // Closes card menu if its open, if not, open card menu
-                else if (Input.GetKeyDown(KeyCode.C))
-                {
-                    if (instance.currentMenu == MenuTypes.Card)
-                    {
-                        CloseMenu();
-                    }
-                    else
-                    {
-                        CloseMenu();
-                        OpenCardMenu();
-                    }
-                }
-                // Closes Map menu if its open, if not, open map menu
-                else if (Input.GetKeyDown(KeyCode.Tab))
-                {
-                    if (instance.currentMenu == MenuTypes.Map)
-                    {
-                        CloseMenu();
-                    }
-                    else
-                    {
-                        CloseMenu();
-                        OpenMapMenu();
-                    }
-                }
+                instance.CloseMenu();
+            }
+            else
+            {
+                OpenPauseMenu();
+            }
+        }
+
+        /// <summary>
+        /// Toggles whether the card menu is open
+        /// </summary>
+        public static void ToggleCardMenu()
+        {
+            if (instance.menuOpen && instance.currentMenu == MenuTypes.Card)
+            {
+                instance.CloseMenu();
+            }
+            else
+            {
+                OpenCardMenu();
+            }
+        }
+
+        /// <summary>
+        /// Toggles whether the map menu is open
+        /// </summary>
+        public static void ToggleMap()
+        {
+
+            if (instance.menuOpen && instance.currentMenu == MenuTypes.Map)
+            {
+                instance.CloseMenu();
+            }
+            else
+            {
+                OpenMapMenu();
             }
         }
 
@@ -151,6 +172,9 @@ namespace Cardificer
             }
         }
 
+        /// <summary>
+        /// Opens the map menu
+        /// </summary>
         public static void OpenMapMenu()
         {
             if (!instance.menuOpen)
@@ -166,6 +190,9 @@ namespace Cardificer
             }
         }
 
+        /// <summary>
+        /// Opens the card menu
+        /// </summary>
         public static void OpenCardMenu()
         {
             if (!instance.menuOpen)
@@ -182,11 +209,29 @@ namespace Cardificer
         }
 
         /// <summary>
+        /// Opens the game over menu
+        /// </summary>
+        public static void OpenGameOverMenu()
+        {
+            if (!instance.menuOpen)
+            {
+                // "Pause the game", should probably be replaced with a more effective method
+                // Sets timeScale to 0, so all time related functions are stopped
+                Time.timeScale = 0;
+                instance.gameOverMenu.gameObject.SetActive(true);
+                // Disable player movement
+                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+                instance.currentMenu = MenuTypes.GameOver;
+                instance.menuOpen = true;
+            }
+        }
+
+        /// <summary>
         /// Called when any menu needs to be closed
         /// </summary>
         public void CloseMenu()
         {
-            if (menuOpen)
+            if (menuOpen && currentMenu != MenuTypes.GameOver) // Prevent closing of Game Over menu
             {
                 // "Resume the game", resumes all time related function
                 Time.timeScale = 1;
@@ -198,8 +243,18 @@ namespace Cardificer
                 {
                     transform.GetChild(i).gameObject.SetActive(false);
                 }
+                currentMenu = MenuTypes.Pause;
                 menuOpen = false;
             }
+        }
+
+        /// <summary>
+        /// Setter for the current menu type
+        /// </summary>
+        /// <param name="menuType">The menu type to set to</param>
+        public void SetCurrentMenu(MenuTypes menuType)
+        {
+            currentMenu = menuType;
         }
     }
 }

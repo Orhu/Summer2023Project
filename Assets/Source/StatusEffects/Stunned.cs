@@ -21,7 +21,7 @@ namespace Cardificer
         {
             Stunned instance = (Stunned)base.CreateCopy(gameObject);
 
-            gameObject.GetComponent<PlayerController>().GetOnRequestCanAct() += instance.PreventAction;
+            gameObject.GetComponent<IActor>().GetOnRequestCanAct() += instance.PreventAction;
             gameObject.GetComponent<Movement>().requestSpeedModifications += instance.PreventMovement;
 
             return instance;
@@ -70,7 +70,7 @@ namespace Cardificer
 
             if (gameObject == null) { return; }
 
-            gameObject.GetComponent<PlayerController>().GetOnRequestCanAct() -= PreventAction;
+            gameObject.GetComponent<IActor>().GetOnRequestCanAct() -= PreventAction;
             gameObject.GetComponent<Movement>().requestSpeedModifications -= PreventMovement;
         }
     }

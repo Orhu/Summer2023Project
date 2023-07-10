@@ -289,6 +289,7 @@ namespace Cardificer
         AimPosition,
         RoomCenter,
         Causer,
+        Player,
     }
 
     /// <summary>

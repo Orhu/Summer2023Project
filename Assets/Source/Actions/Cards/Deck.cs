@@ -97,10 +97,17 @@ namespace Cardificer
             {
                 cooldownReduction = deck.cooldownReduction;
 
+#if UNITY_EDITOR
+                pathToCards = deck.cards.Select(AssetDatabase.GetAssetPath).ToList();
+                pathToCardsDrawableCards = deck.drawableCards.Select(AssetDatabase.GetAssetPath).ToList();
+                pathToCardsInHandCards = deck.inHandCards.Select(AssetDatabase.GetAssetPath).ToList();
+                pathToCardsDiscardedCards = deck.discardedCards.Select(AssetDatabase.GetAssetPath).ToList();
+#else
                 pathToCards = deck.cards.Select(GetCardAssetName).ToList();
                 pathToCardsDrawableCards = deck.drawableCards.Select(GetCardAssetName).ToList();
                 pathToCardsInHandCards = deck.inHandCards.Select(GetCardAssetName).ToList();
                 pathToCardsDiscardedCards = deck.discardedCards.Select(GetCardAssetName).ToList();
+#endif
             }
 
             /// <summary>
@@ -111,7 +118,18 @@ namespace Cardificer
             {
                 deck.cooldownReduction = cooldownReduction;
 
+#if UNITY_EDITOR
+                deck.cards = pathToCards.Select(AssetDatabase.LoadAssetAtPath<Card>).OfType<Card>().ToList();
+                if (pathToCards.Count != deck.cards.Count)
+                {
+                    SaveManager.AutosaveCorrupted("Cards in deck failed to load");
+                    return;
+                }
 
+                deck.drawableCards = pathToCardsDrawableCards.Select(AssetDatabase.LoadAssetAtPath<Card>).OfType<Card>().ToList();
+                deck.inHandCards = pathToCardsInHandCards.Select(AssetDatabase.LoadAssetAtPath<Card>).OfType<Card>().ToList();
+                deck.discardedCards = pathToCardsDiscardedCards.Select(AssetDatabase.LoadAssetAtPath<Card>).OfType<Card>().ToList();
+#else
                 AssetBundle assetBundle = AssetBundle.LoadFromFile(System.IO.Path.Combine(Application.streamingAssetsPath, "cards"));
                 deck.cards = pathToCards.Select(assetBundle.LoadAsset<Card>).ToList();
                 
@@ -127,6 +145,7 @@ namespace Cardificer
                 deck.discardedCards = pathToCardsDiscardedCards.Select(assetBundle.LoadAsset<Card>).OfType<Card>().ToList();
 
                 assetBundle.Unload(false);
+#endif
 
                 if (deck.drawableCards.Count + deck.inHandCards.Count + deck.discardedCards.Count != deck.cards.Count)
                 {
@@ -135,7 +154,9 @@ namespace Cardificer
                 }
             }
 
-            #region GetCardAssetName
+#region GetCardAssetName
+
+#if !UNITY_EDITOR
             // Cards mapped to their asset names.
             static Dictionary<Card, string> cardsToAssetNames = new Dictionary<Card, string>();
 
@@ -183,10 +204,11 @@ namespace Cardificer
                 }
 
             }
-            #endregion
+#endif
+#endregion
         }
 
-        #region Initialization
+#region Initialization
         private void Awake()
         {
             if (playerDeck == null)
@@ -227,9 +249,9 @@ namespace Cardificer
                 DrawCard();
             }
         }
-        #endregion
+#endregion
 
-        #region Card Draw
+#region Card Draw
         /// <summary>
         /// Fills the first empty spot in the actor's hand with a card from the draw pile.
         /// </summary>
@@ -332,9 +354,9 @@ namespace Cardificer
                 }
             }
         }
-        #endregion
+#endregion
 
-        #region Playing & Previewing
+#region Playing & Previewing
         /// <summary>
         /// Selects a card. Will immediately play any non-chordable cards. Will toggle the preview for chordable cards.
         /// </summary>
@@ -481,9 +503,9 @@ namespace Cardificer
             previewedCardIndices.Clear();
             return true;
         }
-        #endregion
+#endregion
 
-        #region Deck Modifications
+#region Deck Modifications
         /// <summary>
         /// Adds a card to the deck
         /// </summary>
@@ -660,6 +682,6 @@ namespace Cardificer
             Hand,
             DiscardPile
         }
-        #endregion
+#endregion
     }
 }
