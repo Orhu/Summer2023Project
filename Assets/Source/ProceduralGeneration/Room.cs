@@ -157,7 +157,7 @@ namespace Cardificer
                 movementInput.y = 1;
             }
 
-            player.GetComponent<PlayerController>().enabled = false;
+            player.GetComponent<PlayerController>().movingEnabled = false;
 
             bool inXRange = (player.transform.position.x >= bottomLeftLocation.x + 0.9f && player.transform.position.x <= topRightLocation.x - 0.9f);
             bool inYRange = (player.transform.position.y >= bottomLeftLocation.y + 0.9f && player.transform.position.y <= topRightLocation.y - 0.9f);
@@ -171,7 +171,8 @@ namespace Cardificer
                 yield return null;
             }
 
-            player.GetComponent<PlayerController>().enabled = true;
+            player.GetComponent<PlayerController>().movingEnabled = true;
+            player.GetComponent<SimpleMovement>().movementInput = new Vector2(0, 0);
 
             ActivateDoors();
             if (shouldCloseDoors)
