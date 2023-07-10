@@ -64,5 +64,12 @@ namespace Cardificer
 
         [Tooltip("Whether or not this should lose all its momentum when hit")]
         public bool resetMomentum = true;
+
+        public KnockbackInfo(float amount = 1f, float duration = 0.2f, bool resetMomentum = true)
+        {
+            this.amount = amount;
+            this.duration = duration;
+            this.resetMomentum = resetMomentum;
+        }
     }
 }
