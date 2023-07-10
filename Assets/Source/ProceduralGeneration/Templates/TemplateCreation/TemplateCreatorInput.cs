@@ -531,7 +531,6 @@ namespace Cardificer
                 Selection.activeGameObject != null
                 && !Selection.activeGameObject.activeInHierarchy
                 && (heldTile == null || Selection.activeGameObject.name != heldTile.name)
-                && (heldTemplate == null || heldTemplate.name != Selection.activeGameObject.name)
                 )
             {
                 GameObject selectedObject = (GameObject) PrefabUtility.InstantiatePrefab(Selection.activeGameObject);
@@ -568,7 +567,6 @@ namespace Cardificer
 
             // Select template from project tab
             if (
-                heldTile == null &&
                 Selection.activeGameObject != null
                 && !Selection.activeGameObject.activeInHierarchy
                 && (heldTemplate == null || Selection.activeGameObject.name != heldTemplate.name)
@@ -586,6 +584,7 @@ namespace Cardificer
                 else
                 {
                     heldTemplate = selectedObject;
+                    heldTile = null;
                 }
             }
 
