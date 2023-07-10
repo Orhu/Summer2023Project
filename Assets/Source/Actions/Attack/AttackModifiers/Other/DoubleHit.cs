@@ -10,7 +10,8 @@ namespace Cardificer
     [CreateAssetMenu(fileName = "NewDoubleHit", menuName = "Cards/AttackModifers/DoubleHit")]
     public class DoubleHit : AttackModifier
     {
-        Projectile projectile;
+        // The projectile that will hit again.
+        private Projectile projectile;
 
         // Binds on overlap
         public override Projectile modifiedProjectile
@@ -21,20 +22,26 @@ namespace Cardificer
                 projectile.onOverlap +=
                     (Collider2D collider) =>
                     {
-                        value.StartCoroutine(SetBindings(collider));
+                        value.StartCoroutine(SetBindings());
                     };
                 projectile.onOverlap += HitAgain;
             }
         }
 
-
-        private IEnumerator SetBindings(Collider2D collider)
+        /// <summary>
+        /// Rebinds hit again after a frame.
+        /// </summary>
+        /// <returns> Wait one frame. </returns>
+        private IEnumerator SetBindings()
         {
             yield return null;
             projectile.onOverlap += HitAgain;
         }
 
-        // Causes the exact effects of hitting the hit objects again.
+        /// <summary>
+        /// Causes the exact effects of hitting the hit objects again.
+        /// </summary>
+        /// <param name="collider"> The object that was hit. </param>
         private void HitAgain(Collider2D collider)
         {
             projectile.onOverlap -= HitAgain;

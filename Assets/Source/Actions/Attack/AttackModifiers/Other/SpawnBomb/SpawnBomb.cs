@@ -12,7 +12,7 @@ namespace Cardificer
         public float explosionRadius = 2f;
 
         [Tooltip("The knockback caused by the explosion in tiles.")]
-        public KnockbackInfo knockback;
+        public KnockbackInfo knockback = new KnockbackInfo(0f, 0.2f, false);
 
         [Tooltip("The time in seconds after the bomb is spawned until it detonates.")] [Min(0f)]
         public float fuseTime = 2f;
@@ -26,7 +26,7 @@ namespace Cardificer
         [Tooltip("Whether or not this should ignore the same objects as it's parent projectile.")]
         public bool inheritIgnore = false;
 
-        private enum SpawnMode { OnHit, OnDestroyed, onHitOrDestroy }
+        private enum SpawnMode { OnHit, OnDestroyed, OnHitOrDestroy }
         [Tooltip("When bombs are spawned.")]
         [SerializeField] private SpawnMode spawnMode;
 
