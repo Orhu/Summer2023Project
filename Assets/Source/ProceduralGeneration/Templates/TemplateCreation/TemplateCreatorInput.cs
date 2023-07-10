@@ -359,6 +359,7 @@ namespace Cardificer
                 {
                     nullSpritesContainer = new GameObject();
                     nullSpritesContainer.name = "Null Sprites Container";
+                    nullSpritesContainer.transform.localPosition = (Vector2) (-value.GetComponent<Template>().roomSize / 2);
                     foreach (SpriteRenderer spriteRenderer in value.GetComponentsInChildren<SpriteRenderer>())
                     {
                         spriteRenderer.color = previewColor;
