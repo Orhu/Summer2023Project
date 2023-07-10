@@ -27,12 +27,15 @@ namespace Cardificer
             OnDestroyed,
             Repeately,
         }
+
         [Tooltip("The number of times this can play an action.")] [Min(1)]
         [SerializeField] private int playCount = 1000;
 
-        [Tooltip("The damage multiplier of this action")]
-        [System.NonSerialized] private float damageMultiplier = 1f;
+        [Tooltip("Causes actions played by this to have the same modifiers as the projectile this modifies. Will; exclude any play action modifiers")]
+        [SerializeField] private bool inheritModifiers = false;
 
+        // The damage multiplier of this action
+        private float damageMultiplier = 1f;
 
         // The objects ignored by this.
         private List<GameObject> ignoredObjects;
@@ -45,6 +48,9 @@ namespace Cardificer
 
         // The projectile this modifies
         private GameObject causer;
+
+        // The objects ignored by this.
+        private List<AttackModifier> modifiers;
 
         // The root of all projectiles
         private static GameObject playActionRoot;
@@ -63,6 +69,13 @@ namespace Cardificer
                 parentActor = value.actor;
                 sourceTransform = value.transform;
                 ignoredObjects = value.ignoredObjects;
+                modifiers = new List<AttackModifier>(value.modifiers);
+                modifiers.RemoveAll(
+                    // Remove all play action modifiers
+                    (AttackModifier modifier) =>
+                    {
+                        return modifier is PlayAction;
+                    });
                 int playCount = this.playCount;
 
                 switch (playTime)
@@ -129,7 +142,14 @@ namespace Cardificer
 
                 if (action is Attack attack)
                 {
-                    attack.Play(this, causer, ignoredObjects);
+                    if (!inheritModifiers)
+                    {
+                        attack.Play(this, causer, ignoredObjects);
+                    }
+                    else
+                    {
+                        attack.Play(this, modifiers, causer, ignoredObjects: ignoredObjects);
+                    }
                 }
                 else
                 {

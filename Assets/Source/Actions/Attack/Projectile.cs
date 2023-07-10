@@ -404,7 +404,6 @@ namespace Cardificer
         /// <param name="collision"></param>
         public void OnTriggerEnter2D(Collider2D collision)
         {
-            Debug.Log("hit");
             if (ignoredObjects.Contains(collision.gameObject))
             {
                 return;
