@@ -35,15 +35,38 @@ namespace Cardificer
                     {
                         GameObject tile = room.template[i, j, k];
 
+                        ThingSpawner tileThingSpawner = null;
+                        if (tile != null)
+                        {
+                            tileThingSpawner = tile.GetComponent<ThingSpawner>();
+
+                        }
+
                         // Check if the tile at this location is an enemy
-                        if (tile != null && (tile.CompareTag("Enemy") || (tile.GetComponent<ThingSpawner>() != null && tile.GetComponent<ThingSpawner>().chosenThing != null && tile.GetComponent<ThingSpawner>().chosenThing.CompareTag("Enemy"))))
+                        if (tile != null && (tile.CompareTag("Enemy") || (tileThingSpawner != null && tileThingSpawner.chosenThing != null && tileThingSpawner.chosenThing.CompareTag("Enemy"))))
                         {
                             enemiesSpawned = true;
                             tile.SetActive(spawnEnemies);
                         }
 
-                        // If not pathfinding layer then be done
-                        if (i != 0) { continue; }
+                        // Check if the spawned thing has a tile component (they aren't necessarily in the pathfinding layer) and make sure to set the room
+                        if (tile != null && tile.GetComponent<Tile>() != null)
+                        {
+                            tile.GetComponent<Tile>().room = room;
+                        }
+
+                        // If not pathfinding layer, then check for thing spawner then be done
+                        if (i != 0) 
+                        {
+                            // Check if this tile is a thing spawner trying to spawn a tile not on the pathfinding layer
+                            if (tileThingSpawner != null && tileThingSpawner.chosenThing != null && tileThingSpawner.chosenThing.GetComponent<Tile>() != null)
+                            {
+                                Debug.LogWarning("Thing spawner at " + tileThingSpawner.GetComponent<Tile>().gridLocation + " in layer " + layers[i].name +
+                                                 "in template " + room.template.name + " is trying to spawn a tile not in the pathfinding layer! Disabling this thing spawner.");
+                                tileThingSpawner.gameObject.SetActive(false);
+                            }
+                            continue; 
+                        }
 
                         Tile createdTile = null;
                         if (j < room.template.roomSize.x && k < room.template.roomSize.y && j >= 0 && k >= 0)
@@ -57,13 +80,13 @@ namespace Cardificer
                             createdTile.name = "Empty tile (" + j + ", " + k + ")";
                             createdTile.gridLocation = new Vector2Int(j, k);
                             createdTile.allowedMovementTypes = RoomInterface.MovementType.Walking | RoomInterface.MovementType.Burrowing | RoomInterface.MovementType.Flying;
+                            createdTile.transform.parent = room.template.transform;
+                            createdTile.transform.localPosition = new Vector3(j, k);
                         }
                         else
                         {
                             createdTile.name = createdTile.name + " (" + j + ", " + k + ")";
                         }
-                        createdTile.transform.parent = room.template.transform;
-                        createdTile.transform.localPosition = new Vector3(j, k);
                         createdTile.room = room;
                         room.roomGrid[j, k] = createdTile;
                     }

@@ -135,6 +135,7 @@ namespace Cardificer
             nullSpriteObject.name = "Null Sprite Object";
             nullSpriteObject.transform.parent = transform;
             nullSpriteObject.AddComponent<SpriteRenderer>().sprite = nullSprite;
+            nullSpriteObject.SetActive(false);
             GetComponent<TemplateCreatorInput>().Initialize();
             Reload();
         }

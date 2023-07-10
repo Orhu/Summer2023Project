@@ -33,7 +33,7 @@ namespace Cardificer
         {
             templateCreator = GetComponent<TemplateCreator>();
             templateCamera = templateCreator.templateCamera;
-            nullSprite = templateCreator.nullSpriteObject;
+            nullSprite = Instantiate(templateCreator.nullSpriteObject);
             nullSprite.SetActive(false);
             nullSprite.GetComponent<SpriteRenderer>().color = previewColor;
 

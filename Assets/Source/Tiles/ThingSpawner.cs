@@ -11,8 +11,8 @@ namespace Cardificer
     [RequireComponent(typeof(Tile))]
     public class ThingSpawner : MonoBehaviour
     {
-        // The list of things to choose from
-        private GameObjectLootTable things;
+        [Tooltip("The list of things to choose from")]
+        [SerializeField] private GameObjectLootTable things;
 
         // The thing that was chosen
         [HideInInspector] public GameObject chosenThing;
