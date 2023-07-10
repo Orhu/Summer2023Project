@@ -474,7 +474,6 @@ namespace Cardificer
             templateCreator.PlaceTile(tile, gridPos);
 
             UndoRedoAction action = new UndoRedoAction();
-            Debug.Log("is this happening? place tile");
             GameObject undoActionTile = (GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile));
             PrefabUtility.SetPropertyModifications(undoActionTile, PrefabUtility.GetPropertyModifications(tile));
 

@@ -206,7 +206,7 @@ namespace Cardificer
                             component.enabled = false;
                         }
 
-                        if (createdTemplate[i, j, k].GetComponent<Rigidbody2D>() == null)
+                        if (createdTemplate[i, j, k].GetComponent<Rigidbody2D>() != null)
                         {
                             createdTemplate[i, j, k].GetComponent<Rigidbody2D>().simulated = false;
                         }
@@ -467,7 +467,6 @@ namespace Cardificer
             {
                 EraseTile(gridPos);
                 GameObject layer = createdTemplate.GetLayer(activeLayer);
-                Debug.Log("is this happening? template creator place tile");
                 GameObject createdTile = ((GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tilePrefab), layer.transform));
 
                 PrefabUtility.SetPropertyModifications(createdTile, PrefabUtility.GetPropertyModifications(tilePrefab));
