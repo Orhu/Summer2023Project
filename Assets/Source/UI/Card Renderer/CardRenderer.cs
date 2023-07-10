@@ -230,6 +230,16 @@ namespace Cardificer
             {
                 GetComponent<Toggle>().isOn = false;
                 GetComponent<Animator>().Play("A_CardRenderer_Base");
+                if (originalScale != Vector3.zero && transform.localScale != originalScale) // Menu closed while card was being hovered
+                {
+                    // reset scale
+                    transform.localScale = originalScale;
+                    // Turn off the compendium button
+                    compendiumButton.gameObject.SetActive(false);
+                    // Set hovered to false
+                    isHovered = false;
+                }
+                
             }
         }
 
