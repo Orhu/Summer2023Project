@@ -266,6 +266,28 @@ namespace Cardificer
 
             Debug.Log("Loading template " + template.name);
 
+            Debug.Log(AssetDatabase.GetAssetPath(PrefabUtility.GetCorrespondingObjectFromSource(template.gameObject)));
+            templateName = template.name;
+            string[] splitAssetPath = AssetDatabase.GetAssetPath(PrefabUtility.GetCorrespondingObjectFromSource(template.gameObject)).Split(char.Parse("/"));
+
+            if (splitAssetPath.Length <= 3 || splitAssetPath[0] != "Assets" || splitAssetPath[1] != "Content" || splitAssetPath[2] != "Templates")
+            {
+                Debug.LogWarning("Templates should be saved in the Assets/Content/Templates folder! This template will be saved in the templates folder as " + template.name);
+                templateName = template.name;
+            }
+            else
+            {
+                string newName = "";
+
+                // 3 to skip Assets, Content, and Templates, - 1 so template.name can be added at the end (to skip the extra / and the .prefab)
+                for (int i = 3; i < splitAssetPath.Length - 1; i++)
+                {
+                    newName += splitAssetPath[i] + "/";
+                }
+                newName += template.name;
+                templateName = newName;
+            }
+
             mapCellSize = template.mapCellSize;
             sizeMultiplier = template.sizeMultiplier;
             Destroy(createdTemplate.gameObject);

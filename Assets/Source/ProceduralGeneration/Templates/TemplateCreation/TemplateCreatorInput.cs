@@ -186,6 +186,11 @@ namespace Cardificer
             {
                 ClearRedoHistory();
             }
+
+            if (mouseOverUI)
+            {
+                heldTemplate = null;
+            }
         }
 
         /// <summary>
@@ -429,7 +434,6 @@ namespace Cardificer
         {
             GameObject tile = templateCreator.GetObject(gridPos);
             UndoRedoAction action = new UndoRedoAction();
-            Debug.Log("is this happening? erase tile");
             GameObject undoActionTile = (GameObject)PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile));
             PrefabUtility.SetPropertyModifications(undoActionTile, PrefabUtility.GetPropertyModifications(tile));
 
