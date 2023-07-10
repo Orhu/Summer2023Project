@@ -388,7 +388,6 @@ namespace Cardificer
                             {
                                 if (value.GetComponent<Template>()[i, j, k] == null) { continue; }
 
-                                value.GetComponent<Template>()[i, j, k].name = "BRUH";
                                 foreach (MonoBehaviour component in value.GetComponent<Template>()[i, j, k].GetComponents<MonoBehaviour>())
                                 {
                                     component.enabled = false;
@@ -670,6 +669,7 @@ namespace Cardificer
             templateCreator.activeLayer = layer;
             DeselectObject();
             heldTile = null;
+            Selection.activeObject = null;
             ClearUndoHistory();
             ClearRedoHistory();
         }
