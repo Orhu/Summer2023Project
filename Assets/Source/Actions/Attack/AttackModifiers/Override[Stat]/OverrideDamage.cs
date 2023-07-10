@@ -10,18 +10,31 @@ namespace Cardificer
     public class OverrideDamage : AttackModifier
     {
         [Tooltip("The new damage to deal.")]
-        [SerializeField] private DamageData damageData;
+        public DamageData damageData;
+
+        [Tooltip("Whether or not to override the damage of the parent.")]
+        public bool overrideDamage = true;
+
+        [Tooltip("Whether or not to override the status effects of the parent.")]
+        public bool overrideStatusEffects = true;
 
         // The projectile this modifies
         public override Projectile modifiedProjectile
         {
             set
             {
-                value.attackData = damageData;
-
-                if (value.causer != null && value.causer?.GetComponent<IActor>() is IActor causedBy)
+                if (overrideDamage)
                 {
-                    value.attackData.damage = Mathf.RoundToInt(value.attackData.damage * causedBy.GetDamageMultiplier());
+                    value.attackData.damage = damageData.damage;
+
+                    if (value.causer != null && value.causer?.GetComponent<IActor>() is IActor causedBy)
+                    {
+                        value.attackData.damage = Mathf.RoundToInt(value.attackData.damage * causedBy.GetDamageMultiplier());
+                    }
+                }
+                if (overrideStatusEffects)
+                {
+                    value.attackData.statusEffects = damageData.statusEffects;
                 }
             }
         }

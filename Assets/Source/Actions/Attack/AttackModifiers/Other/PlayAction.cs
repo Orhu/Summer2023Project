@@ -50,7 +50,7 @@ namespace Cardificer
         private GameObject causer;
 
         // The objects ignored by this.
-        private List<AttackModifier> modifiers;
+        protected List<AttackModifier> modifiers = new List<AttackModifier>();
 
         // The root of all projectiles
         private static GameObject playActionRoot;
@@ -69,13 +69,18 @@ namespace Cardificer
                 parentActor = value.actor;
                 sourceTransform = value.transform;
                 ignoredObjects = value.ignoredObjects;
-                modifiers = new List<AttackModifier>(value.modifiers);
-                modifiers.RemoveAll(
-                    // Remove all play action modifiers
-                    (AttackModifier modifier) =>
-                    {
-                        return modifier is PlayAction;
-                    });
+
+                if (inheritModifiers)
+                {
+                    modifiers = new List<AttackModifier>(value.modifiers);
+                    modifiers.RemoveAll(
+                        // Remove all play action modifiers
+                        (AttackModifier modifier) =>
+                        {
+                            return modifier is PlayAction;
+                        });
+                }
+
                 int playCount = this.playCount;
 
                 switch (playTime)
@@ -142,14 +147,7 @@ namespace Cardificer
 
                 if (action is Attack attack)
                 {
-                    if (!inheritModifiers)
-                    {
-                        attack.Play(this, causer, ignoredObjects);
-                    }
-                    else
-                    {
-                        attack.Play(this, modifiers, causer, ignoredObjects: ignoredObjects);
-                    }
+                    attack.Play(this, modifiers, causer, ignoredObjects: ignoredObjects);
                 }
                 else
                 {
