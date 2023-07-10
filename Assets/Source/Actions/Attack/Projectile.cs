@@ -444,7 +444,6 @@ namespace Cardificer
                 return;
             }
 
-            onOverlap?.Invoke(collision);
             Health hitHealth = collision.gameObject.GetComponent<Health>();
             if (hitHealth != null && applyDamageOnHit)
             {
@@ -456,6 +455,7 @@ namespace Cardificer
                     Destroy(gameObject);
                 }
             }
+            onOverlap?.Invoke(collision);
         }
 
         /// <summary>

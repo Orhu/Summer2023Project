@@ -52,8 +52,14 @@ namespace Cardificer
                 }
                 else
                 {
-                    _modifiedProjectile.onDestroyed += () => CreateBomb();
-                    _modifiedProjectile.onOverlap += (Collider2D collider) => CreateBomb(collider);
+                    System.Action<Collider2D> spawnBombOnOverlap = (Collider2D collider) => CreateBomb(collider);
+                    _modifiedProjectile.onDestroyed +=
+                        () =>
+                        {
+                            _modifiedProjectile.onOverlap -= spawnBombOnOverlap;
+                            CreateBomb();
+                        };
+                    _modifiedProjectile.onOverlap += spawnBombOnOverlap;
                     _modifiedProjectile.onHit += (Collision2D collision) => CreateBomb(collision.collider);
                 }
             }
