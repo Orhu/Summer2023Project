@@ -9,26 +9,34 @@ namespace Cardificer
     {
         // Singleton for the menu manager
         [HideInInspector] public static MenuManager instance;
+
         [Tooltip("Booster pack menu reference, assigned in inspector")]
         [SerializeField] private BoosterPackMenu boosterPackMenu;
+
         [Tooltip("Pause Menu reference, assigned in inspector")]
         [SerializeField] private PauseMenu pauseMenu;
+
         [Tooltip("Map Menu reference, assigned in inspector")]
         [SerializeField] private MapMenu mapMenu;
+
         [Tooltip("Card Menu reference, assigned in inspector")]
         [SerializeField] private CardMenu cardMenu;
+
         [Tooltip("Game Over Menu reference, assigned in inspector")]
         [SerializeField] private GameOverMenu gameOverMenu;
+
         // Reference to the player's game object
         private GameObject playerGameObject;
+
         // Know whether we currently have a menu open or not
         public bool menuOpen { get; private set; }
 
         /// <summary>
         /// Enum for each of the menu types
         /// </summary>
-        private enum MenuTypes
+        public enum MenuTypes
         {
+            Default,
             Pause,
             Booster,
             Map,
@@ -223,7 +231,7 @@ namespace Cardificer
         /// </summary>
         public void CloseMenu()
         {
-            if (menuOpen)
+            if (menuOpen && currentMenu != MenuTypes.GameOver) // Prevent closing of Game Over menu
             {
                 // "Resume the game", resumes all time related function
                 Time.timeScale = 1;
@@ -235,8 +243,18 @@ namespace Cardificer
                 {
                     transform.GetChild(i).gameObject.SetActive(false);
                 }
+                currentMenu = MenuTypes.Pause;
                 menuOpen = false;
             }
+        }
+
+        /// <summary>
+        /// Setter for the current menu type
+        /// </summary>
+        /// <param name="menuType">The menu type to set to</param>
+        public void SetCurrentMenu(MenuTypes menuType)
+        {
+            currentMenu = menuType;
         }
     }
 }

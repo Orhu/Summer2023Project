@@ -34,14 +34,17 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Debug ability to reset the game.
+        /// Ability to reset the game.
         /// Clears saves and reloads the current scene
         /// </summary>
         public void Restart()
         {
+            // Reset our current menu
+            MenuManager.instance.SetCurrentMenu(MenuManager.MenuTypes.Default);
             MenuManager.instance.CloseMenu();
             SaveManager.ClearTransientSaves();
-            Player.Get().GetComponent<ReloadScene>().ReloadCurrentScene();
+            // Load the first level
+            SceneManager.LoadScene("Floor 1");
         }
 
         /// <summary>
