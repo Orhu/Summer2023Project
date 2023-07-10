@@ -188,6 +188,10 @@ namespace Cardificer
             {
                 // Make the card grow
                 StartCoroutine(ScaleCardRenderer(true));
+
+                // Play the shake animation
+                GetComponent<Animator>().Play("A_CardRenderer_Shake");
+
                 // Turn on the compendium button
                 compendiumButton.gameObject.SetActive(true);
                 // Set hovered to true
@@ -205,6 +209,10 @@ namespace Cardificer
             {
                 // Shrink the card
                 StartCoroutine(ScaleCardRenderer(false));
+
+                // Play the base animation
+                GetComponent<Animator>().Play("A_CardRenderer_Base");
+
                 // Turn off the compendium button
                 compendiumButton.gameObject.SetActive(false);
                 // Set hovered to false
@@ -221,6 +229,7 @@ namespace Cardificer
             if (!isSelected)
             {
                 GetComponent<Toggle>().isOn = false;
+                GetComponent<Animator>().Play("A_CardRenderer_Base");
             }
         }
 
