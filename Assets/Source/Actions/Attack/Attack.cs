@@ -1,6 +1,7 @@
 using Skaillz.EditInline;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Cardificer
@@ -28,6 +29,9 @@ namespace Cardificer
 
         [Tooltip("The modifiers that are always applied to this projectile")] [EditInline]
         public List<AttackModifier> modifiers;
+
+        [Tooltip("Whether or not this projectile passes through shields.")]
+        public bool immuneToShield = false;
 
         [Tooltip("The radius of the projectile.")] [EditInline]
         public ProjectileShape shape;
@@ -251,8 +255,12 @@ namespace Cardificer
             Projectile projectile = Instantiate(projectilePrefab.gameObject).GetComponent<Projectile>();
             projectile.attack = this;
             projectile.actor = actor;
-            projectile.modifiers = new List<AttackModifier>(this.modifiers);
-            projectile.modifiers.AddRange(modifiers);
+            projectile.modifiers = this.modifiers.Concat(modifiers).SkipWhile(
+                    // Get only applicable modifiers
+                    (AttackModifier attackModifier) =>
+                    {
+                        return index < attackModifier.minAttackSequenceIndex || index > attackModifier.maxAttackSequenceIndex;
+                    }).ToList();
             projectile.causer = causer;
             projectile.ignoredObjects = ignoredObjects;
             projectile.index = index;

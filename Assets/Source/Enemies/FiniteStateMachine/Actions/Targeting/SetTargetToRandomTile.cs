@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Cardificer.FiniteStateMachine
 {
@@ -18,8 +19,9 @@ namespace Cardificer.FiniteStateMachine
 
         [Tooltip("Target type to use. Should we set the pathfinding target, attack target, or both for this unit?")]
         [SerializeField] private TargetType targetType;
-
-
+        
+        [Tooltip("Cooldown between target acquisitions")] [Min(0f)]
+        [SerializeField] private float cooldown = 0f;
 
         /// <summary>
         /// Enum representing targeting modes for setting a target
@@ -31,8 +33,6 @@ namespace Cardificer.FiniteStateMachine
             Pathfinding = 1,
             Attack = 2,
         }
-
-
 
         /// <summary>
         /// Sets pathfinding and/or attack target depending on the requested targeting type
@@ -62,8 +62,7 @@ namespace Cardificer.FiniteStateMachine
 
             tileLocation += RoomInterface.instance.myWorldPosition;
             
-
-
+            
             // Set Target
             if (targetType.HasFlag(TargetType.Pathfinding))
             {
@@ -75,8 +74,8 @@ namespace Cardificer.FiniteStateMachine
                 stateMachine.currentAttackTarget = tileLocation;
             }
 
+            yield return new WaitForSeconds(cooldown);
             stateMachine.cooldownData.cooldownReady[this] = true;
-            yield break;
         }
     }
 }

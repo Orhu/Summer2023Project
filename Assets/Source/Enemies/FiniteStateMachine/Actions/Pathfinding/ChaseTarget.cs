@@ -78,7 +78,7 @@ namespace Cardificer.FiniteStateMachine
                 {
                     if (stateMachine.pathData.targetIndex == stateMachine.pathData.path.finishLineIndex)
                     {
-                        stateMachine.pathData.keepFollowingPath = false;
+                        stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
                         break;
                     }
                     else
@@ -97,7 +97,8 @@ namespace Cardificer.FiniteStateMachine
                                                      stoppingDist);
                         if (stateMachine.speedPercent < 0.01f)
                         {
-                            stateMachine.pathData.keepFollowingPath = false;
+                            stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
+                            break;
                         }
                     }
                     stateMachine.GetComponent<Movement>().movementInput =

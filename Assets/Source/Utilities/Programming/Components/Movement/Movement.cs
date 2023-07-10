@@ -9,8 +9,7 @@ namespace Cardificer
     [RequireComponent(typeof(AnimatorController))]
     public abstract class Movement : MonoBehaviour
     {
-        [Tooltip("The amount knockback will be multiplied by.")]
-        [Min(0f)]
+        [Tooltip("The amount knockback will be multiplied by.")] [Min(0f)]
         [SerializeField] protected float knockbackMultiplier = 1f;
 
         // The desired movement direction.
@@ -56,13 +55,26 @@ namespace Cardificer
     [System.Serializable]
     public class KnockbackInfo
     {
-        [Tooltip("The distance this will move in tiles.")]
+        [Tooltip("The distance the target will move in tiles.")]
         public float amount = 1f;
 
-        [Tooltip("The time it will take to reach the target destination.")]
+        [Tooltip("The time it will take to reach the knockback destination.")] [Min(0.02f)]
         public float duration = 0.2f;
 
-        [Tooltip("Whether or not this should lose all its momentum when hit")]
+        [Tooltip("Whether or not the target should lose all its momentum when hit.")]
         public bool resetMomentum = true;
+
+        /// <summary>
+        /// Creates a new knockback info with the given stats.
+        /// </summary>
+        /// <param name="amount"> The distance this will move in tiles. </param>
+        /// <param name="duration"> The time it will take to reach the target destination. </param>
+        /// <param name="resetMomentum"> Whether or not this should lose all its momentum when hit. <param>
+        public KnockbackInfo(float amount = 1f, float duration = 0.2f, bool resetMomentum = true)
+        {
+            this.amount = amount;
+            this.duration = duration;
+            this.resetMomentum = resetMomentum;
+        }
     }
 }
