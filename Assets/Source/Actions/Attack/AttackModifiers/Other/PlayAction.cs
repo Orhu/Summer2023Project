@@ -31,7 +31,7 @@ namespace Cardificer
         [Tooltip("The number of times this can play an action.")] [Min(1)]
         [SerializeField] private int playCount = 1000;
 
-        [Tooltip("Causes actions played by this to have the same modifiers as the projectile this modifies. Will; exclude any play action modifiers")]
+        [Tooltip("Causes actions played by this to have the same modifiers as the projectile this modifies. Will exclude any play action modifiers")]
         [SerializeField] private bool inheritModifiers = false;
 
         // The damage multiplier of this action
