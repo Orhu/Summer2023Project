@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
-  m_Name: Atk_Lotus_LightningBolt_L1_Primary
+  m_Name: Atk_Lotus_SealingCircle_Prim
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
@@ -24,10 +24,9 @@ MonoBehaviour:
   applyDamageOnHit: 0
   modifiers:
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
-  - {fileID: 11400000, guid: 066562b20ed30f84fa45f638f23eb6e8, type: 2}
-  - {fileID: 11400000, guid: 2931c6bb243a24f428cf99a8bb1524af, type: 2}
-  shape: {fileID: 11400000, guid: eb53fce9c76f3ea42beed344d6343f14, type: 2}
-  lifetime: 2
+  - {fileID: 11400000, guid: e6f9306eeadfb1a4e936884bcf7fc3c3, type: 2}
+  shape: {fileID: 11400000, guid: 6f26349151ebf204b9e808c7108c0382, type: 2}
+  lifetime: 2.5
   initialSpeed: 0
   acceleration: 0
   minSpeed: 0
@@ -35,18 +34,18 @@ MonoBehaviour:
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
-  homingAimMode: 6
+  homingAimMode: 0
   switchAfterHit: 0
-  visualObject: {fileID: 587928409461862577, guid: cb67e55210d77ab4b910e28c8481f225, type: 3}
+  visualObject: {fileID: 1613449456025330359, guid: a4b06cf01e0cf774295c0cbd0fd1c867, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
   spawnLocation: 4
   aimMode: 5
-  waitForProjectileDeath: 0
+  waitForProjectileDeath: 1
   chargeTime: 0
-  additionalActionTime: 8.75
+  additionalActionTime: 0.1
   _spawnSequence:
   - delay: 0
     startingAngle: 0
