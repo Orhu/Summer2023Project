@@ -26,31 +26,47 @@ namespace Cardificer
             room.template.transform.localPosition = (Vector2) (-room.roomSize / 2);
             room.livingEnemies = new List<GameObject>();
 
-            for (int i = 1; i < room.roomSize.x - 1; i++)
+            List<GameObject> layers = room.template.GetLayers();
+            for (int i = 0; i < layers.Count; i++)
             {
-                for (int j = 1; j < room.roomSize.y - 1; j++)
+                for (int j = 1; j < room.roomSize.x - 1; j++)
                 {
-                    Tile createdTile = null;
-                    if (i < room.template.roomSize.x && j < room.template.roomSize.y && i >= 0 && j >= 0)
+                    for (int k = 1; k < room.roomSize.y - 1; k++)
                     {
-                        createdTile = room.template[i, j];
-                    }
+                        GameObject tile = room.template[i, j, k];
 
-                    if (createdTile == null)
-                    {
-                        createdTile = new GameObject().AddComponent<Tile>();
-                        createdTile.name = "Empty tile (" + i + ", " + j + ")";
-                        createdTile.gridLocation = new Vector2Int(i, j);
-                        createdTile.allowedMovementTypes = RoomInterface.MovementType.Walking | RoomInterface.MovementType.Burrowing | RoomInterface.MovementType.Flying;
+                        // Check if the tile at this location is an enemy
+                        if (tile != null && tile.CompareTag("Enemy"))
+                        {
+                            enemiesSpawned = true;
+                            tile.SetActive(spawnEnemies);
+                        }
+
+                        // If not pathfinding layer then be done
+                        if (i != 0) { continue; }
+
+                        Tile createdTile = null;
+                        if (j < room.template.roomSize.x && k < room.template.roomSize.y && j >= 0 && k >= 0)
+                        {
+                            createdTile = room.template[j, k];
+                        }
+
+                        if (createdTile == null)
+                        {
+                            createdTile = new GameObject().AddComponent<Tile>();
+                            createdTile.name = "Empty tile (" + j + ", " + k + ")";
+                            createdTile.gridLocation = new Vector2Int(j, k);
+                            createdTile.allowedMovementTypes = RoomInterface.MovementType.Walking | RoomInterface.MovementType.Burrowing | RoomInterface.MovementType.Flying;
+                        }
+                        else
+                        {
+                            createdTile.name = createdTile.name + " (" + j + ", " + k + ")";
+                        }
+                        createdTile.transform.parent = room.template.transform;
+                        createdTile.transform.localPosition = new Vector3(j, k);
+                        createdTile.room = room;
+                        room.roomGrid[j, k] = createdTile;
                     }
-                    else
-                    {
-                        createdTile.name = createdTile.name + " (" + i + ", " + j + ")";
-                    }
-                    createdTile.transform.parent = room.template.transform;
-                    createdTile.transform.localPosition = new Vector3(i, j);
-                    createdTile.room = room;
-                    room.roomGrid[i, j] = createdTile;
                 }
             }
 
