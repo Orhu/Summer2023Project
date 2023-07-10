@@ -161,12 +161,53 @@ namespace Cardificer
             {
                 layers[i].SetActive(true);
                 input.UnhideLayerUI(i);
+
+                for (int j = 0; j < roomSize.x; j++)
+                {
+                    for (int k = 0; k < roomSize.y; k++)
+                    {
+                        if (createdTemplate[i, j, k] == null) { continue; }
+
+                        foreach (MonoBehaviour component in createdTemplate[i, j, k].GetComponents<MonoBehaviour>())
+                        {
+                            MonoBehaviour originalComponent = PrefabUtility.GetCorrespondingObjectFromSource(component);
+                            if (originalComponent == null)
+                            {
+                                // Enable by default (this would happen if you added a component to a tile during template creation)
+                                component.enabled = true;
+                            }
+                            component.enabled = originalComponent.enabled;
+                        }
+                    }
+                }
             }
 
             PrefabUtility.SaveAsPrefabAsset(createdTemplate.gameObject, path);
             AssetDatabase.Refresh();
 
             Debug.Log("Template saved to " + path);
+
+            // Redisable all the components
+            for (int i = 0; i < layers.Count; i++)
+            {
+                for (int j = 0; j < roomSize.x; j++)
+                {
+                    for (int k = 0; k < roomSize.y; k++)
+                    {
+                        if (createdTemplate[i, j, k] == null) { continue; }
+
+                        foreach (MonoBehaviour component in createdTemplate[i, j, k].GetComponents<MonoBehaviour>())
+                        {
+                            component.enabled = false;
+                        }
+
+                        if (createdTemplate[i, j, k].GetComponent<SpriteRenderer>() != null)
+                        {
+                            createdTemplate[i, j, k].GetComponent<SpriteRenderer>().enabled = true;
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -243,6 +284,16 @@ namespace Cardificer
                             nullSprites[i][j, k] = createdNullSprite;
                             createdNullSprite.transform.parent = nullSpritesContainer.transform;
                             createdNullSprite.transform.localPosition = new Vector3(j, k, 0);
+                        }
+
+                        foreach (MonoBehaviour component in createdTemplate[i, j, k].GetComponents<MonoBehaviour>())
+                        {
+                            component.enabled = false;
+                        }
+
+                        if (createdTemplate[i, j, k].GetComponent<SpriteRenderer>() != null)
+                        {
+                            createdTemplate[i, j, k].GetComponent<SpriteRenderer>().enabled = true;
                         }
                     }
                 }
@@ -401,9 +452,20 @@ namespace Cardificer
             {
                 EraseTile(gridPos);
                 GameObject layer = createdTemplate.GetLayer(activeLayer);
+                Debug.Log("is this happening? template creator place tile");
                 GameObject createdTile = ((GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tilePrefab), layer.transform));
 
                 PrefabUtility.SetPropertyModifications(createdTile, PrefabUtility.GetPropertyModifications(tilePrefab));
+
+                foreach (MonoBehaviour component in createdTile.GetComponents<MonoBehaviour>())
+                {
+                    component.enabled = false;
+                }
+
+                if (createdTile.GetComponent<SpriteRenderer>() != null)
+                {
+                    createdTile.GetComponent<SpriteRenderer>().enabled = true;
+                }
 
                 createdTile.name = tilePrefab.name;
                 createdTile.transform.localPosition = new Vector3(gridPos.x, gridPos.y, 0);

@@ -212,6 +212,7 @@ namespace Cardificer
 
                 GameObject tile = templateCreator.GetObject(gridPos);
 
+                Debug.Log("is this happening? copy");     
                 heldTile = tile == null ? null : (GameObject)PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile));
                 PrefabUtility.SetPropertyModifications(heldTile, PrefabUtility.GetPropertyModifications(tile));
 
@@ -319,7 +320,21 @@ namespace Cardificer
                     spriteRenderer.sortingOrder++;
                 }
 
-                nullSprite.SetActive(heldTile?.GetComponent<SpriteRenderer>() == null);
+                foreach (MonoBehaviour component in _heldTile.GetComponents<MonoBehaviour>())
+                {
+                    component.enabled = false;
+                }
+
+                if (heldTile == null) { return; }
+
+                if (heldTile.GetComponent<SpriteRenderer>() == null)
+                {
+                    nullSprite.SetActive(true);
+                }
+                else
+                {
+                    heldTile.GetComponent<SpriteRenderer>().enabled = true;
+                }
             }
             get => _heldTile;
         }
@@ -357,14 +372,20 @@ namespace Cardificer
                             {
                                 if (value.GetComponent<Template>()[i, j, k] == null) { continue; }
 
+                                value.GetComponent<Template>()[i, j, k].name = "BRUH";
+                                foreach (MonoBehaviour component in value.GetComponent<Template>()[i, j, k].GetComponents<MonoBehaviour>())
+                                {
+                                    component.enabled = false;
+                                }
+
                                 if (value.GetComponent<Template>()[i, j, k].GetComponent<SpriteRenderer>() != null && value.GetComponent<Template>()[i, j, k].GetComponent<SpriteRenderer>().sprite != null)
                                 {
+                                    value.GetComponent<Template>()[i, j, k].GetComponent<SpriteRenderer>().enabled = true;
                                     continue;
                                 }
 
                                 GameObject createdNullSprite = Instantiate(nullSprite);
                                 createdNullSprite.SetActive(true);
-                                Debug.Log("null sprite??");
                                 createdNullSprite.transform.parent = nullSpritesContainer.transform;
                                 createdNullSprite.transform.localPosition = new Vector3(j, k, 0);
                                 createdNullSprite.GetComponent<SpriteRenderer>().color = previewColor;
@@ -392,8 +413,20 @@ namespace Cardificer
         {
             GameObject tile = templateCreator.GetObject(gridPos);
             UndoRedoAction action = new UndoRedoAction();
+            Debug.Log("is this happening? erase tile");
             GameObject undoActionTile = (GameObject)PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile));
             PrefabUtility.SetPropertyModifications(undoActionTile, PrefabUtility.GetPropertyModifications(tile));
+
+            foreach (MonoBehaviour component in undoActionTile.GetComponents<MonoBehaviour>())
+            {
+                component.enabled = false;
+            }
+
+            if (undoActionTile.GetComponent<SpriteRenderer>() != null)
+            {
+                undoActionTile.GetComponent<SpriteRenderer>().enabled = true;
+            }
+
             undoActionTile.name = tile.name;
             action.redoAction = () => EraseTile(gridPos);
             action.undoAction = () => PlaceTile(undoActionTile, gridPos);
@@ -419,8 +452,20 @@ namespace Cardificer
             templateCreator.PlaceTile(tile, gridPos);
 
             UndoRedoAction action = new UndoRedoAction();
+            Debug.Log("is this happening? place tile");
             GameObject undoActionTile = (GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile));
             PrefabUtility.SetPropertyModifications(undoActionTile, PrefabUtility.GetPropertyModifications(tile));
+
+            foreach (MonoBehaviour component in undoActionTile.GetComponents<MonoBehaviour>())
+            {
+                component.enabled = false;
+            }
+
+            if (undoActionTile.GetComponent<SpriteRenderer>() != null)
+            {
+                undoActionTile.GetComponent<SpriteRenderer>().enabled = true;
+            }
+
             undoActionTile.name = tile.name;
             action.redoAction = () => PlaceTile(undoActionTile, gridPos);
             action.undoAction = () => EraseTile(gridPos);
@@ -472,17 +517,20 @@ namespace Cardificer
                             lastSelectedObjectName = selectedObject.name;
                             heldTile = null;
                         }
+                        selectedObject.SetActive(false);
                         Destroy(selectedObject);
                     }
                     else
                     {
                         DeselectObject();
                         heldTile = selectedObject;
+                        heldTemplate = null;
                     }
                 }
                 else
                 {
                     DeselectObject();
+                    selectedObject.SetActive(false);
                     Destroy(selectedObject);
                     heldTile = null;
                 }
@@ -501,6 +549,7 @@ namespace Cardificer
 
                 if (selectedObject.GetComponent<Template>() == null)
                 {
+                    selectedObject.SetActive(false);
                     Destroy(selectedObject);
                     heldTemplate = null;
                 }

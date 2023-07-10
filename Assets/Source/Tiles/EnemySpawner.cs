@@ -16,6 +16,7 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
+            Debug.Log("enemy spawner name: " + gameObject.name + " parent: " + transform.parent.parent.name);
             SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
             if (spriteRenderer != null)
             {
@@ -34,11 +35,6 @@ namespace Cardificer
             Tile currentTile = GetComponent<Tile>();
             chosenEnemy.transform.parent = currentTile.room.template.transform;
             chosenEnemy.transform.localPosition = (Vector2)currentTile.gridLocation;
-
-            if (chosenEnemy.GetComponent<Tile>() != null)
-            {
-                chosenEnemy.GetComponent<Tile>().shouldDisable = false;
-            }
         }
     }
 }
