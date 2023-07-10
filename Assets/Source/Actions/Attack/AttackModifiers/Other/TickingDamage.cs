@@ -9,9 +9,11 @@ namespace Cardificer
     [CreateAssetMenu(fileName = "NewTickingDamage", menuName = "Cards/AttackModifers/TickingDamage")]
     public class TickingDamage : AttackModifier
     {
-        [Tooltip("The time in seconds to wait to apply damage.")]
-        [Min(0f)]
+        [Tooltip("The time in seconds to wait to apply damage.")] [Min(0f)]
         public float damageInterval = 0.5f;
+
+        [Tooltip("The knockback to apply every tick.")]
+        public KnockbackInfo knockback = new KnockbackInfo(amount: 0f, resetMomentum: false);
 
         // The projectile to apply ticking damage under.
         private Rigidbody2D tickingDamageRigidbody;
@@ -37,9 +39,10 @@ namespace Cardificer
         private void StartTicking(Collider2D collider)
         {
             Health health = collider.GetComponent<Health>();
-            if (health != null)
+            Movement movement = knockback.amount == 0 || knockback.duration == 0 ? null : collider.GetComponent<Movement>();
+            if (health != null || movement != null)
             {
-                tickingDamageProjectile.StartCoroutine(DealTickingDamage(health, collider));
+                tickingDamageProjectile.StartCoroutine(DealTickingDamage(health, movement, collider));
             }
         }
 
@@ -47,14 +50,16 @@ namespace Cardificer
         /// Deals damage on an interval.
         /// </summary>
         /// <param name="healthToDamage"> The health being damaged. </param>
+        /// <param name="movementToKnockback"> The movement component to apply knockback to. </param>
         /// <param name="collider"> The collider of the health. </param>
         /// <returns> The time to wait until the next tick. </returns>
-        private IEnumerator DealTickingDamage(Health healthToDamage, Collider2D collider)
+        private IEnumerator DealTickingDamage(Health healthToDamage, Movement movementToKnockback, Collider2D collider)
         {
             yield return new WaitForSeconds(damageInterval);
             while (tickingDamageRigidbody != null && collider != null && tickingDamageRigidbody.IsTouching(collider))
             {
-                healthToDamage.ReceiveAttack(tickingDamageProjectile.attackData);
+                healthToDamage?.ReceiveAttack(tickingDamageProjectile.attackData);
+                movementToKnockback?.Knockback((Vector2)collider.transform.position - tickingDamageRigidbody.position, knockback);
 
                 if (--tickingDamageProjectile.remainingHits <= 0)
                 {
