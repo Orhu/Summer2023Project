@@ -42,7 +42,7 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Responds to a health's incoming damage modification request, and prevents the attack from passing.
+        /// Responds to a health's incoming damage modification request, and deals damage back to the causer.
         /// </summary>
         /// <param name="attack"> The attack to prevent. </param>
         private void AttackBack(ref DamageData attack)
