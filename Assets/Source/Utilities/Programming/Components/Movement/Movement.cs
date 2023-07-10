@@ -73,7 +73,7 @@ namespace Cardificer
         public KnockbackInfo(float amount = 1f, float duration = 0.2f, bool resetMomentum = true)
         {
             this.amount = amount;
-            this.duration = Mathf.Max(Time.fixedDeltaTime, duration);
+            this.duration = duration;
             this.resetMomentum = resetMomentum;
         }
     }

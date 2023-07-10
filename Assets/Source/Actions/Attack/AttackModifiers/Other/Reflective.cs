@@ -40,6 +40,7 @@ namespace Cardificer
                 && !projectile.ignoredObjects.Contains(hitProjectile.causer))
             {
                 hitProjectile.transform.right *= -1;
+                hitProjectile.ignoredObjects = projectile.ignoredObjects;
 
                 if (--projectile.remainingHits <= 0)
                 {

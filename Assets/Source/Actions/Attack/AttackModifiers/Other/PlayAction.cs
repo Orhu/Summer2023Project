@@ -68,7 +68,6 @@ namespace Cardificer
                 causer = value.causer;
                 parentActor = value.actor;
                 sourceTransform = value.transform;
-                ignoredObjects = value.ignoredObjects;
 
                 if (inheritModifiers)
                 {
@@ -87,12 +86,14 @@ namespace Cardificer
                 {
                     case PlayTime.Repeately:
                     case PlayTime.OnSpawned:
+                        ignoredObjects = value.ignoredObjects;
                         value.StartCoroutine(DelayedPlayAction(playCount));
                         break;
 
                     case PlayTime.OnHit:
                         value.onHit += collision =>
                         {
+                            ignoredObjects = new List<GameObject>(value.ignoredObjects);
                             ignoredObjects.Add(collision.gameObject);
                             if (--playCount < 0) { return; }
                             value.StartCoroutine(DelayedPlayAction());
@@ -102,6 +103,7 @@ namespace Cardificer
                     case PlayTime.OnOverlap:
                         value.onOverlap += hitCollider =>
                         {
+                            ignoredObjects = new List<GameObject>(value.ignoredObjects);
                             ignoredObjects.Add(hitCollider.gameObject);
                             if (--playCount < 0) { return; }
                             value.StartCoroutine(DelayedPlayAction());
@@ -124,6 +126,7 @@ namespace Cardificer
                                 MonoBehaviour mono = sourceTransform.gameObject.AddComponent<Empty>();
                                 FloorGenerator.onRoomChange += () => { Destroy(coroutineRunner); };
 
+                                ignoredObjects = new List<GameObject>(value.ignoredObjects);
                                 mono.GetComponent<MonoBehaviour>().StartCoroutine(DelayedPlayAction());
                             };
                         break;

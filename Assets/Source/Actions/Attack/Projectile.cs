@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Cardificer
@@ -94,8 +95,45 @@ namespace Cardificer
                 _ignoredObjects.Add(causer);
                 return _ignoredObjects;
             }
-            set { _ignoredObjects = value; }
+            set 
+            {
+                Collider2D collider = GetComponent<Collider2D>();
+
+                if (collider == null)
+                {
+                    _ignoredObjects = value;
+                    return;
+                }
+
+                if (value != null && _ignoredObjects != null)
+                {
+                    foreach (GameObject noLongerIgnoredObject in _ignoredObjects.Except(value))
+                    {
+                        Physics2D.IgnoreCollision(collider, noLongerIgnoredObject.GetComponent<Collider2D>(), false);
+                    }
+                    foreach (GameObject newlyIgnoredObject in value.Except(_ignoredObjects))
+                    {
+                        Physics2D.IgnoreCollision(collider, newlyIgnoredObject.GetComponent<Collider2D>());
+                    }
+                }
+                else if (_ignoredObjects != null)
+                {
+                    foreach (GameObject noLongerIgnoredObject in _ignoredObjects)
+                    {
+                        Physics2D.IgnoreCollision(collider, noLongerIgnoredObject.GetComponent<Collider2D>(), false);
+                    }
+                } 
+                else if (value != null)
+                {
+                    foreach (GameObject newlyIgnoredObject in value)
+                    {
+                        Physics2D.IgnoreCollision(collider, newlyIgnoredObject.GetComponent<Collider2D>());
+                    }
+                }
+                _ignoredObjects = value;
+            }
         }
+
         #endregion
 
         #region Delegates
@@ -194,19 +232,16 @@ namespace Cardificer
                 Physics2D.IgnoreCollision(collider, actor.GetCollider());
 
                 // Ignore collision on ignored objects
-                if (ignoredObjects != null)
+                foreach (GameObject ignoredObject in ignoredObjects)
                 {
-                    foreach (GameObject ignoredObject in ignoredObjects)
+                    List<Collider2D> ignoredColliders = new List<Collider2D>();
+                    ignoredObject.GetComponentsInChildren(ignoredColliders);
+                    ignoredObject.GetComponents(ignoredColliders);
+                    if (ignoredColliders.Count > 0)
                     {
-                        List<Collider2D> ignoredColliders = new List<Collider2D>();
-                        ignoredObject.GetComponentsInChildren(ignoredColliders);
-                        ignoredObject.GetComponents(ignoredColliders);
-                        if (ignoredColliders.Count > 0)
+                        foreach (Collider2D ignoredCollider in ignoredColliders)
                         {
-                            foreach (Collider2D ignoredCollider in ignoredColliders)
-                            {
-                                Physics2D.IgnoreCollision(ignoredCollider, actor.GetCollider());
-                            }
+                            Physics2D.IgnoreCollision(ignoredCollider, actor.GetCollider());
                         }
                     }
                 }
