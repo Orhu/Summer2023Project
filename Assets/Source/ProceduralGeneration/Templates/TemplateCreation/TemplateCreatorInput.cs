@@ -39,6 +39,9 @@ namespace Cardificer
             undoHistory = new Stack<List<UndoRedoAction>>();
             redoHistory = new Stack<List<UndoRedoAction>>();
             currentAction = new List<UndoRedoAction>();
+            tempObjectsContainer = new GameObject();
+            tempObjectsContainer.SetActive(false);
+            tempObjectsContainer.name = "Temp Objects Container";
             ClearRedoHistory();
             ClearUndoHistory();
         }
@@ -216,6 +219,8 @@ namespace Cardificer
                 heldTile = tile == null ? null : (GameObject)PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile));
                 PrefabUtility.SetPropertyModifications(heldTile, PrefabUtility.GetPropertyModifications(tile));
 
+                if (heldTile == null) { return; }
+
                 foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
                 {
                     spriteRenderer.color = previewColor;
@@ -325,6 +330,11 @@ namespace Cardificer
                     component.enabled = false;
                 }
 
+                if (_heldTile.GetComponent<Rigidbody2D>() != null)
+                {
+                    _heldTile.GetComponent<Rigidbody2D>().simulated = false;
+                }
+
                 if (heldTile == null) { return; }
 
                 if (heldTile.GetComponent<SpriteRenderer>() == null)
@@ -379,6 +389,11 @@ namespace Cardificer
                                     component.enabled = false;
                                 }
 
+                                if (value.GetComponent<Template>()[i, j, k].GetComponent<Rigidbody2D>() != null)
+                                {
+                                    value.GetComponent<Template>()[i, j, k].GetComponent<Rigidbody2D>().simulated = false;
+                                }
+
                                 if (value.GetComponent<Template>()[i, j, k].GetComponent<SpriteRenderer>() != null && value.GetComponent<Template>()[i, j, k].GetComponent<SpriteRenderer>().sprite != null)
                                 {
                                     value.GetComponent<Template>()[i, j, k].GetComponent<SpriteRenderer>().enabled = true;
@@ -423,12 +438,18 @@ namespace Cardificer
                 component.enabled = false;
             }
 
+            if (undoActionTile.GetComponent<Rigidbody2D>() != null)
+            {
+                undoActionTile.GetComponent<Rigidbody2D>().simulated = false;
+            }
+
             if (undoActionTile.GetComponent<SpriteRenderer>() != null)
             {
                 undoActionTile.GetComponent<SpriteRenderer>().enabled = true;
             }
 
             undoActionTile.name = tile.name;
+            undoActionTile.transform.parent = tempObjectsContainer.transform;
             action.redoAction = () => EraseTile(gridPos);
             action.undoAction = () => PlaceTile(undoActionTile, gridPos);
             action.relevantObjects.Add(undoActionTile);
@@ -462,12 +483,18 @@ namespace Cardificer
                 component.enabled = false;
             }
 
+            if (undoActionTile.GetComponent<Rigidbody2D>() != null)
+            {
+                undoActionTile.GetComponent<Rigidbody2D>().simulated = false;
+            }
+
             if (undoActionTile.GetComponent<SpriteRenderer>() != null)
             {
                 undoActionTile.GetComponent<SpriteRenderer>().enabled = true;
             }
 
             undoActionTile.name = tile.name;
+            undoActionTile.transform.parent = tempObjectsContainer.transform;
             action.redoAction = () => PlaceTile(undoActionTile, gridPos);
             action.undoAction = () => EraseTile(gridPos);
             action.relevantObjects.Add(undoActionTile);
@@ -769,6 +796,9 @@ namespace Cardificer
 
         // The container to hold any redo objects
         private GameObject redoObjectsContainer;
+
+        // The container to hold objects where it's unkown whether they will be undo objects or redo objects
+        private GameObject tempObjectsContainer;
 
         /// <summary>
         /// Un-does the last action

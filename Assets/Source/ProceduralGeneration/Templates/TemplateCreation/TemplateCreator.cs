@@ -178,6 +178,11 @@ namespace Cardificer
                             }
                             component.enabled = originalComponent.enabled;
                         }
+
+                        if (createdTemplate[i, j, k].GetComponent<Rigidbody2D>() != null)
+                        {
+                            createdTemplate[i, j, k].GetComponent<Rigidbody2D>().simulated = true;
+                        }
                     }
                 }
             }
@@ -199,6 +204,11 @@ namespace Cardificer
                         foreach (MonoBehaviour component in createdTemplate[i, j, k].GetComponents<MonoBehaviour>())
                         {
                             component.enabled = false;
+                        }
+
+                        if (createdTemplate[i, j, k].GetComponent<Rigidbody2D>() == null)
+                        {
+                            createdTemplate[i, j, k].GetComponent<Rigidbody2D>().simulated = false;
                         }
 
                         if (createdTemplate[i, j, k].GetComponent<SpriteRenderer>() != null)
@@ -289,6 +299,11 @@ namespace Cardificer
                         foreach (MonoBehaviour component in createdTemplate[i, j, k].GetComponents<MonoBehaviour>())
                         {
                             component.enabled = false;
+                        }
+
+                        if (createdTemplate[i, j, k].GetComponent<Rigidbody2D>() != null)
+                        {
+                            createdTemplate[i, j, k].GetComponent<Rigidbody2D>().simulated = false;
                         }
 
                         if (createdTemplate[i, j, k].GetComponent<SpriteRenderer>() != null)
@@ -460,6 +475,11 @@ namespace Cardificer
                 foreach (MonoBehaviour component in createdTile.GetComponents<MonoBehaviour>())
                 {
                     component.enabled = false;
+                }
+
+                if (createdTile.GetComponent<Rigidbody2D>())
+                {
+                    createdTile.GetComponent<Rigidbody2D>().simulated = false;
                 }
 
                 if (createdTile.GetComponent<SpriteRenderer>() != null)
