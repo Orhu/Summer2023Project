@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
 
 namespace Cardificer
@@ -42,10 +43,22 @@ namespace Cardificer
             {
                 // Instantiate the cardRenderer Game Object in the cardLayout area
                 GameObject tempCardRendererGameObject = Instantiate(cardRendererTemplate.gameObject, scrollCardLayoutArea.transform);
+
+                // Set the smaller scale of the CardRenderer
+                tempCardRendererGameObject.GetComponent<CardRenderer>().SetScale(new Vector3(0.85f, 0.9f, 1));
+
+                // Set the scaling factor of the CardRenderer's animation
+                tempCardRendererGameObject.GetComponent<CardRenderer>().scaleFactor = 1.05f;
+
+                // Set the scaling duration of the CardRenderer's animation
+                tempCardRendererGameObject.GetComponent<CardRenderer>().scaleDuration = 0.25f;
+
                 // Assign the game object a card.
                 tempCardRendererGameObject.GetComponent<CardRenderer>().card = Deck.playerDeck.cards[i];
 
-                tempCardRendererGameObject.transform.localScale = new Vector3(0.85f, 0.9f, 1);
+                // Allows for toggling in groups of card renderers
+                tempCardRendererGameObject.GetComponent<Toggle>().group = scrollCardLayoutArea.GetComponent<ToggleGroup>();
+
                 // Adds the cardRenderer to the list of cardRenderers
                 cardRenderers.Add(tempCardRendererGameObject.GetComponent<CardRenderer>());
             }

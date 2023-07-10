@@ -8,10 +8,10 @@ namespace Cardificer
     public class TemplateCreatorCamera : MonoBehaviour
     {
         [Tooltip("How much the scroll wheel affects the zoom")]
-        float cameraZoomSpeed = 1;
+        public float cameraZoomSpeed = 3f;
 
         [Tooltip("The minimum zoom the camera can have")]
-        float minZoom = 2.1f;
+        public float minZoom = 2.1f;
 
         /// <summary>
         /// Zooms the camera
@@ -27,7 +27,6 @@ namespace Cardificer
             {
                 GetComponent<Camera>().orthographicSize += -scrollDelta.y * cameraZoomSpeed;
             }
-            GetComponent<Camera>().orthographicSize += -scrollDelta.y * cameraZoomSpeed;
         }
 
         /// <summary>
