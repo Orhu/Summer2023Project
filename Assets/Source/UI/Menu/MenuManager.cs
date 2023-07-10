@@ -9,28 +9,39 @@ namespace Cardificer
     {
         // Singleton for the menu manager
         [HideInInspector] public static MenuManager instance;
+
         [Tooltip("Booster pack menu reference, assigned in inspector")]
         [SerializeField] private BoosterPackMenu boosterPackMenu;
+
         [Tooltip("Pause Menu reference, assigned in inspector")]
         [SerializeField] private PauseMenu pauseMenu;
+
         [Tooltip("Map Menu reference, assigned in inspector")]
         [SerializeField] private MapMenu mapMenu;
+
         [Tooltip("Card Menu reference, assigned in inspector")]
         [SerializeField] private CardMenu cardMenu;
+
+        [Tooltip("Game Over Menu reference, assigned in inspector")]
+        [SerializeField] private GameOverMenu gameOverMenu;
+
         // Reference to the player's game object
         private GameObject playerGameObject;
+
         // Know whether we currently have a menu open or not
         public bool menuOpen { get; private set; }
 
         /// <summary>
         /// Enum for each of the menu types
         /// </summary>
-        private enum MenuTypes
+        public enum MenuTypes
         {
+            Default,
             Pause,
             Booster,
             Map,
-            Card
+            Card,
+            GameOver
         }
 
         // Internally know which menu is open
@@ -62,6 +73,10 @@ namespace Cardificer
                 if (mapMenu == null)
                 {
                     mapMenu = GetComponentInChildren<MapMenu>();
+                }
+                if (gameOverMenu == null)
+                {
+                    gameOverMenu = GetComponentInChildren<GameOverMenu>();
                 }
 
                 // The current menu is set to pause menu
@@ -157,6 +172,9 @@ namespace Cardificer
             }
         }
 
+        /// <summary>
+        /// Opens the map menu
+        /// </summary>
         public static void OpenMapMenu()
         {
             if (!instance.menuOpen)
@@ -172,6 +190,9 @@ namespace Cardificer
             }
         }
 
+        /// <summary>
+        /// Opens the card menu
+        /// </summary>
         public static void OpenCardMenu()
         {
             if (!instance.menuOpen)
@@ -188,11 +209,29 @@ namespace Cardificer
         }
 
         /// <summary>
+        /// Opens the game over menu
+        /// </summary>
+        public static void OpenGameOverMenu()
+        {
+            if (!instance.menuOpen)
+            {
+                // "Pause the game", should probably be replaced with a more effective method
+                // Sets timeScale to 0, so all time related functions are stopped
+                Time.timeScale = 0;
+                instance.gameOverMenu.gameObject.SetActive(true);
+                // Disable player movement
+                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+                instance.currentMenu = MenuTypes.GameOver;
+                instance.menuOpen = true;
+            }
+        }
+
+        /// <summary>
         /// Called when any menu needs to be closed
         /// </summary>
         public void CloseMenu()
         {
-            if (menuOpen)
+            if (menuOpen && currentMenu != MenuTypes.GameOver) // Prevent closing of Game Over menu
             {
                 // "Resume the game", resumes all time related function
                 Time.timeScale = 1;
@@ -204,8 +243,18 @@ namespace Cardificer
                 {
                     transform.GetChild(i).gameObject.SetActive(false);
                 }
+                currentMenu = MenuTypes.Pause;
                 menuOpen = false;
             }
+        }
+
+        /// <summary>
+        /// Setter for the current menu type
+        /// </summary>
+        /// <param name="menuType">The menu type to set to</param>
+        public void SetCurrentMenu(MenuTypes menuType)
+        {
+            currentMenu = menuType;
         }
     }
 }
