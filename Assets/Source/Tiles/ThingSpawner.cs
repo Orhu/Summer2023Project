@@ -28,8 +28,7 @@ namespace Cardificer
             }
 
             if (things == null || things.weightedLoot.things == null || things.weightedLoot.things.Count <= 0)
-            {
-                Debug.LogError("Thing spawner in " + GetComponent<Tile>().room.template + " has no things specified!");
+            { 
                 chosenThing = null;
                 return;
             }
@@ -45,7 +44,11 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
-            if (chosenThing == null) { return; }
+            if (chosenThing == null) 
+            {
+                Debug.LogWarning("Thing spawner in " + GetComponent<Tile>().room.template + " at " +  GetComponent<Tile>().gridLocation + " has no things specified! It will not spawn anything");
+                return; 
+            }
 
             string name = chosenThing.name;
             chosenThing = Instantiate(chosenThing.gameObject);

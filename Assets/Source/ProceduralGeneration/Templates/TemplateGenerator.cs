@@ -53,6 +53,7 @@ namespace Cardificer
                         if (tile != null && tile.GetComponent<Tile>() != null)
                         {
                             tile.GetComponent<Tile>().room = room;
+                            tile.GetComponent<Tile>().gridLocation = new Vector2Int(j, k);
                         }
 
                         // If not pathfinding layer, then check for thing spawner then be done
@@ -80,7 +81,7 @@ namespace Cardificer
                             createdTile.name = "Empty tile (" + j + ", " + k + ")";
                             createdTile.gridLocation = new Vector2Int(j, k);
                             createdTile.allowedMovementTypes = RoomInterface.MovementType.Walking | RoomInterface.MovementType.Burrowing | RoomInterface.MovementType.Flying;
-                            createdTile.transform.parent = room.template.transform;
+                            createdTile.transform.parent = layers[0].transform;
                             createdTile.transform.localPosition = new Vector3(j, k);
                         }
                         else

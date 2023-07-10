@@ -25,7 +25,7 @@ namespace Cardificer
         public int burrowMovementPenalty;
 
         [Tooltip("the x and y location of this tile within the 2D array grid")]
-        [HideInInspector] public Vector2Int gridLocation;
+        public Vector2Int gridLocation;
 
         // The room that this tile is a part of 
         [HideInInspector] public Room room;
