@@ -535,7 +535,7 @@ namespace Cardificer
                 && (heldTemplate == null || heldTemplate.name != Selection.activeGameObject.name)
                 )
             {
-                GameObject selectedObject = (GameObject)PrefabUtility.InstantiatePrefab(Selection.activeGameObject);
+                GameObject selectedObject = (GameObject) PrefabUtility.InstantiatePrefab(Selection.activeGameObject);
                 selectedObject.name = Selection.activeGameObject.name;
 
                 if (selectedObject.GetComponent<Template>() == null)
