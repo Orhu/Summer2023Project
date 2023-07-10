@@ -290,6 +290,9 @@ namespace Cardificer
 
                 case SpawnLocation.Causer:
                     return causer.transform.position;
+
+                case SpawnLocation.Player:
+                    return Player.Get().transform.position;
             }
             return Vector3.zero;
         }

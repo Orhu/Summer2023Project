@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
+  m_Name: Atk_Lotus_BigSlash_WU
+  m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 0}
+  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
+  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
+  attack:
+    damage: 2
+    damageType: 0
+    statusEffects: []
+    invertInvincibility: 0
+  hitCount: 999
+  applyDamageOnHit: 1
+  modifiers:
+  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
+  - {fileID: 11400000, guid: 46486230b81cba74a8617487d3d2f430, type: 2}
+  shape: {fileID: 11400000, guid: 68e60fab57dee06419ad697654be7ee4, type: 2}
+  lifetime: 1.5
+  initialSpeed: 0
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 0
+  homingSpeed: 0
+  homingTime: 0
+  homingDelay: 0
+  homingAimMode: 5
+  switchAfterHit: 0
+  visualObject: {fileID: 2861346722292020156, guid: d056bcfd7a7b7df46962def1d0c12871, type: 3}
+  detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
+  spawnLocation: 0
+  aimMode: 0
+  waitForProjectileDeath: 1
+  chargeTime: 0
+  additionalActionTime: 0.5625
+  _spawnSequence:
+  - delay: 0
+    startingAngle: -110
+    radius: 2.5
+    orbitDirection: 1
+  randomStartingAngle: 0
+  randomRadius: 0
+  attachedToSpawnLocation: 1
