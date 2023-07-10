@@ -15,5 +15,13 @@ namespace Cardificer
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+
+        /// <summary>
+        /// Unity event for opening the game over menu.
+        /// </summary>
+        public void OpenGameOverMenuEvent()
+        {
+            MenuManager.OpenGameOverMenu();
+        }
     }
 }

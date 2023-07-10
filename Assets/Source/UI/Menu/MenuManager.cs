@@ -17,6 +17,8 @@ namespace Cardificer
         [SerializeField] private MapMenu mapMenu;
         [Tooltip("Card Menu reference, assigned in inspector")]
         [SerializeField] private CardMenu cardMenu;
+        [Tooltip("Game Over Menu reference, assigned in inspector")]
+        [SerializeField] private GameOverMenu gameOverMenu;
         // Reference to the player's game object
         private GameObject playerGameObject;
         // Know whether we currently have a menu open or not
@@ -30,7 +32,8 @@ namespace Cardificer
             Pause,
             Booster,
             Map,
-            Card
+            Card,
+            GameOver
         }
 
         // Internally know which menu is open
@@ -62,6 +65,10 @@ namespace Cardificer
                 if (mapMenu == null)
                 {
                     mapMenu = GetComponentInChildren<MapMenu>();
+                }
+                if (gameOverMenu == null)
+                {
+                    gameOverMenu = GetComponentInChildren<GameOverMenu>();
                 }
 
                 // The current menu is set to pause menu
@@ -157,6 +164,9 @@ namespace Cardificer
             }
         }
 
+        /// <summary>
+        /// Opens the map menu
+        /// </summary>
         public static void OpenMapMenu()
         {
             if (!instance.menuOpen)
@@ -172,6 +182,9 @@ namespace Cardificer
             }
         }
 
+        /// <summary>
+        /// Opens the card menu
+        /// </summary>
         public static void OpenCardMenu()
         {
             if (!instance.menuOpen)
@@ -183,6 +196,24 @@ namespace Cardificer
                 // Disable player movement
                 instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
                 instance.currentMenu = MenuTypes.Card;
+                instance.menuOpen = true;
+            }
+        }
+
+        /// <summary>
+        /// Opens the game over menu
+        /// </summary>
+        public static void OpenGameOverMenu()
+        {
+            if (!instance.menuOpen)
+            {
+                // "Pause the game", should probably be replaced with a more effective method
+                // Sets timeScale to 0, so all time related functions are stopped
+                Time.timeScale = 0;
+                instance.gameOverMenu.gameObject.SetActive(true);
+                // Disable player movement
+                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+                instance.currentMenu = MenuTypes.GameOver;
                 instance.menuOpen = true;
             }
         }

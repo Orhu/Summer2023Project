@@ -29,6 +29,7 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
+            Time.timeScale = 1;
             if (SaveManager.autosaveExists)
             {
                 saveExists = true;
