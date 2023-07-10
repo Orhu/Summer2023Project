@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Cardificer
 {
@@ -10,6 +11,18 @@ namespace Cardificer
     {
         // Damage multiplier of this actor
         [HideInInspector] public float damageMultiplier = 1f;
+
+        // Tracks whether moving and playing cards is enabled
+        [HideInInspector] public bool movingEnabled = true;
+
+        // Delegate called when the map is opened (@ALEX TODO: Delete this delegate when you make your map screen)
+        public System.Action mapOpened;
+
+        // Delegate called when the map is closed (@ALEX TODO: Delete this delegate when you make your map screen)
+        public System.Action mapClosed;
+
+        // Boolean tracking whether the map is open (@ALEX TODO: Delete this boolean when you make your map screen)
+        private bool mapOpen = false;
         
         // Movement component to allow the agent to move
         private Movement movementComponent;
@@ -58,7 +71,7 @@ namespace Cardificer
             {
                 SaveManager.AutosaveCorrupted("Invalid player health");
                 return;
-            }
+            }           
         }
 
         /// <summary>
@@ -66,73 +79,156 @@ namespace Cardificer
         /// </summary>
         private void Update()
         {
-            movementComponent.movementInput = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
-
             if (canAct)
             {
-                // Card Selection
-                int pressedPreview = GetPressedPreviewButton();
-                if (pressedPreview > 0)
-                {
-                    Deck.playerDeck.SelectCard(pressedPreview - 1);
-                }
-
-                // Card Playing
-                if (Input.GetButtonDown("Fire1") && !Input.GetButton("Fire2"))
-                {
-                    if (Deck.playerDeck.PlayChord())
-                    {
-                        animatorComponent.SetTrigger("cast");
-                    }
-                }
                 animatorComponent.SetMirror("castLeft", GetActionAimPosition().x - transform.position.x < 0);
-
-                // Channeling
-                if (Input.GetButtonDown("Fire2") && !Deck.playerDeck.isActing)
-                {
-                    channelAbility.StartChanneling();
-                }
-                if (Input.GetButtonUp("Fire2"))
-                {
-                    channelAbility.StopChanneling();
-                }
-            }
-
-            /*if (Input.GetKeyDown(KeyCode.T))
-            {
-                FloorGenerator.ShowLayout();
-            }*/
-
-            // Open Pause Menu
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                MenuManager.OpenPauseMenu();
-            }
-            else if (Input.GetKeyDown(KeyCode.C))
-            {
-                MenuManager.OpenCardMenu();
-            }
-            else if (Input.GetKeyDown(KeyCode.Tab))
-            {
-                MenuManager.OpenMapMenu();
             }
         }
 
         /// <summary>
-        /// Gets the card preview button being pressed.
+        /// Moves the player 
         /// </summary>
-        /// <returns> The number corresponding to the current button, -1 if none pressed. </returns>
-        private static int GetPressedPreviewButton()
+        /// <param name="moveInput"> The move input </param>
+        public void OnMove(InputValue moveInput)
         {
-            for (int i = 1; i <= Deck.playerDeck.handSize; i++)
+            if (movingEnabled)
             {
-                if (Input.GetButtonDown("PreviewCard" + i))
+                movementComponent.movementInput = moveInput.Get<Vector2>().normalized;
+                return;
+            }
+            movementComponent.movementInput = new Vector2(0, 0);
+        }
+
+        /// <summary>
+        /// Previews a card
+        /// </summary>
+        public void OnPreviewCard1()
+        {
+            if (movingEnabled && canAct)
+            {
+                Deck.playerDeck.SelectCard(0);
+            }
+        }
+
+        /// <summary>
+        /// Previews a card
+        /// </summary>
+        public void OnPreviewCard2()
+        {
+            if (movingEnabled && canAct)
+            {
+                Deck.playerDeck.SelectCard(1);
+            }
+        }
+
+        /// <summary>
+        /// Previews a card
+        /// </summary>
+        public void OnPreviewCard3()
+        {
+            if (movingEnabled && canAct)
+            {
+                Deck.playerDeck.SelectCard(2);
+            }
+        }
+
+        /// <summary>
+        /// Previews a card
+        /// </summary>
+        public void OnPreviewCard4()
+        {
+            if (movingEnabled && canAct)
+            {
+                Deck.playerDeck.SelectCard(3);
+            }
+        }
+
+        /// <summary>
+        /// Previews a card
+        /// </summary>
+        public void OnPreviewCard5()
+        {
+            if (movingEnabled && canAct)
+            {
+                Deck.playerDeck.SelectCard(4);
+            }
+        }
+
+        /// <summary>
+        /// Cast the selected cards
+        /// </summary>
+        public void OnCast()
+        {
+            if (movingEnabled && canAct)
+            {
+                if (Deck.playerDeck.PlayChord())
                 {
-                    return i;
+                    animatorComponent.SetTrigger("cast");
                 }
             }
+        }
 
-            return -1;
+        /// <summary>
+        /// Channeling
+        /// </summary>
+        /// <param name="input"> The input </param>
+        public void OnChannel(InputValue input)
+        {
+            if (movingEnabled && canAct)
+            {
+                if (input.isPressed)
+                {
+                    channelAbility.StartChanneling();
+                }
+                else
+                {
+                    channelAbility.StopChanneling();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Pauses the game
+        /// </summary>
+        public void OnPause()
+        {
+            MenuManager.TogglePause();
+        }
+
+        /// <summary>
+        /// Opens the map
+        /// </summary>
+        public void OnOpenMap()
+        {
+            // @ALEX TODO: Delete the boolean and delegates (see above for which ones to delete) when you make your map screen. Also, in LockCameraToRoom, delete the TODO: Delete.
+            mapOpen = !mapOpen;
+            if (mapOpen)
+            {
+                mapOpened?.Invoke();
+            }
+            else
+            {
+                mapClosed?.Invoke();
+            }
+        }
+
+        /// <summary>
+        /// Opens the card menu
+        /// </summary>
+        public void OnOpenCardMenu()
+        {
+            MenuManager.ToggleCardMenu();
+        }
+
+        /// <summary>
+        /// Shows the floor layout
+        /// </summary>
+        public void OnShowLayout()
+        {
+            // Make sure this can only happen when testing in the editor
+            #if UNITY_EDITOR
+            FloorGenerator.ShowLayout();
+            #endif
         }
 
         private void OnDestroy()
@@ -169,7 +265,7 @@ namespace Cardificer
         /// <returns> The mouse position in world space. </returns>
         public Vector3 GetActionAimPosition()
         {
-            return Vector3.Scale(Camera.main.ScreenToWorldPoint(Input.mousePosition), new Vector3(1, 1, 0));
+            return Vector3.Scale(Camera.main.ScreenToWorldPoint(Mouse.current.position.value), new Vector3(1, 1, 0));
         }
 
 
@@ -198,8 +294,7 @@ namespace Cardificer
         /// <returns> The AudioSource. </returns>
         public AudioSource GetAudioSource()
         {
-            
-                return GetComponent<AudioSource>(); 
+            return GetComponent<AudioSource>(); 
         }
 
         /// <summary>
