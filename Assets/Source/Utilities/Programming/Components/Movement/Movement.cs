@@ -23,6 +23,7 @@ namespace Cardificer
                 animatorComponent.SetBool("moving", value.sqrMagnitude > 0);
                 if (value.x == 0) { return; }
                 animatorComponent.SetMirror("runLeft", value.x < 0);
+                animatorComponent.SetMirror("idleLeft", value.x < 0);
             }
         }
 
