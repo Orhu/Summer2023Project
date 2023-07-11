@@ -1,6 +1,7 @@
 using System.Collections;
 using Skaillz.EditInline;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Cardificer.FiniteStateMachine
 {
@@ -13,11 +14,8 @@ namespace Cardificer.FiniteStateMachine
         [Tooltip("After requesting an action, how long does it take for the action to be performed?")]
         public float actionChargeUpTime;
 
-        [Tooltip("After the action is performed, what is the delay before the action can be performed again?")]
-        public float actionCooldownTime;
-
-        [Tooltip("The actions that will be taken when the enemy attempts to issue an action.")] [EditInline]
-        public Cardificer.Action[] actions;
+        [Tooltip("The attacks that will be launched when the enemy attempts to attack.")] [EditInline]
+        public Attack[] attacks;
 
         /// <summary>
         /// Fire an attack
@@ -39,13 +37,11 @@ namespace Cardificer.FiniteStateMachine
             yield return new WaitForSeconds(actionChargeUpTime);
             if (stateMachine.canAct)
             {
-                foreach (var action in actions)
+                foreach (var attack in attacks)
                 {
-                    action.Play(stateMachine, FloorGenerator.currentRoom.livingEnemies);
+                    attack.Play(stateMachine, FloorGenerator.currentRoom.livingEnemies, () => stateMachine.cooldownData.cooldownReady[this] = true);
                 }
-                yield return new WaitForSeconds(actionCooldownTime);
             }
-            stateMachine.cooldownData.cooldownReady[this] = true;
         }
     }
 }

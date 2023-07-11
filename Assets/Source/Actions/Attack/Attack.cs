@@ -179,6 +179,11 @@ namespace Cardificer
         {
             Play(actor, modifiers, actor.GetActionSourceTransform().gameObject, attackFinished, ignoredObjects);
         }
+        
+        public void Play(IActor actor, List<GameObject> ignoredObjects = null, System.Action attackFinished = null)
+        {
+            Play(actor, new List<AttackModifier>(), actor.GetActionSourceTransform().gameObject, attackFinished, ignoredObjects);
+        }
         public sealed override void Play(IActor actor, List<GameObject> ignoredObjects = null)
         {
             Play(actor, new List<AttackModifier>(), actor.GetActionSourceTransform().gameObject, ignoredObjects: ignoredObjects);

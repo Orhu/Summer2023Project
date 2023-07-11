@@ -10,7 +10,7 @@ namespace Cardificer.FiniteStateMachine
     /// as well as enabling stateMachine.pathData.ignorePathRequests
     /// </summary>
     [CreateAssetMenu(menuName="FSM/Actions/Pathfinding/Request and Follow Path")]
-    public class ChaseTarget : SingleAction
+    public class RequestAndFollowPath : SingleAction
     {
         [Tooltip("After a Path request is submitted, how long before another one is allowed?")]
         [SerializeField] private float pathLockout = 0.03f;
