@@ -17,7 +17,10 @@ namespace Cardificer
         {
             Panicked instance = (Panicked)base.CreateCopy(gameObject);
 
-            gameObject.GetComponent<Movement>().requestSpeedModifications += instance.ReverseMovement;
+            if (!gameObject.CompareTag("Boss"))
+            {
+                gameObject.GetComponent<Movement>().requestSpeedModifications += instance.ReverseMovement;
+            }
 
             return instance;
         }
@@ -53,7 +56,7 @@ namespace Cardificer
         /// </summary>
         private new void OnDestroy()
         {
-            if (gameObject != null)
+            if (gameObject != null && !gameObject.CompareTag("Boss"))
             {
                 gameObject.GetComponent<Movement>().requestSpeedModifications -= ReverseMovement;
             }
