@@ -9,9 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
-  m_Name: OrbitAttack_BlackHoleChordEffect
+  m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
+  m_Name: BulletAttack_BlackHoleChord
   m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 0}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 0
     damageType: 0
@@ -22,26 +25,32 @@ MonoBehaviour:
   modifiers:
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
   - {fileID: 11400000, guid: c5ecd3c449a2eda448523382752efa64, type: 2}
+  immuneToShield: 1
+  immuneToReflect: 1
   shape: {fileID: 11400000, guid: 90e158c0097e01d478cfb6e53b49dfa0, type: 2}
-  lifetime: 0.01
+  lifetime: 0.05
   initialSpeed: 0
   acceleration: 0
   minSpeed: 0
   maxSpeed: 0
   homingSpeed: 0
   homingTime: 0
+  homingDelay: 0
   homingAimMode: 0
-  visualObject: {fileID: 1471303780206332900, guid: 88b068a8d02932b4cbe2fe2ff5658824, type: 3}
+  switchAfterHit: 0
+  visualObject: {fileID: 5330253246723219290, guid: 394fa397306965c4ba6174d5ff218c23, type: 3}
   detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
   spawnLocation: 0
-  aimMode: 3
-  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
-  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
+  aimMode: 5
+  waitForProjectileDeath: 0
+  chargeTime: 0
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
-    startingAngle: 0
-    radius: 0
-    orbitDirection: 0
-  randomStartingAngle: 0
-  randomRadius: 0
-  attachedToSpawnLocation: 1
+    angle: 0
+    offset: {x: 0, y: 0}
+  randomAngle: 0
+  randomOffset: 0
