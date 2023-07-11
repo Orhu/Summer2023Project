@@ -18,11 +18,14 @@ namespace Cardificer.FiniteStateMachine
             Infinity
         }
 
-        [Tooltip("The path type to use")] [SerializeField]
-        private PathType pathType;
+        [Tooltip("The path type to use")] 
+        [SerializeField] private PathType pathType;
 
-        [Tooltip("Center point of the path shape, as an offset from the room's center")] [SerializeField]
-        private Vector2 centerOffset;
+        [Tooltip("Center point of the path shape, as an offset from the room's center")] 
+        [SerializeField] private Vector2 centerOffset;
+
+        [Tooltip("Bounding box size of the shape")] 
+        [SerializeField] private Vector2Int shapeBounds;
 
 
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
@@ -38,7 +41,7 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> List of Vector2 that make either an infinity or figure 8 path around the center position. </returns>
         private Vector2[] FormulatePath()
         {
-            float quarter = 29f / 4f;
+            float quarter = (float)shapeBounds.x / shapeBounds.y;
             Vector2 roomCenter = RoomInterface.instance.myWorldPosition;
             List<Vector2> points = new List<Vector2>();
 

@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fab3c6ca3c9e43cabc9d762d9be4accb, type: 3}
-  m_Name: SetPathBottomIfDestReached
+  m_Script: {fileID: 11500000, guid: eabd4dbd5b080a640bd3c050fac04c55, type: 3}
+  m_Name: LC_BasicAttack
   m_EditorClassIdentifier: 
-  decision: {fileID: 11400000, guid: 84ee1da3f85044f40bcc338b1d5e1156, type: 2}
-  invert: 0
-  trueAction: {fileID: 11400000, guid: eed957c816d03034c80a92a3b66bad84, type: 2}
+  actionChargeUpTime: 0
+  attacks:
+  - {fileID: 11400000, guid: db6f9deec1d5a2544988d2f26ebba4ca, type: 2}
