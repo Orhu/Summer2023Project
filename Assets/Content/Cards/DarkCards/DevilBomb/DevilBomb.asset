@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5dd09abb2f10ba48b1ad730fbb847cf, type: 3}
   m_Name: DevilBomb
   m_EditorClassIdentifier: 
-  actionTime: 0
   cooldownTime: 7
   actions:
   - {fileID: 11400000, guid: 6d76aa34224caa242bcb762e7f6fbfab, type: 2}
@@ -32,7 +31,8 @@ MonoBehaviour:
   damageTypeSprite: {fileID: 0}
   damage: 1.5
   chordEffectText: Hexing Spell
-  chordModifiers: []
+  chordModifiers:
+  - {fileID: 11400000, guid: 5af2c60ca77657046b7490f79a3d1f2f, type: 2}
   duplicateModifiers:
   - {fileID: 11400000, guid: 4b8a15bd3574b544d926f8378c04b7b4, type: 2}
   - {fileID: 11400000, guid: af5ed3aa9182f7e46963868e45b659c6, type: 2}

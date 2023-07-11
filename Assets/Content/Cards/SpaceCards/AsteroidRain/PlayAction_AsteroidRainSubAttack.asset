@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae521aad527ed7e449352281fbf9e980, type: 3}
   m_Name: PlayAction_AsteroidRainSubAttack
   m_EditorClassIdentifier: 
-  action: {fileID: 11400000, guid: 9d69e988bf96a31409d09f1b6a9daed7, type: 2}
+  minAttackSequenceIndex: 0
+  maxAttackSequenceIndex: 3
+  action: {fileID: 11400000, guid: 9ed02c5d97dfe8346be753116ee019f4, type: 2}
   delay: 0
-  playTime: 0
+  playTime: 3
+  playCount: 1000
+  inheritModifiers: 1

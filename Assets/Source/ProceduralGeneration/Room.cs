@@ -36,6 +36,16 @@ namespace Cardificer
         public void RemoveEnemy(GameObject enemy)
         {
             livingEnemies.Remove(enemy);
+            StartCoroutine(CheckEnemyCount());
+        }
+
+        /// <summary>
+        /// Checks the enemy count after one frame (waiting for any enemies spawned on death of another enemy)
+        /// </summary>
+        /// <returns> Waits on frame </returns>
+        private IEnumerator CheckEnemyCount()
+        {
+            yield return null;
             if (livingEnemies.Count == 0)
             {
                 OpenDoors();

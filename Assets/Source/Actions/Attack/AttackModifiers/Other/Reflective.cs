@@ -36,7 +36,7 @@ namespace Cardificer
         private void ReflectProjectiles(Collider2D collider)
         {
             if (collider.GetComponent<Projectile>() is Projectile hitProjectile
-                && !hitProjectile.immuneToShield
+                && !hitProjectile.immuneToReflect
                 && !projectile.ignoredObjects.Contains(hitProjectile.causer))
             {
                 hitProjectile.transform.right *= -1;

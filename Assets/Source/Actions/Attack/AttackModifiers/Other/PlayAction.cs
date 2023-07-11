@@ -34,6 +34,9 @@ namespace Cardificer
         [Tooltip("Causes actions played by this to have the same modifiers as the projectile this modifies. Will exclude any play action modifiers")]
         [SerializeField] private bool inheritModifiers = false;
 
+        [Tooltip("Whether or not this will play when on 0 damage projectiles")]
+        [SerializeField] private bool applyToZeroDamage = false;
+
         // The damage multiplier of this action
         private float damageMultiplier = 1f;
 
@@ -60,6 +63,7 @@ namespace Cardificer
         {
             set
             {
+                if (!applyToZeroDamage && value.attackData.damage == 0) { return; }
                 if (playActionRoot == null)
                 {
                     playActionRoot = new GameObject("Play Action Roots");
@@ -76,7 +80,7 @@ namespace Cardificer
                         // Remove all play action modifiers
                         (AttackModifier modifier) =>
                         {
-                            return modifier is PlayAction;
+                            return modifier is PlayAction || modifier is DuplicateAttackSequence;
                         });
                 }
 

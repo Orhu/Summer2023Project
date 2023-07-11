@@ -111,7 +111,7 @@ namespace Cardificer
                 rigidBody.velocity = Vector2.zero;
             }
 
-            if (info.amount <= 0) { return; }
+            if (info.amount == 0) { return; }
             float duration = Mathf.Max(Time.fixedDeltaTime, info.duration);
             ActiveKnockbacks.Add(new ActiveKnockback(direction * knockbackMultiplier * info.amount / duration, duration));
         }
