@@ -80,7 +80,7 @@ namespace Cardificer
                         // Remove all play action modifiers
                         (AttackModifier modifier) =>
                         {
-                            return modifier is PlayAction;
+                            return modifier is PlayAction || modifier is DuplicateAttackSequence;
                         });
                 }
 
