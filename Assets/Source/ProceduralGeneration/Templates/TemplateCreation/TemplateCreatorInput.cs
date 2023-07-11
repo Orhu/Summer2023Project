@@ -248,12 +248,11 @@ namespace Cardificer
                     DeselectObject();
                 }
 
-                GameObject tile = templateCreator.GetObject(gridPos);
+                GameObject tile = templateCreator.GetObject(gridPos);             
 
-                Debug.Log("is this happening? copy");     
-                heldTile = tile == null ? null : (GameObject)PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile));
-                PrefabUtility.SetPropertyModifications(heldTile, PrefabUtility.GetPropertyModifications(tile));
-
+                GameObject newTile = tile == null ? null : (GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile));
+                PrefabUtility.SetPropertyModifications(newTile, PrefabUtility.GetPropertyModifications(tile));
+                heldTile = newTile;
                 if (heldTile == null) { return; }
 
                 foreach (SpriteRenderer spriteRenderer in heldTile.GetComponents<SpriteRenderer>())
