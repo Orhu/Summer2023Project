@@ -24,6 +24,7 @@ namespace Cardificer
             OnSpawned,
             OnHit,
             OnOverlap,
+            OnDamagingOverlap,
             OnDestroyed,
             Repeately,
         }
@@ -103,6 +104,17 @@ namespace Cardificer
                     case PlayTime.OnOverlap:
                         value.onOverlap += hitCollider =>
                         {
+                            ignoredObjects = new List<GameObject>(value.ignoredObjects);
+                            ignoredObjects.Add(hitCollider.gameObject);
+                            if (--playCount < 0) { return; }
+                            value.StartCoroutine(DelayedPlayAction());
+                        };
+                        break;
+
+                    case PlayTime.OnDamagingOverlap:
+                        value.onOverlap += hitCollider =>
+                        {
+                            if (value.attackData.damage == 0) { return; }
                             ignoredObjects = new List<GameObject>(value.ignoredObjects);
                             ignoredObjects.Add(hitCollider.gameObject);
                             if (--playCount < 0) { return; }
