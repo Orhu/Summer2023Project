@@ -201,6 +201,35 @@ namespace Cardificer
         public void OnErase(InputValue input)
         {
             eraseButtonPressed = input.isPressed;
+
+            if (!input.isPressed)
+            {
+                if (currentAction.Count > 0)
+                {
+                    List<UndoRedoAction> completedAction = new List<UndoRedoAction>();
+                    foreach (UndoRedoAction action in currentAction)
+                    {
+                        completedAction.Add(action);
+                        foreach (GameObject relevantObject in action.relevantObjects)
+                        {
+                            relevantObject.transform.parent = undoObjectsContainer.transform;
+                        }
+                    }
+                    undoHistory.Push(completedAction);
+                    currentAction.Clear();
+                }
+            }
+
+            Vector3 mouseViewportPos = templateCamera.GetComponent<Camera>().ScreenToViewportPoint(Mouse.current.position.value);
+            bool isOutside = mouseViewportPos.x < 0 || mouseViewportPos.x > 1 || mouseViewportPos.y < 0 || mouseViewportPos.y > 1;
+            Vector2Int gridPos = MousePosToGridPos(Mouse.current.position.value);
+
+            if (!mouseOverUI && !isOutside && input.isPressed
+                && !templateCreator.IsGridPosOutsidePathfindingBounds(gridPos)
+                && heldTile != null)
+            {
+                ClearRedoHistory();
+            }
         }
 
         /// <summary>
