@@ -5,8 +5,8 @@ namespace Cardificer
     /// <summary>
     /// A status effect that prevents movement entirely.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewSlowed", menuName = "Status Effects/Slowed (Unstackable)")]
-    public class UnstackableSlowed : StatusEffect
+    [CreateAssetMenu(fileName = "NewSlowed", menuName = "Status Effects/Slowed (Durations Reset On Stack)")]
+    public class Slowed_DurationsResetOnStack : StatusEffect
     {
         [Tooltip("The percent to reduce the movement speed by per stack")] [Range(0f, 1f)]
         [SerializeField] private float slowAmount = 0.25f;
@@ -18,7 +18,7 @@ namespace Cardificer
         /// <returns> The status effect that was created. </returns>
         public override StatusEffect CreateCopy(GameObject gameObject)
         {
-            UnstackableSlowed instance = (UnstackableSlowed)base.CreateCopy(gameObject);
+            Slowed_DurationsResetOnStack instance = (Slowed_DurationsResetOnStack)base.CreateCopy(gameObject);
 
             gameObject.GetComponent<Movement>().requestSpeedModifications += instance.SlowMovement;
 
@@ -39,7 +39,7 @@ namespace Cardificer
             }
 
             other.remainingDuration = Mathf.Max(duration, other.remainingDuration);
-            (other as UnstackableSlowed).slowAmount = Mathf.Max(slowAmount, (other as UnstackableSlowed).slowAmount);
+            (other as Slowed_DurationsResetOnStack).slowAmount = Mathf.Max(slowAmount, (other as Slowed_DurationsResetOnStack).slowAmount);
             return true;
         }
 

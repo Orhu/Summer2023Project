@@ -5,11 +5,10 @@ namespace Cardificer
     /// <summary>
     /// A status effect that prevents movement entirely.
     /// </summary>
-    [CreateAssetMenu(fileName = "NewSlowed", menuName = "Status Effects/Slowed")]
-    public class Slowed : StatusEffect
+    [CreateAssetMenu(fileName = "NewSlowed", menuName = "Status Effects/Slowed (Slow Increases On Stack)")]
+    public class Slowed_SlowIncreasesOnStack : StatusEffect
     {
-        [Tooltip("The percent to reduce the movement speed by per stack")]
-        [Range(0f, 1f)]
+        [Tooltip("The percent to reduce the movement speed by per stack")] [Range(0f, 1f)]
         [SerializeField] private float slowAmount = 0.25f;
 
         /// <summary>
@@ -19,7 +18,7 @@ namespace Cardificer
         /// <returns> The status effect that was created. </returns>
         public override StatusEffect CreateCopy(GameObject gameObject)
         {
-            Slowed instance = (Slowed)base.CreateCopy(gameObject);
+            Slowed_SlowIncreasesOnStack instance = (Slowed_SlowIncreasesOnStack)base.CreateCopy(gameObject);
 
             gameObject.GetComponent<Movement>().requestSpeedModifications += instance.SlowMovement;
 
