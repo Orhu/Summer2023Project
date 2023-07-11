@@ -9,12 +9,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91eb735b7a0c96c41927a38f682802fa, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ad52b9f80c126441bb77679606ea8e0, type: 3}
   m_Name: SpawnBomb_DevilBomb
   m_EditorClassIdentifier: 
+  minAttackSequenceIndex: 0
+  maxAttackSequenceIndex: 2147483647
   explosionRadius: 0.9765625
+  knockback:
+    amount: 0
+    duration: 0.02
+    resetMomentum: 0
   fuseTime: 0.01
+  destroyBlockers: 0
   sticky: 0
   inheritIgnore: 0
-  spawnMode: 1
+  spawnMode: 0
   bombVisuals: {fileID: 133426283891510824, guid: 45f6ca9fd4bed37448c93353e77711a3, type: 3}
+  damageData:
+    damage: 0
+    damageType: 1
+    statusEffects:
+    - {fileID: 11400000, guid: 2397f2eb8d291da4c9efc62a275046b2, type: 2}
+    invertInvincibility: 0
