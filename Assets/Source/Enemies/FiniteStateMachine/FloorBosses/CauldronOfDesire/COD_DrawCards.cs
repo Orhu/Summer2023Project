@@ -27,10 +27,7 @@ namespace Cardificer.FiniteStateMachine
             public Sprite abilitySprite;
 
             [Tooltip("List of actions to be performed")]
-            public List<Action> actionSequence;
-
-            [Tooltip("Amount to delay between each action")]
-            public List<float> actionDelaySequence;
+            public List<Attack> actionSequence;
         }
         
         // Tracks seeded random from save manager
