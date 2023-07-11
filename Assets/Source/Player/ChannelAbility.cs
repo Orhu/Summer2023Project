@@ -27,6 +27,7 @@ namespace Cardificer
         // Whether or not this is currently channeling
         public bool isChanneling { get; private set; } = false;
 
+        // The current cooldown reduction of the player.
         private float currentCooldownReduction;
 
         /// <summary>
@@ -34,6 +35,7 @@ namespace Cardificer
         /// </summary>
         public void StartChanneling()
         {
+            if (isChanneling) { return; }
             isChanneling = true;
             currentCooldownReduction = initialCooldownReduction;
             Deck.playerDeck.cooldownReduction *= initialCooldownReduction;
@@ -45,7 +47,9 @@ namespace Cardificer
         /// </summary>
         public void StopChanneling()
         {
+            if (!isChanneling) { return; }
             isChanneling = false;
+            Deck.playerDeck.cooldownReduction /= currentCooldownReduction;
             CancelInvoke();
         }
 
@@ -58,22 +62,13 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Resets the player's cooldowns, and stops applying status effects.
-        /// </summary>
-        private void Channel()
-        {
-            Deck.playerDeck.ClearCooldowns();
-            CancelInvoke();
-        }
-
-        /// <summary>
         /// Updates the player's cooldowns
         /// </summary>
         private void Update()
         {
             if (!isChanneling) { return; }
             Deck.playerDeck.cooldownReduction /= currentCooldownReduction;
-            currentCooldownReduction += cooldownReductionIncreaseRate * Time.deltaTime;
+            currentCooldownReduction = Mathf.Min(currentCooldownReduction + cooldownReductionIncreaseRate * Time.deltaTime, maxCooldownReduction);
             Deck.playerDeck.cooldownReduction *= currentCooldownReduction;
         }
     }

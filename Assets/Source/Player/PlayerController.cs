@@ -164,6 +164,7 @@ namespace Cardificer
                 if (Deck.playerDeck.PlayChord())
                 {
                     animatorComponent.SetTrigger("cast");
+                    channelAbility.StopChanneling();
                 }
             }
         }
