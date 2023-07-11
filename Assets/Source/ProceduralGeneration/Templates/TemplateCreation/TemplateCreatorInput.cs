@@ -434,8 +434,14 @@ namespace Cardificer
         {
             GameObject tile = templateCreator.GetObject(gridPos);
             UndoRedoAction action = new UndoRedoAction();
-            GameObject undoActionTile = (GameObject)PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile));
+            GameObject undoActionTile = (GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile));
             PrefabUtility.SetPropertyModifications(undoActionTile, PrefabUtility.GetPropertyModifications(tile));
+
+            if (!templateCreator.EraseTile(gridPos)) 
+            {
+                Destroy(undoActionTile);
+                return; 
+            }
 
             foreach (MonoBehaviour component in undoActionTile.GetComponents<MonoBehaviour>())
             {
@@ -458,8 +464,6 @@ namespace Cardificer
             action.undoAction = () => PlaceTile(undoActionTile, gridPos);
             action.relevantObjects.Add(undoActionTile);
             currentAction.Add(action);
-
-            templateCreator.EraseTile(gridPos);
         }
 
         /// <summary>
@@ -475,7 +479,7 @@ namespace Cardificer
                 spriteRenderer.sortingOrder--;
             }
 
-            templateCreator.PlaceTile(tile, gridPos);
+            if (!templateCreator.PlaceTile(tile, gridPos)) { return; }
 
             UndoRedoAction action = new UndoRedoAction();
             GameObject undoActionTile = (GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tile));
@@ -573,19 +577,22 @@ namespace Cardificer
                 && (heldTemplate == null || Selection.activeGameObject.name != heldTemplate.name)
                 )
             {
-                GameObject selectedObject = (GameObject)PrefabUtility.InstantiatePrefab(Selection.activeGameObject);
-                selectedObject.name = Selection.activeGameObject.name;
+                GameObject selectedObject = (GameObject) PrefabUtility.InstantiatePrefab(Selection.activeGameObject);
+                if (selectedObject != null)
+                {
+                    selectedObject.name = Selection.activeGameObject.name;
 
-                if (selectedObject.GetComponent<Template>() == null)
-                {
-                    selectedObject.SetActive(false);
-                    Destroy(selectedObject);
-                    heldTemplate = null;
-                }
-                else
-                {
-                    heldTemplate = selectedObject;
-                    heldTile = null;
+                    if (selectedObject.GetComponent<Template>() == null)
+                    {
+                        selectedObject.SetActive(false);
+                        Destroy(selectedObject);
+                        heldTemplate = null;
+                    }
+                    else
+                    {
+                        heldTemplate = selectedObject;
+                        heldTile = null;
+                    }
                 }
             }
 

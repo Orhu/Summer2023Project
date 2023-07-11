@@ -484,72 +484,77 @@ namespace Cardificer
         /// </summary>
         /// <param name="tilePrefab"> The tile to place </param>
         /// <param name="gridPos"> The grid position to place the tile in </param>
-        public void PlaceTile(GameObject tilePrefab, Vector2Int gridPos)
+        public bool PlaceTile(GameObject tilePrefab, Vector2Int gridPos)
         {
-            if (!IsGridPosOutsidePathfindingBounds(gridPos))
+            if (IsGridPosOutsidePathfindingBounds(gridPos) || !(createdTemplate.GetLayer(activeLayer).activeSelf)) { return false; }
+
+            EraseTile(gridPos);
+            GameObject layer = createdTemplate.GetLayer(activeLayer);
+            GameObject createdTile = ((GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tilePrefab), layer.transform));
+
+            PrefabUtility.SetPropertyModifications(createdTile, PrefabUtility.GetPropertyModifications(tilePrefab));
+
+            foreach (MonoBehaviour component in createdTile.GetComponents<MonoBehaviour>())
             {
-                EraseTile(gridPos);
-                GameObject layer = createdTemplate.GetLayer(activeLayer);
-                GameObject createdTile = ((GameObject) PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(tilePrefab), layer.transform));
-
-                PrefabUtility.SetPropertyModifications(createdTile, PrefabUtility.GetPropertyModifications(tilePrefab));
-
-                foreach (MonoBehaviour component in createdTile.GetComponents<MonoBehaviour>())
-                {
-                    component.enabled = false;
-                }
-
-                if (createdTile.GetComponent<Rigidbody2D>())
-                {
-                    createdTile.GetComponent<Rigidbody2D>().simulated = false;
-                }
-
-                if (createdTile.GetComponent<SpriteRenderer>() != null)
-                {
-                    createdTile.GetComponent<SpriteRenderer>().enabled = true;
-                }
-
-                createdTile.name = tilePrefab.name;
-                createdTile.transform.localPosition = new Vector3(gridPos.x, gridPos.y, 0);
-
-                // Layer 0 is pathfinding layer, set the grid location if in pathfinding layer
-                if (activeLayer == 0)
-                {
-                    createdTile.GetComponent<Tile>().gridLocation = gridPos;
-                    createdTemplate[gridPos.x, gridPos.y] = createdTile.GetComponent<Tile>();
-                }
-                else
-                {
-                    createdTemplate[activeLayer, gridPos.x, gridPos.y] = createdTile;
-                }
-
-                if (createdTile.GetComponent<SpriteRenderer>() == null || createdTile.GetComponent<SpriteRenderer>().sprite == null)
-                {
-                    GameObject createdNullSprite = Instantiate(nullSpriteObject);
-                    createdNullSprite.SetActive(true);
-                    nullSprites[activeLayer][gridPos.x, gridPos.y] = createdNullSprite;
-                    createdNullSprite.transform.parent = nullSpritesContainer.transform;
-                    createdNullSprite.transform.localPosition = new Vector3(gridPos.x, gridPos.y, 0);
-                }
+                component.enabled = false;
             }
+
+            if (createdTile.GetComponent<Rigidbody2D>())
+            {
+                createdTile.GetComponent<Rigidbody2D>().simulated = false;
+            }
+
+            if (createdTile.GetComponent<SpriteRenderer>() != null)
+            {
+                createdTile.GetComponent<SpriteRenderer>().enabled = true;
+            }
+
+            createdTile.name = tilePrefab.name;
+            createdTile.transform.localPosition = new Vector3(gridPos.x, gridPos.y, 0);
+
+            // Layer 0 is pathfinding layer, set the grid location if in pathfinding layer
+            if (activeLayer == 0)
+            {
+                createdTile.GetComponent<Tile>().gridLocation = gridPos;
+                createdTemplate[gridPos.x, gridPos.y] = createdTile.GetComponent<Tile>();
+            }
+            else
+            {
+                createdTemplate[activeLayer, gridPos.x, gridPos.y] = createdTile;
+            }
+
+            if (createdTile.GetComponent<SpriteRenderer>() == null || createdTile.GetComponent<SpriteRenderer>().sprite == null)
+            {
+                GameObject createdNullSprite = Instantiate(nullSpriteObject);
+                createdNullSprite.SetActive(true);
+                nullSprites[activeLayer][gridPos.x, gridPos.y] = createdNullSprite;
+                createdNullSprite.transform.parent = nullSpritesContainer.transform;
+                createdNullSprite.transform.localPosition = new Vector3(gridPos.x, gridPos.y, 0);
+            }
+
+            return true;
         }
 
         /// <summary>
         /// Erases the tile at a given position
         /// </summary>
         /// <param name="gridPos"> The position to erase the tile at </param>
-        public void EraseTile(Vector2Int gridPos)
+        public bool EraseTile(Vector2Int gridPos)
         {
-            if (!IsGridPosOutsidePathfindingBounds(gridPos))
+            if (IsGridPosOutsidePathfindingBounds(gridPos) || !(createdTemplate.GetLayer(activeLayer).activeSelf))
             {
-                Destroy(nullSprites[activeLayer][gridPos.x, gridPos.y]);
-                nullSprites[activeLayer][gridPos.x, gridPos.y] = null;
-                if (createdTemplate[activeLayer, gridPos.x, gridPos.y] != null)
-                {
-                    Destroy(createdTemplate[activeLayer, gridPos.x, gridPos.y].gameObject);
-                    createdTemplate[activeLayer, gridPos.x, gridPos.y] = null;
-                }
+                return false;
             }
+
+            Destroy(nullSprites[activeLayer][gridPos.x, gridPos.y]);
+            nullSprites[activeLayer][gridPos.x, gridPos.y] = null;
+            if (createdTemplate[activeLayer, gridPos.x, gridPos.y] != null)
+            {
+                Destroy(createdTemplate[activeLayer, gridPos.x, gridPos.y].gameObject);
+                createdTemplate[activeLayer, gridPos.x, gridPos.y] = null;
+            }
+
+            return true;
         }
 
         /// <summary>
