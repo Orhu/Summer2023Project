@@ -33,6 +33,9 @@ namespace Cardificer
         [Tooltip("Whether or not this projectile passes through shields.")]
         public bool immuneToShield = false;
 
+        [Tooltip("Whether or not this projectile can be reflected.")]
+        public bool immuneToReflect = false;
+
         [Tooltip("The radius of the projectile.")] [EditInline]
         public ProjectileShape shape;
 

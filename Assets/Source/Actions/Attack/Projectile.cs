@@ -76,6 +76,9 @@ namespace Cardificer
         // Whether or not this projectile passes through shields.
         [NonSerialized] public bool immuneToShield = false;
 
+        // Whether or not this projectile can be reflected.
+        [NonSerialized] public bool immuneToReflect = false;
+
         // Whether or the projectile should directly deal damage.
         [NonSerialized] public bool applyDamageOnHit = true;
 
@@ -198,6 +201,7 @@ namespace Cardificer
             acceleration = attack.acceleration;
             shape = Instantiate(attack.shape);
             immuneToShield = attack.immuneToShield;
+            immuneToReflect = attack.immuneToReflect;
             applyDamageOnHit = attack.applyDamageOnHit;
 
             // Set up attack
