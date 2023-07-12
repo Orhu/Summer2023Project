@@ -21,11 +21,13 @@ MonoBehaviour:
     statusEffects: []
     invertInvincibility: 0
   hitCount: 1
-  applyDamageOnHit: 1
+  applyDamageOnHit: 0
   modifiers:
   - {fileID: 11400000, guid: 3ec58efc579ea954ea42311d694003bc, type: 2}
   - {fileID: 11400000, guid: 085c611877700594aa3ba56fb099ba99, type: 2}
   - {fileID: 11400000, guid: 085c611877700594aa3ba56fb099ba99, type: 2}
+  immuneToShield: 0
+  immuneToReflect: 0
   shape: {fileID: 11400000, guid: a6644a32a65712d4fb6e3120612a2b02, type: 2}
   lifetime: 2.5
   initialSpeed: 5
@@ -45,6 +47,7 @@ MonoBehaviour:
   spawnLocation: 0
   aimMode: 0
   waitForProjectileDeath: 0
+  chargeTime: 0
   additionalActionTime: 1
   _spawnSequence:
   - delay: 0

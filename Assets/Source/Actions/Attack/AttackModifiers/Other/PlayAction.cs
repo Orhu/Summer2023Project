@@ -27,10 +27,18 @@ namespace Cardificer
             OnDestroyed,
             Repeately,
         }
-        
-        [Tooltip("The damage multiplier of this action")]
-        [SerializeField] private float damageMultiplier = 1f;
 
+        [Tooltip("The number of times this can play an action.")] [Min(1)]
+        [SerializeField] private int playCount = 1000;
+
+        [Tooltip("Causes actions played by this to have the same modifiers as the projectile this modifies. Will exclude any play action modifiers")]
+        [SerializeField] private bool inheritModifiers = false;
+
+        [Tooltip("Whether or not this will play when on 0 damage projectiles")]
+        [SerializeField] private bool applyToZeroDamage = false;
+
+        // The damage multiplier of this action
+        private float damageMultiplier = 1f;
 
         // The objects ignored by this.
         private List<GameObject> ignoredObjects;
@@ -44,6 +52,9 @@ namespace Cardificer
         // The projectile this modifies
         private GameObject causer;
 
+        // The objects ignored by this.
+        protected List<AttackModifier> modifiers = new List<AttackModifier>();
+
         // The root of all projectiles
         private static GameObject playActionRoot;
 
@@ -52,6 +63,7 @@ namespace Cardificer
         {
             set
             {
+                if (!applyToZeroDamage && value.attackData.damage == 0) { return; }
                 if (playActionRoot == null)
                 {
                     playActionRoot = new GameObject("Play Action Roots");
@@ -60,19 +72,34 @@ namespace Cardificer
                 causer = value.causer;
                 parentActor = value.actor;
                 sourceTransform = value.transform;
-                ignoredObjects = value.ignoredObjects;
+
+                if (inheritModifiers)
+                {
+                    modifiers = new List<AttackModifier>(value.modifiers);
+                    modifiers.RemoveAll(
+                        // Remove all play action modifiers
+                        (AttackModifier modifier) =>
+                        {
+                            return modifier is PlayAction || modifier is DuplicateAttackSequence;
+                        });
+                }
+
+                int playCount = this.playCount;
 
                 switch (playTime)
                 {
                     case PlayTime.Repeately:
                     case PlayTime.OnSpawned:
-                        value.StartCoroutine(DelayedPlayAction());
+                        ignoredObjects = value.ignoredObjects;
+                        value.StartCoroutine(DelayedPlayAction(playCount));
                         break;
 
                     case PlayTime.OnHit:
                         value.onHit += collision =>
                         {
+                            ignoredObjects = new List<GameObject>(value.ignoredObjects);
                             ignoredObjects.Add(collision.gameObject);
+                            if (--playCount < 0) { return; }
                             value.StartCoroutine(DelayedPlayAction());
                         };
                         break;
@@ -80,7 +107,9 @@ namespace Cardificer
                     case PlayTime.OnOverlap:
                         value.onOverlap += hitCollider =>
                         {
+                            ignoredObjects = new List<GameObject>(value.ignoredObjects);
                             ignoredObjects.Add(hitCollider.gameObject);
+                            if (--playCount < 0) { return; }
                             value.StartCoroutine(DelayedPlayAction());
                         };
                         break;
@@ -90,6 +119,8 @@ namespace Cardificer
                             // Creates a new game object to act as the source of the played action
                             () =>
                             {
+                                if (value.forceDestroy) { return; }
+
                                 // Create runner object since the projectile will be null.
                                 GameObject coroutineRunner = new GameObject(value.name + " Play " + action.name + " Source");
                                 coroutineRunner.transform.position = sourceTransform.position;
@@ -99,6 +130,7 @@ namespace Cardificer
                                 MonoBehaviour mono = sourceTransform.gameObject.AddComponent<Empty>();
                                 FloorGenerator.onRoomChange += () => { Destroy(coroutineRunner); };
 
+                                ignoredObjects = new List<GameObject>(value.ignoredObjects);
                                 mono.GetComponent<MonoBehaviour>().StartCoroutine(DelayedPlayAction());
                             };
                         break;
@@ -110,10 +142,11 @@ namespace Cardificer
         /// Plays the action.
         /// </summary>
         /// <returns> The time to wait to play it. </returns>
-        private IEnumerator DelayedPlayAction()
+        private IEnumerator DelayedPlayAction(int playCount = 1)
         {
             do
             {
+                if (--playCount < 0) { yield break; }
                 if (delay > 0)
                 {
                     yield return new WaitForSeconds(delay);
@@ -121,11 +154,11 @@ namespace Cardificer
 
                 if (action is Attack attack)
                 {
-                    attack.Play(this, causer, ignoredObjects);
+                    attack.Play(this, modifiers, causer, ignoredObjects: ignoredObjects);
                 }
                 else
                 {
-                    action.Play(this, ignoredObjects);
+                    action.Play(parentActor, ignoredObjects);
                 }
 
                 yield return null;

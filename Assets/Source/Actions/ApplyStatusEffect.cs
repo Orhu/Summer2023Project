@@ -13,8 +13,7 @@ namespace Cardificer
         [Tooltip("The status effect to apply")]
         [SerializeField] private List<StatusEffect> statusEffects;
 
-        [Tooltip("The delay before it is applied")]
-        [Min(0f)]
+        [Tooltip("The delay before it is applied")] [Min(0f)]
         [SerializeField] private float delay = 0f;
 
         /// <summary>

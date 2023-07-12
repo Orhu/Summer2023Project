@@ -16,7 +16,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
-    damage: 8
+    damage: 1
     damageType: 0
     statusEffects:
     - {fileID: 11400000, guid: 86bc1b9f564011949b00550517008c42, type: 2}
@@ -26,6 +26,8 @@ MonoBehaviour:
   modifiers:
   - {fileID: 11400000, guid: 9658f6f592e54704796611a69b3d9214, type: 2}
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
+  immuneToShield: 1
+  immuneToReflect: 1
   shape: {fileID: 11400000, guid: 0e19e8cd20fbdf741874a39bdd1d96ec, type: 2}
   lifetime: 5
   initialSpeed: 5

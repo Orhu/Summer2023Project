@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5dd09abb2f10ba48b1ad730fbb847cf, type: 3}
   m_Name: Bonfire
   m_EditorClassIdentifier: 
-  actionTime: 0
   cooldownTime: 15
   actions:
   - {fileID: 11400000, guid: 8bbfa56e1a8ab7444b1fdd339722a552, type: 2}
@@ -32,6 +31,7 @@ MonoBehaviour:
   damageTypeSprite: {fileID: 0}
   damage: 1.5
   chordEffectText: Inferno Spell
-  chordModifiers: []
+  chordModifiers:
+  - {fileID: 11400000, guid: 60960a7d28038a048a29360004d0de94, type: 2}
   duplicateModifiers:
   - {fileID: 11400000, guid: 5222504407772fa4f8ed696558d3c236, type: 2}

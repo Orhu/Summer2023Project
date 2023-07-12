@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Cardificer
@@ -72,6 +73,15 @@ namespace Cardificer
         // The sequence that spawned this.
         [NonSerialized] public List<ProjectileSpawnInfo> spawnSequence;
 
+        // Whether or not this projectile passes through shields.
+        [NonSerialized] public bool immuneToShield = false;
+
+        // Whether or not this projectile can be reflected.
+        [NonSerialized] public bool immuneToReflect = false;
+
+        // Whether or the projectile should directly deal damage.
+        [NonSerialized] public bool applyDamageOnHit = true;
+
         // The object for this to ignore.
         List<GameObject> _ignoredObjects;
         public List<GameObject> ignoredObjects
@@ -88,8 +98,45 @@ namespace Cardificer
                 _ignoredObjects.Add(causer);
                 return _ignoredObjects;
             }
-            set { _ignoredObjects = value; }
+            set 
+            {
+                Collider2D collider = GetComponent<Collider2D>();
+
+                if (collider == null)
+                {
+                    _ignoredObjects = value;
+                    return;
+                }
+
+                if (value != null && _ignoredObjects != null)
+                {
+                    foreach (GameObject noLongerIgnoredObject in _ignoredObjects.Except(value))
+                    {
+                        Physics2D.IgnoreCollision(collider, noLongerIgnoredObject.GetComponent<Collider2D>(), false);
+                    }
+                    foreach (GameObject newlyIgnoredObject in value.Except(_ignoredObjects))
+                    {
+                        Physics2D.IgnoreCollision(collider, newlyIgnoredObject.GetComponent<Collider2D>());
+                    }
+                }
+                else if (_ignoredObjects != null)
+                {
+                    foreach (GameObject noLongerIgnoredObject in _ignoredObjects)
+                    {
+                        Physics2D.IgnoreCollision(collider, noLongerIgnoredObject.GetComponent<Collider2D>(), false);
+                    }
+                } 
+                else if (value != null)
+                {
+                    foreach (GameObject newlyIgnoredObject in value)
+                    {
+                        Physics2D.IgnoreCollision(collider, newlyIgnoredObject.GetComponent<Collider2D>());
+                    }
+                }
+                _ignoredObjects = value;
+            }
         }
+
         #endregion
 
         #region Delegates
@@ -120,7 +167,10 @@ namespace Cardificer
         private GameObject randomTarget;
 
         // Whether or not the on destroy function should be ignored.
-        private bool forceDestroy = false;
+        public bool forceDestroy = false;
+
+        // Invoked when this is destroyed.
+        private bool isDestroyed = false;
         #endregion
 
 
@@ -150,7 +200,10 @@ namespace Cardificer
             minSpeed = attack.minSpeed;
             acceleration = attack.acceleration;
             shape = Instantiate(attack.shape);
-            
+            immuneToShield = attack.immuneToShield;
+            immuneToReflect = attack.immuneToReflect;
+            applyDamageOnHit = attack.applyDamageOnHit;
+
             // Set up attack
             attackData = new DamageData(attack.attack, causer);
 
@@ -177,29 +230,8 @@ namespace Cardificer
 
             // Setup collision
             rigidBody = GetComponent<Rigidbody2D>();
-            Collider2D collider = shape.CreateCollider(gameObject);
-            if (actor.GetCollider() != null)
-            {
-                Physics2D.IgnoreCollision(collider, actor.GetCollider());
-
-                // Ignore collision on ignored objects
-                if (ignoredObjects != null)
-                {
-                    foreach (GameObject ignoredObject in ignoredObjects)
-                    {
-                        List<Collider2D> ignoredColliders = new List<Collider2D>();
-                        ignoredObject.GetComponentsInChildren(ignoredColliders);
-                        ignoredObject.GetComponents(ignoredColliders);
-                        if (ignoredColliders.Count > 0)
-                        {
-                            foreach (Collider2D ignoredCollider in ignoredColliders)
-                            {
-                                Physics2D.IgnoreCollision(ignoredCollider, actor.GetCollider());
-                            }
-                        }
-                    }
-                }
-            }
+            shape.CreateCollider(gameObject);
+            ignoredObjects = ignoredObjects;
 
 
             FloorGenerator.onRoomChange += ForceDestroy;
@@ -290,6 +322,12 @@ namespace Cardificer
 
                 case SpawnLocation.Causer:
                     return causer.transform.position;
+
+                case SpawnLocation.Player:
+                    return Player.Get().transform.position;
+                
+                case SpawnLocation.RandomEnemy:
+                    return FindRandomEnemy();
             }
             return Vector3.zero;
         }
@@ -320,6 +358,8 @@ namespace Cardificer
                     return FindClosestTarget(GetAimTarget(AimMode.AtMouse), ref closestTargetToAimLocation);
 
                 case AimMode.AtRandomEnemy:
+                    return FindRandomEnemy();
+                    /*
                     if (randomTarget != null)
                     {
                         return randomTarget.transform.position;
@@ -340,6 +380,7 @@ namespace Cardificer
                     }
                     randomTarget = possibleTargets[UnityEngine.Random.Range(0, possibleTargets.Count)].gameObject;
                     return randomTarget.transform.position;
+                    */
 
                 case AimMode.Right:
                     return transform.position + actor.GetActionSourceTransform().right;
@@ -383,6 +424,33 @@ namespace Cardificer
             }
             return currentTarget.transform.position;
         }
+
+        /// <summary>
+        /// Finds a random enemy in the room and returns its transform.
+        /// </summary>
+        /// <returns> The position of a random enemy in world space. </returns>
+        private Vector2 FindRandomEnemy() {
+            if (randomTarget != null)
+            {
+                return randomTarget.transform.position;
+            }
+
+            List<GameObject> possibleTargets = new List<GameObject>(FloorGenerator.currentRoom.livingEnemies);
+            possibleTargets.Add(Player.Get());
+            possibleTargets.RemoveAll(
+                // Removes ignored objects
+                (GameObject possibleTarget) =>
+                {
+                    return ignoredObjects.Contains(possibleTarget);
+                });
+
+            if (possibleTargets.Count <= 0)
+            {
+                return transform.position + transform.right;
+            }
+            randomTarget = possibleTargets[UnityEngine.Random.Range(0, possibleTargets.Count)].gameObject;
+            return randomTarget.transform.position;
+        }
         #endregion
 
 
@@ -391,16 +459,15 @@ namespace Cardificer
         /// Called when the projectile hits something it can pass though.
         /// </summary>
         /// <param name="collision"></param>
-        private void OnTriggerEnter2D(Collider2D collision)
+        public void OnTriggerEnter2D(Collider2D collision)
         {
             if (ignoredObjects.Contains(collision.gameObject))
             {
                 return;
             }
 
-            onOverlap?.Invoke(collision);
             Health hitHealth = collision.gameObject.GetComponent<Health>();
-            if (hitHealth != null && attack.applyDamageOnHit)
+            if (hitHealth != null && applyDamageOnHit)
             {
                 hitHealth.ReceiveAttack(attackData);
 
@@ -410,6 +477,7 @@ namespace Cardificer
                     Destroy(gameObject);
                 }
             }
+            onOverlap?.Invoke(collision);
         }
 
         /// <summary>
@@ -446,7 +514,10 @@ namespace Cardificer
         protected void OnDestroy()
         {
             FloorGenerator.onRoomChange -= ForceDestroy;
-            if (!gameObject.scene.isLoaded || forceDestroy) { return; }
+            if (!gameObject.scene.isLoaded) { return; }
+            if (isDestroyed) { return; }
+
+            isDestroyed = true;
 
             onDestroyed?.Invoke();
             if (attack.detachVisualsBeforeDestroy)

@@ -35,14 +35,14 @@ namespace Cardificer
         /// <param name="collider"> The collided object. </param>
         private void DestroyProjectiles(Collider2D collider)
         {
-            Projectile hitProjectile = collider.GetComponent<Projectile>();
-            if (hitProjectile != null && !projectile.ignoredObjects.Contains(hitProjectile.causer))
+            if (collider.GetComponent<Projectile>() is Projectile hitProjectile
+                && !hitProjectile.immuneToShield
+                && !projectile.ignoredObjects.Contains(hitProjectile.causer))
             {
                 Destroy(collider.gameObject);
 
                 if (--projectile.remainingHits <= 0)
                 {
-                    projectile.onDestroyed?.Invoke();
                     Destroy(projectile.gameObject);
                 }
             }
