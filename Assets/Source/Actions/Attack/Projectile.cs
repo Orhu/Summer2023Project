@@ -230,26 +230,8 @@ namespace Cardificer
 
             // Setup collision
             rigidBody = GetComponent<Rigidbody2D>();
-            Collider2D collider = shape.CreateCollider(gameObject);
-            if (actor.GetCollider() != null)
-            {
-                Physics2D.IgnoreCollision(collider, actor.GetCollider());
-
-                // Ignore collision on ignored objects
-                foreach (GameObject ignoredObject in ignoredObjects)
-                {
-                    List<Collider2D> ignoredColliders = new List<Collider2D>();
-                    ignoredObject.GetComponentsInChildren(ignoredColliders);
-                    ignoredObject.GetComponents(ignoredColliders);
-                    if (ignoredColliders.Count > 0)
-                    {
-                        foreach (Collider2D ignoredCollider in ignoredColliders)
-                        {
-                            Physics2D.IgnoreCollision(ignoredCollider, actor.GetCollider());
-                        }
-                    }
-                }
-            }
+            shape.CreateCollider(gameObject);
+            ignoredObjects = ignoredObjects;
 
 
             FloorGenerator.onRoomChange += ForceDestroy;
@@ -343,6 +325,9 @@ namespace Cardificer
 
                 case SpawnLocation.Player:
                     return Player.Get().transform.position;
+                
+                case SpawnLocation.RandomEnemy:
+                    return FindRandomEnemy();
             }
             return Vector3.zero;
         }
@@ -373,26 +358,7 @@ namespace Cardificer
                     return FindClosestTarget(GetAimTarget(AimMode.AtMouse), ref closestTargetToAimLocation);
 
                 case AimMode.AtRandomEnemy:
-                    if (randomTarget != null)
-                    {
-                        return randomTarget.transform.position;
-                    }
-
-                    List<GameObject> possibleTargets = new List<GameObject>(FloorGenerator.currentRoom.livingEnemies);
-                    possibleTargets.Add(Player.Get());
-                    possibleTargets.RemoveAll(
-                        // Removes ignored objects
-                        (GameObject possibleTarget) =>
-                        {
-                            return ignoredObjects.Contains(possibleTarget);
-                        });
-
-                    if (possibleTargets.Count <= 0)
-                    {
-                        return transform.position + transform.right;
-                    }
-                    randomTarget = possibleTargets[UnityEngine.Random.Range(0, possibleTargets.Count)].gameObject;
-                    return randomTarget.transform.position;
+                    return FindRandomEnemy();
 
                 case AimMode.Right:
                     return transform.position + actor.GetActionSourceTransform().right;
@@ -436,6 +402,33 @@ namespace Cardificer
             }
             return currentTarget.transform.position;
         }
+
+        /// <summary>
+        /// Finds a random enemy in the room and returns its transform.
+        /// </summary>
+        /// <returns> The position of a random enemy in world space. </returns>
+        private Vector2 FindRandomEnemy() {
+            if (randomTarget != null)
+            {
+                return randomTarget.transform.position;
+            }
+
+            List<GameObject> possibleTargets = new List<GameObject>(FloorGenerator.currentRoom.livingEnemies);
+            possibleTargets.Add(Player.Get());
+            possibleTargets.RemoveAll(
+                // Removes ignored objects
+                (GameObject possibleTarget) =>
+                {
+                    return ignoredObjects.Contains(possibleTarget);
+                });
+
+            if (possibleTargets.Count <= 0)
+            {
+                return transform.position + transform.right;
+            }
+            randomTarget = possibleTargets[UnityEngine.Random.Range(0, possibleTargets.Count)].gameObject;
+            return randomTarget.transform.position;
+        }
         #endregion
 
 
@@ -446,10 +439,7 @@ namespace Cardificer
         /// <param name="collision"></param>
         public void OnTriggerEnter2D(Collider2D collision)
         {
-            if (ignoredObjects.Contains(collision.gameObject))
-            {
-                return;
-            }
+            if (ignoredObjects.Contains(collision.gameObject) || remainingHits <= 0) { return; }
 
             Health hitHealth = collision.gameObject.GetComponent<Health>();
             if (hitHealth != null && applyDamageOnHit)
