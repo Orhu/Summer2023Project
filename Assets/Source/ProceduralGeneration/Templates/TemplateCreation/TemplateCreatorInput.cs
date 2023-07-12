@@ -680,7 +680,7 @@ namespace Cardificer
                 int currentIndex = i;
                 TemplateLayerUI layerUIComponent = layerUIs[i].GetComponent<TemplateLayerUI>();
                 layerUIComponent.onLayerActivated = () => ActivateLayer(currentIndex);
-                layerUIComponent.onLayerHiddenToggled = () => templateCreator.ToggleLayerVisibility(currentIndex);
+                layerUIComponent.onLayerHiddenToggled = () => ToggleLayerVisibility(currentIndex);
                 layerUIComponent.onLayerNamed = (string name) => templateCreator.RenameLayer(currentIndex, name);
                 layerUIComponent.onLayerRemoved = () => RemoveLayer(currentIndex);
             }
@@ -708,6 +708,19 @@ namespace Cardificer
             Selection.activeObject = null;
             ClearUndoHistory();
             ClearRedoHistory();
+        }
+
+        /// <summary>
+        /// Toggles the given layer visibility
+        /// </summary>
+        /// <param name="layer"> The layer being toggled </param>
+        public void ToggleLayerVisibility(int layer)
+        {
+            if (layer == templateCreator.activeLayer)
+            {
+                DeselectObject();
+            }
+            templateCreator.ToggleLayerVisibility(layer);
         }
 
         /// <summary>
@@ -767,7 +780,7 @@ namespace Cardificer
             TemplateLayerUI layerUIComponent = newLayerUI.GetComponent<TemplateLayerUI>();
             int currentCount = layerUIs.Count;
             layerUIComponent.onLayerActivated = () => ActivateLayer(currentCount - 1);
-            layerUIComponent.onLayerHiddenToggled = () => templateCreator.ToggleLayerVisibility(currentCount - 1);
+            layerUIComponent.onLayerHiddenToggled = () => ToggleLayerVisibility(currentCount - 1);
             layerUIComponent.onLayerNamed = (string name) => templateCreator.RenameLayer(currentCount - 1, name);
             layerUIComponent.onLayerRemoved = () => RemoveLayer(currentCount - 1);
             templateCreator.RenameLayer(currentCount - 1, name);
