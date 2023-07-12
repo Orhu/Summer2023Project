@@ -200,6 +200,7 @@ namespace Cardificer
         /// <param name="input"> The input </param>
         public void OnErase(InputValue input)
         {
+            heldTemplate = null;
             eraseButtonPressed = input.isPressed;
 
             if (!input.isPressed)
