@@ -18,14 +18,15 @@ MonoBehaviour:
   attack:
     damage: 8
     damageType: 1
-    statusEffects:
-    - {fileID: 11400000, guid: 2397f2eb8d291da4c9efc62a275046b2, type: 2}
+    statusEffects: []
     invertInvincibility: 0
   hitCount: 1
   applyDamageOnHit: 1
   modifiers:
-  - {fileID: 11400000, guid: 0c6a8a95aceba5d4a859a72106f9cf39, type: 2}
+  - {fileID: 11400000, guid: 5af2c60ca77657046b7490f79a3d1f2f, type: 2}
   - {fileID: 11400000, guid: 24f3f6ed849eff249867c930dd59fae9, type: 2}
+  immuneToShield: 0
+  immuneToReflect: 0
   shape: {fileID: 11400000, guid: 256adba026a003f4e82d44d1e2ca79f1, type: 2}
   lifetime: 4
   initialSpeed: 4.5
@@ -45,6 +46,7 @@ MonoBehaviour:
   spawnLocation: 0
   aimMode: 0
   waitForProjectileDeath: 1
+  chargeTime: 0
   additionalActionTime: 0
   _spawnSequence:
   - delay: 0

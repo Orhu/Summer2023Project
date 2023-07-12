@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5dd09abb2f10ba48b1ad730fbb847cf, type: 3}
   m_Name: ThousandBlades
   m_EditorClassIdentifier: 
-  actionTime: 1
   cooldownTime: 8
   actions:
+  - {fileID: 11400000, guid: 52d46827c2c90c04f9d55edd44456893, type: 2}
   - {fileID: 11400000, guid: 6897be3d4f3acdd449237aa26bc16e37, type: 2}
+  - {fileID: 11400000, guid: 6af6edcaf46296b49a7595b06d501a84, type: 2}
   effects: []
   displayName: Thousand Blades
   description: Summon a flurry of blades that reflect enemy attacks.
@@ -32,6 +33,6 @@ MonoBehaviour:
   damage: 0.5
   chordEffectText: Reflecting Spell
   chordModifiers:
-  - {fileID: 11400000, guid: 94fc3817241fd78409a83255d7f562c3, type: 2}
+  - {fileID: 11400000, guid: 4f8603f86f56d9347a859d7a6d17fb97, type: 2}
   duplicateModifiers:
-  - {fileID: 11400000, guid: a26989660f1bba745b1bbf902140c9ac, type: 2}
+  - {fileID: 11400000, guid: 467d6ea889112b14aaca8fe3a50c3095, type: 2}

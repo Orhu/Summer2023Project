@@ -24,6 +24,9 @@ MonoBehaviour:
   applyDamageOnHit: 1
   modifiers:
   - {fileID: 11400000, guid: 983f33c68b89d6f4db70ae60e7508528, type: 2}
+  - {fileID: 11400000, guid: c6b2661fd8c5b574aad3ebe0717a80cf, type: 2}
+  immuneToShield: 0
+  immuneToReflect: 0
   shape: {fileID: 11400000, guid: a80cdd12837da664290f207130e228a6, type: 2}
   lifetime: 1.5
   initialSpeed: 10
@@ -43,6 +46,7 @@ MonoBehaviour:
   spawnLocation: 0
   aimMode: 3
   waitForProjectileDeath: 0
+  chargeTime: 0
   additionalActionTime: 0.75
   _spawnSequence:
   - delay: 0

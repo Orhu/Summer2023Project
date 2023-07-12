@@ -26,6 +26,8 @@ MonoBehaviour:
   modifiers:
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
   - {fileID: 11400000, guid: 18f8a3fdff13db143aab924f9328b792, type: 2}
+  immuneToShield: 1
+  immuneToReflect: 1
   shape: {fileID: 11400000, guid: d7a19c059cc91bd458f8d86631f291f1, type: 2}
   lifetime: 5
   initialSpeed: 0
@@ -43,8 +45,9 @@ MonoBehaviour:
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
   spawnLocation: 2
-  aimMode: 3
+  aimMode: 5
   waitForProjectileDeath: 1
+  chargeTime: 0
   additionalActionTime: 0
   _spawnSequence:
   - delay: 0
