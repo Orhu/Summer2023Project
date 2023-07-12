@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Linq;
 
 /// <summary>
-/// Utility for adding labels to a bunch of things.
+/// Utility for renaming a bunch of things.
 /// </summary>
 public class BatchRename : ScriptableWizard
 {
@@ -14,14 +14,12 @@ public class BatchRename : ScriptableWizard
     [SerializeField] private string replaceWith = "";
 
     /// <summary>
-    /// Asks the user for labels to add.
+    /// Gives a find and replace prompt.
     /// </summary>
     [MenuItem("Tools/Batch Rename")]
-    static void AddTagToSelectedObjects()
+    static void Rename()
     {
-        DisplayWizard<BatchRename>(
-            title: "BatchRename", 
-            createButtonName: "Confirm");
+        DisplayWizard<BatchRename>("BatchRename", "Confirm");
     }
 
     /// <summary>
