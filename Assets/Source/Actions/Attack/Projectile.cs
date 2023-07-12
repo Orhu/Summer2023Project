@@ -230,26 +230,8 @@ namespace Cardificer
 
             // Setup collision
             rigidBody = GetComponent<Rigidbody2D>();
-            Collider2D collider = shape.CreateCollider(gameObject);
-            if (actor.GetCollider() != null)
-            {
-                Physics2D.IgnoreCollision(collider, actor.GetCollider());
-
-                // Ignore collision on ignored objects
-                foreach (GameObject ignoredObject in ignoredObjects)
-                {
-                    List<Collider2D> ignoredColliders = new List<Collider2D>();
-                    ignoredObject.GetComponentsInChildren(ignoredColliders);
-                    ignoredObject.GetComponents(ignoredColliders);
-                    if (ignoredColliders.Count > 0)
-                    {
-                        foreach (Collider2D ignoredCollider in ignoredColliders)
-                        {
-                            Physics2D.IgnoreCollision(ignoredCollider, actor.GetCollider());
-                        }
-                    }
-                }
-            }
+            shape.CreateCollider(gameObject);
+            ignoredObjects = ignoredObjects;
 
 
             FloorGenerator.onRoomChange += ForceDestroy;
