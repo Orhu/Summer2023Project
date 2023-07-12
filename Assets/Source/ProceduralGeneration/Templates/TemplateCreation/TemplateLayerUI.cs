@@ -120,4 +120,20 @@ public class TemplateLayerUI : MonoBehaviour
     {
         onLayerRemoved?.Invoke();
     }
+
+    /// <summary>
+    /// Disables the renaming ability
+    /// </summary>
+    public void DisableRenaming()
+    {
+        inputField.enabled = false;
+    }
+
+    /// <summary>
+    /// Enables the renaming ability
+    /// </summary>
+    public void EnableRenaming()
+    {
+        inputField.enabled = true;
+    }
 }

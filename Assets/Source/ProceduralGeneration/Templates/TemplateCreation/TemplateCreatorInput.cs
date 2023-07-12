@@ -763,6 +763,7 @@ namespace Cardificer
             if (layerUIs.Count == 0)
             {
                 newLayerUI.GetComponent<TemplateLayerUI>().removable = false;
+                newLayerUI.GetComponent<TemplateLayerUI>().DisableRenaming();
                 name = "Pathfinding Layer";
             }
             else
