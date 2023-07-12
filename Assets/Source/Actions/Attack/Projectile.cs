@@ -325,6 +325,9 @@ namespace Cardificer
 
                 case SpawnLocation.Player:
                     return Player.Get().transform.position;
+                
+                case SpawnLocation.RandomEnemy:
+                    return FindRandomEnemy();
             }
             return Vector3.zero;
         }
@@ -355,6 +358,8 @@ namespace Cardificer
                     return FindClosestTarget(GetAimTarget(AimMode.AtMouse), ref closestTargetToAimLocation);
 
                 case AimMode.AtRandomEnemy:
+                    return FindRandomEnemy();
+                    /*
                     if (randomTarget != null)
                     {
                         return randomTarget.transform.position;
@@ -375,6 +380,7 @@ namespace Cardificer
                     }
                     randomTarget = possibleTargets[UnityEngine.Random.Range(0, possibleTargets.Count)].gameObject;
                     return randomTarget.transform.position;
+                    */
 
                 case AimMode.Right:
                     return transform.position + actor.GetActionSourceTransform().right;
@@ -417,6 +423,33 @@ namespace Cardificer
                 return transform.position;
             }
             return currentTarget.transform.position;
+        }
+
+        /// <summary>
+        /// Finds a random enemy in the room and returns its transform.
+        /// </summary>
+        /// <returns> The position of a random enemy in world space. </returns>
+        private Vector2 FindRandomEnemy() {
+            if (randomTarget != null)
+            {
+                return randomTarget.transform.position;
+            }
+
+            List<GameObject> possibleTargets = new List<GameObject>(FloorGenerator.currentRoom.livingEnemies);
+            possibleTargets.Add(Player.Get());
+            possibleTargets.RemoveAll(
+                // Removes ignored objects
+                (GameObject possibleTarget) =>
+                {
+                    return ignoredObjects.Contains(possibleTarget);
+                });
+
+            if (possibleTargets.Count <= 0)
+            {
+                return transform.position + transform.right;
+            }
+            randomTarget = possibleTargets[UnityEngine.Random.Range(0, possibleTargets.Count)].gameObject;
+            return randomTarget.transform.position;
         }
         #endregion
 

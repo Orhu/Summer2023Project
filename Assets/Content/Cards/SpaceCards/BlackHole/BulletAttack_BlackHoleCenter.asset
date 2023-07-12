@@ -10,47 +10,47 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
-  m_Name: BulletAttack_AsteroidRain
+  m_Name: BulletAttack_BlackHoleCenter
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 0}
+  actionAudioClip: {fileID: 8300000, guid: fa0b9c81744f68e4bb2acaa6000be53f, type: 3}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 8
-    damageType: 0
+    damageType: 1
     statusEffects: []
     invertInvincibility: 0
   hitCount: 999
   applyDamageOnHit: 1
   modifiers:
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
-  - {fileID: 11400000, guid: a17cdf919038c2c4c931104810dcfd98, type: 2}
-  immuneToShield: 0
+  - {fileID: 11400000, guid: cbb14f3d3db62d341b1c522e4afd5363, type: 2}
+  immuneToShield: 1
   immuneToReflect: 1
-  shape: {fileID: 11400000, guid: 06d42d1d08f92f748bbcbc5cd21ac050, type: 2}
-  lifetime: 0.4
-  initialSpeed: 26.60445
+  shape: {fileID: 11400000, guid: 992716a277dcb9d4cb4dca97337720eb, type: 2}
+  lifetime: 8
+  initialSpeed: 3
   acceleration: 0
   minSpeed: 0
-  maxSpeed: 26.60445
+  maxSpeed: 3
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
-  homingAimMode: 0
+  homingAimMode: 2
   switchAfterHit: 0
-  visualObject: {fileID: 8504612320505061070, guid: b54eb07aafd2d74449c332e0256aadc0, type: 3}
+  visualObject: {fileID: 7940671346844068234, guid: 1c0c6f27def431a42b35402df9f22f31, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  travelAudioClip: {fileID: 0}
+  travelAudioClip: {fileID: 8300000, guid: f87ed7677e8e7304185095bd6d3afe6e, type: 3}
   impactAudioClip: {fileID: 0}
-  spawnLocation: 0
-  aimMode: 5
+  spawnLocation: 3
+  aimMode: 0
   waitForProjectileDeath: 0
-  chargeTime: 0
+  chargeTime: 3
   additionalActionTime: 0
   _spawnSequence:
-  - delay: 0.25
-    angle: -110
-    offset: {x: 3.6397, y: 10}
+  - delay: 0
+    angle: 0
+    offset: {x: 0, y: 0}
   randomAngle: 0
   randomOffset: 0
