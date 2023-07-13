@@ -359,28 +359,6 @@ namespace Cardificer
 
                 case AimMode.AtRandomEnemy:
                     return FindRandomEnemy();
-                    /*
-                    if (randomTarget != null)
-                    {
-                        return randomTarget.transform.position;
-                    }
-
-                    List<GameObject> possibleTargets = new List<GameObject>(FloorGenerator.currentRoom.livingEnemies);
-                    possibleTargets.Add(Player.Get());
-                    possibleTargets.RemoveAll(
-                        // Removes ignored objects
-                        (GameObject possibleTarget) =>
-                        {
-                            return ignoredObjects.Contains(possibleTarget);
-                        });
-
-                    if (possibleTargets.Count <= 0)
-                    {
-                        return transform.position + transform.right;
-                    }
-                    randomTarget = possibleTargets[UnityEngine.Random.Range(0, possibleTargets.Count)].gameObject;
-                    return randomTarget.transform.position;
-                    */
 
                 case AimMode.Right:
                     return transform.position + actor.GetActionSourceTransform().right;
@@ -461,10 +439,7 @@ namespace Cardificer
         /// <param name="collision"></param>
         public void OnTriggerEnter2D(Collider2D collision)
         {
-            if (ignoredObjects.Contains(collision.gameObject))
-            {
-                return;
-            }
+            if (ignoredObjects.Contains(collision.gameObject) || remainingHits <= 0) { return; }
 
             Health hitHealth = collision.gameObject.GetComponent<Health>();
             if (hitHealth != null && applyDamageOnHit)
