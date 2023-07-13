@@ -1094,7 +1094,7 @@ namespace Cardificer
         /// Gets all the unvisited neighbors of the given room
         /// </summary>
         /// <param name="genMap"> The current generated map </param>
-        /// <param name="roomType"> The room to get the neighbors of </param>
+        /// <param name="room"> The room to get the neighbors of </param>
         /// <param name="useDirection"> Whether or not to use the directions that the given room opens in to get the neighbors </param>
         /// <returns> The unvisited neighbors </returns>
         private List<MapCell> GetUnvisitedNeighbors(MapCell[,] genMap, Room room, bool useDirection)
