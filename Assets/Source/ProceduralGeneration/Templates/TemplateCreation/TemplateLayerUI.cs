@@ -1,9 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// Handles the layer UI behavior for the template creator
+/// </summary>
 public class TemplateLayerUI : MonoBehaviour
 {
     [Tooltip("A reference to the input field for the layer")]
