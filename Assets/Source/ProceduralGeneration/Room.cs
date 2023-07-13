@@ -266,6 +266,26 @@ namespace Cardificer
         }
 
         /// <summary>
+        /// Gets all the cells a room takes up
+        /// </summary>
+        /// <param name="map"> The map to get the cells from </param>
+        /// <returns> The room cells </returns>
+        public List<MapCell> GetRoomCells(MapCell[,] map)
+        {
+            List<MapCell> roomCells = new List<MapCell>();
+
+            for (int i = 0; i < roomType.sizeMultiplier.x; i++)
+            {
+                for (int j = 0; j < roomType.sizeMultiplier.y; j++)
+                {
+                    roomCells.Add(map[roomLocation.x + i, roomLocation.y + j]);
+                }
+            }
+
+            return roomCells;
+        }
+
+        /// <summary>
         /// Gets the edge cells of the room using the given map
         /// </summary>
         /// <param name="map"> The map to get the cells from </param>
@@ -314,6 +334,45 @@ namespace Cardificer
 
             return edgeCells;
         }
+
+        /// <summary>
+        /// Gets all the rooms that this room is connected to
+        /// </summary>
+        /// <param name="map"> The map to get the rooms from </param>
+        /// <returns> The neighboring rooms </returns>
+        public List<Room> GetNeighboringRooms(MapCell[,] map)
+        {
+            List<Room> neighbors = new List<Room>();
+
+            List<MapCell> edges = GetEdgeCells(map);
+            foreach (MapCell edge in edges)
+            {
+                foreach (Direction direction in System.Enum.GetValues(typeof(Direction)))
+                {
+                    if (direction == Direction.None || direction == Direction.All) { continue; }
+
+                    if (!edge.direction.HasFlag(direction)) { continue; }
+
+                    Vector2Int locationOffset = new Vector2Int();
+                    locationOffset.x = System.Convert.ToInt32(direction.HasFlag(Direction.Right)) - System.Convert.ToInt32(direction.HasFlag(Direction.Left));
+                    locationOffset.y = System.Convert.ToInt32(direction.HasFlag(Direction.Up)) - System.Convert.ToInt32(direction.HasFlag(Direction.Down));
+                    bool locationOutsideRoom = locationOffset.x + edge.location.x < roomLocation.x || locationOffset.x + edge.location.x >= roomLocation.x + roomType.sizeMultiplier.x;
+                    locationOutsideRoom |= locationOffset.y + edge.location.y < roomLocation.y || locationOffset.y + edge.location.y >= roomLocation.y + roomType.sizeMultiplier.y;
+
+                    if (!locationOutsideRoom) { continue; }
+
+                    MapCell neighbor = map[edge.location.x + locationOffset.x, edge.location.y + locationOffset.y];
+
+                    if (!neighbors.Contains(neighbor.room))
+                    {
+                        neighbors.Add(neighbor.room);
+                    }
+                }
+            }
+
+            return neighbors;
+        }
+
 
         #endregion
     }
