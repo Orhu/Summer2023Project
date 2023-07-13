@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
-  m_Name: Atk_Lotus_ThopterBullet
+  m_Name: Atk_GM_CosmicLance_Sec_L
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
@@ -25,30 +25,30 @@ MonoBehaviour:
   modifiers: []
   immuneToShield: 0
   immuneToReflect: 0
-  shape: {fileID: 11400000, guid: a50dfff9e40b68143a2c565faa66a9cf, type: 2}
-  lifetime: 10
-  initialSpeed: 10
-  acceleration: 0
+  shape: {fileID: 11400000, guid: fa135efec39feaf42bf7d226b907d67c, type: 2}
+  lifetime: 20
+  initialSpeed: 0
+  acceleration: 16
   minSpeed: 0
-  maxSpeed: 10
+  maxSpeed: 16
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
   homingAimMode: 0
   switchAfterHit: 0
-  visualObject: {fileID: 3319430823238463563, guid: 50f1f5ba607f90248b715015e24aa8f8, type: 3}
+  visualObject: {fileID: 5654160243282954678, guid: 911c165be90089a4e9a2ce600c79d85f, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
   spawnLocation: 0
-  aimMode: 6
+  aimMode: 5
   waitForProjectileDeath: 0
   chargeTime: 0
-  additionalActionTime: 2
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
-    angle: 0
+    angle: 90
     offset: {x: 0, y: 0}
   randomAngle: 0
   randomOffset: 0

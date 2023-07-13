@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
-  m_Name: Atk_Lotus_ThopterBullet
+  m_Name: Atk_GM_BlackLotus
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
@@ -20,32 +20,33 @@ MonoBehaviour:
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
-  hitCount: 1
+  hitCount: 999
   applyDamageOnHit: 1
-  modifiers: []
-  immuneToShield: 0
-  immuneToReflect: 0
-  shape: {fileID: 11400000, guid: a50dfff9e40b68143a2c565faa66a9cf, type: 2}
-  lifetime: 10
-  initialSpeed: 10
+  modifiers:
+  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
+  immuneToShield: 1
+  immuneToReflect: 1
+  shape: {fileID: 11400000, guid: 5dbec515ea34ed547b26579c62ba5495, type: 2}
+  lifetime: 0.111111134
+  initialSpeed: 36
   acceleration: 0
   minSpeed: 0
-  maxSpeed: 10
+  maxSpeed: 36
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
   homingAimMode: 0
   switchAfterHit: 0
-  visualObject: {fileID: 3319430823238463563, guid: 50f1f5ba607f90248b715015e24aa8f8, type: 3}
-  detachVisualsBeforeDestroy: 0
-  detatchedVisualsTimeBeforeDestroy: 0
+  visualObject: {fileID: 804479622504065438, guid: 87fe3688524b9ab4180a7d9325ee32e9, type: 3}
+  detachVisualsBeforeDestroy: 1
+  detatchedVisualsTimeBeforeDestroy: 0.25
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
   spawnLocation: 0
-  aimMode: 6
-  waitForProjectileDeath: 0
-  chargeTime: 0
-  additionalActionTime: 2
+  aimMode: 0
+  waitForProjectileDeath: 1
+  chargeTime: 0.25
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     angle: 0
