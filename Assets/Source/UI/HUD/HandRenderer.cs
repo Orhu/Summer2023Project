@@ -21,23 +21,64 @@ namespace Cardificer
         [Tooltip("The container / renderer for the chord root rune")]
         [SerializeField] private ChordRenderer chordContainer;
 
-
-
-
+        // Reference to the player game object
+        private GameObject playerObject;
 
         [Tooltip("Max number of runes to generate")]
         [SerializeField] private int maxHandSize;
+
+        [Tooltip("Whether the hand displays in the game world or in the UI")]
+        [SerializeField] private bool handInGameWorld;
+
+        // Boolean telling whether the runeRenderers are visible
+        private bool runeRenderersVisible;
+
+        // Time it takes to initiate cooldown
+        private float fadeOutCooldown = 5f;
 
         /// <summary>
         /// Instantiate RuneRenderers
         /// </summary>
         private void Start()
         {
-            chordContainer = GetComponentInChildren<ChordRenderer>();
+            chordContainer = GameObject.FindGameObjectWithTag("HUD").GetComponentInChildren<ChordRenderer>();
+            playerObject = Player.Get().gameObject;
+            runeRenderersVisible = true;
             for (int i = 0; i < maxHandSize; i++)
             {
                 runeRenderers.Add(Instantiate(runeRendererTemplate, runeContainer.transform).GetComponent<RuneRenderer>());
             }
+            if (handInGameWorld)
+            {
+                transform.position = new Vector3(playerObject.transform.position.x + 0.7f, playerObject.transform.position.y + 0.7f, playerObject.transform.position.z);
+            }
+            else // Game is in UI, TODO: a lot needs to change here.
+            {
+                MoveRendererToUI();
+            }
+        }
+        /// <summary>
+        /// When we wish to swap the renderer to the UI, we will need to do this
+        /// </summary>
+        private void MoveRendererToUI()
+        {
+            Canvas parentCanvas = GetComponentInParent<Canvas>();
+
+            parentCanvas.gameObject.transform.localScale = Vector3.one;
+
+            parentCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
+            transform.position = chordContainer.transform.position;
+
+            RadialLayout childRadialLayout = GetComponentInChildren<RadialLayout>();
+
+            childRadialLayout.gameObject.transform.localPosition = Vector3.zero;
+
+            childRadialLayout.fDistance = 350f;
+
+            childRadialLayout.MinAngle = 135f;
+
+            childRadialLayout.StartAngle = 120f;
         }
 
         /// <summary>
@@ -45,6 +86,10 @@ namespace Cardificer
         /// </summary>
         void Update()
         {
+            if (handInGameWorld)
+            {
+                transform.position = new Vector3(playerObject.transform.position.x + 0.7f, playerObject.transform.position.y + 0.3f, playerObject.transform.position.z);
+            }
             // loop through current deck hand size
             for (int i = 0; i < Deck.playerDeck.handSize; i++)
             {
@@ -113,6 +158,29 @@ namespace Cardificer
                 {
                     runeRenderers[i].cooldownTime = 0;
                     runeRenderers[i].actionTime = 0;
+                }
+            }
+
+
+            if (Deck.playerDeck.previewedCardIndices.Count > 0 && !runeRenderersVisible) // One of the buttons has been pressed
+            {
+                runeRenderersVisible = true;
+                fadeOutCooldown = 5f;
+                for (int i = 0; i < Deck.playerDeck.handSize; i++)
+                {
+                    runeRenderers[i].GetComponent<Animator>().Play("A_RuneRenderer_FadeIn");
+                }
+            }
+            else if (Deck.playerDeck.previewedCardIndices.Count <= 0 && runeRenderersVisible)
+            {
+                fadeOutCooldown -= Time.deltaTime;
+                if (fadeOutCooldown <= 0)
+                {
+                    runeRenderersVisible = false;
+                    for (int i = 0; i < Deck.playerDeck.handSize; i++)
+                    {
+                        runeRenderers[i].GetComponent<Animator>().Play("A_RuneRenderer_FadeOut");
+                    }
                 }
             }
         }

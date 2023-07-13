@@ -80,11 +80,11 @@ namespace Cardificer
             }
 
             // Play animation on the last heart
-            if (currentPlayerHealth > playerHealthScript.maxHealth / 2) // When the health is normal
+            if (currentPlayerHealth > 4) // When the health is normal
             {
                 transform.GetChild(transform.childCount - 1).GetComponent<Animator>().Play("A_Heart_Enlarge");
             }
-            else if (currentPlayerHealth <= playerHealthScript.maxHealth / 2) // When the player is close to death
+            else if (currentPlayerHealth <= 4) // When the player is close to death
             {
                 transform.GetChild(transform.childCount - 1).GetComponent<Animator>().Play("A_Heart_Danger");
             }

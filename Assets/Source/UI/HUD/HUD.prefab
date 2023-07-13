@@ -214,65 +214,6 @@ MonoBehaviour:
   m_Spacing: {x: 20, y: 20}
   m_Constraint: 1
   m_ConstraintCount: 3
---- !u!1 &552873786124590183
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7655680568232372302}
-  - component: {fileID: 8940359609853913009}
-  m_Layer: 5
-  m_Name: RuneContainer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &7655680568232372302
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 552873786124590183}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8586450881022363157}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 256, y: 256}
-  m_SizeDelta: {x: 512, y: 512}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &8940359609853913009
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 552873786124590183}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56c84def3ce937d4a881d29565733473, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 0
-  fDistance: 325
-  MinAngle: 150
-  MaxAngle: 0
-  StartAngle: 120
 --- !u!1 &560672310643051866
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,7 +322,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3903429820662665704}
-  - {fileID: 7162767405035853532}
+  - {fileID: 5221782006452785271}
   - {fileID: 7509378420298427892}
   - {fileID: 6268227943518811230}
   - {fileID: 3749321370793376855}
@@ -455,43 +396,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!1 &1341456215692389336
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7162767405035853532}
-  m_Layer: 5
-  m_Name: KeysAndDeckArea
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &7162767405035853532
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1341456215692389336}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 8586450881022363157}
-  m_Father: {fileID: 679029530677113256}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 583.95, y: 415.063}
-  m_SizeDelta: {x: 1073, y: 770.999}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2508887109244842308
 GameObject:
   m_ObjectHideFlags: 0
@@ -931,62 +835,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &4213396389987596377
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8586450881022363157}
-  - component: {fileID: 708667798124351875}
-  m_Layer: 5
-  m_Name: RuneContainer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &8586450881022363157
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4213396389987596377}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7655680568232372302}
-  - {fileID: 5221782006452785271}
-  m_Father: {fileID: 7162767405035853532}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 525.4, y: 385.5}
-  m_SizeDelta: {x: 1050.8, y: 771}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &708667798124351875
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4213396389987596377}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45590e82aaebbd3468dd64e6ffd43101, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  runeRenderers: []
-  runeRendererTemplate: {fileID: -9148389994103617601, guid: 1c1629ed01e9d6d4b9d2710cd624e619, type: 3}
-  runeContainer: {fileID: 552873786124590183}
-  chordContainer: {fileID: 8205989563411235706}
-  maxHandSize: 4
 --- !u!1 &4253811486485995433
 GameObject:
   m_ObjectHideFlags: 0
@@ -1886,7 +1734,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 8586450881022363157}
+    m_TransformParent: {fileID: 679029530677113256}
     m_Modifications:
     - target: {fileID: 442425304747970725, guid: 8e6418ea56705514eb2c8aa48e1e3790, type: 3}
       propertyPath: m_Pivot.x
@@ -1954,11 +1802,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 442425304747970725, guid: 8e6418ea56705514eb2c8aa48e1e3790, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -269.40002
+      value: -1616.55
       objectReference: {fileID: 0}
     - target: {fileID: 442425304747970725, guid: 8e6418ea56705514eb2c8aa48e1e3790, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -129.5
+      value: -794.4365
       objectReference: {fileID: 0}
     - target: {fileID: 442425304747970725, guid: 8e6418ea56705514eb2c8aa48e1e3790, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1983,14 +1831,3 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 442425304747970725, guid: 8e6418ea56705514eb2c8aa48e1e3790, type: 3}
   m_PrefabInstance: {fileID: 5644330201979584722}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8205989563411235706 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4590637441105265576, guid: 8e6418ea56705514eb2c8aa48e1e3790, type: 3}
-  m_PrefabInstance: {fileID: 5644330201979584722}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8189c94eb836a1144b9e0f05c686ebba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
