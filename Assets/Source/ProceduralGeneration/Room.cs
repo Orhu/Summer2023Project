@@ -93,9 +93,6 @@ namespace Cardificer
 
             FloorGenerator.currentRoom = this;
 
-            // Enables all the tiles in the room
-            StartCoroutine(EnableTilesAfterOneFrame(spawnEnemies));
-
             // Move player into room, then close/activate doors (so player doesn't get trapped in door)
             StartCoroutine(MovePlayer(direction, shouldCloseDoors && enemiesPresent, callCleared && (!enemiesPresent && shouldCloseDoors)));
         }
@@ -170,7 +167,7 @@ namespace Cardificer
                 movementInput.y = 1;
             }
 
-            player.GetComponent<PlayerController>().enabled = false;
+            player.GetComponent<PlayerController>().movingEnabled = false;
 
             bool inXRange = (player.transform.position.x >= bottomLeftLocation.x + 0.9f && player.transform.position.x <= topRightLocation.x - 0.9f);
             bool inYRange = (player.transform.position.y >= bottomLeftLocation.y + 0.9f && player.transform.position.y <= topRightLocation.y - 0.9f);
@@ -184,7 +181,8 @@ namespace Cardificer
                 yield return null;
             }
 
-            player.GetComponent<PlayerController>().enabled = true;
+            player.GetComponent<PlayerController>().movingEnabled = true;
+            player.GetComponent<SimpleMovement>().movementInput = new Vector2(0, 0);
 
             ActivateDoors();
             if (shouldCloseDoors)
@@ -315,35 +313,6 @@ namespace Cardificer
             }
 
             return edgeCells;
-        }
-
-        /// <summary>
-        /// Enables all the tiles after waiting one frame to ensure the tiles have initialized themselves correctly
-        /// </summary>
-        /// <param name="spawnEnemies"> Whether or not to spawn enemies </param>
-        /// <returns> Waits one frame </returns>
-        private IEnumerator EnableTilesAfterOneFrame(bool spawnEnemies)
-        {
-            yield return null;
-            for (int i = 0; i < roomSize.x; i++)
-            {
-                for (int j = 0; j < roomSize.y; j++)
-                {
-                    if (roomGrid[i, j] == null)
-                    {
-                        Debug.LogWarning("Destroyable tiles are not updating the room grid! Please fix that bug please Liam or Zak.");
-                        continue;
-                    }
-                    if ((roomGrid[i, j].GetComponent<EnemySpawner>() == null && roomGrid[i, j].GetComponent<FiniteStateMachine.BaseStateMachine>() == null) || spawnEnemies)
-                    {
-                        roomGrid[i, j].Enable();
-                    }
-                    else
-                    {
-                        roomGrid[i, j].gameObject.SetActive(false);
-                    }
-                }
-            }
         }
 
         #endregion
