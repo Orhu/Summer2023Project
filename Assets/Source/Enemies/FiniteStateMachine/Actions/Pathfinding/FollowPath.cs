@@ -22,7 +22,7 @@ namespace Cardificer.FiniteStateMachine
         /// Starts chase action
         /// </summary>
         /// <param name="stateMachine"> stateMachine to be used </param>
-        /// <returns> Waits pathLockout seconds before allowing another request. </returns>
+        /// <returns> Doesn't wait </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             if (stateMachine.pathData.prevFollowCoroutine != null)
@@ -39,7 +39,7 @@ namespace Cardificer.FiniteStateMachine
         }
 
         /// <summary>
-        /// Follows the path to the target, if we have one. If we reach attackRange of our target, then stop and attack
+        /// Follows the path to the target, if we have one. Warning: Will null error here if there is no path assigned.
         /// </summary>
         /// <param name="stateMachine"> The stateMachine to be used. </param>
         /// <returns> Allows other code to execute in between iterations of the while (true) loop </returns>
@@ -94,16 +94,6 @@ namespace Cardificer.FiniteStateMachine
                 yield return null;
             }
             stateMachine.cooldownData.cooldownReady[this] = true;
-        }
-
-        /// <summary>
-        /// Determines if we are "arrived" at a given point based on the serialized buffer variable
-        /// </summary>
-        /// <param name="point"> Point to check against </param>
-        /// <param name="stateMachine"> The stateMachine to be used. </param>
-        private bool ArrivedAtPoint(Vector2 point, BaseStateMachine stateMachine)
-        {
-            return Vector2.Distance(point, stateMachine.GetFeetPos()) <= stateMachine.distanceBuffer;
         }
     }
 }

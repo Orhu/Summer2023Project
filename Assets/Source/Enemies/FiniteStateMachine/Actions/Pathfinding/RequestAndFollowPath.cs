@@ -12,12 +12,12 @@ namespace Cardificer.FiniteStateMachine
     [CreateAssetMenu(menuName="FSM/Actions/Pathfinding/Request and Follow Path")]
     public class RequestAndFollowPath : SingleAction
     {
-        [Tooltip("After a Path request is submitted, how long before another one is allowed?")]
-        [SerializeField] private float pathLockout = 0.03f;
+        [Tooltip("After a Path request is submitted, how long before another one is allowed?")] [SerializeField]
+        private float pathLockout = 0.03f;
 
         [Tooltip("Starting at stopping dist from the target destination, move speed rapidly drops until target destination is reached.")]
         [SerializeField] private float stoppingDist = 0.5f;
-        
+
         // need to track our current data
         private ChaseData chaseData;
 
@@ -39,7 +39,7 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> The stateMachine to be used. </param>
         private void RequestPath(BaseStateMachine stateMachine)
         {
-            PathRequestManager.AsyncRequestPath(stateMachine, (Vector2[] path, bool successful) => 
+            PathRequestManager.AsyncRequestPath(stateMachine, (Vector2[] path, bool successful) =>
             {
                 if (!successful || stateMachine == null || stateMachine.pathData.ignorePathRequests) return;
 
@@ -50,22 +50,23 @@ namespace Cardificer.FiniteStateMachine
                     stateMachine.StopCoroutine(stateMachine.pathData.prevFollowCoroutine);
                 }
 
-                var newCoroutine = FollowPath(stateMachine);
+                var newCoroutine = TracePath(stateMachine);
                 stateMachine.pathData.prevFollowCoroutine = newCoroutine;
                 stateMachine.pathData.targetIndex = 0;
+                stateMachine.pathData.keepFollowingPath = true;
                 stateMachine.StartCoroutine(newCoroutine);
             });
         }
 
         /// <summary>
-        /// Follows the path to the target, if we have one. If we reach attackRange of our target, then stop and attack
+        /// Follows the path to the target, if we have one.
         /// </summary>
         /// <param name="stateMachine"> The stateMachine to be used. </param>
         /// <returns> Allows other code to execute in between iterations of the while (true) loop </returns>
-        private IEnumerator FollowPath(BaseStateMachine stateMachine)
+        private IEnumerator TracePath(BaseStateMachine stateMachine)
         {
             stateMachine.speedPercent = 1f; // reset speed percent to normal
-            
+
             if (stateMachine.pathData.path.waypoints.Length == 0)
             {
                 yield break;
@@ -78,8 +79,10 @@ namespace Cardificer.FiniteStateMachine
                 {
                     if (stateMachine.pathData.targetIndex == stateMachine.pathData.path.finishLineIndex)
                     {
+                        stateMachine.pathData.keepFollowingPath = false;
                         stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
-                        break;
+                        stateMachine.cooldownData.cooldownReady[this] = true;
+                        yield break;
                     }
                     else
                     {
@@ -89,34 +92,32 @@ namespace Cardificer.FiniteStateMachine
 
                 if (stateMachine.pathData.keepFollowingPath)
                 {
-                    if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.slowDownIndex && stoppingDist > 0)
+                    if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.slowDownIndex &&
+                        stoppingDist > 0)
                     {
                         stateMachine.speedPercent = Mathf.Clamp01(stateMachine.pathData.path
-                                                         .turnBoundaries[stateMachine.pathData.path.finishLineIndex]
-                                                         .DistanceFromPoint(stateMachine.GetFeetPos()) /
-                                                     stoppingDist);
+                                                                      .turnBoundaries[
+                                                                          stateMachine.pathData.path.finishLineIndex]
+                                                                      .DistanceFromPoint(stateMachine.GetFeetPos()) /
+                                                                  stoppingDist);
                         if (stateMachine.speedPercent < 0.01f)
                         {
+                            stateMachine.pathData.keepFollowingPath = false;
                             stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
-                            break;
+                            stateMachine.cooldownData.cooldownReady[this] = true;
+                            yield break;
                         }
                     }
+
                     stateMachine.GetComponent<Movement>().movementInput =
-                        (stateMachine.pathData.path.waypoints[stateMachine.pathData.targetIndex] - stateMachine.GetFeetPos()).normalized;
+                        (stateMachine.pathData.path.waypoints[stateMachine.pathData.targetIndex] -
+                         stateMachine.GetFeetPos()).normalized;
                 }
-                
+
                 yield return null;
             }
-        }
 
-        /// <summary>
-        /// Determines if we are "arrived" at a given point based on the serialized buffer variable
-        /// </summary>
-        /// <param name="point"> Point to check against </param>
-        /// <param name="stateMachine"> The stateMachine to be used. </param>
-        private bool ArrivedAtPoint(Vector2 point, BaseStateMachine stateMachine)
-        {
-            return Vector2.Distance(point, stateMachine.GetFeetPos()) <= stateMachine.distanceBuffer;
+            stateMachine.cooldownData.cooldownReady[this] = true;
         }
     }
 }
