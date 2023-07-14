@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
-  m_Name: COD_BulletAttack_GammaBurstTelegraph
+  m_Name: NClockwise_GammaBurstTelegraph
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 8300000, guid: b817808265bdb2e44a7bae6dfe84708e, type: 3}
   projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
@@ -24,7 +24,7 @@ MonoBehaviour:
   applyDamageOnHit: 0
   modifiers:
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
-  - {fileID: 11400000, guid: 2a80c170e4ac51f449669b8460d89097, type: 2}
+  - {fileID: 11400000, guid: 8a44e837b51b8f3439a5a5710f2ae269, type: 2}
   immuneToShield: 0
   immuneToReflect: 0
   shape: {fileID: 11400000, guid: 67a1b629e28d7cb45a484d504a70e759, type: 2}
@@ -47,10 +47,10 @@ MonoBehaviour:
   aimMode: 5
   waitForProjectileDeath: 1
   chargeTime: 0
-  additionalActionTime: 4.75
+  additionalActionTime: 1.5
   _spawnSequence:
   - delay: 0
-    startingAngle: 0
+    startingAngle: 90
     radius: 8.5
     orbitDirection: 0
   randomStartingAngle: 0

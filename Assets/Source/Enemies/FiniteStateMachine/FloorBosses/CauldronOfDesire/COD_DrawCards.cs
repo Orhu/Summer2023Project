@@ -15,7 +15,7 @@ namespace Cardificer.FiniteStateMachine
         [SerializeField] private float displayCardTime;
 
         [Tooltip("Possible actions that could be drawn to play")]
-        [SerializeField] private List<AttackSequence> cardDrawPool;
+        [SerializeField] private GenericWeightedThings<AttackSequence> cardDrawPool;
         
         /// <summary>
         /// An attack sequence and its sprite
@@ -68,7 +68,7 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> The randomly selected attack sequence. </returns>
         private AttackSequence PickRandomAttack()
         {
-            AttackSequence randomAttackSequence = cardDrawPool[random.Next(cardDrawPool.Count)];
+            AttackSequence randomAttackSequence = cardDrawPool.GetRandomThing(random);
             return randomAttackSequence;
         }
 
