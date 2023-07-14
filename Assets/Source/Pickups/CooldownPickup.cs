@@ -9,7 +9,7 @@ namespace Cardificer
     public class CooldownPickup : MonoBehaviour
     {
         [Tooltip("The amount to multiply the current cooldown reduction by.")] [Range(0, 1)]
-        [SerializeField] private float cooldownMultiplier = 0.9f;
+        [SerializeField] private float cooldownMultiplier = 1.1f;
 
         /// <summary>
         /// Pickup reduced cooldowns.
