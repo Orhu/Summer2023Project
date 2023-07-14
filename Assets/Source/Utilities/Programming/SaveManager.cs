@@ -374,7 +374,15 @@ namespace Cardificer
                 saveData.playerCooldownReduction = Deck.playerDeck.cooldownReduction;
                 saveData.deckState = new Deck.State(Deck.playerDeck);
                 saveData.floorSeed = FloorGenerator.seed;
-                saveData.currentFloor = FloorSceneManager.currentFloor;
+
+                if (FloorSceneManager.IsValid())
+                {
+                    saveData.currentFloor = FloorSceneManager.currentFloor;
+                }
+                else
+                {
+                    saveData.currentFloor = 0;
+                }
 
                 saveData.visitedRooms.Add(FloorGenerator.currentRoom.roomLocation);
                 saveData.destroyedTiles = DestroyableTile.destroyedTiles?.ToList();
