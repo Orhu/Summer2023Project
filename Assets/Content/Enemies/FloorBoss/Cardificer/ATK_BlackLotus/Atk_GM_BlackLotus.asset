@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
+  m_Name: Atk_GM_BlackLotus
+  m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 0}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  attack:
+    damage: 2
+    damageType: 0
+    statusEffects: []
+    invertInvincibility: 0
+  hitCount: 999
+  applyDamageOnHit: 1
+  modifiers:
+  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
+  immuneToShield: 1
+  immuneToReflect: 1
+  shape: {fileID: 11400000, guid: 387c43c5612308040b2e373815154ee0, type: 2}
+  lifetime: 0.111111134
+  initialSpeed: 36
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 36
+  homingSpeed: 0
+  homingTime: 0
+  homingDelay: 0
+  homingAimMode: 0
+  switchAfterHit: 0
+  visualObject: {fileID: 804479622504065438, guid: c803762bbbe2558449ab22c3718af792, type: 3}
+  detachVisualsBeforeDestroy: 1
+  detatchedVisualsTimeBeforeDestroy: 0.25
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
+  spawnLocation: 0
+  aimMode: 0
+  waitForProjectileDeath: 1
+  chargeTime: 0.25
+  additionalActionTime: 0
+  _spawnSequence:
+  - delay: 0
+    angle: 0
+    offset: {x: 0, y: 0}
+  randomAngle: 0
+  randomOffset: 0
