@@ -105,6 +105,16 @@ namespace Cardificer
             }
         }
 
+        // The currently saved floor number. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+        public static int savedCurrentFloor
+        {
+            get
+            {
+                if (!autosaveExists) { return 0; }
+                return autosaver.latestAutosave.currentFloor;
+            }
+        }
+
         // The currently saved visited room data. X,Y = room location, Z = size of deck at the time of clearing. Saving handled by autosaves. Use autosaveExists to check if data Valid.
         public static List<Vector2Int> savedVisitedRooms
         {
@@ -300,6 +310,9 @@ namespace Cardificer
                 // The seed of the current floor.
                 public int floorSeed;
 
+                // The current floor number
+                public int currentFloor;
+
                 // The random state at the time of the autosave.
                 public Random.State randomState;
 
@@ -361,6 +374,7 @@ namespace Cardificer
                 saveData.playerCooldownReduction = Deck.playerDeck.cooldownReduction;
                 saveData.deckState = new Deck.State(Deck.playerDeck);
                 saveData.floorSeed = FloorGenerator.seed;
+                saveData.currentFloor = FloorSceneManager.currentFloor;
 
                 saveData.visitedRooms.Add(FloorGenerator.currentRoom.roomLocation);
                 saveData.destroyedTiles = DestroyableTile.destroyedTiles?.ToList();

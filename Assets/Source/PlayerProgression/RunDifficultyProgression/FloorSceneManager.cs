@@ -19,9 +19,9 @@ public class FloorSceneManager : MonoBehaviour
 
     // The current floor
     private int _currentFloor;
-    static private int currentFloor
+    static public int currentFloor
     {
-        set => instance._currentFloor = value;
+        private set => instance._currentFloor = value;
         get => instance._currentFloor;
     }
 
@@ -51,26 +51,27 @@ public class FloorSceneManager : MonoBehaviour
     /// Loads a particular floor
     /// </summary>
     /// <param name="floorNumber"> The floor to load (indexing starts at 0) </param>
-    static public void LoadFloor(int floorNumber)
+    /// <returns> Whether or not the floor was succesfully loaded </returns>
+    static public bool LoadFloor(int floorNumber)
     {
         if (floorNumber >= floors.Count)
         {
             Debug.LogWarning("Attempted to load floor " + floorNumber + ", which does not exist!");
-            return;
+            return false;
         }
 
         SceneManager.LoadScene(floors[floorNumber]);
         currentFloor = floorNumber;
+        return true;
     }
 
     /// <summary>
     /// Loads the next floor in the list
     /// </summary>
-    /// <returns> True if a floor was loaded, false otherwise. Can be false if we are at the end of the list. </returns>
+    /// <returns> True if a floor was loaded, false otherwise. Can be false if we are at the end of the list or if load floor failed. </returns>
     static public bool LoadNextFloor()
     {
         if (currentFloor + 1 >= floors.Count) { return false; }
-        LoadFloor(currentFloor + 1);
-        return true;
+        return LoadFloor(currentFloor + 1);
     }
 }
