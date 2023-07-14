@@ -74,4 +74,13 @@ public class FloorSceneManager : MonoBehaviour
         if (currentFloor + 1 >= floors.Count) { return false; }
         return LoadFloor(currentFloor + 1);
     }
+
+    /// <summary>
+    /// Checks if the floor scene manager is valid or not
+    /// </summary>
+    /// <returns> True if the instance exists, false otherwise </returns>
+    static public bool IsValid()
+    {
+        return instance != null;
+    }
 }

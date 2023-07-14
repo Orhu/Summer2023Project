@@ -16,9 +16,6 @@ namespace Cardificer
         [Tooltip("Display this if the user wishes to override their save")]
         [SerializeField] private GameObject overrideSavePopup;
 
-        [Tooltip("The floor number to initially load to. Set to 0 for playtest build.")]
-        [SerializeField] private int initialFloor;
-
         // Local bool to know if there is already a save.
         private bool saveExists;
 
@@ -53,7 +50,7 @@ namespace Cardificer
         {
             if (saveExists)
             {
-                if (FloorSceneManager.LoadFloor(SaveManager.savedCurrentFloor)) { return; }
+                if (FloorSceneManager.IsValid() && FloorSceneManager.LoadFloor(SaveManager.savedCurrentFloor)) { return; }
 
                 // If load failed
                 TransitionToFirstLevel();
@@ -101,7 +98,12 @@ namespace Cardificer
         /// </summary>
         private void TransitionToFirstLevel()
         {
-            FloorSceneManager.LoadFloor(0);
+            if (FloorSceneManager.IsValid()) 
+            { 
+                FloorSceneManager.LoadFloor(0);
+                return;
+            }
+            throw new System.Exception("The floor scene manager does not exist!");
         }
 
         /// <summary>
