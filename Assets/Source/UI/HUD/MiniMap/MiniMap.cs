@@ -25,17 +25,6 @@ namespace Cardificer{
         // A local reference to the current room, observes current room changes
         private Room localCurrentRoom;
 
-        // For debugging: different rooms have different colors
-        Color[] listOfColors;
-
-        /// <summary>
-        /// Assign variables
-        /// </summary>
-        private void Start()
-        {
-            listOfColors = new Color[] { Color.red, Color.green, Color.blue };
-        }
-
         /// <summary>
         /// Observe if the current room changes,
         /// if it does, reset and update the map
@@ -86,15 +75,12 @@ namespace Cardificer{
             // Draw all cells of neighboring rooms
             foreach (Room room in neighborRooms)
             {
-                int index = Random.Range(0, listOfColors.Length);
-                Color randColor = listOfColors[index];
                 foreach(MapCell cell in room.GetRoomCells(FloorGenerator.map.map))
                 {
                     Vector2 drawLocation = cell.location - localCurrentRoom.roomLocation;
                     var roomVisual = Instantiate(roomVisualPrefab, roomImageContainer.transform);
                     roomVisual.transform.localPosition = new Vector2(roomVisual.transform.localPosition.x + (drawLocation.x * 100), roomVisual.transform.localPosition.y + (drawLocation.y * 100));
-                    roomVisual.GetComponent<Image>().color = randColor;
-                    if (!room.generated)
+                    if (room.generated)
                     {
                         roomVisual.GetComponentInChildren<TextMeshProUGUI>().text = room.roomType.displayName;
                     }
