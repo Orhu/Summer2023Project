@@ -18,6 +18,9 @@ public class Staircase : MonoBehaviour
             return;
         }
 
-        FloorSceneManager.LoadNextFloor();
+        if (!FloorSceneManager.LoadNextFloor())
+        {
+            Debug.Log("YOU WIN!!! WOAH @Alex insert menu shenanigans here");
+        }
     }
 }
