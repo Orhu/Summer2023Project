@@ -298,6 +298,7 @@ namespace Cardificer
         RoomCenter,
         Causer,
         Player,
+        RandomEnemy,
     }
 
     /// <summary>

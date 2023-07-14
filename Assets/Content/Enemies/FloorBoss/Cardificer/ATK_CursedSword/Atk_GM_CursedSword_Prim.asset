@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
+  m_Name: Atk_GM_CursedSword_Prim
+  m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 0}
+  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
+  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
+  attack:
+    damage: 0
+    damageType: 0
+    statusEffects: []
+    invertInvincibility: 0
+  hitCount: 999
+  applyDamageOnHit: 0
+  modifiers:
+  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
+  - {fileID: 11400000, guid: 9c8888d8d9ad6f74b96ba5d01152182a, type: 2}
+  immuneToShield: 1
+  immuneToReflect: 1
+  shape: {fileID: 11400000, guid: da92ea588c49ef541b2dcfe1ea69b552, type: 2}
+  lifetime: 4
+  initialSpeed: 0
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 0
+  homingSpeed: 0
+  homingTime: 0
+  homingDelay: 0
+  homingAimMode: 0
+  switchAfterHit: 0
+  visualObject: {fileID: 8208839745024251749, guid: 5a39127f6ee779e4f98d01c83722927b, type: 3}
+  detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
+  spawnLocation: 4
+  aimMode: 5
+  waitForProjectileDeath: 1
+  chargeTime: 0
+  additionalActionTime: 1.4375
+  _spawnSequence:
+  - delay: 0
+    startingAngle: 90
+    radius: 2.5
+    orbitDirection: 0
+  randomStartingAngle: 0
+  randomRadius: 0
+  attachedToSpawnLocation: 1

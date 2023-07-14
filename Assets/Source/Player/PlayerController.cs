@@ -166,6 +166,7 @@ namespace Cardificer
                     animatorComponent.SetTrigger("cast");
                     animatorComponent.SetMirror("idleLeft", GetActionAimPosition().x - transform.position.x < 0);
                     animatorComponent.SetMirror("runLeft", GetActionAimPosition().x - transform.position.x < 0);
+                    channelAbility.StopChanneling();
                 }
             }
         }
