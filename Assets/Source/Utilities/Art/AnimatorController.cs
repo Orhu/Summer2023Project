@@ -50,7 +50,7 @@ namespace Cardificer
             if (!animator.hasBoundPlayables) { return; }
 
             AnimationClip currentClip = animator.GetCurrentAnimatorClipInfo(0)[0].clip;
-            if (currentClip == null) { return; } 
+            if (currentClip == null) { return; }
             if (!animactionClipsToMirrorParameters.ContainsKey(currentClip)) 
             { 
                 if (defaultMirrorParam.Length > 0)

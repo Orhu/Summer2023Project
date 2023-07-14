@@ -12,6 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae521aad527ed7e449352281fbf9e980, type: 3}
   m_Name: ChordEffect_BlackHole
   m_EditorClassIdentifier: 
-  action: {fileID: 11400000, guid: 3f0eaa5009365ce48bf71db9c5efaf71, type: 2}
+  minAttackSequenceIndex: 0
+  maxAttackSequenceIndex: 2147483647
+  action: {fileID: 11400000, guid: 3def1b649911e014985cc5cf5915576b, type: 2}
   delay: 0
-  playTime: 0
+  playTime: 1
+  playCount: 1000
+  inheritModifiers: 0
+  applyToZeroDamage: 0

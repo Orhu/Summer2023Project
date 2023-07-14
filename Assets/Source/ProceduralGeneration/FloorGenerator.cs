@@ -195,7 +195,6 @@ namespace Cardificer
             return new Vector2((mapLocation.x - startLocation.x) * cellSize.x, (mapLocation.y - startLocation.y) * cellSize.y);
         }
 
-
         /// <summary>
         /// Sets all the rooms to active for debugging purposes
         /// </summary>
@@ -225,7 +224,6 @@ namespace Cardificer
                 }
             }
         }
-
 
         /// <summary>
         /// Saves the layout generation settings to a file for later reference

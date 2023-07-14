@@ -24,14 +24,16 @@ MonoBehaviour:
   applyDamageOnHit: 1
   modifiers:
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
-  - {fileID: 11400000, guid: ca1ca5c908abfa847804e1e805337ce1, type: 2}
+  - {fileID: 11400000, guid: 4f8603f86f56d9347a859d7a6d17fb97, type: 2}
   - {fileID: 11400000, guid: 1396f126d50a11c4f8809ef51968a44e, type: 2}
+  immuneToShield: 1
+  immuneToReflect: 1
   shape: {fileID: 11400000, guid: 384f7f2225167324291aa15e65c8d715, type: 2}
-  lifetime: 0.25
-  initialSpeed: 14.13717
+  lifetime: 3
+  initialSpeed: 0
   acceleration: 0
   minSpeed: 0
-  maxSpeed: 14.13717
+  maxSpeed: 0
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
@@ -45,88 +47,13 @@ MonoBehaviour:
   spawnLocation: 0
   aimMode: 3
   waitForProjectileDeath: 1
+  chargeTime: 0.5
   additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     startingAngle: 0
     radius: 0.75
     orbitDirection: 1
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 0
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 1
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 0
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 1
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 0
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 1
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 0
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 1
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 0
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 1
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 0
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 1
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 0
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 1
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 0
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 1
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 0
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 1
-  - delay: 0.05
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 0
   randomStartingAngle: 360
   randomRadius: 0
   attachedToSpawnLocation: 1
