@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99a1c653678e12c4fb2a6046a5bc52d2, type: 3}
+  m_Name: F2_LayoutParams
+  m_EditorClassIdentifier: 
+  roomTypesToLayoutParams:
+    roomTypesToLayoutParams:
+    - roomType: {fileID: 11400000, guid: 29c9d6ab9c6b80043953eff27129ce32, type: 2}
+      numRooms: 9
+      numRoomsVariance: 3
+    - roomType: {fileID: 11400000, guid: c7131260a9c02ce489611b8f03b669c1, type: 2}
+      numRooms: 2
+      numRoomsVariance: 1
+    - roomType: {fileID: 11400000, guid: 5bae505bbc2ecc74db87ad27d3504366, type: 2}
+      numRooms: 1
+      numRoomsVariance: 0
+    - roomType: {fileID: 11400000, guid: 3dc6d5686bf40a745a17111823c27f78, type: 2}
+      numRooms: 1
+      numRoomsVariance: 0
+    - roomType: {fileID: 11400000, guid: f9a4f2e795f50544ea8dfd1d695934e3, type: 2}
+      numRooms: 2
+      numRoomsVariance: 1
+    - roomType: {fileID: 11400000, guid: 395847d03b0b5ab43991afb3bfe28510, type: 2}
+      numRooms: 2
+      numRoomsVariance: 0
+    - roomType: {fileID: 11400000, guid: 55ba48d7fe0995340a7958b62fe0c11d, type: 2}
+      numRooms: 1
+      numRoomsVariance: 0
+  numBossRooms: 1
+  preferredNumDoors: 2
+  strictnessNumDoors: 12
