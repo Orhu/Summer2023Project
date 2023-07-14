@@ -21,11 +21,10 @@ namespace Cardificer
 
             // Position
             transform.position = GetSpawnLocation();
-            float random = Random.Range(0f, Mathf.PI * 2f);
+            Vector3 aimDirection = (GetAimTarget(attack.aimMode) - GetSpawnLocation()).normalized;
             transform.position += (Vector3)Random.insideUnitCircle * bulletAttack.randomOffset;
 
             // Rotation
-            Vector3 aimDirection = (GetAimTarget(attack.aimMode) - GetSpawnLocation()).normalized;
             float aimRotation = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg;
 
             float randomAngle = Random.Range(bulletAttack.randomAngle / -2f, bulletAttack.randomAngle / 2f);
