@@ -16,6 +16,14 @@ public class FloorSceneManager : MonoBehaviour
         get => instance._floors;
     }
 
+    // Delegate called when a floor is loaded
+    private System.Action _onFloorLoaded;
+    static public System.Action onFloorLoaded
+    {
+        set => instance._onFloorLoaded = value;
+        get => instance._onFloorLoaded;
+    }
+
     // The current floor
     private int _currentFloor;
     static public int currentFloor
@@ -58,9 +66,9 @@ public class FloorSceneManager : MonoBehaviour
             Debug.LogWarning("Attempted to load floor " + floorNumber + ", which does not exist!");
             return false;
         }
-
-        SceneManager.LoadScene(floors[floorNumber]);
         currentFloor = floorNumber;
+        onFloorLoaded?.Invoke();
+        SceneManager.LoadScene(floors[floorNumber]);
         return true;
     }
 

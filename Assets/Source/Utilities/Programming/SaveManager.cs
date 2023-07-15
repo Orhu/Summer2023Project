@@ -521,6 +521,11 @@ namespace Cardificer
                         CancelInvoke();
                     });
 
+                if (FloorSceneManager.IsValid())
+                {
+                    FloorSceneManager.onFloorLoaded += HandleFloorLoad;
+                }
+
                 if (autosaveExists) { return; }
                 Invoke(nameof(Autosave), 1f);
             }
@@ -531,6 +536,23 @@ namespace Cardificer
             private void OnDestroy()
             {
                 FloorGenerator.onRoomChange -= BindCleared;
+                if (FloorSceneManager.IsValid())
+                {
+                    FloorSceneManager.onFloorLoaded -= HandleFloorLoad;
+                }
+            }
+
+            /// <summary>
+            /// Handles the saving and loading when a floor is loaded
+            /// </summary>
+            private void HandleFloorLoad()
+            {
+                Autosave();
+                AutosaveData saveData = latestAutosave == null ? new AutosaveData() : latestAutosave;
+                saveData.visitedRooms.Clear();
+                saveData.playerPos = new Vector2(0, 0);
+                saveData.destroyedTiles.Clear();
+                latestAutosave = saveData;
             }
 
             /// <summary>
