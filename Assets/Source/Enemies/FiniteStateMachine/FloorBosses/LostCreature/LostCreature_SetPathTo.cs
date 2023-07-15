@@ -28,6 +28,11 @@ namespace Cardificer.FiniteStateMachine
         [SerializeField] private Vector2Int shapeBounds;
 
 
+        /// <summary>
+        /// Formulates a path as requested and sets it to be the state machine's path.
+        /// </summary>
+        /// <param name="stateMachine"> The state machine to be used. </param>
+        /// <returns> Does not wait. </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             stateMachine.pathData.path = new Path(FormulatePath(), stateMachine.GetFeetPos(), 0);
