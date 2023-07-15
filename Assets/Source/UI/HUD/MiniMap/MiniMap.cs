@@ -11,7 +11,7 @@ namespace Cardificer{
         [SerializeField] private GameObject roomImageContainer;
 
         [Tooltip("Room visual prefab, change it's sprite to change the background color of the room visual.")]
-        [SerializeField] private GameObject roomVisualPrefab;
+        [SerializeField] private GameObject cellVisualPrefab;
 
         [Tooltip("Sprite representing a blank room space")]
         [SerializeField] private Sprite blankRoomSprite;
@@ -24,6 +24,9 @@ namespace Cardificer{
 
         // A local reference to the current room, observes current room changes
         private Room localCurrentRoom;
+
+        [Tooltip("Float representing the padding between rooms")]
+        [SerializeField] private float roomPadding = 10f;
 
         /// <summary>
         /// Observe if the current room changes,
@@ -67,27 +70,71 @@ namespace Cardificer{
             foreach (MapCell cell in localCurrentRoom.GetRoomCells(FloorGenerator.map.map))
             {
                 Vector2 drawLocation = cell.location - localCurrentRoom.roomLocation;
-                var roomVisual = Instantiate(roomVisualPrefab, roomImageContainer.transform);
-                roomVisual.transform.localPosition = new Vector2(roomVisual.transform.localPosition.x + (drawLocation.x * 100), roomVisual.transform.localPosition.y + (drawLocation.y * 100));
-                roomVisual.GetComponentInChildren<TextMeshProUGUI>().text = localCurrentRoom.roomType.displayName;
+                GameObject cellVisual = Instantiate(cellVisualPrefab, roomImageContainer.transform);
+                cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * 100), cellVisual.transform.localPosition.y + (drawLocation.y * 100));
+                cellVisual.GetComponentInChildren<TextMeshProUGUI>().text = localCurrentRoom.roomType.displayName;
             }
 
-            // Draw all cells of neighboring rooms
-            foreach (Room room in neighborRooms)
+            // Loop through neighboring cells
+            foreach (MapCell cell in localCurrentRoom.GetNeighboringCells(FloorGenerator.map.map))
             {
-                foreach(MapCell cell in room.GetRoomCells(FloorGenerator.map.map))
+
+                // Apply a padding between rooms based on direction
+                Vector2 paddingVec = new Vector2();
+                if (cell.location.x < localCurrentRoom.roomLocation.x)
                 {
+                    paddingVec.x = -roomPadding;
+                }
+                else if(cell.location.x == localCurrentRoom.roomLocation.x)
+                {
+                    paddingVec.x = 0f;
+                }
+                else
+                {
+                    paddingVec.x = roomPadding;
+                }
+
+                if (cell.location.y < localCurrentRoom.roomLocation.y)
+                {
+                    paddingVec.y = -roomPadding;
+                }
+                else if (cell.location.y == localCurrentRoom.roomLocation.y)
+                {
+                    paddingVec.y = 0f;
+                }
+                else
+                {
+                    paddingVec.y = roomPadding;
+                }
+
+                // Check if neighboring cell's room is visited
+                if (cell.room.generated)
+                {
+                    // Loop through that room's inner cells
+                    foreach(MapCell innerCell in cell.room.GetRoomCells(FloorGenerator.map.map))
+                    {
+                        // Instantiate the room visual
+                        GameObject cellVisual = Instantiate(cellVisualPrefab, roomImageContainer.transform);
+
+                        // Decide location of where to draw cells
+                        Vector2 drawLocation = (innerCell.location - localCurrentRoom.roomLocation);
+                        cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * 100) + paddingVec.x, cellVisual.transform.localPosition.y + (drawLocation.y * 100) + paddingVec.y);
+                        
+                        // Modify the room visual
+                        cellVisual.GetComponentInChildren<TextMeshProUGUI>().text = innerCell.room.roomType.displayName;
+                        cellVisual.GetComponent<Image>().color = Color.gray;
+                    }
+                }
+                // If the cell's room has not been visited
+                else
+                {
+                    // Instantiate the room visual
+                    GameObject cellVisual = Instantiate(cellVisualPrefab, roomImageContainer.transform);
+
                     Vector2 drawLocation = cell.location - localCurrentRoom.roomLocation;
-                    var roomVisual = Instantiate(roomVisualPrefab, roomImageContainer.transform);
-                    roomVisual.transform.localPosition = new Vector2(roomVisual.transform.localPosition.x + (drawLocation.x * 100), roomVisual.transform.localPosition.y + (drawLocation.y * 100));
-                    if (room.generated)
-                    {
-                        roomVisual.GetComponentInChildren<TextMeshProUGUI>().text = room.roomType.displayName;
-                    }
-                    else
-                    {
-                        roomVisual.GetComponent<Image>().sprite = nonVisitedRoomSprite;
-                    }
+                    cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * 100) + paddingVec.x, cellVisual.transform.localPosition.y + (drawLocation.y * 100) + paddingVec.y);
+                    
+                    cellVisual.GetComponent<Image>().sprite = nonVisitedRoomSprite;
                 }
             }
 
