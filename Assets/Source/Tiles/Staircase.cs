@@ -20,7 +20,7 @@ public class Staircase : MonoBehaviour
 
         if (!FloorSceneManager.LoadNextFloor())
         {
-            Debug.Log("YOU WIN!!! WOAH @Alex insert menu shenanigans here");
+            Debug.Log("YOU WIN!!! WOAH");
         }
     }
 }
