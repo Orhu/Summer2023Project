@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fab3c6ca3c9e43cabc9d762d9be4accb, type: 3}
-  m_Name: LC_SetPathTopIfDestReached
+  m_Script: {fileID: 11500000, guid: eb60d69d10a27f947aad74b14cc6f071, type: 3}
+  m_Name: LC_SetPathTopAndIncrementCounter
   m_EditorClassIdentifier: 
-  decision: {fileID: 11400000, guid: 84ee1da3f85044f40bcc338b1d5e1156, type: 2}
-  invert: 0
-  trueAction: {fileID: 11400000, guid: f28b4b93f8961e1409173df64a139ef5, type: 2}
+  actions:
+  - {fileID: 11400000, guid: 539d81ebef578c1438bcf498acbb257b, type: 2}
+  - {fileID: 11400000, guid: 5569ce0f9a3f9c6439f2d2a7285aa2e0, type: 2}

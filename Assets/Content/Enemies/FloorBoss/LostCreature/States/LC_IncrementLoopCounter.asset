@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fab3c6ca3c9e43cabc9d762d9be4accb, type: 3}
-  m_Name: LC_SetPathTopIfDestReached
+  m_Script: {fileID: 11500000, guid: 23141c4deeaef0c48a80d17ab7bec3f1, type: 3}
+  m_Name: LC_IncrementLoopCounter
   m_EditorClassIdentifier: 
-  decision: {fileID: 11400000, guid: 84ee1da3f85044f40bcc338b1d5e1156, type: 2}
-  invert: 0
-  trueAction: {fileID: 11400000, guid: f28b4b93f8961e1409173df64a139ef5, type: 2}
+  varToIncrement: NumOfLoops
+  incrementBy: 1
