@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Cardificer.FiniteStateMachine
 {
     /// <summary>
-    /// Represents an action that sets a given variable name to a given integer value
+    /// Represents an action that sets a given variable name to a random integer value in the given range
     /// </summary>
     [CreateAssetMenu(menuName = "FSM/Tracked Variables/Integer/Actions/Set Tracked Variable to Int")]
     public class SetTrackedVariableToInt : SingleAction
