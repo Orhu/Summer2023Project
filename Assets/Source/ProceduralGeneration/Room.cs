@@ -169,14 +169,14 @@ namespace Cardificer
 
             player.GetComponent<PlayerController>().movingEnabled = false;
 
-            bool inXRange = (player.transform.position.x >= bottomLeftLocation.x + 0.9f && player.transform.position.x <= topRightLocation.x - 0.9f);
-            bool inYRange = (player.transform.position.y >= bottomLeftLocation.y + 0.9f && player.transform.position.y <= topRightLocation.y - 0.9f);
+            bool inXRange = (player.transform.position.x >= bottomLeftLocation.x + 0.9f && player.transform.position.x <= topRightLocation.x - 0.9f - (1.0 * System.Convert.ToInt32(roomSize.x % 2 == 0)));
+            bool inYRange = (player.transform.position.y >= bottomLeftLocation.y + 0.9f && player.transform.position.y <= topRightLocation.y - 0.9f - (1.0 * System.Convert.ToInt32(roomSize.y % 2 == 0)));
 
             while ((!inXRange || !inYRange) && !(direction == Direction.None))
             {
 
-                inXRange = (player.transform.position.x >= bottomLeftLocation.x + 0.9f && player.transform.position.x <= topRightLocation.x - 0.9f);
-                inYRange = (player.transform.position.y >= bottomLeftLocation.y + 0.9f && player.transform.position.y <= topRightLocation.y - 0.9f);
+                inXRange = (player.transform.position.x >= bottomLeftLocation.x + 0.9f && player.transform.position.x <= topRightLocation.x - 0.9f - (1.0 * System.Convert.ToInt32(roomSize.x % 2 == 0)));
+                inYRange = (player.transform.position.y >= bottomLeftLocation.y + 0.9f && player.transform.position.y <= topRightLocation.y - 0.9f - (1.0 * System.Convert.ToInt32(roomSize.y % 2 == 0)));
                 player.GetComponent<SimpleMovement>().movementInput = movementInput;
                 yield return null;
             }

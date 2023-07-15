@@ -167,8 +167,28 @@ namespace Cardificer
         /// <returns> The tile at those indices </returns>
         public GameObject this[int i, int j, int k]
         {
-            get => layerTiles[i][j][k];
-            set => layerTiles[i][j][k] = value;
+            get
+            {
+                try
+                {
+                    return layerTiles[i][j][k];
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+            set
+            {
+                try
+                { 
+                    layerTiles[i][j][k] = value;
+                }
+                catch
+                {
+                    Debug.LogWarning(i + ", " + j + ", " + ", " + k + " doesn't exist");
+                }
+            }
         }
 
         /// <summary>
