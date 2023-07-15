@@ -14,15 +14,6 @@ namespace Cardificer
 
         // Tracks whether moving and playing cards is enabled
         [HideInInspector] public bool movingEnabled = true;
-
-        // Delegate called when the map is opened (@ALEX TODO: Delete this delegate when you make your map screen)
-        public System.Action mapOpened;
-
-        // Delegate called when the map is closed (@ALEX TODO: Delete this delegate when you make your map screen)
-        public System.Action mapClosed;
-
-        // Boolean tracking whether the map is open (@ALEX TODO: Delete this boolean when you make your map screen)
-        private bool mapOpen = false;
         
         // Movement component to allow the agent to move
         private Movement movementComponent;
@@ -203,16 +194,7 @@ namespace Cardificer
         /// </summary>
         public void OnOpenMap()
         {
-            // @ALEX TODO: Delete the boolean and delegates (see above for which ones to delete) when you make your map screen. Also, in LockCameraToRoom, delete the TODO: Delete.
-            mapOpen = !mapOpen;
-            if (mapOpen)
-            {
-                mapOpened?.Invoke();
-            }
-            else
-            {
-                mapClosed?.Invoke();
-            }
+            MenuManager.ToggleMap();
         }
 
         /// <summary>
