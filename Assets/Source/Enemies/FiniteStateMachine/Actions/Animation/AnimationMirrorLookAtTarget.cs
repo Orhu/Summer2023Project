@@ -17,7 +17,7 @@ namespace Cardificer.FiniteStateMachine
 
         [Tooltip("Which target to look at")]
         [SerializeField] private TargetType targetToLookAt;
-        private enum TargetType { AttackTarget, PathfindingTarget };
+        private enum TargetType { AttackTarget, PathfindingTarget, ForwardMovement };
 
         /// <summary>
         /// Sets the given mirror property to look at the state machine's target. 
@@ -26,7 +26,21 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> Ends when the action is complete. </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
-            Vector2 target = targetToLookAt == TargetType.AttackTarget ? stateMachine.currentAttackTarget : stateMachine.currentPathfindingTarget;
+            Vector2 target;
+            
+            switch (targetToLookAt)
+            {
+                case TargetType.AttackTarget:
+                    target = stateMachine.currentAttackTarget;
+                    break;
+                case TargetType.PathfindingTarget:
+                    target = stateMachine.currentPathfindingTarget;
+                    break;
+                default:
+                    target = (Vector2)stateMachine.transform.position + stateMachine.GetComponent<Movement>().movementInput;
+                    break;
+            }
+            
             bool lookDirection = (stateMachine.transform.position.x - target.x) < 0;
             stateMachine.GetComponent<AnimatorController>().SetMirror(propertyName, invert != lookDirection);
 
