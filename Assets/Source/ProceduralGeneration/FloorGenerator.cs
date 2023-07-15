@@ -109,7 +109,7 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
-            if (SaveManager.autosaveExists)
+            if (SaveManager.autosaveExists && (!FloorSceneManager.IsValid() || FloorSceneManager.currentFloor == SaveManager.savedCurrentFloor))
             {
                 seed = SaveManager.savedFloorSeed;
             }

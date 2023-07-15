@@ -49,9 +49,6 @@ public class FloorSceneManager : MonoBehaviour
 
         // Make it so the manager doesn't disappear when it loads the next floor
         DontDestroyOnLoad(this);
-
-        // Player will always start on floor 0
-        currentFloor = 0;
     }
 
     /// <summary>

@@ -506,11 +506,13 @@ namespace Cardificer
             }
 
             /// <summary>
-            /// Creates an autosave if non exist.
+            /// Creates an autosave if none exist.
             /// </summary>
             private void Start()
             {
                 if (!FloorGenerator.IsValid()) { return; }
+
+                DontDestroyOnLoad(this);
 
                 FloorGenerator.onRoomChange += BindCleared;
 
@@ -527,6 +529,7 @@ namespace Cardificer
                 }
 
                 if (autosaveExists) { return; }
+
                 Invoke(nameof(Autosave), 1f);
             }
 
@@ -547,12 +550,24 @@ namespace Cardificer
             /// </summary>
             private void HandleFloorLoad()
             {
-                Autosave();
+                // Update everything except the current floor number (this is to ensure the floor generator understands that's it's not being loaded
+                // from an autosave load, the current floor number will be updated when the autosave happens)
                 AutosaveData saveData = latestAutosave == null ? new AutosaveData() : latestAutosave;
                 saveData.visitedRooms.Clear();
                 saveData.playerPos = new Vector2(0, 0);
                 saveData.destroyedTiles.Clear();
+                saveData.playerHealth = Player.health.currentHealth;
+                saveData.playerMoney = Player.GetMoney();
+                saveData.playerMaxHealth = Player.health.maxHealth;
+                saveData.playerSpeed = Player.Get().GetComponent<SimpleMovement>().maxSpeed;
+                saveData.playerDamage = Player.Get().GetComponent<PlayerController>().damageMultiplier;
+                saveData.playerCooldownReduction = Deck.playerDeck.cooldownReduction;
+                saveData.deckState = new Deck.State(Deck.playerDeck);
+                saveData.floorSeed = FloorGenerator.seed;
                 latestAutosave = saveData;
+
+                // Autosave after a second (hopefully after the floor generator is done generating...)
+                Invoke(nameof(Autosave), 1f);
             }
 
             /// <summary>
