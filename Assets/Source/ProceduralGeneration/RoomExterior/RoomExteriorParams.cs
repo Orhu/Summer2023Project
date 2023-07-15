@@ -97,27 +97,27 @@ namespace Cardificer
         /// </summary>
         public void Reset()
         {
-            rightWallSprites.Reset();
-            topWallSprites.Reset();
-            leftWallSprites.Reset();
-            bottomWallSprites.Reset();
-            topRightWallCornerSprites.Reset();
-            topLeftWallCornerSprites.Reset();
-            bottomLeftWallCornerSprites.Reset();
-            bottomRightWallCornerSprites.Reset();
-            rightDoorSprites.Reset();
-            topDoorSprites.Reset();
-            leftDoorSprites.Reset();
-            bottomDoorSprites.Reset();
-            rightDoorTopDoorFrameSprites.Reset();
-            rightDoorBottomDoorFrameSprites.Reset();
-            topDoorRightDoorFrameSprites.Reset();
-            topDoorLeftDoorFrameSprites.Reset();
-            leftDoorTopDoorFrameSprites.Reset();
-            leftDoorBottomDoorFrameSprites.Reset();
-            bottomDoorRightDoorFrameSprites.Reset();
-            bottomDoorLeftDoorFrameSprites.Reset();
-            floorSprites.Reset();
+            rightWallSprites?.Reset();
+            topWallSprites?.Reset();
+            leftWallSprites?.Reset();
+            bottomWallSprites?.Reset();
+            topRightWallCornerSprites?.Reset();
+            topLeftWallCornerSprites?.Reset();
+            bottomLeftWallCornerSprites?.Reset();
+            bottomRightWallCornerSprites?.Reset();
+            rightDoorSprites?.Reset();
+            topDoorSprites?.Reset();
+            leftDoorSprites?.Reset();
+            bottomDoorSprites?.Reset();
+            rightDoorTopDoorFrameSprites?.Reset();
+            rightDoorBottomDoorFrameSprites?.Reset();
+            topDoorRightDoorFrameSprites?.Reset();
+            topDoorLeftDoorFrameSprites?.Reset();
+            leftDoorTopDoorFrameSprites?.Reset();
+            leftDoorBottomDoorFrameSprites?.Reset();
+            bottomDoorRightDoorFrameSprites?.Reset();
+            bottomDoorLeftDoorFrameSprites?.Reset();
+            floorSprites?.Reset();
         }
     }
 

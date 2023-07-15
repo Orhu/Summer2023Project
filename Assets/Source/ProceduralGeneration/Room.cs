@@ -93,9 +93,6 @@ namespace Cardificer
 
             FloorGenerator.currentRoom = this;
 
-            // Enables all the tiles in the room
-            StartCoroutine(EnableTilesAfterOneFrame(spawnEnemies));
-
             // Move player into room, then close/activate doors (so player doesn't get trapped in door)
             StartCoroutine(MovePlayer(direction, shouldCloseDoors && enemiesPresent, callCleared && (!enemiesPresent && shouldCloseDoors)));
         }
@@ -170,7 +167,7 @@ namespace Cardificer
                 movementInput.y = 1;
             }
 
-            player.GetComponent<PlayerController>().enabled = false;
+            player.GetComponent<PlayerController>().movingEnabled = false;
 
             bool inXRange = (player.transform.position.x >= bottomLeftLocation.x + 0.9f && player.transform.position.x <= topRightLocation.x - 0.9f);
             bool inYRange = (player.transform.position.y >= bottomLeftLocation.y + 0.9f && player.transform.position.y <= topRightLocation.y - 0.9f);
@@ -184,7 +181,8 @@ namespace Cardificer
                 yield return null;
             }
 
-            player.GetComponent<PlayerController>().enabled = true;
+            player.GetComponent<PlayerController>().movingEnabled = true;
+            player.GetComponent<SimpleMovement>().movementInput = new Vector2(0, 0);
 
             ActivateDoors();
             if (shouldCloseDoors)
@@ -268,6 +266,26 @@ namespace Cardificer
         }
 
         /// <summary>
+        /// Gets all the cells a room takes up
+        /// </summary>
+        /// <param name="map"> The map to get the cells from </param>
+        /// <returns> The room cells </returns>
+        public List<MapCell> GetRoomCells(MapCell[,] map)
+        {
+            List<MapCell> roomCells = new List<MapCell>();
+
+            for (int i = 0; i < roomType.sizeMultiplier.x; i++)
+            {
+                for (int j = 0; j < roomType.sizeMultiplier.y; j++)
+                {
+                    roomCells.Add(map[roomLocation.x + i, roomLocation.y + j]);
+                }
+            }
+
+            return roomCells;
+        }
+
+        /// <summary>
         /// Gets the edge cells of the room using the given map
         /// </summary>
         /// <param name="map"> The map to get the cells from </param>
@@ -318,33 +336,43 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Enables all the tiles after waiting one frame to ensure the tiles have initialized themselves correctly
+        /// Gets all the rooms that this room is connected to
         /// </summary>
-        /// <param name="spawnEnemies"> Whether or not to spawn enemies </param>
-        /// <returns> Waits one frame </returns>
-        private IEnumerator EnableTilesAfterOneFrame(bool spawnEnemies)
+        /// <param name="map"> The map to get the rooms from </param>
+        /// <returns> The neighboring rooms </returns>
+        public List<Room> GetNeighboringRooms(MapCell[,] map)
         {
-            yield return null;
-            for (int i = 0; i < roomSize.x; i++)
+            List<Room> neighbors = new List<Room>();
+
+            List<MapCell> edges = GetEdgeCells(map);
+            foreach (MapCell edge in edges)
             {
-                for (int j = 0; j < roomSize.y; j++)
+                foreach (Direction direction in System.Enum.GetValues(typeof(Direction)))
                 {
-                    if (roomGrid[i, j] == null)
+                    if (direction == Direction.None || direction == Direction.All) { continue; }
+
+                    if (!edge.direction.HasFlag(direction)) { continue; }
+
+                    Vector2Int locationOffset = new Vector2Int();
+                    locationOffset.x = System.Convert.ToInt32(direction.HasFlag(Direction.Right)) - System.Convert.ToInt32(direction.HasFlag(Direction.Left));
+                    locationOffset.y = System.Convert.ToInt32(direction.HasFlag(Direction.Up)) - System.Convert.ToInt32(direction.HasFlag(Direction.Down));
+                    bool locationOutsideRoom = locationOffset.x + edge.location.x < roomLocation.x || locationOffset.x + edge.location.x >= roomLocation.x + roomType.sizeMultiplier.x;
+                    locationOutsideRoom |= locationOffset.y + edge.location.y < roomLocation.y || locationOffset.y + edge.location.y >= roomLocation.y + roomType.sizeMultiplier.y;
+
+                    if (!locationOutsideRoom) { continue; }
+
+                    MapCell neighbor = map[edge.location.x + locationOffset.x, edge.location.y + locationOffset.y];
+
+                    if (!neighbors.Contains(neighbor.room))
                     {
-                        Debug.LogWarning("Destroyable tiles are not updating the room grid! Please fix that bug please Liam or Zak.");
-                        continue;
-                    }
-                    if ((roomGrid[i, j].GetComponent<EnemySpawner>() == null && roomGrid[i, j].GetComponent<FiniteStateMachine.BaseStateMachine>() == null) || spawnEnemies)
-                    {
-                        roomGrid[i, j].Enable();
-                    }
-                    else
-                    {
-                        roomGrid[i, j].gameObject.SetActive(false);
+                        neighbors.Add(neighbor.room);
                     }
                 }
             }
+
+            return neighbors;
         }
+
 
         #endregion
     }

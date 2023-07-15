@@ -343,7 +343,7 @@ namespace Cardificer
         {
             foreach (KeyValuePair<int, float> cardIndexToCooldown in new Dictionary<int, float>(cardIndicesToCooldowns))
             {
-                float newValue = cardIndexToCooldown.Value - Time.deltaTime;
+                float newValue = cardIndexToCooldown.Value - Time.deltaTime * cooldownReduction;
                 if (newValue <= 0)
                 {
                     cardIndicesToCooldowns.Remove(cardIndexToCooldown.Key);

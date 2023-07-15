@@ -61,7 +61,10 @@ namespace Cardificer
                 }
             }
 
-            transform.GetChild(0).transform.parent = null;
+            if (transform.GetChild(0) != null) 
+            {
+                transform.GetChild(0).transform.parent = null;
+            }
             Destroy(gameObject);
         }
     }
