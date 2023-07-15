@@ -69,7 +69,7 @@ namespace Cardificer
             health.currentHealth = SaveManager.savedPlayerHealth;
             if (health.currentHealth > health.maxHealth || health.currentHealth <= 0 || health.maxHealth <= 0)
             {
-                SaveManager.AutosaveCorrupted("Invalid player health");
+                SaveManager.AutosaveCorrupted("Invalid player health of " + health.currentHealth);
                 return;
             }           
         }
