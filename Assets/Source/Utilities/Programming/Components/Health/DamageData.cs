@@ -25,14 +25,14 @@ namespace Cardificer
 
         // The causer of this attack.
         [System.NonSerialized]
-        public Object causer;
+        public GameObject causer;
 
         /// <summary>
         /// Copy Constructor for an attack.
         /// </summary>
         /// <param name="attack"> The attack to copy </param>
         /// <param name="causer"> The new causer </param>
-        public DamageData(DamageData attack, Object causer)
+        public DamageData(DamageData attack, GameObject causer)
         {
             damage = attack.damage;
             damageType = attack.damageType;
@@ -48,7 +48,7 @@ namespace Cardificer
         /// <param name="damageType"> The type of damage dealt. </param>
         /// <param name="causer"> The causer of the damage </param>
         /// <param name="invertInvincibility"> Whether or not this should cause invincibility if it does no damage and not cause invincibility if it does. </param>
-        public DamageData(int damage, DamageType damageType, Object causer, bool invertInvincibility = false)
+        public DamageData(int damage, DamageType damageType, GameObject causer, bool invertInvincibility = false)
         {
             this.damage = damage;
             this.damageType = damageType;
@@ -64,7 +64,7 @@ namespace Cardificer
         /// <param name="statusEffects"> The status effects applied. </param>
         /// <param name="causer"> The causer of the damage </param>
         /// <param name="invertInvincibility"> Whether or not this should cause invincibility if it does no damage and not cause invincibility if it does. </param>
-        public DamageData(int damage, DamageType damageType, List<StatusEffect> statusEffects, Object causer, bool invertInvincibility = false) : this(damage, damageType, causer, invertInvincibility)
+        public DamageData(int damage, DamageType damageType, List<StatusEffect> statusEffects, GameObject causer, bool invertInvincibility = false) : this(damage, damageType, causer, invertInvincibility)
         {
             this.statusEffects = new List<StatusEffect>(statusEffects);
         }
@@ -75,7 +75,7 @@ namespace Cardificer
         /// <param name="statusEffects"> The status effects applied. </param>
         /// <param name="causer"> The causer of the damage. </param>
         /// <param name="invertInvincibility"> Whether or not this should cause invincibility if it does no damage and not cause invincibility if it does. </param>
-        public DamageData(List<StatusEffect> statusEffects, Object causer, bool invertInvincibility = false)
+        public DamageData(List<StatusEffect> statusEffects, GameObject causer, bool invertInvincibility = false)
         {
             this.statusEffects = new List<StatusEffect>(statusEffects);
             this.causer = causer;

@@ -14,6 +14,9 @@ namespace Cardificer
         [Tooltip("The card to render.")]
         [SerializeField] private Card _card;
 
+        [Tooltip("The empty sword image if a card has half damage.")]
+        [SerializeField] private Sprite emptySwordImage;
+
         [Tooltip("The half sword image if a card has half damage.")]
         [SerializeField] private Sprite halfSwordImage;
 
@@ -90,14 +93,15 @@ namespace Cardificer
                     // resetting all swords
                     for(int i = 0; i < links.damageContainer.transform.childCount; i++)
                     {
-                        links.damageContainer.transform.GetChild(i).GetComponent<Image>().color = Color.white;
-                        links.damageContainer.transform.GetChild(i).GetComponent<Image>().sprite = fullSwordImage;
+                        links.damageContainer.transform.GetChild(i).GetComponent<Image>().sprite = emptySwordImage;
+                        links.damageContainer.transform.GetChild(i).GetComponent<Image>().color = _card.chordColor;
                     }
 
                     // filling all full swords
                     for (int i = 0; i < Mathf.Floor(_card.damage); i++)
                     {
-                        links.damageContainer.transform.GetChild(i).GetComponent<Image>().color = _card.chordColor; 
+                        links.damageContainer.transform.GetChild(i).GetComponent<Image>().sprite = fullSwordImage;
+                        links.damageContainer.transform.GetChild(i).GetComponent<Image>().color = _card.chordColor;
                     }
 
                     // If there is some remainder leftover, assign the last image to be a half sword
