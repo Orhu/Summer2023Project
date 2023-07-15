@@ -1,0 +1,19 @@
+Generic Melee Behavior is as Follows:
+
+Target Player, Chase Target repeatedly.
+This example Generic Melee is simply a walking version of the Bat.
+
+To create a new enemy:
+Right click GenericMelee > Create > Prefab Variant
+
+Place it in its folder, alongside a folder called "Animations", "States", and optionally "Projectile"
+	Animations holds animation controllers, animations, sprites, etc.
+	States holds all state/logic related ScriptableObjects
+	(Optional) Projectile holds all projectile sprites, BulletAttack/OrbitAttack and their related objects. 
+			If there are multiple projectiles that can be fired, give them each their own folder.
+
+Add your sprite, and modify the outer hitbox on the prefab to fit its damageable region.
+Then, go into the feet child object and modify that hitbox to fit its waist/feet. Feet should be as small as possible while still fitting the visual of the enemy.
+
+Modify the states and actions as needed. You can find all created state machine things under Right Click > Create > FSM.
+Stats such as health, movement speed, on touch damage, etc can all be found on the prefab itself.
