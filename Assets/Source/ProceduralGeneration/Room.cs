@@ -373,6 +373,44 @@ namespace Cardificer
             return neighbors;
         }
 
+        /// <summary>
+        /// Gets all the map cells that this room is connected to
+        /// </summary>
+        /// <param name="map"> The map to get the cells from </param>
+        /// <returns> The neighboring cells </returns>
+        public List<MapCell> GetNeighboringCells(MapCell[,] map)
+        {
+            List<MapCell> neighbors = new List<MapCell>();
+
+            List<MapCell> edges = GetEdgeCells(map);
+            foreach (MapCell edge in edges)
+            {
+                foreach (Direction direction in System.Enum.GetValues(typeof(Direction)))
+                {
+                    if (direction == Direction.None || direction == Direction.All) { continue; }
+
+                    if (!edge.direction.HasFlag(direction)) { continue; }
+
+                    Vector2Int locationOffset = new Vector2Int();
+                    locationOffset.x = System.Convert.ToInt32(direction.HasFlag(Direction.Right)) - System.Convert.ToInt32(direction.HasFlag(Direction.Left));
+                    locationOffset.y = System.Convert.ToInt32(direction.HasFlag(Direction.Up)) - System.Convert.ToInt32(direction.HasFlag(Direction.Down));
+                    bool locationOutsideRoom = locationOffset.x + edge.location.x < roomLocation.x || locationOffset.x + edge.location.x >= roomLocation.x + roomType.sizeMultiplier.x;
+                    locationOutsideRoom |= locationOffset.y + edge.location.y < roomLocation.y || locationOffset.y + edge.location.y >= roomLocation.y + roomType.sizeMultiplier.y;
+
+                    if (!locationOutsideRoom) { continue; }
+
+                    MapCell neighbor = map[edge.location.x + locationOffset.x, edge.location.y + locationOffset.y];
+
+                    if (!neighbors.Contains(neighbor))
+                    {
+                        neighbors.Add(neighbor);
+                    }
+                }
+            }
+
+            return neighbors;
+        }
+
 
         #endregion
     }
