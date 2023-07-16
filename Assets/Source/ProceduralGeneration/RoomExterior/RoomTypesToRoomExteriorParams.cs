@@ -61,6 +61,17 @@ namespace Cardificer
 
             return false;
         }
+
+        /// <summary>
+        /// Resets the room type to room exterior params list
+        /// </summary>
+        public void Reset()
+        {
+            foreach (RoomTypeToRoomExteriorParams roomTypeToRoomExteriorParams in roomTypesToRoomExteriorParams)
+            {
+                roomTypeToRoomExteriorParams.roomExteriorParams.Reset();
+            }
+        }
     }
 
     /// <summary>
