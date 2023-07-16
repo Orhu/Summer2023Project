@@ -10,6 +10,16 @@ namespace Cardificer
     [CreateAssetMenu(fileName = "NewRoomTypesToRoomExteriorParams", menuName = "Generation/RoomTypesToRoomExteriorParams")]
     public class RoomTypesToRoomExteriorParams : ScriptableObject
     {
+        [Header("Tiles")]
+        [Tooltip("The wall tile")]
+        public Tile wallTile;
+
+        [Tooltip("The door tile")]
+        public Tile doorTile;
+
+        [Tooltip("The floor prefab")]
+        public GameObject floorTile;
+
         [Tooltip("The defuault exterior params to use if a given room type doesn't have specified room exterior params")]
         [SerializeField] public RoomExteriorParams defaultRoomExteriorParams;
 

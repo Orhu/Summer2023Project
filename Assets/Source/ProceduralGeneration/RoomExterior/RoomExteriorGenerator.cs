@@ -30,11 +30,11 @@ namespace Cardificer
                     generatedRooms.Add(map.map[i, j].room);
                     if (roomTypesToExteriorParams.Contains(map.map[i, j].room.roomType))
                     {
-                        CreateRoomExterior(map.map[i, j].room, roomTypesToExteriorParams.At(map.map[i, j].room.roomType), map, cellSize);
+                        CreateRoomExterior(map.map[i, j].room, roomTypesToExteriorParams.At(map.map[i, j].room.roomType), roomTypesToExteriorParams.wallTile, roomTypesToExteriorParams.doorTile, roomTypesToExteriorParams.floorTile, map, cellSize);
                     }
                     else
                     {
-                        CreateRoomExterior(map.map[i, j].room, roomTypesToExteriorParams.defaultRoomExteriorParams, map, cellSize);
+                        CreateRoomExterior(map.map[i, j].room, roomTypesToExteriorParams.defaultRoomExteriorParams, roomTypesToExteriorParams.wallTile, roomTypesToExteriorParams.doorTile, roomTypesToExteriorParams.floorTile, map, cellSize);
                     }
                 }
             }
@@ -47,16 +47,16 @@ namespace Cardificer
         /// <param name="exteriorParams"> The Params for this type of room </param>
         /// <param name="map"> The map </param>
         /// <param name="cellSize"> The size of a single cell </param>
-        private void CreateRoomExterior(Room createdRoom, RoomExteriorParams exteriorParams, Map map, Vector2Int cellSize)
+        private void CreateRoomExterior(Room createdRoom, RoomExteriorParams exteriorParams, Tile wallTile, Tile doorTile, GameObject floorTile, Map map, Vector2Int cellSize)
         {
             createdRoom.cellSize = cellSize;
             createdRoom.roomGrid = new Tile[createdRoom.roomSize.x, createdRoom.roomSize.y];
 
-            CreateWalls(map, createdRoom, exteriorParams);
+            CreateWalls(map, createdRoom, exteriorParams, wallTile);
 
-            CreateDoors(map, createdRoom);
+            CreateDoors(map, createdRoom, doorTile);
 
-            CreateFloor(map, createdRoom, exteriorParams);
+            CreateFloor(map, createdRoom, exteriorParams, floorTile);
 
             // Reset the exterior Params (leave things as they were)
             exteriorParams.Reset();
@@ -68,7 +68,7 @@ namespace Cardificer
         /// <param name="map"> The map </param>
         /// <param name="room"> The room to create the walls for </param>
         /// <param name="exteriorParams"> The Params of this type of room </param>
-        private void CreateWalls(Map map, Room room, RoomExteriorParams exteriorParams)
+        private void CreateWalls(Map map, Room room, RoomExteriorParams exteriorParams, Tile wallTile)
         {
             Vector2Int roomSize = room.roomSize;
 
@@ -79,16 +79,16 @@ namespace Cardificer
 
             // Add the corners
             Sprite randomCornerSprite = exteriorParams.bottomLeftWallCornerSprites.GetRandomThing(FloorGenerator.random);
-            room.roomGrid[0, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(0, 0), exteriorParams.wallTile, wallContainer);
+            room.roomGrid[0, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(0, 0), wallTile, wallContainer);
 
             randomCornerSprite = exteriorParams.topLeftWallCornerSprites.GetRandomThing(FloorGenerator.random);
-            room.roomGrid[0, roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(0, roomSize.y - 1), exteriorParams.wallTile, wallContainer);
+            room.roomGrid[0, roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(0, roomSize.y - 1), wallTile, wallContainer);
 
             randomCornerSprite = exteriorParams.bottomRightWallCornerSprites.GetRandomThing(FloorGenerator.random);
-            room.roomGrid[roomSize.x - 1, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(roomSize.x - 1, 0), exteriorParams.wallTile, wallContainer);
+            room.roomGrid[roomSize.x - 1, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(roomSize.x - 1, 0), wallTile, wallContainer);
 
             randomCornerSprite = exteriorParams.topRightWallCornerSprites.GetRandomThing(FloorGenerator.random);
-            room.roomGrid[roomSize.x - 1, roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(roomSize.x - 1, roomSize.y - 1), exteriorParams.wallTile, wallContainer);
+            room.roomGrid[roomSize.x - 1, roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(roomSize.x - 1, roomSize.y - 1), wallTile, wallContainer);
 
             // Add the top and bottom walls
             for (int i = 1; i < roomSize.x - 1; i++)
@@ -109,7 +109,7 @@ namespace Cardificer
                 }
                 if (randomWallSprite != null)
                 {
-                    room.roomGrid[i, 0] = CreateWallTile(randomWallSprite, new Vector2Int(i, 0), exteriorParams.wallTile, wallContainer);
+                    room.roomGrid[i, 0] = CreateWallTile(randomWallSprite, new Vector2Int(i, 0), wallTile, wallContainer);
                 }
 
                 randomWallSprite = null;
@@ -128,7 +128,7 @@ namespace Cardificer
                 }
                 if (randomWallSprite != null)
                 {
-                    room.roomGrid[i, roomSize.y - 1] = CreateWallTile(randomWallSprite, new Vector2Int(i, roomSize.y - 1), exteriorParams.wallTile, wallContainer);
+                    room.roomGrid[i, roomSize.y - 1] = CreateWallTile(randomWallSprite, new Vector2Int(i, roomSize.y - 1), wallTile, wallContainer);
                 }
             }
 
@@ -151,7 +151,7 @@ namespace Cardificer
                 }
                 if (randomWallSprite != null)
                 {
-                    room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), exteriorParams.wallTile, wallContainer);
+                    room.roomGrid[0, j] = CreateWallTile(randomWallSprite, new Vector2Int(0, j), wallTile, wallContainer);
                 }
 
                 randomWallSprite = null;
@@ -170,7 +170,7 @@ namespace Cardificer
                 }
                 if (randomWallSprite != null)
                 {
-                    room.roomGrid[roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), exteriorParams.wallTile, wallContainer);
+                    room.roomGrid[roomSize.x - 1, j] = CreateWallTile(randomWallSprite, new Vector2Int(roomSize.x - 1, j), wallTile, wallContainer);
                 }
             }
             
@@ -206,7 +206,7 @@ namespace Cardificer
         /// </summary>
         /// <param name="map"> The map </param>
         /// <param name="room"> The room to create doors for </param>
-        private void CreateDoors(Map map, Room room)
+        private void CreateDoors(Map map, Room room, Tile doorTile)
         {
             GameObject doorContainer = new GameObject();
             doorContainer.name = "Door Container";
@@ -258,7 +258,7 @@ namespace Cardificer
                             doorSprites = exteriorParams.bottomDoorSprites.GetRandomThing(FloorGenerator.random);
                         }
 
-                        room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, direction, connectedCell, exteriorParams.doorTile, doorContainer);
+                        room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, direction, connectedCell, doorTile, doorContainer);
                         room.doors.Add(room.roomGrid[doorLocation.x, doorLocation.y].GetComponent<Door>());
                     }
                 }
@@ -305,7 +305,7 @@ namespace Cardificer
         /// <param name="map"> The map </param>
         /// <param name="room"> The room to create the floor for </param>
         /// <param name="exteriorParams"> The exterior generation Params of this room </param>
-        private void CreateFloor(Map map, Room room, RoomExteriorParams exteriorParams)
+        private void CreateFloor(Map map, Room room, RoomExteriorParams exteriorParams, GameObject floorTile)
         {
             Vector2Int roomSize = room.roomSize;
 
@@ -318,7 +318,7 @@ namespace Cardificer
                 for (int j = 0; j < roomSize.y; j++)
                 {
                     Sprite floorSprite = exteriorParams.floorSprites.GetRandomThing(FloorGenerator.random);
-                    CreateFloorTile(floorSprite, new Vector2Int(i, j), exteriorParams.floorTile, floorContainer);
+                    CreateFloorTile(floorSprite, new Vector2Int(i, j), floorTile, floorContainer);
                 }
             }
 
@@ -329,12 +329,12 @@ namespace Cardificer
                 if (map.map[room.roomLocation.x, j + room.roomLocation.y].direction.HasFlag(Direction.Left))
                 {
                     Sprite floorSprite = exteriorParams.floorSprites.GetRandomThing(FloorGenerator.random);
-                    CreateFloorTile(floorSprite, new Vector2Int(0, (room.cellSize.y * j) + room.cellSize.y / 2), exteriorParams.floorTile, floorContainer);
+                    CreateFloorTile(floorSprite, new Vector2Int(0, (room.cellSize.y * j) + room.cellSize.y / 2), floorTile, floorContainer);
                 }
                 if (map.map[room.roomLocation.x + room.roomType.sizeMultiplier.x - 1, j + room.roomLocation.y].direction.HasFlag(Direction.Right))
                 {
                     Sprite floorSprite = exteriorParams.floorSprites.GetRandomThing(FloorGenerator.random);
-                    CreateFloorTile(floorSprite, new Vector2Int(roomSize.x - 1, (room.cellSize.y * j) + room.cellSize.y / 2), exteriorParams.floorTile, floorContainer);
+                    CreateFloorTile(floorSprite, new Vector2Int(roomSize.x - 1, (room.cellSize.y * j) + room.cellSize.y / 2), floorTile, floorContainer);
                 }
             }
 
