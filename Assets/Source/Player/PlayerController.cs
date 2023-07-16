@@ -27,6 +27,9 @@ namespace Cardificer
         // Movement component to allow the agent to move
         private Movement movementComponent;
 
+        // The attempted movement input
+        private Vector2 attemptedMovementInput;
+
         // Animator component to make the pretty animations do their thing.
         private AnimatorController animatorComponent;
 
@@ -83,6 +86,12 @@ namespace Cardificer
             {
                 animatorComponent.SetMirror("castLeft", GetActionAimPosition().x - transform.position.x < 0);
             }
+
+            if (movingEnabled)
+            {
+                movementComponent.movementInput = attemptedMovementInput;
+                return;
+            }
         }
 
         /// <summary>
@@ -91,12 +100,7 @@ namespace Cardificer
         /// <param name="moveInput"> The move input </param>
         public void OnMove(InputValue moveInput)
         {
-            if (movingEnabled)
-            {
-                movementComponent.movementInput = moveInput.Get<Vector2>().normalized;
-                return;
-            }
-            movementComponent.movementInput = new Vector2(0, 0);
+            attemptedMovementInput = moveInput.Get<Vector2>().normalized;
         }
 
         /// <summary>
