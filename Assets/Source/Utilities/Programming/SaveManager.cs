@@ -35,17 +35,6 @@ namespace Cardificer
             }
         }
 
-        // The currently saved random state. Saving handled by autosaves. Use autosaveExists to check if data Valid.
-        public static Random.State savedRandomState
-        {
-            get
-            {
-                if (!autosaveExists) { return Random.state; }
-                return autosaver.latestAutosave.randomState;
-            }
-        }
-
-
         // The currently saved player health. Saving handled by autosaves. Use autosaveExists to check if data Valid.
         public static int savedPlayerHealth
         {
@@ -365,7 +354,6 @@ namespace Cardificer
                 saveData.visitedRooms.Add(FloorGenerator.currentRoom.roomLocation);
                 saveData.destroyedTiles = DestroyableTile.destroyedTiles?.ToList();
                 saveData.remainingShopBuys = ShopSlot.savableRemainingShopBuys;
-                saveData.randomState = Random.state;
 
                 latestAutosave = saveData;
             }
