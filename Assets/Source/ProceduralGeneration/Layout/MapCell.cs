@@ -62,8 +62,5 @@ namespace Cardificer
 
         // The size of the map
         public Vector2Int mapSize;
-
-        // The index representing the current room inside the 2D array of map cells
-        public Vector2 currentRoomIndex;
     }
 }

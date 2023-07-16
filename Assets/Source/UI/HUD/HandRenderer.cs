@@ -9,6 +9,7 @@ namespace Cardificer
     /// </summary>
     public class HandRenderer : MonoBehaviour
     {
+        [Header("Containers/Templates")]
         [Tooltip("The rune renderers to display the hand.")]
         public List<RuneRenderer> runeRenderers = new List<RuneRenderer>();
 
@@ -27,14 +28,31 @@ namespace Cardificer
         [Tooltip("Max number of runes to generate")]
         [SerializeField] private int maxHandSize;
 
+        [Tooltip("Time it takes to initiate fade out animation")]
+        [SerializeField] private float totalFadeOutCooldown = 5f;
+
+        [Header("Game World Settings")]
         [Tooltip("Whether the hand displays in the game world or in the UI")]
         [SerializeField] private bool handInGameWorld;
+
+        [Tooltip("How offset the hand is from the player in the game world")]
+        [SerializeField] private Vector2 handInGameWorldOffset;
 
         // Boolean telling whether the runeRenderers are visible
         private bool runeRenderersVisible;
 
-        // Time it takes to initiate cooldown
-        private float fadeOutCooldown = 5f;
+        // The timer variable which will be decremented
+        private float fadeOutCooldown;
+
+        // NOTE: I would suggest not changing these values unless good reason.
+        [Header("Radial Settings")]
+        [SerializeField] private float gameWorldFDistance = 450f;
+        [SerializeField] private float gameWorldMinAngle = 90f;
+        [SerializeField] private float gameWorldStartAngle = 135f;
+
+        [SerializeField] private float uiFDistance = 350f;
+        [SerializeField] private float uiMinAngle = 135f;
+        [SerializeField] private float uiStartAngle = 120f;
 
         /// <summary>
         /// Instantiate RuneRenderers
@@ -44,19 +62,57 @@ namespace Cardificer
             chordContainer = GameObject.FindGameObjectWithTag("HUD").GetComponentInChildren<ChordRenderer>();
             playerObject = Player.Get().gameObject;
             runeRenderersVisible = true;
+            fadeOutCooldown = totalFadeOutCooldown;
+
+
+            if(handInGameWorldOffset == null)
+            {
+                // Default offset
+                handInGameWorldOffset = new Vector2(0.7f, 0.3f);
+            }
+            // Instantiate as many RuneRenderers as we have hand size
             for (int i = 0; i < maxHandSize; i++)
             {
                 runeRenderers.Add(Instantiate(runeRendererTemplate, runeContainer.transform).GetComponent<RuneRenderer>());
             }
+
+            // Decide if the hand is in the UI or the game world
             if (handInGameWorld)
             {
-                transform.position = new Vector3(playerObject.transform.position.x + 0.7f, playerObject.transform.position.y + 0.7f, playerObject.transform.position.z);
+                MoveRendererToGameWorld();
             }
-            else // Game is in UI, TODO: a lot needs to change here.
+            else // Game is in UI
             {
                 MoveRendererToUI();
             }
         }
+
+        private void MoveRendererToGameWorld()
+        {
+            Canvas parentCanvas = GetComponentInParent<Canvas>();
+
+            // Scale the UI to be game world appropriate
+            parentCanvas.gameObject.transform.localScale = new Vector3(0.005f, 0.005f, 1);
+
+            // So the UI is in GameWorld render mode
+            parentCanvas.renderMode = RenderMode.WorldSpace;
+
+            // Set the UI to be positioned at the chordContainer on screen
+            transform.position = new Vector3(playerObject.transform.position.x + handInGameWorldOffset.x,
+                    playerObject.transform.position.y + handInGameWorldOffset.y, playerObject.transform.position.z);
+
+            // Change how we're setting the rune's radially (it's different when in game world)
+            RadialLayout childRadialLayout = GetComponentInChildren<RadialLayout>();
+
+            childRadialLayout.gameObject.transform.localPosition = Vector3.zero;
+
+            childRadialLayout.fDistance = gameWorldFDistance;
+
+            childRadialLayout.MinAngle = gameWorldMinAngle;
+
+            childRadialLayout.StartAngle = gameWorldStartAngle;
+        }
+
         /// <summary>
         /// When we wish to swap the renderer to the UI, we will need to do this
         /// </summary>
@@ -64,21 +120,45 @@ namespace Cardificer
         {
             Canvas parentCanvas = GetComponentInParent<Canvas>();
 
+            // When the UI is in the game world, it is scaled way down to fit on screen.
+            // When we swap back to UI, we need to scale it back to (1,1,1)
             parentCanvas.gameObject.transform.localScale = Vector3.one;
 
+            // So the UI is not in GameWorld render mode anymore
             parentCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
 
+            // Set the UI to be positioned at the chordContainer on screen
             transform.position = chordContainer.transform.position;
 
+            // Change how we're setting the rune's radially (it's different when not in game world)
             RadialLayout childRadialLayout = GetComponentInChildren<RadialLayout>();
 
             childRadialLayout.gameObject.transform.localPosition = Vector3.zero;
 
-            childRadialLayout.fDistance = 350f;
+            childRadialLayout.fDistance = uiFDistance;
 
-            childRadialLayout.MinAngle = 135f;
+            childRadialLayout.MinAngle = uiMinAngle;
 
-            childRadialLayout.StartAngle = 120f;
+            childRadialLayout.StartAngle = uiStartAngle;
+        }
+
+        /// <summary>
+        /// Allows a player to dynamically change whether the 
+        /// HandRenderer is in the GameWorld or in the UI.
+        /// </summary>
+        /// <param name="inGameWorld">If true, the UI is in game world, else it is in the UI</param>
+        public void SetHandRendererMode(bool inGameWorld)
+        {
+            if (inGameWorld)
+            {
+                handInGameWorld = true;
+                MoveRendererToGameWorld();
+            }
+            else
+            {
+                handInGameWorld = false;
+                MoveRendererToUI();
+            }
         }
 
         /// <summary>
@@ -86,10 +166,14 @@ namespace Cardificer
         /// </summary>
         void Update()
         {
+            // Ensure the hand renderer stays following the player
+            // if it is in the game world
             if (handInGameWorld)
             {
-                transform.position = new Vector3(playerObject.transform.position.x + 0.7f, playerObject.transform.position.y + 0.3f, playerObject.transform.position.z);
+                transform.position = new Vector3(playerObject.transform.position.x + handInGameWorldOffset.x,
+                    playerObject.transform.position.y + handInGameWorldOffset.y, playerObject.transform.position.z);
             }
+
             // loop through current deck hand size
             for (int i = 0; i < Deck.playerDeck.handSize; i++)
             {
@@ -165,7 +249,7 @@ namespace Cardificer
             if (Deck.playerDeck.previewedCardIndices.Count > 0 && !runeRenderersVisible) // One of the buttons has been pressed
             {
                 runeRenderersVisible = true;
-                fadeOutCooldown = 5f;
+                fadeOutCooldown = totalFadeOutCooldown;
                 for (int i = 0; i < Deck.playerDeck.handSize; i++)
                 {
                     runeRenderers[i].GetComponent<Animator>().Play("A_RuneRenderer_FadeIn");

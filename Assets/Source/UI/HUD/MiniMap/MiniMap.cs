@@ -4,7 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-namespace Cardificer{
+namespace Cardificer
+{
+    /// <summary>
+    /// Gives functionality to HUD minimap 
+    /// mainly for drawing and resetting the map itself
+    /// </summary>
     public class MiniMap : MonoBehaviour
     {
         [Tooltip("Grid layout for organizing room visuals")]
@@ -27,6 +32,9 @@ namespace Cardificer{
 
         [Tooltip("Float representing the padding between rooms")]
         [SerializeField] private float roomPadding = 10f;
+
+        [Tooltip("How much we scale drawing each room from each other")]
+        [SerializeField] private float drawScale = 100f;
 
         /// <summary>
         /// Observe if the current room changes,
@@ -63,15 +71,12 @@ namespace Cardificer{
             // Reassign the current room
             localCurrentRoom = FloorGenerator.currentRoom;
             
-            // Get a list of neighbor rooms
-            List<Room> neighborRooms = FloorGenerator.currentRoom.GetNeighboringRooms(FloorGenerator.map.map);
-
             // Update the current room by drawing all it's cells
             foreach (MapCell cell in localCurrentRoom.GetRoomCells(FloorGenerator.map.map))
             {
                 Vector2 drawLocation = cell.location - localCurrentRoom.roomLocation;
                 GameObject cellVisual = Instantiate(cellVisualPrefab, roomImageContainer.transform);
-                cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * 100), cellVisual.transform.localPosition.y + (drawLocation.y * 100));
+                cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * drawScale), cellVisual.transform.localPosition.y + (drawLocation.y * drawScale));
                 cellVisual.GetComponentInChildren<TextMeshProUGUI>().text = localCurrentRoom.roomType.displayName;
             }
 
@@ -118,7 +123,7 @@ namespace Cardificer{
 
                         // Decide location of where to draw cells
                         Vector2 drawLocation = (innerCell.location - localCurrentRoom.roomLocation);
-                        cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * 100) + paddingVec.x, cellVisual.transform.localPosition.y + (drawLocation.y * 100) + paddingVec.y);
+                        cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * drawScale) + paddingVec.x, cellVisual.transform.localPosition.y + (drawLocation.y * drawScale) + paddingVec.y);
                         
                         // Modify the room visual
                         cellVisual.GetComponentInChildren<TextMeshProUGUI>().text = innerCell.room.roomType.displayName;
@@ -132,7 +137,7 @@ namespace Cardificer{
                     GameObject cellVisual = Instantiate(cellVisualPrefab, roomImageContainer.transform);
 
                     Vector2 drawLocation = cell.location - localCurrentRoom.roomLocation;
-                    cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * 100) + paddingVec.x, cellVisual.transform.localPosition.y + (drawLocation.y * 100) + paddingVec.y);
+                    cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * drawScale) + paddingVec.x, cellVisual.transform.localPosition.y + (drawLocation.y * drawScale) + paddingVec.y);
                     
                     cellVisual.GetComponent<Image>().sprite = nonVisitedRoomSprite;
                 }
