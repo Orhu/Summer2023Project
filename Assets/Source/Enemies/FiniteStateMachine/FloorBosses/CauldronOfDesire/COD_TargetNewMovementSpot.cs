@@ -23,11 +23,9 @@ namespace Cardificer.FiniteStateMachine
         {
             stateMachine.trackedVariables.TryAdd("Random", new Random(SaveManager.savedFloorSeed));
             random = stateMachine.trackedVariables["Random"] as Random;
-            BaseStateMachine.print("Moving time!");
 
             if (!stateMachine.trackedVariables.ContainsKey("CenterPoint"))
             {
-                BaseStateMachine.print("Locations not cached, caching now...");
                 CacheMovementPoints(stateMachine);
             }
 
@@ -43,7 +41,6 @@ namespace Cardificer.FiniteStateMachine
             FindClosestAndRemove(movementOptions, stateMachine);
 
             Vector2 randomMove = movementOptions[random.Next(movementOptions.Count)];
-            BaseStateMachine.print("Setting pathfinding target to randomly selected spot!");
             stateMachine.currentPathfindingTarget = randomMove;
 
             stateMachine.cooldownData.cooldownReady[this] = true;
