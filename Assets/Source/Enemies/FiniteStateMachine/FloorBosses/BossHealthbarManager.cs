@@ -7,17 +7,14 @@ using UnityEngine.UI;
 /// </summary>
 public class BossHealthbarManager : MonoBehaviour
 {
-    [Tooltip("Duration to fill the health bar during the health bar starting animation, in seconds")]
+    [Tooltip("Duration of animation between health values, in seconds")]
     [SerializeField] private float healthFillDuration;
     
     // The instance of this boss healthbar manager
-    [HideInInspector] public static BossHealthbarManager instance;
+    public static BossHealthbarManager instance;
 
     // The reference to the slider component
     private Slider slider;
-
-    // Tracks time the health bar was initiated
-    private float startTime;
 
     /// <summary>
     /// Initialize components and variables, then disable the health bar 
@@ -36,10 +33,9 @@ public class BossHealthbarManager : MonoBehaviour
     public void StartHealthbar(float maxHealth)
     {
         gameObject.SetActive(true);
-        startTime = Time.time;
         slider.maxValue = maxHealth;
         slider.value = 0;
-        StartCoroutine(FillHealthbar(maxHealth));
+        StartCoroutine(AnimateHealthbar(maxHealth));
     }
 
     /// <summary>
@@ -50,7 +46,16 @@ public class BossHealthbarManager : MonoBehaviour
     {
         gameObject.SetActive(true);
         StopAllCoroutines();
-        StartCoroutine(FillHealthbar(newValue));
+        StartCoroutine(AnimateHealthbar(newValue));
+    }
+
+    /// <summary>
+    /// Resets all values to default and disables the health bar
+    /// </summary>
+    public void DisableHealthbar()
+    {
+        StopAllCoroutines();
+        gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -58,13 +63,23 @@ public class BossHealthbarManager : MonoBehaviour
     /// </summary>
     /// <param name="healthVal"> New value to set the health bar to </param>
     /// <returns> Waits one frame between every fill step </returns>
-    private IEnumerator FillHealthbar(float healthVal)
+    private IEnumerator AnimateHealthbar(float healthVal)
     {
-        while (Mathf.Abs(slider.value - healthVal) > 0.01)
+        float startValue = slider.value;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < healthFillDuration)
         {
-            float step = (Time.time - startTime) / healthFillDuration;
-            slider.value = Mathf.SmoothStep(slider.value, healthVal, step);
-            yield return null; // wait one frame between each loop
+            float normalizedTime = elapsedTime / healthFillDuration;
+            float easedValue = Mathf.Lerp(startValue, healthVal, normalizedTime);
+
+            slider.value = easedValue;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
         }
+
+        // Ensure the health bar reaches the target value
+        slider.value = healthVal;
     }
 }
