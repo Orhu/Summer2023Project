@@ -56,7 +56,7 @@ namespace Cardificer
 
             CreateWalls(map, createdRoom, exteriorParams, defaultRoomExteriorParams, wallTile);
 
-            CreateDoors(map, createdRoom, defaultRoomExteriorParams, doorTile);
+            CreateDoors(map, createdRoom, doorTile);
 
             CreateFloor(map, createdRoom, exteriorParams, defaultRoomExteriorParams, floorTile);
         }
@@ -221,7 +221,7 @@ namespace Cardificer
         /// </summary>
         /// <param name="map"> The map </param>
         /// <param name="room"> The room to create doors for </param>
-        private void CreateDoors(Map map, Room room, RoomExteriorParams defaultRoomExteriorParams, Tile doorTile)
+        private void CreateDoors(Map map, Room room, Tile doorTile)
         {
             GameObject doorContainer = new GameObject();
             doorContainer.name = "Door Container";
@@ -236,20 +236,32 @@ namespace Cardificer
                     {
                         continue;
                     }
+
                     if (roomCell.direction.HasFlag(direction))
                     {
                         Vector2Int mapOffset = new Vector2Int();
                         mapOffset.x = System.Convert.ToInt32(direction == Direction.Right) - System.Convert.ToInt32(direction == Direction.Left);
                         mapOffset.y = System.Convert.ToInt32(direction == Direction.Up) - System.Convert.ToInt32(direction == Direction.Down);
                         MapCell connectedCell = map.map[roomCell.location.x + mapOffset.x, roomCell.location.y + mapOffset.y];
+
+                        int currentRoomIndex = FloorGenerator.roomTypesToExteriorParams.roomTypesToRoomExteriorParams.FindIndex(iRoomType => room.roomType == iRoomType.roomType);
+                        int connectedRoomIndex = FloorGenerator.roomTypesToExteriorParams.roomTypesToRoomExteriorParams.FindIndex(iRoomType => connectedCell.room.roomType == iRoomType.roomType);
+
                         RoomExteriorParams exteriorParams;
-                        if (FloorGenerator.roomTypesToExteriorParams.Contains(connectedCell.room.roomType))
+                        if (currentRoomIndex == -1 && connectedRoomIndex == -1)
                         {
-                            exteriorParams = FloorGenerator.roomTypesToExteriorParams.At(connectedCell.room.roomType);
+                            exteriorParams = FloorGenerator.roomTypesToExteriorParams.defaultRoomExteriorParams;
                         }
                         else
                         {
-                            exteriorParams = FloorGenerator.roomTypesToExteriorParams.defaultRoomExteriorParams;
+                            if (currentRoomIndex > connectedRoomIndex)
+                            {
+                                exteriorParams = FloorGenerator.roomTypesToExteriorParams.At(room.roomType);
+                            }
+                            else
+                            {
+                                exteriorParams = FloorGenerator.roomTypesToExteriorParams.At(connectedCell.room.roomType);
+                            }
                         }
 
                         Vector2Int doorLocation = (mapOffset * room.cellSize / 2) + room.cellSize / 2 + (roomCell.location - room.roomLocation) * room.cellSize;
@@ -258,19 +270,19 @@ namespace Cardificer
 
                         if (direction == Direction.Right)
                         {
-                            doorSprites = GetRandomValidExteriorParam(exteriorParams.rightDoorSprites, defaultRoomExteriorParams.rightDoorSprites);
+                            doorSprites = GetRandomValidExteriorParam(exteriorParams.rightDoorSprites, FloorGenerator.roomTypesToExteriorParams.defaultRoomExteriorParams.rightDoorSprites);
                         }
                         else if (direction == Direction.Up)
                         {
-                            doorSprites = GetRandomValidExteriorParam(exteriorParams.topDoorSprites, defaultRoomExteriorParams.topDoorSprites);
+                            doorSprites = GetRandomValidExteriorParam(exteriorParams.topDoorSprites, FloorGenerator.roomTypesToExteriorParams.defaultRoomExteriorParams.topDoorSprites);
                         }
                         else if (direction == Direction.Left)
                         {
-                            doorSprites = GetRandomValidExteriorParam(exteriorParams.leftDoorSprites, defaultRoomExteriorParams.leftDoorSprites);
+                            doorSprites = GetRandomValidExteriorParam(exteriorParams.leftDoorSprites, FloorGenerator.roomTypesToExteriorParams.defaultRoomExteriorParams.leftDoorSprites);
                         }
                         else if (direction == Direction.Down)
                         {
-                            doorSprites = GetRandomValidExteriorParam(exteriorParams.bottomDoorSprites, defaultRoomExteriorParams.bottomDoorSprites);
+                            doorSprites = GetRandomValidExteriorParam(exteriorParams.bottomDoorSprites, FloorGenerator.roomTypesToExteriorParams.defaultRoomExteriorParams.bottomDoorSprites);
                         }
 
                         room.roomGrid[doorLocation.x, doorLocation.y] = CreateDoorTile(doorSprites, doorLocation, direction, connectedCell, doorTile, doorContainer);

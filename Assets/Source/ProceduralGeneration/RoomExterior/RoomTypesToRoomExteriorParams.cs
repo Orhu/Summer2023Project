@@ -23,7 +23,7 @@ namespace Cardificer
         [Tooltip("The defuault exterior params to use if a given room type doesn't have specified room exterior params")]
         [SerializeField] public RoomExteriorParams defaultRoomExteriorParams;
 
-        [Tooltip("A list of room types to exterior generation Params")]
+        [Tooltip("A list of room types to exterior generation Params. The higher in this list a room type is, the higher priority its doors will have.")]
         [SerializeField] public List<RoomTypeToRoomExteriorParams> roomTypesToRoomExteriorParams;
 
         /// <summary>
