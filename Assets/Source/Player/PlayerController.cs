@@ -19,7 +19,7 @@ namespace Cardificer
             get => _movingEnabled;
             set
             {
-                _movingEnabled = false;
+                _movingEnabled = value;
                 if (!_movingEnabled)
                 {
                     movementComponent.movementInput = new Vector2(0, 0);
