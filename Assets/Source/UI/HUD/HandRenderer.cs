@@ -36,7 +36,7 @@ namespace Cardificer
         [SerializeField] private bool handInGameWorld;
 
         [Tooltip("How offset the hand is from the player in the game world")]
-        [SerializeField] private Vector2 handInGameWorldOffset;
+        [SerializeField] private Vector2 handInGameWorldOffset = new Vector2(0.7f, 0.3f);
 
         // Boolean telling whether the runeRenderers are visible
         private bool runeRenderersVisible;
@@ -46,12 +46,18 @@ namespace Cardificer
 
         // NOTE: I would suggest not changing these values unless good reason.
         [Header("Radial Settings")]
+        [Tooltip("How far the RuneRenderers are from the base point in game world")]
         [SerializeField] private float gameWorldFDistance = 450f;
+        [Tooltip("How far the RuneRenderers are from each other in game world")]
         [SerializeField] private float gameWorldMinAngle = 90f;
+        [Tooltip("How far the RuneRenderers start in game world")]
         [SerializeField] private float gameWorldStartAngle = 135f;
 
+        [Tooltip("How far the RuneRenderers are from the base point in UI")]
         [SerializeField] private float uiFDistance = 350f;
+        [Tooltip("How far the RuneRenderers are from each other in UI")]
         [SerializeField] private float uiMinAngle = 135f;
+        [Tooltip("How far the RuneRenderers start in UI")]
         [SerializeField] private float uiStartAngle = 120f;
 
         /// <summary>
@@ -64,12 +70,6 @@ namespace Cardificer
             runeRenderersVisible = true;
             fadeOutCooldown = totalFadeOutCooldown;
 
-
-            if(handInGameWorldOffset == null)
-            {
-                // Default offset
-                handInGameWorldOffset = new Vector2(0.7f, 0.3f);
-            }
             // Instantiate as many RuneRenderers as we have hand size
             for (int i = 0; i < maxHandSize; i++)
             {
@@ -87,6 +87,9 @@ namespace Cardificer
             }
         }
 
+        /// <summary>
+        /// When we wish to swap the renderer to the Game World, we will need call do this
+        /// </summary>
         private void MoveRendererToGameWorld()
         {
             Canvas parentCanvas = GetComponentInParent<Canvas>();
@@ -114,7 +117,7 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// When we wish to swap the renderer to the UI, we will need to do this
+        /// When we wish to swap the renderer to the UI, we will need to call this
         /// </summary>
         private void MoveRendererToUI()
         {
