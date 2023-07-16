@@ -53,8 +53,7 @@ namespace Cardificer
             set
             {
                 links.cooldownOverlay.enabled = value > 0;
-                links.cooldownTimeTextBox.text = (Mathf.Round(value * 10f) / 10f).ToString();
-                links.cooldownTimeTextBox.enabled = value > 0;
+                links.cooldownOverlay.fillAmount = value / _card.cooldownTime;
             }
         }
 
@@ -75,9 +74,6 @@ namespace Cardificer
         [System.Serializable]
         struct ComponentLinks
         {
-
-            [Tooltip("The text boxed used to display the current remaining cooldown of the crune.")]
-            public TMP_Text cooldownTimeTextBox;
 
             [Tooltip("The text boxed used to display the current remaining action time of the rune.")]
             public TMP_Text actionTimeTextBox;
