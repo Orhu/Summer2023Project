@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6816320395962278880}
   - component: {fileID: 6816320395962278882}
   m_Layer: 0
-  m_Name: F1_Generator
+  m_Name: TutorialGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,22 +50,34 @@ MonoBehaviour:
   _randomizeSeed: 1
   _generationSettingsFileName: GenerationSettings
   _cellSize: {x: 17, y: 11}
-  _usePredefinedMap: 0
+  _usePredefinedMap: 1
   _predefinedMap:
     predefinedMap:
     - innerArray:
-      - direction: 0
-        roomType: {fileID: 0}
-      - direction: 0
-        roomType: {fileID: 0}
+      - direction: 1
+        roomType: {fileID: 11400000, guid: dea0350780660c745a86b762cc8eed9e, type: 2}
     - innerArray:
-      - direction: 0
-        roomType: {fileID: 0}
-      - direction: 0
-        roomType: {fileID: 0}
-  _layoutParams: {fileID: 11400000, guid: b6bc28eb883e9604a93e3a7353b6c1f7, type: 2}
-  _roomTypesToExteriorParams: {fileID: 11400000, guid: d02e7153e87fabd4394bee407c272248, type: 2}
-  _templateParams: {fileID: 11400000, guid: edf9c76c7f360e4459a24604646906f9, type: 2}
+      - direction: 5
+        roomType: {fileID: 11400000, guid: 795e547290ceded498e76018b6b95398, type: 2}
+    - innerArray:
+      - direction: 5
+        roomType: {fileID: 11400000, guid: 09437ef99c6dc0b488407153a8e69ec3, type: 2}
+    - innerArray:
+      - direction: 5
+        roomType: {fileID: 11400000, guid: 707dadda8f965ff47b91e71a49efc100, type: 2}
+    - innerArray:
+      - direction: 5
+        roomType: {fileID: 11400000, guid: 76d78e8a304cf7d49a3f9404919b2dfe, type: 2}
+    - innerArray:
+      - direction: 5
+        roomType: {fileID: 11400000, guid: ff26cd02e888aa34a8f216027600d985, type: 2}
+    - innerArray:
+      - direction: 4
+        roomType: {fileID: 11400000, guid: d1ee419fb11ae534ea3e00cf70b1b0fd, type: 2}
+  _predefinedMapStartLoc: {x: 0, y: 0}
+  _layoutParams: {fileID: 0}
+  _roomTypesToExteriorParams: {fileID: 11400000, guid: 9d4b5866a63e1d944a10cda7f7ec3a9f, type: 2}
+  _templateParams: {fileID: 11400000, guid: 75e63b9abedfd944fb14685262b38e5d, type: 2}
 --- !u!114 &6816320395962278880
 MonoBehaviour:
   m_ObjectHideFlags: 0
