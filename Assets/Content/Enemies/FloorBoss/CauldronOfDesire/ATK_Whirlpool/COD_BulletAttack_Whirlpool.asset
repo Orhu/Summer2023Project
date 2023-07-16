@@ -16,19 +16,18 @@ MonoBehaviour:
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
-    damage: 1
+    damage: 2
     damageType: 1
     statusEffects: []
     invertInvincibility: 0
   hitCount: 1
   applyDamageOnHit: 1
-  modifiers:
-  - {fileID: 11400000, guid: 43ed3bbaa2a1b79448c8dab1d088c73c, type: 2}
+  modifiers: []
   immuneToShield: 0
   immuneToReflect: 0
   shape: {fileID: 11400000, guid: f6c731e4b6917524d9a02ad77fc65355, type: 2}
   lifetime: 8
-  initialSpeed: 1
+  initialSpeed: 4
   acceleration: 1
   minSpeed: 0
   maxSpeed: 6
@@ -43,58 +42,13 @@ MonoBehaviour:
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
   spawnLocation: 0
-  aimMode: 6
+  aimMode: 5
   waitForProjectileDeath: 0
   chargeTime: 0
   additionalActionTime: 0.05
   _spawnSequence:
   - delay: 0
     angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.05
-    angle: 22.5
-    offset: {x: 0, y: 0}
-  - delay: 0.05
-    angle: 45
-    offset: {x: 0, y: 0}
-  - delay: 0.05
-    angle: 67.5
-    offset: {x: 0, y: 0}
-  - delay: 0.05
-    angle: 90
-    offset: {x: 0, y: 0}
-  - delay: 0.05
-    angle: 112.5
-    offset: {x: 0, y: 0}
-  - delay: 0.05
-    angle: 135
-    offset: {x: 0, y: 0}
-  - delay: 0.05
-    angle: 157.5
-    offset: {x: 0, y: 0}
-  - delay: 0.05
-    angle: 180
-    offset: {x: 0, y: 0}
-  - delay: 0.05
-    angle: 202.5
-    offset: {x: 0, y: 0}
-  - delay: 0.05
-    angle: 225
-    offset: {x: 0, y: 0}
-  - delay: 0.05
-    angle: 247.5
-    offset: {x: 0, y: 0}
-  - delay: 0.05
-    angle: 270
-    offset: {x: 0, y: 0}
-  - delay: 0.05
-    angle: 302.5
-    offset: {x: 0, y: 0}
-  - delay: 0.05
-    angle: 325
-    offset: {x: 0, y: 0}
-  - delay: 0.05
-    angle: 347.5
     offset: {x: 0, y: 0}
   randomAngle: 0
   randomOffset: 0

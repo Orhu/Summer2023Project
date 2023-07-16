@@ -10,138 +10,91 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
-  m_Name: Atk_COD_EchoingShout
+  m_Name: COD_BulletAttack_WhirlpoolAiming
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
-    damage: 2
+    damage: 0
     damageType: 1
     statusEffects: []
     invertInvincibility: 0
   hitCount: 1
-  applyDamageOnHit: 1
-  modifiers: []
+  applyDamageOnHit: 0
+  modifiers:
+  - {fileID: 11400000, guid: 0be95c66ec1570e429b86481e848fb66, type: 2}
   immuneToShield: 0
   immuneToReflect: 0
-  shape: {fileID: 11400000, guid: 192da02bcafeb4236a76e18cc00b4b9a, type: 2}
-  lifetime: 4
-  initialSpeed: 20
-  acceleration: 10
+  shape: {fileID: 11400000, guid: f6c731e4b6917524d9a02ad77fc65355, type: 2}
+  lifetime: 0.5
+  initialSpeed: 0
+  acceleration: 0
   minSpeed: 0
-  maxSpeed: 40
+  maxSpeed: 0
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
   homingAimMode: 1
   switchAfterHit: 0
-  visualObject: {fileID: 4721454448969483725, guid: 3182f604296f9437d87915c95e2aee3b, type: 3}
+  visualObject: {fileID: 7634779327624276169, guid: 0de4ff9cc8df4c44ea942aac6c72d9b3, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
   spawnLocation: 0
-  aimMode: 5
+  aimMode: 6
   waitForProjectileDeath: 0
   chargeTime: 0
-  additionalActionTime: 0
+  additionalActionTime: 0.05
   _spawnSequence:
   - delay: 0
     angle: 0
     offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 11.25
-    offset: {x: 0, y: 0}
-  - delay: 0
+  - delay: 0.05
     angle: 22.5
     offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 33.75
-    offset: {x: 0, y: 0}
-  - delay: 0
+  - delay: 0.05
     angle: 45
     offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 56.25
-    offset: {x: 0, y: 0}
-  - delay: 0
+  - delay: 0.05
     angle: 67.5
     offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 78.75
-    offset: {x: 0, y: 0}
-  - delay: 0
+  - delay: 0.05
     angle: 90
     offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 101.25
-    offset: {x: 0, y: 0}
-  - delay: 0
+  - delay: 0.05
     angle: 112.5
     offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 123.75
-    offset: {x: 0, y: 0}
-  - delay: 0
+  - delay: 0.05
     angle: 135
     offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 146.25
-    offset: {x: 0, y: 0}
-  - delay: 0
+  - delay: 0.05
     angle: 157.5
     offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 168.75
-    offset: {x: 0, y: 0}
-  - delay: 0
+  - delay: 0.05
     angle: 180
     offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 191.25
-    offset: {x: 0, y: 0}
-  - delay: 0
+  - delay: 0.05
     angle: 202.5
     offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 213.75
-    offset: {x: 0, y: 0}
-  - delay: 0
+  - delay: 0.05
     angle: 225
     offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 236.25
-    offset: {x: 0, y: 0}
-  - delay: 0
+  - delay: 0.05
     angle: 247.5
     offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 258.75
-    offset: {x: 0, y: 0}
-  - delay: 0
+  - delay: 0.05
     angle: 270
     offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 281.25
-    offset: {x: 0, y: 0}
-  - delay: 0
+  - delay: 0.05
     angle: 292.5
     offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 303.75
-    offset: {x: 0, y: 0}
-  - delay: 0
+  - delay: 0.05
     angle: 315
     offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 326.25
-    offset: {x: 0, y: 0}
-  - delay: 0
+  - delay: 0.05
     angle: 337.5
-    offset: {x: 0, y: 0}
-  - delay: 0
-    angle: 348.75
     offset: {x: 0, y: 0}
   randomAngle: 0
   randomOffset: 0
