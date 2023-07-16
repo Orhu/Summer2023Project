@@ -27,6 +27,11 @@ namespace Cardificer
             room.livingEnemies = new List<GameObject>();
 
             List<GameObject> layers = room.template.GetLayers();
+            if (layers.Count == 0)
+            {
+                throw new System.Exception("Template " + template.name + " has no layers!");
+            }
+
             for (int i = 0; i < layers.Count; i++)
             {
                 for (int j = 1; j < room.roomSize.x - 1; j++)
