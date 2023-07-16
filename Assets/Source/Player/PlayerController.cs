@@ -13,7 +13,19 @@ namespace Cardificer
         [HideInInspector] public float damageMultiplier = 1f;
 
         // Tracks whether moving and playing cards is enabled
-        [HideInInspector] public bool movingEnabled = true;
+        private bool _movingEnabled = true;
+        public bool movingEnabled
+        {
+            get => _movingEnabled;
+            set
+            {
+                _movingEnabled = false;
+                if (!_movingEnabled)
+                {
+                    movementComponent.movementInput = new Vector2(0, 0);
+                }
+            }
+        }
 
         // Delegate called when the map is opened (@ALEX TODO: Delete this delegate when you make your map screen)
         public System.Action mapOpened;
