@@ -266,13 +266,13 @@ namespace Cardificer
 
             if (distX > distY)
             {
-                // 24 is the cost of a diagonal move
+                // 30 is the cost of a diagonal move
                 // 10 is the cost of a straight move
-                return 24 * distY + 10 * (distX - distY);
+                return 30 * distY + 10 * (distX - distY);
             }
             else
             {
-                return 24 * distX + 10 * (distY - distX);
+                return 30 * distX + 10 * (distY - distX);
             }
         }
     }
