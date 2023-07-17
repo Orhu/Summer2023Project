@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Cardificer
 {
@@ -43,7 +46,7 @@ namespace Cardificer
     /// </summary>
     /// <typeparam name="T"> The type of the things </typeparam>
     [System.Serializable]
-    public class GenericWeightedThings<T>
+    public class GenericWeightedThings<T> : GenericWeightedThingsParent
     {
         [Tooltip("The initial list of things that can be chosen")]
         public List<GenericWeightedThing<T>> things;
@@ -251,4 +254,58 @@ namespace Cardificer
             return result + FloorGenerator.seed;
         }
     }
+
+    /// <summary>
+    /// This is only to allow for the workaround of having the same property drawer for every generic weighted thing (thanks Unity)
+    /// </summary>
+    public class GenericWeightedThingsParent {};
+
+#if UNITY_EDITOR
+    /// <summary>
+    /// Class for making the Generic weighted thing easier to read in the inspector.
+    /// </summary>
+    [CustomPropertyDrawer(typeof(GenericWeightedThingsParent), true)]
+    public class GenericWeightedThingDrawer : PropertyDrawer
+    {
+        /// <summary>
+        /// IDK HOW THIS WORKS DON'T @ ME
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="property"></param>
+        /// <param name="label"></param>
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            // Using BeginProperty / EndProperty on the parent property means that
+            // prefab override logic works on the entire property.
+            EditorGUI.BeginProperty(position, label, property);
+
+            // Draw label
+            position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+
+            // Don't make child fields be indented
+            int indent = EditorGUI.indentLevel;
+            EditorGUI.indentLevel = 0;
+
+            // Draw fields - pass GUIContent.none to each so they are drawn without labels
+            EditorGUI.PropertyField(position, property.FindPropertyRelative("things"), GUIContent.none);
+
+            // Set indent back to what it was
+            EditorGUI.indentLevel = indent;
+
+            EditorGUI.EndProperty();
+        }
+
+        /// <summary>
+        /// Overrides the height of the property
+        /// </summary>
+        /// <param name="property"> The property dude idk </param>
+        /// <param name="label"> The label </param>
+        /// <returns> the property height??? </returns>
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            SerializedProperty things = property.FindPropertyRelative("things");
+            return EditorGUI.GetPropertyHeight(things, true);
+        }
+    }
+#endif
 }
