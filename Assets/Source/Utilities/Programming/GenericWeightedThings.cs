@@ -275,24 +275,60 @@ namespace Cardificer
         /// <param name="label"></param>
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            // Using BeginProperty / EndProperty on the parent property means that
-            // prefab override logic works on the entire property.
             EditorGUI.BeginProperty(position, label, property);
+            SerializedProperty things = property.FindPropertyRelative("things");
 
-            // Draw label
-            position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
+            // Display things property
+            //EditorGUI.PropertyField(position, things, label, true);
+            Rect foldoutRect = position;
+            foldoutRect.height = EditorGUIUtility.singleLineHeight;
+            things.isExpanded = EditorGUI.Foldout(foldoutRect, things.isExpanded, label);
 
-            // Don't make child fields be indented
-            int indent = EditorGUI.indentLevel;
-            EditorGUI.indentLevel = 0;
+            // Check if things is expanded
+            if (things.isExpanded)
+            {
 
-            // Draw fields - pass GUIContent.none to each so they are drawn without labels
-            EditorGUI.PropertyField(position, property.FindPropertyRelative("things"), GUIContent.none);
+                // Iterate over each element in the list
+                for (int i = 0; i < things.arraySize; i++)
+                {
+                    SerializedProperty thing = things.GetArrayElementAtIndex(i);
 
-            // Set indent back to what it was
-            EditorGUI.indentLevel = indent;
+                    // Calculate position for element
+                    position.y += EditorGUIUtility.singleLineHeight + 2;
+                    position.height = EditorGUI.GetPropertyHeight(thing);
+
+                    // Display element properties
+                    EditorGUI.PrefixLabel(position, new GUIContent("Element " + i));
+
+                    // Indent child elements
+                    EditorGUI.indentLevel++;
+
+                    SerializedProperty thingInThing = thing.FindPropertyRelative("thing");
+                    position.y += EditorGUIUtility.singleLineHeight + 2;
+                    position.height = EditorGUI.GetPropertyHeight(thingInThing);
+                    EditorGUI.PropertyField(position, thingInThing);
+
+                    SerializedProperty weight = thing.FindPropertyRelative("weight");
+                    position.y += EditorGUIUtility.singleLineHeight + 2;
+                    position.height = EditorGUI.GetPropertyHeight(weight);
+                    EditorGUI.PropertyField(position, weight);
+
+                    SerializedProperty maxChosen = thing.FindPropertyRelative("maxChosen");
+                    position.y += EditorGUIUtility.singleLineHeight + 2;
+                    position.height = EditorGUI.GetPropertyHeight(maxChosen);
+                    EditorGUI.PropertyField(position, maxChosen);
+
+                    // Unindent child elements
+                    EditorGUI.indentLevel--;
+                }
+            }
 
             EditorGUI.EndProperty();
+
+
+            /*EditorGUI.BeginProperty(position, label, property);
+            SerializedProperty things = property.FindPropertyRelative("things");
+            EditorGUI.PropertyField(position, things, label, true);*/
         }
 
         /// <summary>
@@ -303,8 +339,33 @@ namespace Cardificer
         /// <returns> the property height??? </returns>
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
+            float height = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+
             SerializedProperty things = property.FindPropertyRelative("things");
-            return EditorGUI.GetPropertyHeight(things, true);
+            if (things.isExpanded)
+            {
+                for (int i = 0; i < things.arraySize; i++)
+                {
+                    SerializedProperty thing = things.GetArrayElementAtIndex(i);
+                    height += EditorGUI.GetPropertyHeight(thing) + EditorGUIUtility.standardVerticalSpacing;
+                }
+            }
+
+            return height;
+
+            /*SerializedProperty things = property.FindPropertyRelative("things");
+            //return EditorGUI.GetPropertyHeight(things, true);
+
+            float height = EditorGUIUtility.singleLineHeight;
+            if (things.isExpanded)
+            {
+                for (int i = 0; i < things.arraySize; i++)
+                {
+                    SerializedProperty thing = things.GetArrayElementAtIndex(i);
+                    height += EditorGUI.GetPropertyHeight(thing, true);
+                }
+            }
+            return height;*/
         }
     }
 #endif
