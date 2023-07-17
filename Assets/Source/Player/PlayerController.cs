@@ -28,7 +28,7 @@ namespace Cardificer
         }
 
         // Tracks whether the player should be paused
-        [HideInInspector] public bool paused = false;
+        [HideInInspector] public bool paused => Time.timeScale == 0;
 
         // Delegate called when the map is opened (@ALEX TODO: Delete this delegate when you make your map screen)
         public System.Action mapOpened;
