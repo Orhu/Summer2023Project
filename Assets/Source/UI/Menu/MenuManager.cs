@@ -25,6 +25,9 @@ namespace Cardificer
         [Tooltip("Game Over Menu reference, assigned in inspector")]
         [SerializeField] private GameOverMenu gameOverMenu;
 
+        [Tooltip("Instruction Menu reference, assigned in inspector")]
+        [SerializeField] private InstructionMenu instructionMenu;
+
         // Reference to the player's game object
         private GameObject playerGameObject;
 
@@ -41,7 +44,8 @@ namespace Cardificer
             Booster,
             Map,
             Card,
-            GameOver
+            GameOver,
+            Instruction
         }
 
         // Internally know which menu is open
@@ -78,9 +82,26 @@ namespace Cardificer
                 {
                     gameOverMenu = GetComponentInChildren<GameOverMenu>();
                 }
+                if (instructionMenu == null)
+                {
+                    instructionMenu = GetComponentInChildren<InstructionMenu>();
+                }
 
                 // The current menu is set to pause menu
                 currentMenu = MenuTypes.Pause;
+            }
+        }
+
+        /// <summary>
+        /// If it's a player's first time playing,
+        /// show them the instruction manual right away.
+        /// </summary>
+        private void Start()
+        {
+            // Check to see if they've seen the manual already
+            if (PlayerPrefs.GetInt("seenManual") == 0)
+            {
+                ToggleInstructionManual();
             }
         }
 
@@ -96,6 +117,7 @@ namespace Cardificer
             }
             else
             {
+                instance.CloseMenu();
                 OpenPauseMenu();
             }
         }
@@ -111,6 +133,7 @@ namespace Cardificer
             }
             else
             {
+                instance.CloseMenu();
                 OpenCardMenu();
             }
         }
@@ -127,7 +150,25 @@ namespace Cardificer
             }
             else
             {
+                instance.CloseMenu();
                 OpenMapMenu();
+            }
+        }
+
+        /// <summary>
+        /// Toggles whether the Instruction menu is open
+        /// </summary>
+        public static void ToggleInstructionManual()
+        {
+
+            if (instance.menuOpen && instance.currentMenu == MenuTypes.Instruction)
+            {
+                instance.CloseMenu();
+            }
+            else
+            {
+                instance.CloseMenu();
+                OpenInstructionMenu();
             }
         }
 
@@ -222,6 +263,24 @@ namespace Cardificer
                 // Disable player movement
                 instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
                 instance.currentMenu = MenuTypes.GameOver;
+                instance.menuOpen = true;
+            }
+        }
+
+        /// <summary>
+        /// Opens the instruction menu
+        /// </summary>
+        public static void OpenInstructionMenu()
+        {
+            if (!instance.menuOpen)
+            {
+                // "Pause the game", should probably be replaced with a more effective method
+                // Sets timeScale to 0, so all time related functions are stopped
+                Time.timeScale = 0;
+                instance.instructionMenu.gameObject.SetActive(true);
+                // Disable player movement
+                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
+                instance.currentMenu = MenuTypes.Instruction;
                 instance.menuOpen = true;
             }
         }

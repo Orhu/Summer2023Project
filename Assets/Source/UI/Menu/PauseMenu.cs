@@ -28,6 +28,7 @@ namespace Cardificer
         public void Reset()
         {
             MenuManager.instance.CloseMenu();
+            PlayerPrefs.SetFloat("seenManual", 0);
             SaveManager.ClearTransientSaves();
             Player.Get().GetComponent<ReloadScene>().ReloadCurrentScene();
         }
@@ -38,6 +39,14 @@ namespace Cardificer
         public void Options()
         {
 
+        }
+        
+        /// <summary>
+        /// When the InstructionManual button is clicked, open the Instruction Manual Menu
+        /// </summary>
+        public void InstructionManual()
+        {
+            MenuManager.ToggleInstructionManual();
         }
 
         /// <summary>
