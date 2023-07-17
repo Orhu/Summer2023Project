@@ -56,8 +56,6 @@ namespace Cardificer
             movementComponent = GetComponent<Movement>();
             animatorComponent = GetComponent<AnimatorController>();
             channelAbility = GetComponent<ChannelAbility>();
-
-            Random.state = SaveManager.savedRandomState;
         }
 
         /// <summary>
