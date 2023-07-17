@@ -465,11 +465,9 @@ namespace Cardificer
 
             if (room.roomType.useRandomOffset)
             {
-                //bool checkHorizontalOffset = !(generatedCell.direction.HasFlag(Direction.Left) || generatedCell.direction.HasFlag(Direction.Right));
-                //bool checkVerticalOffset = !(generatedCell.direction.HasFlag(Direction.Up) || generatedCell.direction.HasFlag(Direction.Down));
-                for (int i = 0; i < room.roomType.sizeMultiplier.x; i++)// && (i == 0 || checkHorizontalOffset); i++)
+                for (int i = 0; i < room.roomType.sizeMultiplier.x; i++)
                 {
-                    for (int j = 0; j < room.roomType.sizeMultiplier.y; j++) //&& (j == 0 || checkVerticalOffset); j++)
+                    for (int j = 0; j < room.roomType.sizeMultiplier.y; j++)
                     {
                         // -i and -j because 0, 0 is bottom left, and we need to move the room down left in order to not lose the room
                         possibleOffsets.Add(new Vector2Int(-i, -j));

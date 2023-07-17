@@ -10,10 +10,20 @@ namespace Cardificer
     [CreateAssetMenu(fileName = "NewRoomTypesToRoomExteriorParams", menuName = "Generation/RoomTypesToRoomExteriorParams")]
     public class RoomTypesToRoomExteriorParams : ScriptableObject
     {
+        [Header("Tiles")]
+        [Tooltip("The wall tile")]
+        public Tile wallTile;
+
+        [Tooltip("The door tile")]
+        public Tile doorTile;
+
+        [Tooltip("The floor prefab")]
+        public GameObject floorTile;
+
         [Tooltip("The defuault exterior params to use if a given room type doesn't have specified room exterior params")]
         [SerializeField] public RoomExteriorParams defaultRoomExteriorParams;
 
-        [Tooltip("A list of room types to exterior generation Params")]
+        [Tooltip("A list of room types to exterior generation Params. The higher in this list a room type is, the higher priority its doors will have.")]
         [SerializeField] public List<RoomTypeToRoomExteriorParams> roomTypesToRoomExteriorParams;
 
         /// <summary>
@@ -50,6 +60,17 @@ namespace Cardificer
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Resets the room type to room exterior params list
+        /// </summary>
+        public void Reset()
+        {
+            foreach (RoomTypeToRoomExteriorParams roomTypeToRoomExteriorParams in roomTypesToRoomExteriorParams)
+            {
+                roomTypeToRoomExteriorParams.roomExteriorParams.Reset();
+            }
         }
     }
 
