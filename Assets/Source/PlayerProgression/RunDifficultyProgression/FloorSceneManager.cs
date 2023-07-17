@@ -5,50 +5,29 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// Handles loading the next floor, and tracks the current floor. 
 /// </summary>
-public class FloorSceneManager : MonoBehaviour
+[CreateAssetMenu(menuName ="Test")] [ExecuteAlways]
+public class FloorSceneManager : ScriptableObject
 {
     // Is a string because unity doesn't natively allow you to set scenes in the inspector as far as I'm aware 
     [Tooltip("The list of floors, in the order they will appear in")]
     [SerializeField] private List<string> _floors;
-    static private List<string> floors
-    {
-        set => instance._floors = value;
-        get => instance._floors;
-    }
+    private static List<string> floors;
 
     // Delegate called when a floor is loaded
-    private System.Action _onFloorLoaded;
-    static public System.Action onFloorLoaded
-    {
-        set => instance._onFloorLoaded = value;
-        get => instance._onFloorLoaded;
-    }
+    public static System.Action onFloorLoaded;
 
     // The current floor
-    private int _currentFloor;
-    static public int currentFloor
-    {
-        private set => instance._currentFloor = value;
-        get => instance._currentFloor;
-    }
-
-    // The instance
-    private static FloorSceneManager instance;
+    public static int currentFloor { private set; get; }
 
     /// <summary>
     /// Sets up the singleton
     /// </summary>
-    private void Awake()
+    private void OnEnable()
     {
-        if (instance != null && instance != this)
+        if (floors == null)
         {
-            Destroy(gameObject);
-            return;
+            floors = _floors;
         }
-        instance = this;
-
-        // Make it so the manager doesn't disappear when it loads the next floor
-        DontDestroyOnLoad(this);
     }
 
     /// <summary>
@@ -85,6 +64,6 @@ public class FloorSceneManager : MonoBehaviour
     /// <returns> True if the instance exists, false otherwise </returns>
     static public bool IsValid()
     {
-        return instance != null;
+        return floors != null;
     }
 }
