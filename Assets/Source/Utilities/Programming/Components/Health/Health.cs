@@ -138,6 +138,10 @@ namespace Cardificer
 
             if (currentHealth <= 0 && prevHealth > 0)
             {
+                if (hasBossHealthbar)
+                {
+                    BossHealthbarManager.instance.DisableHealthbar();
+                }
                 onDeath?.Invoke();
                 return;
             }

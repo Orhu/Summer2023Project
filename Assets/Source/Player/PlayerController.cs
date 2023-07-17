@@ -13,7 +13,19 @@ namespace Cardificer
         [HideInInspector] public float damageMultiplier = 1f;
 
         // Tracks whether moving and playing cards is enabled
-        [HideInInspector] public bool movingEnabled = true;
+        private bool _movingEnabled = true;
+        public bool movingEnabled
+        {
+            get => _movingEnabled;
+            set
+            {
+                _movingEnabled = value;
+                if (!_movingEnabled)
+                {
+                    movementComponent.movementInput = new Vector2(0, 0);
+                }
+            }
+        }
 
         // Delegate called when the map is opened (@ALEX TODO: Delete this delegate when you make your map screen)
         public System.Action mapOpened;
@@ -26,6 +38,9 @@ namespace Cardificer
         
         // Movement component to allow the agent to move
         private Movement movementComponent;
+
+        // The attempted movement input
+        private Vector2 attemptedMovementInput;
 
         // Animator component to make the pretty animations do their thing.
         private AnimatorController animatorComponent;
@@ -83,6 +98,12 @@ namespace Cardificer
             {
                 animatorComponent.SetMirror("castLeft", GetActionAimPosition().x - transform.position.x < 0);
             }
+
+            if (movingEnabled)
+            {
+                movementComponent.movementInput = attemptedMovementInput;
+                return;
+            }
         }
 
         /// <summary>
@@ -91,12 +112,7 @@ namespace Cardificer
         /// <param name="moveInput"> The move input </param>
         public void OnMove(InputValue moveInput)
         {
-            if (movingEnabled)
-            {
-                movementComponent.movementInput = moveInput.Get<Vector2>().normalized;
-                return;
-            }
-            movementComponent.movementInput = new Vector2(0, 0);
+            attemptedMovementInput = moveInput.Get<Vector2>().normalized;
         }
 
         /// <summary>

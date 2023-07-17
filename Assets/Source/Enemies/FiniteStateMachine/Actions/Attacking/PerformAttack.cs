@@ -37,7 +37,7 @@ namespace Cardificer.FiniteStateMachine
             yield return new WaitForSeconds(actionChargeUpTime);
             if (stateMachine.canAct)
             {
-                foreach (var attack in attacks)
+                foreach (Attack attack in attacks)
                 {
                     attack.Play(stateMachine, FloorGenerator.currentRoom.livingEnemies, () => stateMachine.cooldownData.cooldownReady[this] = true);
                 }
