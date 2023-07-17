@@ -28,3 +28,6 @@ public partial class FloorGeneratorEditorStub : UnityEditor.Editor { }
 [UnityEditor.CustomEditor(typeof(Cardificer.SpawnBombCustom))]
 public partial class SpawnBombCustomEditorStub : UnityEditor.Editor { }
 
+[UnityEditor.CustomEditor(typeof(Cardificer.FiniteStateMachine.ConditionalOrAction))]
+public partial class ConditionalOrActionEditorStub : UnityEditor.Editor { }
+

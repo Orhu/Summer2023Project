@@ -1,14 +1,17 @@
-Generic Melee Behavior is as Follows:
+Generic Wandering Ranged Behavior is as Follows:
 
-Target Player, Chase Target repeatedly.
+Hold down movement button until random chance check succeeds, or an obstacle is hit.
+The random chance of moving any given moment can be adjusted under the respective action.
 
-Movement: Target Player
-Targeting: None
+Then, if the player walks in front of wherever the enemy is facing, fire an attack.
 
-This example Generic Melee is simply a walking version of the Bat. Swarmers also use the Generic Melee base behavior.
+Movement: Patrol
+Targeting: In-Range and LOS
+
+This example Wandering Ranged is simply a Spear Thrower.
 
 To create a new enemy:
-Right click GenericMelee > Create > Prefab Variant
+Right click GenericWanderingRanged > Create > Prefab Variant
 
 Place it in its folder, alongside a folder called "Animations", "States", and optionally "Projectile"
 	Animations holds animation controllers, animations, sprites, etc.

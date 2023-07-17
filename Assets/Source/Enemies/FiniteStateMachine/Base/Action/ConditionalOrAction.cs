@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Skaillz.EditInline;
 using UnityEngine;
 
 namespace Cardificer.FiniteStateMachine
@@ -9,14 +10,11 @@ namespace Cardificer.FiniteStateMachine
     [CreateAssetMenu(menuName="FSM/Actions/Conditional OR Action")]
     public class ConditionalOrAction : BaseAction
     {
-        [Tooltip("Decisions to evaluate with OR condition.")]
+        [Tooltip("Decisions to evaluate with OR condition.")] [EditInline]
         [SerializeField] private List<BaseDecision> decisions;
 
-        [Tooltip("Action to perform if decision is true.")]
+        [Tooltip("Action to perform if decision is true.")] [EditInline]
         [SerializeField] private BaseAction trueAction;
-
-        [Tooltip("Action to perform if decision is false.")]
-        [SerializeField] private BaseAction falseAction;
 
         /// <summary>
         /// Evaluate the condition and execute the action if one of the listed conditions is true.
@@ -33,10 +31,6 @@ namespace Cardificer.FiniteStateMachine
             if (result)
             {
                 trueAction.Execute(stateMachine);
-            }
-            else
-            {
-                falseAction.Execute(stateMachine);
             }
         }
     }
