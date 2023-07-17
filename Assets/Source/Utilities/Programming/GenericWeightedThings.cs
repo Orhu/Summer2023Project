@@ -277,58 +277,7 @@ namespace Cardificer
         {
             EditorGUI.BeginProperty(position, label, property);
             SerializedProperty things = property.FindPropertyRelative("things");
-
-            // Display things property
-            //EditorGUI.PropertyField(position, things, label, true);
-            Rect foldoutRect = position;
-            foldoutRect.height = EditorGUIUtility.singleLineHeight;
-            things.isExpanded = EditorGUI.Foldout(foldoutRect, things.isExpanded, label);
-
-            // Check if things is expanded
-            if (things.isExpanded)
-            {
-
-                // Iterate over each element in the list
-                for (int i = 0; i < things.arraySize; i++)
-                {
-                    SerializedProperty thing = things.GetArrayElementAtIndex(i);
-
-                    // Calculate position for element
-                    position.y += EditorGUIUtility.singleLineHeight + 2;
-                    position.height = EditorGUI.GetPropertyHeight(thing);
-
-                    // Display element properties
-                    EditorGUI.PrefixLabel(position, new GUIContent("Element " + i));
-
-                    // Indent child elements
-                    EditorGUI.indentLevel++;
-
-                    SerializedProperty thingInThing = thing.FindPropertyRelative("thing");
-                    position.y += EditorGUIUtility.singleLineHeight + 2;
-                    position.height = EditorGUI.GetPropertyHeight(thingInThing);
-                    EditorGUI.PropertyField(position, thingInThing);
-
-                    SerializedProperty weight = thing.FindPropertyRelative("weight");
-                    position.y += EditorGUIUtility.singleLineHeight + 2;
-                    position.height = EditorGUI.GetPropertyHeight(weight);
-                    EditorGUI.PropertyField(position, weight);
-
-                    SerializedProperty maxChosen = thing.FindPropertyRelative("maxChosen");
-                    position.y += EditorGUIUtility.singleLineHeight + 2;
-                    position.height = EditorGUI.GetPropertyHeight(maxChosen);
-                    EditorGUI.PropertyField(position, maxChosen);
-
-                    // Unindent child elements
-                    EditorGUI.indentLevel--;
-                }
-            }
-
-            EditorGUI.EndProperty();
-
-
-            /*EditorGUI.BeginProperty(position, label, property);
-            SerializedProperty things = property.FindPropertyRelative("things");
-            EditorGUI.PropertyField(position, things, label, true);*/
+            EditorGUI.PropertyField(position, things, label, true);
         }
 
         /// <summary>
@@ -339,6 +288,8 @@ namespace Cardificer
         /// <returns> the property height??? </returns>
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
+            return EditorGUI.GetPropertyHeight(property.FindPropertyRelative("things"), true);
+
             float height = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 
             SerializedProperty things = property.FindPropertyRelative("things");
