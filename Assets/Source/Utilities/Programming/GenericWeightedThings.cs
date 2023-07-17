@@ -289,34 +289,6 @@ namespace Cardificer
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             return EditorGUI.GetPropertyHeight(property.FindPropertyRelative("things"), true);
-
-            float height = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
-
-            SerializedProperty things = property.FindPropertyRelative("things");
-            if (things.isExpanded)
-            {
-                for (int i = 0; i < things.arraySize; i++)
-                {
-                    SerializedProperty thing = things.GetArrayElementAtIndex(i);
-                    height += EditorGUI.GetPropertyHeight(thing) + EditorGUIUtility.standardVerticalSpacing;
-                }
-            }
-
-            return height;
-
-            /*SerializedProperty things = property.FindPropertyRelative("things");
-            //return EditorGUI.GetPropertyHeight(things, true);
-
-            float height = EditorGUIUtility.singleLineHeight;
-            if (things.isExpanded)
-            {
-                for (int i = 0; i < things.arraySize; i++)
-                {
-                    SerializedProperty thing = things.GetArrayElementAtIndex(i);
-                    height += EditorGUI.GetPropertyHeight(thing, true);
-                }
-            }
-            return height;*/
         }
     }
 #endif
