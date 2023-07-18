@@ -250,7 +250,7 @@ namespace Cardificer
         {
             set
             {
-                if (value != _useDifficulty)
+                if (value != _useDifficulty || difficultiesToTemplates == null || difficultiesToTemplates.Count == 0)
                 {
                     difficultiesToTemplates = new List<DifficultyToTemplates>();
                     if (value)
