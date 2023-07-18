@@ -245,7 +245,7 @@ namespace Cardificer
         }
 
         // Whether or not to display easy and hard, or not applicable
-        private bool _useDifficulty = false;
+        [SerializeField] [HideInInspector] private bool _useDifficulty = false;
         public bool useDifficulty
         {
             set
