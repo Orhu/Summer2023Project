@@ -265,8 +265,6 @@ namespace Cardificer
                 // Sets timeScale to 0, so all time related functions are stopped
                 Time.timeScale = 0;
                 instance.instructionMenu.gameObject.SetActive(true);
-                // Disable player movement
-                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
                 instance.currentMenu = MenuTypes.Instruction;
                 instance.menuOpen = true;
             }
@@ -281,8 +279,6 @@ namespace Cardificer
             {
                 // "Resume the game", resumes all time related function
                 Time.timeScale = 1;
-                // Re-enable player movement
-                playerGameObject.GetComponent<PlayerController>().enabled = true;
 
                 // close all menus
                 for (int i = 0; i < transform.childCount; i++)
