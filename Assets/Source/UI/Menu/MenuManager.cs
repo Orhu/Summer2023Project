@@ -148,7 +148,6 @@ namespace Cardificer
                     instance.boosterPackMenu.boosterPackObject = boosterPack;
                 }
                 // Disable player movement
-                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
                 instance.currentMenu = MenuTypes.Booster;
                 instance.menuOpen = true;
             }
@@ -166,7 +165,6 @@ namespace Cardificer
                 Time.timeScale = 0;
                 instance.pauseMenu.gameObject.SetActive(true);
                 // Disable player movement
-                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
                 instance.currentMenu = MenuTypes.Pause;
                 instance.menuOpen = true;
             }
@@ -184,7 +182,6 @@ namespace Cardificer
                 Time.timeScale = 0;
                 instance.mapMenu.gameObject.SetActive(true);
                 // Disable player movement
-                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
                 instance.currentMenu = MenuTypes.Map;
                 instance.menuOpen = true;
             }
@@ -202,7 +199,6 @@ namespace Cardificer
                 Time.timeScale = 0;
                 instance.cardMenu.gameObject.SetActive(true);
                 // Disable player movement
-                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
                 instance.currentMenu = MenuTypes.Card;
                 instance.menuOpen = true;
             }
@@ -220,7 +216,6 @@ namespace Cardificer
                 Time.timeScale = 0;
                 instance.gameOverMenu.gameObject.SetActive(true);
                 // Disable player movement
-                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
                 instance.currentMenu = MenuTypes.GameOver;
                 instance.menuOpen = true;
             }
@@ -235,9 +230,6 @@ namespace Cardificer
             {
                 // "Resume the game", resumes all time related function
                 Time.timeScale = 1;
-                // Re-enable player movement
-                playerGameObject.GetComponent<PlayerController>().enabled = true;
-
                 // close all menus
                 for (int i = 0; i < transform.childCount; i++)
                 {
