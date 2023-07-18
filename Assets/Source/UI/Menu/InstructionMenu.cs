@@ -14,9 +14,6 @@ namespace Cardificer
         [Tooltip("List of pages in the manual in order")]
         [SerializeField] private Sprite[] manualPages;
 
-        // The current index of the pages we are on and rendering
-        private int pageIndex = 0;
-
         [Tooltip("The image displaying the current manual page")]
         [SerializeField] private Image manualImage;
 
@@ -29,8 +26,11 @@ namespace Cardificer
         [Tooltip("Button to go forward one page")]
         [SerializeField] private Button nextButton;
 
+        // The current index of the pages we are on and rendering
+        private int pageIndex = 0;
+
         /// <summary>
-        /// Change which buttons are active depending on
+        /// Change which buttons are active depending on the page index
         /// </summary>
         private void SetButtonsActive()
         {
@@ -83,6 +83,7 @@ namespace Cardificer
             SetButtonsActive();
             manualImage.sprite = manualPages[pageIndex];
         }
+
         /// <summary>
         /// For use by previousButton.
         /// Moves the page count backwards one
