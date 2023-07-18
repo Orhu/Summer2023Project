@@ -11,24 +11,49 @@ public class FloorSceneManager : ScriptableObject
     // Is a string because unity doesn't natively allow you to set scenes in the inspector as far as I'm aware 
     [Tooltip("The list of floors, in the order they will appear in")]
     [SerializeField] private List<string> _floors;
-    private static List<string> floors;
+    private static List<string> floors
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = Resources.Load<FloorSceneManager>("FloorOrder");
+            }
+
+            return instance._floors;
+        }
+    }
+
+
 
     // Delegate called when a floor is loaded
     public static System.Action onFloorLoaded;
 
     // The current floor
-    public static int currentFloor { private set; get; }
-
-    /// <summary>
-    /// Sets up the singleton
-    /// </summary>
-    private void OnEnable()
-    {
-        if (floors == null)
+    private static int? _currentFloor = null;
+    public static int currentFloor 
+    { 
+        private set
         {
-            floors = _floors;
+            _currentFloor = value;
+        }
+        get
+        {
+            if (_currentFloor == null)
+            {
+                _currentFloor = floors.IndexOf(SceneManager.GetActiveScene().name);
+            }
+
+            return _currentFloor.Value;
         }
     }
+
+    // The instance of the floor order.
+    public static bool hasFloorBeenLoaded { private set; get; } = false;
+
+
+    // The instance of the floor order.
+    private static FloorSceneManager instance;
 
     /// <summary>
     /// Loads a particular floor
@@ -45,6 +70,7 @@ public class FloorSceneManager : ScriptableObject
         currentFloor = floorNumber;
         onFloorLoaded?.Invoke();
         SceneManager.LoadScene(floors[floorNumber]);
+        hasFloorBeenLoaded = true;
         return true;
     }
 
@@ -54,16 +80,6 @@ public class FloorSceneManager : ScriptableObject
     /// <returns> True if a floor was loaded, false otherwise. Can be false if we are at the end of the list or if load floor failed. </returns>
     static public bool LoadNextFloor()
     {
-        if (currentFloor + 1 >= floors.Count) { return false; }
         return LoadFloor(currentFloor + 1);
-    }
-
-    /// <summary>
-    /// Checks if the floor scene manager is valid or not
-    /// </summary>
-    /// <returns> True if the instance exists, false otherwise </returns>
-    static public bool IsValid()
-    {
-        return floors != null;
     }
 }

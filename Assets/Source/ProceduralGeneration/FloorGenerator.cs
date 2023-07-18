@@ -109,13 +109,13 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
-            if (SaveManager.autosaveExists && (!FloorSceneManager.IsValid() || FloorSceneManager.currentFloor == SaveManager.savedCurrentFloor))
+            if (SaveManager.autosaveExists)
             {
-                seed = SaveManager.savedFloorSeed;
+                seed = SaveManager.savedFloorSeed + FloorSceneManager.currentFloor;
             }
             else if (randomizeSeed)
             {
-                seed = Random.Range(0, System.Int32.MaxValue);
+                seed = Random.Range(0, System.Int32.MaxValue) + FloorSceneManager.currentFloor;
             }
 
             random = new System.Random(seed);

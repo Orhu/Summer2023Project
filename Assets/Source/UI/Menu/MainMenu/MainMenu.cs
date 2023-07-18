@@ -50,7 +50,7 @@ namespace Cardificer
         {
             if (saveExists)
             {
-                if (FloorSceneManager.IsValid() && FloorSceneManager.LoadFloor(SaveManager.savedCurrentFloor)) { return; }
+                if (FloorSceneManager.LoadFloor(SaveManager.savedCurrentFloor)) { return; }
 
                 // If load failed
                 TransitionToFirstLevel();
@@ -98,12 +98,7 @@ namespace Cardificer
         /// </summary>
         private void TransitionToFirstLevel()
         {
-            if (FloorSceneManager.IsValid()) 
-            { 
-                FloorSceneManager.LoadFloor(0);
-                return;
-            }
-            throw new System.Exception("The floor scene manager does not exist!");
+            FloorSceneManager.LoadFloor(0);
         }
 
         /// <summary>

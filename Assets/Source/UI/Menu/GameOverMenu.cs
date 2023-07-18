@@ -43,17 +43,7 @@ namespace Cardificer
             MenuManager.instance.SetCurrentMenu(MenuManager.MenuTypes.Default);
             MenuManager.instance.CloseMenu();
             SaveManager.ClearTransientSaves();
-
-            if (FloorSceneManager.IsValid())
-            {
-                // Load the first level
-                FloorSceneManager.LoadFloor(0);
-            }
-            else
-            {
-                // Reload the current scene. This should only be allowed when not starting at the main menu, which the player always should.
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            }
+            FloorSceneManager.LoadFloor(0);
         }
 
         /// <summary>

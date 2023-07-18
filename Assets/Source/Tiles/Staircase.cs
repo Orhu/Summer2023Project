@@ -12,11 +12,6 @@ public class Staircase : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.CompareTag("Player")) { return; }
-        if (!FloorSceneManager.IsValid())
-        {
-            Debug.LogWarning("The floor scene manager is not valid, likely because you didn't start from the main menu! The staircase will not work.");
-            return;
-        }
 
         if (!FloorSceneManager.LoadNextFloor())
         {

@@ -374,16 +374,7 @@ namespace Cardificer
                 saveData.playerCooldownReduction = Deck.playerDeck.cooldownReduction;
                 saveData.deckState = new Deck.State(Deck.playerDeck);
                 saveData.floorSeed = FloorGenerator.seed;
-
-                if (FloorSceneManager.IsValid())
-                {
-                    saveData.currentFloor = FloorSceneManager.currentFloor;
-                }
-                else
-                {
-                    saveData.currentFloor = 0;
-                }
-
+                saveData.currentFloor = FloorSceneManager.currentFloor;
                 saveData.visitedRooms.Add(FloorGenerator.currentRoom.roomLocation);
                 saveData.destroyedTiles = DestroyableTile.destroyedTiles?.ToList();
                 saveData.remainingShopBuys = ShopSlot.savableRemainingShopBuys;
@@ -523,10 +514,7 @@ namespace Cardificer
                         CancelInvoke();
                     });
 
-                if (FloorSceneManager.IsValid())
-                {
-                    FloorSceneManager.onFloorLoaded += HandleFloorLoad;
-                }
+                FloorSceneManager.onFloorLoaded += HandleFloorLoad;
 
                 if (autosaveExists) { return; }
 
@@ -539,10 +527,7 @@ namespace Cardificer
             private void OnDestroy()
             {
                 FloorGenerator.onRoomChange -= BindCleared;
-                if (FloorSceneManager.IsValid())
-                {
-                    FloorSceneManager.onFloorLoaded -= HandleFloorLoad;
-                }
+                FloorSceneManager.onFloorLoaded -= HandleFloorLoad;
             }
 
             /// <summary>
@@ -553,27 +538,17 @@ namespace Cardificer
                 // Update everything except the current floor number (this is to ensure the floor generator understands that's it's not being loaded
                 // from an autosave load, the current floor number will be updated when the autosave happens)
                 AutosaveData saveData = latestAutosave;
-                if (saveData != null)
+                if (saveData != null && FloorSceneManager.hasFloorBeenLoaded)
                 {
+                    Autosave();
                     saveData.visitedRooms.Clear();
                     saveData.playerPos = new Vector2(0, 0);
                     if (saveData.destroyedTiles != null)
                     {
                         saveData.destroyedTiles.Clear();
                     }
-                    saveData.playerHealth = Player.health.currentHealth;
-                    saveData.playerMoney = Player.GetMoney();
-                    saveData.playerMaxHealth = Player.health.maxHealth;
-                    saveData.playerSpeed = Player.Get().GetComponent<SimpleMovement>().maxSpeed;
-                    saveData.playerDamage = Player.Get().GetComponent<PlayerController>().damageMultiplier;
-                    saveData.playerCooldownReduction = Deck.playerDeck.cooldownReduction;
-                    saveData.deckState = new Deck.State(Deck.playerDeck);
-                    saveData.floorSeed = FloorGenerator.seed;
                     latestAutosave = saveData;
                 }
-
-                // Autosave after a second (hopefully after the floor generator is done generating...)
-                Invoke(nameof(Autosave), 1f);
             }
 
             /// <summary>
