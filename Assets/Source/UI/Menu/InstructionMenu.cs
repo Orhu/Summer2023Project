@@ -30,26 +30,26 @@ namespace Cardificer
         [SerializeField] private Button nextButton;
 
         /// <summary>
-        /// Actively updates which instruction page to display
-        /// based on button presses
+        /// Change which buttons are active depending on
         /// </summary>
-        void Update()
+        private void SetButtonsActive()
         {
             if (pageIndex == manualPages.Length - 1)
             {
                 exitButton.gameObject.SetActive(true);
+                previousButton.gameObject.SetActive(true);
                 nextButton.gameObject.SetActive(false);
             }
             else if (pageIndex == 0)
             {
                 previousButton.gameObject.SetActive(false);
+                nextButton.gameObject.SetActive(true);
             }
             else
             {
                 previousButton.gameObject.SetActive(true);
                 nextButton.gameObject.SetActive(true);
             }
-            manualImage.sprite = manualPages[pageIndex];
         }
 
         /// <summary>
@@ -58,8 +58,7 @@ namespace Cardificer
         private void OnEnable()
         {
             pageIndex = 0;
-            previousButton.gameObject.SetActive(true);
-            nextButton.gameObject.SetActive(true);
+            SetButtonsActive();
             if (PlayerPrefs.GetInt("seenManual") == 0)
             {
                 PlayerPrefs.SetInt("seenManual", 1);
@@ -81,6 +80,8 @@ namespace Cardificer
             {
                 pageIndex++;
             }
+            SetButtonsActive();
+            manualImage.sprite = manualPages[pageIndex];
         }
         /// <summary>
         /// For use by previousButton.
@@ -92,6 +93,8 @@ namespace Cardificer
             {
                 pageIndex--;
             }
+            SetButtonsActive();
+            manualImage.sprite = manualPages[pageIndex];
         }
 
         /// <summary>
@@ -100,7 +103,7 @@ namespace Cardificer
         /// </summary>
         public void ExitInstructions()
         {
-            MenuManager.instance.CloseMenu();
+            MenuManager.instance.CloseInstructionManual();
         }
     }
 }

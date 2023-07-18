@@ -28,7 +28,6 @@ namespace Cardificer
         public void Reset()
         {
             MenuManager.instance.CloseMenu();
-            PlayerPrefs.SetFloat("seenManual", 0);
             SaveManager.ClearTransientSaves();
             Player.Get().GetComponent<ReloadScene>().ReloadCurrentScene();
         }

@@ -160,16 +160,8 @@ namespace Cardificer
         /// </summary>
         public static void ToggleInstructionManual()
         {
-
-            if (instance.menuOpen && instance.currentMenu == MenuTypes.Instruction)
-            {
-                instance.CloseMenu();
-            }
-            else
-            {
-                instance.CloseMenu();
-                OpenInstructionMenu();
-            }
+            instance.CloseMenu();
+            OpenInstructionMenu();
         }
 
         /// <summary>
@@ -290,7 +282,29 @@ namespace Cardificer
         /// </summary>
         public void CloseMenu()
         {
-            if (menuOpen && currentMenu != MenuTypes.GameOver) // Prevent closing of Game Over menu
+            if (menuOpen && currentMenu != MenuTypes.GameOver && currentMenu != MenuTypes.Instruction) // Prevent closing of Game Over menu and Instruction menu
+            {
+                // "Resume the game", resumes all time related function
+                Time.timeScale = 1;
+                // Re-enable player movement
+                playerGameObject.GetComponent<PlayerController>().enabled = true;
+
+                // close all menus
+                for (int i = 0; i < transform.childCount; i++)
+                {
+                    transform.GetChild(i).gameObject.SetActive(false);
+                }
+                currentMenu = MenuTypes.Pause;
+                menuOpen = false;
+            }
+        }
+
+        /// <summary>
+        /// Called when Instruction Menu needs to be closed
+        /// </summary>
+        public void CloseInstructionManual()
+        {
+            if (menuOpen) 
             {
                 // "Resume the game", resumes all time related function
                 Time.timeScale = 1;

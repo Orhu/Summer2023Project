@@ -12,6 +12,8 @@ namespace Cardificer
     {
         [Tooltip("The card whose rune will be rendered")]
         [SerializeField] private Card _card;
+        private float _currentCooldown;
+        private float _totalCooldown;
 
         public Card card
         {
@@ -48,12 +50,29 @@ namespace Cardificer
         }
 
         // The cooldown time to display. If <= 0 no cooldown overlay will be rendered.
-        public float cooldownTime
+        public float currentCooldownTime
         {
             set
             {
                 links.cooldownOverlay.enabled = value > 0;
-                links.cooldownOverlay.fillAmount = value / _card.cooldownTime;
+                _currentCooldown = value;
+                links.cooldownOverlay.fillAmount = _currentCooldown / totalCooldownTime;
+            }
+            get
+            {
+                return _currentCooldown;
+            }
+        }
+
+        public float totalCooldownTime
+        {
+            set
+            {
+                _totalCooldown = value;
+            }
+            get
+            {
+                return _totalCooldown;
             }
         }
 
