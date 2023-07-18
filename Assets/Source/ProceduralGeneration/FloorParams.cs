@@ -83,7 +83,6 @@ namespace Cardificer
         /// <summary>
         /// Parses the floor generator params to get only the exterior parameters
         /// </summary>
-        /// <returns> The exterior parameters </returns>
         public void ParseExteriorParams()
         {
             exteriorParams = new RoomTypesToRoomExteriorParams();
@@ -101,7 +100,6 @@ namespace Cardificer
         /// <summary>
         /// Parses the floor generator params to get only the template param
         /// </summary>
-        /// <returns></returns>
         public void ParseTemplateParams()
         {
             templateParams = new TemplateParams();
@@ -123,8 +121,7 @@ namespace Cardificer
             {
                 if (roomTypeParams.roomType == null)
                 {
-                    // TODO: Change to false
-                    roomTypeParams.templateParams.useDifficulty = true;
+                    roomTypeParams.templateParams.useDifficulty = false;
                     continue;
                 }
                 roomTypeParams.templateParams.useDifficulty = roomTypeParams.roomType.useDifficulty;
