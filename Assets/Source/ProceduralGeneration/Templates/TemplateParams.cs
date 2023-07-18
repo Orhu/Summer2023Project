@@ -155,6 +155,16 @@ namespace Cardificer
         }
 
         /// <summary>
+        /// Adds a room type to difficulties to templates to the pool
+        /// </summary>
+        /// <param name="roomType"> The room type </param>
+        /// <param name="difficultiesToTemplates"> The difficulties to templates </param>
+        public void Add(RoomType roomType, DifficultiesToTemplates difficultiesToTemplates)
+        {
+            roomTypesToDifficultiesToTemplates.Add(new RoomTypeToDifficultiesToTemplates(roomType, difficultiesToTemplates));
+        }
+
+        /// <summary>
         /// Gets the difficulties to templates associated with the given room type
         /// </summary>
         /// <param name="roomType"> The room type </param>
@@ -196,6 +206,17 @@ namespace Cardificer
 
         [Tooltip("The room type's associated difficulties and templates")]
         public DifficultiesToTemplates difficultiesToTemplates;
+
+        /// <summary>
+        /// Constructor that takes a room type and difficulties to templates
+        /// </summary>
+        /// <param name="roomType"> The room type </param>
+        /// <param name="difficultiesToTemplates"> The room type's associated difficulties and templates </param>
+        public RoomTypeToDifficultiesToTemplates(RoomType roomType, DifficultiesToTemplates difficultiesToTemplates)
+        {
+            this.roomType = roomType;
+            this.difficultiesToTemplates = difficultiesToTemplates;
+        }
     }
 
     /// <summary>
