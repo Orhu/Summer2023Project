@@ -230,19 +230,6 @@ namespace Cardificer
         [Tooltip("The difficulties and their associated templates")]
         public List<DifficultyToTemplates> difficultiesToTemplates = new List<DifficultyToTemplates>();
 
-        public DifficultiesToTemplates()
-        {
-            DifficultyToTemplates difficultyToTemplates = new DifficultyToTemplates();
-            difficultyToTemplates.difficulty = Difficulty.Easy;
-            difficultyToTemplates.templates = new List<Template>();
-            Add(difficultyToTemplates);
-
-            difficultyToTemplates = new DifficultyToTemplates();
-            difficultyToTemplates.difficulty = Difficulty.Hard;
-            difficultyToTemplates.templates = new List<Template>();
-            Add(difficultyToTemplates);
-        }
-
         // Whether or not to display easy and hard, or not applicable
         [SerializeField] [HideInInspector] private bool _useDifficulty = false;
         public bool useDifficulty
