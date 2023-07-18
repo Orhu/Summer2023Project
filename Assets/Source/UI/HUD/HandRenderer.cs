@@ -46,17 +46,22 @@ namespace Cardificer
 
         // NOTE: I would suggest not changing these values unless good reason.
         [Header("Radial Settings")]
+
         [Tooltip("How far the RuneRenderers are from the base point in game world")]
         [SerializeField] private float gameWorldFDistance = 450f;
+
         [Tooltip("How far the RuneRenderers are from each other in game world")]
         [SerializeField] private float gameWorldMinAngle = 90f;
+
         [Tooltip("How far the RuneRenderers start in game world")]
         [SerializeField] private float gameWorldStartAngle = 135f;
 
         [Tooltip("How far the RuneRenderers are from the base point in UI")]
         [SerializeField] private float uiFDistance = 350f;
+
         [Tooltip("How far the RuneRenderers are from each other in UI")]
         [SerializeField] private float uiMinAngle = 135f;
+
         [Tooltip("How far the RuneRenderers start in UI")]
         [SerializeField] private float uiStartAngle = 120f;
 
