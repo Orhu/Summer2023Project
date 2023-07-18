@@ -9,16 +9,6 @@ namespace Cardificer
 
     public class RoomExteriorParams : ScriptableObject
     {
-        [Header("Tiles")]
-        [Tooltip("The wall tile")]
-        public Tile wallTile;
-
-        [Tooltip("The door tile")]
-        public Tile doorTile;
-
-        [Tooltip("The floor prefab")]
-        public GameObject floorTile;
-
         [Header("Walls")]
 
         [Tooltip("The possible right wall sprites to use (will pick randomly from these)")]

@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using MovementType = Cardificer.RoomInterface.MovementType;
 

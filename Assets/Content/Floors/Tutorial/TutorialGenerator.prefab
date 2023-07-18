@@ -1,0 +1,104 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6816320395962278886
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6816320395962278883}
+  - component: {fileID: 6816320395962278881}
+  - component: {fileID: 6816320395962278880}
+  - component: {fileID: 6816320395962278882}
+  m_Layer: 0
+  m_Name: TutorialGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6816320395962278883
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6816320395962278886}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6816320395962278881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6816320395962278886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e63de1514ff48147a82161e152674ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _seed: 0
+  _randomizeSeed: 1
+  _generationSettingsFileName: GenerationSettings
+  _cellSize: {x: 17, y: 11}
+  _usePredefinedMap: 1
+  _predefinedMap:
+    predefinedMap:
+    - innerArray:
+      - direction: 1
+        roomType: {fileID: 11400000, guid: dea0350780660c745a86b762cc8eed9e, type: 2}
+    - innerArray:
+      - direction: 5
+        roomType: {fileID: 11400000, guid: 795e547290ceded498e76018b6b95398, type: 2}
+    - innerArray:
+      - direction: 5
+        roomType: {fileID: 11400000, guid: 09437ef99c6dc0b488407153a8e69ec3, type: 2}
+    - innerArray:
+      - direction: 5
+        roomType: {fileID: 11400000, guid: 707dadda8f965ff47b91e71a49efc100, type: 2}
+    - innerArray:
+      - direction: 5
+        roomType: {fileID: 11400000, guid: 76d78e8a304cf7d49a3f9404919b2dfe, type: 2}
+    - innerArray:
+      - direction: 5
+        roomType: {fileID: 11400000, guid: ff26cd02e888aa34a8f216027600d985, type: 2}
+    - innerArray:
+      - direction: 4
+        roomType: {fileID: 11400000, guid: d1ee419fb11ae534ea3e00cf70b1b0fd, type: 2}
+  _predefinedMapStartLoc: {x: 0, y: 0}
+  _layoutParams: {fileID: 0}
+  _roomTypesToExteriorParams: {fileID: 11400000, guid: 9d4b5866a63e1d944a10cda7f7ec3a9f, type: 2}
+  _templateParams: {fileID: 11400000, guid: 75e63b9abedfd944fb14685262b38e5d, type: 2}
+--- !u!114 &6816320395962278880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6816320395962278886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a29f310fa7d366418a67d3a4a32c490, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6816320395962278882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6816320395962278886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 115ec058accef4944a6421b670c3c81a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
