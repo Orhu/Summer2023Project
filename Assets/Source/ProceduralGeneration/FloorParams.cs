@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Cardificer
 {
@@ -24,7 +27,6 @@ namespace Cardificer
         [Tooltip("The room types and their individual params")]
         [SerializeField] private List<RoomTypeParams> roomTypesToParams;
 
-
         // The (parsed) layout parameters
         public LayoutParams layoutParams { private set; get; }
 
@@ -38,7 +40,7 @@ namespace Cardificer
         /// Stores a room type and its associated parameters
         /// </summary>
         [System.Serializable]
-        private class RoomTypeParams
+        public class RoomTypeParams
         {
             [Tooltip("The room type these parameters apply to")]
             public RoomType roomType;
@@ -54,6 +56,9 @@ namespace Cardificer
 
         }
 
+        /// <summary>
+        /// Parses all the params and stores them in the variables
+        /// </summary>
         public void ParseParams()
         {
             ParseLayoutParams();
@@ -106,5 +111,109 @@ namespace Cardificer
                 templateParams.templatesPool.Add(roomTypeParams.roomType, roomTypeParams.templateParams);
             }
         }
+
+        /// <summary>
+        /// Updates the use difficulty on the difficulties to templates
+        /// </summary>
+        private void OnValidate()
+        {
+            if (roomTypesToParams == null) { return; }
+
+            foreach (RoomTypeParams roomTypeParams in roomTypesToParams)
+            {
+                if (roomTypeParams.roomType == null)
+                {
+                    // TODO: Change to false
+                    roomTypeParams.templateParams.useDifficulty = true;
+                    continue;
+                }
+                roomTypeParams.templateParams.useDifficulty = roomTypeParams.roomType.useDifficulty;
+            }
+        }
     }
+
+#if UNITY_EDITOR
+
+    /// <summary>
+    /// Class for making the floor params easier to read in the inspector.
+    /// </summary>
+    [CustomPropertyDrawer(typeof(FloorParams.RoomTypeParams), true)]
+    public class FloorParamsDrawer : PropertyDrawer
+    {
+        /// <summary>
+        /// Draws the floor params property
+        /// </summary>
+        /// <param name="position"> The position the property begins at </param>
+        /// <param name="property"> The property being drawn </param>
+        /// <param name="label"> The label of this property </param>
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            EditorGUI.BeginProperty(position, label, property);
+
+            SerializedProperty roomType = property.FindPropertyRelative("roomType");
+            SerializedProperty exteriorParams = property.FindPropertyRelative("exteriorParams");
+            SerializedProperty layoutParams = property.FindPropertyRelative("layoutParams");
+            SerializedProperty templateParams = property.FindPropertyRelative("templateParams");
+
+            label.text = "Room Type: ";
+            position.height = EditorGUI.GetPropertyHeight(roomType);
+
+            roomType.isExpanded = EditorGUI.Foldout(position, roomType.isExpanded, label);
+            Rect roomTypeRect = position;
+            roomTypeRect.x += 100;
+            roomTypeRect.width -= 100;
+            EditorGUI.PropertyField(roomTypeRect, roomType, GUIContent.none, true);
+
+            if (roomType.isExpanded)
+            {
+                position.y += EditorGUI.GetPropertyHeight(roomType) + 2;
+
+                EditorGUI.indentLevel++;
+
+                position.height = EditorGUI.GetPropertyHeight(exteriorParams);
+                EditorGUI.PropertyField(position, exteriorParams, new GUIContent("Exterior Params"), true);
+                position.y += EditorGUI.GetPropertyHeight(exteriorParams) + 2;
+
+                position.height = EditorGUI.GetPropertyHeight(layoutParams);
+                EditorGUI.PropertyField(position, layoutParams, new GUIContent("Layout Params"), true);
+                position.y += EditorGUI.GetPropertyHeight(layoutParams) + 2;
+
+                position.height = EditorGUI.GetPropertyHeight(templateParams);
+                EditorGUI.PropertyField(position, templateParams, new GUIContent("Template Params"), true);
+                position.y += EditorGUI.GetPropertyHeight(templateParams) + 2;
+
+                EditorGUI.indentLevel--;
+            }
+
+            EditorGUI.EndProperty();
+        }
+
+        /// <summary>
+        /// Gets the height this property should have
+        /// </summary>
+        /// <param name="property"> The property </param>
+        /// <param name="label"> The label of this property </param>
+        /// <returns> The height of this property </returns>
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            SerializedProperty roomType = property.FindPropertyRelative("roomType");
+            SerializedProperty exteriorParams = property.FindPropertyRelative("exteriorParams");
+            SerializedProperty layoutParams = property.FindPropertyRelative("layoutParams");
+            SerializedProperty templateParams = property.FindPropertyRelative("templateParams");
+
+            float height = 0;
+            height += EditorGUI.GetPropertyHeight(roomType) + 2;
+
+            if (roomType.isExpanded)
+            {
+                height += EditorGUI.GetPropertyHeight(exteriorParams) + 2;
+                height += EditorGUI.GetPropertyHeight(layoutParams) + 2;
+                height += EditorGUI.GetPropertyHeight(templateParams) + 2;
+            }
+
+            return height;
+        }
+    }
+
+#endif
 }
