@@ -6,8 +6,8 @@ namespace Cardificer
     /// <summary>
     /// The Params that affect the layout generation
     /// </summary>
-    [System.Serializable] [CreateAssetMenu(fileName = "NewLayoutParams", menuName = "Generation/LayoutParams")]
-    public class LayoutParams : ScriptableObject
+    [System.Serializable]
+    public class LayoutParams
     {
         [Tooltip("A list of room types, and their layout Params")]
         public RoomTypesToLayoutParams roomTypesToLayoutParams;
@@ -55,6 +55,11 @@ namespace Cardificer
         /// A list of room types to layout Params
         /// </summary>
         public List<RoomTypeToLayoutParams> roomTypesToLayoutParams;
+
+        public RoomTypesToLayoutParams()
+        {
+            roomTypesToLayoutParams = new List<RoomTypeToLayoutParams>();
+        }
 
         /// <summary>
         /// Gets the layout Params associated with a given room type

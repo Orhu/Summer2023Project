@@ -69,7 +69,7 @@ namespace Cardificer
         /// <summary>
         /// Parses the floor generator params to get only the layout parameters
         /// </summary>
-        public void ParseLayoutParams()
+        private void ParseLayoutParams()
         {
             layoutParams = new LayoutParams();
             layoutParams.mapLayoutParams = mapLayoutParams;
@@ -83,7 +83,7 @@ namespace Cardificer
         /// <summary>
         /// Parses the floor generator params to get only the exterior parameters
         /// </summary>
-        public void ParseExteriorParams()
+        private void ParseExteriorParams()
         {
             exteriorParams = new RoomTypesToRoomExteriorParams();
             exteriorParams.wallTile = WallTile;
@@ -93,6 +93,11 @@ namespace Cardificer
             exteriorParams.roomTypesToRoomExteriorParams = new List<RoomTypeToRoomExteriorParams>();
             foreach (RoomTypeParams roomTypeParams in roomTypesToParams)
             {
+                if (roomTypeParams.exteriorParams == null)
+                {
+                    exteriorParams.Add(roomTypeParams.roomType, defaultExteriorParams);
+                    continue;
+                }
                 exteriorParams.Add(roomTypeParams.roomType, roomTypeParams.exteriorParams);
             }
         }
@@ -100,7 +105,7 @@ namespace Cardificer
         /// <summary>
         /// Parses the floor generator params to get only the template param
         /// </summary>
-        public void ParseTemplateParams()
+        private void ParseTemplateParams()
         {
             templateParams = new TemplateParams();
             templateParams.templatesPool = new RoomTypesToDifficultiesToTemplates();

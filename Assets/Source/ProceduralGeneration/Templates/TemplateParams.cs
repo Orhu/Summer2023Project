@@ -10,8 +10,7 @@ namespace Cardificer
     /// The Params to use when generating a template
     /// </summary>
     [System.Serializable]
-    [CreateAssetMenu(fileName = "NewTemplateParams", menuName = "Generation/TemplateParams")]
-    public class TemplateParams : ScriptableObject
+    public class TemplateParams
     {
         [Tooltip("The pool of templates to draw from and their associated room types")]
         public RoomTypesToDifficultiesToTemplates templatesPool;

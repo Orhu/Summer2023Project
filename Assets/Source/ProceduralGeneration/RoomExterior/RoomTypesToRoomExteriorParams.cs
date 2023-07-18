@@ -7,8 +7,7 @@ namespace Cardificer
     /// A dictionary that maps room types to exterior generation params
     /// </summary>
     [System.Serializable]
-    [CreateAssetMenu(fileName = "NewRoomTypesToRoomExteriorParams", menuName = "Generation/RoomTypesToRoomExteriorParams")]
-    public class RoomTypesToRoomExteriorParams : ScriptableObject
+    public class RoomTypesToRoomExteriorParams
     {
         [Header("Tiles")]
         [Tooltip("The wall tile")]

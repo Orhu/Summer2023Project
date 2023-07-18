@@ -73,31 +73,6 @@ namespace Cardificer
             get => instance._floorParams;
         }
 
-        [Tooltip("The generation Params for the layout of this floor")] [EditInline]
-        [SerializeField] private LayoutParams _layoutParams;
-        static public LayoutParams layoutParams
-        {
-            private set => instance._layoutParams = value;
-            get => instance._layoutParams;
-        }
-
-        [Tooltip("A dictionary that holds room types and their associated exterior generation Params for this floor")]
-        [EditInline]
-        [SerializeField] private RoomTypesToRoomExteriorParams _roomTypesToExteriorParams;
-        static public RoomTypesToRoomExteriorParams roomTypesToExteriorParams
-        {
-            private set => instance._roomTypesToExteriorParams = value;
-            get => instance._roomTypesToExteriorParams;
-        }
-
-        [Tooltip("The template generation Params for this floor")] [EditInline]
-        [SerializeField] private TemplateParams _templateParams;
-        static public TemplateParams templateParams
-        {
-            private set => instance._templateParams = value;
-            get => instance._templateParams;
-        }
-
         // The random instance
         [HideInInspector] static public System.Random random;
 
@@ -182,6 +157,12 @@ namespace Cardificer
 
             random = new System.Random(seed);
 
+            floorParams = Instantiate(floorParams);
+            floorParams.ParseParams();
+            LayoutParams layoutParams = floorParams.layoutParams;
+            TemplateParams templateParams = floorParams.templateParams;
+            RoomTypesToRoomExteriorParams roomTypesToExteriorParams = floorParams.exteriorParams;
+
             Dictionary<RoomType, int> templateCounts = new Dictionary<RoomType, int>();
             if (layoutParams != null)
             {
@@ -200,11 +181,7 @@ namespace Cardificer
                         Debug.LogError("No templates associated with room type " + roomType.roomType);
                     }
                 }
-
-                layoutParams = Instantiate(layoutParams);
             }
-
-            roomTypesToExteriorParams = Instantiate(roomTypesToExteriorParams);
 
             if (usePredefinedMap)
             {
@@ -216,8 +193,6 @@ namespace Cardificer
             }
             GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorParams, map, cellSize);
             SaveLayoutGenerationSettings();
-
-            templateParams = Instantiate(templateParams);
 
             // Autosave loading
             if (!SaveManager.autosaveExists) 
@@ -363,12 +338,12 @@ namespace Cardificer
         /// </summary>
         static public void SaveLayoutGenerationSettings()
         {
-            if (!Application.isEditor || layoutParams == null) { return; }
+            if (!Application.isEditor || floorParams.layoutParams == null) { return; }
 
             string fileText = "Seed: " + seed.ToString() + "\n\n";
             fileText += "Room Types and their layout\n\n";
             
-            foreach(RoomTypeToLayoutParams roomTypeToLayoutParams in layoutParams.roomTypesToLayoutParams.roomTypesToLayoutParams)
+            foreach(RoomTypeToLayoutParams roomTypeToLayoutParams in floorParams.layoutParams.roomTypesToLayoutParams.roomTypesToLayoutParams)
             {
                 fileText += "==============================================\n";
                 RoomType roomType = roomTypeToLayoutParams.roomType;
