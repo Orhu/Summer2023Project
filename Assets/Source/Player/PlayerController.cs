@@ -27,6 +27,9 @@ namespace Cardificer
             }
         }
 
+        // Tracks whether the player should be paused
+        [HideInInspector] public bool paused => Time.timeScale == 0;
+
         // Delegate called when the map is opened (@ALEX TODO: Delete this delegate when you make your map screen)
         public System.Action mapOpened;
 
@@ -92,12 +95,12 @@ namespace Cardificer
         /// </summary>
         private void Update()
         {
-            if (canAct)
+            if (canAct && !paused)
             {
                 animatorComponent.SetMirror("castLeft", GetActionAimPosition().x - transform.position.x < 0);
             }
 
-            if (movingEnabled)
+            if (movingEnabled && !paused)
             {
                 movementComponent.movementInput = attemptedMovementInput;
                 return;
@@ -118,7 +121,7 @@ namespace Cardificer
         /// </summary>
         public void OnPreviewCard1()
         {
-            if (movingEnabled && canAct)
+            if (movingEnabled && canAct && !paused)
             {
                 Deck.playerDeck.SelectCard(0);
             }
@@ -129,7 +132,7 @@ namespace Cardificer
         /// </summary>
         public void OnPreviewCard2()
         {
-            if (movingEnabled && canAct)
+            if (movingEnabled && canAct && !paused)
             {
                 Deck.playerDeck.SelectCard(1);
             }
@@ -140,7 +143,7 @@ namespace Cardificer
         /// </summary>
         public void OnPreviewCard3()
         {
-            if (movingEnabled && canAct)
+            if (movingEnabled && canAct && !paused)
             {
                 Deck.playerDeck.SelectCard(2);
             }
@@ -151,7 +154,7 @@ namespace Cardificer
         /// </summary>
         public void OnPreviewCard4()
         {
-            if (movingEnabled && canAct)
+            if (movingEnabled && canAct && !paused)
             {
                 Deck.playerDeck.SelectCard(3);
             }
@@ -162,7 +165,7 @@ namespace Cardificer
         /// </summary>
         public void OnPreviewCard5()
         {
-            if (movingEnabled && canAct)
+            if (movingEnabled && canAct && !paused)
             {
                 Deck.playerDeck.SelectCard(4);
             }
@@ -173,7 +176,7 @@ namespace Cardificer
         /// </summary>
         public void OnCast()
         {
-            if (movingEnabled && canAct)
+            if (movingEnabled && canAct && !paused)
             {
                 if (Deck.playerDeck.PlayChord())
                 {
@@ -191,7 +194,7 @@ namespace Cardificer
         /// <param name="input"> The input </param>
         public void OnChannel(InputValue input)
         {
-            if (movingEnabled && canAct)
+            if (movingEnabled && canAct & !paused)
             {
                 if (input.isPressed)
                 {
