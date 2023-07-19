@@ -51,6 +51,14 @@ PrefabInstance:
       propertyPath: m_Direction
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3245013398548236268, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3245013398548236268, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.025
+      objectReference: {fileID: 0}
     - target: {fileID: 3413457293059694498, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Layer
       value: 7
@@ -69,7 +77,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5097362261395317995, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: maxSpeed
-      value: 1.5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5936671061499478613, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Layer
@@ -82,6 +90,10 @@ PrefabInstance:
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.size
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
@@ -109,7 +121,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: SplitOnDeath, Assembly-CSharp
+      value: Cardificer.SplitOnDeath, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -191,6 +203,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 7400328270181020654, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7751502563386350530, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Radius
       value: 0.37632948
@@ -223,10 +239,30 @@ PrefabInstance:
       propertyPath: m_Direction
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8576139625026935080, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8576139625026935080, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Size.y
+      value: 0.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 8576139625026935080, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 8941374239524879921, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: initialState
       value: 
-      objectReference: {fileID: 11400000, guid: d80fcbf1bd237e6459afd8d304553b84, type: 2}
+      objectReference: {fileID: 11400000, guid: a38e486e2b3ac304db9c9f21d4bebf63, type: 2}
+    - target: {fileID: 8941374239524879921, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: delayBeforeLogic
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8941374239524879921, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: delayBeforeLogicVarience
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
 --- !u!114 &1723144585415805513 stripped
@@ -254,9 +290,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6498099726284613696}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6bec4ca900caaa49ac9fc2ad383acd5, type: 3}
+  m_Script: {fileID: 11500000, guid: a96aa9cf0d021954c8727a0b84d3fc11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   numToSplitInto: 2
   splitRadius: 1
-  splitIntoPrefab: {fileID: 4890778746729502211, guid: bc1edc08fdf625c47a608356ab627b5d, type: 3}
+  splitIntoPrefab: {fileID: 6540377894847513607, guid: 94abe19a4a83e21489f3e9ddda64022a, type: 3}
+  spawnLayer:
+    serializedVersion: 2
+    m_Bits: 1835008
