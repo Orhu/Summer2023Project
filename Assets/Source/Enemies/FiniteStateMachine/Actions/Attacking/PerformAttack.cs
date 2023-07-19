@@ -37,9 +37,17 @@ namespace Cardificer.FiniteStateMachine
             yield return new WaitForSeconds(actionChargeUpTime);
             if (stateMachine.canAct)
             {
-                foreach (Attack attack in attacks)
+                for (int i = 0; i < attacks.Length; i++)
                 {
-                    attack.Play(stateMachine, FloorGenerator.currentRoom.livingEnemies, () => stateMachine.cooldownData.cooldownReady[this] = true);
+                    // if this is the last attack in the sequence we want to use its action time to enable cooldown
+                    if (i == attacks.Length - 1)
+                    {
+                        attacks[i].Play(stateMachine, FloorGenerator.currentRoom.livingEnemies, () => stateMachine.cooldownData.cooldownReady[this] = true);
+                    } // otherwise, just play the attack
+                    else
+                    {
+                        attacks[i].Play(stateMachine, FloorGenerator.currentRoom.livingEnemies);
+                    }
                 }
             }
         }
