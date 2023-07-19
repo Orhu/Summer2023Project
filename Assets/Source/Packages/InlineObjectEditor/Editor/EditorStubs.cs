@@ -19,15 +19,9 @@ public partial class PerformAttackEditorStub : UnityEditor.Editor { }
 [UnityEditor.CustomEditor(typeof(Cardificer.FiniteStateMachine.Transition))]
 public partial class TransitionEditorStub : UnityEditor.Editor { }
 
-[UnityEditor.CustomEditor(typeof(Cardificer.FiniteStateMachine.ConditionalSingleAction))]
-public partial class ConditionalSingleActionEditorStub : UnityEditor.Editor { }
-
 [UnityEditor.CustomEditor(typeof(Cardificer.FloorGenerator))]
 public partial class FloorGeneratorEditorStub : UnityEditor.Editor { }
 
 [UnityEditor.CustomEditor(typeof(Cardificer.SpawnBombCustom))]
 public partial class SpawnBombCustomEditorStub : UnityEditor.Editor { }
-
-[UnityEditor.CustomEditor(typeof(Cardificer.FiniteStateMachine.ConditionalOrAction))]
-public partial class ConditionalOrActionEditorStub : UnityEditor.Editor { }
 

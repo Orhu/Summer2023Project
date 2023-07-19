@@ -19,7 +19,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         /// <param name="state"> The state machine to use </param>
         /// <returns> true if the given key exists and its value is equal to the given int value, false otherwise </returns>
-        protected override bool Evaluate(BaseStateMachine state)
+        public override bool Decide(BaseStateMachine state)
         {
             bool stateVariableExists = state.trackedVariables.TryGetValue(stateVariableName, out var variableValue);
             return stateVariableExists && (int)variableValue == numberToCheck;

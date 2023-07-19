@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trueState: {fileID: 11400000, guid: d4877254b97f9f641807b6f6dd4af48e, type: 2}
   decisions:
-  - decision: {fileID: 11400000, guid: e74d1c49d39aab74096448b0c9933079, type: 2}
-    nextOperator: 4
-  - decision: {fileID: 11400000, guid: f747f176c6bdcc14692a9902f3b1e982, type: 2}
-    nextOperator: 4
-  - decision: {fileID: 11400000, guid: 033dc1d7997b7d647a5500a2e0e6656d, type: 2}
+  - invert: 1
+    decision: {fileID: 11400000, guid: e74d1c49d39aab74096448b0c9933079, type: 2}
+    nextOperator: 1
+  - invert: 1
+    decision: {fileID: 11400000, guid: f747f176c6bdcc14692a9902f3b1e982, type: 2}
+    nextOperator: 1
+  - invert: 1
+    decision: {fileID: 11400000, guid: 033dc1d7997b7d647a5500a2e0e6656d, type: 2}
     nextOperator: 4

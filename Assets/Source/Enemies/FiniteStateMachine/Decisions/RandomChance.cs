@@ -20,7 +20,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         /// <param name="state"> The stateMachine to use. </param>
         /// <returns> True if the target rolls the given chance, false otherwise. </returns>
-        protected override bool Evaluate(BaseStateMachine state)
+        public override bool Decide(BaseStateMachine state)
         {
             state.trackedVariables.TryAdd("LastRollTime", Time.time);
             float lastRollTime = (float)state.trackedVariables["LastRollTime"];

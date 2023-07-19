@@ -17,7 +17,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         /// <param name="state"> The stateMachine to use </param>
         /// <returns> True if the target is in the forward direction relative to the state machine, false otherwise </returns>
-        protected override bool Evaluate(BaseStateMachine state)
+        public override bool Decide(BaseStateMachine state)
         {
             Vector2 enemyPos = state.transform.position;
             Vector2 enemyForward = enemyPos + state.GetComponent<Movement>().movementInput;
