@@ -231,6 +231,7 @@ namespace Cardificer
             // Setup collision
             rigidBody = GetComponent<Rigidbody2D>();
             shape.CreateCollider(gameObject);
+            ignoredObjects.Add(actor.GetActionSourceTransform().gameObject);
             ignoredObjects = ignoredObjects;
 
 
