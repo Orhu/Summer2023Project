@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f3d5b824f2339840af4ac56badf0e06, type: 3}
-  m_Name: F2_BossExteriorParams
+  m_Name: F1_BossExteriorParams
   m_EditorClassIdentifier: 
   rightWallSprites:
     things:
-    - thing: {fileID: 21300000, guid: 73cc65083900f8d46a5a9504d83833a0, type: 3}
+    - thing: {fileID: 21300000, guid: 34b25e0330bf5ce4e9ab46526a5a8ba8, type: 3}
       weight: 1
       maxChosen: -1
   topWallSprites:
@@ -33,7 +33,7 @@ MonoBehaviour:
       maxChosen: -1
   leftWallSprites:
     things:
-    - thing: {fileID: 21300000, guid: b0d57b6d2af8e9848aba25df14cd5e2f, type: 3}
+    - thing: {fileID: 21300000, guid: 8603e284e35d1dc4baddc7e9d62b5169, type: 3}
       weight: 1
       maxChosen: -1
   bottomWallSprites:
@@ -52,22 +52,22 @@ MonoBehaviour:
       maxChosen: -1
   topRightWallCornerSprites:
     things:
-    - thing: {fileID: 21300000, guid: f367dfa6c9243f44787a21b4ca007c0d, type: 3}
+    - thing: {fileID: 21300000, guid: d48e512052e9566459b11dec4466fbed, type: 3}
       weight: 1
       maxChosen: -1
   topLeftWallCornerSprites:
     things:
-    - thing: {fileID: 21300000, guid: 54428d5574421db4f896fff5d3d8bb49, type: 3}
+    - thing: {fileID: 21300000, guid: c59a4c29f20df6f4a8c5e608537ed69d, type: 3}
       weight: 1
       maxChosen: -1
   bottomLeftWallCornerSprites:
     things:
-    - thing: {fileID: 21300000, guid: 99763290b5f17e44db8ee5c87911f1af, type: 3}
+    - thing: {fileID: 21300000, guid: c59a4c29f20df6f4a8c5e608537ed69d, type: 3}
       weight: 1
       maxChosen: -1
   bottomRightWallCornerSprites:
     things:
-    - thing: {fileID: 21300000, guid: 7db81917b3a79cc438580112a662cbe7, type: 3}
+    - thing: {fileID: 21300000, guid: a92569ebbac91784c8efc46b3ccac595, type: 3}
       weight: 1
       maxChosen: -1
   rightDoorSprites:
@@ -100,47 +100,32 @@ MonoBehaviour:
       maxChosen: -1
   rightDoorTopDoorFrameSprites:
     things:
-    - thing: {fileID: 21300000, guid: 751f8ea9bc5284e4cb6b350239a43202, type: 3}
+    - thing: {fileID: 21300000, guid: fb761714b34e3fe4aa6e2e748e13deac, type: 3}
       weight: 1
       maxChosen: -1
   rightDoorBottomDoorFrameSprites:
-    things: []
+    things:
+    - thing: {fileID: 21300000, guid: a5ed9dac0f460cc43b4e23be85083bfe, type: 3}
+      weight: 1
+      maxChosen: -1
   topDoorRightDoorFrameSprites:
     things:
     - thing: {fileID: 21300000, guid: 1e9ca3d2522fd874db62105eaf5c4c17, type: 3}
       weight: 1
       maxChosen: -1
-    - thing: {fileID: 21300000, guid: bd9df3679f74edf43a8c2dc9e4a1f668, type: 3}
-      weight: 1
-      maxChosen: -1
-    - thing: {fileID: 21300000, guid: 113140907a0bb0a42ac1bf2064740e3f, type: 3}
-      weight: 1
-      maxChosen: -1
-    - thing: {fileID: 21300000, guid: 2cc342ddb65315b4ba32c4561b1197e8, type: 3}
-      weight: 1
-      maxChosen: -1
   topDoorLeftDoorFrameSprites:
     things:
-    - thing: {fileID: 21300000, guid: 1e9ca3d2522fd874db62105eaf5c4c17, type: 3}
-      weight: 1
-      maxChosen: -1
     - thing: {fileID: 21300000, guid: bd9df3679f74edf43a8c2dc9e4a1f668, type: 3}
-      weight: 1
-      maxChosen: -1
-    - thing: {fileID: 21300000, guid: 113140907a0bb0a42ac1bf2064740e3f, type: 3}
-      weight: 1
-      maxChosen: -1
-    - thing: {fileID: 21300000, guid: 2cc342ddb65315b4ba32c4561b1197e8, type: 3}
       weight: 1
       maxChosen: -1
   leftDoorTopDoorFrameSprites:
     things:
-    - thing: {fileID: 21300000, guid: 6b18340f21b896c49a17fddc326a4ce7, type: 3}
+    - thing: {fileID: 21300000, guid: 13a26f75ed1ac644587c762c543da4ad, type: 3}
       weight: 1
       maxChosen: -1
   leftDoorBottomDoorFrameSprites:
     things:
-    - thing: {fileID: 21300000, guid: ab77d89b6b814644283c2d297b5d5935, type: 3}
+    - thing: {fileID: 21300000, guid: fffb0394df1096b41b74812de46044dc, type: 3}
       weight: 1
       maxChosen: -1
   bottomDoorRightDoorFrameSprites:
@@ -148,40 +133,10 @@ MonoBehaviour:
     - thing: {fileID: 21300000, guid: 1e9ca3d2522fd874db62105eaf5c4c17, type: 3}
       weight: 1
       maxChosen: -1
-    - thing: {fileID: 21300000, guid: bd9df3679f74edf43a8c2dc9e4a1f668, type: 3}
-      weight: 1
-      maxChosen: -1
-    - thing: {fileID: 21300000, guid: 113140907a0bb0a42ac1bf2064740e3f, type: 3}
-      weight: 1
-      maxChosen: -1
-    - thing: {fileID: 21300000, guid: 2cc342ddb65315b4ba32c4561b1197e8, type: 3}
-      weight: 1
-      maxChosen: -1
   bottomDoorLeftDoorFrameSprites:
     things:
-    - thing: {fileID: 21300000, guid: 1e9ca3d2522fd874db62105eaf5c4c17, type: 3}
-      weight: 1
-      maxChosen: -1
     - thing: {fileID: 21300000, guid: bd9df3679f74edf43a8c2dc9e4a1f668, type: 3}
-      weight: 1
-      maxChosen: -1
-    - thing: {fileID: 21300000, guid: 113140907a0bb0a42ac1bf2064740e3f, type: 3}
-      weight: 1
-      maxChosen: -1
-    - thing: {fileID: 21300000, guid: 2cc342ddb65315b4ba32c4561b1197e8, type: 3}
       weight: 1
       maxChosen: -1
   floorSprites:
-    things:
-    - thing: {fileID: 21300000, guid: cb3c2a731d3d4d6479fed66be3ae748c, type: 3}
-      weight: 30
-      maxChosen: -1
-    - thing: {fileID: 21300000, guid: 9bfe47d81af8d2d4e87e95c5900cfe76, type: 3}
-      weight: 5
-      maxChosen: -1
-    - thing: {fileID: 21300000, guid: 4618e2e3fa8f4814e99b8efd7ade79e9, type: 3}
-      weight: 0.5
-      maxChosen: -1
-    - thing: {fileID: 21300000, guid: d059177851ea4eb4b85189d668d3e310, type: 3}
-      weight: 0.5
-      maxChosen: -1
+    things: []
