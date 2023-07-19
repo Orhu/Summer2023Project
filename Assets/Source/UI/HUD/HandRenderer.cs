@@ -46,17 +46,22 @@ namespace Cardificer
 
         // NOTE: I would suggest not changing these values unless good reason.
         [Header("Radial Settings")]
+
         [Tooltip("How far the RuneRenderers are from the base point in game world")]
         [SerializeField] private float gameWorldFDistance = 450f;
+
         [Tooltip("How far the RuneRenderers are from each other in game world")]
         [SerializeField] private float gameWorldMinAngle = 90f;
+
         [Tooltip("How far the RuneRenderers start in game world")]
         [SerializeField] private float gameWorldStartAngle = 135f;
 
         [Tooltip("How far the RuneRenderers are from the base point in UI")]
         [SerializeField] private float uiFDistance = 350f;
+
         [Tooltip("How far the RuneRenderers are from each other in UI")]
         [SerializeField] private float uiMinAngle = 135f;
+
         [Tooltip("How far the RuneRenderers start in UI")]
         [SerializeField] private float uiStartAngle = 120f;
 
@@ -183,6 +188,10 @@ namespace Cardificer
                 Card card = Deck.playerDeck.inHandCards[i];
                 if (runeRenderers[i].card != card)
                 {
+                    if (runeRenderers[i].card)
+                    {
+                        runeRenderers[i].totalCooldownTime = runeRenderers[i].card.cooldownTime;
+                    }
                     runeRenderers[i].card = card;
                 }
                 // Set runeRenderers that are currently in the hand to not be greyed out
@@ -233,17 +242,17 @@ namespace Cardificer
 
                 if (Deck.playerDeck.actingCardIndices.Contains(i))
                 {
-                    runeRenderers[i].cooldownTime = 0;
+                    runeRenderers[i].currentCooldownTime = 0;
                     runeRenderers[i].actionTime = 1;
                 }
                 else if (Deck.playerDeck.cardIndicesToCooldowns.ContainsKey(i))
                 {
                     runeRenderers[i].actionTime = 0;
-                    runeRenderers[i].cooldownTime = Deck.playerDeck.cardIndicesToCooldowns[i];
+                    runeRenderers[i].currentCooldownTime = Deck.playerDeck.cardIndicesToCooldowns[i];
                 }
                 else
                 {
-                    runeRenderers[i].cooldownTime = 0;
+                    runeRenderers[i].currentCooldownTime = 0;
                     runeRenderers[i].actionTime = 0;
                 }
             }
