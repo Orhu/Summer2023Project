@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: GoblinSpearThrower_BulletAttack
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 2
     damageType: 0
@@ -21,6 +23,8 @@ MonoBehaviour:
   hitCount: 1
   applyDamageOnHit: 1
   modifiers: []
+  immuneToShield: 0
+  immuneToReflect: 0
   shape: {fileID: 11400000, guid: d9d245910c3ac1148b44a5df5fdc6550, type: 2}
   lifetime: 1
   initialSpeed: 9
@@ -35,12 +39,13 @@ MonoBehaviour:
   visualObject: {fileID: 2809569760718847691, guid: b12dc7754602a78439f88e6dfb3026bd, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  spawnLocation: 0
-  aimMode: 0
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  spawnLocation: 0
+  aimMode: 0
+  waitForProjectileDeath: 0
+  chargeTime: 0
+  additionalActionTime: 1
   _spawnSequence:
   - delay: 0
     angle: 0
