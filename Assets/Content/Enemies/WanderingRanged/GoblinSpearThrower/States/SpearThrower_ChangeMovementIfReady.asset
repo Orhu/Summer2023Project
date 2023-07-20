@@ -9,10 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aec04ee97d9e48e5be6919f2de59069a, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b7609383c524e9cb7c438272085f9b6, type: 3}
   m_Name: SpearThrower_ChangeMovementIfReady
   m_EditorClassIdentifier: 
   decisions:
-  - {fileID: 11400000, guid: e5b41a7245ec8d2419a573515c021a8b, type: 2}
-  - {fileID: 11400000, guid: 9f88c8b721a2e5044a66c0853e152384, type: 2}
+  - invert: 0
+    decision: {fileID: 11400000, guid: 9f88c8b721a2e5044a66c0853e152384, type: 2}
+    nextOperator: 1
+  - invert: 0
+    decision: {fileID: 11400000, guid: e5b41a7245ec8d2419a573515c021a8b, type: 2}
+    nextOperator: 1
   trueAction: {fileID: 11400000, guid: 2ba370404f7f7234b8dad9ebdd8f2a71, type: 2}

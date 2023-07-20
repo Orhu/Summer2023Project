@@ -17,6 +17,9 @@ namespace Cardificer.FiniteStateMachine
         [Tooltip("The attacks that will be launched when the enemy attempts to attack.")] [EditInline]
         public Attack[] attacks;
 
+        [Tooltip("Projectile Lifetime? Only needed if tracking projectile counts (such as the Trapper)")]
+        public float projectileLifetime;
+
         /// <summary>
         /// Fire an attack
         /// </summary>
@@ -24,6 +27,7 @@ namespace Cardificer.FiniteStateMachine
         /// <returns></returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
+            stateMachine.trackedVariables.TryAdd("NumOfActiveProjectiles", 0);
             stateMachine.StartCoroutine(LaunchAttack(stateMachine));
             yield break;
         }
@@ -39,14 +43,27 @@ namespace Cardificer.FiniteStateMachine
             {
                 for (int i = 0; i < attacks.Length; i++)
                 {
+                    stateMachine.trackedVariables["NumOfActiveProjectiles"] =
+                        (int)stateMachine.trackedVariables["NumOfActiveProjectiles"] + 1;
                     // if this is the last attack in the sequence we want to use its action time to enable cooldown
                     if (i == attacks.Length - 1)
                     {
-                        attacks[i].Play(stateMachine, FloorGenerator.currentRoom.livingEnemies, () => stateMachine.cooldownData.cooldownReady[this] = true);
-                    } // otherwise, just play the attack
+                        attacks[i].Play(stateMachine, FloorGenerator.currentRoom.livingEnemies, () =>
+                        {
+                            stateMachine.cooldownData.cooldownReady[this] = true;
+                        });
+                        
+                        yield return new WaitForSeconds(attacks[i].lifetime); // track lifetime and decrement accordingly
+                        stateMachine.trackedVariables["NumOfActiveProjectiles"] =
+                            (int)stateMachine.trackedVariables["NumOfActiveProjectiles"] - 1;
+                    } // otherwise, just play the attack and do not enable cooldown when it finishes
                     else
                     {
                         attacks[i].Play(stateMachine, FloorGenerator.currentRoom.livingEnemies);
+                        
+                        yield return new WaitForSeconds(attacks[i].lifetime);  // track lifetime and decrement accordingly
+                        stateMachine.trackedVariables["NumOfActiveProjectiles"] =
+                            (int)stateMachine.trackedVariables["NumOfActiveProjectiles"] - 1;
                     }
                 }
             }

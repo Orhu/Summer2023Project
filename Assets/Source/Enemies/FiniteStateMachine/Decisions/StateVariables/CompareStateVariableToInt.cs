@@ -11,8 +11,23 @@ namespace Cardificer.FiniteStateMachine
         [Tooltip("State variable to compare")]
         [SerializeField] private string stateVariableName;
         
-        [Tooltip("Transition returns true when the state variable is equal to this number")]
+        [Tooltip("How should we compare the state variable")]
+        [SerializeField] private ComparisonType comparison = ComparisonType.Equal;
+        
+        [Tooltip("Transition returns true when the state variable is compared to this number")]
         [SerializeField] private int numberToCheck;
+
+        /// <summary>
+        /// Enum used for representing a comparison type
+        /// </summary>
+        private enum ComparisonType
+        {
+            GreaterThan,
+            GreaterThanOrEqual,
+            LessThan,
+            LessThanOrEqual,
+            Equal
+        }
         
         /// <summary>
         /// Returns true if the given key exists and its value is equal to the given int value
@@ -22,7 +37,24 @@ namespace Cardificer.FiniteStateMachine
         public override bool Decide(BaseStateMachine state)
         {
             bool stateVariableExists = state.trackedVariables.TryGetValue(stateVariableName, out var variableValue);
-            return stateVariableExists && (int)variableValue == numberToCheck;
+
+            switch (comparison)
+            {
+                case ComparisonType.GreaterThan:
+                    return stateVariableExists && (int)variableValue > numberToCheck;
+                case ComparisonType.GreaterThanOrEqual: 
+                    return stateVariableExists && (int)variableValue >= numberToCheck;
+                case ComparisonType.LessThan:
+                    return stateVariableExists && (int)variableValue < numberToCheck;
+                case ComparisonType.LessThanOrEqual:
+                    return stateVariableExists && (int)variableValue <= numberToCheck;
+                case ComparisonType.Equal:
+                    return stateVariableExists && (int)variableValue == numberToCheck;
+            }
+            
+            Debug.LogError("Provided with an invalid comparison type! Returning false.");
+            return false;
+            
         }
     }
 }

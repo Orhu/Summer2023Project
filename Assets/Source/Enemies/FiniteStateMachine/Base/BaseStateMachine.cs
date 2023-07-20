@@ -258,6 +258,7 @@ namespace Cardificer.FiniteStateMachine
             }
 
             currentState.OnStateUpdate(this);
+            print(gameObject.name + "'s Current State: " + currentState);
         }
 
         /// <summary>

@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c5858af96344aaa9e636fdff62a26b5, type: 3}
   m_Name: SpearThrower_Patrol
   m_EditorClassIdentifier: 
-  enterActions: []
-  exitActions: []
+  enterActions:
+  - {fileID: 11400000, guid: 47b704b20835da2478af6dc5c1a51c32, type: 2}
+  exitActions:
+  - {fileID: 11400000, guid: a1fc8154edcd94d4e91c99d2cbc4f343, type: 2}
   updateActions:
-  - {fileID: 11400000, guid: d5175123fa0a6df418d340740360b457, type: 2}
+  - {fileID: 11400000, guid: 78c383537647ffe43be6578c97c2e5a0, type: 2}
   - {fileID: 11400000, guid: 2715ac0b3761e1749b3a532aa1dacbe8, type: 2}
   - {fileID: 11400000, guid: afcd557287fbd334a805dc221a207d09, type: 2}
   transitions:

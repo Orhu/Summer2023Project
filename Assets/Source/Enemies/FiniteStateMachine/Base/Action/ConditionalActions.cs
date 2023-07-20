@@ -15,9 +15,6 @@ namespace Cardificer.FiniteStateMachine
         [Tooltip("Action to perform if decision is true.")]
         [SerializeField] private BaseAction trueAction;
 
-        [Tooltip("Action to perform if decision is false.")]
-        [SerializeField] private BaseAction falseAction;
-
         /// <summary>
         /// Evaluate the condition and execute the action if all listed conditions are true.
         /// </summary>
@@ -27,10 +24,6 @@ namespace Cardificer.FiniteStateMachine
             if (decisions.Decide(stateMachine))
             {
                 trueAction.Execute(stateMachine);
-            }
-            else
-            {
-                falseAction.Execute(stateMachine);
             }
         }
     }
