@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using System.Collections.Generic;
 using TMPro;
 
 namespace Cardificer
@@ -26,15 +28,55 @@ namespace Cardificer
         private Room localCurrentRoom;
 
         [Tooltip("Float representing the padding between rooms")]
-        [SerializeField] private float roomPadding = 30f;
+        [SerializeField] private float roomPadding = 100f;
+
+        [Tooltip("How much we scale drawing each room from each other")]
+        [SerializeField] private float drawScale = 500;
+
+        // current Scale of the map
+        private float currentScale = 1;
+
+        // minimum scale of the map
+        private float minScale = 0.1f;
+
+        // max scale of the map
+        private float maxScale = 2f;
+
+        [Tooltip("The speed of zooming in and out the map")]
+        [SerializeField] private float scaleSpeed = 0.5f;
+
+        public void OnZoom(InputValue input)
+        {
+
+            currentScale += input.Get<float>() * Time.unscaledDeltaTime * scaleSpeed;
+            if (currentScale >= maxScale)
+            {
+                currentScale = maxScale;
+            }
+            else if (currentScale <= minScale)
+            {
+                currentScale = minScale;
+            }
+            roomImageContainer.transform.localScale = new Vector2(currentScale, currentScale);
+        }
+
+        public void OnReset(InputValue input)
+        {
+            currentScale = 1;
+            roomImageContainer.transform.localScale = new Vector2(currentScale, currentScale);
+            roomImageContainer.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+        }
+
 
         private void OnEnable()
         {
+            GetComponentInChildren<ScrollRect>().normalizedPosition = Vector3.zero;
             if (localCurrentRoom != FloorGenerator.currentRoom)
             {
                 ResetMap();
                 UpdateMap();
             }
+
         }
 
         /// <summary>
@@ -95,7 +137,7 @@ namespace Cardificer
                         paddingVec.y = roomPadding;
                     }
 
-                    // Check if neighboring cell's room is visited
+                    // Check if any given cell is visited
                     if (cell.room.generated)
                     {
                         // Loop through that room's inner cells
@@ -106,7 +148,7 @@ namespace Cardificer
 
                             // Decide location of where to draw cells
                             Vector2 drawLocation = (innerCell.location - localCurrentRoom.roomLocation);
-                            cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * 150) + paddingVec.x, cellVisual.transform.localPosition.y + (drawLocation.y * 150) + paddingVec.y);
+                            cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * drawScale) + paddingVec.x, cellVisual.transform.localPosition.y + (drawLocation.y * drawScale) + paddingVec.y);
 
                             // Modify the room visual
                             cellVisual.GetComponentInChildren<TextMeshProUGUI>().text = innerCell.room.roomType.displayName;
@@ -116,13 +158,36 @@ namespace Cardificer
                     // If the cell's room has not been visited
                     else
                     {
-                        // Instantiate the room visual
-                        GameObject cellVisual = Instantiate(cellVisualPrefab, roomImageContainer.transform);
+                        // Check to see if the cell has been seen before. If it has draw it
+                        if (cell.seenByMap)
+                        {
+                            // Instantiate the room visual
+                            GameObject cellVisual = Instantiate(cellVisualPrefab, roomImageContainer.transform);
 
-                        Vector2 drawLocation = cell.location - localCurrentRoom.roomLocation;
-                        cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * 150) + paddingVec.x, cellVisual.transform.localPosition.y + (drawLocation.y * 150) + paddingVec.y);
+                            Vector2 drawLocation = cell.location - localCurrentRoom.roomLocation;
+                            cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * drawScale) + paddingVec.x, cellVisual.transform.localPosition.y + (drawLocation.y * drawScale) + paddingVec.y);
 
-                        cellVisual.GetComponent<Image>().sprite = nonVisitedRoomSprite;
+                            cellVisual.GetComponent<Image>().sprite = nonVisitedRoomSprite;
+                        }
+                        // Lastly, if the cell hasn't been visited or seen,
+                        // see if it is a neighbor of the current cell. If it is,
+                        // draw it
+                        else 
+                        {
+                            List<MapCell> listOfNeighboringCells = localCurrentRoom.GetNeighboringCells(FloorGenerator.map.map);
+                            if (listOfNeighboringCells.Contains(cell))
+                            {
+                                cell.seenByMap = true;
+                                // Instantiate the room visual
+                                GameObject cellVisual = Instantiate(cellVisualPrefab, roomImageContainer.transform);
+
+                                Vector2 drawLocation = cell.location - localCurrentRoom.roomLocation;
+                                cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * drawScale) + paddingVec.x, cellVisual.transform.localPosition.y + (drawLocation.y * drawScale) + paddingVec.y);
+
+                                cellVisual.GetComponent<Image>().sprite = nonVisitedRoomSprite;
+                            }
+                        }
+                       
                     }
                 }
             }
