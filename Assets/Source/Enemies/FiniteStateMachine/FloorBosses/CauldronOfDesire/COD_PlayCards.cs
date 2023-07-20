@@ -19,6 +19,7 @@ namespace Cardificer.FiniteStateMachine
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             stateMachine.trackedVariables.TryAdd("CardsPlayed", 0);
+            stateMachine.trackedVariables.TryAdd("ActionTimeComplete", false);
 
             if (!stateMachine.trackedVariables.ContainsKey("Card0"))
             {
@@ -29,16 +30,23 @@ namespace Cardificer.FiniteStateMachine
             
             AttackSequence currentAttackSequence = stateMachine.trackedVariables["Card" + cardPlayIndex] as AttackSequence;
 
-            List<Action> actionSequence = currentAttackSequence.actionSequence;
-            List<float> actionDelaySequence = currentAttackSequence.actionDelaySequence;
+            List<Attack> actionSequence = currentAttackSequence.actionSequence;
+            
             for (int i = 0; i < currentAttackSequence.actionSequence.Count; i++)
             {
-                actionSequence[i].Play(stateMachine);
-                yield return new WaitForSeconds(actionDelaySequence[i]);
+                stateMachine.trackedVariables["ActionTimeComplete"] = false;
+                
+                actionSequence[i].Play(stateMachine, FloorGenerator.currentRoom.livingEnemies, () =>
+                {
+                    stateMachine.trackedVariables["ActionTimeComplete"] = true;
+                });
+                
+                yield return new WaitUntil(() => (bool)stateMachine.trackedVariables["ActionTimeComplete"]);
             }
             
-            stateMachine.trackedVariables["CardsPlayed"] = (int)stateMachine.trackedVariables["CardsPlayed"] + 1;
             stateMachine.cooldownData.cooldownReady[this] = true;
+            stateMachine.trackedVariables["CardsPlayed"] = (int)stateMachine.trackedVariables["CardsPlayed"] + 1;
+            yield break;
         }
     }
 }

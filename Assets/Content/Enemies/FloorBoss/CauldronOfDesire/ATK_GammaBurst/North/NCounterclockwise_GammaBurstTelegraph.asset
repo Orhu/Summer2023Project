@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
+  m_Name: NCounterclockwise_GammaBurstTelegraph
+  m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 8300000, guid: b817808265bdb2e44a7bae6dfe84708e, type: 3}
+  projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
+  previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
+  attack:
+    damage: 4
+    damageType: 1
+    statusEffects: []
+    invertInvincibility: 0
+  hitCount: 999
+  applyDamageOnHit: 0
+  modifiers:
+  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
+  - {fileID: 11400000, guid: c49735d42d9fb5c4ca58edd16d925b41, type: 2}
+  immuneToShield: 0
+  immuneToReflect: 0
+  shape: {fileID: 11400000, guid: 67a1b629e28d7cb45a484d504a70e759, type: 2}
+  lifetime: 2
+  initialSpeed: 0
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 0
+  homingSpeed: 0
+  homingTime: 0
+  homingDelay: 0
+  homingAimMode: 1
+  switchAfterHit: 0
+  visualObject: {fileID: 293521835147723709, guid: 93d7b30d88a2a42229053a2ace4b87e6, type: 3}
+  detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0.25
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
+  spawnLocation: 3
+  aimMode: 5
+  waitForProjectileDeath: 1
+  chargeTime: 0
+  additionalActionTime: 1.5
+  _spawnSequence:
+  - delay: 0
+    startingAngle: 90
+    radius: 8.5
+    orbitDirection: 0
+  randomStartingAngle: 0
+  randomRadius: 0
+  attachedToSpawnLocation: 1

@@ -25,6 +25,9 @@ namespace Cardificer
         [Tooltip("Game Over Menu reference, assigned in inspector")]
         [SerializeField] private GameOverMenu gameOverMenu;
 
+        [Tooltip("Instruction Menu reference, assigned in inspector")]
+        [SerializeField] private InstructionMenu instructionMenu;
+
         // Reference to the player's game object
         private GameObject playerGameObject;
 
@@ -41,7 +44,8 @@ namespace Cardificer
             Booster,
             Map,
             Card,
-            GameOver
+            GameOver,
+            Instruction
         }
 
         // Internally know which menu is open
@@ -78,9 +82,26 @@ namespace Cardificer
                 {
                     gameOverMenu = GetComponentInChildren<GameOverMenu>();
                 }
+                if (instructionMenu == null)
+                {
+                    instructionMenu = GetComponentInChildren<InstructionMenu>();
+                }
 
                 // The current menu is set to pause menu
                 currentMenu = MenuTypes.Pause;
+            }
+        }
+
+        /// <summary>
+        /// If it's a player's first time playing,
+        /// show them the instruction manual right away.
+        /// </summary>
+        private void Start()
+        {
+            // Check to see if they've seen the manual already
+            if (PlayerPrefs.GetInt("seenManual") == 0)
+            {
+                ToggleInstructionManual();
             }
         }
 
@@ -96,6 +117,7 @@ namespace Cardificer
             }
             else
             {
+                instance.CloseMenu();
                 OpenPauseMenu();
             }
         }
@@ -111,6 +133,7 @@ namespace Cardificer
             }
             else
             {
+                instance.CloseMenu();
                 OpenCardMenu();
             }
         }
@@ -127,8 +150,18 @@ namespace Cardificer
             }
             else
             {
+                instance.CloseMenu();
                 OpenMapMenu();
             }
+        }
+
+        /// <summary>
+        /// Toggles whether the Instruction menu is open
+        /// </summary>
+        public static void ToggleInstructionManual()
+        {
+            instance.CloseMenu();
+            OpenInstructionMenu();
         }
 
         /// <summary>
@@ -148,7 +181,6 @@ namespace Cardificer
                     instance.boosterPackMenu.boosterPackObject = boosterPack;
                 }
                 // Disable player movement
-                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
                 instance.currentMenu = MenuTypes.Booster;
                 instance.menuOpen = true;
             }
@@ -166,7 +198,6 @@ namespace Cardificer
                 Time.timeScale = 0;
                 instance.pauseMenu.gameObject.SetActive(true);
                 // Disable player movement
-                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
                 instance.currentMenu = MenuTypes.Pause;
                 instance.menuOpen = true;
             }
@@ -184,7 +215,6 @@ namespace Cardificer
                 Time.timeScale = 0;
                 instance.mapMenu.gameObject.SetActive(true);
                 // Disable player movement
-                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
                 instance.currentMenu = MenuTypes.Map;
                 instance.menuOpen = true;
             }
@@ -202,7 +232,6 @@ namespace Cardificer
                 Time.timeScale = 0;
                 instance.cardMenu.gameObject.SetActive(true);
                 // Disable player movement
-                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
                 instance.currentMenu = MenuTypes.Card;
                 instance.menuOpen = true;
             }
@@ -220,8 +249,23 @@ namespace Cardificer
                 Time.timeScale = 0;
                 instance.gameOverMenu.gameObject.SetActive(true);
                 // Disable player movement
-                instance.playerGameObject.GetComponent<PlayerController>().enabled = false;
                 instance.currentMenu = MenuTypes.GameOver;
+                instance.menuOpen = true;
+            }
+        }
+
+        /// <summary>
+        /// Opens the instruction menu
+        /// </summary>
+        public static void OpenInstructionMenu()
+        {
+            if (!instance.menuOpen)
+            {
+                // "Pause the game", should probably be replaced with a more effective method
+                // Sets timeScale to 0, so all time related functions are stopped
+                Time.timeScale = 0;
+                instance.instructionMenu.gameObject.SetActive(true);
+                instance.currentMenu = MenuTypes.Instruction;
                 instance.menuOpen = true;
             }
         }
@@ -231,13 +275,30 @@ namespace Cardificer
         /// </summary>
         public void CloseMenu()
         {
-            if (menuOpen && currentMenu != MenuTypes.GameOver) // Prevent closing of Game Over menu
+            if (menuOpen && currentMenu != MenuTypes.GameOver && currentMenu != MenuTypes.Instruction) // Prevent closing of Game Over menu and Instruction menu
             {
                 // "Resume the game", resumes all time related function
                 Time.timeScale = 1;
-                // Re-enable player movement
-                playerGameObject.GetComponent<PlayerController>().enabled = true;
 
+                // close all menus
+                for (int i = 0; i < transform.childCount; i++)
+                {
+                    transform.GetChild(i).gameObject.SetActive(false);
+                }
+                currentMenu = MenuTypes.Pause;
+                menuOpen = false;
+            }
+        }
+
+        /// <summary>
+        /// Called when Instruction Menu needs to be closed
+        /// </summary>
+        public void CloseInstructionManual()
+        {
+            if (menuOpen) 
+            {
+                // "Resume the game", resumes all time related function
+                Time.timeScale = 1;
                 // close all menus
                 for (int i = 0; i < transform.childCount; i++)
                 {
