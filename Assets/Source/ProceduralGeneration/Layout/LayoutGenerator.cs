@@ -121,8 +121,8 @@ namespace Cardificer
                 }
                 else
                 {
-                    int variance = roomTypeToLayoutParams.numRoomsVariance;
-                    int numRooms = roomTypeToLayoutParams.numRooms;
+                    int variance = roomTypeToLayoutParams.layoutParams.numRoomsVariance;
+                    int numRooms = roomTypeToLayoutParams.layoutParams.numRooms;
                     numRooms += FloorGenerator.random.Next(-variance, variance + 1);
                     if (numRooms > 0)
                     {
@@ -159,7 +159,7 @@ namespace Cardificer
                 }
             }
 
-            for (int i = 0; i < layoutParams.numBossRooms; i++)
+            for (int i = 0; i < layoutParams.mapLayoutParams.numBossRooms; i++)
             {
                 RoomType randomBossRoom = bossRooms.GetRandomThing(FloorGenerator.random);
                 if (deadEndRooms.ContainsKey(randomBossRoom))
@@ -184,7 +184,7 @@ namespace Cardificer
             Room startRoom = GenerateStartRoom(genMap, roomContainer, mapSize, startRoomType);
 
             // Get all the branchable cells (which will start out as all the edge normal cells, then cells will be removed from them as it goes along
-            List<MapCell> branchableCells = GenerateNormalRooms(genMap, roomContainer, startRoom, normalRooms, emergencyRooms, layoutParams.preferredNumDoors, layoutParams.strictnessNumDoors);
+            List<MapCell> branchableCells = GenerateNormalRooms(genMap, roomContainer, startRoom, normalRooms, emergencyRooms, layoutParams.mapLayoutParams.preferredNumDoors, layoutParams.mapLayoutParams.strictnessNumDoors);
 
             if (!GenerateDeadEnds(genMap, roomContainer, startRoom.startLocation, branchableCells, deadEndRooms))
             {
