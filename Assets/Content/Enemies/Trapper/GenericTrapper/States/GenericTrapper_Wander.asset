@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c5858af96344aaa9e636fdff62a26b5, type: 3}
+  m_Name: GenericTrapper_Wander
+  m_EditorClassIdentifier: 
+  enterActions:
+  - {fileID: 11400000, guid: 2c97c69650614cc4eb242620c6f40157, type: 2}
+  - {fileID: 11400000, guid: 47b704b20835da2478af6dc5c1a51c32, type: 2}
+  - {fileID: 11400000, guid: 6651ceee903b34e42bbf2a4bab4c76ff, type: 2}
+  - {fileID: 11400000, guid: 8b7ed859d2eb8b14591715070b4b26e5, type: 2}
+  exitActions: []
+  updateActions:
+  - {fileID: 11400000, guid: 78b2c99c0caebbb479f93ef95806e615, type: 2}
+  transitions:
+  - {fileID: 11400000, guid: dffc1076f93e59842affaf3df61b6c71, type: 2}
+  - {fileID: 11400000, guid: c2855589d0fbf4340a87ce957af92301, type: 2}

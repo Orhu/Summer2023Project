@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
-  m_Name: GoblinMiner_ThrowRock
+  m_Name: SpearThrower_BulletAttack
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
@@ -25,30 +25,30 @@ MonoBehaviour:
   modifiers: []
   immuneToShield: 0
   immuneToReflect: 0
-  shape: {fileID: 11400000, guid: b7ee9ce7af15c5248a94d3ef241d4bff, type: 2}
-  lifetime: 2
-  initialSpeed: 5
-  acceleration: -2.5
+  shape: {fileID: 11400000, guid: d9d245910c3ac1148b44a5df5fdc6550, type: 2}
+  lifetime: 1
+  initialSpeed: 9
+  acceleration: 0
   minSpeed: 0
-  maxSpeed: 10
+  maxSpeed: 9
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
   homingAimMode: 0
   switchAfterHit: 0
-  visualObject: {fileID: 8412107525280692032, guid: 8bcc4526d5bd7bc41a90326d2947453f, type: 3}
+  visualObject: {fileID: 2809569760718847691, guid: b12dc7754602a78439f88e6dfb3026bd, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
   spawnLocation: 0
   aimMode: 0
-  waitForProjectileDeath: 0
+  waitForProjectileDeath: 1
   chargeTime: 0
-  additionalActionTime: 2
+  additionalActionTime: 1
   _spawnSequence:
   - delay: 0
     angle: 0
     offset: {x: 0, y: 0}
-  randomAngle: 30
+  randomAngle: 0
   randomOffset: 0

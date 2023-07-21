@@ -17,9 +17,6 @@ namespace Cardificer.FiniteStateMachine
         [Tooltip("The attacks that will be launched when the enemy attempts to attack.")] [EditInline]
         public Attack[] attacks;
 
-        [Tooltip("Projectile Lifetime? Only needed if tracking projectile counts (such as the Trapper)")]
-        public float projectileLifetime;
-
         /// <summary>
         /// Fire an attack
         /// </summary>

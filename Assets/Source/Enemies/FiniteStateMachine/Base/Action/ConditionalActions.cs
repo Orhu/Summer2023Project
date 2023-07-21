@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Skaillz.EditInline;
 using UnityEngine;
 
 namespace Cardificer.FiniteStateMachine
@@ -12,7 +13,7 @@ namespace Cardificer.FiniteStateMachine
         [Tooltip("Decisions to evaluate with.")]
         [SerializeField] private List<Decision.Combinable> decisions;
 
-        [Tooltip("Action to perform if decision is true.")]
+        [Tooltip("Action to perform if decision is true.")] [EditInline]
         [SerializeField] private BaseAction trueAction;
 
         /// <summary>

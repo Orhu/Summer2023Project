@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b7609383c524e9cb7c438272085f9b6, type: 3}
+  m_Name: BearTrapper_WanderIfMaxTrapsLaid
+  m_EditorClassIdentifier: 
+  decisions:
+  - invert: 0
+    decision: {fileID: 11400000, guid: f9a81f8879575ee41bc8289d7cdcd5ac, type: 2}
+    nextOperator: 2
+  - invert: 0
+    decision: {fileID: 11400000, guid: 84ee1da3f85044f40bcc338b1d5e1156, type: 2}
+    nextOperator: 0
+  trueAction: {fileID: 11400000, guid: d5984bf0ed66e9f4097db5c594e43cc3, type: 2}
