@@ -267,7 +267,8 @@ namespace Cardificer
                     // Get only applicable modifiers
                     (AttackModifier attackModifier) =>
                     {
-                        return index < attackModifier.minAttackSequenceIndex || index > attackModifier.maxAttackSequenceIndex;
+                        int adjIndex = index % attackModifier.attackSequenceLoopInterval;
+                        return adjIndex < attackModifier.minAttackSequenceIndex || adjIndex > attackModifier.maxAttackSequenceIndex;
                     }).ToList();
             projectile.causer = causer;
             projectile.ignoredObjects = ignoredObjects;

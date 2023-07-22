@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Cardificer
 {
@@ -8,7 +11,7 @@ namespace Cardificer
     /// </summary>
     /// <typeparam name="T"> The type of thing </typeparam>
     [System.Serializable]
-    public class GenericWeightedThing<T>
+    public class GenericWeightedThing<T> : GenericWeightedThingParent
     {
         [Tooltip("The weighted thing")]
         public T thing;
@@ -43,7 +46,7 @@ namespace Cardificer
     /// </summary>
     /// <typeparam name="T"> The type of the things </typeparam>
     [System.Serializable]
-    public class GenericWeightedThings<T>
+    public class GenericWeightedThings<T> : GenericWeightedThingsParent
     {
         [Tooltip("The initial list of things that can be chosen")]
         public List<GenericWeightedThing<T>> things;
@@ -251,4 +254,107 @@ namespace Cardificer
             return result + FloorGenerator.seed;
         }
     }
+
+    /// <summary>
+    /// This is only to allow for the workaround of having the same property drawer for every generic weighted things (thanks Unity)
+    /// </summary>
+    public class GenericWeightedThingsParent {};
+
+    /// <summary>
+    /// This is only to allow for the workaround of having the same property drawer for every generic weighted thing (thanks Unity)
+    /// </summary>
+    public class GenericWeightedThingParent {};
+
+#if UNITY_EDITOR
+
+    /// <summary>
+    /// Class for making the Generic weighted things easier to read in the inspector.
+    /// </summary>
+    [CustomPropertyDrawer(typeof(GenericWeightedThingsParent), true)]
+    public class GenericWeightedThingsDrawer : PropertyDrawer
+    {
+        /// <summary>
+        /// Draws the generic weighted thing property
+        /// </summary>
+        /// <param name="position"> The position the property begins at </param>
+        /// <param name="property"> The property being drawn </param>
+        /// <param name="label"> The label of this property </param>
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            EditorGUI.BeginProperty(position, label, property);
+            EditorGUI.PropertyField(position, property.FindPropertyRelative("things"), label, true);
+            EditorGUI.EndProperty();
+        }
+
+        /// <summary>
+        /// Gets the height this property should have
+        /// </summary>
+        /// <param name="property"> The property </param>
+        /// <param name="label"> The label of this property </param>
+        /// <returns> The height of this property </returns>
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            return EditorGUI.GetPropertyHeight(property.FindPropertyRelative("things"), true);
+        }
+    }
+
+    /// <summary>
+    /// Class for making the Generic weighted thing easier to read in the inspector.
+    /// </summary>
+    [CustomPropertyDrawer(typeof(GenericWeightedThingParent), true)]
+    public class GenericWeightedThingDrawer : PropertyDrawer
+    {
+        /// <summary>
+        /// Draws the generic weighted thing property
+        /// </summary>
+        /// <param name="position"> The position the property begins at </param>
+        /// <param name="property"> The property being drawn </param>
+        /// <param name="label"> The label of this property </param>
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            EditorGUI.BeginProperty(position, label, property);
+
+            SerializedProperty thing = property.FindPropertyRelative("thing");
+            SerializedProperty weight = property.FindPropertyRelative("weight");
+            SerializedProperty maxChosen = property.FindPropertyRelative("maxChosen");
+
+            // + 2 To space the properties out a bit
+
+            position.height = EditorGUI.GetPropertyHeight(thing);
+            EditorGUI.PropertyField(position, thing, new GUIContent("Thing"), true);
+            position.y += EditorGUI.GetPropertyHeight(thing) + 2;
+
+            position.height = EditorGUI.GetPropertyHeight(weight);
+            EditorGUI.PropertyField(position, weight, new GUIContent("Weight"));
+            position.y += EditorGUI.GetPropertyHeight(weight) + 2;
+
+            position.height = EditorGUI.GetPropertyHeight(maxChosen);
+            EditorGUI.PropertyField(position, maxChosen, new GUIContent("Max Chosen"));
+            position.y += EditorGUI.GetPropertyHeight(maxChosen) + 2;
+
+            EditorGUI.EndProperty();
+        }
+
+        /// <summary>
+        /// Gets the height this property should have
+        /// </summary>
+        /// <param name="property"> The property </param>
+        /// <param name="label"> The label of this property </param>
+        /// <returns> The height of this property </returns>
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            float height = 0;
+
+            SerializedProperty thing = property.FindPropertyRelative("thing");
+            SerializedProperty weight = property.FindPropertyRelative("weight");
+            SerializedProperty maxChosen = property.FindPropertyRelative("maxChosen");
+
+            height += EditorGUI.GetPropertyHeight(thing) + 2;
+            height += EditorGUI.GetPropertyHeight(weight) + 2;
+            height += EditorGUI.GetPropertyHeight(maxChosen) + 2;
+
+            return height;
+        }
+    }
+#endif
 }

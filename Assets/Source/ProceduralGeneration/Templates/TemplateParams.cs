@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Cardificer
 {
@@ -7,8 +10,7 @@ namespace Cardificer
     /// The Params to use when generating a template
     /// </summary>
     [System.Serializable]
-    [CreateAssetMenu(fileName = "NewTemplateParams", menuName = "Generation/TemplateParams")]
-    public class TemplateParams : ScriptableObject
+    public class TemplateParams
     {
         [Tooltip("The pool of templates to draw from and their associated room types")]
         public RoomTypesToDifficultiesToTemplates templatesPool;
@@ -155,6 +157,16 @@ namespace Cardificer
         }
 
         /// <summary>
+        /// Adds a room type to difficulties to templates to the pool
+        /// </summary>
+        /// <param name="roomType"> The room type </param>
+        /// <param name="difficultiesToTemplates"> The difficulties to templates </param>
+        public void Add(RoomType roomType, DifficultiesToTemplates difficultiesToTemplates)
+        {
+            roomTypesToDifficultiesToTemplates.Add(new RoomTypeToDifficultiesToTemplates(roomType, difficultiesToTemplates));
+        }
+
+        /// <summary>
         /// Gets the difficulties to templates associated with the given room type
         /// </summary>
         /// <param name="roomType"> The room type </param>
@@ -196,6 +208,17 @@ namespace Cardificer
 
         [Tooltip("The room type's associated difficulties and templates")]
         public DifficultiesToTemplates difficultiesToTemplates;
+
+        /// <summary>
+        /// Constructor that takes a room type and difficulties to templates
+        /// </summary>
+        /// <param name="roomType"> The room type </param>
+        /// <param name="difficultiesToTemplates"> The room type's associated difficulties and templates </param>
+        public RoomTypeToDifficultiesToTemplates(RoomType roomType, DifficultiesToTemplates difficultiesToTemplates)
+        {
+            this.roomType = roomType;
+            this.difficultiesToTemplates = difficultiesToTemplates;
+        }
     }
 
     /// <summary>
@@ -206,6 +229,42 @@ namespace Cardificer
     {
         [Tooltip("The difficulties and their associated templates")]
         public List<DifficultyToTemplates> difficultiesToTemplates = new List<DifficultyToTemplates>();
+
+        // Whether or not to display easy and hard, or not applicable
+        [SerializeField] [HideInInspector] private bool _useDifficulty = false;
+        public bool useDifficulty
+        {
+            set
+            {
+                if (value != _useDifficulty || difficultiesToTemplates == null || difficultiesToTemplates.Count == 0)
+                {
+                    difficultiesToTemplates = new List<DifficultyToTemplates>();
+                    if (value)
+                    {
+                        DifficultyToTemplates difficultyToTemplates = new DifficultyToTemplates();
+                        difficultyToTemplates.difficulty = Difficulty.Easy;
+                        difficultyToTemplates.templates = new List<Template>();
+                        Add(difficultyToTemplates);
+
+                        difficultyToTemplates = new DifficultyToTemplates();
+                        difficultyToTemplates.difficulty = Difficulty.Hard;
+                        difficultyToTemplates.templates = new List<Template>();
+                        Add(difficultyToTemplates);
+                    }
+                    else
+                    {
+                        DifficultyToTemplates difficultyToTemplates = new DifficultyToTemplates();
+                        difficultyToTemplates.difficulty = Difficulty.NotApplicable;
+                        difficultyToTemplates.templates = new List<Template>();
+                        Add(difficultyToTemplates);
+                    }
+                }
+
+                _useDifficulty = value;
+
+            }
+            get => _useDifficulty;
+        }
 
         /// <summary>
         /// Finds the associated list of templates of the given difficulty
@@ -265,4 +324,69 @@ namespace Cardificer
         [Tooltip("The associated templates of that difficulty")]
         public List<Template> templates;
     }
+
+#if UNITY_EDITOR
+
+    /// <summary>
+    /// Class for making the floor params easier to read in the inspector.
+    /// </summary>
+    [CustomPropertyDrawer(typeof(DifficultiesToTemplates), true)]
+    public class DifficultiesToTemplatesDrawer : PropertyDrawer
+    {
+        /// <summary>
+        /// Draws the difficulties to templates property
+        /// </summary>
+        /// <param name="position"> The position the property begins at </param>
+        /// <param name="property"> The property being drawn </param>
+        /// <param name="label"> The label of this property </param>
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            EditorGUI.BeginProperty(position, label, property);
+
+            SerializedProperty templatesPool = property.FindPropertyRelative("difficultiesToTemplates");
+            
+            for (int i = 0; i < templatesPool.arraySize; i++)
+            {
+                SerializedProperty difficultyToTemplates = templatesPool.GetArrayElementAtIndex(i);
+                SerializedProperty difficulty = difficultyToTemplates.FindPropertyRelative("difficulty");
+                Difficulty difficultyVal = (Difficulty) difficulty.enumValueIndex;
+                string labelName = "";
+                if (difficultyVal != Difficulty.NotApplicable)
+                {
+                    labelName = difficultyVal.ToString();
+                }
+                labelName += " Templates";
+
+                position.height = EditorGUI.GetPropertyHeight(difficulty);
+
+                GUIContent difficultyLabel = new GUIContent(labelName);
+                SerializedProperty templates = difficultyToTemplates.FindPropertyRelative("templates");
+                EditorGUI.PropertyField(position, templates, difficultyLabel);
+                position.y += EditorGUI.GetPropertyHeight(templates) + 2;
+            }
+
+            EditorGUI.EndProperty();
+        }
+
+        /// <summary>
+        /// Gets the height this property should have
+        /// </summary>
+        /// <param name="property"> The property </param>
+        /// <param name="label"> The label of this property </param>
+        /// <returns> The height of this property </returns>
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            float height = 0;
+            SerializedProperty templatesPool = property.FindPropertyRelative("difficultiesToTemplates");
+            for (int i = 0; i < templatesPool.arraySize; i++)
+            {
+                SerializedProperty difficultyToTemplates = templatesPool.GetArrayElementAtIndex(i);
+                SerializedProperty templates = difficultyToTemplates.FindPropertyRelative("templates");
+                height += EditorGUI.GetPropertyHeight(templates) + 2;
+            }
+            return height;
+        }
+    }
+
+#endif
 }

@@ -65,29 +65,12 @@ namespace Cardificer
 
         [Header("Specific Params")]
 
-        [Tooltip("The generation Params for the layout of this floor")] [EditInline]
-        [SerializeField] private LayoutParams _layoutParams;
-        static public LayoutParams layoutParams
+        [Tooltip("The floor generator params")]
+        [SerializeField] private FloorParams _floorParams;
+        static public FloorParams floorParams
         {
-            get => instance._layoutParams;
-            private set => instance._layoutParams = value;
-        }
-
-        [Tooltip("A dictionary that holds room types and their associated exterior generation Params for this floor")]
-        [EditInline]
-        [SerializeField] private RoomTypesToRoomExteriorParams _roomTypesToExteriorParams;
-        static public RoomTypesToRoomExteriorParams roomTypesToExteriorParams
-        {
-            get => instance._roomTypesToExteriorParams;
-            private set => instance._roomTypesToExteriorParams = value;
-        }
-
-        [Tooltip("The template generation Params for this floor")] [EditInline]
-        [SerializeField] private TemplateParams _templateParams;
-        static public TemplateParams templateParams
-        {
-            get => instance._templateParams;
-            private set => instance._templateParams = value;
+            private set => instance._floorParams = value;
+            get => instance._floorParams;
         }
 
         // The random instance
@@ -174,6 +157,12 @@ namespace Cardificer
 
             random = new System.Random(seed);
 
+            floorParams = Instantiate(floorParams);
+            floorParams.ParseParams();
+            LayoutParams layoutParams = floorParams.layoutParams;
+            TemplateParams templateParams = floorParams.templateParams;
+            RoomTypesToRoomExteriorParams roomTypesToExteriorParams = floorParams.exteriorParams;
+
             Dictionary<RoomType, int> templateCounts = new Dictionary<RoomType, int>();
             if (layoutParams != null)
             {
@@ -192,11 +181,7 @@ namespace Cardificer
                         Debug.LogError("No templates associated with room type " + roomType.roomType);
                     }
                 }
-
-                layoutParams = Instantiate(layoutParams);
             }
-
-            roomTypesToExteriorParams = Instantiate(roomTypesToExteriorParams);
 
             if (usePredefinedMap)
             {
@@ -208,8 +193,6 @@ namespace Cardificer
             }
             GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorParams, map, cellSize);
             SaveLayoutGenerationSettings();
-
-            templateParams = Instantiate(templateParams);
 
             // Autosave loading
             if (!SaveManager.autosaveExists) 
@@ -355,12 +338,12 @@ namespace Cardificer
         /// </summary>
         static public void SaveLayoutGenerationSettings()
         {
-            if (!Application.isEditor || layoutParams == null) { return; }
+            if (!Application.isEditor || floorParams.layoutParams == null) { return; }
 
             string fileText = "Seed: " + seed.ToString() + "\n\n";
             fileText += "Room Types and their layout\n\n";
             
-            foreach(RoomTypeToLayoutParams roomTypeToLayoutParams in layoutParams.roomTypesToLayoutParams.roomTypesToLayoutParams)
+            foreach(RoomTypeToLayoutParams roomTypeToLayoutParams in floorParams.layoutParams.roomTypesToLayoutParams.roomTypesToLayoutParams)
             {
                 fileText += "==============================================\n";
                 RoomType roomType = roomTypeToLayoutParams.roomType;
@@ -394,8 +377,8 @@ namespace Cardificer
                 }
                 fileText += "Use difficulty: " + roomType.useDifficulty.ToString() + "\n";
                 fileText += "Emergency room: " + roomType.emergencyRoom.ToString() + "\n";
-                fileText += "Number of rooms: " + roomTypeToLayoutParams.numRooms.ToString() + "\n";
-                fileText += "Number of rooms variance: " + roomTypeToLayoutParams.numRoomsVariance.ToString() + "\n";
+                fileText += "Number of rooms: " + roomTypeToLayoutParams.layoutParams.numRooms.ToString() + "\n";
+                fileText += "Number of rooms variance: " + roomTypeToLayoutParams.layoutParams.numRoomsVariance.ToString() + "\n";
             }
 
             fileText += "==============================================\n";
