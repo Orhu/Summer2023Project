@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Skaillz.EditInline;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -17,23 +18,41 @@ namespace Cardificer.FiniteStateMachine
         [Tooltip("The attacks that will be launched when the enemy attempts to attack.")] [EditInline]
         public Attack[] attacks;
 
+        [Tooltip("Whether or not this will hit everything.")]
+        public bool friendlyFire = false;
+
         /// <summary>
         /// Fire an attack
         /// </summary>
         /// <param name="stateMachine"> The stateMachine performing the attack </param>
         /// <returns></returns>
-        protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
+        protected sealed override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             stateMachine.trackedVariables.TryAdd("NumOfActiveProjectiles", 0);
+
+            if (!stateMachine.trackedVariables.ContainsKey("OnAttack"))
+            {
+                stateMachine.trackedVariables.Add("OnAttack", null);
+            }
+
             stateMachine.StartCoroutine(LaunchAttack(stateMachine));
             yield break;
+        }
+
+        /// <summary>
+        /// The objects the attacks of this will ignore.
+        /// </summary>
+        /// <param name="stateMachine"> The stateMachine performing the attack </param>
+        protected virtual List<GameObject> getIgnoredObjects(BaseStateMachine stateMachine)
+        {
+            return friendlyFire ? new List<GameObject>() : FloorGenerator.currentRoom.livingEnemies;
         }
 
         /// <summary>
         /// Performs an attack if canAct is enabled, otherwise does nothing
         /// </summary>
         /// <param name="stateMachine"> The stateMachine performing the attack </param>
-        IEnumerator LaunchAttack(BaseStateMachine stateMachine)
+        private IEnumerator LaunchAttack(BaseStateMachine stateMachine)
         {
             yield return new WaitForSeconds(actionChargeUpTime);
             if (stateMachine.canAct)
@@ -42,26 +61,15 @@ namespace Cardificer.FiniteStateMachine
                 {
                     stateMachine.trackedVariables["NumOfActiveProjectiles"] =
                         (int)stateMachine.trackedVariables["NumOfActiveProjectiles"] + 1;
-                    // if this is the last attack in the sequence we want to use its action time to enable cooldown
-                    if (i == attacks.Length - 1)
-                    {
-                        attacks[i].Play(stateMachine, FloorGenerator.currentRoom.livingEnemies, () =>
+                    attacks[i].Play(stateMachine, getIgnoredObjects(stateMachine), 
+                        () =>
                         {
+                            stateMachine.trackedVariables["NumOfActiveProjectiles"] =
+                                (int)stateMachine.trackedVariables["NumOfActiveProjectiles"] - 1;
                             stateMachine.cooldownData.cooldownReady[this] = true;
                         });
-                        
-                        yield return new WaitForSeconds(attacks[i].lifetime); // track lifetime and decrement accordingly
-                        stateMachine.trackedVariables["NumOfActiveProjectiles"] =
-                            (int)stateMachine.trackedVariables["NumOfActiveProjectiles"] - 1;
-                    } // otherwise, just play the attack and do not enable cooldown when it finishes
-                    else
-                    {
-                        attacks[i].Play(stateMachine, FloorGenerator.currentRoom.livingEnemies);
-                        
-                        yield return new WaitForSeconds(attacks[i].lifetime);  // track lifetime and decrement accordingly
-                        stateMachine.trackedVariables["NumOfActiveProjectiles"] =
-                            (int)stateMachine.trackedVariables["NumOfActiveProjectiles"] - 1;
-                    }
+
+                    (stateMachine.trackedVariables["OnAttack"] as System.Action)?.Invoke();
                 }
             }
         }

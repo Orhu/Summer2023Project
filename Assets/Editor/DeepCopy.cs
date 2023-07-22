@@ -28,7 +28,7 @@ public class DeepCopy : ScriptableWizard
     [MenuItem("Assets/Deep Copy", true)]
     private static bool isValidSelection()
     {
-        return Selection.objects.Length == 1 && Selection.objects[0] is GameObject or ScriptableObject;
+        return Selection.objects.Length == 1;
     }
 
     /// <summary>

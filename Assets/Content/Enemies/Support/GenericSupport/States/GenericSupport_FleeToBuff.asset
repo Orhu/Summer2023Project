@@ -13,4 +13,10 @@ MonoBehaviour:
   m_Name: GenericSupport_FleeToBuff
   m_EditorClassIdentifier: 
   trueState: {fileID: 11400000, guid: d1a49b0d121645542883598db495ccf1, type: 2}
-  decisions: []
+  decisions:
+  - invert: 1
+    decision: {fileID: 11400000, guid: 75a9e3dd4adad544eb76e674f05c10ff, type: 2}
+    nextOperator: 2
+  - invert: 0
+    decision: {fileID: 11400000, guid: f290b26a23e2ab741a1e4b2de201fea8, type: 2}
+    nextOperator: 0
