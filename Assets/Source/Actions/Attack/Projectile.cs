@@ -476,7 +476,9 @@ namespace Cardificer
         }
         #endregion
 
-
+        /// <summary>
+        /// Destroys this without triggering onDestroyed.
+        /// </summary>
         private void ForceDestroy()
         {
             forceDestroy = true;
