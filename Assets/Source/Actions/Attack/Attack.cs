@@ -271,7 +271,7 @@ namespace Cardificer
                         return adjIndex < attackModifier.minAttackSequenceIndex || adjIndex > attackModifier.maxAttackSequenceIndex;
                     }).ToList();
             projectile.causer = causer;
-            projectile.ignoredObjects = ignoredObjects;
+            projectile.ignoredObjects = new List<GameObject>(ignoredObjects);
             projectile.index = index;
             projectile.spawnSequence = spawnSequence;
             projectile.transform.parent = projectileRoot.transform;
