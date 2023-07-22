@@ -203,16 +203,12 @@ namespace Cardificer
 
             Vector2Int roomLocation = roomToUse.roomLocation;
             Vector2 roomWorldBottomLeftCellMiddleLocation = FloorGenerator.TransformMapToWorld(roomLocation, FloorGenerator.map.startRoom.roomLocation, FloorGenerator.cellSize);
-            Vector2 roomWorldBottomLeftLocation = roomWorldBottomLeftCellMiddleLocation - FloorGenerator.cellSize / 2;
             Vector2 roomWorldTopRightCellMiddleLocation = FloorGenerator.TransformMapToWorld(roomLocation + roomToUse.roomType.sizeMultiplier - new Vector2Int(1, 1), FloorGenerator.map.startRoom.roomLocation, FloorGenerator.cellSize);
-            Vector2 roomWorldTopRightLocation = roomWorldTopRightCellMiddleLocation - FloorGenerator.cellSize / 2 - Vector2.one;
-            roomWorldTopRightLocation += FloorGenerator.cellSize;
 
-            float newWidth = (height - extraHeight + extraHeight) * GetComponent<Camera>().aspect;
-            minPosition.x = roomWorldBottomLeftCellMiddleLocation.x - newWidth / 2;
-            minPosition.y = roomWorldBottomLeftLocation.y - extraHeight / 2 - 0.5f;
-            maxPosition.x = roomWorldTopRightCellMiddleLocation.x + newWidth / 2;
-            maxPosition.y = roomWorldTopRightLocation.y + extraHeight / 2 + 0.5f;
+            minPosition.x = roomWorldBottomLeftCellMiddleLocation.x - width / 2;
+            minPosition.y = roomWorldBottomLeftCellMiddleLocation.y - height / 2;
+            maxPosition.x = roomWorldTopRightCellMiddleLocation.x + width / 2;
+            maxPosition.y = roomWorldTopRightCellMiddleLocation.y + height / 2;
         }
 
         /// <summary>

@@ -9,7 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6608bbf3f55a6e24b893b77178b04c4a, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ad52b9f80c126441bb77679606ea8e0, type: 3}
   m_Name: ChordEffect_Bomb
   m_EditorClassIdentifier: 
-  damageFactor: 2
+  minAttackSequenceIndex: 0
+  maxAttackSequenceIndex: 3
+  explosionRadius: 2.5
+  knockback:
+    amount: 0
+    duration: 0.2
+    resetMomentum: 0
+  fuseTime: 2
+  destroyBlockers: 0
+  sticky: 0
+  inheritIgnore: 0
+  spawnMode: 1
+  bombVisuals: {fileID: 8860203955239009406, guid: c1608cf1a146c9a4aa09fee09a013618, type: 3}
+  damageData:
+    damage: 4
+    damageType: 0
+    statusEffects: []
+    invertInvincibility: 0
