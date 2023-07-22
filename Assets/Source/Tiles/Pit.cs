@@ -53,7 +53,7 @@ namespace Cardificer
             /// <returns> True if the tile does not have a pit component, false otherwise </returns>
             bool CheckLocation(Vector2Int location, Room room)
             {
-                if (location.x >= room.roomSize.x || location.x < 0 || location.y >= room.roomSize.y || location.y < 0)
+                if (location.x >= room.roomSize.x - 1 || location.x < 1 || location.y >= room.roomSize.y - 1 || location.y < 1)
                 {
                     return false;
                 }
@@ -103,19 +103,19 @@ namespace Cardificer
             // Determine the pit number
             int pitNumber = (int) edgeDirection;
 
-            if (!edgeDirection.HasFlag(EdgeDirection.Right) || edgeDirection.HasFlag(EdgeDirection.Up))
+            if (!edgeDirection.HasFlag(EdgeDirection.Right) && !edgeDirection.HasFlag(EdgeDirection.Up))
             {
                 pitNumber += (int) (cornerDirection & CornerDirection.TopRight);
             }
-            if (!edgeDirection.HasFlag(EdgeDirection.Up) || edgeDirection.HasFlag(EdgeDirection.Left))
+            if (!edgeDirection.HasFlag(EdgeDirection.Up) && !edgeDirection.HasFlag(EdgeDirection.Left))
             {
                 pitNumber += (int) (cornerDirection & CornerDirection.TopLeft);
             }
-            if (!edgeDirection.HasFlag(EdgeDirection.Left) || edgeDirection.HasFlag(EdgeDirection.Down))
+            if (!edgeDirection.HasFlag(EdgeDirection.Left) && !edgeDirection.HasFlag(EdgeDirection.Down))
             {
                 pitNumber += (int) (cornerDirection & CornerDirection.BottomLeft);
             }
-            if (!edgeDirection.HasFlag(EdgeDirection.Down) || edgeDirection.HasFlag(EdgeDirection.Right))
+            if (!edgeDirection.HasFlag(EdgeDirection.Down) && !edgeDirection.HasFlag(EdgeDirection.Right))
             {
                 pitNumber += (int) (cornerDirection & CornerDirection.BottomRight);
             }

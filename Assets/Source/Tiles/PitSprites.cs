@@ -26,7 +26,7 @@ namespace Cardificer
             if (pitOrder[spriteNumber] == -1)
             {
                 Debug.Log("Pit sprite number " + spriteNumber + " is -1!");
-                return sprites[0];
+                return sprites[pitOrder[0]];
             }
             return sprites[pitOrder[spriteNumber]];
         }
