@@ -1,18 +1,34 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PitSprites : MonoBehaviour
+namespace Cardificer
 {
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// Class that takes in a sprite number and spits out the approprate sprite
+    /// </summary>
+    [System.Serializable]
+    [CreateAssetMenu(fileName = "NewPitSprites", menuName = "Pits/PitSprites")]
+    public class PitSprites : ScriptableObject
     {
-        
-    }
+        [Tooltip("The order the sprites appear in")]
+        [SerializeField] private PitOrder pitOrder;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        [Tooltip("The sprites to use")]
+        [SerializeField] private List<Sprite> sprites;
+
+        /// <summary>
+        /// Gets a sprite with the given number
+        /// </summary>
+        /// <param name="spriteNumber"> The sprite number of the sprite </param>
+        /// <returns></returns>
+        public Sprite GetSprite(int spriteNumber)
+        {
+            if (pitOrder[spriteNumber] == -1)
+            {
+                Debug.Log("Pit sprite number " + spriteNumber + " is -1!");
+                return sprites[0];
+            }
+            return sprites[pitOrder[spriteNumber]];
+        }
     }
 }
