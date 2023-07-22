@@ -14,6 +14,9 @@ namespace Cardificer
         [Tooltip("The last index in the attack sequence to modify")] [Min(0)]
         public int maxAttackSequenceIndex = int.MaxValue;
 
+        [Tooltip("The interval on which the range of this modifier's valid indices loops")] [Min(2)]
+        public int attackSequenceLoopInterval = int.MaxValue;
+
         // The projectile this modifies
         public abstract Projectile modifiedProjectile { set; }
     }
