@@ -15,6 +15,9 @@ namespace Cardificer
         [Tooltip("Grid layout for organizing room visuals")]
         [SerializeField] private GameObject roomImageContainer;
 
+        [Tooltip("The text representing what floor you're on.")]
+        [SerializeField] private TextMeshProUGUI floorText;
+
         [Tooltip("Room visual prefab, change it's sprite to change the background color of the room visual.")]
         [SerializeField] private GameObject cellVisualPrefab;
 
@@ -45,6 +48,18 @@ namespace Cardificer
         [Tooltip("The speed of zooming in and out the map")]
         [SerializeField] private float scaleSpeed = 0.5f;
 
+        /// <summary>
+        /// At the start of each floor, assign the floor name
+        /// </summary>
+        private void Start()
+        {
+            floorText.text = "Floor " + 1;
+        }
+
+        /// <summary>
+        /// Zooms the map in and out based on input
+        /// </summary>
+        /// <param name="input">Input value used for zoom</param>
         public void OnZoom(InputValue input)
         {
 
@@ -60,6 +75,10 @@ namespace Cardificer
             roomImageContainer.transform.localScale = new Vector2(currentScale, currentScale);
         }
 
+        /// <summary>
+        /// Reset the map on button click
+        /// </summary>
+        /// <param name="input">Button used to reset the map</param>
         public void OnReset(InputValue input)
         {
             currentScale = 1;
@@ -67,7 +86,9 @@ namespace Cardificer
             roomImageContainer.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
         }
 
-
+        /// <summary>
+        /// Reset the map when the map is reenabled
+        /// </summary>
         private void OnEnable()
         {
             GetComponentInChildren<ScrollRect>().normalizedPosition = Vector3.zero;
@@ -77,6 +98,14 @@ namespace Cardificer
                 UpdateMap();
             }
 
+        }
+
+        /// <summary>
+        /// Button to swap to the deck viewer
+        /// </summary>
+        public void DeckViewerButtonEvent()
+        {
+            MenuManager.ToggleCardMenu();
         }
 
         /// <summary>
@@ -101,6 +130,7 @@ namespace Cardificer
             // Reassign the current room
             localCurrentRoom = FloorGenerator.currentRoom;
 
+
             for(int i = 0; i < FloorGenerator.map.map.GetLength(0); i++)
             {
                 for(int j = 0; j < FloorGenerator.map.map.GetLength(1); j++)
@@ -111,6 +141,7 @@ namespace Cardificer
 
                     // Apply a padding between rooms based on direction
                     Vector2 paddingVec = new Vector2();
+                    
                     if (cell.location.x < localCurrentRoom.roomLocation.x)
                     {
                         paddingVec.x = -roomPadding;
@@ -137,23 +168,34 @@ namespace Cardificer
                         paddingVec.y = roomPadding;
                     }
 
+                   /* Vector2 paddingScale;
+                    if (cell.room.generated)
+                    {
+                        paddingScale = new Vector2(cell.room.roomLocation.x - localCurrentRoom.roomLocation.x, cell.room.roomLocation.y - localCurrentRoom.roomLocation.y);
+                    }
+                    else
+                    {
+                        paddingScale = new Vector2(cell.location.x - localCurrentRoom.roomLocation.x, cell.location.y - localCurrentRoom.roomLocation.y);
+                    }
+
+                    paddingVec = new Vector2(paddingVec.x * Mathf.Abs(paddingScale.x), paddingVec.y * Mathf.Abs(paddingScale.y));*/
+                    
+
                     // Check if any given cell is visited
                     if (cell.room.generated)
                     {
-                        // Loop through that room's inner cells
-                        foreach (MapCell innerCell in cell.room.GetRoomCells(FloorGenerator.map.map))
-                        {
-                            // Instantiate the room visual
-                            GameObject cellVisual = Instantiate(cellVisualPrefab, roomImageContainer.transform);
 
-                            // Decide location of where to draw cells
-                            Vector2 drawLocation = (innerCell.location - localCurrentRoom.roomLocation);
-                            cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * drawScale) + paddingVec.x, cellVisual.transform.localPosition.y + (drawLocation.y * drawScale) + paddingVec.y);
+                        // Instantiate the room visual
+                        GameObject cellVisual = Instantiate(cellVisualPrefab, roomImageContainer.transform);
+                        
 
-                            // Modify the room visual
-                            cellVisual.GetComponentInChildren<TextMeshProUGUI>().text = innerCell.room.roomType.displayName;
-                            cellVisual.GetComponent<Image>().color = Color.gray;
-                        }
+                        // Decide location of where to draw cells
+                        Vector2 drawLocation = (cell.location - localCurrentRoom.roomLocation);
+                        cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * drawScale) + paddingVec.x, cellVisual.transform.localPosition.y + (drawLocation.y * drawScale) + paddingVec.y);
+
+                        // Modify the room visual
+                        cellVisual.GetComponentInChildren<TextMeshProUGUI>().text = cell.room.roomType.displayName;
+                        cellVisual.GetComponent<Image>().color = Color.gray;
                     }
                     // If the cell's room has not been visited
                     else
