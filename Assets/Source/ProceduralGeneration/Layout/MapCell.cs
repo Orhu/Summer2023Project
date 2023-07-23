@@ -35,18 +35,16 @@ namespace Cardificer
     }
 
     /// <summary>
-    /// Specifies what directions a room must have and which directions a room must not have, and the max number of directions it can have
+    /// The map cell that will show up in the predefined map
     /// </summary>
-    public class DirectionConstraint
+    [System.Serializable]
+    public class PredefinedMapCell
     {
-        // The directions that the room must have 
-        public Direction mustHave = Direction.None;
+        // The direction of this cell
+        public Direction direction;
 
-        // The directions that the room must not have
-        public Direction mustNotHave = Direction.None;
-
-        // The maximum number of directions the room can have
-        public int maxDirections = 4;
+        // The room type of this cell
+        public RoomType roomType;
     }
 
     /// <summary>

@@ -121,8 +121,8 @@ namespace Cardificer
                 }
                 else
                 {
-                    int variance = roomTypeToLayoutParams.numRoomsVariance;
-                    int numRooms = roomTypeToLayoutParams.numRooms;
+                    int variance = roomTypeToLayoutParams.layoutParams.numRoomsVariance;
+                    int numRooms = roomTypeToLayoutParams.layoutParams.numRooms;
                     numRooms += FloorGenerator.random.Next(-variance, variance + 1);
                     if (numRooms > 0)
                     {
@@ -159,7 +159,7 @@ namespace Cardificer
                 }
             }
 
-            for (int i = 0; i < layoutParams.numBossRooms; i++)
+            for (int i = 0; i < layoutParams.mapLayoutParams.numBossRooms; i++)
             {
                 RoomType randomBossRoom = bossRooms.GetRandomThing(FloorGenerator.random);
                 if (deadEndRooms.ContainsKey(randomBossRoom))
@@ -184,7 +184,7 @@ namespace Cardificer
             Room startRoom = GenerateStartRoom(genMap, roomContainer, mapSize, startRoomType);
 
             // Get all the branchable cells (which will start out as all the edge normal cells, then cells will be removed from them as it goes along
-            List<MapCell> branchableCells = GenerateNormalRooms(genMap, roomContainer, startRoom, normalRooms, emergencyRooms, layoutParams.preferredNumDoors, layoutParams.strictnessNumDoors);
+            List<MapCell> branchableCells = GenerateNormalRooms(genMap, roomContainer, startRoom, normalRooms, emergencyRooms, layoutParams.mapLayoutParams.preferredNumDoors, layoutParams.mapLayoutParams.strictnessNumDoors);
 
             if (!GenerateDeadEnds(genMap, roomContainer, startRoom.startLocation, branchableCells, deadEndRooms))
             {
@@ -465,11 +465,9 @@ namespace Cardificer
 
             if (room.roomType.useRandomOffset)
             {
-                //bool checkHorizontalOffset = !(generatedCell.direction.HasFlag(Direction.Left) || generatedCell.direction.HasFlag(Direction.Right));
-                //bool checkVerticalOffset = !(generatedCell.direction.HasFlag(Direction.Up) || generatedCell.direction.HasFlag(Direction.Down));
-                for (int i = 0; i < room.roomType.sizeMultiplier.x; i++)// && (i == 0 || checkHorizontalOffset); i++)
+                for (int i = 0; i < room.roomType.sizeMultiplier.x; i++)
                 {
-                    for (int j = 0; j < room.roomType.sizeMultiplier.y; j++) //&& (j == 0 || checkVerticalOffset); j++)
+                    for (int j = 0; j < room.roomType.sizeMultiplier.y; j++)
                     {
                         // -i and -j because 0, 0 is bottom left, and we need to move the room down left in order to not lose the room
                         possibleOffsets.Add(new Vector2Int(-i, -j));

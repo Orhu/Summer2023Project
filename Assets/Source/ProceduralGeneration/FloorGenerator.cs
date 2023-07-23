@@ -39,31 +39,38 @@ namespace Cardificer
         // Event called when the room is changed
         [SerializeField] static public System.Action onRoomChange;
 
+        // Whether or not the generation should use a predefined map
+        [SerializeField] private bool _usePredefinedMap;
+        static public bool usePredefinedMap
+        {
+            set => instance._usePredefinedMap = value;
+            get => instance._usePredefinedMap;
+        }
+
+        // The predefined map
+        [SerializeField] private PredefinedMap _predefinedMap;
+        static public PredefinedMap predefinedMap
+        {
+            set => instance._predefinedMap = value;
+            get => instance._predefinedMap;
+        }
+
+        // The start location in the predefined map
+        [SerializeField] private Vector2Int _predefinedMapStartLoc;
+        static public Vector2Int predefinedMapStartLoc
+        {
+            set => instance._predefinedMapStartLoc = value;
+            get => instance._predefinedMapStartLoc;
+        }
+
         [Header("Specific Params")]
 
-        [Tooltip("The generation Params for the layout of this floor")] [EditInline]
-        [SerializeField] private LayoutParams _layoutParams;
-        static public LayoutParams layoutParams
+        [Tooltip("The floor generator params")]
+        [SerializeField] private FloorParams _floorParams;
+        static public FloorParams floorParams
         {
-            get => instance._layoutParams;
-            private set => instance._layoutParams = value;
-        }
-
-        [Tooltip("A dictionary that holds room types and their associated exterior generation Params for this floor")]
-        [EditInline]
-        [SerializeField] private RoomTypesToRoomExteriorParams _roomTypesToExteriorParams;
-        static public RoomTypesToRoomExteriorParams roomTypesToExteriorParams
-        {
-            get => instance._roomTypesToExteriorParams;
-            private set => instance._roomTypesToExteriorParams = value;
-        }
-
-        [Tooltip("The template generation Params for this floor")] [EditInline]
-        [SerializeField] private TemplateParams _templateParams;
-        static public TemplateParams templateParams
-        {
-            get => instance._templateParams;
-            private set => instance._templateParams = value;
+            private set => instance._floorParams = value;
+            get => instance._floorParams;
         }
 
         // The random instance
@@ -89,6 +96,36 @@ namespace Cardificer
 
         // The instance
         private static FloorGenerator instance;
+
+        /// <summary>
+        /// Wrapper class for a list of map cells
+        /// </summary>
+        [System.Serializable]
+        public class PredefinedMap
+        {
+            /// <summary>
+            /// Inner wrapper class for a list of map cells
+            /// </summary>
+            [System.Serializable]
+            public class InnerPredefinedMap
+            {
+                public PredefinedMapCell[] innerArray;
+            }
+            /// The list of map cells
+            public InnerPredefinedMap[] predefinedMap;
+
+            /// <summary>
+            /// Indexer 
+            /// </summary>
+            /// <param name="i"> first index </param>
+            /// <param name="j"> second index </param>
+            /// <returns> The predefined map cell at this index </returns>
+            public PredefinedMapCell this[int i, int j]
+            {
+                set => predefinedMap[i].innerArray[j] = value;
+                get => predefinedMap[i].innerArray[j];
+            }
+        }
 
         /// <summary>
         /// Sets up the singleton
@@ -120,31 +157,42 @@ namespace Cardificer
 
             random = new System.Random(seed);
 
+            floorParams = Instantiate(floorParams);
+            floorParams.ParseParams();
+            LayoutParams layoutParams = floorParams.layoutParams;
+            TemplateParams templateParams = floorParams.templateParams;
+            RoomTypesToRoomExteriorParams roomTypesToExteriorParams = floorParams.exteriorParams;
+
             Dictionary<RoomType, int> templateCounts = new Dictionary<RoomType, int>();
-            foreach (RoomTypeToLayoutParams roomType in layoutParams.roomTypesToLayoutParams.roomTypesToLayoutParams)
+            if (layoutParams != null)
             {
-                templateCounts.Add(roomType.roomType, 0);
-                try
+                foreach (RoomTypeToLayoutParams roomType in layoutParams.roomTypesToLayoutParams.roomTypesToLayoutParams)
                 {
-                    foreach (DifficultyToTemplates difficultyToTemplates in templateParams.templatesPool.At(roomType.roomType).difficultiesToTemplates)
+                    templateCounts.Add(roomType.roomType, 0);
+                    try
                     {
-                        templateCounts[roomType.roomType] += difficultyToTemplates.templates.Count;
+                        foreach (DifficultyToTemplates difficultyToTemplates in templateParams.templatesPool.At(roomType.roomType).difficultiesToTemplates)
+                        {
+                            templateCounts[roomType.roomType] += difficultyToTemplates.templates.Count;
+                        }
                     }
-                }
-                catch
-                {
-                    Debug.LogError("No templates associated with room type " + roomType.roomType);
+                    catch
+                    {
+                        Debug.LogError("No templates associated with room type " + roomType.roomType);
+                    }
                 }
             }
 
-            layoutParams = Instantiate(layoutParams);
-            roomTypesToExteriorParams = Instantiate(roomTypesToExteriorParams);
-
-            map = GetComponent<LayoutGenerator>().Generate(layoutParams, templateCounts);
+            if (usePredefinedMap)
+            {
+                map = ParsePredefinedMap();
+            }
+            else
+            {
+                map = GetComponent<LayoutGenerator>().Generate(layoutParams, templateCounts);
+            }
             GetComponent<RoomExteriorGenerator>().Generate(roomTypesToExteriorParams, map, cellSize);
             SaveLayoutGenerationSettings();
-
-            templateParams = Instantiate(templateParams);
 
             // Autosave loading
             if (!SaveManager.autosaveExists) 
@@ -172,6 +220,66 @@ namespace Cardificer
             lastRoom.Enter(callCleared: false);
 
             onGenerated?.Invoke();
+        }
+
+        /// <summary>
+        /// Takes the predefined map and makes a normal map out of it
+        /// </summary>
+        /// <returns> The map created from the predefined map </returns>
+        private Map ParsePredefinedMap()
+        {
+            GameObject roomContainer = new GameObject();
+            roomContainer.transform.parent = transform;
+            roomContainer.name = "Room Container";
+
+            MapCell[,] genMap = new MapCell[predefinedMap.predefinedMap.Length, predefinedMap.predefinedMap[0].innerArray.Length];
+
+            // Initialize the gen map
+            for (int i = 0; i < predefinedMap.predefinedMap.Length; i++)
+            {
+                for (int j = 0; j < predefinedMap.predefinedMap[0].innerArray.Length; j++)
+                {
+                    genMap[i, j] = new MapCell();
+                    genMap[i, j].location = new Vector2Int(i, j);
+                    genMap[i, j].direction = predefinedMap[i, j].direction;
+                }
+            }
+
+            // Generate the room types in the predefined map (assuming the room types are only placed in their bottom left locations
+            for (int i = 0; i < predefinedMap.predefinedMap.Length; i++)
+            {
+                for (int j = 0; j < predefinedMap.predefinedMap[0].innerArray.Length; j++)
+                {
+                    if (predefinedMap[i, j].roomType != null)
+                    {
+                        RoomType roomType = predefinedMap[i, j].roomType;
+                        GameObject room = new GameObject();
+                        room.name = roomType.displayName + " Room";
+                        room.transform.parent = roomContainer.transform;
+                        room.AddComponent<TemplateGenerator>(); // Should probably make a prefab but whatevs
+                        Room roomComponent = room.AddComponent<Room>();
+                        roomComponent.roomType = roomType;
+                        roomComponent.startLocation = predefinedMapStartLoc;
+                        roomComponent.roomLocation = new Vector2Int(i, j);
+
+                        for (int k = 0; k < roomComponent.roomType.sizeMultiplier.x; k++)
+                        {
+                            for (int l = 0; l < roomComponent.roomType.sizeMultiplier.y; l++)
+                            {
+                                MapCell cell = genMap[k + roomComponent.roomLocation.x, l + roomComponent.roomLocation.y];
+                                cell.room = roomComponent;
+                                cell.visited = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            Map map = new Map();
+            map.map = genMap;
+            map.mapSize = new Vector2Int(predefinedMap.predefinedMap.Length, predefinedMap.predefinedMap[0].innerArray.Length);
+            map.startRoom = genMap[predefinedMapStartLoc.x, predefinedMapStartLoc.y].room;
+            return map;
         }
 
         /// <summary>
@@ -230,11 +338,12 @@ namespace Cardificer
         /// </summary>
         static public void SaveLayoutGenerationSettings()
         {
-            if (!Application.isEditor) return;
+            if (!Application.isEditor || floorParams.layoutParams == null) { return; }
+
             string fileText = "Seed: " + seed.ToString() + "\n\n";
             fileText += "Room Types and their layout\n\n";
             
-            foreach(RoomTypeToLayoutParams roomTypeToLayoutParams in layoutParams.roomTypesToLayoutParams.roomTypesToLayoutParams)
+            foreach(RoomTypeToLayoutParams roomTypeToLayoutParams in floorParams.layoutParams.roomTypesToLayoutParams.roomTypesToLayoutParams)
             {
                 fileText += "==============================================\n";
                 RoomType roomType = roomTypeToLayoutParams.roomType;
@@ -268,8 +377,8 @@ namespace Cardificer
                 }
                 fileText += "Use difficulty: " + roomType.useDifficulty.ToString() + "\n";
                 fileText += "Emergency room: " + roomType.emergencyRoom.ToString() + "\n";
-                fileText += "Number of rooms: " + roomTypeToLayoutParams.numRooms.ToString() + "\n";
-                fileText += "Number of rooms variance: " + roomTypeToLayoutParams.numRoomsVariance.ToString() + "\n";
+                fileText += "Number of rooms: " + roomTypeToLayoutParams.layoutParams.numRooms.ToString() + "\n";
+                fileText += "Number of rooms variance: " + roomTypeToLayoutParams.layoutParams.numRoomsVariance.ToString() + "\n";
             }
 
             fileText += "==============================================\n";

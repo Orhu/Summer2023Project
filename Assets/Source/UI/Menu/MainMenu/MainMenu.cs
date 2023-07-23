@@ -77,6 +77,8 @@ namespace Cardificer
             }
             else
             {
+                // Ensure player sees the manual again on new game
+                PlayerPrefs.SetFloat("seenManual", 0);
                 // initiate new game
                 TransitionToFirstLevel();
             }
@@ -89,6 +91,8 @@ namespace Cardificer
         {
             // Clear all current saves
             SaveManager.ClearTransientSaves();
+            // Ensure player sees the manual again on new game
+            PlayerPrefs.SetFloat("seenManual", 0);
             // Transition
             TransitionToFirstLevel();
         }

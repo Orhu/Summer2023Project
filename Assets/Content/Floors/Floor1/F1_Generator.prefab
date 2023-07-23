@@ -50,12 +50,21 @@ MonoBehaviour:
   _randomizeSeed: 1
   _generationSettingsFileName: GenerationSettings
   _cellSize: {x: 17, y: 11}
-  _onRoomChange:
-    m_PersistentCalls:
-      m_Calls: []
-  _layoutParams: {fileID: 11400000, guid: b6bc28eb883e9604a93e3a7353b6c1f7, type: 2}
-  _templateParams: {fileID: 11400000, guid: edf9c76c7f360e4459a24604646906f9, type: 2}
-  _roomTypesToExteriorParams: {fileID: 11400000, guid: d02e7153e87fabd4394bee407c272248, type: 2}
+  _usePredefinedMap: 0
+  _predefinedMap:
+    predefinedMap:
+    - innerArray:
+      - direction: 0
+        roomType: {fileID: 0}
+      - direction: 0
+        roomType: {fileID: 0}
+    - innerArray:
+      - direction: 0
+        roomType: {fileID: 0}
+      - direction: 0
+        roomType: {fileID: 0}
+  _predefinedMapStartLoc: {x: 0, y: 0}
+  _floorParams: {fileID: 11400000, guid: a6c513223f4d85b419ee15800ffadfaa, type: 2}
 --- !u!114 &6816320395962278880
 MonoBehaviour:
   m_ObjectHideFlags: 0

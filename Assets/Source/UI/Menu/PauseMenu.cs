@@ -39,6 +39,14 @@ namespace Cardificer
         {
 
         }
+        
+        /// <summary>
+        /// When the InstructionManual button is clicked, open the Instruction Manual Menu
+        /// </summary>
+        public void InstructionManual()
+        {
+            MenuManager.ToggleInstructionManual();
+        }
 
         /// <summary>
         /// Asks for the user to confirm they want to quit,

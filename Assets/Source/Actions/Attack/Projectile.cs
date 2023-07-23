@@ -231,6 +231,7 @@ namespace Cardificer
             // Setup collision
             rigidBody = GetComponent<Rigidbody2D>();
             shape.CreateCollider(gameObject);
+            ignoredObjects.Add(actor.GetActionSourceTransform().gameObject);
             ignoredObjects = ignoredObjects;
 
 
@@ -475,7 +476,9 @@ namespace Cardificer
         }
         #endregion
 
-
+        /// <summary>
+        /// Destroys this without triggering onDestroyed.
+        /// </summary>
         private void ForceDestroy()
         {
             forceDestroy = true;

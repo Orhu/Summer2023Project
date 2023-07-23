@@ -7,13 +7,22 @@ namespace Cardificer
     /// A dictionary that maps room types to exterior generation params
     /// </summary>
     [System.Serializable]
-    [CreateAssetMenu(fileName = "NewRoomTypesToRoomExteriorParams", menuName = "Generation/RoomTypesToRoomExteriorParams")]
-    public class RoomTypesToRoomExteriorParams : ScriptableObject
+    public class RoomTypesToRoomExteriorParams
     {
+        [Header("Tiles")]
+        [Tooltip("The wall tile")]
+        public Tile wallTile;
+
+        [Tooltip("The door tile")]
+        public Tile doorTile;
+
+        [Tooltip("The floor prefab")]
+        public GameObject floorTile;
+
         [Tooltip("The defuault exterior params to use if a given room type doesn't have specified room exterior params")]
         [SerializeField] public RoomExteriorParams defaultRoomExteriorParams;
 
-        [Tooltip("A list of room types to exterior generation Params")]
+        [Tooltip("A list of room types to exterior generation Params. The higher in this list a room type is, the higher priority its doors will have.")]
         [SerializeField] public List<RoomTypeToRoomExteriorParams> roomTypesToRoomExteriorParams;
 
         /// <summary>
@@ -51,6 +60,36 @@ namespace Cardificer
 
             return false;
         }
+
+        /// <summary>
+        /// Adds a room type and its exterior params
+        /// </summary>
+        /// <param name="roomTypeToRoomExteriorParams"> The room type and its exterior params </param>
+        public void Add(RoomTypeToRoomExteriorParams roomTypeToRoomExteriorParams)
+        {
+            roomTypesToRoomExteriorParams.Add(roomTypeToRoomExteriorParams);
+        }
+
+        /// <summary>
+        /// Adds a room type and its exterior params
+        /// </summary>
+        /// <param name="roomType"> The room type </param>
+        /// <param name="exteriorParams"> The exterior params </param>
+        public void Add(RoomType roomType, RoomExteriorParams exteriorParams)
+        {
+            roomTypesToRoomExteriorParams.Add(new RoomTypeToRoomExteriorParams(roomType, exteriorParams));
+        }    
+
+        /// <summary>
+        /// Resets the room type to room exterior params list
+        /// </summary>
+        public void Reset()
+        {
+            foreach (RoomTypeToRoomExteriorParams roomTypeToRoomExteriorParams in roomTypesToRoomExteriorParams)
+            {
+                roomTypeToRoomExteriorParams.roomExteriorParams.Reset();
+            }
+        }
     }
 
     /// <summary>
@@ -64,5 +103,16 @@ namespace Cardificer
 
         [Tooltip("The generation Params associated with that type")]
         [SerializeField] public RoomExteriorParams roomExteriorParams;
+
+        /// <summary>
+        /// Constructor that takes a room type and room exterior params 
+        /// </summary>
+        /// <param name="roomType"> The room type </param>
+        /// <param name="roomExteriorParams"> The room exterior params </param>
+        public RoomTypeToRoomExteriorParams(RoomType roomType, RoomExteriorParams roomExteriorParams)
+        {
+            this.roomType = roomType;
+            this.roomExteriorParams = roomExteriorParams;
+        }
     }
 }
