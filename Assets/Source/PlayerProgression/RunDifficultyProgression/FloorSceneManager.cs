@@ -69,10 +69,10 @@ public class FloorSceneManager : ScriptableObject
     [System.Serializable]
     private struct SceneNameToFloorName
     {
-        // The name of the scene
+        [Tooltip("The name of the scene")]
         public string sceneName;
 
-        // The name of the floor
+        [Tooltip("The name of the scene")]
         public string floorName;
     }
 
