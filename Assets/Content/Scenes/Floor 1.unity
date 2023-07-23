@@ -123,6 +123,48 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &14253351 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 608508398850829056, guid: 8632f6f27e13c5a4db34ed52aaad2360, type: 3}
+  m_PrefabInstance: {fileID: 548517992}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &14253362 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 2591183591901039891, guid: 8632f6f27e13c5a4db34ed52aaad2360, type: 3}
+  m_PrefabInstance: {fileID: 548517992}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &14253366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 14253351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8edf2d55ca588547881b7472e926510, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TrailName: playerTrail
+  m_CurrentTrailPreset: {fileID: 11400000, guid: 0d655f4f10ac9864fbb7b09750fbaee2, type: 2}
+  m_TrailParent: {fileID: 0}
+  m_SpriteToDuplicate: {fileID: 14253362}
+  m_Layer: 0
+  m_ZMoveStep: 0.0001
+  m_ZMoveMax: 0.9999
+  m_HideTrailOnDisabled: 1
+  m_TrailActivationCondition: 0
+  m_TrailDeactivationCondition: 0
+  m_StartIfUnderVelocity: 0
+  m_VelocityStartIsLocalSpace: 0
+  m_VelocityNeededToStart: 0
+  m_StopIfOverVelocity: 0
+  m_VelocityStopIsLocalSpace: 0
+  m_VelocityNeededToStop: 0
+  m_TrailActivationDuration: 0
+  m_SortingLayerID: 0
+  m_OrderInSortingLayer: 0
+  m_DisabledElementsInTrail: []
 --- !u!1001 &52533540
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -903,15 +945,15 @@ PrefabInstance:
     - target: {fileID: 2036930054678835856, guid: 567d3dab6ca66fc4d924949862f27478, type: 3}
       propertyPath: cards.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 3bc54e870885deb409c76aac87f972e3, type: 2}
+      objectReference: {fileID: 11400000, guid: 3604aa74684ef8c40bedd9f7a90bf160, type: 2}
     - target: {fileID: 2036930054678835856, guid: 567d3dab6ca66fc4d924949862f27478, type: 3}
       propertyPath: cards.Array.data[1]
       value: 
-      objectReference: {fileID: 11400000, guid: 3bc54e870885deb409c76aac87f972e3, type: 2}
+      objectReference: {fileID: 11400000, guid: 3604aa74684ef8c40bedd9f7a90bf160, type: 2}
     - target: {fileID: 2036930054678835856, guid: 567d3dab6ca66fc4d924949862f27478, type: 3}
       propertyPath: cards.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: 3bc54e870885deb409c76aac87f972e3, type: 2}
+      objectReference: {fileID: 11400000, guid: 3604aa74684ef8c40bedd9f7a90bf160, type: 2}
     - target: {fileID: 2036930054678835856, guid: 567d3dab6ca66fc4d924949862f27478, type: 3}
       propertyPath: cards.Array.data[3]
       value: 

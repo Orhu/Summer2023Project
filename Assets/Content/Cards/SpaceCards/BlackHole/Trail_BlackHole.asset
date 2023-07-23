@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Trail_BlackHole
   m_EditorClassIdentifier: 
   m_SpecialMat: {fileID: 0}
-  m_UseOnlyAlpha: 0
+  m_UseOnlyAlpha: 1
   m_TrailColor:
     serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
+    key0: {r: 1, g: 1, b: 1, a: 0.5019608}
+    key1: {r: 1, g: 1, b: 1, a: 0.5019608}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -47,21 +47,57 @@ MonoBehaviour:
   m_TrailMaxLength: 10
   m_TrailDuration: 0.5
   m_TrailElementSpawnCondition: 0
-  m_TimeBetweenSpawns: 0
+  m_TimeBetweenSpawns: 0.25
   m_FramesBetweenSpawns: 0
   m_DistanceBetweenSpawns: 0
   m_DistanceCorrection: 1
-  m_UseSizeModifier: 0
+  m_UseSizeModifier: 1
   m_UsePositionModifier: 0
   m_TrailSizeX:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   m_TrailSizeY:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
