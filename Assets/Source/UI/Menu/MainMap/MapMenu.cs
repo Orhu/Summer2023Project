@@ -21,11 +21,11 @@ namespace Cardificer
         [Tooltip("Room visual prefab, change it's sprite to change the background color of the room visual.")]
         [SerializeField] private GameObject cellVisualPrefab;
 
-        [Tooltip("Sprite representing a blank room space")]
-        [SerializeField] private Sprite blankRoomSprite;
+        [Tooltip("Prefab visual for vertical doors")]
+        [SerializeField] private GameObject doorVerticalPrefab;
 
-        [Tooltip("Sprite representing an non visited room")]
-        [SerializeField] private Sprite nonVisitedRoomSprite;
+        [Tooltip("Prefab visual for horizontal doors")]
+        [SerializeField] private GameObject doorHorizontalPrefab;
 
         // A local reference to the current room, observes current room changes
         private Room localCurrentRoom;
@@ -163,8 +163,7 @@ namespace Cardificer
 
                             Vector2 drawLocation = cell.location - localCurrentRoom.roomLocation;
                             cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * cellSize.x), cellVisual.transform.localPosition.y + (drawLocation.y * cellSize.y));
-
-                            cellVisual.GetComponent<Image>().sprite = nonVisitedRoomSprite;
+                            cellVisual.GetComponent<Image>().color = new Color(0.25f, 0.25f, 0.25f, 0.85f);
                         }
                     }
                     // draw all visited cells
@@ -215,8 +214,41 @@ namespace Cardificer
                             cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * cellSize.x), cellVisual.transform.localPosition.y + (drawLocation.y * cellSize.y)) + paddingVec;
 
                             // Modify the room visual
-                            cellVisual.GetComponentInChildren<TextMeshProUGUI>().text = cell.room.roomType.displayName;
-                            cellVisual.GetComponent<Image>().color = Color.gray;
+                            if (innerCell.room.roomType.roomTypeSprite)
+                            {
+                                cellVisual.transform.GetChild(0).GetComponent<Image>().enabled = true;
+                                cellVisual.transform.GetChild(0).GetComponent<Image>().sprite = innerCell.room.roomType.roomTypeSprite;
+                            }
+                            
+
+                            // Place doors
+                            if (innerCell.direction.HasFlag(Direction.Up))
+                            {
+                                // place a door up
+                                GameObject doorVisual = Instantiate(doorHorizontalPrefab, cellVisual.transform);
+                                doorVisual.transform.localPosition = new Vector2(doorVisual.transform.localPosition.x - paddingVec.x, doorVisual.transform.localPosition.y + (cellVisual.GetComponent<RectTransform>().sizeDelta.y / 2));
+                            }
+
+                            if (innerCell.direction.HasFlag(Direction.Down))
+                            {
+                                // place a door up
+                                GameObject doorVisual = Instantiate(doorHorizontalPrefab, cellVisual.transform);
+                                doorVisual.transform.localPosition = new Vector2(doorVisual.transform.localPosition.x - paddingVec.x, doorVisual.transform.localPosition.y - (cellVisual.GetComponent<RectTransform>().sizeDelta.y / 2));
+                            }
+
+                            if (innerCell.direction.HasFlag(Direction.Left))
+                            {
+                                // place a door up
+                                GameObject doorVisual = Instantiate(doorVerticalPrefab, cellVisual.transform);
+                                doorVisual.transform.localPosition = new Vector2(doorVisual.transform.localPosition.x - (cellVisual.GetComponent<RectTransform>().sizeDelta.x / 2), doorVisual.transform.localPosition.y - paddingVec.y);
+                            }
+
+                            if (innerCell.direction.HasFlag(Direction.Right))
+                            {
+                                // place a door up
+                                GameObject doorVisual = Instantiate(doorVerticalPrefab, cellVisual.transform);
+                                doorVisual.transform.localPosition = new Vector2(doorVisual.transform.localPosition.x + (cellVisual.GetComponent<RectTransform>().sizeDelta.x / 2), doorVisual.transform.localPosition.y - paddingVec.y) ;
+                            }
                         }
                     }
                 }
