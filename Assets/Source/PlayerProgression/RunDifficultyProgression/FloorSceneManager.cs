@@ -58,10 +58,6 @@ public class FloorSceneManager : ScriptableObject
     }
 
     // The instance of the floor order.
-    public static bool hasFloorBeenLoaded { private set; get; } = false;
-
-
-    // The instance of the floor order.
     private static FloorSceneManager instance;
 
 
@@ -91,7 +87,6 @@ public class FloorSceneManager : ScriptableObject
         currentFloor = floorNumber;
         onFloorLoaded?.Invoke();
         SceneManager.LoadScene(floors[floorNumber].sceneName);
-        hasFloorBeenLoaded = true;
         return true;
     }
 

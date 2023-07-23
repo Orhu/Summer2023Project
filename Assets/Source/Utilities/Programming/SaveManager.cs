@@ -526,7 +526,7 @@ namespace Cardificer
                 // Update everything except the current floor number (this is to ensure the floor generator understands that's it's not being loaded
                 // from an autosave load, the current floor number will be updated when the autosave happens)
                 AutosaveData saveData = latestAutosave;
-                if (saveData != null && FloorSceneManager.hasFloorBeenLoaded)
+                if (saveData != null)
                 {
                     Autosave();
                     saveData.visitedRooms.Clear();
