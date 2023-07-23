@@ -133,6 +133,9 @@ namespace Cardificer
             // Keep track of a list of seen cells when drawing all cells each update
             List<MapCell> seenCells = new List<MapCell>();
 
+            // Keep list of seen rooms so as to not duplicate room sprites
+            List<Room> seenRooms = new List<Room>();
+
             for(int i = 0; i < FloorGenerator.map.map.GetLength(0); i++)
             {
                 for(int j = 0; j < FloorGenerator.map.map.GetLength(1); j++)
@@ -213,9 +216,10 @@ namespace Cardificer
                             Vector2 drawLocation = (innerCell.location - localCurrentRoom.roomLocation);
                             cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * cellSize.x), cellVisual.transform.localPosition.y + (drawLocation.y * cellSize.y)) + paddingVec;
 
-                            // Modify the room visual
-                            if (innerCell.room.roomType.roomTypeSprite)
+   
+                            if (!seenRooms.Contains(innerCell.room) && innerCell.room.roomType.roomTypeSprite)
                             {
+                                seenRooms.Add(innerCell.room);
                                 cellVisual.transform.GetChild(0).GetComponent<Image>().enabled = true;
                                 cellVisual.transform.GetChild(0).GetComponent<Image>().sprite = innerCell.room.roomType.roomTypeSprite;
                             }
