@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0373c586c4d117a45a6d04561b89fa60, type: 3}
-  m_Name: GenericTeleporter_SetTargetToPointAroundPlayer
+  m_Script: {fileID: 11500000, guid: eabd4dbd5b080a640bd3c050fac04c55, type: 3}
+  m_Name: GobboChieftain_Stage2Attack
   m_EditorClassIdentifier: 
-  maxDistance: 3.5
-  minDistance: 2.5
-  targetType: 1
-  cooldown: 0
+  actionChargeUpTime: 2
+  attacks:
+  - {fileID: 11400000, guid: 0571b978e95198243a7ed6ec9fce8321, type: 2}
+  friendlyFire: 0
