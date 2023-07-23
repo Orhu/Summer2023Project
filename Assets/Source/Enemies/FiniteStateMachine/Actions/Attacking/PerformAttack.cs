@@ -10,16 +10,37 @@ namespace Cardificer.FiniteStateMachine
     /// Represents an action that fires an attack
     /// </summary>
     [CreateAssetMenu(menuName = "FSM/Actions/Attacking/Perform Attack")]
-    public class PerformAttack : SingleAction
+    public class PerformAttack : PerformAction
+    {
+        [Tooltip("The attacks that will be launched when the enemy attempts to attack.")]
+        [SerializeField] private Action[] attacks;
+
+        /// <summary>
+        /// Gets the attacks that will be used by this
+        /// </summary>
+        /// <returns> The attacks that will be launched when the enemy attempts to attack. </returns>
+        public override Action[] GetAttacks()
+        { 
+            return attacks; 
+        }
+    }
+
+    /// <summary>
+    /// Represents an action that fires an attack
+    /// </summary>
+    public abstract class PerformAction : SingleAction
     {
         [Tooltip("After requesting an action, how long does it take for the action to be performed?")]
         public float actionChargeUpTime;
 
-        [Tooltip("The attacks that will be launched when the enemy attempts to attack.")] [EditInline]
-        public Action[] attacks;
-
         [Tooltip("Whether or not this will hit everything.")]
         public bool friendlyFire = false;
+
+        /// <summary>
+        /// Gets the attacks that will be used by this
+        /// </summary>
+        /// <returns> The attacks that will be launched when the enemy attempts to attack. </returns>
+        public abstract Action[] GetAttacks();
 
         /// <summary>
         /// Fire an attack
@@ -58,9 +79,9 @@ namespace Cardificer.FiniteStateMachine
             if (stateMachine.canAct)
             {
                 bool attackPlayed = false;
-                for (int i = 0; i < attacks.Length; i++)
+                foreach (Action action in GetAttacks())
                 {
-                    if (attacks[i] is Attack attack)
+                    if (action is Attack attack)
                     {
                         stateMachine.trackedVariables["NumOfActiveProjectiles"] =
                             (int)stateMachine.trackedVariables["NumOfActiveProjectiles"] + 1;
@@ -75,7 +96,7 @@ namespace Cardificer.FiniteStateMachine
                     }
                     else
                     {
-                        attacks[i].Play(stateMachine, getIgnoredObjects(stateMachine));
+                        action.Play(stateMachine, getIgnoredObjects(stateMachine));
                     }
 
                 }

@@ -222,6 +222,15 @@ namespace Cardificer
             onGenerated?.Invoke();
         }
 
+        // Unbinds events
+        private void OnDestroy()
+        {
+            foreach (System.Delegate @delegate in onGenerated.GetInvocationList())
+            {
+                onGenerated -= (System.Action)@delegate;
+            }
+        }
+
         /// <summary>
         /// Takes the predefined map and makes a normal map out of it
         /// </summary>
