@@ -24,32 +24,13 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> The stateMachine to use </param>
         public void Evaluate(BaseStateMachine stateMachine)
         {
-            if (Execute(stateMachine))
+            if (decisions.Decide(stateMachine))
             {
-                // true and not inverted, change to true state
-                StateTransition(stateMachine);
+                stateMachine.currentState.OnStateExit(stateMachine);
+                stateMachine.currentState = trueState;
+                stateMachine.timeSinceTransition = 0f;
+                stateMachine.currentState.OnStateEnter(stateMachine);
             }
-        }
-
-        /// <summary>
-        /// Transitions to the true state
-        /// </summary>
-        /// <param name="stateMachine"> The state machine to use </param>
-        private void StateTransition(BaseStateMachine stateMachine)
-        {
-            stateMachine.currentState.OnStateExit(stateMachine);
-            stateMachine.currentState = trueState;
-            stateMachine.timeSinceTransition = 0f;
-            stateMachine.currentState.OnStateEnter(stateMachine);
-        }
-
-        /// <summary>
-        /// Execute this transition
-        /// </summary>
-        /// <param name="machine"> The stateMachine to use </param>
-        protected bool Execute(BaseStateMachine machine)
-        {
-            return decisions.Decide(machine);
         }
     }
 }

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a35acca2b866a4a854023149e2de6f, type: 3}
+  m_Name: GenericMiner_AttackingToBurrowing
+  m_EditorClassIdentifier: 
+  trueState: {fileID: 11400000, guid: 4fa73f0aa1500df49a4d43369fafeeb4, type: 2}
+  decisions:
+  - invert: 1
+    decision: {fileID: 11400000, guid: 4caf72e52c0eec54aa67fad3bd15ff96, type: 2}
+    nextOperator: 2
+  - invert: 0
+    decision: {fileID: 11400000, guid: 92268f08114b22243bf540a69785644f, type: 2}
+    nextOperator: 1
+  - invert: 1
+    decision: {fileID: 11400000, guid: 90db055540e52ef449cccbfc53ced815, type: 2}
+    nextOperator: 2
+  - invert: 0
+    decision: {fileID: 11400000, guid: 92268f08114b22243bf540a69785644f, type: 2}
+    nextOperator: 0

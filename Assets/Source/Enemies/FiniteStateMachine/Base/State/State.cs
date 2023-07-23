@@ -57,8 +57,8 @@ using UnityEngine;
          /// </summary>
          /// <param name="stateMachine"> The state machine to be used. </param>
          public void OnStateExit(BaseStateMachine stateMachine)
-         {
-             foreach (var action in exitActions)
+        {
+            foreach (var action in exitActions)
              {
                  action.Execute(stateMachine);
              }

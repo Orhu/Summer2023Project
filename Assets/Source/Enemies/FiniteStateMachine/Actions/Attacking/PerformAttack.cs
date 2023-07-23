@@ -16,7 +16,7 @@ namespace Cardificer.FiniteStateMachine
         public float actionChargeUpTime;
 
         [Tooltip("The attacks that will be launched when the enemy attempts to attack.")] [EditInline]
-        public Attack[] attacks;
+        public Action[] attacks;
 
         [Tooltip("Whether or not this will hit everything.")]
         public bool friendlyFire = false;
@@ -57,20 +57,38 @@ namespace Cardificer.FiniteStateMachine
             yield return new WaitForSeconds(actionChargeUpTime);
             if (stateMachine.canAct)
             {
+                bool attackPlayed = false;
                 for (int i = 0; i < attacks.Length; i++)
                 {
-                    stateMachine.trackedVariables["NumOfActiveProjectiles"] =
-                        (int)stateMachine.trackedVariables["NumOfActiveProjectiles"] + 1;
-                    attacks[i].Play(stateMachine, getIgnoredObjects(stateMachine), 
-                        () =>
-                        {
-                            stateMachine.trackedVariables["NumOfActiveProjectiles"] =
-                                (int)stateMachine.trackedVariables["NumOfActiveProjectiles"] - 1;
-                            stateMachine.cooldownData.cooldownReady[this] = true;
-                        });
+                    if (attacks[i] is Attack attack)
+                    {
+                        stateMachine.trackedVariables["NumOfActiveProjectiles"] =
+                            (int)stateMachine.trackedVariables["NumOfActiveProjectiles"] + 1;
+                        attack.Play(stateMachine, getIgnoredObjects(stateMachine),
+                            () =>
+                            {
+                                stateMachine.trackedVariables["NumOfActiveProjectiles"] =
+                                    (int)stateMachine.trackedVariables["NumOfActiveProjectiles"] - 1;
+                                stateMachine.cooldownData.cooldownReady[this] = true;
+                            });
+                        attackPlayed = true;
+                    }
+                    else
+                    {
+                        attacks[i].Play(stateMachine, getIgnoredObjects(stateMachine));
+                    }
 
-                    (stateMachine.trackedVariables["OnAttack"] as System.Action)?.Invoke();
                 }
+
+                if (!attackPlayed)
+                {
+                    stateMachine.cooldownData.cooldownReady[this] = true;
+                }
+                (stateMachine.trackedVariables["OnAttack"] as System.Action)?.Invoke();
+            }
+            else
+            {
+                stateMachine.cooldownData.cooldownReady[this] = true;
             }
         }
     }

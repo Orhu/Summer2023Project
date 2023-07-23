@@ -96,8 +96,7 @@ namespace Cardificer.FiniteStateMachine
         {
             if (decisions.Count() == 0)
             {
-                Debug.LogWarning("No decisions added to " + stateMachine.name);
-                return false;
+                return true;
             }
 
             //Calculate AND results

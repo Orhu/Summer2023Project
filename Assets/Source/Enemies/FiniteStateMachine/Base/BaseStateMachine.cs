@@ -18,6 +18,9 @@ namespace Cardificer.FiniteStateMachine
         // Delay after this enemy is spawned before it begins performing logic
         [SerializeField] private float delayBeforeLogic;
 
+        // Max random amount added to delayBeforeLogic.
+        [SerializeField] private float delayBeforeLogicVariance = 0.5f;
+
         // The pathfinding target
         [HideInInspector] public Vector2 currentPathfindingTarget;
 
@@ -205,6 +208,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void Start()
         {
+            delayBeforeLogic += UnityEngine.Random.Range(-delayBeforeLogicVariance, delayBeforeLogicVariance);
             SetStats();
             timeStarted = Time.time;
             
@@ -243,14 +247,13 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void Update()
         {
-            timeSinceTransition += Time.deltaTime;
-
             if (exhausted || Time.time - timeStarted <= delayBeforeLogic)
             {
                 movementComponent.movementInput = Vector2.zero;
                 return;
             }
 
+            timeSinceTransition += Time.deltaTime;
             if (firstTimeStarted)
             {
                 firstTimeStarted = false;
@@ -258,7 +261,7 @@ namespace Cardificer.FiniteStateMachine
             }
 
             currentState.OnStateUpdate(this);
-            print(gameObject.name + "'s Current State: " + currentState);
+            //print(gameObject.name + "'s Current State: " + currentState);
         }
 
         /// <summary>
