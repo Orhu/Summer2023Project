@@ -51,6 +51,9 @@ namespace Cardificer
         // The component responsible for the channeling ability
         private ChannelAbility channelAbility;
 
+        // The component responsible for the basic attack
+        private BasicAttack basicAttack;
+
         /// <summary>
         /// Initialize components.
         /// </summary>
@@ -59,6 +62,7 @@ namespace Cardificer
             movementComponent = GetComponent<Movement>();
             animatorComponent = GetComponent<AnimatorController>();
             channelAbility = GetComponent<ChannelAbility>();
+            basicAttack = GetComponent<BasicAttack>();
         }
 
         /// <summary>
@@ -188,6 +192,7 @@ namespace Cardificer
             }
         }
 
+        /*
         /// <summary>
         /// Channeling
         /// </summary>
@@ -203,6 +208,26 @@ namespace Cardificer
                 else
                 {
                     channelAbility.StopChanneling();
+                }
+            }
+        }
+        */
+
+        /// <summary>
+        /// Basic Attack
+        /// </summary>
+        /// <param name="input"> The input </param>
+        public void OnChannel(InputValue input)
+        {
+            if (movingEnabled && canAct && !paused)
+            {
+                if (input.isPressed)
+                {
+                    basicAttack.StartFiringBasicAttack();
+                }
+                else
+                {
+                    basicAttack.StopFiringBasicAttack();
                 }
             }
         }

@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4131509149270325233}
   - component: {fileID: 548517994}
   - component: {fileID: 2546847731475278928}
+  - component: {fileID: 5686187750317693033}
   - component: {fileID: -1180372233089998350}
   m_Layer: 7
   m_Name: Player
@@ -147,7 +148,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 1
-  movingEnabled: 1
 --- !u!114 &-8563880425545905597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -377,6 +377,20 @@ MonoBehaviour:
   cooldownReductionIncreaseRate: 1
   statusEffect: {fileID: 11400000, guid: 05e75421a2439ec488822dad4afc1826, type: 2}
   statusEffectInertval: 0.1
+--- !u!114 &5686187750317693033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608508398850829056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ee460351c79e7b43a587536f4a677d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  basicAttackAction: {fileID: 11400000, guid: d4301c1859ea3114584b2b306b778539, type: 2}
+  fireRate: 0.33333334
 --- !u!114 &-1180372233089998350
 MonoBehaviour:
   m_ObjectHideFlags: 0
