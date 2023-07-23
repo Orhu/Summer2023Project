@@ -494,6 +494,8 @@ namespace Cardificer
                 DontDestroyOnLoad(this);
 
                 FloorGenerator.onRoomChange += BindCleared;
+                // Invoked after 0 time so it's invoked on the next frame (leaving time for everything else that sets its saves up on start to start)
+                FloorGenerator.onGenerated += () => Invoke(nameof(Autosave), 0f);
 
                 Player.health.onDeath.AddListener(
                     () =>
@@ -503,10 +505,6 @@ namespace Cardificer
                     });
 
                 FloorSceneManager.onFloorLoaded += HandleFloorLoad;
-
-                if (autosaveExists) { return; }
-
-                Invoke(nameof(Autosave), 1f);
             }
 
             /// <summary>

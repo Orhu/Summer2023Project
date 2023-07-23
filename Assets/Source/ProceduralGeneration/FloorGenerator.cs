@@ -146,6 +146,12 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
+            if (SaveManager.autosaveExists && SaveManager.savedCurrentFloor != FloorSceneManager.currentFloor)
+            {
+                Debug.LogWarning("Saved current floor (" + SaveManager.savedCurrentFloor + ") is not the same as the current floor (" + FloorSceneManager.currentFloor + ")! Clearing the autosave.");
+                SaveManager.ClearTransientSaves();
+            }
+
             if (SaveManager.autosaveExists)
             {
                 seed = SaveManager.savedFloorSeed + FloorSceneManager.currentFloor;

@@ -29,7 +29,7 @@ namespace Cardificer
         {
             MenuManager.instance.CloseMenu();
             SaveManager.ClearTransientSaves();
-            Player.Get().GetComponent<ReloadScene>().ReloadCurrentScene();
+            FloorSceneManager.LoadFloor(0);
         }
 
         /// <summary>
