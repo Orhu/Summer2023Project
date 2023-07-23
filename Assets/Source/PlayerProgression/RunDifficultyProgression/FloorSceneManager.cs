@@ -10,8 +10,8 @@ public class FloorSceneManager : ScriptableObject
 {
     // Is a string because unity doesn't natively allow you to set scenes in the inspector as far as I'm aware 
     [Tooltip("The list of floors, in the order they will appear in")]
-    [SerializeField] private List<string> _floors;
-    private static List<string> floors
+    [SerializeField] private List<SceneNameToFloorName> _floors;
+    private static List<SceneNameToFloorName> floors
     {
         get
         {
@@ -23,8 +23,6 @@ public class FloorSceneManager : ScriptableObject
             return instance._floors;
         }
     }
-
-
 
     // Delegate called when a floor is loaded
     public static System.Action onFloorLoaded;
@@ -41,7 +39,18 @@ public class FloorSceneManager : ScriptableObject
         {
             if (_currentFloor == null)
             {
-                _currentFloor = floors.IndexOf(SceneManager.GetActiveScene().name);
+                for (int i = 0; i < floors.Count; i++)
+                {
+                    if (SceneManager.GetActiveScene().name == floors[i].sceneName)
+                    {
+                        _currentFloor = i;
+                        break;
+                    }
+                }
+                if (_currentFloor == null)
+                {
+                    throw new System.Exception("The active scene " + SceneManager.GetActiveScene().name + " is not included in the floor order!");
+                }
             }
 
             return _currentFloor.Value;
@@ -54,6 +63,18 @@ public class FloorSceneManager : ScriptableObject
 
     // The instance of the floor order.
     private static FloorSceneManager instance;
+
+
+    // A struct that maps a scene name to a floor name
+    [System.Serializable]
+    private struct SceneNameToFloorName
+    {
+        // The name of the scene
+        public string sceneName;
+
+        // The name of the floor
+        public string floorName;
+    }
 
     /// <summary>
     /// Loads a particular floor
@@ -69,7 +90,7 @@ public class FloorSceneManager : ScriptableObject
         }
         currentFloor = floorNumber;
         onFloorLoaded?.Invoke();
-        SceneManager.LoadScene(floors[floorNumber]);
+        SceneManager.LoadScene(floors[floorNumber].sceneName);
         hasFloorBeenLoaded = true;
         return true;
     }
@@ -81,5 +102,29 @@ public class FloorSceneManager : ScriptableObject
     static public bool LoadNextFloor()
     {
         return LoadFloor(currentFloor + 1);
+    }
+
+    /// <summary>
+    /// Gets the floor name of the current floor
+    /// </summary>
+    /// <returns> The floor name of the current floor </returns>
+    static public string GetCurrentFloorName()
+    {
+        return floors[currentFloor].floorName;
+    }
+
+    /// <summary>
+    /// Returns the floor name of the given floor
+    /// </summary>
+    /// <param name="floorNumber"> The floor to get the floor name of </param>
+    /// <returns> The floor name </returns>
+    static public string GetFloorName(int floorNumber)
+    {
+        if (floorNumber >= floors.Count)
+        {
+            Debug.LogWarning("Attempted get the name of floor " + floorNumber + ", which does not exist!");
+            return "";
+        }
+        return floors[floorNumber].floorName;
     }
 }
