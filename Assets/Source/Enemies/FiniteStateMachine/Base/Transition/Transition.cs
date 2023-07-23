@@ -11,7 +11,7 @@ namespace Cardificer.FiniteStateMachine
     public class Transition : ScriptableObject
     {
         [Tooltip("What state to enter on true")] [EditInline]
-        [SerializeField] protected State trueState;
+        [SerializeField] protected BaseState trueState;
 
         [Tooltip("Conditions to evaluate")]
         [SerializeField] private List<Decision.Combinable> decisions;
@@ -27,7 +27,7 @@ namespace Cardificer.FiniteStateMachine
             if (decisions.Decide(stateMachine))
             {
                 stateMachine.currentState.OnStateExit(stateMachine);
-                stateMachine.currentState = trueState;
+                stateMachine.currentState = trueState.GetState();
                 stateMachine.timeSinceTransition = 0f;
                 stateMachine.currentState.OnStateEnter(stateMachine);
             }
