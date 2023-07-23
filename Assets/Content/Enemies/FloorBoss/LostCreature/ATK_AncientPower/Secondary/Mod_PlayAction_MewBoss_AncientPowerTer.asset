@@ -12,7 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae521aad527ed7e449352281fbf9e980, type: 3}
   m_Name: Mod_PlayAction_MewBoss_AncientPowerTer
   m_EditorClassIdentifier: 
+  minAttackSequenceIndex: 0
+  maxAttackSequenceIndex: 2147483647
+  attackSequenceLoopInterval: 2147483647
   action: {fileID: 11400000, guid: 6eb6817942ee4ca4a944371bdbd46569, type: 2}
   delay: 0
   playTime: 3
-  damageMultiplier: 1
+  playCount: 1000
+  inheritModifiers: 0
+  applyToZeroDamage: 0
