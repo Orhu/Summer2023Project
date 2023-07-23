@@ -34,7 +34,7 @@ namespace Cardificer
         [SerializeField] private float roomPadding = 100f;
 
         [Tooltip("How much we scale drawing each room from each other")]
-        [SerializeField] private float drawScale = 500;
+        [SerializeField] private Vector2 cellSize = new Vector2(400f, 400f);
 
         // current Scale of the map
         private float currentScale = 1;
@@ -130,76 +130,31 @@ namespace Cardificer
             // Reassign the current room
             localCurrentRoom = FloorGenerator.currentRoom;
 
+            // Keep track of a list of seen cells when drawing all cells each update
+            List<MapCell> seenCells = new List<MapCell>();
 
             for(int i = 0; i < FloorGenerator.map.map.GetLength(0); i++)
             {
                 for(int j = 0; j < FloorGenerator.map.map.GetLength(1); j++)
                 {
                     MapCell cell = FloorGenerator.map.map[i, j];
-                    if (!cell.room)
+                    // If a cell does not have a room, or it has been seen and drawn before, continue
+                    if (!cell.room || seenCells.Contains(cell))
                         continue;
 
-                    // Apply a padding between rooms based on direction
-                    Vector2 paddingVec = new Vector2();
-                    
-                    if (cell.location.x < localCurrentRoom.roomLocation.x)
+                    // If a cell is not visited, only draw a singular visual
+                    if (!cell.room.generated)
                     {
-                        paddingVec.x = -roomPadding;
-                    }
-                    else if (cell.location.x == localCurrentRoom.roomLocation.x)
-                    {
-                        paddingVec.x = 0f;
-                    }
-                    else
-                    {
-                        paddingVec.x = roomPadding;
-                    }
-
-                    if (cell.location.y < localCurrentRoom.roomLocation.y)
-                    {
-                        paddingVec.y = -roomPadding;
-                    }
-                    else if (cell.location.y == localCurrentRoom.roomLocation.y)
-                    {
-                        paddingVec.y = 0f;
-                    }
-                    else
-                    {
-                        paddingVec.y = roomPadding;
-                    }
-
-                   /* Vector2 paddingScale;
-                    if (cell.room.generated)
-                    {
-                        paddingScale = new Vector2(cell.room.roomLocation.x - localCurrentRoom.roomLocation.x, cell.room.roomLocation.y - localCurrentRoom.roomLocation.y);
-                    }
-                    else
-                    {
-                        paddingScale = new Vector2(cell.location.x - localCurrentRoom.roomLocation.x, cell.location.y - localCurrentRoom.roomLocation.y);
-                    }
-
-                    paddingVec = new Vector2(paddingVec.x * Mathf.Abs(paddingScale.x), paddingVec.y * Mathf.Abs(paddingScale.y));*/
-                    
-
-                    // Check if any given cell is visited
-                    if (cell.room.generated)
-                    {
-
-                        // Instantiate the room visual
-                        GameObject cellVisual = Instantiate(cellVisualPrefab, roomImageContainer.transform);
-                        
-
-                        // Decide location of where to draw cells
-                        Vector2 drawLocation = (cell.location - localCurrentRoom.roomLocation);
-                        cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * drawScale) + paddingVec.x, cellVisual.transform.localPosition.y + (drawLocation.y * drawScale) + paddingVec.y);
-
-                        // Modify the room visual
-                        cellVisual.GetComponentInChildren<TextMeshProUGUI>().text = cell.room.roomType.displayName;
-                        cellVisual.GetComponent<Image>().color = Color.gray;
-                    }
-                    // If the cell's room has not been visited
-                    else
-                    {
+                        // Check if the current cell has not been seen
+                        if (!cell.seenByMap)
+                        {
+                            // See if it is seeable
+                            List<MapCell> listOfNeighboringCells = localCurrentRoom.GetNeighboringCells(FloorGenerator.map.map);
+                            if (listOfNeighboringCells.Contains(cell))
+                            {
+                                cell.seenByMap = true;
+                            }
+                        }
                         // Check to see if the cell has been seen before. If it has draw it
                         if (cell.seenByMap)
                         {
@@ -207,29 +162,62 @@ namespace Cardificer
                             GameObject cellVisual = Instantiate(cellVisualPrefab, roomImageContainer.transform);
 
                             Vector2 drawLocation = cell.location - localCurrentRoom.roomLocation;
-                            cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * drawScale) + paddingVec.x, cellVisual.transform.localPosition.y + (drawLocation.y * drawScale) + paddingVec.y);
+                            cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * cellSize.x), cellVisual.transform.localPosition.y + (drawLocation.y * cellSize.y));
 
                             cellVisual.GetComponent<Image>().sprite = nonVisitedRoomSprite;
                         }
-                        // Lastly, if the cell hasn't been visited or seen,
-                        // see if it is a neighbor of the current cell. If it is,
-                        // draw it
-                        else 
+                    }
+                    // draw all visited cells
+                    else
+                    {
+                        // For each cell, draw all its inner cells
+                        foreach (MapCell innerCell in cell.room.GetRoomCells(FloorGenerator.map.map))
                         {
-                            List<MapCell> listOfNeighboringCells = localCurrentRoom.GetNeighboringCells(FloorGenerator.map.map);
-                            if (listOfNeighboringCells.Contains(cell))
+                            innerCell.seenByMap = true;
+                            seenCells.Add(innerCell);
+
+                            Vector2 paddingVec = new Vector2();
+
+                            // Instantiate the room visual
+                            GameObject cellVisual = Instantiate(cellVisualPrefab, roomImageContainer.transform);
+
+                            // stretch the visual
+                            Vector2 intermediarySize = (cellSize - cellVisual.GetComponent<RectTransform>().rect.size) / 2;
+
+                            if (innerCell.location.x != innerCell.room.roomLocation.x)
                             {
-                                cell.seenByMap = true;
-                                // Instantiate the room visual
-                                GameObject cellVisual = Instantiate(cellVisualPrefab, roomImageContainer.transform);
-
-                                Vector2 drawLocation = cell.location - localCurrentRoom.roomLocation;
-                                cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * drawScale) + paddingVec.x, cellVisual.transform.localPosition.y + (drawLocation.y * drawScale) + paddingVec.y);
-
-                                cellVisual.GetComponent<Image>().sprite = nonVisitedRoomSprite;
+                                // There is a cell to the left of this cell that's part of the room 
+                                cellVisual.GetComponent<RectTransform>().sizeDelta = new Vector2(cellVisual.GetComponent<RectTransform>().sizeDelta.x + intermediarySize.x, cellVisual.GetComponent<RectTransform>().sizeDelta.y);
+                                paddingVec.x -= intermediarySize.x / 2;
                             }
+                            if (innerCell.location.x != innerCell.room.roomLocation.x + innerCell.room.roomType.sizeMultiplier.x - 1)
+                            {
+                                // There is a cell to the right of this cell that's part of the room 
+                                cellVisual.GetComponent<RectTransform>().sizeDelta = new Vector2(cellVisual.GetComponent<RectTransform>().sizeDelta.x + intermediarySize.x, cellVisual.GetComponent<RectTransform>().sizeDelta.y);
+                                paddingVec.x += intermediarySize.x / 2;
+                            }
+
+
+                            if (innerCell.location.y != innerCell.room.roomLocation.y)
+                            {
+                                // There is a cell to the left of this cell that's part of the room 
+                                cellVisual.GetComponent<RectTransform>().sizeDelta = new Vector2(cellVisual.GetComponent<RectTransform>().sizeDelta.x, cellVisual.GetComponent<RectTransform>().sizeDelta.y + intermediarySize.y);
+                                paddingVec.y -= intermediarySize.y / 2;
+                            }
+                            if (innerCell.location.y != innerCell.room.roomLocation.y + innerCell.room.roomType.sizeMultiplier.y - 1)
+                            {
+                                // There is a cell to the right of this cell that's part of the room 
+                                cellVisual.GetComponent<RectTransform>().sizeDelta = new Vector2(cellVisual.GetComponent<RectTransform>().sizeDelta.x, cellVisual.GetComponent<RectTransform>().sizeDelta.y + intermediarySize.y);
+                                paddingVec.y += intermediarySize.y / 2;
+                            }
+
+                            Vector2 drawLocation = (innerCell.location - localCurrentRoom.roomLocation);
+                            cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * cellSize.x), cellVisual.transform.localPosition.y + (drawLocation.y * cellSize.y)) + paddingVec;
+
+                            // Modify the room visual
+                            cellVisual.GetComponentInChildren<TextMeshProUGUI>().text = cell.room.roomType.displayName;
+                            cellVisual.GetComponent<Image>().color = Color.gray;
                         }
-                       
                     }
                 }
             }
