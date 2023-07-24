@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
-  m_Name: Dribbler_Projectile
+  m_Name: RottingAbomination_DribblerBlob
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
@@ -22,21 +22,24 @@ MonoBehaviour:
     invertInvincibility: 0
   hitCount: 1
   applyDamageOnHit: 1
-  modifiers: []
+  modifiers:
+  - {fileID: 11400000, guid: b35a169b6528fa14d9d1985637c4b021, type: 2}
+  - {fileID: 11400000, guid: 91e74b026b0279c4a8bd03023198b1a1, type: 2}
+  - {fileID: 11400000, guid: 45f9d265478e6d4448dcbc9efaebe0e0, type: 2}
   immuneToShield: 0
   immuneToReflect: 0
-  shape: {fileID: 11400000, guid: 62daf972e94ab554baec54583e273272, type: 2}
-  lifetime: 10
+  shape: {fileID: 11400000, guid: e9a86337d1e33e14380a1b6e4f120c2f, type: 2}
+  lifetime: 12
   initialSpeed: 4
-  acceleration: -1
-  minSpeed: 5
+  acceleration: -0.33333334
+  minSpeed: 0
   maxSpeed: 10
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
   homingAimMode: 0
   switchAfterHit: 0
-  visualObject: {fileID: 3163897759028285208, guid: 94c0191b62e754f439db2bd05e189e6a, type: 3}
+  visualObject: {fileID: 8189167328214649155, guid: eaa7b52fc6ebaf54896976bbbdcd410e, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
   travelAudioClip: {fileID: 0}
@@ -44,11 +47,11 @@ MonoBehaviour:
   spawnLocation: 0
   aimMode: 0
   waitForProjectileDeath: 0
-  chargeTime: 0
-  additionalActionTime: 0.5
+  chargeTime: 1
+  additionalActionTime: 4
   _spawnSequence:
   - delay: 0
     angle: 0
     offset: {x: 0, y: 0}
-  randomAngle: 360
+  randomAngle: 30
   randomOffset: 0

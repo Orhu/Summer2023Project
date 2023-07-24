@@ -79,6 +79,20 @@ namespace Cardificer
         // A reference to the generated map
         [HideInInspector] static public Map map;
 
+        // Whether or not this has generated yet.
+        private bool _hasGenerated = false;
+        public static bool hasGenerated
+        {
+            get
+            {
+                return instance == null ? false : instance._hasGenerated;
+            }
+            private set
+            {
+                instance._hasGenerated = value;
+            }
+        }
+
         // Called when the floor has been generated.
         public static System.Action onGenerated;
 
@@ -200,6 +214,7 @@ namespace Cardificer
                 Room startRoom = map.startRoom.GetComponent<Room>();
                 startRoom.Enter(Direction.None, callCleared: false);
                 onGenerated?.Invoke();
+                hasGenerated = true;
                 return; 
             }
 
@@ -220,12 +235,14 @@ namespace Cardificer
             lastRoom.Enter(callCleared: false);
 
             onGenerated?.Invoke();
+            hasGenerated = true;
         }
 
         // Unbinds events
         private void OnDestroy()
         {
-            foreach (System.Delegate @delegate in onGenerated.GetInvocationList())
+            if (onGenerated == null) { return; }
+            foreach (System.Delegate @delegate in onGenerated?.GetInvocationList())
             {
                 onGenerated -= (System.Action)@delegate;
             }

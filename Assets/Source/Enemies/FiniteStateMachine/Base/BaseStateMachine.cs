@@ -211,9 +211,24 @@ namespace Cardificer.FiniteStateMachine
             delayBeforeLogic += UnityEngine.Random.Range(-delayBeforeLogicVariance, delayBeforeLogicVariance);
             SetStats();
             timeStarted = Time.time;
-            
+
+            PathfindingTile currentTile = RoomInterface.instance.WorldPosToTile(transform.position).Item1;
+            if (currentTile != null && !currentTile.allowedMovementTypes.HasFlag(currentMovementType))
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             GetComponent<SimpleMovement>().requestSpeedModifications += AdjustMovement;
-            FloorGenerator.onGenerated += () => FloorGenerator.currentRoom.AddEnemy(gameObject);
+
+            if (FloorGenerator.hasGenerated)
+            {
+                FloorGenerator.currentRoom.AddEnemy(gameObject);
+            }
+            else
+            {
+                FloorGenerator.onGenerated += () => FloorGenerator.currentRoom.AddEnemy(gameObject);
+            }
 
             gameObject.AddComponent<DamageFlash>(); // TODO: delete this line once templates have been fixed
         }

@@ -25,7 +25,7 @@ namespace Cardificer
         {
             if (delay <= 0)
             {
-                Instantiate(thing).transform.position = actor.GetActionAimPosition();
+                Instantiate(thing).transform.position = actor.GetActionSourceTransform().position;
             }
             else
             {
@@ -39,7 +39,7 @@ namespace Cardificer
         private IEnumerator DelayedSpawn(IActor actor)
         {
             yield return new WaitForSeconds(delay);
-            Instantiate(thing).transform.position = actor.GetActionAimPosition();
+            Instantiate(thing).transform.position = actor.GetActionSourceTransform().position;
         }
     }
 }

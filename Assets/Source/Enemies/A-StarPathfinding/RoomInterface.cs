@@ -52,7 +52,7 @@ namespace Cardificer
         /// <summary>
         /// Sets the instance to this instance
         /// </summary>
-        private void Start()
+        private void Awake()
         {
             instance = this;
             FloorGenerator.onRoomChange += GrabCurrentRoom;
