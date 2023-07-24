@@ -13,7 +13,7 @@ namespace Cardificer.FiniteStateMachine
     public class BaseStateMachine : MonoBehaviour, IActor
     {
         // the state this machine starts in
-        [SerializeField] private State initialState;
+        [SerializeField] private BaseState initialState;
 
         // Delay after this enemy is spawned before it begins performing logic
         [SerializeField] private float delayBeforeLogic;
@@ -182,7 +182,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void Awake()
         {
-            currentState = initialState;
+            currentState = initialState.GetState();
             cooldownData.cooldownReady = new Dictionary<BaseAction, bool>();
             cachedComponents = new Dictionary<Type, Component>();
             currentMovementType = startingMovementType;
