@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eabd4dbd5b080a640bd3c050fac04c55, type: 3}
-  m_Name: SpearThrower_ShootAttack
+  m_Script: {fileID: 11500000, guid: 77a6a89efc88b1846985356fd9a25e89, type: 3}
+  m_Name: FastThrower_RollMoveChance
   m_EditorClassIdentifier: 
-  actionChargeUpTime: 0.5
-  friendlyFire: 0
-  attacks:
-  - {fileID: 11400000, guid: 2291eccf3a83a2148843396a530bb613, type: 2}
+  invert: 0
+  chance: 0.05
+  rollTimeLockout: 1
