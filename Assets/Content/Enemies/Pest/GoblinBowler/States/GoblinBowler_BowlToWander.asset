@@ -10,13 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3a35acca2b866a4a854023149e2de6f, type: 3}
-  m_Name: GoblinBowler_AttackToChase
+  m_Name: GoblinBowler_BowlToWander
   m_EditorClassIdentifier: 
-  trueState: {fileID: 11400000, guid: 35a293b2a2810c340ab45f0735063f4b, type: 2}
+  trueState: {fileID: 11400000, guid: 406e1aedf74efde43b7c30fc88f3b3f3, type: 2}
   decisions:
-  - invert: 1
-    decision: {fileID: 11400000, guid: af860a906d198224aba62f9825754ac7, type: 2}
-    nextOperator: 1
-  - invert: 1
-    decision: {fileID: 11400000, guid: b0aa15f967b89e6449215fbcd05e57b5, type: 2}
+  - invert: 0
+    decision: {fileID: 11400000, guid: 2f1da158d608c4540836dab1a7d0831b, type: 2}
     nextOperator: 0
