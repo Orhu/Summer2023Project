@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c5858af96344aaa9e636fdff62a26b5, type: 3}
+  m_Name: FastThrower_Patrol
+  m_EditorClassIdentifier: 
+  enterActions:
+  - {fileID: 11400000, guid: 47b704b20835da2478af6dc5c1a51c32, type: 2}
+  exitActions:
+  - {fileID: 11400000, guid: a1fc8154edcd94d4e91c99d2cbc4f343, type: 2}
+  updateActions:
+  - {fileID: 11400000, guid: 3930d00563a93844595b549090d6b83d, type: 2}
+  - {fileID: 11400000, guid: 2715ac0b3761e1749b3a532aa1dacbe8, type: 2}
+  - {fileID: 11400000, guid: 95fcdb6602e570d48bb8553592b04fd6, type: 2}
+  transitions:
+  - {fileID: 11400000, guid: 9a4294fb44edd3242acb1600dea2f774, type: 2}
