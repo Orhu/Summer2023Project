@@ -19,6 +19,7 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> Ends when the action is complete. </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
+            stateMachine.trackedVariables.TryAdd("OnAttack", null);
             stateMachine.trackedVariables["OnAttack"] = (stateMachine.trackedVariables["OnAttack"] as System.Action) + PlayAnim;
 
             void PlayAnim()

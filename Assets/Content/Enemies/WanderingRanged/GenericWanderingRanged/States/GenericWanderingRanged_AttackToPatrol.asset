@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a35acca2b866a4a854023149e2de6f, type: 3}
+  m_Name: GenericWanderingRanged_AttackToPatrol
+  m_EditorClassIdentifier: 
+  trueState: {fileID: 11400000, guid: 5d4204afc6cb0ad4aafa9d7d9e68ff30, type: 2}
+  decisions:
+  - invert: 1
+    decision: {fileID: 11400000, guid: 4446bda8ce92814478d150c32e88fe4d, type: 2}
+    nextOperator: 1
+  - invert: 1
+    decision: {fileID: 11400000, guid: 2019ddeeba0e61a4b8dde017c1cf9487, type: 2}
+    nextOperator: 1
+  - invert: 1
+    decision: {fileID: 11400000, guid: 524892c7081cfc1489407846f4581718, type: 2}
+    nextOperator: 1
+  - invert: 0
+    decision: {fileID: 11400000, guid: 83ffddf0e7e2c144fac095b1411637f7, type: 2}
+    nextOperator: 1
