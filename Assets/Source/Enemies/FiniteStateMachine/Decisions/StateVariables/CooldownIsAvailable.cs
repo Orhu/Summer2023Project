@@ -20,6 +20,7 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> True if the given action's cooldownData.cooldownReady is true, false otherwise </returns>
         public override bool Decide(BaseStateMachine state)
         {
+            state.cooldownData.cooldownReady.TryAdd(actionToCheck, true);
             return state.cooldownData.cooldownReady[actionToCheck];
         }
     }
