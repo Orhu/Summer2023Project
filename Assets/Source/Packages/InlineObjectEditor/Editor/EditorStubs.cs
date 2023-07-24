@@ -28,3 +28,6 @@ public partial class SpawnBombCustomEditorStub : UnityEditor.Editor { }
 [UnityEditor.CustomEditor(typeof(Cardificer.FiniteStateMachine.ConditionalActions))]
 public partial class ConditionalActionsEditorStub : UnityEditor.Editor { }
 
+[UnityEditor.CustomEditor(typeof(Cardificer.DamageOnInteract))]
+public partial class DamageOnInteractEditorStub : UnityEditor.Editor { }
+
