@@ -495,16 +495,6 @@ namespace Cardificer
 
                 FloorGenerator.onRoomChange += BindCleared;
 
-                /// <summary>
-                /// Autosaves after a frame
-                /// </summary>
-                /// <returns> Waits one frame </returns>
-                System.Collections.IEnumerator AutosaveAfterFrame()
-                {
-                    yield return null;
-                    Autosave();
-                }
-
                 // Start courotine so it's invoked on the next frame (leaving time for everything else that sets its saves up on start to start)
                 FloorGenerator.onGenerated += () => StartCoroutine(nameof(AutosaveAfterFrame));
 
@@ -525,6 +515,16 @@ namespace Cardificer
             {
                 FloorGenerator.onRoomChange -= BindCleared;
                 FloorSceneManager.onFloorLoaded -= HandleFloorLoad;
+            }
+
+            /// <summary>
+            /// Autosaves after a frame
+            /// </summary>
+            /// <returns> Waits one frame </returns>
+            private System.Collections.IEnumerator AutosaveAfterFrame()
+            {
+                yield return null;
+                Autosave();
             }
 
             /// <summary>
