@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// The names for each exterior param type
 /// </summary>
+[CreateAssetMenu(fileName = "NewExteriorParamNames", menuName = "Generation/ExteriorParamNames")]
 public class ExteriorParamNames : ScriptableObject
 {
     [Header("Walls")]

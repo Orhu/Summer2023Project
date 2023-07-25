@@ -10,7 +10,8 @@ public class BatchRename : ScriptableWizard
     // The labels to add.
     [SerializeField] private string find = "";
 
-    // What to replace the found thing with
+    // What to replace the found thing
+    // 
     [SerializeField] private string replaceWith = "";
 
     /// <summary>
