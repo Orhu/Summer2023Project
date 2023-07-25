@@ -27,6 +27,9 @@ namespace Cardificer
         [Tooltip("Prefab visual for horizontal doors")]
         [SerializeField] private GameObject doorHorizontalPrefab;
 
+        [Tooltip("Prefab for the room type visual")]
+        [SerializeField] private GameObject roomTypeImagePrefab;
+
         // A local reference to the current room, observes current room changes
         private Room localCurrentRoom;
 
@@ -92,6 +95,8 @@ namespace Cardificer
         private void OnEnable()
         {
             GetComponentInChildren<ScrollRect>().normalizedPosition = Vector3.zero;
+            currentScale = 1;
+            roomImageContainer.transform.localScale = new Vector2(currentScale, currentScale);
             if (localCurrentRoom != FloorGenerator.currentRoom)
             {
                 ResetMap();
@@ -172,6 +177,7 @@ namespace Cardificer
                     // draw all visited cells
                     else
                     {
+                        GameObject parentCell = null;
                         // For each cell, draw all its inner cells
                         foreach (MapCell innerCell in cell.room.GetRoomCells(FloorGenerator.map.map))
                         {
@@ -181,8 +187,14 @@ namespace Cardificer
                             Vector2 paddingVec = new Vector2();
 
                             // Instantiate the room visual
+
+                            
                             GameObject cellVisual = Instantiate(cellVisualPrefab, roomImageContainer.transform);
 
+                            if (parentCell == null)
+                            {
+                                parentCell = cellVisual;
+                            }
                             // stretch the visual
                             Vector2 intermediarySize = (cellSize - cellVisual.GetComponent<RectTransform>().rect.size) / 2;
 
@@ -216,15 +228,6 @@ namespace Cardificer
                             Vector2 drawLocation = (innerCell.location - localCurrentRoom.roomLocation);
                             cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * cellSize.x), cellVisual.transform.localPosition.y + (drawLocation.y * cellSize.y)) + paddingVec;
 
-   
-                            if (!seenRooms.Contains(innerCell.room) && innerCell.room.roomType.roomTypeSprite)
-                            {
-                                seenRooms.Add(innerCell.room);
-                                cellVisual.transform.GetChild(0).GetComponent<Image>().enabled = true;
-                                cellVisual.transform.GetChild(0).GetComponent<Image>().sprite = innerCell.room.roomType.roomTypeSprite;
-                            }
-                            
-
                             // Place doors
                             if (innerCell.direction.HasFlag(Direction.Up))
                             {
@@ -253,6 +256,20 @@ namespace Cardificer
                                 GameObject doorVisual = Instantiate(doorVerticalPrefab, cellVisual.transform);
                                 doorVisual.transform.localPosition = new Vector2(doorVisual.transform.localPosition.x + (cellVisual.GetComponent<RectTransform>().sizeDelta.x / 2), doorVisual.transform.localPosition.y - paddingVec.y) ;
                             }
+                        }
+
+                        if (cell.room.roomType.roomTypeSprite)
+                        {
+                            GameObject roomTypeVisual = Instantiate(roomTypeImagePrefab, parentCell.transform);
+                            roomTypeVisual.GetComponent<Image>().sprite = cell.room.roomType.roomTypeSprite;
+
+                            roomTypeVisual.transform.localPosition = new Vector2(roomTypeVisual.transform.localPosition.x + ((cellVisualPrefab.GetComponent<RectTransform>().sizeDelta.x * cell.room.roomType.sizeMultiplier.x) / 2), roomTypeVisual.transform.localPosition.y + ((cellVisualPrefab.GetComponent<RectTransform>().sizeDelta.y * cell.room.roomType.sizeMultiplier.y) / 2));
+
+                            int roomScale = Mathf.Max(cell.room.roomType.sizeMultiplier.x, cell.room.roomType.sizeMultiplier.y);
+
+                            roomTypeVisual.GetComponent<RectTransform>().sizeDelta = new Vector2(roomTypeVisual.GetComponent<RectTransform>().sizeDelta.x * roomScale, roomTypeVisual.GetComponent<RectTransform>().sizeDelta.y * roomScale);
+
+                            roomTypeVisual.transform.SetParent(roomImageContainer.transform, true);
                         }
                     }
                 }
