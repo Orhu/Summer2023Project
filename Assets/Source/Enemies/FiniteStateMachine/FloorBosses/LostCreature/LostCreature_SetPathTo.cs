@@ -9,7 +9,7 @@ namespace Cardificer.FiniteStateMachine
     /// <summary>
     /// Represents an action that draws some number of cards and adds them to the state machine.
     /// </summary>
-    [CreateAssetMenu(menuName = "FSM/Floor Boss/Lost Creature/Set Path To...")]
+    [CreateAssetMenu(menuName = "FSM/Floor Boss/Lost Creature/Set Path To Figure8 Or Infinity")]
     public class LostCreature_SetPathTo : SingleAction
     {
         [Tooltip("Center point of the path shape, as an offset from the room's center")] 
@@ -44,6 +44,11 @@ namespace Cardificer.FiniteStateMachine
 
             if (shapeBounds.y > shapeBounds.x)
             {
+                // Bottom Circle
+                points.Add(roomCenter + new Vector2(centerOffset.x + quarterHoriz, centerOffset.y - quarterVert));
+                points.Add(roomCenter + new Vector2(centerOffset.x, centerOffset.y - 2 * quarterVert));
+                points.Add(roomCenter + new Vector2(centerOffset.x - quarterHoriz, centerOffset.y - quarterVert));
+                
                 // Top Circle
                 points.Add(roomCenter + new Vector2(centerOffset.x + quarterHoriz, centerOffset.y + quarterVert));
                 points.Add(roomCenter + new Vector2(centerOffset.x, centerOffset.y + 2 * quarterVert));
@@ -51,15 +56,15 @@ namespace Cardificer.FiniteStateMachine
 
                 // Center
                 points.Add(roomCenter + centerOffset);
-
-                // Bottom Circle
-                points.Add(roomCenter + new Vector2(centerOffset.x + quarterHoriz, centerOffset.y - quarterVert));
-                points.Add(roomCenter + new Vector2(centerOffset.x, centerOffset.y - 2 * quarterVert));
-                points.Add(roomCenter + new Vector2(centerOffset.x - quarterHoriz, centerOffset.y - quarterVert));
                 return points.ToArray();
             }
             else
             {
+                // Left Circle
+                points.Add(roomCenter + new Vector2(centerOffset.x - quarterHoriz, centerOffset.y + quarterVert));
+                points.Add(roomCenter + new Vector2(centerOffset.x - 2 * quarterHoriz, centerOffset.y));
+                points.Add(roomCenter + new Vector2(centerOffset.x - quarterHoriz, centerOffset.y - quarterVert));
+                
                 // Right Circle
                 points.Add(roomCenter + new Vector2(centerOffset.x + quarterHoriz, centerOffset.y + quarterVert));
                 points.Add(roomCenter + new Vector2(centerOffset.x + 2 * quarterHoriz, centerOffset.y));
@@ -67,65 +72,8 @@ namespace Cardificer.FiniteStateMachine
 
                 // Center
                 points.Add(roomCenter + centerOffset);
-
-                // Left Circle
-                points.Add(roomCenter + new Vector2(centerOffset.x - quarterHoriz, centerOffset.y + quarterVert));
-                points.Add(roomCenter + new Vector2(centerOffset.x - 2 * quarterHoriz, centerOffset.y));
-                points.Add(roomCenter + new Vector2(centerOffset.x - quarterHoriz, centerOffset.y - quarterVert));
                 return points.ToArray();
             }
-        }
-        
-        private Vector2[] GenerateFigureEight()
-        {
-            Vector2[] points = new Vector2[7];
-
-            Vector2 roomWorldPos = RoomInterface.instance.myRoomSize;
-        
-            float halfWidth = shapeBounds.x / 2f;
-            float halfHeight = shapeBounds.y / 2f;
-        
-            float centerX = centerOffset.x;
-            float centerY = centerOffset.y;
-        
-            // Upper loop
-            points[0] = roomWorldPos + new Vector2(centerX, centerY + halfHeight);
-            points[1] = roomWorldPos + new Vector2(centerX + halfWidth, centerY + halfHeight);
-            points[2] = roomWorldPos + new Vector2(centerX + halfWidth, centerY);
-        
-            // Lower loop
-            points[3] = roomWorldPos + new Vector2(centerX + halfWidth, centerY - halfHeight);
-            points[4] = roomWorldPos + new Vector2(centerX, centerY - halfHeight);
-            points[5] = roomWorldPos + new Vector2(centerX - halfWidth, centerY - halfHeight);
-            points[6] = roomWorldPos + new Vector2(centerX - halfWidth, centerY);
-        
-            return points;
-        }
-    
-        private Vector2[] GenerateInfinity()
-        {
-            Vector2[] points = new Vector2[7];
-            
-            Vector2 roomWorldPos = RoomInterface.instance.myRoomSize;
-        
-            float halfWidth = shapeBounds.x / 2f;
-            float halfHeight = shapeBounds.y / 2f;
-        
-            float centerX = centerOffset.x;
-            float centerY = centerOffset.y;
-        
-            // Upper loop
-            points[0] = roomWorldPos + new Vector2(centerX - halfWidth, centerY + halfHeight);
-            points[1] = roomWorldPos + new Vector2(centerX, centerY + halfHeight);
-            points[2] = roomWorldPos + new Vector2(centerX + halfWidth, centerY);
-        
-            // Lower loop
-            points[3] = roomWorldPos + new Vector2(centerX, centerY - halfHeight);
-            points[4] = roomWorldPos + new Vector2(centerX + halfWidth, centerY - halfHeight);
-            points[5] = roomWorldPos + new Vector2(centerX - halfWidth, centerY);
-            points[6] = roomWorldPos + new Vector2(centerX, centerY + halfHeight);
-        
-            return points;
         }
     }
 }
