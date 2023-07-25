@@ -494,8 +494,19 @@ namespace Cardificer
                 DontDestroyOnLoad(this);
 
                 FloorGenerator.onRoomChange += BindCleared;
-                // Invoked after 0 time so it's invoked on the next frame (leaving time for everything else that sets its saves up on start to start)
-                FloorGenerator.onGenerated += () => Invoke(nameof(Autosave), 0f);
+
+                /// <summary>
+                /// Autosaves after a frame
+                /// </summary>
+                /// <returns> Waits one frame </returns>
+                System.Collections.IEnumerator AutosaveAfterFrame()
+                {
+                    yield return null;
+                    Autosave();
+                }
+
+                // Start courotine so it's invoked on the next frame (leaving time for everything else that sets its saves up on start to start)
+                FloorGenerator.onGenerated += () => StartCoroutine(nameof(AutosaveAfterFrame));
 
                 Player.health.onDeath.AddListener(
                     () =>
@@ -526,6 +537,7 @@ namespace Cardificer
                 AutosaveData saveData = latestAutosave;
                 if (saveData != null)
                 {
+                    // Handle floor load autosave
                     Autosave();
                     saveData.visitedRooms.Clear();
                     saveData.playerPos = new Vector2(0, 0);
