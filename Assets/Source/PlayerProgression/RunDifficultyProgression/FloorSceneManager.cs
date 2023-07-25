@@ -85,8 +85,8 @@ public class FloorSceneManager : ScriptableObject
             return false;
         }
         currentFloor = floorNumber;
-        SceneManager.LoadScene(floors[floorNumber].sceneName);
         onFloorLoaded?.Invoke();
+        SceneManager.LoadScene(floors[floorNumber].sceneName);
         return true;
     }
 

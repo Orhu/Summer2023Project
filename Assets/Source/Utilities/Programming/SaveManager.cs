@@ -349,7 +349,7 @@ namespace Cardificer
             /// </summary>
             private void Autosave()
             {
-                if (!gameObject.scene.isLoaded || SceneManager.sceneCount > 1) { return; }
+                if (!gameObject.scene.isLoaded || SceneManager.sceneCount > 1 || Player.Get() == null) { return; }
 
                 AutosaveData saveData = latestAutosave == null ? new AutosaveData() : latestAutosave;
 
