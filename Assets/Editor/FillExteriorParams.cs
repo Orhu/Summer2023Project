@@ -132,7 +132,7 @@ namespace Cardificer
                 }
             }
 
-            List<Sprite> topWallSprites = LoadSprites(names.rightWallName);
+            List<Sprite> topWallSprites = LoadSprites(names.topWallName);
             if (topWallSprites == null || topWallSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any top wall sprites, looking for name [" + names.topWallName + "] with prefix [" + prefix + "]");
@@ -146,7 +146,7 @@ namespace Cardificer
                 }
             }
 
-            List<Sprite> leftWallSprites = LoadSprites(names.rightWallName);
+            List<Sprite> leftWallSprites = LoadSprites(names.leftWallName);
             if (leftWallSprites == null || leftWallSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any left wall sprites, looking for name [" + names.leftWallName + "] with prefix [" + prefix + "]");
@@ -160,7 +160,7 @@ namespace Cardificer
                 }
             }
 
-            List<Sprite> bottomWallSprites = LoadSprites(names.rightWallName);
+            List<Sprite> bottomWallSprites = LoadSprites(names.bottomWallName);
             if (bottomWallSprites == null || bottomWallSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any bottom wall sprites, looking for name [" + names.bottomWallName + "] with prefix [" + prefix + "]");
