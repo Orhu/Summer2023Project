@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a35acca2b866a4a854023149e2de6f, type: 3}
+  m_Name: LC_ExitPsychic
+  m_EditorClassIdentifier: 
+  trueState: {fileID: 11400000, guid: 2891ad9d9de8c88449f3f1b678df36bc, type: 2}
+  decisions:
+  - invert: 1
+    decision: {fileID: 11400000, guid: 8253103c2ec53ac439a0fc3685cf301d, type: 2}
+    nextOperator: 2
+  - invert: 0
+    decision: {fileID: 11400000, guid: 388f847b571840441848387eb168efe2, type: 2}
+    nextOperator: 2
