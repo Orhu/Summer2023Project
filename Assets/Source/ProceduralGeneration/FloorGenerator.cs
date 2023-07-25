@@ -2,6 +2,7 @@ using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using Skaillz.EditInline;
 
@@ -150,6 +151,8 @@ namespace Cardificer
             {
                 Debug.LogWarning("Saved current floor (" + SaveManager.savedCurrentFloor + ") is not the same as the current floor (" + FloorSceneManager.currentFloor + ")! Clearing the autosave.");
                 SaveManager.ClearTransientSaves();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                return;
             }
 
             if (SaveManager.autosaveExists)
