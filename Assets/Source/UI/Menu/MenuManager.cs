@@ -30,26 +30,35 @@ namespace Cardificer
         // The menus that are currently locked open.
         private HashSet<GameObject> lockedOpenMenus = new HashSet<GameObject>();
 
+        // The menus that are currently pausing the game.
+        private HashSet<GameObject> pausingMenus = new HashSet<GameObject>();
+
         /// <summary>
         /// Opens a given menu.
         /// </summary>
         /// <typeparam name="MenuType"> The type of menu to open. </typeparam>
+        /// <param name="pauseGame"> Whether or not this will pause the game until this menu is closed. </param>
         /// <param name="closeOtherMenus"> Whether or not this will close other currently open menus. </param>
         /// <param name="lockOpen"> Whether or not this menu will be allowed to be closed by the menu manager. </param>
         /// <returns> The actual menu object that was opened. </returns>
-        public static MenuType Open<MenuType>(bool lockOpen = false, bool closeOtherMenus = true) where MenuType : Component
+
+        public static MenuType Open<MenuType>(bool pauseGame = true,  bool lockOpen = false, bool closeOtherMenus = true) where MenuType : Component
+        {
+            return (MenuType)Open(typeof(MenuType), pauseGame, lockOpen, closeOtherMenus);
+        }
+        public static Component Open(Type menuType, bool pauseGame = true, bool lockOpen = false, bool closeOtherMenus = true)
         {
             if (closeOtherMenus)
             {
                 CloseAllMenus();
             }
 
-            MenuType menu = instance.GetComponentInChildren<MenuType>();
+            Component menu = instance.GetComponentInChildren(menuType);
             if (menu == null)
             {
-                GameObject newMenu = Instantiate(GetMenuPrefab<MenuType>());
-                newMenu.transform.SetParent(instance.transform);
-                menu = newMenu.GetComponent<MenuType>();
+                GameObject newMenu = Instantiate(GetMenuPrefab(menuType));
+                newMenu.transform.SetParent(instance.transform, false);
+                menu = newMenu.GetComponent(menuType);
             }
 
             if (lockOpen)
@@ -59,6 +68,12 @@ namespace Cardificer
             else
             {
                 instance.lockedOpenMenus.Remove(menu.gameObject);
+            }
+
+            if (pauseGame)
+            {
+                Time.timeScale = 0;
+                instance.pausingMenus.Add(menu.gameObject);
             }
 
             menu.gameObject.SetActive(true);
@@ -73,11 +88,22 @@ namespace Cardificer
         /// <returns> The actual menu object that was closed. </returns>
         public static MenuType Close<MenuType>(bool closeLockedMenus = false) where MenuType : Component
         {
-            MenuType menu = instance.GetComponentInChildren<MenuType>();
+            return (MenuType)Close(typeof(MenuType), closeLockedMenus);
+        }
+        public static Component Close(Type menuType, bool closeLockedMenus = false)
+        {
+            Component menu = instance.GetComponentInChildren(menuType);
 
             if (menu == null || instance.lockedOpenMenus.Contains(menu.gameObject) && !closeLockedMenus) { return null; }
 
             menu.gameObject.SetActive(false);
+            instance.pausingMenus.Remove(menu.gameObject);
+
+            if (instance.pausingMenus.Count == 0)
+            {
+                Time.timeScale = 1;
+            }
+
             return menu;
         }
 
@@ -95,6 +121,8 @@ namespace Cardificer
                     child.SetActive(false);
                 }
             }
+            instance.pausingMenus.Clear();
+            Time.timeScale = 1;
         }
 
         /// <summary>
@@ -106,19 +134,27 @@ namespace Cardificer
         /// <returns> The actual menu object that was toggled. </returns>
         public static MenuType Toggle<MenuType>(out bool newIsOpened, bool closeOtherMenus = true) where MenuType : Component
         {
-            newIsOpened = !IsMenuOpen<MenuType>();
+            return (MenuType)Toggle(typeof(MenuType), out newIsOpened, closeOtherMenus);
+        }
+        public static Component Toggle(Type menuType, out bool newIsOpened, bool closeOtherMenus = true)
+        {
+            newIsOpened = !IsMenuOpen(menuType);
             if (newIsOpened)
             {
-                return Open<MenuType>(closeOtherMenus: closeOtherMenus);
+                return Open(menuType, closeOtherMenus: closeOtherMenus);
             }
             else
             {
-                return Close<MenuType>();
+                return Close(menuType);
             }
         }
         public static MenuType Toggle<MenuType>(bool closeOtherMenus = true) where MenuType : Component
         {
             return Toggle<MenuType>(out bool _, closeOtherMenus);
+        }
+        public static Component Toggle(Type menuType, bool closeOtherMenus = true)
+        {
+            return Toggle(menuType, out bool _, closeOtherMenus);
         }
 
         /// <summary>
@@ -128,7 +164,11 @@ namespace Cardificer
         /// <returns> True if the given menu is open. </returns>
         public static bool IsMenuOpen<MenuType>() where MenuType : Component
         {
-            return (instance.GetComponentInChildren<MenuType>()?.gameObject.activeSelf).GetValueOrDefault();
+            return IsMenuOpen(typeof(MenuType));
+        }
+        public static bool IsMenuOpen(Type menuType)
+        {
+            return (instance.GetComponentInChildren(menuType)?.gameObject.activeSelf).GetValueOrDefault();
         }
 
 
@@ -137,9 +177,9 @@ namespace Cardificer
         /// </summary>
         /// <typeparam name="MenuType"> The type of menu get the prefab for. </typeparam>
         /// <returns> The prefab of the given menu. </returns>
-        private static GameObject GetMenuPrefab<MenuType>() where MenuType : Component
+        private static GameObject GetMenuPrefab(Type menuType)
         {
-            if (instance.menuTypesToPrefabs.TryGetValue(typeof(MenuType), out GameObject value))
+            if (instance.menuTypesToPrefabs.TryGetValue(menuType, out GameObject value))
             {
                 return value;
             }
@@ -149,28 +189,28 @@ namespace Cardificer
             foreach (string guid in AssetDatabase.FindAssets("*", new[] { "Assets/Source/UI/Menu/SubMenus" }))
             {
                 GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(guid));
-                if (prefab?.GetComponent<MenuType>() != null)
+                if (prefab?.GetComponent(menuType) != null)
                 {
-                    instance.menuTypesToPrefabs.Add(typeof(MenuType), prefab);
+                    instance.menuTypesToPrefabs.Add(menuType, prefab);
                     return prefab;
                 }
             }
 
-            throw new System.Exception($"No prefab for {typeof(MenuType)} that is Assets/Source/UI/Menu/SubMenus IMPORTAINT: Be sure to add the asset to the menus asset bundle in addition to adding it to the folder.");
+            throw new System.Exception($"No prefab for {menuType} that is Assets/Source/UI/Menu/SubMenus IMPORTAINT: Be sure to add the asset to the menus asset bundle in addition to adding it to the folder.");
 #else
             AssetBundle menusAssetBundle = AssetBundle.LoadFromFile(System.IO.Path.Combine(Application.streamingAssetsPath, "menus"));
             foreach (GameObject prefab in menusAssetBundle.LoadAllAssets<GameObject>())
             {
-                if (prefab.GetComponent<MenuType>() != null)
+                if (prefab.GetComponent(menuType) != null)
                 {
-                    instance.menuTypesToPrefabs.Add(typeof(MenuType), prefab);
+                    instance.menuTypesToPrefabs.Add(menuType, prefab);
                     menusAssetBundle.Unload(false);
                     return prefab;
                 }
             }
 
             menusAssetBundle.Unload(false);
-            throw new System.Exception($"No prefab for {typeof(MenuType)} that is in the menus asset bundle.");
+            throw new System.Exception($"No prefab for {menuType} that is in the menus asset bundle.");
 #endif
 
         }
