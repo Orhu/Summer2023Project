@@ -16,21 +16,23 @@ MonoBehaviour:
   projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
   previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   attack:
-    damage: 0
+    damage: 1
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
   hitCount: 1
   applyDamageOnHit: 1
-  modifiers: []
-  immuneToShield: 0
-  immuneToReflect: 0
+  modifiers:
+  - {fileID: 11400000, guid: 4f8603f86f56d9347a859d7a6d17fb97, type: 2}
+  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
+  immuneToShield: 1
+  immuneToReflect: 1
   shape: {fileID: 11400000, guid: 5debdbd7ca3af374dacb28fdfe3dcf6c, type: 2}
   lifetime: 10
-  initialSpeed: 10
-  acceleration: -1
-  minSpeed: 5
-  maxSpeed: 10
+  initialSpeed: 0
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 0
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
@@ -42,14 +44,14 @@ MonoBehaviour:
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
   spawnLocation: 0
-  aimMode: 0
+  aimMode: 5
   waitForProjectileDeath: 1
-  chargeTime: 0
+  chargeTime: 2
   additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     startingAngle: 0
-    radius: 1
+    radius: 0
     orbitDirection: 0
   randomStartingAngle: 0
   randomRadius: 0
