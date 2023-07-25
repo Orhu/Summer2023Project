@@ -33,7 +33,7 @@ namespace Cardificer
             {
                 if (lootTable != null)
                 {
-                    MenuManager.OpenBoosterPackMenu(this);
+                    MenuManager.Open<BoosterPackMenu>().boosterPackObject = this;
                 }
                 else
                 {
