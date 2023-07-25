@@ -41,12 +41,10 @@ namespace Cardificer
         /// <returns> The sprites that were loaded </returns>
         private List<Sprite> LoadSprites(string name)
         {
-            Debug.Log("Loading sprites for " + name);
             List<Sprite> loadedSprites = new List<Sprite>();
             Sprite nonNumberedSprite = (Sprite) AssetDatabase.LoadAssetAtPath(path + prefix + "_" + name + ".png", typeof(Sprite));
             if (nonNumberedSprite != null)
             {
-                Debug.Log("Found " + AssetDatabase.GetAssetPath(nonNumberedSprite));
                 loadedSprites.Add(nonNumberedSprite);
             }
 
@@ -60,7 +58,6 @@ namespace Cardificer
                 }
                 else
                 {
-                    Debug.Log("Found " + AssetDatabase.GetAssetPath(numberedSprite));
                     loadedSprites.Add(numberedSprite);
                 }
                 number++;
@@ -119,13 +116,13 @@ namespace Cardificer
 
             // Walls
             List<Sprite> rightWallSprites = LoadSprites(names.rightWallName);
+            exteriorParams.rightWallSprites = new GenericWeightedThings<Sprite>();
             if (rightWallSprites == null || rightWallSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any right wall sprites, looking for name [" + names.rightWallName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.rightWallSprites = new GenericWeightedThings<Sprite>();
                 foreach (Sprite sprite in rightWallSprites)
                 {
                     exteriorParams.rightWallSprites.Add(sprite, 1, -1, true);
@@ -133,13 +130,13 @@ namespace Cardificer
             }
 
             List<Sprite> topWallSprites = LoadSprites(names.topWallName);
+            exteriorParams.topWallSprites = new GenericWeightedThings<Sprite>();
             if (topWallSprites == null || topWallSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any top wall sprites, looking for name [" + names.topWallName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.topWallSprites = new GenericWeightedThings<Sprite>();
                 foreach (Sprite sprite in topWallSprites)
                 {
                     exteriorParams.topWallSprites.Add(sprite, 1, -1, true);
@@ -147,13 +144,13 @@ namespace Cardificer
             }
 
             List<Sprite> leftWallSprites = LoadSprites(names.leftWallName);
+            exteriorParams.leftWallSprites = new GenericWeightedThings<Sprite>();
             if (leftWallSprites == null || leftWallSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any left wall sprites, looking for name [" + names.leftWallName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.leftWallSprites = new GenericWeightedThings<Sprite>();
                 foreach (Sprite sprite in leftWallSprites)
                 {
                     exteriorParams.leftWallSprites.Add(sprite, 1, -1, true);
@@ -161,13 +158,13 @@ namespace Cardificer
             }
 
             List<Sprite> bottomWallSprites = LoadSprites(names.bottomWallName);
+            exteriorParams.bottomWallSprites = new GenericWeightedThings<Sprite>();
             if (bottomWallSprites == null || bottomWallSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any bottom wall sprites, looking for name [" + names.bottomWallName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.bottomWallSprites = new GenericWeightedThings<Sprite>();
                 foreach (Sprite sprite in bottomWallSprites)
                 {
                     exteriorParams.bottomWallSprites.Add(sprite, 1, -1, true);
@@ -176,13 +173,13 @@ namespace Cardificer
 
             // Corners
             List<Sprite> topRightCornerSprites = LoadSprites(names.topRightCornerName);
+            exteriorParams.topRightCornerSprites = new GenericWeightedThings<Sprite>();
             if (topRightCornerSprites == null || topRightCornerSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any top right corner sprites, looking for name [" + names.topRightCornerName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.topRightCornerSprites = new GenericWeightedThings<Sprite>();
                 foreach (Sprite sprite in topRightCornerSprites)
                 {
                     exteriorParams.topRightCornerSprites.Add(sprite, 1, -1, true);
@@ -190,13 +187,13 @@ namespace Cardificer
             }
 
             List<Sprite> topLeftCornerSprites = LoadSprites(names.topLeftCornerName);
+            exteriorParams.topLeftCornerSprites = new GenericWeightedThings<Sprite>();
             if (topLeftCornerSprites == null || topLeftCornerSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any top left corner sprites, looking for name [" + names.topLeftCornerName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.topLeftCornerSprites = new GenericWeightedThings<Sprite>();
                 foreach (Sprite sprite in topLeftCornerSprites)
                 {
                     exteriorParams.topLeftCornerSprites.Add(sprite, 1, -1, true);
@@ -204,13 +201,13 @@ namespace Cardificer
             }
 
             List<Sprite> bottomLeftCornerSprites = LoadSprites(names.bottomLeftCornerName);
+            exteriorParams.bottomLeftCornerSprites = new GenericWeightedThings<Sprite>();
             if (bottomLeftCornerSprites == null || bottomLeftCornerSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any bottom left corner sprites, looking for name [" + names.bottomLeftCornerName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.bottomLeftCornerSprites = new GenericWeightedThings<Sprite>();
                 foreach (Sprite sprite in bottomLeftCornerSprites)
                 {
                     exteriorParams.bottomLeftCornerSprites.Add(sprite, 1, -1, true);
@@ -218,13 +215,13 @@ namespace Cardificer
             }
 
             List<Sprite> bottomRightCornerSprites = LoadSprites(names.bottomRightCornerName);
+            exteriorParams.bottomRightCornerSprites = new GenericWeightedThings<Sprite>();
             if (bottomRightCornerSprites == null || bottomRightCornerSprites.Count == 0 )
             {
                 Debug.LogWarning("Couldn't find any bottom right corner sprites, looking for name [" + names.bottomRightCornerName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.bottomRightCornerSprites = new GenericWeightedThings<Sprite>();
                 foreach (Sprite sprite in bottomRightCornerSprites)
                 {
                     exteriorParams.bottomRightCornerSprites.Add(sprite, 1, -1, true);
@@ -233,13 +230,13 @@ namespace Cardificer
 
             // Doors
             List<DoorSprites> rightDoorSprites = LoadDoorSprites(names.rightDoorName);
+            exteriorParams.rightDoorSprites = new GenericWeightedThings<DoorSprites>();
             if (rightDoorSprites == null || rightDoorSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any right door sprites, looking for name [" + names.rightDoorName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.rightDoorSprites = new GenericWeightedThings<DoorSprites>();
                 foreach (DoorSprites sprite in rightDoorSprites)
                 {
                     exteriorParams.rightDoorSprites.Add(sprite, 1, -1, true);
@@ -247,13 +244,13 @@ namespace Cardificer
             }
 
             List<DoorSprites> topDoorSprites = LoadDoorSprites(names.topDoorName);
+            exteriorParams.topDoorSprites = new GenericWeightedThings<DoorSprites>();
             if (topDoorSprites == null || topDoorSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any top door sprites, looking for name [" + names.topDoorName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.topDoorSprites = new GenericWeightedThings<DoorSprites>();
                 foreach (DoorSprites sprite in topDoorSprites)
                 {
                     exteriorParams.topDoorSprites.Add(sprite, 1, -1, true);
@@ -261,13 +258,13 @@ namespace Cardificer
             }
 
             List<DoorSprites> leftDoorSprites = LoadDoorSprites(names.leftDoorName);
+            exteriorParams.leftDoorSprites = new GenericWeightedThings<DoorSprites>();
             if (leftDoorSprites == null)
             {
                 Debug.LogWarning("Couldn't find any left door sprites, looking for name [" + names.leftDoorName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.leftDoorSprites = new GenericWeightedThings<DoorSprites>();
                 foreach (DoorSprites sprite in leftDoorSprites)
                 {
                     exteriorParams.leftDoorSprites.Add(sprite, 1, -1, true);
@@ -275,13 +272,13 @@ namespace Cardificer
             }
 
             List<DoorSprites> bottomDoorSprites = LoadDoorSprites(names.bottomDoorName);
+            exteriorParams.bottomDoorSprites = new GenericWeightedThings<DoorSprites>();
             if (bottomDoorSprites == null || bottomDoorSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any bottom door sprites, looking for name [" + names.bottomDoorName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.bottomDoorSprites = new GenericWeightedThings<DoorSprites>();
                 foreach (DoorSprites sprite in bottomDoorSprites)
                 {
                     exteriorParams.bottomDoorSprites.Add(sprite, 1, -1, true);
@@ -290,13 +287,13 @@ namespace Cardificer
 
             // Door frames
             List<Sprite> rightDoorTopDoorFrameSprites = LoadSprites(names.rightDoorTopDoorFrameName);
+            exteriorParams.rightDoorTopDoorFrameSprites = new GenericWeightedThings<Sprite>();
             if (rightDoorTopDoorFrameSprites == null || rightDoorTopDoorFrameSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any right door top door frame sprites, looking for name [" + names.rightDoorTopDoorFrameName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.rightDoorTopDoorFrameSprites = new GenericWeightedThings<Sprite>();
                 foreach (Sprite sprite in rightDoorTopDoorFrameSprites)
                 {
                     exteriorParams.rightDoorTopDoorFrameSprites.Add(sprite, 1, -1, true);
@@ -304,13 +301,13 @@ namespace Cardificer
             }
 
             List<Sprite> rightDoorBottomDoorFrameSprites = LoadSprites(names.rightDoorBottomDoorFrameName);
+            exteriorParams.rightDoorBottomDoorFrameSprites = new GenericWeightedThings<Sprite>();
             if (rightDoorBottomDoorFrameSprites == null || rightDoorBottomDoorFrameSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any right door bottom door frame sprites, looking for name [" + names.rightDoorBottomDoorFrameName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.rightDoorBottomDoorFrameSprites = new GenericWeightedThings<Sprite>();
                 foreach (Sprite sprite in rightDoorBottomDoorFrameSprites)
                 {
                     exteriorParams.rightDoorBottomDoorFrameSprites.Add(sprite, 1, -1, true);
@@ -318,13 +315,13 @@ namespace Cardificer
             }
 
             List<Sprite> topDoorRightDoorFrameSprites = LoadSprites(names.topDoorRightDoorFrameName);
+            exteriorParams.topDoorRightDoorFrameSprites = new GenericWeightedThings<Sprite>();
             if (topDoorRightDoorFrameSprites == null || topDoorRightDoorFrameSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any top door right door frame sprites, looking for name [" + names.topDoorRightDoorFrameName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.topDoorRightDoorFrameSprites = new GenericWeightedThings<Sprite>();
                 foreach (Sprite sprite in topDoorRightDoorFrameSprites)
                 {
                     exteriorParams.topDoorRightDoorFrameSprites.Add(sprite, 1, -1, true);
@@ -332,13 +329,13 @@ namespace Cardificer
             }
 
             List<Sprite> topDoorLeftDoorFrameSprites = LoadSprites(names.topDoorLeftDoorFrameName);
+            exteriorParams.topDoorLeftDoorFrameSprites = new GenericWeightedThings<Sprite>();
             if (topDoorLeftDoorFrameSprites == null || topDoorLeftDoorFrameSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any top door left door frame sprites, looking for name [" + names.topDoorLeftDoorFrameName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.topDoorLeftDoorFrameSprites = new GenericWeightedThings<Sprite>();
                 foreach (Sprite sprite in topDoorLeftDoorFrameSprites)
                 {
                     exteriorParams.topDoorLeftDoorFrameSprites.Add(sprite, 1, -1, true);
@@ -346,13 +343,13 @@ namespace Cardificer
             }
 
             List<Sprite> leftDoorTopDoorFrameSprites = LoadSprites(names.leftDoorTopDoorFrameName);
+            exteriorParams.leftDoorTopDoorFrameSprites = new GenericWeightedThings<Sprite>();
             if (leftDoorTopDoorFrameSprites == null || leftDoorTopDoorFrameSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any left door top door frame sprites, looking for name [" + names.leftDoorTopDoorFrameName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.leftDoorTopDoorFrameSprites = new GenericWeightedThings<Sprite>();
                 foreach (Sprite sprite in leftDoorTopDoorFrameSprites)
                 {
                     exteriorParams.leftDoorTopDoorFrameSprites.Add(sprite, 1, -1, true);
@@ -360,13 +357,13 @@ namespace Cardificer
             }
 
             List<Sprite> leftDoorBottomDoorFrameSprites = LoadSprites(names.leftDoorBottomDoorFrameName);
+            exteriorParams.leftDoorBottomDoorFrameSprites = new GenericWeightedThings<Sprite>();
             if (leftDoorBottomDoorFrameSprites == null || leftDoorBottomDoorFrameSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any left door bottom door frame sprites, looking for name [" + names.leftDoorBottomDoorFrameName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.leftDoorBottomDoorFrameSprites = new GenericWeightedThings<Sprite>();
                 foreach (Sprite sprite in leftDoorBottomDoorFrameSprites)
                 {
                     exteriorParams.leftDoorBottomDoorFrameSprites.Add(sprite, 1, -1, true);
@@ -374,13 +371,13 @@ namespace Cardificer
             }
 
             List<Sprite> bottomDoorRightDoorFrameSprites = LoadSprites(names.bottomDoorRightDoorFrameName);
+            exteriorParams.bottomDoorRightDoorFrameSprites = new GenericWeightedThings<Sprite>();
             if (bottomDoorRightDoorFrameSprites == null || bottomDoorRightDoorFrameSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any bottom door right door frame sprites, looking for name [" + names.bottomDoorRightDoorFrameName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.bottomDoorRightDoorFrameSprites = new GenericWeightedThings<Sprite>();
                 foreach (Sprite sprite in bottomDoorRightDoorFrameSprites)
                 {
                     exteriorParams.bottomDoorRightDoorFrameSprites.Add(sprite, 1, -1, true);
@@ -388,13 +385,13 @@ namespace Cardificer
             }
 
             List<Sprite> bottomDoorLeftDoorFrameSprites = LoadSprites(names.bottomDoorLeftDoorFrameName);
+            exteriorParams.bottomDoorLeftDoorFrameSprites = new GenericWeightedThings<Sprite>();
             if (bottomDoorLeftDoorFrameSprites == null || bottomDoorLeftDoorFrameSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any bottom door left door frame sprites, looking for name [" + names.bottomDoorLeftDoorFrameName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.bottomDoorLeftDoorFrameSprites = new GenericWeightedThings<Sprite>();
                 foreach (Sprite sprite in bottomDoorLeftDoorFrameSprites)
                 {
                     exteriorParams.bottomDoorLeftDoorFrameSprites.Add(sprite, 1, -1, true);
@@ -403,13 +400,13 @@ namespace Cardificer
 
             // Floors
             List<Sprite> floorSprites = LoadSprites(names.floorName);
+            exteriorParams.floorSprites = new GenericWeightedThings<Sprite>();
             if (floorSprites == null || floorSprites.Count == 0)
             {
                 Debug.LogWarning("Couldn't find any floor sprites, looking for name [" + names.floorName + "] with prefix [" + prefix + "]");
             }
             else
             {
-                exteriorParams.floorSprites = new GenericWeightedThings<Sprite>();
                 foreach (Sprite sprite in floorSprites)
                 {
                     exteriorParams.floorSprites.Add(sprite, 1, -1, true);
