@@ -7,6 +7,7 @@ using UnityEngine;
 /// </summary>
 public class ExteriorParamNames : ScriptableObject
 {
+    [Header("Walls")]
     [Tooltip("The name for the right wall sprites")]
     public string rightWallName;
 
@@ -19,6 +20,7 @@ public class ExteriorParamNames : ScriptableObject
     [Tooltip("The name for the right wall sprites")]
     public string bottomWallName;
 
+    [Header("Corners")]
     [Tooltip("The name for the top right corner sprites")]
     public string topRightCornerName;
 
@@ -31,6 +33,7 @@ public class ExteriorParamNames : ScriptableObject
     [Tooltip("The name for the bottom right corner sprites")]
     public string bottomRightCornerName;
 
+    [Header("Doors")]
     [Tooltip("The name for the right door sprites")]
     public string rightDoorName;
 
@@ -43,6 +46,7 @@ public class ExteriorParamNames : ScriptableObject
     [Tooltip("The name for the bottom door sprites")]
     public string bottomDoorName;
 
+    [Header("Door Frames")]
     [Tooltip("The name for the right door top door frame sprites")]
     public string rightDoorTopDoorFrameName;
 
@@ -67,6 +71,7 @@ public class ExteriorParamNames : ScriptableObject
     [Tooltip("The name for the bottom door left door frame sprites")]
     public string bottomDoorLeftDoorFrameName;
 
+    [Header("Floors")]
     [Tooltip("The name for the floor sprites")]
     public string floorName;
 }
