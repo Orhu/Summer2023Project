@@ -89,7 +89,16 @@ namespace Cardificer
             }
             currentFloor = floorNumber;
             onFloorLoaded?.Invoke();
-            SceneManager.LoadScene(floors[floorNumber].sceneName);
+            System.Action finishLoading = null;
+            LoadingScreen.Open(
+                () =>
+                {
+                    SceneManager.LoadSceneAsync(floors[floorNumber].sceneName).completed += 
+                        (AsyncOperation operation) =>
+                        {
+                            finishLoading();
+                        };
+                }, out finishLoading);
             return true;
         }
 

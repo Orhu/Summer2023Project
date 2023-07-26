@@ -24,7 +24,7 @@ namespace Cardificer
             {
                 yield return new WaitForSeconds(minLoadingTime / 2);
                 loadingAction();
-                DelayedClose();
+                MenuManager.StartCoroutine(DelayedClose());
             }
 
             // Closes the loading screen after half the min loading time if it is ready to be closed.
