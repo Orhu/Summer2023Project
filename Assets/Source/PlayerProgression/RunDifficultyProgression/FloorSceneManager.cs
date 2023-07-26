@@ -28,7 +28,7 @@ namespace Cardificer
         }
 
         // Delegate called when a floor is loaded
-        public static System.Action onFloorLoaded;
+        public static event System.Action onFloorLoaded;
 
         // The current floor
         private static int? _currentFloor = null;
@@ -89,16 +89,8 @@ namespace Cardificer
             }
             currentFloor = floorNumber;
             onFloorLoaded?.Invoke();
-            System.Action finishLoading = null;
-            LoadingScreen.Open(
-                () =>
-                {
-                    SceneManager.LoadSceneAsync(floors[floorNumber].sceneName).completed += 
-                        (AsyncOperation operation) =>
-                        {
-                            finishLoading();
-                        };
-                }, out finishLoading);
+            AsyncOperation operation = SceneManager.LoadSceneAsync(floors[floorNumber].sceneName);
+            MenuManager.Open<LoadingScreen>(false, true).AddAsyncOperation(operation);
             return true;
         }
 
