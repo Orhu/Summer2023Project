@@ -47,7 +47,7 @@ namespace Cardificer
 
             transform.position += Quaternion.AngleAxis(startingRotation, Vector3.forward) * Vector2.right * radius;
             startingRotation -= 90;
-            transform.rotation = Quaternion.AngleAxis(-startingRotation * OrbitSign(), Vector3.forward);
+            transform.rotation = Quaternion.AngleAxis(startingRotation * OrbitSign(), Vector3.forward);
 
             base.Start();
         }
