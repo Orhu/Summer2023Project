@@ -46,7 +46,6 @@ namespace Cardificer
         /// <param name="closeOtherMenus"> Whether or not this will close other currently open menus. </param>
         /// <param name="lockOpen"> Whether or not this menu will be allowed to be closed by the menu manager. </param>
         /// <returns> The actual menu object that was opened. </returns>
-
         public static MenuType Open<MenuType>(bool pauseGame = true,  bool lockOpen = false, bool closeOtherMenus = true) where MenuType : Component
         {
             return (MenuType)Open(typeof(MenuType), pauseGame, lockOpen, closeOtherMenus);
