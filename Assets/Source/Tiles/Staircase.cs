@@ -1,21 +1,24 @@
 using UnityEngine;
 
-/// <summary>
-/// Loads the next floor when the player enters it
-/// </summary>
-public class Staircase : MonoBehaviour
-{
+namespace Cardificer
+{ 
     /// <summary>
-    /// Handles entering the staircase, loading the next floor
+    /// Loads the next floor when the player enters it
     /// </summary>
-    /// <param name="collision"> The collision that entered the staircase </param>
-    private void OnTriggerEnter2D(Collider2D collision)
+    public class Staircase : MonoBehaviour
     {
-        if (!collision.CompareTag("Player")) { return; }
-
-        if (!FloorSceneManager.LoadNextFloor())
+        /// <summary>
+        /// Handles entering the staircase, loading the next floor
+        /// </summary>
+        /// <param name="collision"> The collision that entered the staircase </param>
+        private void OnTriggerEnter2D(Collider2D collision)
         {
-            Debug.Log("YOU WIN!!! WOAH");
+            if (!collision.CompareTag("Player")) { return; }
+
+            if (!FloorSceneManager.LoadNextFloor())
+            {
+                Debug.Log("YOU WIN!!! WOAH");
+            }
         }
     }
 }
