@@ -112,6 +112,8 @@ namespace Cardificer
             Destroy(_boosterPackObject.gameObject);
             // Remove the reference to the game world booster pack object
             _boosterPackObject = null;
+
+            MenuManager.Close<BoosterPackMenu>();
         }
     }
 }

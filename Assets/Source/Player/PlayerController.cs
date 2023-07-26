@@ -203,7 +203,7 @@ namespace Cardificer
         /// </summary>
         public void OnPause()
         {
-            MenuManager.TogglePause();
+            MenuManager.Toggle<PauseMenu>();
         }
 
         /// <summary>
@@ -219,7 +219,7 @@ namespace Cardificer
         /// </summary>
         public void OnOpenCardMenu()
         {
-            MenuManager.ToggleCardMenu();
+            MenuManager.Toggle<CardMenu>();
         }
 
         /// <summary>
