@@ -9,16 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae521aad527ed7e449352281fbf9e980, type: 3}
-  m_Name: ChordEffect_IcyBlast
+  m_Script: {fileID: 11500000, guid: 924b3322649ca944ea341915d22808fe, type: 3}
+  m_Name: ChordEffect_BoulderLob
   m_EditorClassIdentifier: 
   minAttackSequenceIndex: 0
-  maxAttackSequenceIndex: 2
+  maxAttackSequenceIndex: 2147483647
   attackSequenceLoopInterval: 2147483647
   priority: 0
-  action: {fileID: 11400000, guid: f874c03cd6b383d4e9d7ebed496b024b, type: 2}
-  delay: 0.25
-  playTime: 4
-  playCount: 10
-  inheritModifiers: 0
-  applyToZeroDamage: 1
+  knockback:
+    amount: 2
+    duration: 0.1
+    resetMomentum: 0
+  pushDirection: 0
