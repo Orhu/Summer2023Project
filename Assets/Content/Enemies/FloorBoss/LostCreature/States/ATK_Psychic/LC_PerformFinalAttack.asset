@@ -9,7 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9838566d5ffcc544e8fd14ad27501149, type: 3}
-  m_Name: LC_PsychicCooldownComplete
+  m_Script: {fileID: 11500000, guid: eabd4dbd5b080a640bd3c050fac04c55, type: 3}
+  m_Name: LC_PerformFinalAttack
   m_EditorClassIdentifier: 
-  actionToCheck: {fileID: 11400000, guid: 73e5e1e890a8df04781c8e9a39706c21, type: 2}
+  actionChargeUpTime: 0
+  friendlyFire: 0
+  attacks:
+  - {fileID: 11400000, guid: a705f9581ab65914386f461e5de4916f, type: 2}
