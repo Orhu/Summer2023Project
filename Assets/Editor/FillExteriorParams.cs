@@ -9,7 +9,7 @@ namespace Cardificer
     /// </summary>
     public class FillExteriorParams : ScriptableWizard
     {
-        // The prefix for the exterior params
+        [Tooltip("The prefix for the exterior params")]
         [SerializeField] private string prefix = "";
 
         // The current asset path
