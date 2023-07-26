@@ -57,7 +57,7 @@ namespace Cardificer
         /// </summary>
         new void FixedUpdate()
         {
-            if (radius == 0f)
+            if (radius != 0f)
             {
                 timeAlive += Time.fixedDeltaTime;
                 speed += acceleration * Time.fixedDeltaTime;
