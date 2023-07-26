@@ -259,12 +259,7 @@ namespace Cardificer
                                 GameObject roomTypeVisual = Instantiate(roomTypeImagePrefab, cellVisual.transform);
                                 roomTypeVisual.GetComponent<Image>().sprite = neighborCell.room.roomType.roomTypeSprite;
 
-                                int roomScale = Mathf.Min(neighborCell.room.roomType.sizeMultiplier.x, neighborCell.room.roomType.sizeMultiplier.y);
-
-                                roomTypeVisual.GetComponent<RectTransform>().sizeDelta = new Vector2(roomTypeVisual.GetComponent<RectTransform>().sizeDelta.x * roomScale, roomTypeVisual.GetComponent<RectTransform>().sizeDelta.y * roomScale);
-
-                                roomTypeVisual.transform.localPosition = new Vector2(roomTypeVisual.transform.localPosition.x + ((cellVisualPrefab.GetComponent<RectTransform>().sizeDelta.x * neighborCell.room.roomType.sizeMultiplier.x) / 2), roomTypeVisual.transform.localPosition.y + ((cellVisualPrefab.GetComponent<RectTransform>().sizeDelta.y * neighborCell.room.roomType.sizeMultiplier.y) / 2));
-
+                                roomTypeVisual.transform.localPosition = new Vector2(roomTypeVisual.transform.localPosition.x + (cellVisualPrefab.GetComponent<RectTransform>().sizeDelta.x / 2), roomTypeVisual.transform.localPosition.y + (cellVisualPrefab.GetComponent<RectTransform>().sizeDelta.y / 2));
 
                                 roomTypeVisual.transform.SetParent(roomImageContainer.transform, true);
                             }
