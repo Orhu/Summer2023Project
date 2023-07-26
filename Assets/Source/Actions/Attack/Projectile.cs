@@ -308,20 +308,22 @@ namespace Cardificer
         /// <returns> The position in world space of the spawn location. </returns>
         protected Vector3 GetSpawnLocation()
         {
-            if (actor == null) { return transform.position; }
 
             switch (attack.spawnLocation)
             {
                 case SpawnLocation.Actor:
+                    if (actor == null) { return transform.position; }
                     return actor.GetActionSourceTransform().position;
 
                 case SpawnLocation.AimPosition:
+                    if (actor == null) { return transform.position; }
                     return actor.GetActionAimPosition();
 
                 case SpawnLocation.RoomCenter:
                     return FloorGenerator.currentRoom.transform.position;
 
                 case SpawnLocation.Causer:
+                    if (causer == null) { return transform.position; }
                     return causer.transform.position;
 
                 case SpawnLocation.Player:
