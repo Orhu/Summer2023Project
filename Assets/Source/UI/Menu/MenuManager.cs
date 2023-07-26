@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -176,6 +177,14 @@ namespace Cardificer
             return (instance.GetComponentInChildren(menuType)?.gameObject.activeSelf).GetValueOrDefault();
         }
 
+        /// <summary>
+        /// Starts a coroutine.
+        /// </summary>
+        /// <param name="routine"> The routine to run. </param>
+        public static new void StartCoroutine(IEnumerator routine)
+        {
+            (instance as MonoBehaviour).StartCoroutine(routine);
+        }
 
         /// <summary>
         /// Gets the prefab to instantiate for a given menu.
