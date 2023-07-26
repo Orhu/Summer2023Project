@@ -211,7 +211,7 @@ namespace Cardificer
         /// </summary>
         public void OnOpenMap()
         {
-            MenuManager.ToggleMap();
+            MenuManager.Toggle<MapMenu>();
         }
 
         /// <summary>

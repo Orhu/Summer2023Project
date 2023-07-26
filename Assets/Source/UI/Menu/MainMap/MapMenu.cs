@@ -110,7 +110,7 @@ namespace Cardificer
         /// </summary>
         public void DeckViewerButtonEvent()
         {
-            MenuManager.ToggleCardMenu();
+            MenuManager.Toggle<CardMenu>();
         }
 
         /// <summary>
@@ -263,11 +263,12 @@ namespace Cardificer
                             GameObject roomTypeVisual = Instantiate(roomTypeImagePrefab, parentCell.transform);
                             roomTypeVisual.GetComponent<Image>().sprite = cell.room.roomType.roomTypeSprite;
 
-                            roomTypeVisual.transform.localPosition = new Vector2(roomTypeVisual.transform.localPosition.x + ((cellVisualPrefab.GetComponent<RectTransform>().sizeDelta.x * cell.room.roomType.sizeMultiplier.x) / 2), roomTypeVisual.transform.localPosition.y + ((cellVisualPrefab.GetComponent<RectTransform>().sizeDelta.y * cell.room.roomType.sizeMultiplier.y) / 2));
-
-                            int roomScale = Mathf.Max(cell.room.roomType.sizeMultiplier.x, cell.room.roomType.sizeMultiplier.y);
+                            int roomScale = Mathf.Min(cell.room.roomType.sizeMultiplier.x, cell.room.roomType.sizeMultiplier.y);
 
                             roomTypeVisual.GetComponent<RectTransform>().sizeDelta = new Vector2(roomTypeVisual.GetComponent<RectTransform>().sizeDelta.x * roomScale, roomTypeVisual.GetComponent<RectTransform>().sizeDelta.y * roomScale);
+
+                            roomTypeVisual.transform.localPosition = new Vector2(roomTypeVisual.transform.localPosition.x + ((cellVisualPrefab.GetComponent<RectTransform>().sizeDelta.x * cell.room.roomType.sizeMultiplier.x) / 2), roomTypeVisual.transform.localPosition.y + ((cellVisualPrefab.GetComponent<RectTransform>().sizeDelta.y * cell.room.roomType.sizeMultiplier.y) / 2));
+
 
                             roomTypeVisual.transform.SetParent(roomImageContainer.transform, true);
                         }
