@@ -93,16 +93,16 @@ namespace Cardificer
             wallContainer.name = "Wall Container";
 
             // Add the corners
-            Sprite randomCornerSprite = GetRandomValidExteriorParam(exteriorParams.bottomLeftWallCornerSprites, defaultRoomExteriorParams.bottomLeftWallCornerSprites);
+            Sprite randomCornerSprite = GetRandomValidExteriorParam(exteriorParams.bottomLeftCornerSprites, defaultRoomExteriorParams.bottomLeftCornerSprites);
             room.roomGrid[0, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(0, 0), wallTile, wallContainer);
 
-            randomCornerSprite = GetRandomValidExteriorParam(exteriorParams.topLeftWallCornerSprites, defaultRoomExteriorParams.topLeftWallCornerSprites); 
+            randomCornerSprite = GetRandomValidExteriorParam(exteriorParams.topLeftCornerSprites, defaultRoomExteriorParams.topLeftCornerSprites); 
             room.roomGrid[0, roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(0, roomSize.y - 1), wallTile, wallContainer);
 
-            randomCornerSprite = GetRandomValidExteriorParam(exteriorParams.bottomRightWallCornerSprites, defaultRoomExteriorParams.bottomRightWallCornerSprites);
+            randomCornerSprite = GetRandomValidExteriorParam(exteriorParams.bottomRightCornerSprites, defaultRoomExteriorParams.bottomRightCornerSprites);
             room.roomGrid[roomSize.x - 1, 0] = CreateWallTile(randomCornerSprite, new Vector2Int(roomSize.x - 1, 0), wallTile, wallContainer);
 
-            randomCornerSprite = GetRandomValidExteriorParam(exteriorParams.topRightWallCornerSprites, defaultRoomExteriorParams.topRightWallCornerSprites);
+            randomCornerSprite = GetRandomValidExteriorParam(exteriorParams.topRightCornerSprites, defaultRoomExteriorParams.topRightCornerSprites);
             room.roomGrid[roomSize.x - 1, roomSize.y - 1] = CreateWallTile(randomCornerSprite, new Vector2Int(roomSize.x - 1, roomSize.y - 1), wallTile, wallContainer);
 
             // Add the top and bottom walls

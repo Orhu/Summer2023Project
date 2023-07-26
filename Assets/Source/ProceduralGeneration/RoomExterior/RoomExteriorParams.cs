@@ -26,16 +26,16 @@ namespace Cardificer
         [Header("Corners")]
 
         [Tooltip("The possible top right wall corner sprites to use")]
-        public GenericWeightedThings<Sprite> topRightWallCornerSprites;
+        public GenericWeightedThings<Sprite> topRightCornerSprites;
 
         [Tooltip("The possible top left wall corner sprites to use")]
-        public GenericWeightedThings<Sprite> topLeftWallCornerSprites;
+        public GenericWeightedThings<Sprite> topLeftCornerSprites;
 
         [Tooltip("The possible bottom left wall corner sprites to use")]
-        public GenericWeightedThings<Sprite> bottomLeftWallCornerSprites;
+        public GenericWeightedThings<Sprite> bottomLeftCornerSprites;
 
         [Tooltip("The possible bottom right wall corner sprites to use")]
-        public GenericWeightedThings<Sprite> bottomRightWallCornerSprites;
+        public GenericWeightedThings<Sprite> bottomRightCornerSprites;
 
         [Header("Doors")]
 
@@ -91,10 +91,10 @@ namespace Cardificer
             topWallSprites?.Reset();
             leftWallSprites?.Reset();
             bottomWallSprites?.Reset();
-            topRightWallCornerSprites?.Reset();
-            topLeftWallCornerSprites?.Reset();
-            bottomLeftWallCornerSprites?.Reset();
-            bottomRightWallCornerSprites?.Reset();
+            topRightCornerSprites?.Reset();
+            topLeftCornerSprites?.Reset();
+            bottomLeftCornerSprites?.Reset();
+            bottomRightCornerSprites?.Reset();
             rightDoorSprites?.Reset();
             topDoorSprites?.Reset();
             leftDoorSprites?.Reset();
