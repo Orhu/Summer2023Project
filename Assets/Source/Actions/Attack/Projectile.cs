@@ -112,7 +112,10 @@ namespace Cardificer
                 {
                     foreach (GameObject noLongerIgnoredObject in _ignoredObjects.Except(value))
                     {
-                        Physics2D.IgnoreCollision(collider, noLongerIgnoredObject.GetComponent<Collider2D>(), false);
+                        if(noLongerIgnoredObject.GetComponent<Collider2D>() != null)
+                        {
+                            Physics2D.IgnoreCollision(collider, noLongerIgnoredObject.GetComponent<Collider2D>(), false);
+                        }
                     }
                     foreach (GameObject newlyIgnoredObject in value.Except(_ignoredObjects))
                     {
