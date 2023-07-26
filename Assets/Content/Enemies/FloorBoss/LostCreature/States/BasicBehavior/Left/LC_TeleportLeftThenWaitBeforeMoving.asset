@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c5858af96344aaa9e636fdff62a26b5, type: 3}
+  m_Name: LC_TeleportLeftThenWaitBeforeMoving
+  m_EditorClassIdentifier: 
+  enterActions:
+  - {fileID: 11400000, guid: e4f513ce97af3834098fb06e319b53ec, type: 2}
+  - {fileID: 11400000, guid: fccb8c6fd3819724381127b6009009f1, type: 2}
+  - {fileID: 11400000, guid: bb10e401e706e6948b3a22bc405202af, type: 2}
+  exitActions: []
+  updateActions: []
+  transitions:
+  - {fileID: 11400000, guid: 45c5e21d9006abb47a93d4f4227bc115, type: 2}
