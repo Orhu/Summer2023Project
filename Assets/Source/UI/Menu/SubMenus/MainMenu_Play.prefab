@@ -267,7 +267,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7117564002036735948}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3624320039148984897}
+        m_TargetAssemblyTypeName: Cardificer.MainMenu_Play, Assembly-CSharp
+        m_MethodName: NewGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &7117564002036735948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -505,7 +517,7 @@ GameObject:
   - component: {fileID: 2239378185708829983}
   - component: {fileID: 3313875555087777437}
   m_Layer: 5
-  m_Name: SantumButton
+  m_Name: SanctumButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -529,7 +541,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -45.99996}
-  m_SizeDelta: {x: 140, y: 50}
+  m_SizeDelta: {x: 150, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7116377991917083178
 CanvasRenderer:
@@ -582,7 +594,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3313875555087777437}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3624320039148984897}
+        m_TargetAssemblyTypeName: Cardificer.MainMenu_Play, Assembly-CSharp
+        m_MethodName: Sanctum
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &3313875555087777437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603,7 +627,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Santum
+  m_text: Sanctum
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 55496c6b99b6115458594536a8f9313a, type: 2}
   m_sharedMaterial: {fileID: 2648412495557280930, guid: 55496c6b99b6115458594536a8f9313a, type: 2}
@@ -866,7 +890,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 356167327224600823}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3624320039148984897}
+        m_TargetAssemblyTypeName: Cardificer.MainMenu_Play, Assembly-CSharp
+        m_MethodName: Continue
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &356167327224600823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1435,6 +1471,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1374390380514256698}
+  - component: {fileID: 3624320039148984897}
   m_Layer: 0
   m_Name: MainMenu_Play
   m_TagString: Untagged
@@ -1463,6 +1500,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &3624320039148984897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3162784461188484221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2fbd414567825a4085800dd7df36574, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3373394825138915456
 GameObject:
   m_ObjectHideFlags: 0
@@ -1820,6 +1869,7 @@ GameObject:
   - component: {fileID: 8692081824811476513}
   - component: {fileID: 27779080902413245}
   - component: {fileID: 3632683471681961820}
+  - component: {fileID: 7534905225925849360}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -1898,7 +1948,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3632683471681961820}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3162784461188484221}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &3632683471681961820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1990,6 +2052,19 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7534905225925849360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4080180511360954833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4c0bd1b3eaf18d49b09709ff20069d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuName: MainMenu_Play
 --- !u!1 &4916069816464378507
 GameObject:
   m_ObjectHideFlags: 0
@@ -2676,7 +2751,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1378500792540638459}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3624320039148984897}
+        m_TargetAssemblyTypeName: Cardificer.MainMenu_Play, Assembly-CSharp
+        m_MethodName: Tutorail
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1378500792540638459
 MonoBehaviour:
   m_ObjectHideFlags: 0
