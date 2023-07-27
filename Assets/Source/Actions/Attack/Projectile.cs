@@ -227,7 +227,6 @@ namespace Cardificer
                     };
             }
 
-            modifiers.OrderBy((AttackModifier modifier) => { return modifier.priority; }); // reorder modifiers so that low priority ones get proc'd last.
 
             InitializeModifiers();
 

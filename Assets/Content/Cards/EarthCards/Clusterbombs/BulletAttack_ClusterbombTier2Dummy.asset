@@ -12,9 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_ClusterbombTier2Dummy
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 0}
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 2
     damageType: 0
@@ -26,8 +23,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9fed95c8a01aa7f4d9aa79ef71abb320, type: 2}
   - {fileID: 11400000, guid: d568cea840dd9564a951ce18a02416e1, type: 2}
   - {fileID: 11400000, guid: d568cea840dd9564a951ce18a02416e1, type: 2}
-  immuneToShield: 0
-  immuneToReflect: 0
   shape: {fileID: 11400000, guid: c9279b1234bcfbe4fa653ee437bc757c, type: 2}
   lifetime: 0.5
   initialSpeed: 8
@@ -36,19 +31,13 @@ MonoBehaviour:
   maxSpeed: 8
   homingSpeed: 0
   homingTime: 0
-  homingDelay: 0
-  homingAimMode: 1
-  switchAfterHit: 0
+  homingAimMode: 0
   visualObject: {fileID: 5678426477218678071, guid: 0af2668acb1ae1447bb5fd6087c3d817, type: 3}
   detachVisualsBeforeDestroy: 0
-  detatchedVisualsTimeBeforeDestroy: 0
-  travelAudioClip: {fileID: 0}
-  impactAudioClip: {fileID: 0}
   spawnLocation: 0
   aimMode: 3
-  waitForProjectileDeath: 0
-  chargeTime: 0
-  additionalActionTime: 0
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   _spawnSequence:
   - delay: 0
     angle: 0
