@@ -104,7 +104,7 @@ namespace Cardificer
         /// </summary>
         public void ExitInstructions()
         {
-            MenuManager.instance.CloseInstructionManual();
+            MenuManager.Close<InstructionMenu>();
         }
     }
 }

@@ -26,6 +26,8 @@ MonoBehaviour:
   modifiers:
   - {fileID: 11400000, guid: f441220b3acda924eaf1e8610d72a8f1, type: 2}
   - {fileID: 11400000, guid: fbc899abf59764d49b7ddee171c8cd60, type: 2}
+  immuneToShield: 0
+  immuneToReflect: 0
   shape: {fileID: 11400000, guid: 40fbf006cc2aa7d409f49dbd6d31aa69, type: 2}
   lifetime: 3
   initialSpeed: 5
@@ -35,7 +37,7 @@ MonoBehaviour:
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
-  homingAimMode: 1
+  homingAimMode: 2
   switchAfterHit: 0
   visualObject: {fileID: 3957954505525376328, guid: 2001e06b6d03d93428403f44f85933f8, type: 3}
   detachVisualsBeforeDestroy: 0
@@ -45,6 +47,7 @@ MonoBehaviour:
   spawnLocation: 0
   aimMode: 0
   waitForProjectileDeath: 0
+  chargeTime: 0
   additionalActionTime: 0
   _spawnSequence:
   - delay: 0

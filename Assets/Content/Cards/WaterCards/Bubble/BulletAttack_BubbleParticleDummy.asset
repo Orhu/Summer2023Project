@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: BulletAttack_BubbleParticleDummy
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 0
     damageType: 0
@@ -21,6 +23,8 @@ MonoBehaviour:
   hitCount: 1
   applyDamageOnHit: 0
   modifiers: []
+  immuneToShield: 0
+  immuneToReflect: 0
   shape: {fileID: 11400000, guid: 46e26752956f95a4483f9a38c83dcc10, type: 2}
   lifetime: 0.01
   initialSpeed: 0
@@ -30,17 +34,18 @@ MonoBehaviour:
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
-  homingAimMode: 0
+  homingAimMode: 1
   switchAfterHit: 0
   visualObject: {fileID: 6767510378083908967, guid: 6ff268b6095ae3c49ab6874948b4e85d, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  spawnLocation: 0
-  aimMode: 5
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  spawnLocation: 0
+  aimMode: 5
+  waitForProjectileDeath: 0
+  chargeTime: 0
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     angle: 0
