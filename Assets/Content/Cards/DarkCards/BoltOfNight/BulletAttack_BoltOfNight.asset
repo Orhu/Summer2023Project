@@ -13,10 +13,8 @@ MonoBehaviour:
   m_Name: BulletAttack_BoltOfNight
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
-    damage: 2
+    damage: 4
     damageType: 0
     statusEffects:
     - {fileID: 11400000, guid: 2397f2eb8d291da4c9efc62a275046b2, type: 2}
@@ -26,29 +24,26 @@ MonoBehaviour:
   modifiers:
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
   - {fileID: 11400000, guid: 5deb79ecdd458bb4ab5a548ee36d30df, type: 2}
-  immuneToShield: 0
-  immuneToReflect: 0
   shape: {fileID: 11400000, guid: 37ec6bf0dc06b3843882d659c93300de, type: 2}
-  lifetime: 2
+  lifetime: 3
   initialSpeed: 12
   acceleration: 0
   minSpeed: 0
   maxSpeed: 12
   homingSpeed: 24
-  homingTime: 1
+  homingTime: 3
   homingDelay: 0
   homingAimMode: 2
   switchAfterHit: 0
   visualObject: {fileID: 8323142901054200154, guid: 054e57125bfb2df4e8d02d2a3fc3accd, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  travelAudioClip: {fileID: 0}
-  impactAudioClip: {fileID: 0}
   spawnLocation: 0
   aimMode: 0
-  waitForProjectileDeath: 0
-  chargeTime: 0
-  additionalActionTime: 0
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   _spawnSequence:
   - delay: 0
     angle: 0

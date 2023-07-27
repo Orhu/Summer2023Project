@@ -9,16 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae521aad527ed7e449352281fbf9e980, type: 3}
+  m_Script: {fileID: 11500000, guid: 42a1acf2e79005b458f58392b602218a, type: 3}
   m_Name: ChordEffect_IcyBlast
   m_EditorClassIdentifier: 
-  minAttackSequenceIndex: 0
-  maxAttackSequenceIndex: 2
-  attackSequenceLoopInterval: 2147483647
-  priority: 0
-  action: {fileID: 11400000, guid: f874c03cd6b383d4e9d7ebed496b024b, type: 2}
-  delay: 0.25
-  playTime: 4
-  playCount: 10
-  inheritModifiers: 0
-  applyToZeroDamage: 1
+  damage: 0
+  statusEffects:
+  - {fileID: 11400000, guid: c075620e03585cd45a6707d0b18cecd4, type: 2}
