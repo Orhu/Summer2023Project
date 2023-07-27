@@ -15,13 +15,13 @@ public class SellSlot : MonoBehaviour
 {
     [Tooltip("What is the value of a regular card at this slot?")]
     [SerializeField] private int regularValue = 5;
-    
+
     [Tooltip("What is the value of a rare card at this slot?")]
     [SerializeField] private int rareValue = 10;
-    
+
     [Tooltip("How many times can a card be sold at this slot?")]
     [SerializeField] private int sellCount = 1;
-    
+
     [Tooltip("What is the sell pool of this slot?")]
     [SerializeField] private SellPool sellPool = SellPool.AllCards;
 
@@ -36,13 +36,13 @@ public class SellSlot : MonoBehaviour
 
     [Tooltip("Stores a reference to the text object that displays the card's value")]
     [SerializeField] private TextMeshProUGUI cardValueText;
-    
+
     [Tooltip("Sell particle effect")]
     [SerializeField] private ParticleSystem sellParticles;
 
     // Tracks the card contained in this slot
     private Card selectedCard;
-    
+
     // Tracks the value of the card in this slot
     private int cardValue;
 
@@ -54,36 +54,45 @@ public class SellSlot : MonoBehaviour
     /// </summary>
     void Start()
     {
-        List<Card> cardPool = new List<Card>();
         GenericWeightedThings<Card> possibleCardPool = new GenericWeightedThings<Card>();
-        
+
         switch (sellPool)
         {
             case SellPool.AllCards:
             {
-                AssetBundle assetBundle = AssetBundle.LoadFromFile(System.IO.Path.Combine(Application.streamingAssetsPath, "cards"));
-                
+#if UNITY_EDITOR
+                string[] cardAssetGUIDs = AssetDatabase.FindAssets("l:Card");
+                foreach(var guid in cardAssetGUIDs)
+                {
+                   string cardAssetPath = AssetDatabase.GUIDToAssetPath(guid);
+                   Card cardObject = AssetDatabase.LoadAssetAtPath(cardAssetPath, typeof(Card)) as Card;
+                   possibleCardPool.Add(new GenericWeightedThing<Card>(cardObject, 1));
+                }
+                break;
+#else
+                AssetBundle assetBundle =
+ AssetBundle.LoadFromFile(System.IO.Path.Combine(Application.streamingAssetsPath, "cards"));
                 cardPool = assetBundle.LoadAllAssets<Card>().ToList();
                 break;
+#endif
             }
             case SellPool.PlayerDeck:
             {
-                cardPool = Deck.playerDeck.cards;
+                // add all cards to the generic weighted thing then pick one
+                foreach (Card card in Deck.playerDeck.cards)
+                {
+                    possibleCardPool.Add(card, 1);
+                }
                 break;
             }
         }
-        
-        // add all cards to the generic weighted thing then pick one
-        foreach (Card card in cardPool)
-        {
-            possibleCardPool.Add(card, 1);
-        }
+
         selectedCard = possibleCardPool.GetRandomThing(transform.position);
 
         // set sprite, value, and text
         cardValue = selectedCard.isRare ? rareValue : regularValue;
-        GetComponent<SpriteRenderer>().sprite = selectedCard.actionImage;
-        cardValueText.text = cardValue.ToString();
+        GetComponent<SpriteRenderer>().sprite = selectedCard.runeImage;
+        cardValueText.text = "+$" + cardValue;
     }
 
     /// <summary>
