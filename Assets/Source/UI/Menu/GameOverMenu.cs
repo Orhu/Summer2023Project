@@ -40,11 +40,9 @@ namespace Cardificer
         public void Restart()
         {
             // Reset our current menu
-            MenuManager.instance.SetCurrentMenu(MenuManager.MenuTypes.Default);
-            MenuManager.instance.CloseMenu();
+            MenuManager.CloseAllMenus(true);
             SaveManager.ClearTransientSaves();
-            // Load the first level
-            SceneManager.LoadScene("Floor 1");
+            FloorSceneManager.LoadFloor(0);
         }
 
         /// <summary>

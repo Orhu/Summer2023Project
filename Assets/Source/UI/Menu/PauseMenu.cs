@@ -18,7 +18,7 @@ namespace Cardificer
         /// </summary>
         public void Resume()
         {
-            MenuManager.instance.CloseMenu();
+            MenuManager.Close<PauseMenu>();
         }
 
         /// <summary>
@@ -27,9 +27,9 @@ namespace Cardificer
         /// </summary>
         public void Reset()
         {
-            MenuManager.instance.CloseMenu();
+            MenuManager.CloseAllMenus(true);
             SaveManager.ClearTransientSaves();
-            Player.Get().GetComponent<ReloadScene>().ReloadCurrentScene();
+            FloorSceneManager.LoadFloor(0);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Cardificer
         /// </summary>
         public void InstructionManual()
         {
-            MenuManager.ToggleInstructionManual();
+            MenuManager.Toggle<InstructionMenu>();
         }
 
         /// <summary>
