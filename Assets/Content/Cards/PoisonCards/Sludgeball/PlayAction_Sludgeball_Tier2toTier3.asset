@@ -12,7 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae521aad527ed7e449352281fbf9e980, type: 3}
   m_Name: PlayAction_Sludgeball_Tier2toTier3
   m_EditorClassIdentifier: 
+  minAttackSequenceIndex: 0
+  maxAttackSequenceIndex: 2147483647
+  attackSequenceLoopInterval: 2147483647
   action: {fileID: 11400000, guid: 9067c4de97456ca438d6ed2ab1bfffff, type: 2}
   delay: 0
-  playTime: 1
-  damageMultiplier: 1
+  playTime: 3
+  playCount: 1000
+  inheritModifiers: 0
+  applyToZeroDamage: 1
