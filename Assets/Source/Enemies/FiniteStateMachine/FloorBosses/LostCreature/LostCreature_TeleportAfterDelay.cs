@@ -11,7 +11,7 @@ namespace Cardificer.FiniteStateMachine
     [CreateAssetMenu(menuName = "FSM/Floor Boss/Lost Creature/Teleport After Delay")]
     public class LostCreature_TeleportAfterDelay : SingleAction
     {
-        [Tooltip("The position to teleport to.")]
+        [Tooltip("The position to teleport to, relative to room center")]
         public Vector2 posToTeleportTo;
         
         [Tooltip("Teleport will happen after how many seconds?")]
@@ -24,8 +24,8 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> Waits amount of time specified before teleporting. </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
-            yield return new WaitForSeconds(delay);
-            stateMachine.transform.position = posToTeleportTo;
+            yield return new UnityEngine.WaitForSeconds(delay);
+            stateMachine.transform.position = FloorGenerator.currentRoom.roomLocation + posToTeleportTo;
             stateMachine.cooldownData.cooldownReady[this] = true;
             yield break;
         }

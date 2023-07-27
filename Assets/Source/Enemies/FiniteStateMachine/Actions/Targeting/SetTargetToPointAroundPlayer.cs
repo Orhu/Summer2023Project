@@ -78,7 +78,7 @@ namespace Cardificer.FiniteStateMachine
                 stateMachine.currentAttackTarget = tileLocation;
             }
 
-            yield return new WaitForSeconds(cooldown);
+            yield return new UnityEngine.WaitForSeconds(cooldown);
             stateMachine.cooldownData.cooldownReady[this] = true;
         }
     }

@@ -75,7 +75,7 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> The stateMachine performing the attack </param>
         private IEnumerator LaunchAttack(BaseStateMachine stateMachine)
         {
-            yield return new WaitForSeconds(actionChargeUpTime);
+            yield return new UnityEngine.WaitForSeconds(actionChargeUpTime);
             if (stateMachine.canAct)
             {
                 bool attackPlayed = false;

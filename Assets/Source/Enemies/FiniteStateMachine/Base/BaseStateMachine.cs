@@ -283,7 +283,7 @@ namespace Cardificer.FiniteStateMachine
                 firstTimeStarted = false;
                 currentState.OnStateEnter(this);
             }
-
+            
             currentState.OnStateUpdate(this);
         }
 

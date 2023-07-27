@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2357f9eaad6fd504ea91b1782346eccf, type: 3}
-  m_Name: LC_SetPathToRight
+  m_Script: {fileID: 11500000, guid: 97dc95d1766383e4a9936e474ef12a94, type: 3}
+  m_Name: LC_RequestAndFollowPath
   m_EditorClassIdentifier: 
-  centerOffset: {x: 12.5, y: -0.5}
-  shapePoints: 64
-  shapeBounds: {x: 4, y: 14}
+  pathLockout: 0.03
+  stoppingDist: 0.5

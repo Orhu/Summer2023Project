@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2357f9eaad6fd504ea91b1782346eccf, type: 3}
-  m_Name: LC_SetPathToRight
+  m_Script: {fileID: 11500000, guid: 0efc37261aaa8b040beb4e61b35d132c, type: 3}
+  m_Name: LC_ActiveProjectilesTPBackThreshold
   m_EditorClassIdentifier: 
-  centerOffset: {x: 12.5, y: -0.5}
-  shapePoints: 64
-  shapeBounds: {x: 4, y: 14}
+  stateVariableName: NumOfActiveProjectiles
+  comparison: 3
+  numberToCheck: 3
