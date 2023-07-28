@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
-  m_Name: Atk_MewBoss_AuraSphere_EW
+  m_Name: Atk_MewBoss_AuraSphere_E
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
@@ -18,7 +18,8 @@ MonoBehaviour:
   attack:
     damage: 4
     damageType: 0
-    statusEffects: []
+    statusEffects:
+    - {fileID: 0}
     invertInvincibility: 0
   hitCount: 999
   applyDamageOnHit: 1
@@ -51,6 +52,6 @@ MonoBehaviour:
   _spawnSequence:
   - delay: 0
     angle: 0
-    offset: {x: 0, y: 3}
+    offset: {x: 0, y: -3}
   randomAngle: 0
   randomOffset: 0
