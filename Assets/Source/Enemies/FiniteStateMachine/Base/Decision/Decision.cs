@@ -90,8 +90,17 @@ namespace Cardificer.FiniteStateMachine
 #endif
         }
     }
+    /// <summary>
+    /// Represents a class that can evaluate a list of Decision.Combinable objects
+    /// </summary>
     public static class DecisionListDecider
     {
+        /// <summary>
+        /// Given a list of combinable decisions with their logical operators, evaluates them and returns their final combined result
+        /// </summary>
+        /// <param name="decisions"> The list of decisions to evaluate. </param>
+        /// <param name="stateMachine"> The state machine to use. </param>
+        /// <returns> The combined result of all bool evaluations. </returns>
         public static bool Decide(this IEnumerable<Decision.Combinable> decisions, BaseStateMachine stateMachine)
         {
             if (decisions.Count() == 0)
@@ -99,7 +108,7 @@ namespace Cardificer.FiniteStateMachine
                 return true;
             }
 
-            //Calculate AND results
+            // Calculate AND results
             List<bool> andResults = new List<bool>();
 
             for (int i = 0; i < decisions.Count(); i++)

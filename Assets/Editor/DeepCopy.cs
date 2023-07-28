@@ -26,7 +26,7 @@ public class DeepCopy : ScriptableWizard
     /// </summary>
     /// <returns> True if possible. </returns>
     [MenuItem("Assets/Deep Copy", true)]
-    private static bool isValidSelection()
+    private static bool IsValidSelection()
     {
         return Selection.objects.Length == 1;
     }

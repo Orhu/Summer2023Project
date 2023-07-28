@@ -20,7 +20,7 @@ namespace Cardificer.FiniteStateMachine
         /// The objects the attacks of this will ignore.
         /// </summary>
         /// <param name="stateMachine"> The stateMachine performing the attack </param>
-        protected override List<GameObject> getIgnoredObjects(BaseStateMachine stateMachine)
+        protected override List<GameObject> GetIgnoredObjects(BaseStateMachine stateMachine)
         {
             if (friendlyFire) { return new List<GameObject>(); }
 

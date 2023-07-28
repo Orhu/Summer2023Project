@@ -37,7 +37,7 @@ namespace Cardificer
         [Tooltip("Whether or not this will play when on 0 damage projectiles")]
         [SerializeField] private bool applyToZeroDamage = false;
 
-        [Tooltip("Whether or not this will be the actor used as the source for playing actions (Does not effect attacks)")]
+        [Tooltip("Whether or not this will be the actor used as the source for playing actions (Does not affect attacks)")]
         [SerializeField] private bool useThisAsActor = false;
 
         // The damage multiplier of this action
