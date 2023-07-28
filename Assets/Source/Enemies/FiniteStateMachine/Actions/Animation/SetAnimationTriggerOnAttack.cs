@@ -26,7 +26,6 @@ namespace Cardificer.FiniteStateMachine
             {
                 stateMachine.trackedVariables["OnAttack"] = (stateMachine.trackedVariables["OnAttack"] as System.Action) - PlayAnim;
                 stateMachine.GetComponent<AnimatorController>().SetTrigger(propertyName);
-                Debug.Log("ANIMIATE!");
                 stateMachine.cooldownData.cooldownReady[this] = true;
             }
             yield break;

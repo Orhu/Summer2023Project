@@ -16,6 +16,11 @@ namespace Cardificer.FiniteStateMachine
         [Tooltip("Value to set variable to (does not override if variable already exists)")]
         [SerializeField] private int numberToInitializeVarTo;
         
+        /// <summary>
+        /// Sets a variable in the state machine with the given name and number default (does not overwrite if val already exists)
+        /// </summary>
+        /// <param name="stateMachine"> The stateMachine to use </param>
+        /// <returns> Does not wait </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             stateMachine.trackedVariables.TryAdd(trackedVariableName, numberToInitializeVarTo); 

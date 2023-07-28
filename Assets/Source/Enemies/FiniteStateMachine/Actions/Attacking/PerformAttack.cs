@@ -51,10 +51,7 @@ namespace Cardificer.FiniteStateMachine
         {
             stateMachine.trackedVariables.TryAdd("NumOfActiveProjectiles", 0);
 
-            if (!stateMachine.trackedVariables.ContainsKey("OnAttack"))
-            {
-                stateMachine.trackedVariables.Add("OnAttack", null);
-            }
+            stateMachine.trackedVariables.TryAdd("OnAttack", null);
 
             stateMachine.StartCoroutine(LaunchAttack(stateMachine));
             yield break;
@@ -64,7 +61,7 @@ namespace Cardificer.FiniteStateMachine
         /// The objects the attacks of this will ignore.
         /// </summary>
         /// <param name="stateMachine"> The stateMachine performing the attack </param>
-        protected virtual List<GameObject> getIgnoredObjects(BaseStateMachine stateMachine)
+        protected virtual List<GameObject> GetIgnoredObjects(BaseStateMachine stateMachine)
         {
             return friendlyFire ? new List<GameObject>() : FloorGenerator.currentRoom.livingEnemies;
         }
@@ -85,7 +82,7 @@ namespace Cardificer.FiniteStateMachine
                     {
                         stateMachine.trackedVariables["NumOfActiveProjectiles"] =
                             (int)stateMachine.trackedVariables["NumOfActiveProjectiles"] + 1;
-                        attack.Play(stateMachine, getIgnoredObjects(stateMachine),
+                        attack.Play(stateMachine, GetIgnoredObjects(stateMachine),
                             () =>
                             {
                                 stateMachine.trackedVariables["NumOfActiveProjectiles"] =
@@ -96,7 +93,7 @@ namespace Cardificer.FiniteStateMachine
                     }
                     else
                     {
-                        action.Play(stateMachine, getIgnoredObjects(stateMachine));
+                        action.Play(stateMachine, GetIgnoredObjects(stateMachine));
                     }
 
                 }

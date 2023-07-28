@@ -257,7 +257,9 @@ namespace Cardificer
             hasGenerated = true;
         }
 
-        // Unbinds events
+        /// <summary>
+        /// Unbinds events
+        /// </summary>
         private void OnDestroy()
         {
             if (onGenerated == null) { return; }
