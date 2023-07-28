@@ -513,7 +513,6 @@ namespace Cardificer
             /// </summary>
             private void OnDestroy()
             {
-                FloorGenerator.onRoomChange -= BindCleared;
                 FloorSceneManager.onFloorLoaded -= HandleFloorLoad;
             }
 

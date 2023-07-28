@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Vector2 = UnityEngine.Vector2;
 
 namespace Cardificer
@@ -84,6 +85,7 @@ namespace Cardificer
         /// <param name="vector">The location for the audio clip to be played.</param>
         public void PlayAudioAtPos(AudioClip audioClip, Vector2 vector)
         {
+            if (!SceneManager.GetActiveScene().isLoaded) { return; }
             GameObject audioSourceGameObject = new GameObject();
             audioSourceGameObject.transform.name = "PlayAudioAtPosGameObj";
             audioSourceGameObject.transform.position = vector;

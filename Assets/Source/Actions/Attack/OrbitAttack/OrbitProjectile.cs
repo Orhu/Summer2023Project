@@ -47,7 +47,7 @@ namespace Cardificer
 
             transform.position += Quaternion.AngleAxis(startingRotation, Vector3.forward) * Vector2.right * radius;
             startingRotation -= 90;
-            transform.rotation = Quaternion.AngleAxis(-startingRotation * OrbitSign(), Vector3.forward);
+            transform.rotation = Quaternion.AngleAxis(startingRotation * OrbitSign(), Vector3.forward);
 
             base.Start();
         }
@@ -57,11 +57,13 @@ namespace Cardificer
         /// </summary>
         new void FixedUpdate()
         {
-            timeAlive += Time.fixedDeltaTime;
-            speed += acceleration * Time.fixedDeltaTime;
+            if (radius != 0f)
+            {
+                timeAlive += Time.fixedDeltaTime;
+                speed += acceleration * Time.fixedDeltaTime;
 
-            transform.rotation = Quaternion.AngleAxis(startingRotation + OrbitSign() * Mathf.Rad2Deg * speed * timeAlive / radius, Vector3.forward);
-
+                transform.rotation = Quaternion.AngleAxis(startingRotation + OrbitSign() * Mathf.Rad2Deg * speed * timeAlive / radius, Vector3.forward);
+            }
 
             if (remainingHomingDelay <= 0 && remainingHomingTime > 0 && homingSpeed > 0)
             {

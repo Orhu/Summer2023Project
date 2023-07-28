@@ -38,7 +38,12 @@ namespace Cardificer
         static public Vector2Int cellSize => instance._cellSize;
 
         // Event called when the room is changed
-        [SerializeField] static public System.Action onRoomChange;
+        private System.Action _onRoomChange;
+        public static System.Action onRoomChange
+        {
+            get => instance._onRoomChange;
+            set => instance._onRoomChange = value;
+        }
 
         // Whether or not the generation should use a predefined map
         [SerializeField] private bool _usePredefinedMap;
@@ -95,7 +100,12 @@ namespace Cardificer
         }
 
         // Called when the floor has been generated.
-        public static System.Action onGenerated;
+        private System.Action _onGenerated;
+        public static System.Action onGenerated
+        {
+            get => instance._onGenerated;
+            set => instance._onGenerated = value;
+        }
 
         // The room the player is currently in
         private Room _currentRoom;

@@ -21,7 +21,7 @@ namespace Cardificer
         /// </summary>
         public void OpenGameOverMenuEvent()
         {
-            MenuManager.OpenGameOverMenu();
+            MenuManager.Open<GameOverMenu>();
         }
     }
 }
