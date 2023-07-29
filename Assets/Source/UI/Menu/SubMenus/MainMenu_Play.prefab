@@ -189,6 +189,7 @@ GameObject:
   - component: {fileID: 2110761168290945840}
   - component: {fileID: 92849580793045910}
   - component: {fileID: 7117564002036735948}
+  - component: {fileID: 795229365292649784}
   m_Layer: 5
   m_Name: NewGameButton
   m_TagString: Untagged
@@ -267,19 +268,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7117564002036735948}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3624320039148984897}
-        m_TargetAssemblyTypeName: Cardificer.MainMenu_Play, Assembly-CSharp
-        m_MethodName: NewGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &7117564002036735948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -369,6 +358,41 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &795229365292649784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 862692461184482147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53f4a824c3f8f954fb26eeeeb92d4a2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: 'Are you sure?
+
+    This will end your previous run.'
+  confirmButtonText: Yes
+  denyButtonText: No
+  onConfirmed:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3624320039148984897}
+        m_TargetAssemblyTypeName: Cardificer.MainMenu_Play, Assembly-CSharp
+        m_MethodName: NewGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onDenied:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1623452162325405575
 GameObject:
   m_ObjectHideFlags: 0
@@ -1144,7 +1168,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1306056546330548126
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1152,19 +1176,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2719002011018708996}
-  m_LocalRotation: {x: -0, y: -0, z: 0.4236377, w: -0.9058318}
+  m_LocalRotation: {x: -0, y: -0, z: 0.4613768, w: -0.8872043}
   m_LocalPosition: {x: 0, y: 0, z: 10.735907}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4424332959176528412}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -50.129}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -54.952}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 91.10626, y: -269.3802}
-  m_SizeDelta: {x: -4.5172, y: -428.3161}
-  m_Pivot: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 21.966095, y: -1.8380127}
+  m_SizeDelta: {x: 165.6625, y: -253.8295}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3419565087177791062
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1220,12 +1244,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 125
+  m_fontSize: 121.6
   m_fontSizeBase: 125
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 700
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -1472,6 +1496,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1374390380514256698}
   - component: {fileID: 3624320039148984897}
+  - component: {fileID: 7598307824925295177}
   m_Layer: 0
   m_Name: MainMenu_Play
   m_TagString: Untagged
@@ -1497,8 +1522,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 2.5255, y: 0}
+  m_SizeDelta: {x: 5.051, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3624320039148984897
 MonoBehaviour:
@@ -1512,6 +1537,96 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2fbd414567825a4085800dd7df36574, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7598307824925295177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3162784461188484221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ef09055ab158ca4fa566e4e5342d6b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autosaveExists:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5090905343862743541}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: set_interactable
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 795229365292649784}
+        m_TargetAssemblyTypeName: Cardificer.OpenConfirmationMenuOnClick, Assembly-CSharp
+        m_MethodName: set_skipConfirmation
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2719002011018708996}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  autosaveDoesNotExist:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5090905343862743541}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: set_interactable
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 795229365292649784}
+        m_TargetAssemblyTypeName: Cardificer.OpenConfirmationMenuOnClick, Assembly-CSharp
+        m_MethodName: set_skipConfirmation
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 2719002011018708996}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &3373394825138915456
 GameObject:
   m_ObjectHideFlags: 0
@@ -2916,7 +3031,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b9ba627650ce4ed408a384b5ef778244, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 502785d7246aeaa48b0a44177931e3d4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
