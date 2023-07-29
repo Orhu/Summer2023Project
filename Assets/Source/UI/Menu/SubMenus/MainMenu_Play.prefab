@@ -135,12 +135,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25.7
+  m_fontSize: 32.95
   m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 100
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -486,7 +486,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21.9
+  m_fontSize: 21
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1523,7 +1523,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 2.5255, y: 0}
+  m_AnchoredPosition: {x: 2.5255127, y: 0}
   m_SizeDelta: {x: 5.051, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3624320039148984897
@@ -1686,6 +1686,29 @@ MonoBehaviour:
     getValue:
       m_PersistentCalls:
         m_Calls: []
+  health:
+    prefixText: 
+    suffixText: 
+    fallbackText: 
+    getValueAsString:
+      m_PersistentCalls:
+        m_Calls: []
+    fallbackValue: 12
+    getValue:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 5154620810471391278}
+          m_TargetAssemblyTypeName: HeartContainer, Assembly-CSharp
+          m_MethodName: SetHearts
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   money:
     prefixText: <sprite name="GoldIcon">
     suffixText: 
@@ -2331,6 +2354,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6973245225499055348}
   - component: {fileID: 730617364430084813}
+  - component: {fileID: 5154620810471391278}
   m_Layer: 0
   m_Name: HeartsContainer
   m_TagString: Untagged
@@ -2375,13 +2399,32 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 4
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 100, y: 100}
+  m_CellSize: {x: 150, y: 150}
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!114 &5154620810471391278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5076399718740219017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42d3bea672fe4eb44b4b02baffda4275, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heartCounterPrefab: {fileID: 5871087372450070482, guid: 1b5b14f0b6225ce4bb3aef6c2f284b32, type: 3}
+  heartSpriteVariations:
+  - {fileID: 21300000, guid: 8f2d730c7fcf5b944bc526b378949b4c, type: 3}
+  - {fileID: 21300000, guid: bb49f7d3ec53091459911b70fabc010b, type: 3}
+  - {fileID: 21300000, guid: 28f6848858fac9844bacb37757f4ff54, type: 3}
+  - {fileID: 21300000, guid: a8afdffaea367674db8e56a790499e29, type: 3}
+  lowHealthThreshhold: 0
 --- !u!1 &5148266696367604269
 GameObject:
   m_ObjectHideFlags: 0
@@ -2610,7 +2653,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 21.9
+  m_fontSize: 21
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1

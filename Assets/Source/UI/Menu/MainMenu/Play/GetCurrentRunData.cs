@@ -14,7 +14,10 @@ namespace Cardificer
         [Tooltip("The current size of the player deck.")]
         [SerializeField] private RunDataum<int> deckSize;
 
-        [Tooltip("The current size of the player deck.")]
+        [Tooltip("The current amount of health the player has.")]
+        [SerializeField] private RunDataum<int> health;
+
+        [Tooltip("The current amount of money the player has.")]
         [SerializeField] private RunDataum<int> money;
 
         /// <summary>
@@ -24,6 +27,7 @@ namespace Cardificer
         {
             currentFloor.Invoke(FloorSceneManager.GetFloorName(SaveManager.savedCurrentFloor));
             deckSize.Invoke(SaveManager.savedPlayerDeck.pathToCards.Count);
+            health.Invoke(SaveManager.savedPlayerHealth);
             money.Invoke(SaveManager.savedPlayerMoney);
         }
 
