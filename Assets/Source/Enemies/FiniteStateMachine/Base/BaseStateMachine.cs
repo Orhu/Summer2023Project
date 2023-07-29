@@ -332,7 +332,7 @@ namespace Cardificer.FiniteStateMachine
             {
                 foreach (Vector2 p in pathData.path.waypoints)
                 {
-                    Gizmos.DrawCube(p, Vector3.one);
+                    Gizmos.DrawCube(p, new Vector3(0.05f, 0.05f));
                 }
 
                 Gizmos.color = Color.white;
@@ -345,9 +345,9 @@ namespace Cardificer.FiniteStateMachine
             }
             
             Gizmos.color = Color.red;
-            Gizmos.DrawCube(currentAttackTarget, Vector3.one);
+            Gizmos.DrawCube(currentAttackTarget, new Vector3(0.05f, 0.05f));
             Gizmos.color = Color.blue;
-            Gizmos.DrawCube(currentPathfindingTarget, Vector3.one);
+            Gizmos.DrawCube(currentPathfindingTarget, new Vector3(0.05f, 0.05f));
         }
 
         #region IActor Implementation
