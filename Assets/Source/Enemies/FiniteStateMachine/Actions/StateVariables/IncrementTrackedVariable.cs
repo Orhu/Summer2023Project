@@ -26,6 +26,7 @@
                 stateMachine.trackedVariables.TryAdd(varToIncrement, 0);
                 
                 stateMachine.trackedVariables[varToIncrement] = (int)stateMachine.trackedVariables[varToIncrement] + incrementBy;
+                stateMachine.cooldownData.cooldownReady[this] = true;
                 
                 yield break;
             }

@@ -56,7 +56,7 @@ namespace Cardificer.FiniteStateMachine
                 // set movement to zero
                 Debug.LogWarning(stateMachine.gameObject.name + ": No viable random movement direction found!");
                 stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
-                yield return new WaitForSeconds(randomMoveLockout);
+                yield return new UnityEngine.WaitForSeconds(randomMoveLockout);
                 stateMachine.cooldownData.cooldownReady[this] = true;
             }
             else
@@ -65,7 +65,7 @@ namespace Cardificer.FiniteStateMachine
                 Vector2 randomDirection = viableDirections[Random.Range(0, viableDirections.Count)];
 
                 stateMachine.GetComponent<Movement>().movementInput = randomDirection;
-                yield return new WaitForSeconds(randomMoveLockout);
+                yield return new UnityEngine.WaitForSeconds(randomMoveLockout);
                 stateMachine.cooldownData.cooldownReady[this] = true;  
             }
         }

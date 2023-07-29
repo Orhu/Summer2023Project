@@ -55,7 +55,7 @@ namespace Cardificer.FiniteStateMachine
             stateMachine.trackedVariables["CardsDrawn"] = (int)stateMachine.trackedVariables["CardsDrawn"] + 1;
             
             GameObject cardDisplay = DisplayCard(stateMachine, selectedAttackSequence);
-            yield return new WaitForSeconds(displayCardTime);
+            yield return new UnityEngine.WaitForSeconds(displayCardTime);
             Destroy(cardDisplay);
             stateMachine.trackedVariables["CardsDisplayed"] = (int)stateMachine.trackedVariables["CardsDisplayed"] + 1;
 

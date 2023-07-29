@@ -16,8 +16,6 @@ namespace Cardificer.FiniteStateMachine
         [Tooltip("Conditions to evaluate")]
         [SerializeField] private List<Decision.Combinable> decisions;
 
-        
-
         /// <summary>
         /// Evaluate this transition
         /// </summary>

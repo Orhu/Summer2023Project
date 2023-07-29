@@ -20,20 +20,22 @@ MonoBehaviour:
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
-  hitCount: 999
+  hitCount: 1
   applyDamageOnHit: 1
   modifiers:
   - {fileID: 11400000, guid: 4db00e30cb485914980b8d29faa3969e, type: 2}
+  immuneToShield: 0
+  immuneToReflect: 0
   shape: {fileID: 11400000, guid: 73e95a6ad145c264fa2cc5e9554b9b43, type: 2}
   lifetime: 10
-  initialSpeed: 12
+  initialSpeed: 8
   acceleration: 0
   minSpeed: 0
-  maxSpeed: 12
+  maxSpeed: 8
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
-  homingAimMode: 0
+  homingAimMode: 6
   switchAfterHit: 0
   visualObject: {fileID: 3866314259983467581, guid: 45e01487b2a0dd34984282d23f807632, type: 3}
   detachVisualsBeforeDestroy: 0
@@ -47,33 +49,6 @@ MonoBehaviour:
   additionalActionTime: 0
   _spawnSequence:
   - delay: 0
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.5
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.5
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.5
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.5
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.5
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.5
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.5
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.5
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.5
     angle: 0
     offset: {x: 0, y: 0}
   randomAngle: 0
