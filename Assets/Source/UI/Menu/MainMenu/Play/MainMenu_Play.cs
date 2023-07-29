@@ -21,6 +21,7 @@ namespace Cardificer
             {
                 SaveManager.AutosaveCorrupted("Floor " + SaveManager.savedCurrentFloor + " does not exist");
             }
+            MenuManager.Close<MainMenu_Play>();
         }
 
         /// <summary>
@@ -30,15 +31,17 @@ namespace Cardificer
         {
             SaveManager.ClearTransientSaves();
             FloorSceneManager.LoadFloor(0);
+            MenuManager.Close<MainMenu_Play>();
         }
 
         /// <summary>
         /// Clears autosaves and starts a new game.
         /// </summary>
-        public void Tutorail()
+        public void Tutorial()
         {
             // TODO: Implement loading screen.
             SceneManager.LoadSceneAsync("Tutorial");
+            MenuManager.Close<MainMenu_Play>();
         }
 
         /// <summary>
@@ -47,6 +50,7 @@ namespace Cardificer
         public void Sanctum()
         {
             // TODO: Implement loading screen.
+            MenuManager.Close<MainMenu_Play>();
             throw new System.NotImplementedException("Sanctum hasn't been made yet.");
         }
     }
