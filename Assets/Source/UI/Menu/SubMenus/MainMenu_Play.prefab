@@ -108,7 +108,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: <sprite name="GoldIcon">0
+  m_text: <sprite name="GoldIcon">Error
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2acfb72208e546943ace8802d5273384, type: 2}
   m_sharedMaterial: {fileID: 1551447067489636112, guid: 2acfb72208e546943ace8802d5273384, type: 2}
@@ -1497,6 +1497,7 @@ GameObject:
   - component: {fileID: 1374390380514256698}
   - component: {fileID: 3624320039148984897}
   - component: {fileID: 7598307824925295177}
+  - component: {fileID: 5285886915128114535}
   m_Layer: 0
   m_Name: MainMenu_Play
   m_TagString: Untagged
@@ -1627,6 +1628,87 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &5285886915128114535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3162784461188484221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be0cfaa0cddeb424ea14f345444a0753, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentFloor:
+    prefixText: 
+    suffixText: 
+    fallbackText: The World Between
+    getValueAsString:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6898847791239463303}
+          m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+          m_MethodName: set_text
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    fallbackValue: The World Between
+    getValue:
+      m_PersistentCalls:
+        m_Calls: []
+  deckSize:
+    prefixText: 
+    suffixText: 
+    fallbackText: 0
+    getValueAsString:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6618513728640213773}
+          m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+          m_MethodName: set_text
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    fallbackValue: 0
+    getValue:
+      m_PersistentCalls:
+        m_Calls: []
+  money:
+    prefixText: <sprite name="GoldIcon">
+    suffixText: 
+    fallbackText: Broke
+    getValueAsString:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6391446558501402114}
+          m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
+          m_MethodName: set_text
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    fallbackValue: 0
+    getValue:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!1 &3373394825138915456
 GameObject:
   m_ObjectHideFlags: 0
