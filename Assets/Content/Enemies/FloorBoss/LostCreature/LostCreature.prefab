@@ -7,10 +7,42 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 542899057510882649, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 8c1b271f78933804d847043cc152b670, type: 2}
     - target: {fileID: 5097362261395317995, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: maxSpeed
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 5097362261395317995, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: knockbackMultiplier
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: _maxHealth
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: hasBossHealthbar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: invincibilityDuration
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: immuneStatusEffects.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: immuneStatusEffects.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0f77568f9f9219646a3156a817079d62, type: 2}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: immuneStatusEffects.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0f77568f9f9219646a3156a817079d62, type: 2}
     - target: {fileID: 7281680880204442667, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -60,12 +92,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 7ba927d06ff92b24fae4f2db7355f832, type: 3}
     - target: {fileID: 7281680880204442676, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281680880204442676, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1315461015
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281680880204442676, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442677, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Name
       value: LostCreature
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281680880204442677, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: m_TagString
+      value: Boss
       objectReference: {fileID: 0}
     - target: {fileID: 7771620888905133544, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_Size.x
@@ -110,10 +154,56 @@ PrefabInstance:
     - target: {fileID: 8941374239524879921, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: initialState
       value: 
-      objectReference: {fileID: 11400000, guid: 78b306ba04b4ef94d839acd297ec988f, type: 2}
+      objectReference: {fileID: 11400000, guid: 2891ad9d9de8c88449f3f1b678df36bc, type: 2}
     - target: {fileID: 8941374239524879921, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: startingMovementType
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8941374239524879921, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: ignoreDifficultyProgression
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+--- !u!1 &910903919623520336 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7281680880204442677, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+  m_PrefabInstance: {fileID: 7613779818672106597}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8633328461631099628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910903919623520336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8edf2d55ca588547881b7472e926510, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TrailName: mewBossTrail
+  m_CurrentTrailPreset: {fileID: 11400000, guid: 3dc23d702399c4c4884e6f685e65aa8d, type: 2}
+  m_TrailParent: {fileID: 0}
+  m_SpriteToDuplicate: {fileID: 910903919623520337}
+  m_Layer: 24
+  m_ZMoveStep: 0.0001
+  m_ZMoveMax: 2.76
+  m_HideTrailOnDisabled: 1
+  m_TrailActivationCondition: 0
+  m_TrailDeactivationCondition: 0
+  m_StartIfUnderVelocity: 0
+  m_VelocityStartIsLocalSpace: 0
+  m_VelocityNeededToStart: 0
+  m_StopIfOverVelocity: 0
+  m_VelocityStopIsLocalSpace: 0
+  m_VelocityNeededToStop: 0
+  m_TrailActivationDuration: 0
+  m_SortingLayerID: 1315461015
+  m_OrderInSortingLayer: -1
+  m_DisabledElementsInTrail: []
+--- !u!212 &910903919623520337 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 7281680880204442676, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+  m_PrefabInstance: {fileID: 7613779818672106597}
+  m_PrefabAsset: {fileID: 0}

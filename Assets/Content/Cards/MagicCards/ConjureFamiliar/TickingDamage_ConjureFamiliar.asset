@@ -12,4 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa522dca2d6adea4d8bb31ed55ac08c3, type: 3}
   m_Name: TickingDamage_ConjureFamiliar
   m_EditorClassIdentifier: 
-  damageInterval: 0.5
+  minAttackSequenceIndex: 0
+  maxAttackSequenceIndex: 2147483647
+  attackSequenceLoopInterval: 2147483647
+  damageInterval: 1
+  knockback:
+    amount: 0
+    duration: 0.2
+    resetMomentum: 0

@@ -98,26 +98,6 @@ namespace Cardificer
 
             player = Player.Get();
 
-            //@ALEX TODO: DELETE (delete the mapping variable also)
-            #region Stuff to Delete
-            player.GetComponent<PlayerController>().mapOpened +=
-                () =>
-                {
-                    mapping = true;
-                    GetComponent<Camera>().orthographicSize *= 10;
-                    FloorGenerator.ShowLayout(false);
-                };
-
-            player.GetComponent<PlayerController>().mapClosed +=
-                () =>
-                {
-                    mapping = false;
-                    GetComponent<Camera>().orthographicSize /= 10;
-                    FloorGenerator.HideLayout();
-                };
-
-            #endregion Stuff to Delete
-
             DetermineMinAndMax(FloorGenerator.map.startRoom);
         }
         #endregion

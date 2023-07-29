@@ -4,12 +4,12 @@ using UnityEngine;
 namespace Cardificer.FiniteStateMachine
 {
     /// <summary>
-    /// Represents an action that sets a given variable name to a given integer value
+    /// Represents an action that sets a given variable name to a random integer value in the given range
     /// </summary>
     [CreateAssetMenu(menuName = "FSM/Tracked Variables/Integer/Actions/Set Tracked Variable to Int")]
     public class SetTrackedVariableToInt : SingleAction
     {
-        [Tooltip("Tracked variable to set")]
+        [Tooltip("Tracked variable to set (creates it at set number if it doesn't exist)")]
         [SerializeField] private string trackedVariableName;
         
         [Tooltip("Number to set it to")]
@@ -22,6 +22,7 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> Does not wait </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
+            stateMachine.trackedVariables.TryAdd(trackedVariableName, numberToSetVarTo); 
             stateMachine.trackedVariables[trackedVariableName] = numberToSetVarTo;
             stateMachine.cooldownData.cooldownReady[this] = true;
             yield break;

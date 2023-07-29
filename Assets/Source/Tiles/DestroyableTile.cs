@@ -63,13 +63,15 @@ namespace Cardificer
         /// </summary>
         private void OnDestroy()
         {
+            if (!FloorGenerator.IsValid()) { return; }
             FloorGenerator.onRoomChange -= OnRoomEnter;
             // if scene is loaded
-            if (FloorGenerator.IsValid() && !destroyedTiles.Contains(transform.position) && gameObject.scene.isLoaded && RoomInterface.instance != null)
+            if (!destroyedTiles.Contains(transform.position) && gameObject.scene.isLoaded && RoomInterface.instance != null)
             {
                 // false because OnDestroy means something else destroyed us
                 InitiateDestruction(false);
             }
+            
         }
 
         /// <summary>

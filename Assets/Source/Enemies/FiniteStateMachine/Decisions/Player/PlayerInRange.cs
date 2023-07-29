@@ -16,7 +16,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         /// <param name="state"> The stateMachine to use </param>
         /// <returns> True if the target is at or below the specified range from this stateMachine, false otherwise </returns>
-        protected override bool Evaluate(BaseStateMachine state)
+        public override bool Decide(BaseStateMachine state)
         {
             return Vector2.Distance(Player.Get().transform.position, state.transform.position) <= range;
         }
