@@ -13,7 +13,7 @@ namespace Cardificer.FiniteStateMachine
     public class BaseStateMachine : MonoBehaviour, IActor
     {
         // the state this machine starts in
-        [SerializeField] private State initialState;
+        [SerializeField] private BaseState initialState;
 
         // Delay after this enemy is spawned before it begins performing logic
         [SerializeField] private float delayBeforeLogic;
@@ -39,7 +39,16 @@ namespace Cardificer.FiniteStateMachine
         // Tracks whether our destination has been reached or not
         public bool destinationReached
         {
-            get { return (currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer; }
+            get
+            {
+                if (pathData.path != null)
+                    return ((currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer) &&
+                           pathData.targetIndex == pathData.path.waypoints.Length - 1;
+                else
+                {
+                    return ((currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer);
+                }
+            }
         }
 
         // The distance margin of error 
@@ -167,13 +176,13 @@ namespace Cardificer.FiniteStateMachine
 
         // Tracks whether this is the first time this object has been started (needed to make sure we call OnStateEnter AFTER the initial logic delay)
         private bool firstTimeStarted = true;
-        
+
         // Percent of attempted speed this unit should go
         [HideInInspector] public float speedPercent = 1f;
 
         [Tooltip("Ignore difficulty progression scaling HP, DMG, or other stats?")]
         [SerializeField] private bool ignoreDifficultyProgression;
-        
+
         [Tooltip("Draw debug gizmos? Pathfinding target is magenta, attack target is yellow, current waypoint is cyan")]
         [SerializeField] private bool drawGizmos;
 
@@ -182,7 +191,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void Awake()
         {
-            currentState = initialState;
+            currentState = initialState.GetState();
             cooldownData.cooldownReady = new Dictionary<BaseAction, bool>();
             cachedComponents = new Dictionary<Type, Component>();
             currentMovementType = startingMovementType;
@@ -242,7 +251,7 @@ namespace Cardificer.FiniteStateMachine
             {
                 return;
             }
-            
+
             // assign health
             int startingHealth =
                 Mathf.RoundToInt(GetComponent<Health>().maxHealth * DifficultyProgressionManager.healthMultiplier);
@@ -274,7 +283,7 @@ namespace Cardificer.FiniteStateMachine
                 firstTimeStarted = false;
                 currentState.OnStateEnter(this);
             }
-
+            
             currentState.OnStateUpdate(this);
         }
 
@@ -312,7 +321,7 @@ namespace Cardificer.FiniteStateMachine
         private void OnDestroy()
         {
             StopAllCoroutines();
-            
+
             if (!gameObject.scene.isLoaded || !FloorGenerator.IsValid())
             {
                 return;
@@ -343,7 +352,7 @@ namespace Cardificer.FiniteStateMachine
                     Gizmos.DrawLine(lineCenter - lineDir * 5 / 2f, lineCenter + lineDir * 5 / 2f);
                 }
             }
-            
+
             Gizmos.color = Color.red;
             Gizmos.DrawCube(currentAttackTarget, new Vector3(0.05f, 0.05f));
             Gizmos.color = Color.blue;

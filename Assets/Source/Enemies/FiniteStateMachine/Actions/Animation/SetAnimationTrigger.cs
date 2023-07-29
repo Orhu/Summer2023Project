@@ -33,7 +33,7 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> The time to wait to trigger. </returns>
         IEnumerator PlayTrigger(BaseStateMachine stateMachine)
         {
-            yield return new WaitForSeconds(delay);
+            yield return new UnityEngine.WaitForSeconds(delay);
             stateMachine.GetComponent<AnimatorController>().SetTrigger(propertyName);
             stateMachine.cooldownData.cooldownReady[this] = true;
         }

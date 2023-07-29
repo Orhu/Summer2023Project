@@ -29,7 +29,7 @@ namespace Cardificer.FiniteStateMachine
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             RequestPath(stateMachine);
-            yield return new WaitForSeconds(pathLockout);
+            yield return new UnityEngine.WaitForSeconds(pathLockout);
             stateMachine.cooldownData.cooldownReady[this] = true;
         }
 
