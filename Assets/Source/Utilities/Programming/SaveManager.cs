@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,16 @@ namespace Cardificer
     /// </example>
     public static class SaveManager
     {
+        // The currently saved player deck. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+        public static DateTime lastAutosaveTime
+        {
+            get
+            {
+                if (!autosaveExists) { return default; }
+                return DateTime.FromFileTime(autosaver.latestAutosave.saveTime);
+            }
+        }
+
         // The currently saved player deck. Saving handled by autosaves. Use autosaveExists to check if data Valid.
         public static Deck.State savedPlayerDeck
         {
@@ -296,6 +307,9 @@ namespace Cardificer
             [System.Serializable]
             public class AutosaveData
             {
+                // The time this was saved at.
+                public long saveTime;
+
                 // The seed of the current floor.
                 public int floorSeed;
 
@@ -303,7 +317,7 @@ namespace Cardificer
                 public int currentFloor;
 
                 // The random state at the time of the autosave.
-                public Random.State randomState;
+                public UnityEngine.Random.State randomState;
 
                 // The last position of the player.
                 public Vector2 playerPos;
@@ -354,6 +368,7 @@ namespace Cardificer
                 AutosaveData saveData = latestAutosave == null ? new AutosaveData() : latestAutosave;
 
                 // Add new save data Here:
+                saveData.saveTime = DateTime.Now.ToFileTime();
                 saveData.playerPos = Player.Get().transform.position;
                 saveData.playerHealth = Player.health.currentHealth;
                 saveData.playerMoney = Player.GetMoney();

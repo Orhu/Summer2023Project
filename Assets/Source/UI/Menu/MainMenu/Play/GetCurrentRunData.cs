@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,6 +9,9 @@ namespace Cardificer
     /// </summary>
     public class GetCurrentRunData : MonoBehaviour
     {
+        [Tooltip("The current floor the player is on.")]
+        [SerializeField] private RunDataum<DateTime> lastPlayed;
+
         [Tooltip("The current floor the player is on.")]
         [SerializeField] private RunDataum<string> currentFloor;
 
@@ -25,8 +29,9 @@ namespace Cardificer
         /// </summary>
         void OnEnable()
         {
+            lastPlayed.Invoke(SaveManager.lastAutosaveTime);
             currentFloor.Invoke(FloorSceneManager.GetFloorName(SaveManager.savedCurrentFloor));
-            deckSize.Invoke(SaveManager.savedPlayerDeck.pathToCards.Count);
+            deckSize.Invoke((SaveManager.savedPlayerDeck?.pathToCards.Count).GetValueOrDefault());
             health.Invoke(SaveManager.savedPlayerHealth);
             money.Invoke(SaveManager.savedPlayerMoney);
         }
