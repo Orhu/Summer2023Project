@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 namespace Cardificer
 {
@@ -12,6 +12,9 @@ namespace Cardificer
     {
         [Tooltip("Deactivate if no save file exists.")]
         [SerializeField] private Button continueButton;
+
+        [Tooltip("Set to navigation button if no save file exists")]
+        [SerializeField] private Button newGameButton;
 
         [Tooltip("Display this if the user wishes to override their save")]
         [SerializeField] private GameObject overrideSavePopup;
@@ -33,11 +36,13 @@ namespace Cardificer
             {
                 saveExists = true;
                 continueButton.gameObject.SetActive(true);
+                GetComponent<EventSystem>().SetSelectedGameObject(continueButton.gameObject);
             }
             else
             {
                 saveExists = false;
                 continueButton.gameObject.SetActive(false);
+                GetComponent<EventSystem>().SetSelectedGameObject(newGameButton.gameObject);
             }
         }
 
