@@ -42,6 +42,12 @@ namespace Cardificer
         // The component responsible for the channeling ability
         private ChannelAbility channelAbility;
 
+        // Tracks the controller aim direction
+        private Vector2 aimDirection;
+
+        // Tracks whether get aim position should return the aim direction or the mouse position
+        private bool useAimDirectionForAimPosition = false;
+
         /// <summary>
         /// Initialize components.
         /// </summary>
@@ -108,6 +114,15 @@ namespace Cardificer
         }
 
         /// <summary>
+        /// Handles the aim input from the controller
+        /// </summary>
+        /// <param name="aimInput"> The aim input </param>
+        public void OnAim(InputValue aimInput)
+        {
+            aimDirection = aimInput.Get<Vector2>().normalized;
+        }
+
+        /// <summary>
         /// Previews a card
         /// </summary>
         public void OnPreviewCard1()
@@ -169,6 +184,27 @@ namespace Cardificer
         {
             if (movingEnabled && canAct && !paused)
             {
+                useAimDirectionForAimPosition = false;
+
+                if (Deck.playerDeck.PlayChord())
+                {
+                    animatorComponent.SetTrigger("cast");
+                    animatorComponent.SetMirror("idleLeft", GetActionAimPosition().x - transform.position.x < 0);
+                    animatorComponent.SetMirror("runLeft", GetActionAimPosition().x - transform.position.x < 0);
+                    channelAbility.StopChanneling();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Cast the selected cards, but using a gamepad input
+        /// </summary>
+        public void OnGamepadCast()
+        {
+            if (movingEnabled && canAct && !paused)
+            {
+                useAimDirectionForAimPosition = true;
+
                 if (Deck.playerDeck.PlayChord())
                 {
                     animatorComponent.SetTrigger("cast");
@@ -267,6 +303,10 @@ namespace Cardificer
         /// <returns> The mouse position in world space. </returns>
         public Vector3 GetActionAimPosition()
         {
+            if (useAimDirectionForAimPosition)
+            {
+                return (Vector3) aimDirection + transform.position;
+            }
             return Vector3.Scale(Camera.main.ScreenToWorldPoint(Mouse.current.position.value), new Vector3(1, 1, 0));
         }
 

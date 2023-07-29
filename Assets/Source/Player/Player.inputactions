@@ -69,6 +69,24 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Aim",
+                    "type": "Value",
+                    "id": "f1e1dd16-4db7-4f0b-a68d-d0a208aee7dd",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "GamepadCast",
+                    "type": "Button",
+                    "id": "1cc56b98-bc6f-47c1-bf3b-0fccb7597201",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Channel",
                     "type": "Button",
                     "id": "187684dc-b470-4a68-893b-174ff47da495",
@@ -434,17 +452,6 @@
                 },
                 {
                     "name": "",
-                    "id": "2f4ebd15-592a-4cdf-882f-a329b63ae57a",
-                    "path": "<Gamepad>/rightTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Cast",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "a2e43e7b-0a52-46f1-b880-683185b15399",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
@@ -550,6 +557,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Channel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7972b318-57f5-4d5e-a1eb-d6d35e098201",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "GamepadCast",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "09f44a17-2203-40e3-9bab-98e2999bf6ab",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
