@@ -45,7 +45,7 @@ namespace Cardificer.FiniteStateMachine
         // The distance margin of error 
         public float distanceBuffer
         {
-            get { return movementComponent.maxSpeed * Time.fixedDeltaTime + 0.01f; }
+            get { return movementComponent.maxSpeed * Time.fixedDeltaTime * 3f; }
         }
 
         /// <summary>
