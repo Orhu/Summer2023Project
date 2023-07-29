@@ -16,7 +16,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         /// <param name="stateMachine"> The stateMachine to use </param>
         /// <returns> timeSinceTransition >= time </returns>
-        protected override bool Evaluate(BaseStateMachine stateMachine)
+        public override bool Decide(BaseStateMachine stateMachine)
         {
             return stateMachine.timeSinceTransition >= time;
         }

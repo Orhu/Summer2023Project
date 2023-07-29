@@ -13,7 +13,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         /// <param name="stateMachine"> The stateMachine to use </param>
         /// <returns> true if the given state machine has reached its destination </returns>
-        protected override bool Evaluate(BaseStateMachine stateMachine)
+        public override bool Decide(BaseStateMachine stateMachine)
         {
             return stateMachine.destinationReached;
         }

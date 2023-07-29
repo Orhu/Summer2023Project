@@ -359,6 +359,10 @@ namespace Cardificer
                     return FindClosestTarget(transform.position, ref closestTargetToProjectile);
 
                 case AimMode.AtClosestEnemyToActor:
+                    if (actor == null)
+                    {
+                        return transform.position + transform.right;
+                    }
                     return FindClosestTarget(actor.GetActionSourceTransform().position, ref closestTargetToActor);
 
                 case AimMode.AtClosestEnemyToAimLocation:

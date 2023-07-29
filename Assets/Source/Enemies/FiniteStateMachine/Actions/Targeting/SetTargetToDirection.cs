@@ -30,7 +30,8 @@ namespace Cardificer.FiniteStateMachine
             Up,
             Down,
             Left,
-            Right
+            Right,
+            Forward,
         }
 
         [Tooltip("What direction should be aimed in?")]
@@ -62,6 +63,9 @@ namespace Cardificer.FiniteStateMachine
                     case Direction.Right:
                         stateMachine.currentPathfindingTarget = (Vector2)stateMachine.transform.position + Vector2.right;
                         break;
+                    case Direction.Forward:
+                        stateMachine.currentPathfindingTarget = (Vector2)stateMachine.transform.position + stateMachine.GetComponent<Movement>().movementInput;
+                        break;
                 }
             }
 
@@ -80,6 +84,9 @@ namespace Cardificer.FiniteStateMachine
                         break;
                     case Direction.Right:
                         stateMachine.currentAttackTarget = (Vector2)stateMachine.transform.position + Vector2.right;
+                        break;
+                    case Direction.Forward:
+                        stateMachine.currentAttackTarget = (Vector2)stateMachine.transform.position + stateMachine.GetComponent<Movement>().movementInput;
                         break;
                 }
             }

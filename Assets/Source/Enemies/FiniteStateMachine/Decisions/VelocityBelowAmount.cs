@@ -16,7 +16,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         /// <param name="stateMachine"> The stateMachine to use </param>
         /// <returns> True if the velocity is below the provided threshold, false otherwise </returns>
-        protected override bool Evaluate(BaseStateMachine stateMachine)
+        public override bool Decide(BaseStateMachine stateMachine)
         {
             return stateMachine.GetComponent<Rigidbody2D>().velocity.magnitude <= velocityThreshold;
         }

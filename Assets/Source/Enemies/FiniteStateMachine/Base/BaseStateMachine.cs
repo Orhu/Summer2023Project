@@ -18,6 +18,9 @@ namespace Cardificer.FiniteStateMachine
         // Delay after this enemy is spawned before it begins performing logic
         [SerializeField] private float delayBeforeLogic;
 
+        // Max random amount added to delayBeforeLogic.
+        [SerializeField] private float delayBeforeLogicVariance = 0.5f;
+
         // The pathfinding target
         [HideInInspector] public Vector2 currentPathfindingTarget;
 
@@ -42,7 +45,7 @@ namespace Cardificer.FiniteStateMachine
         // The distance margin of error 
         public float distanceBuffer
         {
-            get { return movementComponent.maxSpeed * Time.fixedDeltaTime + 0.01f; }
+            get { return movementComponent.maxSpeed * Time.fixedDeltaTime * 3f; }
         }
 
         /// <summary>
@@ -205,11 +208,27 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void Start()
         {
+            delayBeforeLogic += UnityEngine.Random.Range(-delayBeforeLogicVariance, delayBeforeLogicVariance);
             SetStats();
             timeStarted = Time.time;
-            
+
+            PathfindingTile currentTile = RoomInterface.instance.WorldPosToTile(transform.position).Item1;
+            if (currentTile != null && !currentTile.allowedMovementTypes.HasFlag(currentMovementType))
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             GetComponent<SimpleMovement>().requestSpeedModifications += AdjustMovement;
-            FloorGenerator.currentRoom.AddEnemy(gameObject);
+
+            if (FloorGenerator.hasGenerated)
+            {
+                FloorGenerator.currentRoom.AddEnemy(gameObject);
+            }
+            else
+            {
+                FloorGenerator.onGenerated += () => FloorGenerator.currentRoom.AddEnemy(gameObject);
+            }
 
             gameObject.AddComponent<DamageFlash>(); // TODO: delete this line once templates have been fixed
         }
@@ -243,14 +262,13 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void Update()
         {
-            timeSinceTransition += Time.deltaTime;
-
             if (exhausted || Time.time - timeStarted <= delayBeforeLogic)
             {
                 movementComponent.movementInput = Vector2.zero;
                 return;
             }
 
+            timeSinceTransition += Time.deltaTime;
             if (firstTimeStarted)
             {
                 firstTimeStarted = false;
@@ -314,7 +332,7 @@ namespace Cardificer.FiniteStateMachine
             {
                 foreach (Vector2 p in pathData.path.waypoints)
                 {
-                    Gizmos.DrawCube(p, Vector3.one);
+                    Gizmos.DrawCube(p, new Vector3(0.05f, 0.05f));
                 }
 
                 Gizmos.color = Color.white;
@@ -327,9 +345,9 @@ namespace Cardificer.FiniteStateMachine
             }
             
             Gizmos.color = Color.red;
-            Gizmos.DrawCube(currentAttackTarget, Vector3.one);
+            Gizmos.DrawCube(currentAttackTarget, new Vector3(0.05f, 0.05f));
             Gizmos.color = Color.blue;
-            Gizmos.DrawCube(currentPathfindingTarget, Vector3.one);
+            Gizmos.DrawCube(currentPathfindingTarget, new Vector3(0.05f, 0.05f));
         }
 
         #region IActor Implementation

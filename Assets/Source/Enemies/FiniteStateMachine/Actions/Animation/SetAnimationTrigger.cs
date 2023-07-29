@@ -13,10 +13,7 @@ namespace Cardificer.FiniteStateMachine
         [SerializeField] private string propertyName;
 
         [Tooltip("After requesting an action, how long does it take for the action to be performed?")] [Min(0f)]
-        public float actionChargeUpTime;
-
-        [Tooltip("After the action is performed, what is the delay before the action can be performed again?")] [Min(0f)]
-        public float actionCooldownTime;
+        public float delay;
 
         /// <summary>
         /// States the coroutine to trigger the given animation trigger 
@@ -36,12 +33,8 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> The time to wait to trigger. </returns>
         IEnumerator PlayTrigger(BaseStateMachine stateMachine)
         {
-            yield return new WaitForSeconds(actionChargeUpTime);
-            if (stateMachine.canAct)
-            {
-                stateMachine.GetComponent<AnimatorController>().SetTrigger(propertyName);
-                yield return new WaitForSeconds(actionCooldownTime);
-            }
+            yield return new WaitForSeconds(delay);
+            stateMachine.GetComponent<AnimatorController>().SetTrigger(propertyName);
             stateMachine.cooldownData.cooldownReady[this] = true;
         }
     }

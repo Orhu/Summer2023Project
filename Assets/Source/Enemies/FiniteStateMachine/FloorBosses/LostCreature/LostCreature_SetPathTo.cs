@@ -12,15 +12,6 @@ namespace Cardificer.FiniteStateMachine
     [CreateAssetMenu(menuName = "FSM/Floor Boss/Lost Creature/Set Path To...")]
     public class LostCreature_SetPathTo : SingleAction
     {
-        private enum PathType
-        {
-            FigureEight,
-            Infinity
-        }
-
-        [Tooltip("The path type to use")] 
-        [SerializeField] private PathType pathType;
-
         [Tooltip("Center point of the path shape, as an offset from the room's center")] 
         [SerializeField] private Vector2 centerOffset;
 
@@ -46,36 +37,95 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> List of Vector2 that make either an infinity or figure 8 path around the center position. </returns>
         private Vector2[] FormulatePath()
         {
-            float quarter = (float)shapeBounds.x / shapeBounds.y;
+            float quarterHoriz = (float)shapeBounds.x / 4;
+            float quarterVert = (float)shapeBounds.y / 4;
             Vector2 roomCenter = RoomInterface.instance.myWorldPosition;
             List<Vector2> points = new List<Vector2>();
 
-            if (pathType == PathType.FigureEight)
+            if (shapeBounds.y > shapeBounds.x)
             {
-                points.Add(roomCenter + new Vector2(centerOffset.x - quarter, centerOffset.y + 2));
-                points.Add(roomCenter + new Vector2(centerOffset.x - 2 * quarter, centerOffset.y));
-                points.Add(roomCenter + new Vector2(centerOffset.x - quarter, centerOffset.y - 2));
-                
+                // Top Circle
+                points.Add(roomCenter + new Vector2(centerOffset.x + quarterHoriz, centerOffset.y + quarterVert));
+                points.Add(roomCenter + new Vector2(centerOffset.x, centerOffset.y + 2 * quarterVert));
+                points.Add(roomCenter + new Vector2(centerOffset.x - quarterHoriz, centerOffset.y + quarterVert));
+
+                // Center
                 points.Add(roomCenter + centerOffset);
-                
-                points.Add(roomCenter + new Vector2(centerOffset.x + quarter, centerOffset.y + 2));
-                points.Add(roomCenter + new Vector2(centerOffset.x + 2 * quarter, centerOffset.y));
-                points.Add(roomCenter + new Vector2(centerOffset.x + quarter, centerOffset.y - 2));
+
+                // Bottom Circle
+                points.Add(roomCenter + new Vector2(centerOffset.x + quarterHoriz, centerOffset.y - quarterVert));
+                points.Add(roomCenter + new Vector2(centerOffset.x, centerOffset.y - 2 * quarterVert));
+                points.Add(roomCenter + new Vector2(centerOffset.x - quarterHoriz, centerOffset.y - quarterVert));
                 return points.ToArray();
             }
             else
             {
-                points.Add(roomCenter + new Vector2(centerOffset.x + 2, centerOffset.y - quarter));
-                points.Add(roomCenter + new Vector2(centerOffset.x, centerOffset.y - 2 * quarter));
-                points.Add(roomCenter + new Vector2(centerOffset.x - 2, centerOffset.y - quarter));
-                
+                // Right Circle
+                points.Add(roomCenter + new Vector2(centerOffset.x + quarterHoriz, centerOffset.y + quarterVert));
+                points.Add(roomCenter + new Vector2(centerOffset.x + 2 * quarterHoriz, centerOffset.y));
+                points.Add(roomCenter + new Vector2(centerOffset.x + quarterHoriz, centerOffset.y - quarterVert));
+
+                // Center
                 points.Add(roomCenter + centerOffset);
-                
-                points.Add(roomCenter + new Vector2(centerOffset.x + 2, centerOffset.y + quarter));
-                points.Add(roomCenter + new Vector2(centerOffset.x, centerOffset.y + 2 * quarter));
-                points.Add(roomCenter + new Vector2(centerOffset.x - 2, centerOffset.y + quarter));
+
+                // Left Circle
+                points.Add(roomCenter + new Vector2(centerOffset.x - quarterHoriz, centerOffset.y + quarterVert));
+                points.Add(roomCenter + new Vector2(centerOffset.x - 2 * quarterHoriz, centerOffset.y));
+                points.Add(roomCenter + new Vector2(centerOffset.x - quarterHoriz, centerOffset.y - quarterVert));
                 return points.ToArray();
             }
+        }
+        
+        private Vector2[] GenerateFigureEight()
+        {
+            Vector2[] points = new Vector2[7];
+
+            Vector2 roomWorldPos = RoomInterface.instance.myRoomSize;
+        
+            float halfWidth = shapeBounds.x / 2f;
+            float halfHeight = shapeBounds.y / 2f;
+        
+            float centerX = centerOffset.x;
+            float centerY = centerOffset.y;
+        
+            // Upper loop
+            points[0] = roomWorldPos + new Vector2(centerX, centerY + halfHeight);
+            points[1] = roomWorldPos + new Vector2(centerX + halfWidth, centerY + halfHeight);
+            points[2] = roomWorldPos + new Vector2(centerX + halfWidth, centerY);
+        
+            // Lower loop
+            points[3] = roomWorldPos + new Vector2(centerX + halfWidth, centerY - halfHeight);
+            points[4] = roomWorldPos + new Vector2(centerX, centerY - halfHeight);
+            points[5] = roomWorldPos + new Vector2(centerX - halfWidth, centerY - halfHeight);
+            points[6] = roomWorldPos + new Vector2(centerX - halfWidth, centerY);
+        
+            return points;
+        }
+    
+        private Vector2[] GenerateInfinity()
+        {
+            Vector2[] points = new Vector2[7];
+            
+            Vector2 roomWorldPos = RoomInterface.instance.myRoomSize;
+        
+            float halfWidth = shapeBounds.x / 2f;
+            float halfHeight = shapeBounds.y / 2f;
+        
+            float centerX = centerOffset.x;
+            float centerY = centerOffset.y;
+        
+            // Upper loop
+            points[0] = roomWorldPos + new Vector2(centerX - halfWidth, centerY + halfHeight);
+            points[1] = roomWorldPos + new Vector2(centerX, centerY + halfHeight);
+            points[2] = roomWorldPos + new Vector2(centerX + halfWidth, centerY);
+        
+            // Lower loop
+            points[3] = roomWorldPos + new Vector2(centerX, centerY - halfHeight);
+            points[4] = roomWorldPos + new Vector2(centerX + halfWidth, centerY - halfHeight);
+            points[5] = roomWorldPos + new Vector2(centerX - halfWidth, centerY);
+            points[6] = roomWorldPos + new Vector2(centerX, centerY + halfHeight);
+        
+            return points;
         }
     }
 }
