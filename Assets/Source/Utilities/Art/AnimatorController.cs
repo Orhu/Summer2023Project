@@ -7,7 +7,7 @@ namespace Cardificer
     /// <summary>
     /// Handles mirroring based on state of animations.
     /// </summary>
-    [RequireComponent(typeof(Animator))]
+    //[RequireComponent(typeof(Animator))]
     public class AnimatorController : MonoBehaviour
     {
         [Tooltip("The default mirror parameter, if empty no parameter will be set by default.")]
@@ -21,14 +21,17 @@ namespace Cardificer
         private Dictionary<string, bool> mirrorParametersToValues = new Dictionary<string, bool>();
 
         // The animator to control
-        private Animator animator;
+        [Tooltip("The animator to control")]
+        [SerializeField] private Animator animator;
 
         /// <summary>
         /// Initialize reference.
         /// </summary>
         private void Awake()
         {
-            animator = GetComponent<Animator>();
+            if (animator == null) { // temporary while I rewire all the enemies
+                animator = GetComponent<Animator>();
+            }
 
             foreach (ClipToParameter animactionClipToMirrorParameter in _animactionClipsToMirrorParameters)
             {

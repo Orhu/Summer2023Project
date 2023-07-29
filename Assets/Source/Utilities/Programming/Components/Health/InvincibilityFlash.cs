@@ -2,15 +2,14 @@ using UnityEngine;
 
 namespace Cardificer
 {
-    [RequireComponent(typeof(Health), typeof(SpriteRenderer))]
+    [RequireComponent(typeof(Health))]
     public class InvincibilityFlash : MonoBehaviour
     {
         [Tooltip("The color to make the sprite when invincible.")]
         [SerializeField] private Color invincibilityFlashColor;
 
-
-
-        private SpriteRenderer spriteRenderer;
+        [Tooltip("Sprite Renderer to change tint of.")]
+        [SerializeField] private SpriteRenderer spriteRenderer;
 
         /// <summary>
         /// Initializes references
@@ -18,7 +17,9 @@ namespace Cardificer
         private void Awake()
         {
             GetComponent<Health>().onInvincibilityChanged += SetTintEnable;
-            spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null) { // temporary while i rewire all the enemies
+                spriteRenderer = GetComponent<SpriteRenderer>();
+            }
         }
 
 

@@ -149,7 +149,7 @@ namespace Cardificer.FiniteStateMachine
             set
             {
                 feetCollider.gameObject.layer = LayerMask.NameToLayer(value.ToString());
-                GetComponent<SpriteRenderer>().sortingLayerName = value.ToString();
+                //GetComponent<SpriteRenderer>().sortingLayerName = value.ToString(); Dont think this is necessary anymore since all enemies will exist on the same sorting layer.
                 _currentMovementType = value;
             }
             get => _currentMovementType;
