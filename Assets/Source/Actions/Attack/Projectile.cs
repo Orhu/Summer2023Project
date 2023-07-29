@@ -316,11 +316,11 @@ namespace Cardificer
             switch (attack.spawnLocation)
             {
                 case SpawnLocation.Actor:
-                    if (actor == null) { return transform.position; }
+                    if ((MonoBehaviour) actor == null) { return transform.position; }
                     return actor.GetActionSourceTransform().position;
 
                 case SpawnLocation.AimPosition:
-                    if (actor == null) { return transform.position; }
+                    if ((MonoBehaviour) actor == null) { return transform.position; }
                     return actor.GetActionAimPosition();
 
                 case SpawnLocation.RoomCenter:
@@ -349,7 +349,7 @@ namespace Cardificer
             switch (aimMode)
             {
                 case AimMode.AtMouse:
-                    if (actor == null)
+                    if ((MonoBehaviour) actor == null)
                     {
                         return transform.position + transform.right;
                     }
@@ -359,7 +359,7 @@ namespace Cardificer
                     return FindClosestTarget(transform.position, ref closestTargetToProjectile);
 
                 case AimMode.AtClosestEnemyToActor:
-                    if (actor == null)
+                    if ((MonoBehaviour) actor == null)
                     {
                         return transform.position + transform.right;
                     }
