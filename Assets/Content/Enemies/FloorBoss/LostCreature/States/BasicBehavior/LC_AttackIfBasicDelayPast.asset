@@ -10,13 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3b7609383c524e9cb7c438272085f9b6, type: 3}
-  m_Name: LC_SetPathBottomIfDestReached
+  m_Name: LC_AttackIfBasicDelayPast
   m_EditorClassIdentifier: 
   decisions:
   - invert: 0
-    decision: {fileID: 11400000, guid: 84ee1da3f85044f40bcc338b1d5e1156, type: 2}
-    nextOperator: 2
-  - invert: 0
     decision: {fileID: 11400000, guid: 5d0f081a11bfdb64fb208175cbcfb1b2, type: 2}
     nextOperator: 0
-  trueAction: {fileID: 11400000, guid: cdee2192ca31bac4f86877979f56b676, type: 2}
+  trueAction: {fileID: 11400000, guid: 509c17e7a44ed6b48b6b8a0cd2e60018, type: 2}
