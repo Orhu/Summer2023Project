@@ -15,6 +15,9 @@
             
             [Tooltip("How much to increment the variable by")]
             [SerializeField] private int incrementBy = 1;
+
+            [Tooltip("How many seconds before another increment is allowed?")]
+            [SerializeField] private float rateLimit = 0f;
             
             /// <summary>
             /// Increments the requested var by the requested amount
@@ -24,8 +27,12 @@
             protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
             {
                 stateMachine.trackedVariables.TryAdd(varToIncrement, 0);
-                
+
                 stateMachine.trackedVariables[varToIncrement] = (int)stateMachine.trackedVariables[varToIncrement] + incrementBy;
+                BaseStateMachine.print(stateMachine.trackedVariables[varToIncrement]);
+
+                yield return new WaitForSeconds(rateLimit);
+                
                 stateMachine.cooldownData.cooldownReady[this] = true;
                 
                 yield break;
