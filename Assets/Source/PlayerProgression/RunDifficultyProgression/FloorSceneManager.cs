@@ -7,7 +7,6 @@ namespace Cardificer
     /// <summary>
     /// Handles loading the next floor, and tracks the current floor. 
     /// </summary>
-    [CreateAssetMenu(menuName = "Test")]
     [ExecuteAlways]
     public class FloorSceneManager : ScriptableObject
     {
