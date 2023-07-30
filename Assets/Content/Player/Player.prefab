@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 548517994}
   - component: {fileID: 2546847731475278928}
   - component: {fileID: -1180372233089998350}
+  - component: {fileID: 8061370563630907577}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -490,6 +491,24 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &8061370563630907577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608508398850829056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 302a8d21882099a40a1f7c7cc5f09034, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cards: []
+  handSize: 4
+  drawableCards: []
+  inHandCards: []
+  discardedCards: []
+  actingCardIndices: 
 --- !u!1 &4235891105401400328
 GameObject:
   m_ObjectHideFlags: 0
