@@ -30,7 +30,13 @@ namespace Cardificer
 
         // Tracks whether the player should be paused
         [HideInInspector] public bool paused => Time.timeScale == 0;
-        
+
+        // Tracks the controller aim direction
+        [System.NonSerialized] public Vector2 aimDirection;
+
+        // Tracks whether the last input was a gamepad input
+        [System.NonSerialized] public bool lastInputWasGamepad = false;
+
         // Movement component to allow the agent to move
         private Movement movementComponent;
 
@@ -42,12 +48,6 @@ namespace Cardificer
 
         // The component responsible for the channeling ability
         private ChannelAbility channelAbility;
-
-        // Tracks the controller aim direction
-        private Vector2 aimDirection;
-
-        // Tracks whether the last input was a gamepad input
-        private bool lastInputWasGamepad = false;
 
         /// <summary>
         /// Initialize components.
