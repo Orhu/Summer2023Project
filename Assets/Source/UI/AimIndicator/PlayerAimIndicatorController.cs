@@ -28,7 +28,7 @@ namespace Cardificer
         {
             if (aimIndicator == null) { return; }
 
-            if (!playerController.lastInputWasGamepad)
+            if (!playerController.lastInputWasGamepad || playerController.aimDirection == Vector2.zero)
             {
                 aimIndicator.SetActive(false);
                 return;
@@ -36,11 +36,12 @@ namespace Cardificer
 
             aimIndicator.SetActive(true);
 
-            if (playerController.aimDirection == new Vector2(0, 0)) { return; }
+            if (playerController.aimDirection == Vector2.zero) { return; }
 
             float pointingLeftOffset = playerController.aimDirection.x < 0 ? 180 : 0;
+            float mirroredOffset = aimIndicator.transform.lossyScale.x < 0 ? 180 : 0;
 
-            aimIndicator.transform.eulerAngles = new Vector3(0, 0, Mathf.Atan(playerController.aimDirection.y / playerController.aimDirection.x) * Mathf.Rad2Deg + pointingLeftOffset);
+            aimIndicator.transform.eulerAngles = new Vector3(0, 0, Mathf.Atan(playerController.aimDirection.y / playerController.aimDirection.x) * Mathf.Rad2Deg + pointingLeftOffset + mirroredOffset);
         }
     }
 }
