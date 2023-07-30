@@ -32,29 +32,38 @@ namespace Cardificer
         /// <summary>
         /// Bind on click.
         /// </summary>
-        void Awake()
+        void OnEnable()
         {
+            GetComponent<Button>().onClick.RemoveListener(Confirm);
+            GetComponent<Button>().onClick.RemoveListener(OpenConfirmationBox);
             if (skipConfirmation)
             {
-                GetComponent<Button>().onClick.AddListener(
-                    () =>
-                    {
-                        onConfirmed?.Invoke();
-                    });
+                GetComponent<Button>().onClick.AddListener(Confirm);
             }
             else
             {
-                GetComponent<Button>().onClick.AddListener(
-                    () =>
-                    {
-                        ConfirmationPopup popup = MenuManager.Open<ConfirmationPopup>(closeOtherMenus: false);
-                        popup.text = text;
-                        popup.confirmButtonText = confirmButtonText;
-                        popup.denyButtonText = denyButtonText;
+                GetComponent<Button>().onClick.AddListener(OpenConfirmationBox);
+            }
 
-                        popup.onConfirmed += () => { onConfirmed?.Invoke(); };
-                        popup.onDenied += () => { onDenied?.Invoke(); };
-                    });
+            void Confirm()
+            {
+                onConfirmed?.Invoke();
+            }
+
+            void Deny()
+            {
+                onDenied?.Invoke();
+            }
+
+            void OpenConfirmationBox()
+            {
+                ConfirmationPopup popup = MenuManager.Open<ConfirmationPopup>(closeOtherMenus: false);
+                popup.text = text;
+                popup.confirmButtonText = confirmButtonText;
+                popup.denyButtonText = denyButtonText;
+
+                popup.onConfirmed += Confirm;
+                popup.onDenied += Deny;
             }
         }
     }

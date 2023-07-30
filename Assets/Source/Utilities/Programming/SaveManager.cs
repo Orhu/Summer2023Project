@@ -26,13 +26,33 @@ namespace Cardificer
     /// </example>
     public static class SaveManager
     {
-        // The currently saved player deck. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+        // Whether or not the player has completed the tutorial.
+        private static SaveData<bool> _savedPlayerPosition = new SaveData<bool>("TutorialCompleated", true);
+        public static bool tutorialCompleted
+        {
+            get => _savedPlayerPosition.data;
+            set => _savedPlayerPosition.data = value;
+        }
+
+
+
+        // When the autosave was last played.
         public static DateTime lastAutosaveTime
+            {
+                get
+                {
+                    if (!autosaveExists) { return DateTime.Now; }
+                    return DateTime.FromFileTime(autosaver.latestAutosave.saveTime);
+                }
+            }
+
+        // How long the current play session is in seconds.
+        public static TimeSpan savedPlaytime
         {
             get
             {
                 if (!autosaveExists) { return default; }
-                return DateTime.FromFileTime(autosaver.latestAutosave.saveTime);
+                return TimeSpan.FromSeconds(autosaver.latestAutosave.playtime);
             }
         }
 
@@ -310,6 +330,9 @@ namespace Cardificer
                 // The time this was saved at.
                 public long saveTime;
 
+                // The amount of time this game has been running in seconds.
+                public float playtime;
+
                 // The seed of the current floor.
                 public int floorSeed;
 
@@ -369,6 +392,7 @@ namespace Cardificer
 
                 // Add new save data Here:
                 saveData.saveTime = DateTime.Now.ToFileTime();
+                saveData.playtime = Mathf.Round(Player.Get().GetComponent<PlayerController>().playtime);
                 saveData.playerPos = Player.Get().transform.position;
                 saveData.playerHealth = Player.health.currentHealth;
                 saveData.playerMoney = Player.GetMoney();

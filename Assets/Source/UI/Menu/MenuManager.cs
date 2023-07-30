@@ -58,12 +58,14 @@ namespace Cardificer
             }
 
             Component menu = instance.GetComponentInChildren(menuType, true);
-            if (menu == null)
+            if (menu == null || menu.gameObject.activeSelf)
             {
                 GameObject newMenu = Instantiate(GetMenuPrefab(menuType));
                 newMenu.transform.SetParent(instance.transform, false);
                 menu = newMenu.GetComponent(menuType);
             }
+
+            menu.transform.SetAsLastSibling();
 
             if (lockOpen)
             {

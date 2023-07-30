@@ -50,28 +50,26 @@ namespace Cardificer
         // Called when the action is denied.
         public event System.Action onDenied;
 
-        // Whether or not this has all ready been confirmed/denied.
-        private bool optionPicked = false;
 
         /// <summary>
         /// Sets text & bindings.
         /// </summary>
-        private void OnEnable()
+        private void Awake()
         {
-            optionPicked = false;
-
             confirmButton.onClick.AddListener(
                 () =>
                 {
-                    optionPicked = true;
                     onConfirmed?.Invoke();
+                    onConfirmed = null;
+                    onDenied = null;
                     MenuManager.Close<ConfirmationPopup>();
                 });
             denyButton.onClick.AddListener(
                 () =>
                 {
-                    optionPicked = true;
                     onDenied?.Invoke();
+                    onConfirmed = null;
+                    onDenied = null;
                     MenuManager.Close<ConfirmationPopup>();
                 });
         }
@@ -81,10 +79,9 @@ namespace Cardificer
         /// </summary>
         private void OnDisable()
         {
-            if (!optionPicked)
-            {
-                onDenied?.Invoke();
-            }
+            onDenied?.Invoke();
+            onConfirmed = null;
+            onDenied = null;
         }
     }
 }

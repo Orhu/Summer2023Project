@@ -13,6 +13,9 @@ namespace Cardificer
         [SerializeField] private RunDataum<DateTime> lastPlayed;
 
         [Tooltip("The current floor the player is on.")]
+        [SerializeField] private RunDataum<TimeSpan> playTime;
+
+        [Tooltip("The current floor the player is on.")]
         [SerializeField] private RunDataum<string> currentFloor;
 
         [Tooltip("The current size of the player deck.")]
@@ -30,6 +33,7 @@ namespace Cardificer
         void OnEnable()
         {
             lastPlayed.Invoke(SaveManager.lastAutosaveTime);
+            playTime.Invoke(SaveManager.savedPlaytime);
             currentFloor.Invoke(FloorSceneManager.GetFloorName(SaveManager.savedCurrentFloor));
             deckSize.Invoke((SaveManager.savedPlayerDeck?.pathToCards.Count).GetValueOrDefault());
             health.Invoke(SaveManager.savedPlayerHealth);
