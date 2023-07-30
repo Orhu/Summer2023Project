@@ -10,6 +10,12 @@ namespace Cardificer
     [RequireComponent(typeof(Movement), typeof(AnimatorController), typeof(ChannelAbility))]
     public class PlayerController : MonoBehaviour, IActor
     {
+        [Tooltip("The amount that the aim direction angle has to change before it counts as an input")]
+        [SerializeField] private float aimAngleChangeThreshold = 1;
+
+        [Tooltip("The magnitude of the aim direction that the gamepad must input before it counts as aiming")]
+        [SerializeField] private float aimMagnitudeThreshold = 0.5f;
+
         // Damage multiplier of this actor
         [HideInInspector] public float damageMultiplier = 1f;
 
@@ -131,6 +137,13 @@ namespace Cardificer
         /// <param name="aimInput"> The aim input </param>
         public void OnAimGamepad(InputValue aimInput)
         {
+            Vector2 newAimInput = aimInput.Get<Vector2>();
+
+            if (newAimInput.sqrMagnitude < aimMagnitudeThreshold * aimMagnitudeThreshold) { return; }
+
+            newAimInput.Normalize();
+            if (aimDirection != Vector2.zero && Vector2.Angle(newAimInput, aimDirection) < aimAngleChangeThreshold) { return; }
+
             lastInputWasGamepad = true;
             aimDirection = aimInput.Get<Vector2>().normalized;
         }
