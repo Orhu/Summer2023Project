@@ -240,6 +240,18 @@ namespace Cardificer
             #endif
         }
 
+        /// <summary>
+        /// Prints the name of the template of the current room
+        /// </summary>
+        public void OnPrintCurrentRoomTemplate()
+        {
+            // Make sure this only happens when testing in the editor
+#if UNITY_EDITOR
+            Debug.Log("Current room type: " + FloorGenerator.currentRoom.roomType.displayName);
+            Debug.Log("Current room template: " + FloorGenerator.currentRoom.template);
+            #endif
+        }
+
         private void OnDestroy()
         {
             Player.SetMoney(0);
