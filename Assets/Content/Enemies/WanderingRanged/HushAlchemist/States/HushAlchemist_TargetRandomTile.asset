@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4abf72fba962d6943af00d0331f7e504, type: 3}
-  m_Name: HushAlchemist_Velocity0
+  m_Script: {fileID: 11500000, guid: 2502d7970eebaf6468d551c5f884081d, type: 3}
+  m_Name: HushAlchemist_TargetRandomTile
   m_EditorClassIdentifier: 
-  invert: 0
-  velocityThreshold: 0
+  maxDistance: 4
+  minDistance: 1
+  targetType: 1
+  cooldown: 2
