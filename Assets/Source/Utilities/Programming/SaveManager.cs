@@ -530,7 +530,8 @@ namespace Cardificer
             {
                 if (!FloorGenerator.IsValid()) { return; }
 
-                DontDestroyOnLoad(this);
+                // Commented out because the autosaves broke and would stop saving if the tutorial was played and then a normal game started. Also doest appear to be needed as floor progression seems to still work.
+                //DontDestroyOnLoad(this);
 
                 FloorGenerator.onRoomChange += BindCleared;
 
