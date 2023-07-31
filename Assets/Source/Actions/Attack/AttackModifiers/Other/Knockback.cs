@@ -24,30 +24,28 @@ namespace Cardificer
 
         // The projectile this modifies
         private GameObject knockbackSource = null;
-        public override Projectile modifiedProjectile
+
+        public override void Initialize(Projectile value)
         {
-            set
+            switch (pushDirection)
             {
-                switch (pushDirection)
-                {
-                    case PushDirection.AwayFromProjectile:
-                        knockbackSource = value.gameObject;
-                        break;
+                case PushDirection.AwayFromProjectile:
+                    knockbackSource = value.gameObject;
+                    break;
 
-                    case PushDirection.InProjectileForwardDirection:
-                        knockbackSource = value.gameObject;
-                        break;
+                case PushDirection.InProjectileForwardDirection:
+                    knockbackSource = value.gameObject;
+                    break;
 
-                    case PushDirection.AwayFromSpawner:
-                        knockbackSource = value.actor.GetActionSourceTransform().gameObject;
-                        break;
+                case PushDirection.AwayFromSpawner:
+                    knockbackSource = value.actor.GetActionSourceTransform().gameObject;
+                    break;
 
-                    case PushDirection.InSpawnerForwardDirection:
-                        knockbackSource = value.actor.GetActionSourceTransform().gameObject;
-                        break;
-                }
-                value.onOverlap += ApplyKnockback;
+                case PushDirection.InSpawnerForwardDirection:
+                    knockbackSource = value.actor.GetActionSourceTransform().gameObject;
+                    break;
             }
+            value.onOverlap += ApplyKnockback;
         }
 
         /// <summary>

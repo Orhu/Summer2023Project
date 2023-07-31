@@ -62,82 +62,79 @@ namespace Cardificer
         private static GameObject playActionRoot;
 
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
+            if (!applyToZeroDamage && value.attackData.damage == 0) { return; }
+            if (playActionRoot == null)
             {
-                if (!applyToZeroDamage && value.attackData.damage == 0) { return; }
-                if (playActionRoot == null)
-                {
-                    playActionRoot = new GameObject("Play Action Roots");
-                }
+                playActionRoot = new GameObject("Play Action Roots");
+            }
 
-                causer = value.causer;
-                parentActor = value.actor;
-                sourceTransform = value.transform;
+            causer = value.causer;
+            parentActor = value.actor;
+            sourceTransform = value.transform;
 
-                if (inheritModifiers)
-                {
-                    modifiers = new List<AttackModifier>(value.modifiers);
-                    modifiers.RemoveAll(
-                        // Remove all play action modifiers
-                        (AttackModifier modifier) =>
+            if (inheritModifiers)
+            {
+                modifiers = new List<AttackModifier>(value.modifiers);
+                modifiers.RemoveAll(
+                    // Remove all play action modifiers
+                    (AttackModifier modifier) =>
+                    {
+                        return modifier is PlayAction || modifier is DuplicateAttackSequence;
+                    });
+            }
+
+            int playCount = this.playCount;
+
+            switch (playTime)
+            {
+                case PlayTime.Repeately:
+                case PlayTime.OnSpawned:
+                    ignoredObjects = value.ignoredObjects;
+                    value.StartCoroutine(DelayedPlayAction(playCount));
+                    break;
+
+                case PlayTime.OnHit:
+                    value.onHit += collision =>
+                    {
+                        ignoredObjects = new List<GameObject>(value.ignoredObjects);
+                        ignoredObjects.Add(collision.gameObject);
+                        if (--playCount < 0) { return; }
+                        value.StartCoroutine(DelayedPlayAction());
+                    };
+                    break;
+
+                case PlayTime.OnOverlap:
+                    value.onOverlap += hitCollider =>
+                    {
+                        ignoredObjects = new List<GameObject>(value.ignoredObjects);
+                        ignoredObjects.Add(hitCollider.gameObject);
+                        if (--playCount < 0) { return; }
+                        value.StartCoroutine(DelayedPlayAction());
+                    };
+                    break;
+
+                case PlayTime.OnDestroyed:
+                    value.onDestroyed +=
+                        // Creates a new game object to act as the source of the played action
+                        () =>
                         {
-                            return modifier is PlayAction || modifier is DuplicateAttackSequence;
-                        });
-                }
-
-                int playCount = this.playCount;
-
-                switch (playTime)
-                {
-                    case PlayTime.Repeately:
-                    case PlayTime.OnSpawned:
-                        ignoredObjects = value.ignoredObjects;
-                        value.StartCoroutine(DelayedPlayAction(playCount));
-                        break;
-
-                    case PlayTime.OnHit:
-                        value.onHit += collision =>
-                        {
-                            ignoredObjects = new List<GameObject>(value.ignoredObjects);
-                            ignoredObjects.Add(collision.gameObject);
-                            if (--playCount < 0) { return; }
-                            value.StartCoroutine(DelayedPlayAction());
-                        };
-                        break;
-
-                    case PlayTime.OnOverlap:
-                        value.onOverlap += hitCollider =>
-                        {
-                            ignoredObjects = new List<GameObject>(value.ignoredObjects);
-                            ignoredObjects.Add(hitCollider.gameObject);
-                            if (--playCount < 0) { return; }
-                            value.StartCoroutine(DelayedPlayAction());
-                        };
-                        break;
-
-                    case PlayTime.OnDestroyed:
-                        value.onDestroyed +=
-                            // Creates a new game object to act as the source of the played action
-                            () =>
-                            {
-                                if (value.forceDestroy) { return; }
+                            if (value.forceDestroy) { return; }
 
                                 // Create runner object since the projectile will be null.
                                 GameObject coroutineRunner = new GameObject(value.name + " Play " + action.name + " Source");
-                                coroutineRunner.transform.position = sourceTransform.position;
-                                coroutineRunner.transform.rotation = sourceTransform.rotation;
-                                coroutineRunner.transform.parent = playActionRoot.transform;
-                                sourceTransform = coroutineRunner.transform;
-                                MonoBehaviour mono = sourceTransform.gameObject.AddComponent<Empty>();
-                                FloorGenerator.onRoomChange += () => { Destroy(coroutineRunner); };
+                            coroutineRunner.transform.position = sourceTransform.position;
+                            coroutineRunner.transform.rotation = sourceTransform.rotation;
+                            coroutineRunner.transform.parent = playActionRoot.transform;
+                            sourceTransform = coroutineRunner.transform;
+                            MonoBehaviour mono = sourceTransform.gameObject.AddComponent<Empty>();
+                            FloorGenerator.onRoomChange += () => { Destroy(coroutineRunner); };
 
-                                ignoredObjects = new List<GameObject>(value.ignoredObjects);
-                                mono.GetComponent<MonoBehaviour>().StartCoroutine(DelayedPlayAction());
-                            };
-                        break;
-                }
+                            ignoredObjects = new List<GameObject>(value.ignoredObjects);
+                            mono.GetComponent<MonoBehaviour>().StartCoroutine(DelayedPlayAction());
+                        };
+                    break;
             }
         }
 

@@ -9,12 +9,9 @@ namespace Cardificer
     public class Phantasmal : AttackModifier
     {
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.gameObject.layer = LayerMask.NameToLayer("PhantasmalProjectile");
-            }
+            value.gameObject.layer = LayerMask.NameToLayer("PhantasmalProjectile");
         }
     }
 }

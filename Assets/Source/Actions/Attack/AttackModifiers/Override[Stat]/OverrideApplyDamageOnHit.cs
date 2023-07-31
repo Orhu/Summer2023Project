@@ -13,12 +13,9 @@ namespace Cardificer
         [SerializeField] private bool newApplyDamageOnHit;
 
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.applyDamageOnHit = newApplyDamageOnHit;
-            }
+            value.applyDamageOnHit = newApplyDamageOnHit;
         }
     }
 }

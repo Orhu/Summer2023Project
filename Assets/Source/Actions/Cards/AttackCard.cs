@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Skaillz.EditInline;
 using System.Linq;
+using UnityEditor.Presets;
 
 namespace Cardificer
 {
@@ -21,7 +22,10 @@ namespace Cardificer
         
         [Tooltip("The how this card will modify actions when used in a combo.")] [EditInline]
         public List<AttackModifier> chordModifiers;
-        
+
+        [Tooltip("The prefabs that will be attached to the projectile when chorded.")]
+        public List<GameObject> cordVFXPrefabs;
+
         [Tooltip("The how this card will modify actions when used in a combo with itself.")] [EditInline]
         public List<AttackModifier> duplicateModifiers;
 
@@ -119,9 +123,19 @@ namespace Cardificer
         public void PlayActions(IActor actor, List<AttackCard> chordedCards, System.Action attackFinished = null)
         {
             List<AttackModifier> modifiers = new List<AttackModifier>();
+
+
             foreach (AttackCard chordedCard in chordedCards)
             {
                 modifiers.AddRange(GetAppliedModifers(chordedCard));
+
+                // Chord VFX
+                if (chordedCard.cordVFXPrefabs != null && chordedCard.cordVFXPrefabs.Count > 0)
+                {
+                    ChordVFXModifier vfxModifer = CreateInstance<ChordVFXModifier>();
+                    vfxModifer.cordVFXPrefabs = chordedCard.cordVFXPrefabs;
+                    modifiers.Add(vfxModifer);
+                }
             }
 
             PlayActions(actor, modifiers, attackFinished);

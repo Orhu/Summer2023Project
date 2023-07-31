@@ -12,21 +12,18 @@ namespace Cardificer
         private Projectile projectile;
 
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                GameObject shieldObject = new GameObject();
-                shieldObject.name = "Shield";
-                shieldObject.transform.parent = value.transform;
-                shieldObject.transform.localPosition = Vector2.zero;
-                shieldObject.transform.localRotation = Quaternion.identity;
-                shieldObject.layer = LayerMask.NameToLayer("Shield");
-                value.shape.CreateCollider(shieldObject).isTrigger = true;
+            GameObject shieldObject = new GameObject();
+            shieldObject.name = "Shield";
+            shieldObject.transform.parent = value.transform;
+            shieldObject.transform.localPosition = Vector2.zero;
+            shieldObject.transform.localRotation = Quaternion.identity;
+            shieldObject.layer = LayerMask.NameToLayer("Shield");
+            value.shape.CreateCollider(shieldObject).isTrigger = true;
 
-                value.onOverlap += DestroyProjectiles;
-                projectile = value;
-            }
+            value.onOverlap += DestroyProjectiles;
+            projectile = value;
         }
 
         /// <summary>

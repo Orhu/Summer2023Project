@@ -22,26 +22,23 @@ namespace Cardificer
         [SerializeField] private float minSpeed = -999f;
 
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
+            if (value.speed != -999f)
             {
-                if (value.speed != -999f)
-                {
-                    value.speed = initialSpeed;
-                }
-                if (value.acceleration != -999f)
-                {
-                    value.acceleration = acceleration;
-                }
-                if (value.maxSpeed != -999f)
-                {
-                    value.maxSpeed = maxSpeed;
-                }
-                if (value.minSpeed != -999f)
-                {
-                    value.minSpeed = minSpeed;
-                }
+                value.speed = initialSpeed;
+            }
+            if (value.acceleration != -999f)
+            {
+                value.acceleration = acceleration;
+            }
+            if (value.maxSpeed != -999f)
+            {
+                value.maxSpeed = maxSpeed;
+            }
+            if (value.minSpeed != -999f)
+            {
+                value.minSpeed = minSpeed;
             }
         }
     }

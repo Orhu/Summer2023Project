@@ -13,12 +13,9 @@ namespace Cardificer
         [SerializeField] private int hitCountToAdd;
 
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.remainingHits += hitCountToAdd;
-            }
+            value.remainingHits += hitCountToAdd;
         }
     }
 }

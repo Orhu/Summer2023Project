@@ -19,16 +19,13 @@ namespace Cardificer
         List<ProjectileSpawnInfo> spawnSequence;
 
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
+            if (value.index == 0)
             {
-                if (value.index == 0)
-                {
-                    spawnSequence = value.spawnSequence;
-                    sequenceLength = spawnSequence.Count;
-                    value.StartCoroutine(UpadateSpawnSequnce());
-                }
+                spawnSequence = value.spawnSequence;
+                sequenceLength = spawnSequence.Count;
+                value.StartCoroutine(UpadateSpawnSequnce());
             }
         }
 

@@ -15,12 +15,9 @@ namespace Cardificer
         private const int INSTAKILL_DAMAGE = 99999;
 
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.onOverlap += Instakill;
-            }
+            value.onOverlap += Instakill;
         }
 
         /// <summary>

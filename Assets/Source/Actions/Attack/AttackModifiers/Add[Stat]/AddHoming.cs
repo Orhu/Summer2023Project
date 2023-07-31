@@ -19,13 +19,10 @@ namespace Cardificer
         [SerializeField] private float homingDelay;
 
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.homingSpeed += homingSpeed * value.maxSpeed; // This allows homing to scale appropriately based on the velocity of the projectile
-                value.remainingHomingTime += homingTime;
-            }
+            value.homingSpeed += homingSpeed * value.maxSpeed; // This allows homing to scale appropriately based on the velocity of the projectile
+            value.remainingHomingTime += homingTime;
         }
     }
 }

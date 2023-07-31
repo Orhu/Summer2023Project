@@ -25,16 +25,13 @@ namespace Cardificer
         Vector2 lastBounceNormal = Vector2.zero;
 
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
+            if (value.onHit == null || !value.onHit.GetInvocationList().Contains((Action<Collision2D>)Bounce))
             {
-                if (value.onHit == null || !value.onHit.GetInvocationList().Contains((Action<Collision2D>)Bounce))
-                {
-                    value.onHit += Bounce;
-                    bouncyProjectile = value;
-                    bouncyRigidbody = value.GetComponent<Rigidbody2D>();
-                }
+                value.onHit += Bounce;
+                bouncyProjectile = value;
+                bouncyRigidbody = value.GetComponent<Rigidbody2D>();
             }
         }
 

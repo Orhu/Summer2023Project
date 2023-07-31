@@ -36,32 +36,30 @@ namespace Cardificer
 
         // The projectile this modifies
         private Projectile _modifiedProjectile;
-        public override Projectile modifiedProjectile
+
+        public override void Initialize(Projectile value)
         {
-            set
+            _modifiedProjectile = value;
+            if (spawnMode == SpawnMode.OnDestroyed)
             {
-                _modifiedProjectile = value;
-                if (spawnMode == SpawnMode.OnDestroyed)
-                {
-                    _modifiedProjectile.onDestroyed += () => CreateBomb(); 
-                }
-                else if (spawnMode == SpawnMode.OnDestroyed)
-                {
-                    _modifiedProjectile.onOverlap += (Collider2D collider) => CreateBomb(collider);
-                    _modifiedProjectile.onHit += (Collision2D collision) => CreateBomb(collision.collider);
-                }
-                else
-                {
-                    System.Action<Collider2D> spawnBombOnOverlap = (Collider2D collider) => CreateBomb(collider);
-                    _modifiedProjectile.onDestroyed +=
-                        () =>
-                        {
-                            _modifiedProjectile.onOverlap -= spawnBombOnOverlap;
-                            CreateBomb();
-                        };
-                    _modifiedProjectile.onOverlap += spawnBombOnOverlap;
-                    _modifiedProjectile.onHit += (Collision2D collision) => CreateBomb(collision.collider);
-                }
+                _modifiedProjectile.onDestroyed += () => CreateBomb();
+            }
+            else if (spawnMode == SpawnMode.OnDestroyed)
+            {
+                _modifiedProjectile.onOverlap += (Collider2D collider) => CreateBomb(collider);
+                _modifiedProjectile.onHit += (Collision2D collision) => CreateBomb(collision.collider);
+            }
+            else
+            {
+                System.Action<Collider2D> spawnBombOnOverlap = (Collider2D collider) => CreateBomb(collider);
+                _modifiedProjectile.onDestroyed +=
+                    () =>
+                    {
+                        _modifiedProjectile.onOverlap -= spawnBombOnOverlap;
+                        CreateBomb();
+                    };
+                _modifiedProjectile.onOverlap += spawnBombOnOverlap;
+                _modifiedProjectile.onHit += (Collision2D collision) => CreateBomb(collision.collider);
             }
         }
 

@@ -18,17 +18,14 @@ namespace Cardificer
         public bool inheritStatusEffects = true;
 
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                base.modifiedProjectile = value;
-                OverrideDamage damgeOverride = CreateInstance<OverrideDamage>();
-                damgeOverride.damageData = value.attack.attack;
-                damgeOverride.overrideDamage = inheritDamage;
-                damgeOverride.overrideStatusEffects = inheritStatusEffects;
-                modifiers.Insert(0, damgeOverride);
-            }
+            base.Initialize(value);
+            OverrideDamage damgeOverride = CreateInstance<OverrideDamage>();
+            damgeOverride.damageData = value.attack.attack;
+            damgeOverride.overrideDamage = inheritDamage;
+            damgeOverride.overrideStatusEffects = inheritStatusEffects;
+            modifiers.Insert(0, damgeOverride);
         }
     }
 }

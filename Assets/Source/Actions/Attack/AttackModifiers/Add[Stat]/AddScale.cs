@@ -12,12 +12,9 @@ namespace Cardificer
         [SerializeField] private float scale;
 
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.transform.localScale = value.transform.localScale + new Vector3(scale, scale, scale);
-            }
+            value.transform.localScale = value.transform.localScale + new Vector3(scale, scale, scale);
         }
     }
 }

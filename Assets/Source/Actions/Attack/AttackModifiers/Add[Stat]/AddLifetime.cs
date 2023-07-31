@@ -13,12 +13,9 @@ namespace Cardificer
         [SerializeField] private float lifetime;
 
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.remainingLifetime += lifetime;
-            }
+            value.remainingLifetime += lifetime;
         }
     }
 }

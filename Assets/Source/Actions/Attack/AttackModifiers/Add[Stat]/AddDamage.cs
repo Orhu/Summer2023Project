@@ -16,12 +16,9 @@ namespace Cardificer
         [SerializeField] private List<StatusEffect> statusEffects;
 
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.attackData = value.attackData + damage + statusEffects;
-            }
+            value.attackData = value.attackData + damage + statusEffects;
         }
     }
 }
