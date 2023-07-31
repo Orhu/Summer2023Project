@@ -7,7 +7,6 @@ namespace Cardificer
     /// <summary>
     /// Handles mirroring based on state of animations.
     /// </summary>
-    //[RequireComponent(typeof(Animator))]
     public class AnimatorController : MonoBehaviour
     {
         [Tooltip("The default mirror parameter, if empty no parameter will be set by default.")]
@@ -29,8 +28,9 @@ namespace Cardificer
         /// </summary>
         private void Awake()
         {
-            if (animator == null) { // temporary while I rewire all the enemies
-                animator = GetComponent<Animator>();
+            if (animator == null) 
+            {
+                Debug.LogError($"Animator is not set on Animation Controller component. Source: {this.gameObject.name}");
             }
 
             foreach (ClipToParameter animactionClipToMirrorParameter in _animactionClipsToMirrorParameters)

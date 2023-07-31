@@ -17,8 +17,9 @@ namespace Cardificer
         private void Awake()
         {
             GetComponent<Health>().onInvincibilityChanged += SetTintEnable;
-            if (spriteRenderer == null) { // temporary while i rewire all the enemies
-                spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null) 
+            {
+                Debug.LogError($"Sprite Renderer is not set on Invincibility Flash component. Source: {this.gameObject.name}");
             }
         }
 
