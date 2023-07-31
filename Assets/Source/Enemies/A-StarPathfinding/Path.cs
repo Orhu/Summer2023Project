@@ -35,17 +35,15 @@ namespace Cardificer
             for (int i = 0; i < this.waypoints.Length; i++)
             {
                 Vector2 currentPoint = this.waypoints[i];
-                Vector2 dirToCurrentPoint = (currentPoint - previousPoint).normalized;
-                // calculate the turn boundary point based on whether it's the finish line or not
-                Vector2 turnBoundaryPoint = (i == finishLineIndex) ? currentPoint : currentPoint - dirToCurrentPoint;
-                // create a new line for the turn boundary
-                turnBoundaries[i] = new Line(turnBoundaryPoint, previousPoint - dirToCurrentPoint);
+                Vector2 turnBoundaryPoint = currentPoint;
+                // Create a new line for the turn boundary
+                turnBoundaries[i] = new Line(turnBoundaryPoint, previousPoint);
                 previousPoint = turnBoundaryPoint;
             }
 
             float dstFromEndPoint = 0;
             for (int i = this.waypoints.Length - 1; i > 0; i--) {
-                dstFromEndPoint += Vector3.Distance (this.waypoints [i], this.waypoints [i - 1]);
+                dstFromEndPoint += Vector2.Distance (this.waypoints [i], this.waypoints [i - 1]);
                 if (dstFromEndPoint > stoppingDist) {
                     slowDownIndex = i;
                     break;
