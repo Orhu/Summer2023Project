@@ -216,6 +216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialState: {fileID: 11400000, guid: 477429be3bb41214fa176b7272192a89, type: 2}
   delayBeforeLogic: 1
+  delayBeforeLogicVariance: 0.5
   currentPathfindingTarget: {x: 0, y: 0}
   currentAttackTarget: {x: 0, y: 0}
   currentState: {fileID: 0}
@@ -269,6 +270,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invincibilityFlashColor: {r: 1, g: 0, b: 0, a: 1}
+  spriteRenderer: {fileID: 0}
 --- !u!114 &5097362261395317995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -334,3 +336,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultMirrorParam: lookingLeft
   _animactionClipsToMirrorParameters: []
+  animator: {fileID: 0}
