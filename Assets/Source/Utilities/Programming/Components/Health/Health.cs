@@ -129,7 +129,7 @@ namespace Cardificer
             // Damage
             onRequestIncomingAttackModification?.Invoke(ref attack);
             var prevHealth = currentHealth;
-            currentHealth -= attack.damage;
+            currentHealth = Mathf.Clamp(currentHealth - attack.damage, 0, maxHealth);
 
             if (attack.damage > 0)
             {

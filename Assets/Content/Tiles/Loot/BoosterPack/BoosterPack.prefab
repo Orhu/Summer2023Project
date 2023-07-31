@@ -16,6 +16,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 9d9c071b09f814f4aa99909b86d8d019, type: 3}
     - target: {fileID: -4437867604851821722, guid: 66e40a70839468d4cbda19663025e667, type: 3}
+      propertyPath: m_SortingLayer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4437867604851821722, guid: 66e40a70839468d4cbda19663025e667, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4437867604851821722, guid: 66e40a70839468d4cbda19663025e667, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
@@ -104,6 +112,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.171875}
   m_EdgeRadius: 0
+--- !u!114 &1490329489898075965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476453489519752093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69334c49175041147bd701976551d731, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3656270538625802944
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,15 +138,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numCards: 3
   lootTable: {fileID: 11400000, guid: ffaac468cf8e0b640864b4356f8f45f4, type: 2}
---- !u!114 &1490329489898075965
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1476453489519752093}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69334c49175041147bd701976551d731, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

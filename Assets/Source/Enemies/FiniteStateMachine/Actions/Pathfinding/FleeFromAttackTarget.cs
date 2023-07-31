@@ -38,7 +38,7 @@ namespace Cardificer.FiniteStateMachine
             foreach (PathfindingTile possibleTargetTile in possibleTargetTiles)
             {
                 Vector2 tilePosition = RoomInterface.instance.TileToWorldPos(possibleTargetTile);
-                if (FleeDistance(tilePosition, stateMachine) > FleeDistance(stateMachine.currentPathfindingTarget, stateMachine))
+                if (FleeDistance(tilePosition, stateMachine) > FleeDistance(stateMachine.currentPathfindingTarget, stateMachine) && possibleTargetTile.allowedMovementTypes.HasFlag(stateMachine.currentMovementType))
                 {
                     stateMachine.currentPathfindingTarget = tilePosition;
                 }

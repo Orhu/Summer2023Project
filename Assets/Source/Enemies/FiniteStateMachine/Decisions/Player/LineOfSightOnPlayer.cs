@@ -19,7 +19,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         /// <param name="state"> The stateMachine to use </param>
         /// <returns> True if the target is at or below the specified range from this stateMachine, false otherwise </returns>
-        protected override bool Evaluate(BaseStateMachine state)
+        public override bool Decide(BaseStateMachine state)
         {
             Vector2 currentPos = state.transform.position;
             Vector2 direction = Player.GetFeetPosition() - currentPos;

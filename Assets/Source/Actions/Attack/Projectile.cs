@@ -227,6 +227,7 @@ namespace Cardificer
                     };
             }
 
+            modifiers.OrderBy((AttackModifier modifier) => { return modifier.priority; }); // reorder modifiers so that low priority ones get proc'd last.
 
             InitializeModifiers();
 
@@ -315,11 +316,11 @@ namespace Cardificer
             switch (attack.spawnLocation)
             {
                 case SpawnLocation.Actor:
-                    if (actor == null) { return transform.position; }
+                    if (!IsActorValid()) { return transform.position; }
                     return actor.GetActionSourceTransform().position;
 
                 case SpawnLocation.AimPosition:
-                    if (actor == null) { return transform.position; }
+                    if (!IsActorValid()) { return transform.position; }
                     return actor.GetActionAimPosition();
 
                 case SpawnLocation.RoomCenter:
@@ -348,7 +349,7 @@ namespace Cardificer
             switch (aimMode)
             {
                 case AimMode.AtMouse:
-                    if (actor == null)
+                    if (!IsActorValid())
                     {
                         return transform.position + transform.right;
                     }
@@ -358,6 +359,10 @@ namespace Cardificer
                     return FindClosestTarget(transform.position, ref closestTargetToProjectile);
 
                 case AimMode.AtClosestEnemyToActor:
+                    if (!IsActorValid())
+                    {
+                        return transform.position + transform.right;
+                    }
                     return FindClosestTarget(actor.GetActionSourceTransform().position, ref closestTargetToActor);
 
                 case AimMode.AtClosestEnemyToAimLocation:
@@ -514,5 +519,21 @@ namespace Cardificer
             }
         }
 
+        /// <summary>
+        /// Gets whether this actor is valid.
+        /// </summary>
+        /// <returns> True if it is valid </returns>
+        private bool IsActorValid()
+        {
+            if (actor is MonoBehaviour mono)
+            {
+                return mono != null;
+            }
+            if (actor is ScriptableObject scriptable)
+            {
+                return scriptable != null;
+            }
+            return actor != null;
+        }
     }
 }

@@ -48,8 +48,14 @@ namespace Cardificer.FiniteStateMachine
 
             for (int i = 0; i < RoomInterface.instance.GetMaxRoomSize() && !tileNavicable; i++)
             {
-                tileLocation = new Vector2(Mathf.RoundToInt(UnityEngine.Random.Range(roomSize.x / -2f, roomSize.x / 2f)), Mathf.RoundToInt(UnityEngine.Random.Range(roomSize.y / -2f, roomSize.y / 2f)));
-                tileNavicable = RoomInterface.instance.WorldPosToTile(tileLocation + RoomInterface.instance.myWorldPosition).Item1.allowedMovementTypes.HasFlag(stateMachine.currentMovementType);
+                tileLocation = new Vector2(Mathf.RoundToInt(Random.Range(roomSize.x / -2f, roomSize.x / 2f)), Mathf.RoundToInt(Random.Range(roomSize.y / -2f, roomSize.y / 2f)));
+
+                (PathfindingTile, bool) tileReturnData = RoomInterface.instance.WorldPosToTile(tileLocation + RoomInterface.instance.myWorldPosition);
+
+                if (tileReturnData.Item2) // only assign if we get a valid tile
+                {
+                    tileNavicable = tileReturnData.Item1.allowedMovementTypes.HasFlag(stateMachine.currentMovementType);
+                }
 
                 float sqrDistance = (tileLocation + RoomInterface.instance.myWorldPosition - stateMachine.GetFeetPos()).sqrMagnitude;
 
@@ -74,7 +80,7 @@ namespace Cardificer.FiniteStateMachine
                 stateMachine.currentAttackTarget = tileLocation;
             }
 
-            yield return new WaitForSeconds(cooldown);
+            yield return new UnityEngine.WaitForSeconds(cooldown);
             stateMachine.cooldownData.cooldownReady[this] = true;
         }
     }

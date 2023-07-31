@@ -27,6 +27,9 @@ namespace Cardificer
         // Whether this cell has been visited
         public bool visited = false;
 
+        // For map use only
+        public bool seenByMap = false;
+
         // The location in the map (each integer corresponds to one room)
         public Vector2Int location;
 

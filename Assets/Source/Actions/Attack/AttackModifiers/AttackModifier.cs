@@ -19,5 +19,8 @@ namespace Cardificer
 
         // The projectile this modifies
         public abstract Projectile modifiedProjectile { set; }
+
+        [Tooltip("Determines the order in which the modifier is applied to an action based on other modifier's priorities (lower values first)")]
+        public int priority = 0;
     }
 }

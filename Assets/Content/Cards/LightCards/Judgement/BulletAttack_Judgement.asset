@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: BulletAttack_Judgement
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 1
     damageType: 1
@@ -23,8 +25,10 @@ MonoBehaviour:
   modifiers:
   - {fileID: 11400000, guid: 182a2aa6e3d79404f81cf6bb5c571489, type: 2}
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
+  immuneToShield: 0
+  immuneToReflect: 0
   shape: {fileID: 11400000, guid: 886bf321ea5899f448c13c5c7ff1871e, type: 2}
-  lifetime: 5
+  lifetime: 2.5
   initialSpeed: 0
   acceleration: 12
   minSpeed: 0
@@ -36,83 +40,61 @@ MonoBehaviour:
   switchAfterHit: 0
   visualObject: {fileID: 4353946261569637226, guid: a3f960bcc25babe4fba2a10db3c2decb, type: 3}
   detachVisualsBeforeDestroy: 0
-  spawnLocation: 0
-  aimMode: 4
+  detatchedVisualsTimeBeforeDestroy: 0
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  spawnLocation: 0
+  aimMode: 0
+  waitForProjectileDeath: 0
+  chargeTime: 0
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     angle: 180
     offset: {x: 0.25, y: 0}
-  - delay: 0.05
+  - delay: 0.075
     angle: 180
     offset: {x: 0.25, y: 0}
-  - delay: 0.05
+  - delay: 0.075
     angle: 180
     offset: {x: 0.25, y: 0}
-  - delay: 0.05
+  - delay: 0.075
     angle: 180
     offset: {x: 0.25, y: 0}
-  - delay: 0.05
+  - delay: 0.075
     angle: 180
     offset: {x: 0.25, y: 0}
-  - delay: 0.05
+  - delay: 0.075
     angle: 180
     offset: {x: 0.25, y: 0}
-  - delay: 0.05
+  - delay: 0.075
     angle: 180
     offset: {x: 0.25, y: 0}
-  - delay: 0.05
+  - delay: 0.075
     angle: 180
     offset: {x: 0.25, y: 0}
-  - delay: 0.05
+  - delay: 0.075
     angle: 180
     offset: {x: 0.25, y: 0}
-  - delay: 0.05
+  - delay: 0.075
     angle: 180
     offset: {x: 0.25, y: 0}
-  - delay: 0.05
+  - delay: 0.075
     angle: 180
     offset: {x: 0.25, y: 0}
-  - delay: 0.05
+  - delay: 0.075
     angle: 180
     offset: {x: 0.25, y: 0}
-  - delay: 0.05
+  - delay: 0.075
     angle: 180
     offset: {x: 0.25, y: 0}
-  - delay: 0.05
+  - delay: 0.075
     angle: 180
     offset: {x: 0.25, y: 0}
-  - delay: 0.05
+  - delay: 0.075
     angle: 180
     offset: {x: 0.25, y: 0}
-  - delay: 0.05
-    angle: 180
-    offset: {x: 0.25, y: 0}
-  - delay: 0.05
-    angle: 180
-    offset: {x: 0.25, y: 0}
-  - delay: 0.05
-    angle: 180
-    offset: {x: 0.25, y: 0}
-  - delay: 0.05
-    angle: 180
-    offset: {x: 0.25, y: 0}
-  - delay: 0.05
-    angle: 180
-    offset: {x: 0.25, y: 0}
-  - delay: 0.05
-    angle: 180
-    offset: {x: 0.25, y: 0}
-  - delay: 0.05
-    angle: 180
-    offset: {x: 0.25, y: 0}
-  - delay: 0.05
-    angle: 180
-    offset: {x: 0.25, y: 0}
-  - delay: 0.05
+  - delay: 0.075
     angle: 180
     offset: {x: 0.25, y: 0}
   randomAngle: 60

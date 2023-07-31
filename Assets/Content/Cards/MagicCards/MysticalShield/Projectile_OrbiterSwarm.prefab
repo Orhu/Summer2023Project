@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 4659764656535185365}
   - component: {fileID: 5483348806186395999}
   - component: {fileID: 1719149109475886435}
-  - component: {fileID: 9017961654206418118}
   - component: {fileID: -5605785557838651401}
+  - component: {fileID: -4313376587386478049}
   m_Layer: 0
   m_Name: Projectile_OrbiterSwarm
   m_TagString: Untagged
@@ -74,8 +74,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1830944795
-  m_SortingLayer: 2
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: c26db046f1b81294fb7f31512c9c4741, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -4834,8 +4834,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1830944795
-  m_SortingLayer: 2
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: -1
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -4867,23 +4867,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &9017961654206418118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2291022195297182687}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IsGlobal: 1
-  priority: 0
-  blendDistance: 0
-  weight: 1
-  sharedProfile: {fileID: 11400000, guid: 5ff68c82088dd8749895b841f0f26dd6, type: 2}
 --- !u!114 &-5605785557838651401
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4904,7 +4887,7 @@ MonoBehaviour:
   m_Intensity: 0.15
   m_LightVolumeIntensity: 0
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 77901369433081d28f89abc00000000027f65187a90f93ca
+  m_ApplyToSortingLayers: 77901369433081d28f89abc00000000027f65187a90f93ca977b128f9757684e
   m_LightCookieSprite: {fileID: 21300000, guid: 631a876c787299f4f9a955e60a2b9741, type: 3}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -4959,3 +4942,35 @@ MonoBehaviour:
   m_ShapeLightFalloffSize: 0.5
   m_ShapeLightFalloffOffset: {x: 0, y: 0}
   m_ShapePath: []
+--- !u!114 &-4313376587386478049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2291022195297182687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8edf2d55ca588547881b7472e926510, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TrailName: mysticalshieldTrail
+  m_CurrentTrailPreset: {fileID: 11400000, guid: be5210a420e88b842ae13487622e85f5, type: 2}
+  m_TrailParent: {fileID: 0}
+  m_SpriteToDuplicate: {fileID: 4659764656535185365}
+  m_Layer: 24
+  m_ZMoveStep: 0.0001
+  m_ZMoveMax: 0.9999
+  m_HideTrailOnDisabled: 1
+  m_TrailActivationCondition: 0
+  m_TrailDeactivationCondition: 0
+  m_StartIfUnderVelocity: 0
+  m_VelocityStartIsLocalSpace: 0
+  m_VelocityNeededToStart: 0
+  m_StopIfOverVelocity: 0
+  m_VelocityStopIsLocalSpace: 0
+  m_VelocityNeededToStop: 0
+  m_TrailActivationDuration: 0
+  m_SortingLayerID: 0
+  m_OrderInSortingLayer: -1
+  m_DisabledElementsInTrail: []

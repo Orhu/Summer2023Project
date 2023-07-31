@@ -52,9 +52,17 @@ namespace Cardificer
         /// <summary>
         /// Sets the instance to this instance
         /// </summary>
-        private void Start()
+        private void Awake()
         {
             instance = this;
+            
+        }
+
+        /// <summary>
+        /// Assigns the onRoomChange event to grab current room
+        /// </summary>
+        private void Start()
+        {
             FloorGenerator.onRoomChange += GrabCurrentRoom;
         }
 

@@ -13,10 +13,13 @@ namespace Cardificer.FiniteStateMachine
     public class BaseStateMachine : MonoBehaviour, IActor
     {
         // the state this machine starts in
-        [SerializeField] private State initialState;
+        [SerializeField] private BaseState initialState;
 
         // Delay after this enemy is spawned before it begins performing logic
         [SerializeField] private float delayBeforeLogic;
+
+        // Max random amount added to delayBeforeLogic.
+        [SerializeField] private float delayBeforeLogicVariance = 0.5f;
 
         // The pathfinding target
         [HideInInspector] public Vector2 currentPathfindingTarget;
@@ -36,13 +39,22 @@ namespace Cardificer.FiniteStateMachine
         // Tracks whether our destination has been reached or not
         public bool destinationReached
         {
-            get { return (currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer; }
+            get
+            {
+                if (pathData.path != null)
+                    return ((currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer) &&
+                           pathData.targetIndex == pathData.path.waypoints.Length - 1;
+                else
+                {
+                    return ((currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer);
+                }
+            }
         }
 
         // The distance margin of error 
         public float distanceBuffer
         {
-            get { return movementComponent.maxSpeed * Time.fixedDeltaTime + 0.01f; }
+            get { return movementComponent.maxSpeed * Time.fixedDeltaTime * 3f; }
         }
 
         /// <summary>
@@ -137,7 +149,6 @@ namespace Cardificer.FiniteStateMachine
             set
             {
                 feetCollider.gameObject.layer = LayerMask.NameToLayer(value.ToString());
-                GetComponent<SpriteRenderer>().sortingLayerName = value.ToString();
                 _currentMovementType = value;
             }
             get => _currentMovementType;
@@ -164,13 +175,13 @@ namespace Cardificer.FiniteStateMachine
 
         // Tracks whether this is the first time this object has been started (needed to make sure we call OnStateEnter AFTER the initial logic delay)
         private bool firstTimeStarted = true;
-        
+
         // Percent of attempted speed this unit should go
         [HideInInspector] public float speedPercent = 1f;
 
         [Tooltip("Ignore difficulty progression scaling HP, DMG, or other stats?")]
         [SerializeField] private bool ignoreDifficultyProgression;
-        
+
         [Tooltip("Draw debug gizmos? Pathfinding target is magenta, attack target is yellow, current waypoint is cyan")]
         [SerializeField] private bool drawGizmos;
 
@@ -179,7 +190,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void Awake()
         {
-            currentState = initialState;
+            currentState = initialState.GetState();
             cooldownData.cooldownReady = new Dictionary<BaseAction, bool>();
             cachedComponents = new Dictionary<Type, Component>();
             currentMovementType = startingMovementType;
@@ -205,11 +216,27 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void Start()
         {
+            delayBeforeLogic += UnityEngine.Random.Range(-delayBeforeLogicVariance, delayBeforeLogicVariance);
             SetStats();
             timeStarted = Time.time;
-            
+
+            PathfindingTile currentTile = RoomInterface.instance.WorldPosToTile(transform.position).Item1;
+            if (currentTile != null && !currentTile.allowedMovementTypes.HasFlag(currentMovementType))
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             GetComponent<SimpleMovement>().requestSpeedModifications += AdjustMovement;
-            FloorGenerator.currentRoom.AddEnemy(gameObject);
+
+            if (FloorGenerator.hasGenerated)
+            {
+                FloorGenerator.currentRoom.AddEnemy(gameObject);
+            }
+            else
+            {
+                FloorGenerator.onGenerated += () => FloorGenerator.currentRoom.AddEnemy(gameObject);
+            }
 
             gameObject.AddComponent<DamageFlash>(); // TODO: delete this line once templates have been fixed
         }
@@ -223,7 +250,7 @@ namespace Cardificer.FiniteStateMachine
             {
                 return;
             }
-            
+
             // assign health
             int startingHealth =
                 Mathf.RoundToInt(GetComponent<Health>().maxHealth * DifficultyProgressionManager.healthMultiplier);
@@ -243,20 +270,19 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void Update()
         {
-            timeSinceTransition += Time.deltaTime;
-
             if (exhausted || Time.time - timeStarted <= delayBeforeLogic)
             {
                 movementComponent.movementInput = Vector2.zero;
                 return;
             }
 
+            timeSinceTransition += Time.deltaTime;
             if (firstTimeStarted)
             {
                 firstTimeStarted = false;
                 currentState.OnStateEnter(this);
             }
-
+            
             currentState.OnStateUpdate(this);
         }
 
@@ -294,7 +320,7 @@ namespace Cardificer.FiniteStateMachine
         private void OnDestroy()
         {
             StopAllCoroutines();
-            
+
             if (!gameObject.scene.isLoaded || !FloorGenerator.IsValid())
             {
                 return;
@@ -314,7 +340,7 @@ namespace Cardificer.FiniteStateMachine
             {
                 foreach (Vector2 p in pathData.path.waypoints)
                 {
-                    Gizmos.DrawCube(p, Vector3.one);
+                    Gizmos.DrawCube(p, new Vector3(0.05f, 0.05f));
                 }
 
                 Gizmos.color = Color.white;
@@ -325,11 +351,11 @@ namespace Cardificer.FiniteStateMachine
                     Gizmos.DrawLine(lineCenter - lineDir * 5 / 2f, lineCenter + lineDir * 5 / 2f);
                 }
             }
-            
+
             Gizmos.color = Color.red;
-            Gizmos.DrawCube(currentAttackTarget, Vector3.one);
+            Gizmos.DrawCube(currentAttackTarget, new Vector3(0.05f, 0.05f));
             Gizmos.color = Color.blue;
-            Gizmos.DrawCube(currentPathfindingTarget, Vector3.one);
+            Gizmos.DrawCube(currentPathfindingTarget, new Vector3(0.05f, 0.05f));
         }
 
         #region IActor Implementation
