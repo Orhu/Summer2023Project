@@ -24,7 +24,7 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> Waits amount of time specified before teleporting. </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
-            yield return new UnityEngine.WaitForSeconds(delay);
+            yield return new WaitForSeconds(delay);
             stateMachine.transform.position = FloorGenerator.currentRoom.roomLocation + posToTeleportTo;
             stateMachine.cooldownData.cooldownReady[this] = true;
             yield break;
