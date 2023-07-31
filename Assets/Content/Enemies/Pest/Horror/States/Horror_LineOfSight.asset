@@ -9,10 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 773d74f3ccd5c8247814aa4b0b22d5a3, type: 3}
-  m_Name: SpearThrower_RaycastForHazards
+  m_Script: {fileID: 11500000, guid: b62f3c01a59dfa44aac473e4fb93240f, type: 3}
+  m_Name: Horror_LineOfSight
   m_EditorClassIdentifier: 
-  layersToCast:
+  invert: 0
+  layerMask:
     serializedVersion: 2
-    m_Bits: 2621440
-  length: 1
+    m_Bits: 1572864
+  sightRadius: 0.1
