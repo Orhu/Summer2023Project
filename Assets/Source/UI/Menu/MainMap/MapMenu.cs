@@ -34,9 +34,6 @@ namespace Cardificer
         // A local reference to the current room, observes current room changes
         private Room localCurrentRoom;
 
-        [Tooltip("Float representing the padding between rooms")]
-        [SerializeField] private float roomPadding = 100f;
-
         [Tooltip("How much we scale drawing each room from each other")]
         [SerializeField] private Vector2 cellSize = new Vector2(400f, 400f);
 
