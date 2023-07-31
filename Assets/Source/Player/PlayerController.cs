@@ -239,7 +239,8 @@ namespace Cardificer
         public void OnPrintCurrentRoomTemplate()
         {
             // Make sure this only happens when testing in the editor
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
+            Debug.Log("Current room type: " + FloorGenerator.currentRoom.roomType.displayName);
             Debug.Log("Current room template: " + FloorGenerator.currentRoom.template);
             #endif
         }
