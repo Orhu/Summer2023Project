@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5475393954021222037}
   - component: {fileID: 4363589241628831102}
   - component: {fileID: 7026334053014117424}
+  - component: {fileID: 885429387872625329}
   m_Layer: 0
   m_Name: ProjectileOutline
   m_TagString: Untagged
@@ -98,3 +99,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scale: 0.1
+--- !u!114 &885429387872625329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 31062830433601940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b33d77cd577cac64091c1dccfd0772b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  applicationPriority: 0
+  onCast:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7026334053014117424}
+        m_TargetAssemblyTypeName: Cardificer.ProjectileOutline, Assembly-CSharp
+        m_MethodName: DrawOutline
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onHitAny:
+    m_PersistentCalls:
+      m_Calls: []
+  onHitEnemy:
+    m_PersistentCalls:
+      m_Calls: []
+  onHitWall:
+    m_PersistentCalls:
+      m_Calls: []
+  onDestroyed:
+    m_PersistentCalls:
+      m_Calls: []

@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,6 +8,11 @@ namespace Cardificer
     [AddComponentMenu("Projectile Visuals")]
     public class ChordVisuals : MonoBehaviour
     {
+
+        [Tooltip("The priority that this visuals will be applied at. Lower priorities are applied first.")]
+        [SerializeField] private int applicationPriority = 0;
+
+
         // The projectile this is representing the visuals for.
         protected Projectile projectile { private set; get; }
 
@@ -35,6 +42,9 @@ namespace Cardificer
         protected virtual void OnDestroyed() { }
 
 
+        // Stores all of the visuals on a projectile sorted by priority for when they are bound.
+        private static Dictionary<Projectile, List<ChordVisuals>> projectilesToOrderedVisuals = new Dictionary<Projectile, List<ChordVisuals>>();
+
         /// <summary>
         /// Binds events.
         /// </summary>
@@ -45,6 +55,35 @@ namespace Cardificer
             visualSprite = projectile.visualObject.GetComponent<SpriteRenderer>();
 
 
+            projectilesToOrderedVisuals.TryAdd(projectile, new List<ChordVisuals>());
+            projectilesToOrderedVisuals[projectile].Add(this);
+            projectilesToOrderedVisuals[projectile].Sort(
+                (ChordVisuals visual1, ChordVisuals visual2) =>
+                {
+                    return visual2.applicationPriority - visual1.applicationPriority;
+                });
+
+            StartCoroutine(DelayedBindings());
+
+            IEnumerator DelayedBindings()
+            {
+                yield return null;
+
+                if (!projectilesToOrderedVisuals.TryGetValue(projectile, out List<ChordVisuals> visuals)) { yield break; }
+
+                foreach (ChordVisuals visual in visuals)
+                {
+                    visual.BindEvents();
+                }
+                projectilesToOrderedVisuals.Remove(projectile);
+            }
+        }
+
+        /// <summary>
+        /// Binds all of this objects events.
+        /// </summary>
+        private void BindEvents()
+        {
             onCast?.Invoke();
             OnCast();
 
@@ -61,6 +100,5 @@ namespace Cardificer
             projectile.onDestroyed += OnDestroyed;
             projectile.onDestroyed += () => onDestroyed?.Invoke();
         }
-
     }
 }
