@@ -112,6 +112,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "PrintCurrentRoomTemplate",
+                    "type": "Button",
+                    "id": "a64b4ed0-9613-4850-8148-ac5f879a57ee",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -420,6 +429,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ShowLayout",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "35eb9b38-c61a-401f-b837-87019397708b",
+                    "path": "<Keyboard>/y",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PrintCurrentRoomTemplate",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
