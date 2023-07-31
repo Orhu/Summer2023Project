@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Cardificer
 {
+    /// <summary>
+    /// A loading screen for hiding async function calls.
+    /// </summary>
     public class LoadingScreen : MonoBehaviour
     {
         // The minimum time that this will load for.
