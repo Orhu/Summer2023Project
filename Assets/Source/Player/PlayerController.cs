@@ -59,7 +59,7 @@ namespace Cardificer
         {
             if (!SaveManager.autosaveExists) 
             {
-                MenuManager.Open<DraftMenu>();
+                MenuManager.Open<DraftMenu>(lockOpen: true);
                 return; 
             }
 

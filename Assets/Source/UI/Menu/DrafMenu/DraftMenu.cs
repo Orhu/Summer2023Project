@@ -41,7 +41,7 @@ namespace Cardificer
                 Deck.playerDeck.AddCard(renderer.card, Deck.AddCardLocation.BottomOfDrawPile);
             }
 
-            MenuManager.Close<DraftMenu>();
+            MenuManager.Close<DraftMenu>(true);
         }
 
         /// <summary>
