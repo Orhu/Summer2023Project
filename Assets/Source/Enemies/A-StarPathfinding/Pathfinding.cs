@@ -54,10 +54,12 @@ namespace Cardificer
 
             PathfindingTile startNode;
             PathfindingTile targetNode;
+            PathfindingTile closestNodeToTargetNode;
 
             if (startNodeResult.Item2 && targetNodeResult.Item2)
             {
                 startNode = startNodeResult.Item1;
+                closestNodeToTargetNode = startNode;
                 targetNode = targetNodeResult.Item1;
                 startNode.retraceStep = startNode;
             }
@@ -80,6 +82,10 @@ namespace Cardificer
                     // grab lowest fCost tile. Due to the heap data structure, this will always be the first element
                     PathfindingTile currentNode = openSet.RemoveFirst();
                     closedSet.Add(currentNode);
+                    if (GetDistance(currentNode, targetNode) < GetDistance(closestNodeToTargetNode, targetNode))
+                    {
+                        closestNodeToTargetNode = currentNode;
+                    }
 
                     if (currentNode == targetNode)
                     {
@@ -121,7 +127,14 @@ namespace Cardificer
             yield return null;
             if (pathSuccess)
             {
-                waypoints = RetracePath(startNode, targetNode, request);
+                // Full path found
+                waypoints = RetracePath(startNode, targetNode, request.endPos);
+            }
+            else if (closestNodeToTargetNode != startNode)
+            {
+                // Partial path found
+                pathSuccess = true;
+                waypoints = RetracePath(startNode, closestNodeToTargetNode, RoomInterface.instance.TileToWorldPos(closestNodeToTargetNode));
             }
 
             requestManager.FinishedProcessingPath(waypoints, pathSuccess);
@@ -206,7 +219,7 @@ namespace Cardificer
 
             if (pathSuccess)
             {
-                waypoints = RetracePath(startNode, targetNode, request);
+                waypoints = RetracePath(startNode, targetNode, request.endPos);
             }
 
             return (waypoints, pathSuccess);
@@ -217,9 +230,9 @@ namespace Cardificer
         /// </summary>
         /// <param name="startTile"> Start tile </param>
         /// <param name="endTile"> End tile </param>
-        /// <param name="stateMachine"> The stateMachine to use </param>
+        /// <param name="targetPos"> The final position to target </param>
         /// <returns> Array containing waypoints to travel from start to end </returns>
-        Vector2[] RetracePath(PathfindingTile startTile, PathfindingTile endTile, PathRequest request)
+        Vector2[] RetracePath(PathfindingTile startTile, PathfindingTile endTile, Vector2 targetPos)
         {
             List<PathfindingTile> path = new List<PathfindingTile>();
             PathfindingTile currentNode = endTile;
@@ -230,7 +243,7 @@ namespace Cardificer
                 currentNode = currentNode.retraceStep;
             }
 
-            Vector2[] waypoints = PathToVectors(path, request);
+            Vector2[] waypoints = PathToVectors(path, targetPos);
             Array.Reverse(waypoints);
             return waypoints;
         }
@@ -239,12 +252,14 @@ namespace Cardificer
         /// Converts given PathfindingTile path into a path of Vector2 waypoints
         /// </summary>
         /// <param name="path"> Input path </param>
-        /// <param name="stateMachine"> The stateMachine to use </param>
+        /// <param name="targetPos"> The final position to target </param>
         /// <returns> List of Vector2 waypoints on every PathfindingTile point </returns>
-        Vector2[] PathToVectors(List<PathfindingTile> path, PathRequest request)
+        Vector2[] PathToVectors(List<PathfindingTile> path, Vector2 targetPos)
         {
             List<Vector2> waypoints = new List<Vector2>();
-            waypoints.Add(request.endPos);
+            // This final waypoint allows the enemy to hit the player after reaching their tile
+            // (final waypoint normally is just the center of the nearest tile)
+            waypoints.Add(targetPos);
             foreach (var tile in path)
             {
                 waypoints.Add(roomInterface.TileToWorldPos(tile));
