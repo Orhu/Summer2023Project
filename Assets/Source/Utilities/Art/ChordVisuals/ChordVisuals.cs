@@ -4,7 +4,7 @@ using UnityEngine.Events;
 namespace Cardificer
 {
     [AddComponentMenu("Projectile Visuals")]
-    public class ProjectileVisuals : MonoBehaviour
+    public class ChordVisuals : MonoBehaviour
     {
         // The projectile this is representing the visuals for.
         protected Projectile projectile { private set; get; }

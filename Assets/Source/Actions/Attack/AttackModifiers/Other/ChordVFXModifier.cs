@@ -20,7 +20,7 @@ namespace Cardificer
         {
             foreach (GameObject chordVFXPrefab in cordVFXPrefabs)
             {
-                Instantiate(chordVFXPrefab).transform.SetParent(attachedProjectile.transform, false);
+                Instantiate(chordVFXPrefab).transform.SetParent(attachedProjectile.visualObject.transform, false);
             }
         }
     }
