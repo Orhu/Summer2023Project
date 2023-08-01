@@ -36,6 +36,8 @@ namespace Cardificer
                 if (_currentHealth == value) { return; }
 
                 _currentHealth = value;
+                onHealthChange.Invoke(currentHealth, maxHealth);
+                onHealthChangePercent.Invoke((float) currentHealth / maxHealth);
                 if (hasBossHealthbar)
                 {
                     BossHealthbarManager.instance.UpdateHealth(value);
@@ -51,6 +53,12 @@ namespace Cardificer
 
         [Tooltip("Called when this dies")]
         public UnityEvent onDeath;
+
+        [Tooltip("Called when the health changes. Gives current health, then max health.")]
+        public UnityEvent<int, int> onHealthChange;
+
+        [Tooltip("Called when the health changes. Gives the percent the current health is of the max health.")]
+        public UnityEvent<float> onHealthChangePercent;
         
         [Tooltip("Indicates whether this enemy has an associated boss health bar")]
         [SerializeField] private bool hasBossHealthbar = false;
