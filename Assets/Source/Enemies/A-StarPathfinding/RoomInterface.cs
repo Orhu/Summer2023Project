@@ -124,7 +124,8 @@ namespace Cardificer
             // add to appropriate lists (if there is a Null Reference in this area, it is most likely because a null tile slipped through the cracks)
             if (tile == null)
             {
-                throw new System.Exception("Tile " + pos + " is null!");
+                Debug.LogError("Tile " + pos + " is null!");
+                return;
             }
             roomGrid[pos.x, pos.y] = new PathfindingTile(tile, tile.walkMovementPenalty);
         }
