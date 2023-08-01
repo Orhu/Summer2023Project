@@ -47,12 +47,22 @@ namespace Cardificer
         /// <summary>
         /// Initializes card renders and handles their movement when clicked.
         /// </summary>
-        private void Start()
+        private void OnEnable()
         {
             settings = DraftSettings.Get();
 
+            for (int i = 0; i < draftContainer.transform.childCount; i++)
+            {
+                Destroy(draftContainer.transform.GetChild(i).gameObject);
+            }
+            for (int i = 0; i < deckContainer.transform.childCount; i++)
+            {
+                Destroy(deckContainer.transform.GetChild(i).gameObject);
+            }
+
             // Get random draft pool from draft loot table.
-            System.Random random = new System.Random(SaveManager.savedFloorSeed);
+
+            System.Random random = new System.Random();
             IEnumerable<Card> draftpool = settings.draftPoolLootTable.weightedLoot.GetRandomThings(settings.draftPoolSize, random);
             // Add guaranteed items.
             draftpool = draftpool.Concat(settings.guaranteedOptions);
