@@ -47,7 +47,7 @@ namespace Cardificer
         private Movement movementComponent;
 
         // The attempted movement input
-        private Vector2 attemptedMovementInput;
+        public Vector2 attemptedMovementInput { private set; get; }
 
         // Animator component to make the pretty animations do their thing.
         private AnimatorController animatorComponent;

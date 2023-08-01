@@ -13,14 +13,17 @@ namespace Cardificer
         [Tooltip("The cooldown between dashes (seconds)")] [Min(0f)]
         [SerializeField] private float dashCooldown = 1f;
 
-        [Tooltip("The distance a dash will give you")] [Min(0f)]
-        [SerializeField] private float dashDistance = 3f;
+        [Tooltip("The speed multiplier of the dash (multiplies the player speed)")] [Min(0f)]
+        [SerializeField] private float dashSpeedMultiplier = 3f;
 
-        [Tooltip("The time it takes for a dash to cross that distance")] [Min(0f)]
-        [SerializeField] private float dashTime = 0.5f;
+        [Tooltip("The time a dash is active for")] [Min(0f)]
+        [SerializeField] private float dashTime = 0.2f;
 
         // Whether or not a dash is currently happening
-        [System.NonSerialized] public bool dashing;
+        [System.NonSerialized] public bool dashing = false;
+
+        // Whether or not a dash can be performed
+        [System.NonSerialized] public bool canDash = true;
 
         // A reference to the player controller
         [System.NonSerialized] private PlayerController playerController;
@@ -42,7 +45,10 @@ namespace Cardificer
         /// </summary>
         public void StartDash()
         {
-            StartCoroutine(nameof(Dash));
+            if (canDash)
+            {
+                StartCoroutine(nameof(Dash));
+            }
         }
 
         /// <summary>
@@ -52,10 +58,17 @@ namespace Cardificer
         private IEnumerator Dash()
         {
             dashing = true;
+            canDash = false;
             playerController.movingEnabled = false;
-            movement.movementInput = playerController.GetActionAimPosition();
+            movement.movementInput = playerController.attemptedMovementInput * dashSpeedMultiplier;
+
             yield return new WaitForSeconds(dashTime);
+
             playerController.movingEnabled = true;
+
+            yield return new WaitForSeconds(dashCooldown);
+
+            canDash = true;
         }
     }
 }

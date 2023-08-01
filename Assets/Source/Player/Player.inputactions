@@ -238,6 +238,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "413b30cb-4997-46f7-b0a5-bfb2f5a1cb0b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -507,17 +516,6 @@
                 },
                 {
                     "name": "",
-                    "id": "155e0ed5-4f34-4f7d-9ff2-cd8611ab61b7",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Channel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "09f44a17-2203-40e3-9bab-98e2999bf6ab",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
@@ -689,6 +687,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "PrintCurrentRoomTemplate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6f86dbdb-a390-4f70-81c2-174d2067cc02",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
