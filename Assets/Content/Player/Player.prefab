@@ -47,6 +47,7 @@ Transform:
   - {fileID: 1488116583187081461}
   - {fileID: 7099847626013359165}
   - {fileID: 8878453073744682772}
+  - {fileID: 4228717941832936471}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -485,11 +486,60 @@ MonoBehaviour:
   - {fileID: 3586952506838634694}
   hitboxesToEnable:
   - {fileID: 8272785183773381047}
+  - {fileID: 8622106158601452278}
   spritesToDisable:
   - {fileID: 7308960042031977249}
   spritesToEnable:
   - {fileID: 3103395882018834773}
   dashIndicator: {fileID: 3594558985941581572}
+--- !u!1 &2663262086980286405
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4228717941832936471}
+  - component: {fileID: 8622106158601452278}
+  m_Layer: 16
+  m_Name: DashBlockCollision
+  m_TagString: Player
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4228717941832936471
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2663262086980286405}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6351846847079443315}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &8622106158601452278
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2663262086980286405}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.03554335, y: -0.2758933}
+  m_Size: {x: 0.6259296, y: 0.603311}
+  m_Direction: 1
 --- !u!1 &3594558985941581572
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,7 +790,7 @@ GameObject:
   - component: {fileID: 8272785183773381047}
   - component: {fileID: 3103395882018834773}
   m_Layer: 8
-  m_Name: DashCollision
+  m_Name: DashHurtCollision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -774,7 +824,7 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.03063476, y: -0.01760614}
+  m_Offset: {x: 0, y: 0}
   m_Size: {x: 2, y: 2}
   m_Direction: 0
 --- !u!212 &3103395882018834773

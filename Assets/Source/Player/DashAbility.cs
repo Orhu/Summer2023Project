@@ -66,7 +66,7 @@ namespace Cardificer
         /// </summary>
         public void StartDash()
         {
-            if (canDash)
+            if (canDash && playerController.attemptedMovementInput != Vector2.zero)
             {
                 StartCoroutine(nameof(Dash));
             }

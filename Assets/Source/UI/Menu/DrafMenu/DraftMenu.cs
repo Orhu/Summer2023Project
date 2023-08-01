@@ -50,6 +50,7 @@ namespace Cardificer
         private void OnEnable()
         {
             settings = DraftSettings.Get();
+            settings = Instantiate(settings);
 
             for (int i = 0; i < draftContainer.transform.childCount; i++)
             {
