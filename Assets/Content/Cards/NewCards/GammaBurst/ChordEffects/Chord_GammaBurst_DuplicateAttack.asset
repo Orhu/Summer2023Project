@@ -9,14 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae521aad527ed7e449352281fbf9e980, type: 3}
-  m_Name: ChordEffect_GammaBurst_PoisonSelf
+  m_Script: {fileID: 11500000, guid: 09af6f69defc9a0499d1570054152646, type: 3}
+  m_Name: Chord_GammaBurst_DuplicateAttack
   m_EditorClassIdentifier: 
   minAttackSequenceIndex: 0
-  maxAttackSequenceIndex: 0
-  action: {fileID: 11400000, guid: 04e3f2ed2226078418c8d04ebaf268d5, type: 2}
-  delay: 0
-  playTime: 0
-  playCount: 1
-  inheritModifiers: 0
-  applyToZeroDamage: 1
+  maxAttackSequenceIndex: 2147483647
+  attackSequenceLoopInterval: 2147483647
+  priority: 0
+  duplicateDelay: 0.4
