@@ -11,13 +11,22 @@ namespace Cardificer
     public class DashAbility : MonoBehaviour
     {
         [Tooltip("The cooldown between dashes (seconds)")] [Min(0f)]
-        [SerializeField] private float dashCooldown = 1f;
+        [SerializeField] private float cooldown = 1f;
 
         [Tooltip("The speed multiplier of the dash (multiplies the player speed)")] [Min(0f)]
-        [SerializeField] private float dashSpeedMultiplier = 3f;
+        [SerializeField] private float speedMultiplier = 3f;
 
         [Tooltip("The time a dash is active for")] [Min(0f)]
-        [SerializeField] private float dashTime = 0.2f;
+        [SerializeField] private float time = 0.2f;
+
+        [Tooltip("The damage that a dash does")]
+        [SerializeField] private int damage = 1;
+
+        [Tooltip("The collisions to disable")]
+        [SerializeField] private List<CapsuleCollider2D> hitboxesToDisable;
+
+        [Tooltip("The collisions to enable")]
+        [SerializeField] private List<CapsuleCollider2D> hitboxesToEnable;
 
         // Whether or not a dash is currently happening
         [System.NonSerialized] public bool dashing = false;
@@ -60,15 +69,53 @@ namespace Cardificer
             dashing = true;
             canDash = false;
             playerController.movingEnabled = false;
-            movement.movementInput = playerController.attemptedMovementInput * dashSpeedMultiplier;
+            movement.movementInput = playerController.attemptedMovementInput *speedMultiplier;
 
-            yield return new WaitForSeconds(dashTime);
+            if (damage > 0 && hitboxesToDisable != null && hitboxesToEnable != null)
+            {
+                foreach (CapsuleCollider2D hitbox in hitboxesToDisable)
+                {
+                    hitbox.enabled = false;
+                }
+                foreach (CapsuleCollider2D hitbox in hitboxesToEnable)
+                {
+                    hitbox.enabled = true;
+                }
+            }
+
+            yield return new WaitForSeconds(time);
 
             playerController.movingEnabled = true;
 
-            yield return new WaitForSeconds(dashCooldown);
+            if (damage > 0 && hitboxesToDisable != null && hitboxesToEnable != null)
+            {
+                foreach (CapsuleCollider2D hitbox in hitboxesToDisable)
+                {
+                    hitbox.enabled = true;
+                }
+                foreach (CapsuleCollider2D hitbox in hitboxesToEnable)
+                {
+                    hitbox.enabled = false;
+                }
+            }
+
+            yield return new WaitForSeconds(cooldown);
 
             canDash = true;
+        }
+
+        /// <summary>
+        /// Handles the dash damage
+        /// </summary>
+        /// <param name="collision"> The thing we've collided with </param>
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            Debug.Log("Trigger entered");
+            if (dashing && collision.gameObject.GetComponent<Health>() != null)
+            {
+                Debug.Log("Damage done");
+                collision.gameObject.GetComponent<Health>().currentHealth -= damage;
+            }
         }
     }
 }

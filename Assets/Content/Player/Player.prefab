@@ -45,6 +45,7 @@ Transform:
   - {fileID: 2526645731703428551}
   - {fileID: 3223522940954157260}
   - {fileID: 1488116583187081461}
+  - {fileID: 7099847626013359165}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -306,7 +307,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 608508398850829056}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9fc1cae342f9dda42b1c3580e9719138, type: 3}
   m_Name: 
@@ -473,9 +474,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d100bdabba473d94c98a887f7944bb29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashCooldown: 0.3
-  dashSpeedMultiplier: 2.92
-  dashTime: 0.2
+  cooldown: 1
+  speedMultiplier: 3
+  time: 0.2
+  damage: 10
+  hitboxesToDisable:
+  - {fileID: 5517008572783111348}
+  - {fileID: 3586952506838634694}
+  hitboxesToEnable:
+  - {fileID: 8272785183773381047}
 --- !u!1 &4235891105401400328
 GameObject:
   m_ObjectHideFlags: 0
@@ -630,6 +637,54 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &9217904669645270900
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7099847626013359165}
+  - component: {fileID: 8272785183773381047}
+  m_Layer: 8
+  m_Name: DashCollision
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7099847626013359165
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9217904669645270900}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.60035557, y: 0.35592532, z: -0.01984146}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6351846847079443315}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!70 &8272785183773381047
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9217904669645270900}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.03063476, y: -0.01760614}
+  m_Size: {x: 0.6287283, y: 0.9647877}
+  m_Direction: 0
 --- !u!1001 &165404844585796476
 PrefabInstance:
   m_ObjectHideFlags: 0
