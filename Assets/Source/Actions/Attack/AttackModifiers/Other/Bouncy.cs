@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -24,11 +25,15 @@ namespace Cardificer
         // The normal of the last wall bounced off of this frame
         Vector2 lastBounceNormal = Vector2.zero;
 
+        // All the projectiles bouncy is applied to.
+        static private HashSet<Projectile> apliedProjectiles = new HashSet<Projectile>();
+
         // The projectile this modifies
         public override void Initialize(Projectile value)
         {
-            if (value.onHit == null || !value.onHit.GetInvocationList().Contains((Action<Collision2D>)Bounce))
+            if (!apliedProjectiles.Contains(value))
             {
+                apliedProjectiles.Add(value);
                 value.onHit += Bounce;
                 bouncyProjectile = value;
                 bouncyRigidbody = value.GetComponent<Rigidbody2D>();
