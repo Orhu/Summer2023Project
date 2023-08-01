@@ -22,6 +22,9 @@ namespace Cardificer
         [Tooltip("The damage that a dash does")]
         [SerializeField] private int damage = 1;
 
+        [Tooltip("The amount that card cooldowns are reduced by")]
+        [SerializeField] private float cooldownReduction = 0.5f;
+
         [Tooltip("The collisions to disable")]
         [SerializeField] private List<CapsuleCollider2D> hitboxesToDisable;
 
@@ -115,11 +118,29 @@ namespace Cardificer
         /// <param name="collision"> The thing we've collided with </param>
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            Debug.Log("Trigger entered");
             if (dashing && collision.gameObject.GetComponent<Health>() != null)
             {
-                Debug.Log("Damage done");
-                collision.gameObject.GetComponent<Health>().currentHealth -= damage;
+                DamageData dashDamage = new DamageData(new List<StatusEffect>(), gameObject);
+                dashDamage.damage = damage;
+                collision.gameObject.GetComponent<Health>().ReceiveAttack(dashDamage);
+
+                List<int> cooldownsToRemove = new List<int>();
+
+                List<int> keys = new List<int>(Deck.playerDeck.cardIndicesToCooldowns.Keys);
+                foreach (int key in keys)
+                {
+                    if (Deck.playerDeck.cardIndicesToCooldowns[key] - cooldownReduction <= 0)
+                    {
+                        cooldownsToRemove.Add(key);
+                        continue;
+                    }
+                    Deck.playerDeck.cardIndicesToCooldowns[key] -= cooldownReduction;
+                }
+
+                foreach (int cooldownToRemove in cooldownsToRemove)
+                {
+                    Deck.playerDeck.cardIndicesToCooldowns.Remove(cooldownToRemove);
+                }
             }
         }
     }
