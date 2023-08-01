@@ -67,6 +67,14 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1924281098058370358, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1924281098058370358, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.2734375
+      objectReference: {fileID: 0}
     - target: {fileID: 2803927118712481488, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
       propertyPath: damageOnTouch
       value: 2
@@ -87,6 +95,10 @@ PrefabInstance:
       propertyPath: m_Offset.y
       value: -0.02980529
       objectReference: {fileID: 0}
+    - target: {fileID: 4399100595971910195, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
+      propertyPath: spriteRenderer
+      value: 
+      objectReference: {fileID: 4664905252437850726}
     - target: {fileID: 4843195976864922180, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
       propertyPath: initialState
       value: 
@@ -131,6 +143,18 @@ PrefabInstance:
       propertyPath: m_Offset.y
       value: -0.025486652
       objectReference: {fileID: 0}
+    - target: {fileID: 6435494896034841637, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 08687127b5f33e24b8364b404b036f2d, type: 3}
+    - target: {fileID: 6435494896034841637, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
+      propertyPath: m_SpriteSortPoint
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6454615054032353179, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 1239562159779242155}
     - target: {fileID: 6454615054032353179, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -223,5 +247,17 @@ PrefabInstance:
       propertyPath: maxSpeed
       value: 5
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6498099726284613697, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
+    - {fileID: 4082683190358284588, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
+--- !u!95 &1239562159779242155 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 630967022066212584, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
+  m_PrefabInstance: {fileID: 1869673473963884099}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &4664905252437850726 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 6435494896034841637, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
+  m_PrefabInstance: {fileID: 1869673473963884099}
+  m_PrefabAsset: {fileID: 0}

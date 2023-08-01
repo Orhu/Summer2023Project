@@ -70,7 +70,11 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
-            if (!SaveManager.autosaveExists) { return; }
+            if (!SaveManager.autosaveExists) 
+            {
+                MenuManager.Open<DraftMenu>(lockOpen: true);
+                return; 
+            }
 
             if (!Player.SetMoney(SaveManager.savedPlayerMoney))
             {
