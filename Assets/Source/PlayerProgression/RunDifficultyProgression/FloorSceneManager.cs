@@ -89,7 +89,7 @@ namespace Cardificer
             currentFloor = floorNumber;
             onFloorLoaded?.Invoke();
             AsyncOperation operation = SceneManager.LoadSceneAsync(floors[floorNumber].sceneName);
-            MenuManager.Open<LoadingScreen>(false, true).AddAsyncOperation(operation);
+            //MenuManager.Open<LoadingScreen>(false, true).AddAsyncOperation(operation);
             return true;
         }
 
