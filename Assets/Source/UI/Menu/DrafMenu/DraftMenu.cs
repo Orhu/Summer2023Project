@@ -54,6 +54,8 @@ namespace Cardificer
             // Get random draft pool from draft loot table.
             IEnumerable<Card> draftpool = settings.draftPoolLootTable.weightedLoot.GetRandomThings(settings.draftPoolSize, new System.Random(SaveManager.savedFloorSeed));
             // Add guaranteed items.
+
+            Debug.Log("Saved floor seed: " + SaveManager.savedFloorSeed);
             draftpool = draftpool.Concat(settings.guaranteedOptions);
 
             // Initializes the draft pool
