@@ -28,6 +28,9 @@ namespace Cardificer
         [Tooltip("The collisions to enable")]
         [SerializeField] private List<CapsuleCollider2D> hitboxesToEnable;
 
+        [Tooltip("The visual indicator of whether you can dash or not")]
+        [SerializeField] private GameObject dashIndicator;
+
         // Whether or not a dash is currently happening
         [System.NonSerialized] public bool dashing = false;
 
@@ -69,7 +72,8 @@ namespace Cardificer
             dashing = true;
             canDash = false;
             playerController.movingEnabled = false;
-            movement.movementInput = playerController.attemptedMovementInput *speedMultiplier;
+            movement.movementInput = playerController.attemptedMovementInput * speedMultiplier;
+            dashIndicator.SetActive(false);
 
             if (damage > 0 && hitboxesToDisable != null && hitboxesToEnable != null)
             {
@@ -101,6 +105,7 @@ namespace Cardificer
 
             yield return new WaitForSeconds(cooldown);
 
+            dashIndicator.SetActive(true);
             canDash = true;
         }
 
