@@ -22,6 +22,9 @@ namespace Cardificer
 
         [Header("Draft Pool")]
 
+        [Tooltip("The number of cards that are picked randomly to be in your initial deck (will add on top of the other initial deck)")]
+        public int randomInitialDeckSize = 0;
+
         [Tooltip("Cards that will be guaranteed to be added to the draft pool.")]
         public Card[] guaranteedOptions = new Card[0];
 

@@ -52,9 +52,27 @@ namespace Cardificer
             settings = DraftSettings.Get();
 
             // Get random draft pool from draft loot table.
-            IEnumerable<Card> draftpool = settings.draftPoolLootTable.weightedLoot.GetRandomThings(settings.draftPoolSize, new System.Random(SaveManager.savedFloorSeed));
+            System.Random random = new System.Random(SaveManager.savedFloorSeed);
+            IEnumerable<Card> draftpool = settings.draftPoolLootTable.weightedLoot.GetRandomThings(settings.draftPoolSize, random);
             // Add guaranteed items.
             draftpool = draftpool.Concat(settings.guaranteedOptions);
+
+            if (settings.randomInitialDeckSize > 0)
+            {
+                Card[] initialCards = new Card[settings.initialDeck.Length + settings.randomInitialDeckSize];
+
+                for (int i = 0; i < settings.initialDeck.Length; i++)
+                {
+                    initialCards[i] = settings.initialDeck[i];
+                }
+
+                for (int i = 0; i < settings.randomInitialDeckSize; i++)
+                {
+                    initialCards[i + settings.initialDeck.Length - 1] = settings.draftPoolLootTable.weightedLoot.GetRandomThing(random);
+                }
+
+                settings.initialDeck = initialCards;
+            }
 
             // Initializes the draft pool
             foreach (Card card in draftpool)
