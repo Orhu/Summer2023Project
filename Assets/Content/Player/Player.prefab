@@ -124,6 +124,12 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onHealthChange:
+    m_PersistentCalls:
+      m_Calls: []
+  onHealthChangePercent:
+    m_PersistentCalls:
+      m_Calls: []
   hasBossHealthbar: 0
 --- !u!114 &1503026418
 MonoBehaviour:
@@ -138,7 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackMultiplier: 1
-  maxSpeed: 8
+  maxSpeed: 6
   acceleration: 100
   deceleration: 100
   immuneToGroundEffects: 0
