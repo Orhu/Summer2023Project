@@ -6,7 +6,7 @@ namespace Cardificer
     /// <summary>
     /// Agent serves as the brain of any agent. Has the ability to input basic tasks, delegating them to various parts of the agent as needed.
     /// </summary>
-    [RequireComponent(typeof(Movement), typeof(AnimatorController), typeof(ChannelAbility))]
+    [RequireComponent(typeof(Movement), typeof(AnimatorController))]
     public class PlayerController : MonoBehaviour, IActor
     {
         // Damage multiplier of this actor
@@ -39,9 +39,6 @@ namespace Cardificer
         // Animator component to make the pretty animations do their thing.
         private AnimatorController animatorComponent;
 
-        // The component responsible for the channeling ability
-        private ChannelAbility channelAbility;
-
         /// <summary>
         /// Initialize components.
         /// </summary>
@@ -49,7 +46,6 @@ namespace Cardificer
         {
             movementComponent = GetComponent<Movement>();
             animatorComponent = GetComponent<AnimatorController>();
-            channelAbility = GetComponent<ChannelAbility>();
         }
 
         /// <summary>
@@ -174,26 +170,6 @@ namespace Cardificer
                     animatorComponent.SetTrigger("cast");
                     animatorComponent.SetMirror("idleLeft", GetActionAimPosition().x - transform.position.x < 0);
                     animatorComponent.SetMirror("runLeft", GetActionAimPosition().x - transform.position.x < 0);
-                    channelAbility.StopChanneling();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Channeling
-        /// </summary>
-        /// <param name="input"> The input </param>
-        public void OnChannel(InputValue input)
-        {
-            if (movingEnabled && canAct & !paused)
-            {
-                if (input.isPressed)
-                {
-                    channelAbility.StartChanneling();
-                }
-                else
-                {
-                    channelAbility.StopChanneling();
                 }
             }
         }
