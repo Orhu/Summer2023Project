@@ -12,18 +12,15 @@ namespace Cardificer
         [SerializeField] private float radius;
 
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
+            if (value is OrbitProjectile orbitProjectile)
             {
-                if (value is OrbitProjectile orbitProjectile)
-                {
-                    orbitProjectile.radius += radius;
-                }
-                else
-                {
-                    Debug.LogWarning("Tried to modify radius on " + value.name + ", which does not use a CircleProjectileShape");
-                }
+                orbitProjectile.radius += radius;
+            }
+            else
+            {
+                Debug.LogWarning("Tried to modify radius on " + value.name + ", which does not use a CircleProjectileShape");
             }
         }
     }

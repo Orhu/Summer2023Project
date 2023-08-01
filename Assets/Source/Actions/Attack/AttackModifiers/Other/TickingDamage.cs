@@ -22,14 +22,11 @@ namespace Cardificer
         private Projectile tickingDamageProjectile;
 
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.onOverlap += StartTicking;
-                tickingDamageProjectile = value;
-                tickingDamageRigidbody = value.GetComponent<Rigidbody2D>();
-            }
+            value.onOverlap += StartTicking;
+            tickingDamageProjectile = value;
+            tickingDamageRigidbody = value.GetComponent<Rigidbody2D>();
         }
 
         /// <summary>

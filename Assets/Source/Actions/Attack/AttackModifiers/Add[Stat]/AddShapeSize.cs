@@ -16,19 +16,16 @@ namespace Cardificer
         [SerializeField] private float visualsScale;
 
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
+            if (value.shape is BoxProjectileShape box)
             {
-                if (value.shape is BoxProjectileShape box)
-                {
-                    box.size += size;
-                    value.visualObject.transform.localScale = value.visualObject.transform.localScale + new Vector3(visualsScale, visualsScale, visualsScale);
-                }
-                else
-                {
-                    Debug.LogWarning("Tried to modify radius on " + value.name + ", which does not use a BoxProjectileShape");
-                }
+                box.size += size;
+                value.visualObject.transform.localScale = value.visualObject.transform.localScale + new Vector3(visualsScale, visualsScale, visualsScale);
+            }
+            else
+            {
+                Debug.LogWarning("Tried to modify radius on " + value.name + ", which does not use a BoxProjectileShape");
             }
         }
     }

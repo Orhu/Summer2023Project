@@ -13,12 +13,9 @@ namespace Cardificer
         [SerializeField] private float damageFactor = 1f;
 
         // The projectile this modifies
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.attackData.damage += (int)((damageFactor - 1) * value.attack.attack.damage);
-            }
+            value.attackData.damage += (int)((damageFactor - 1) * value.attack.attack.damage);
         }
     }
 }
