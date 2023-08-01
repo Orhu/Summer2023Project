@@ -50,16 +50,25 @@ namespace Cardificer
                 bool shouldEnable = _card != null;
 
                 links.nameTextBox.enabled = shouldEnable;
+                links.cardSprite.enabled = shouldEnable;
+
+                shouldEnable = false;
                 links.descriptionTextBox.enabled = shouldEnable;
+                links.descriptionTextBox.gameObject.transform.parent.gameObject.SetActive(shouldEnable);
                 links.backgroundSprite.enabled = shouldEnable;
                 links.outlineSprite.enabled = shouldEnable;
                 links.chordEffectText.enabled = shouldEnable;
+                links.chordEffectText.gameObject.SetActive(shouldEnable);
                 links.rarityImage.enabled = shouldEnable;
+                links.rarityImage.gameObject.SetActive(shouldEnable);
                 links.damageContainer.SetActive(shouldEnable);
-                links.cardSprite.enabled = shouldEnable;
                 links.projectileTypeImage.enabled = shouldEnable;
                 links.flavorTextBox.enabled = shouldEnable;
+                links.flavorTextBox.gameObject.SetActive(shouldEnable);
                 links.coolDownOverlayText.enabled = shouldEnable;
+                links.coolDownOverlayText.gameObject.transform.parent.gameObject.SetActive(shouldEnable);
+
+                shouldEnable = _card != null;
                 if (shouldEnable)
                 {
                     // Name of the card
