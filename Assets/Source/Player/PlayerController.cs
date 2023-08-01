@@ -42,6 +42,9 @@ namespace Cardificer
         // The component responsible for the channeling ability
         private ChannelAbility channelAbility;
 
+        // The component responsible for dashing
+        private DashAbility dashAbility;
+
         /// <summary>
         /// Initialize components.
         /// </summary>
@@ -50,6 +53,7 @@ namespace Cardificer
             movementComponent = GetComponent<Movement>();
             animatorComponent = GetComponent<AnimatorController>();
             channelAbility = GetComponent<ChannelAbility>();
+            dashAbility = GetComponent<DashAbility>();
         }
 
         /// <summary>
@@ -199,6 +203,17 @@ namespace Cardificer
                 {
                     channelAbility.StopChanneling();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Dashing
+        /// </summary>
+        public void OnDash()
+        {
+            if (movingEnabled && !paused)
+            {
+                dashAbility.StartDash();
             }
         }
 
