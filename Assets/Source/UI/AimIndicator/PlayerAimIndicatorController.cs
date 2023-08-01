@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Cardificer
 {
+    /// <summary>
+    /// Controls the aim indicator
+    /// </summary>
     [RequireComponent(typeof(PlayerController))]
     public class PlayerAimIndicatorController : MonoBehaviour
     {
