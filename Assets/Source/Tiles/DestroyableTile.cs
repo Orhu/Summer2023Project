@@ -52,8 +52,7 @@ namespace Cardificer
             // if our pos is in the HashSet, destroy immediately
             if (destroyedTiles.Contains(transform.position))
             {
-                // true because we are not already destroyed by something else
-                InitiateDestruction(true);
+                Destroy(gameObject);
             }
         }
 
@@ -65,34 +64,7 @@ namespace Cardificer
         {
             if (!FloorGenerator.IsValid()) { return; }
             FloorGenerator.onRoomChange -= OnRoomEnter;
-            // if scene is loaded
-            if (!destroyedTiles.Contains(transform.position) && gameObject.scene.isLoaded && RoomInterface.instance != null)
-            {
-                // false because OnDestroy means something else destroyed us
-                InitiateDestruction(false);
-            }
             
-        }
-
-        /// <summary>
-        /// Sets the tile this object is on to be movable by all movement types, adds it to the destroyed tiles static list, and optionally Destroys the object itself
-        /// </summary>
-        /// <param name="shouldDestroy"> If true, destroys the game object. If false, does not. Should only destroy game object if it is not being destroyed by some other source. </param>
-        private void InitiateDestruction(bool shouldDestroy)
-        {
-            var myWorldPos = transform.position;
-            (PathfindingTile, bool) grabbedTile = RoomInterface.instance.WorldPosToTile(myWorldPos);
-            if (grabbedTile.Item2)
-            {
-                grabbedTile.Item1.allowedMovementTypes |=
-                    RoomInterface.MovementType.Walking | RoomInterface.MovementType.Flying |
-                    RoomInterface.MovementType.Burrowing;
-                destroyedTiles.Add(myWorldPos);
-                if (shouldDestroy)
-                {
-                    Destroy(gameObject);
-                }
-            }
         }
     }
 }

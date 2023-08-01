@@ -40,42 +40,17 @@ namespace Cardificer.FiniteStateMachine
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             // Get Random Tile
-            Vector2 tileLocation = Vector2.zero;
-            Vector2Int roomSize = RoomInterface.instance.myRoomSize;
-            bool tileNavicable = false;
-
-            for (int i = 0; i < RoomInterface.instance.GetMaxRoomSize() && !tileNavicable; i++)
-            {
-                tileLocation = new Vector2(Mathf.RoundToInt(Random.Range(roomSize.x / -2f, roomSize.x / 2f)), Mathf.RoundToInt(Random.Range(roomSize.y / -2f, roomSize.y / 2f)));
-
-                (PathfindingTile, bool) tileReturnData = RoomInterface.instance.WorldPosToTile(tileLocation + RoomInterface.instance.myWorldPosition);
-
-                if (tileReturnData.Item2) // only assign if we get a valid tile
-                {
-                    tileNavicable = tileReturnData.Item1.allowedMovementTypes.HasFlag(stateMachine.currentMovementType);
-                }
-
-                float sqrDistance = (tileLocation + RoomInterface.instance.myWorldPosition - Player.GetFeetPosition()).sqrMagnitude;
-
-                tileNavicable = tileNavicable && sqrDistance <= maxDistance * maxDistance && sqrDistance >= minDistance * minDistance;
-            }
-            if (!tileNavicable)
-            {
-                Debug.LogError("No valid random tile was found.");
-            }
-
-            tileLocation += RoomInterface.instance.myWorldPosition;
-
+            Vector2 targetLocation = Player.GetFeetPosition() + Random.insideUnitCircle * Random.Range(minDistance, maxDistance);
 
             // Set Target
             if (targetType.HasFlag(TargetType.Pathfinding))
             {
-                stateMachine.currentPathfindingTarget = tileLocation;
+                stateMachine.currentPathfindingTarget = targetLocation;
             }
 
             if (targetType.HasFlag(TargetType.Attack))
             {
-                stateMachine.currentAttackTarget = tileLocation;
+                stateMachine.currentAttackTarget = targetLocation;
             }
 
             yield return new UnityEngine.WaitForSeconds(cooldown);

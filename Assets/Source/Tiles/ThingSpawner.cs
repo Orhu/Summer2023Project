@@ -63,11 +63,7 @@ namespace Cardificer
                 chosenThingTile.gridLocation = currentTile.gridLocation;
                 chosenThingTile.room = currentTile.room;
 
-                // Only update the room grid if this actually affects pathfinding
-                if (chosenThingTile.allowedMovementTypes != RoomInterface.MovementType.None)
-                {
-                    currentTile.room.roomGrid[currentTile.gridLocation.x, currentTile.gridLocation.y] = chosenThing.GetComponent<Tile>();
-                }
+                currentTile.room.roomGrid[currentTile.gridLocation.x, currentTile.gridLocation.y] = chosenThing.GetComponent<Tile>();
             }
         }
     }

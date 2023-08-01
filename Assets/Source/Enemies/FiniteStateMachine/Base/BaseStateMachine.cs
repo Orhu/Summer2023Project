@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MovementType = Cardificer.RoomInterface.MovementType;
+
 
 namespace Cardificer.FiniteStateMachine
 {
@@ -41,13 +41,7 @@ namespace Cardificer.FiniteStateMachine
         {
             get
             {
-                if (pathData.path != null)
-                    return ((currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer) &&
-                           pathData.targetIndex == pathData.path.waypoints.Length - 1;
-                else
-                {
-                    return ((currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer);
-                }
+                return (currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer;
             }
         }
 
@@ -56,31 +50,6 @@ namespace Cardificer.FiniteStateMachine
         {
             get { return movementComponent.maxSpeed * Time.fixedDeltaTime * 3f; }
         }
-
-        /// <summary>
-        /// Struct used to store path data with this state machine instance,
-        /// so we can remember pathfinding data on our ScriptableObjects where we cannot store them in-object
-        /// </summary>
-        public struct PathData
-        {
-            // Path to target 
-            public Path path;
-
-            // Index of where we are in the path
-            public int targetIndex;
-
-            // Do we ignore incoming path requests?
-            public bool ignorePathRequests;
-
-            // Store the path following coroutine so it can be cancelled as needed
-            public IEnumerator prevFollowCoroutine;
-
-            // Should we keep following the path? Checked every time an enemy tries to move
-            public bool keepFollowingPath;
-        }
-
-        // Stores our current path data
-        [HideInInspector] public PathData pathData;
 
         // Struct to store cooldown data
         public struct CooldownData
@@ -138,22 +107,6 @@ namespace Cardificer.FiniteStateMachine
         // Cached movement component
         private SimpleMovement movementComponent;
 
-        [Tooltip("Movement type this enemy begins in")] [SerializeField]
-        private MovementType startingMovementType;
-
-        // Current movement type of this enemy
-        private MovementType _currentMovementType;
-
-        public MovementType currentMovementType
-        {
-            set
-            {
-                feetCollider.gameObject.layer = LayerMask.NameToLayer(value.ToString());
-                _currentMovementType = value;
-            }
-            get => _currentMovementType;
-        }
-
         /// <summary>
         /// Chase Data struct used to store chase data as it is passed to the pathfinding singleton from pathing scriptable objects.
         /// Never need to actually cache the data in the state machine, just declaring the struct here so it is only declared once.
@@ -193,7 +146,6 @@ namespace Cardificer.FiniteStateMachine
             currentState = initialState.GetState();
             cooldownData.cooldownReady = new Dictionary<BaseAction, bool>();
             cachedComponents = new Dictionary<Type, Component>();
-            currentMovementType = startingMovementType;
 
             movementComponent = GetComponent<SimpleMovement>();
         }
@@ -219,13 +171,6 @@ namespace Cardificer.FiniteStateMachine
             delayBeforeLogic += UnityEngine.Random.Range(-delayBeforeLogicVariance, delayBeforeLogicVariance);
             SetStats();
             timeStarted = Time.time;
-
-            PathfindingTile currentTile = RoomInterface.instance.WorldPosToTile(transform.position).Item1;
-            if (currentTile != null && !currentTile.allowedMovementTypes.HasFlag(currentMovementType))
-            {
-                Destroy(gameObject);
-                return;
-            }
 
             GetComponent<SimpleMovement>().requestSpeedModifications += AdjustMovement;
 
@@ -335,22 +280,6 @@ namespace Cardificer.FiniteStateMachine
         private void OnDrawGizmos()
         {
             if (!drawGizmos) return;
-            Gizmos.color = Color.black;
-            if (pathData.path != null)
-            {
-                foreach (Vector2 p in pathData.path.waypoints)
-                {
-                    Gizmos.DrawCube(p, new Vector3(0.05f, 0.05f));
-                }
-
-                Gizmos.color = Color.white;
-                foreach (Line l in pathData.path.turnBoundaries)
-                {
-                    Vector2 lineDir = new Vector2(1, l.gradient).normalized;
-                    Vector2 lineCenter = l.pointOnLine_1;
-                    Gizmos.DrawLine(lineCenter - lineDir * 5 / 2f, lineCenter + lineDir * 5 / 2f);
-                }
-            }
 
             Gizmos.color = Color.red;
             Gizmos.DrawCube(currentAttackTarget, new Vector3(0.05f, 0.05f));

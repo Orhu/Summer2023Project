@@ -36,10 +36,6 @@ namespace Cardificer
                 if (_currentHealth == value) { return; }
 
                 _currentHealth = value;
-                if (hasBossHealthbar)
-                {
-                    BossHealthbarManager.instance.UpdateHealth(value);
-                }
             }
         }
 
@@ -51,9 +47,6 @@ namespace Cardificer
 
         [Tooltip("Called when this dies")]
         public UnityEvent onDeath;
-        
-        [Tooltip("Indicates whether this enemy has an associated boss health bar")]
-        [SerializeField] private bool hasBossHealthbar = false;
 
         // Called when invincibility changes and passes the new invincibility
         public Action<bool> onInvincibilityChanged;
@@ -90,12 +83,7 @@ namespace Cardificer
         /// Initializes current health.
         /// </summary>
         void Start()
-        {
-            if (hasBossHealthbar)
-            {
-                BossHealthbarManager.instance.StartHealthbar(maxHealth);
-            }
-            
+        {            
             if (currentHealth != 0) { return; }
             currentHealth = maxHealth;
         }
@@ -138,10 +126,6 @@ namespace Cardificer
 
             if (currentHealth <= 0 && prevHealth > 0)
             {
-                if (hasBossHealthbar)
-                {
-                    BossHealthbarManager.instance.DisableHealthbar();
-                }
                 onDeath?.Invoke();
                 return;
             }

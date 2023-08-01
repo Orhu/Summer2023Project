@@ -85,7 +85,6 @@ namespace Cardificer
                             createdTile = new GameObject().AddComponent<Tile>();
                             createdTile.name = "Empty tile (" + j + ", " + k + ")";
                             createdTile.gridLocation = new Vector2Int(j, k);
-                            createdTile.allowedMovementTypes = RoomInterface.MovementType.Walking | RoomInterface.MovementType.Burrowing | RoomInterface.MovementType.Flying;
                             createdTile.transform.parent = layers[0].transform;
                             createdTile.transform.localPosition = new Vector3(j, k);
                         }

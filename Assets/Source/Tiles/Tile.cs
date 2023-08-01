@@ -1,5 +1,5 @@
 using UnityEngine;
-using MovementType = Cardificer.RoomInterface.MovementType;
+
 
 namespace Cardificer
 {
@@ -9,9 +9,6 @@ namespace Cardificer
     [System.Serializable] [ExecuteAlways]
     public class Tile : MonoBehaviour
     {
-        [Tooltip("Movement types this tile supports")]
-        public MovementType allowedMovementTypes = MovementType.Burrowing | MovementType.Walking | MovementType.Flying;
-
         [Tooltip("How much this tile costs to walk on (higher is avoided more, lower is preferred)")]
         public int walkMovementPenalty;
 

@@ -83,13 +83,13 @@ GameObject:
   - component: {fileID: 7281680880204442676}
   - component: {fileID: 7771620888905133544}
   - component: {fileID: 2453830812017951992}
-  - component: {fileID: 8941374239524879921}
   - component: {fileID: 7281680880204442666}
   - component: {fileID: 156754919104867910}
   - component: {fileID: 5097362261395317995}
   - component: {fileID: 2939038239829249596}
   - component: {fileID: 542899057510882649}
   - component: {fileID: 7400328270181020654}
+  - component: {fileID: -7445713138728903320}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
@@ -202,30 +202,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &8941374239524879921
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7281680880204442677}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af611a0591bda784ca1ea39c0913459f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initialState: {fileID: 11400000, guid: 477429be3bb41214fa176b7272192a89, type: 2}
-  delayBeforeLogic: 1
-  delayBeforeLogicVariance: 0.5
-  currentPathfindingTarget: {x: 0, y: 0}
-  currentAttackTarget: {x: 0, y: 0}
-  currentState: {fileID: 0}
-  exhausted: 0
-  timeSinceTransition: 0
-  startingMovementType: 1
-  speedPercent: 1
-  ignoreDifficultyProgression: 0
-  drawGizmos: 0
 --- !u!114 &7281680880204442666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,7 +305,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7281680880204442677}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 059485bb3fc502f49928b10a7bfc2323, type: 3}
   m_Name: 
@@ -337,3 +313,27 @@ MonoBehaviour:
   defaultMirrorParam: lookingLeft
   _animactionClipsToMirrorParameters: []
   animator: {fileID: 0}
+--- !u!114 &-7445713138728903320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7281680880204442677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af611a0591bda784ca1ea39c0913459f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialState: {fileID: 0}
+  delayBeforeLogic: 0
+  delayBeforeLogicVariance: 0.5
+  currentPathfindingTarget: {x: 0, y: 0}
+  currentAttackTarget: {x: 0, y: 0}
+  currentState: {fileID: 0}
+  exhausted: 0
+  timeSinceTransition: 0
+  startingMovementType: 0
+  speedPercent: 1
+  ignoreDifficultyProgression: 0
+  drawGizmos: 0
