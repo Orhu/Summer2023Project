@@ -82,8 +82,6 @@ namespace Cardificer
             set
             {
                 links.actionTimeOverlay.enabled = value > 0;
-                links.actionTimeTextBox.text = (Mathf.Round(value * 10f) / 10f).ToString();
-                links.actionTimeTextBox.enabled = value > 0;
             }
         }
 
@@ -93,10 +91,6 @@ namespace Cardificer
         [System.Serializable]
         struct ComponentLinks
         {
-
-            [Tooltip("The text boxed used to display the current remaining action time of the rune.")]
-            public TMP_Text actionTimeTextBox;
-
             [Tooltip("The image used to render the rune specific sprite.")]
             public Image runeSprite;
 
