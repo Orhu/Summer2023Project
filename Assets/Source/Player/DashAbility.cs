@@ -31,6 +31,12 @@ namespace Cardificer
         [Tooltip("The collisions to enable")]
         [SerializeField] private List<CapsuleCollider2D> hitboxesToEnable;
 
+        [Tooltip("The sprites to disable")]
+        [SerializeField] private List<SpriteRenderer> spritesToDisable;
+
+        [Tooltip("The sprites to enable")]
+        [SerializeField] private List<SpriteRenderer> spritesToEnable;
+
         [Tooltip("The visual indicator of whether you can dash or not")]
         [SerializeField] private GameObject dashIndicator;
 
@@ -88,6 +94,14 @@ namespace Cardificer
                 {
                     hitbox.enabled = true;
                 }
+                foreach(SpriteRenderer sprite in spritesToDisable)
+                {
+                    sprite.enabled = false;
+                }
+                foreach (SpriteRenderer sprite in spritesToEnable)
+                {
+                    sprite.enabled = true;
+                }
             }
 
             yield return new WaitForSeconds(time);
@@ -103,6 +117,14 @@ namespace Cardificer
                 foreach (CapsuleCollider2D hitbox in hitboxesToEnable)
                 {
                     hitbox.enabled = false;
+                }
+                foreach (SpriteRenderer sprite in spritesToDisable)
+                {
+                    sprite.enabled = true;
+                }
+                foreach (SpriteRenderer sprite in spritesToEnable)
+                {
+                    sprite.enabled = false;
                 }
             }
 
