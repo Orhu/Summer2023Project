@@ -124,22 +124,17 @@ namespace Cardificer
                 dashDamage.damage = damage;
                 collision.gameObject.GetComponent<Health>().ReceiveAttack(dashDamage);
 
-                List<int> cooldownsToRemove = new List<int>();
-
-                List<int> keys = new List<int>(Deck.playerDeck.cardIndicesToCooldowns.Keys);
-                foreach (int key in keys)
+                foreach (KeyValuePair<int, float> cardIndexToCooldown in new Dictionary<int, float>(Deck.playerDeck.cardIndicesToCooldowns))
                 {
-                    if (Deck.playerDeck.cardIndicesToCooldowns[key] - cooldownReduction <= 0)
+                    float newValue = cardIndexToCooldown.Value - cooldownReduction;
+                    if (newValue <= 0)
                     {
-                        cooldownsToRemove.Add(key);
-                        continue;
+                        Deck.playerDeck.cardIndicesToCooldowns.Remove(cardIndexToCooldown.Key);
                     }
-                    Deck.playerDeck.cardIndicesToCooldowns[key] -= cooldownReduction;
-                }
-
-                foreach (int cooldownToRemove in cooldownsToRemove)
-                {
-                    Deck.playerDeck.cardIndicesToCooldowns.Remove(cooldownToRemove);
+                    else
+                    {
+                        Deck.playerDeck.cardIndicesToCooldowns[cardIndexToCooldown.Key] = newValue;
+                    }
                 }
             }
         }
