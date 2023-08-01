@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ba8f12574f003740995560e9d603e40, type: 3}
   m_Name: DraftSettings
   m_EditorClassIdentifier: 
-  initialDeck: []
+  initialDeck:
+  - {fileID: 11400000, guid: 80393c555f2f1694e801cc86d330b63f, type: 2}
+  - {fileID: 11400000, guid: ac854718d3305404fbbfec3dc567b05f, type: 2}
+  - {fileID: 11400000, guid: 6f8659ff3fc30aa4986b5604a0e1db73, type: 2}
   allowRemovalFromInitialDeck: 1
   minPlayerDeckSize: 6
   maxPlayerDeckSize: 6
   randomInitialDeckSize: 3
   guaranteedOptions: []
   draftPoolLootTable: {fileID: 11400000, guid: ffaac468cf8e0b640864b4356f8f45f4, type: 2}
-  draftPoolSize: 5
+  draftPoolSize: 6
