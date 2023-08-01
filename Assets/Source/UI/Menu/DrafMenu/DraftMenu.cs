@@ -68,7 +68,7 @@ namespace Cardificer
 
                 for (int i = 0; i < settings.randomInitialDeckSize; i++)
                 {
-                    initialCards[i + settings.initialDeck.Length - 1] = settings.draftPoolLootTable.weightedLoot.GetRandomThing(random);
+                    initialCards[i + settings.initialDeck.Length] = settings.draftPoolLootTable.weightedLoot.GetRandomThing(random);
                 }
 
                 settings.initialDeck = initialCards;
