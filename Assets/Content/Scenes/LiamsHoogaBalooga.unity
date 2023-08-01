@@ -281,7 +281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26ef4823c32fa6c40a3b47c86267e2f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnFrequncy: 1
+  spawnFrequncy: 3
   spawnDistance: 20
   spawnBounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -289,6 +289,154 @@ MonoBehaviour:
   spawnPools:
   - spawnEntries:
     - <thingToSpawn>k__BackingField: {fileID: 4664199254330675353, guid: ad478f926a6e0c346a5365acbf0722ae, type: 3}
+      <spawnpointCost>k__BackingField: 3
+      weightOverTime:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 180
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 600
+          value: 0.1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1800
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+    - <thingToSpawn>k__BackingField: {fileID: 4664199254330675353, guid: 413f6c16ccb68714199c3cc7c63fd3f4, type: 3}
+      <spawnpointCost>k__BackingField: 4
+      weightOverTime:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 60
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 90
+          value: 0.2
+          inSlope: 0.000029560395
+          outSlope: 0.000029560395
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.34417233
+        - serializedVersion: 3
+          time: 600
+          value: 1
+          inSlope: 0.0052238675
+          outSlope: -0.000056696
+          tangentMode: 1
+          weightedMode: 0
+          inWeight: 0.055717677
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1800
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+    spawnpointsOverTime:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 3
+        inSlope: 0.27611113
+        outSlope: 0.27611113
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1800
+        value: 500
+        inSlope: 0.8753698
+        outSlope: 0.8753698
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.05900621
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 0
+  - spawnEntries:
+    - <thingToSpawn>k__BackingField: {fileID: 5034389711991681297, guid: 0bd14818c299fcb42802128b211ec2da, type: 3}
+      <spawnpointCost>k__BackingField: 1
+      weightOverTime:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 2
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 2
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+    - <thingToSpawn>k__BackingField: {fileID: 5034389711991681297, guid: 7bc49cc6e129ae04ab0d64ebcc944f19, type: 3}
       <spawnpointCost>k__BackingField: 1
       weightOverTime:
         serializedVersion: 2
@@ -319,21 +467,72 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
-        inSlope: 0.27722222
-        outSlope: 0.27722222
+        value: 5
+        inSlope: 0.016666668
+        outSlope: 0.016666668
         tangentMode: 34
         weightedMode: 0
         inWeight: 0
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 1800
-        value: 500
-        inSlope: 0.8753698
-        outSlope: 0.8753698
-        tangentMode: 0
+        time: 900
+        value: 20
+        inSlope: 0.016666668
+        outSlope: 0.016666668
+        tangentMode: 34
         weightedMode: 0
-        inWeight: 0.05900621
+        inWeight: 0.33333334
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 0
+  - spawnEntries:
+    - <thingToSpawn>k__BackingField: {fileID: 6725208822767139332, guid: 384516f1beb327443bb0776eb01fa2ba, type: 3}
+      <spawnpointCost>k__BackingField: 1
+      weightOverTime:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 2
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 2
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+    spawnpointsOverTime:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 5
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 5
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 34
+        weightedMode: 0
+        inWeight: 0.33333334
         outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
@@ -797,12 +996,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2036930054678835856, guid: 567d3dab6ca66fc4d924949862f27478, type: 3}
       propertyPath: cards.Array.size
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2036930054678835856, guid: 567d3dab6ca66fc4d924949862f27478, type: 3}
       propertyPath: cards.Array.data[0]
       value: 
       objectReference: {fileID: 11400000, guid: edb2a1437d4d3b147a55dd2c1da089d8, type: 2}
+    - target: {fileID: 2036930054678835856, guid: 567d3dab6ca66fc4d924949862f27478, type: 3}
+      propertyPath: cards.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 3e3000a778d44fb408de8d285b2c6996, type: 2}
+    - target: {fileID: 2036930054678835856, guid: 567d3dab6ca66fc4d924949862f27478, type: 3}
+      propertyPath: cards.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 3e3000a778d44fb408de8d285b2c6996, type: 2}
     - target: {fileID: 2036930054678835859, guid: 567d3dab6ca66fc4d924949862f27478, type: 3}
       propertyPath: m_RootOrder
       value: 0
