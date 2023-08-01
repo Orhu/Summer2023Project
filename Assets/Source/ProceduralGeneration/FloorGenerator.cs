@@ -279,7 +279,7 @@ namespace Cardificer
             roomContainer.transform.parent = transform;
             roomContainer.name = "Room Container";
 
-            MapCell[,] genMap = new MapCell[predefinedMap.predefinedMap.Length, predefinedMap.predefinedMap[0].innerArray.Length];
+            MapCell[,] genMap = new MapCell[predefinedMap.predefinedMap.Length*3, predefinedMap.predefinedMap[0].innerArray.Length*3];
 
             // Initialize the gen map
             for (int i = 0; i < predefinedMap.predefinedMap.Length; i++)

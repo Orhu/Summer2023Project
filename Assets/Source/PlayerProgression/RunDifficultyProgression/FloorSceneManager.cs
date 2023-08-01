@@ -51,8 +51,9 @@ namespace Cardificer
                         }
                     }
                     if (_currentFloor == null)
-                    {
-                        throw new System.Exception("The active scene " + SceneManager.GetActiveScene().name + " is not included in the floor order!");
+                    { 
+                        Debug.Log("The active scene " + SceneManager.GetActiveScene().name + " is not included in the floor order!");
+                        return -1;
                     }
                 }
 
