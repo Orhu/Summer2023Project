@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 namespace Cardificer
 {
@@ -9,6 +10,12 @@ namespace Cardificer
     [RequireComponent(typeof(Movement), typeof(AnimatorController), typeof(ChannelAbility))]
     public class PlayerController : MonoBehaviour, IActor
     {
+        [Tooltip("The amount that the aim direction angle has to change before it counts as an input")]
+        [SerializeField] private float aimAngleChangeThreshold = 1;
+
+        [Tooltip("The magnitude of the aim direction that the gamepad must input before it counts as aiming")]
+        [SerializeField] private float aimMagnitudeThreshold = 0.5f;
+
         // Damage multiplier of this actor
         [HideInInspector] public float damageMultiplier = 1f;
 
@@ -29,7 +36,13 @@ namespace Cardificer
 
         // Tracks whether the player should be paused
         [HideInInspector] public bool paused => Time.timeScale == 0;
-        
+
+        // Tracks the controller aim direction
+        [System.NonSerialized] public Vector2 aimDirection;
+
+        // Tracks whether the last input was a gamepad input
+        [System.NonSerialized] public bool lastInputWasGamepad = false;
+
         // Movement component to allow the agent to move
         private Movement movementComponent;
 
@@ -112,7 +125,35 @@ namespace Cardificer
         /// <param name="moveInput"> The move input </param>
         public void OnMove(InputValue moveInput)
         {
+            lastInputWasGamepad = false;
             attemptedMovementInput = moveInput.Get<Vector2>().normalized;
+        }
+
+        /// <summary>
+        /// Moves the player, but from a gamepad
+        /// </summary>
+        /// <param name="moveInput"> The move input </param>
+        public void OnMoveGamepad(InputValue moveInput)
+        {
+            lastInputWasGamepad = true;
+            attemptedMovementInput = moveInput.Get<Vector2>().normalized;
+        }
+
+        /// <summary>
+        /// Handles the aim input from the controller
+        /// </summary>
+        /// <param name="aimInput"> The aim input </param>
+        public void OnAimGamepad(InputValue aimInput)
+        {
+            Vector2 newAimInput = aimInput.Get<Vector2>();
+
+            if (newAimInput.sqrMagnitude < aimMagnitudeThreshold * aimMagnitudeThreshold) { return; }
+
+            newAimInput.Normalize();
+            if (aimDirection != Vector2.zero && Vector2.Angle(newAimInput, aimDirection) < aimAngleChangeThreshold) { return; }
+
+            lastInputWasGamepad = true;
+            aimDirection = aimInput.Get<Vector2>().normalized;
         }
 
         /// <summary>
@@ -120,6 +161,19 @@ namespace Cardificer
         /// </summary>
         public void OnPreviewCard1()
         {
+            lastInputWasGamepad = false;
+            if (movingEnabled && canAct && !paused)
+            {
+                Deck.playerDeck.SelectCard(0);
+            }
+        }
+
+        /// <summary>
+        /// Previews a card
+        /// </summary>
+        public void OnPreviewCard1Gamepad()
+        {
+            lastInputWasGamepad = true;
             if (movingEnabled && canAct && !paused)
             {
                 Deck.playerDeck.SelectCard(0);
@@ -131,6 +185,19 @@ namespace Cardificer
         /// </summary>
         public void OnPreviewCard2()
         {
+            lastInputWasGamepad = false;
+            if (movingEnabled && canAct && !paused)
+            {
+                Deck.playerDeck.SelectCard(1);
+            }
+        }
+
+        /// <summary>
+        /// Previews a card
+        /// </summary>
+        public void OnPreviewCard2Gamepad()
+        {
+            lastInputWasGamepad = true;
             if (movingEnabled && canAct && !paused)
             {
                 Deck.playerDeck.SelectCard(1);
@@ -142,6 +209,19 @@ namespace Cardificer
         /// </summary>
         public void OnPreviewCard3()
         {
+            lastInputWasGamepad = false;
+            if (movingEnabled && canAct && !paused)
+            {
+                Deck.playerDeck.SelectCard(2);
+            }
+        }
+
+        /// <summary>
+        /// Previews a card
+        /// </summary>
+        public void OnPreviewCard3Gamepad()
+        {
+            lastInputWasGamepad = true;
             if (movingEnabled && canAct && !paused)
             {
                 Deck.playerDeck.SelectCard(2);
@@ -153,6 +233,19 @@ namespace Cardificer
         /// </summary>
         public void OnPreviewCard4()
         {
+            lastInputWasGamepad = false;
+            if (movingEnabled && canAct && !paused)
+            {
+                Deck.playerDeck.SelectCard(3);
+            }
+        }
+
+        /// <summary>
+        /// Previews a card
+        /// </summary>
+        public void OnPreviewCard4Gamepad()
+        {
+            lastInputWasGamepad = true;
             if (movingEnabled && canAct && !paused)
             {
                 Deck.playerDeck.SelectCard(3);
@@ -164,6 +257,19 @@ namespace Cardificer
         /// </summary>
         public void OnPreviewCard5()
         {
+            lastInputWasGamepad = false;
+            if (movingEnabled && canAct && !paused)
+            {
+                Deck.playerDeck.SelectCard(4);
+            }
+        }
+
+        /// <summary>
+        /// Previews a card
+        /// </summary>
+        public void OnPreviewCard5Gamepad()
+        {
+            lastInputWasGamepad = true;
             if (movingEnabled && canAct && !paused)
             {
                 Deck.playerDeck.SelectCard(4);
@@ -175,6 +281,25 @@ namespace Cardificer
         /// </summary>
         public void OnCast()
         {
+            lastInputWasGamepad = false;
+            if (movingEnabled && canAct && !paused)
+            {
+                if (Deck.playerDeck.PlayChord())
+                {
+                    animatorComponent.SetTrigger("cast");
+                    animatorComponent.SetMirror("idleLeft", GetActionAimPosition().x - transform.position.x < 0);
+                    animatorComponent.SetMirror("runLeft", GetActionAimPosition().x - transform.position.x < 0);
+                    channelAbility.StopChanneling();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Cast the selected cards, but using a gamepad input
+        /// </summary>
+        public void OnCastGamepad()
+        {
+            lastInputWasGamepad = true;
             if (movingEnabled && canAct && !paused)
             {
                 if (Deck.playerDeck.PlayChord())
@@ -193,6 +318,27 @@ namespace Cardificer
         /// <param name="input"> The input </param>
         public void OnChannel(InputValue input)
         {
+            lastInputWasGamepad = false;
+            if (movingEnabled && canAct & !paused)
+            {
+                if (input.isPressed)
+                {
+                    channelAbility.StartChanneling();
+                }
+                else
+                {
+                    channelAbility.StopChanneling();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Channeling
+        /// </summary>
+        /// <param name="input"> The input </param>
+        public void OnChannelGamepad(InputValue input)
+        {
+            lastInputWasGamepad = true;
             if (movingEnabled && canAct & !paused)
             {
                 if (input.isPressed)
@@ -222,6 +368,16 @@ namespace Cardificer
         /// </summary>
         public void OnPause()
         {
+            lastInputWasGamepad = false;
+            MenuManager.Toggle<PauseMenu>();
+        }
+
+        /// <summary>
+        /// Pauses the game
+        /// </summary>
+        public void OnPauseGamepad()
+        {
+            lastInputWasGamepad = true;
             MenuManager.Toggle<PauseMenu>();
         }
 
@@ -230,6 +386,16 @@ namespace Cardificer
         /// </summary>
         public void OnOpenMap()
         {
+            lastInputWasGamepad = false;
+            MenuManager.Toggle<MapMenu>();
+        }
+
+        /// <summary>
+        /// Opens the map
+        /// </summary>
+        public void OnOpenMapGamepad()
+        {
+            lastInputWasGamepad = true;
             MenuManager.Toggle<MapMenu>();
         }
 
@@ -238,7 +404,33 @@ namespace Cardificer
         /// </summary>
         public void OnOpenCardMenu()
         {
+            lastInputWasGamepad = false;
             MenuManager.Toggle<CardMenu>();
+        }
+
+        /// <summary>
+        /// Opens the card menu
+        /// </summary>
+        public void OnOpenCardMenuGamepad()
+        {
+            lastInputWasGamepad = true;
+            MenuManager.Toggle<CardMenu>();
+        }
+
+        /// <summary>
+        /// Unselects all spells
+        /// </summary>
+        public void OnUnselectSpellsGamepad()
+        {
+            lastInputWasGamepad = true;
+            if (movingEnabled && canAct && !paused)
+            {
+                List<int> selectedCards = Deck.playerDeck.previewedCardIndices;
+                foreach (int selectedCard in selectedCards)
+                {
+                    Deck.playerDeck.SelectCard(4);
+                }
+            }
         }
 
         /// <summary>
@@ -246,6 +438,7 @@ namespace Cardificer
         /// </summary>
         public void OnShowLayout()
         {
+            lastInputWasGamepad = false;
             // Make sure this can only happen when testing in the editor
             #if UNITY_EDITOR
             FloorGenerator.ShowLayout();
@@ -258,12 +451,15 @@ namespace Cardificer
         public void OnPrintCurrentRoomTemplate()
         {
             // Make sure this only happens when testing in the editor
-#if UNITY_EDITOR
+            #if UNITY_EDITOR
             Debug.Log("Current room type: " + FloorGenerator.currentRoom.roomType.displayName);
             Debug.Log("Current room template: " + FloorGenerator.currentRoom.template);
             #endif
         }
 
+        /// <summary>
+        /// Handles the player being destroyed
+        /// </summary>
         private void OnDestroy()
         {
             Player.SetMoney(0);
@@ -298,6 +494,10 @@ namespace Cardificer
         /// <returns> The mouse position in world space. </returns>
         public Vector3 GetActionAimPosition()
         {
+            if (lastInputWasGamepad)
+            {
+                return (Vector3) aimDirection + transform.position;
+            }
             return Vector3.Scale(Camera.main.ScreenToWorldPoint(Mouse.current.position.value), new Vector3(1, 1, 0));
         }
 
