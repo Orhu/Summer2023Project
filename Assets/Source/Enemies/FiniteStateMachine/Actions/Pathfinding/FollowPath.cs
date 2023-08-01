@@ -21,7 +21,7 @@ namespace Cardificer.FiniteStateMachine
         {
             while (!stateMachine.destinationReached)
             {
-                stateMachine.GetComponent<Movement>().movementInput = stateMachine.currentPathfindingTarget - stateMachine.GetFeetPos();
+                stateMachine.GetComponent<Movement>().movementInput = (stateMachine.currentPathfindingTarget - stateMachine.GetFeetPos()).normalized;
                 yield return null;
             }
             stateMachine.cooldownData.cooldownReady[this] = true;
