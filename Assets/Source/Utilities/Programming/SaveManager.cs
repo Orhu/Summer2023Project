@@ -251,7 +251,7 @@ namespace Cardificer
         // Whether or not an autosave currently exists. 
         public static bool autosaveExists
         {
-            get => autosaver.latestAutosave != null;
+            get => false;//autosaver.latestAutosave != null;
         }
 
         /// <summary>

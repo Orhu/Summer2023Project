@@ -183,14 +183,6 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Opens the map
-        /// </summary>
-        public void OnOpenMap()
-        {
-            MenuManager.Toggle<MapMenu>();
-        }
-
-        /// <summary>
         /// Opens the card menu
         /// </summary>
         public void OnOpenCardMenu()

@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 7400328270181020654}
   - component: {fileID: -7445713138728903320}
   - component: {fileID: 3897473326780364653}
+  - component: {fileID: 670251355829366426}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Enemy
@@ -167,6 +168,18 @@ MonoBehaviour:
   onDeath:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 670251355829366426}
+        m_TargetAssemblyTypeName: Cardificer.DropLootPerHitPoint, Assembly-CSharp
+        m_MethodName: Drop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 2939038239829249596}
         m_TargetAssemblyTypeName: Destroy, Assembly-CSharp
         m_MethodName: DestroyMe
@@ -261,6 +274,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   invincibilityFlashColor: {r: 1, g: 0, b: 0, a: 1}
   flashDuration: 0.25
+--- !u!114 &670251355829366426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7281680880204442677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f165d6177dac74745b3b92c9e6360207, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lootTable: {fileID: 11400000, guid: bbddc82eac9a5ca45aadae360982c9f8, type: 2}
 --- !u!1 &8209777805845980032
 GameObject:
   m_ObjectHideFlags: 0
