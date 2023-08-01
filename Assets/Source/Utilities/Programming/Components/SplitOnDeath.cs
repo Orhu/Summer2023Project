@@ -22,7 +22,7 @@ namespace Cardificer
         [SerializeField] private LayerMask spawnLayer;
 
         // The number of attempts to find an appropriate spawn location
-        private const int LOCATION_SEACH_ATTEMPTS = 4;
+        private const int LOCATION_SEACH_ATTEMPTS = 12;
 
         /// <summary>
         /// Split by creating a number of enemies along the circumference of the circle given by the splitRadius

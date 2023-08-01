@@ -43,6 +43,7 @@ namespace Cardificer
         /// </summary>
         void Start()
         {
+            maxSpeed *= Random.Range(0.9f, 1.1f);
             originalMaxSpeed = maxSpeed;
             originalAcceleration = acceleration;
             originalDeceleration = deceleration;
