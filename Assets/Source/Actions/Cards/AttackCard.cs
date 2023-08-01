@@ -129,12 +129,15 @@ namespace Cardificer
             {
                 modifiers.AddRange(GetAppliedModifers(chordedCard));
 
-                // Chord VFX
-                if (chordedCard.cordVFXPrefabs != null && chordedCard.cordVFXPrefabs.Count > 0)
+                if (chordedCard != this)
                 {
-                    ChordVFXModifier vfxModifer = CreateInstance<ChordVFXModifier>();
-                    vfxModifer.cordVFXPrefabs = chordedCard.cordVFXPrefabs;
-                    modifiers.Add(vfxModifer);
+                    // Chord VFX
+                    if (chordedCard.cordVFXPrefabs != null && chordedCard.cordVFXPrefabs.Count > 0)
+                    {
+                        ChordVFXModifier vfxModifer = CreateInstance<ChordVFXModifier>();
+                        vfxModifer.cordVFXPrefabs = chordedCard.cordVFXPrefabs;
+                        modifiers.Add(vfxModifer);
+                    }
                 }
             }
 
