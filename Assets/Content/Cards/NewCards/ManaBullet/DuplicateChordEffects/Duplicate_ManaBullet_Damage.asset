@@ -9,7 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f0e760e8b138974782081b50c003dd1, type: 3}
-  m_Name: ChordEffect_ManaBullet
+  m_Script: {fileID: 11500000, guid: 6608bbf3f55a6e24b893b77178b04c4a, type: 3}
+  m_Name: Duplicate_ManaBullet_Damage
   m_EditorClassIdentifier: 
-  scale: 0.5
+  minAttackSequenceIndex: 0
+  maxAttackSequenceIndex: 2147483647
+  attackSequenceLoopInterval: 2147483647
+  priority: 0
+  damageFactor: 2
