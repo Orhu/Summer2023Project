@@ -64,7 +64,7 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
-            chordContainer = GameObject.FindGameObjectWithTag("HUD").GetComponentInChildren<ChordRenderer>();
+            //chordContainer = GameObject.FindGameObjectWithTag("HUD").GetComponentInChildren<ChordRenderer>();
             playerObject = Player.Get().gameObject;
 
             // Instantiate as many RuneRenderers as we have hand size
@@ -89,28 +89,28 @@ namespace Cardificer
         /// </summary>
         private void MoveRendererToGameWorld()
         {
-            Canvas parentCanvas = GetComponentInParent<Canvas>();
+            //Canvas parentCanvas = GetComponentInParent<Canvas>();
 
-            // Scale the UI to be game world appropriate
-            parentCanvas.gameObject.transform.localScale = new Vector3(0.005f, 0.005f, 1);
+            //// Scale the UI to be game world appropriate
+            //parentCanvas.gameObject.transform.localScale = new Vector3(0.005f, 0.005f, 1);
 
-            // So the UI is in GameWorld render mode
-            parentCanvas.renderMode = RenderMode.WorldSpace;
+            //// So the UI is in GameWorld render mode
+            //parentCanvas.renderMode = RenderMode.WorldSpace;
 
-            // Set the UI to be positioned at the chordContainer on screen
-            transform.position = new Vector3(playerObject.transform.position.x + handInGameWorldOffset.x,
-                    playerObject.transform.position.y + handInGameWorldOffset.y, playerObject.transform.position.z);
+            //// Set the UI to be positioned at the chordContainer on screen
+            //transform.position = new Vector3(playerObject.transform.position.x + handInGameWorldOffset.x,
+            //        playerObject.transform.position.y + handInGameWorldOffset.y, playerObject.transform.position.z);
 
-            // Change how we're setting the rune's radially (it's different when in game world)
-            RadialLayout childRadialLayout = GetComponentInChildren<RadialLayout>();
+            //// Change how we're setting the rune's radially (it's different when in game world)
+            //RadialLayout childRadialLayout = GetComponentInChildren<RadialLayout>();
 
-            childRadialLayout.gameObject.transform.localPosition = Vector3.zero;
+            //childRadialLayout.gameObject.transform.localPosition = Vector3.zero;
 
-            childRadialLayout.fDistance = gameWorldFDistance;
+            //childRadialLayout.fDistance = gameWorldFDistance;
 
-            childRadialLayout.MinAngle = gameWorldMinAngle;
+            //childRadialLayout.MinAngle = gameWorldMinAngle;
 
-            childRadialLayout.StartAngle = gameWorldStartAngle;
+            //childRadialLayout.StartAngle = gameWorldStartAngle;
         }
 
         /// <summary>
@@ -118,28 +118,28 @@ namespace Cardificer
         /// </summary>
         private void MoveRendererToUI()
         {
-            Canvas parentCanvas = GetComponentInParent<Canvas>();
+            //Canvas parentCanvas = GetComponentInParent<Canvas>();
 
-            // When the UI is in the game world, it is scaled way down to fit on screen.
-            // When we swap back to UI, we need to scale it back to (1,1,1)
-            parentCanvas.gameObject.transform.localScale = Vector3.one;
+            //// When the UI is in the game world, it is scaled way down to fit on screen.
+            //// When we swap back to UI, we need to scale it back to (1,1,1)
+            //parentCanvas.gameObject.transform.localScale = Vector3.one;
 
-            // So the UI is not in GameWorld render mode anymore
-            parentCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            //// So the UI is not in GameWorld render mode anymore
+            //parentCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
 
-            // Set the UI to be positioned at the chordContainer on screen
-            transform.position = chordContainer.transform.position;
+            //// Set the UI to be positioned at the chordContainer on screen
+            ////transform.position = chordContainer.transform.position;
 
-            // Change how we're setting the rune's radially (it's different when not in game world)
-            RadialLayout childRadialLayout = GetComponentInChildren<RadialLayout>();
+            //// Change how we're setting the rune's radially (it's different when not in game world)
+            //RadialLayout childRadialLayout = GetComponentInChildren<RadialLayout>();
 
-            childRadialLayout.gameObject.transform.localPosition = Vector3.zero;
+            //childRadialLayout.gameObject.transform.localPosition = Vector3.zero;
 
-            childRadialLayout.fDistance = uiFDistance;
+            //childRadialLayout.fDistance = uiFDistance;
 
-            childRadialLayout.MinAngle = uiMinAngle;
+            //childRadialLayout.MinAngle = uiMinAngle;
 
-            childRadialLayout.StartAngle = uiStartAngle;
+            //childRadialLayout.StartAngle = uiStartAngle;
         }
 
         /// <summary>
@@ -168,11 +168,11 @@ namespace Cardificer
         {
             // Ensure the hand renderer stays following the player
             // if it is in the game world
-            if (handInGameWorld)
-            {
-                transform.position = new Vector3(playerObject.transform.position.x + handInGameWorldOffset.x,
-                    playerObject.transform.position.y + handInGameWorldOffset.y, playerObject.transform.position.z);
-            }
+            //if (handInGameWorld)
+            //{
+            //    transform.position = new Vector3(playerObject.transform.position.x + handInGameWorldOffset.x,
+            //        playerObject.transform.position.y + handInGameWorldOffset.y, playerObject.transform.position.z);
+            //}
 
             // loop through current deck hand size
             for (int i = 0; i < Deck.playerDeck.handSize; i++)
@@ -212,24 +212,24 @@ namespace Cardificer
                     // Obtain the first card of the chord
                     if (Deck.playerDeck.previewedCardIndices.Count == 1 && Deck.playerDeck.previewedCardIndices[0] == i)
                     {
-                        chordContainer.DisplayChordLevelOne(runeRenderers[i].card);
+                        //chordContainer.DisplayChordLevelOne(runeRenderers[i].card);
                     }
                     // Obtain the second card of the chord
                     else if (Deck.playerDeck.previewedCardIndices.Count == 2 && Deck.playerDeck.previewedCardIndices[1] == i)
                     {
-                        chordContainer.DisplayChordLevelTwo(runeRenderers[i].card);
+                        //chordContainer.DisplayChordLevelTwo(runeRenderers[i].card);
                     }
                     // Obtain the third card of the chord
                     else if (Deck.playerDeck.previewedCardIndices.Count == 3 && Deck.playerDeck.previewedCardIndices[2] == i)
                     {
-                        chordContainer.DisplayChordLevelThree(runeRenderers[i].card);
+                        //chordContainer.DisplayChordLevelThree(runeRenderers[i].card);
                     }
 
                 }
                 // Reset chord
                 else if (Deck.playerDeck.previewedCardIndices.Count <= 0)
                 {
-                    chordContainer.ResetChord();
+                    //chordContainer.ResetChord();
                 }
 
                 if (Deck.playerDeck.actingCardIndices.Contains(i))
