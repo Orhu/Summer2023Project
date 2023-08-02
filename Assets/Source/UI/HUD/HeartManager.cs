@@ -17,6 +17,7 @@ namespace Cardificer
 
         [Tooltip("Collection of heart sprite variants, remainder of heart based on index")]
         [SerializeField] private Sprite[] heartSpriteVariations;
+        public Sprite emptyHeartImage;
 
         [Tooltip("Value that health must be at or below to initiate 'low health' (make the hearts flash red)")]
         [SerializeField] private int lowHealthThreshhold = 4;
@@ -52,7 +53,7 @@ namespace Cardificer
         {
             foreach (Transform child in transform)
             {
-                GameObject.Destroy(child.gameObject);
+                Destroy(child.gameObject);
             }
         }
 
@@ -82,6 +83,12 @@ namespace Cardificer
                 lastHeart.GetComponent<Image>().sprite = heartSpriteVariations[spriteIndex];
             }
 
+            while ((fullHearts + (remainder > 0 ? 1 : 0)) * 4 < Player.health.maxHealth)
+            {
+                fullHearts++;
+                Instantiate(heartCounterPrefab, transform).GetComponent<Image>().sprite = emptyHeartImage;
+            }
+
             // Play animation on the last heart
             if (currentPlayerHealth > lowHealthThreshhold) // When the health is normal
             {
@@ -89,7 +96,7 @@ namespace Cardificer
             }
             else if (currentPlayerHealth <= lowHealthThreshhold) // When the player is close to death
             {
-                transform.GetChild(transform.childCount - 1).GetComponent<Animator>().Play("A_Heart_Danger");
+                transform.GetChild(0).GetComponent<Animator>().Play("A_Heart_Danger");
             }
 
         }

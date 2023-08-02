@@ -453,7 +453,7 @@ namespace Cardificer
             if (ignoredObjects.Contains(collision.gameObject) || remainingHits <= 0) { return; }
 
             Health hitHealth = collision.gameObject.GetComponent<Health>();
-            if (hitHealth != null && applyDamageOnHit)
+            if (hitHealth != null && applyDamageOnHit && hitHealth.currentHealth > 0)
             {
                 hitHealth.ReceiveAttack(attackData);
 

@@ -43,7 +43,10 @@ namespace Cardificer
         /// </summary>
         void Start()
         {
-            maxSpeed *= Random.Range(0.9f, 1.1f);
+            if (gameObject != Player.Get())
+            {
+                maxSpeed *= Random.Range(0.95f, 1.02f);
+            }
             originalMaxSpeed = maxSpeed;
             originalAcceleration = acceleration;
             originalDeceleration = deceleration;

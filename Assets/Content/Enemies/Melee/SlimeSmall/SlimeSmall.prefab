@@ -209,11 +209,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6498099726284613727, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
       propertyPath: _maxHealth
-      value: 12
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6498099726284613727, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
-      propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
+      objectReference: {fileID: 1441376932220620954}
+    - target: {fileID: 6498099726284613727, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
+      propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: Drop
+      objectReference: {fileID: 0}
+    - target: {fileID: 6498099726284613727, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
+      propertyPath: onDeath.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Cardificer.DropLootPerHitPoint, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6860102534320048842, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
       propertyPath: m_Sprite
@@ -233,8 +241,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8763211661879550110, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
       propertyPath: maxSpeed
-      value: 7
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -4843010171196774241, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
+--- !u!1 &4890778746729502211 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6498099726284613696, guid: 2b87fa5bd68f80d46bafd14b7f39f0a0, type: 3}
+  m_PrefabInstance: {fileID: 1869673473963884099}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1441376932220620954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4890778746729502211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f165d6177dac74745b3b92c9e6360207, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lootTable: {fileID: 11400000, guid: bbddc82eac9a5ca45aadae360982c9f8, type: 2}

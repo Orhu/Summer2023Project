@@ -185,7 +185,7 @@ namespace Cardificer
                 if (!collision.CompareTag("Player")) { return; }
 
                 bought = true;
-                Player.AddMoney(-price);
+                Player.AddMoney(-(int)(price * shopSlot.multiplierOverBuys.Evaluate(buys)));
                 shopSlot.onBought?.Invoke();
             }
 
