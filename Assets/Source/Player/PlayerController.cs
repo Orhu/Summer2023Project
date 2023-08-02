@@ -390,7 +390,8 @@ namespace Cardificer
         public void OnOpenCardMenu()
         {
             lastInputWasGamepad = false;
-            MenuManager.Toggle<CardMenu>();
+            // TODO REVERT BACK
+            MenuManager.Toggle<CardPrinterMenu>();
         }
 
         /// <summary>
