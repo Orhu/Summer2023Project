@@ -16,7 +16,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
-    damage: 4
+    damage: 6
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
@@ -24,6 +24,8 @@ MonoBehaviour:
   applyDamageOnHit: 1
   modifiers:
   - {fileID: 11400000, guid: eb4a487c18adc8e40bc33c5c9276d738, type: 2}
+  immuneToShield: 0
+  immuneToReflect: 0
   shape: {fileID: 11400000, guid: 1e7505a74e59d2a48bbca6cde8ae76f6, type: 2}
   lifetime: 0.75
   initialSpeed: 10
@@ -33,7 +35,7 @@ MonoBehaviour:
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
-  homingAimMode: 1
+  homingAimMode: 2
   switchAfterHit: 0
   visualObject: {fileID: 2238662938685823967, guid: d30dac2222e24914097423291f8d6df0, type: 3}
   detachVisualsBeforeDestroy: 0
@@ -43,6 +45,7 @@ MonoBehaviour:
   spawnLocation: 0
   aimMode: 0
   waitForProjectileDeath: 0
+  chargeTime: 0
   additionalActionTime: 0
   _spawnSequence:
   - delay: 0

@@ -25,6 +25,7 @@ TagManager:
   - Walking
   - Flying
   - Burrowing
+  - PlayerDashing
   - 
   - '  ---------------------'
   - Pits
@@ -32,9 +33,8 @@ TagManager:
   - Blockers
   - FloorTraps
   - 
-  - 
-  - 
-  - 
+  - '   ---------------------'
+  - Trails
   - 
   - 
   - 
@@ -45,26 +45,41 @@ TagManager:
   - name: Floors
     uniqueID: 1762889847
     locked: 0
-  - name: Burrowing
+  - name: OnFloor
+    uniqueID: 2400353175
+    locked: 0
+  - name: Burrowing -> Default
     uniqueID: 3676326077
     locked: 0
   - name: Walls
     uniqueID: 3531681859
     locked: 0
-  - name: Obstacles
+  - name: Obstacles -> Default
     uniqueID: 3232467343
+    locked: 0
+  - name: Under Particles
+    uniqueID: 1393870795
     locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Items
-    uniqueID: 2270295591
-    locked: 0
   - name: Flying
     uniqueID: 1315461015
     locked: 0
-  - name: Projectiles
+  - name: Above Particles
+    uniqueID: 304026867
+    locked: 0
+  - name: Items -> Default
+    uniqueID: 2270295591
+    locked: 0
+  - name: Projectiles -> Default
     uniqueID: 2464022501
+    locked: 0
+  - name: Cloud
+    uniqueID: 659792797
+    locked: 0
+  - name: World Space UI
+    uniqueID: 4052284469
     locked: 0
   - name: CameraSortingLayer
     uniqueID: 3398635433

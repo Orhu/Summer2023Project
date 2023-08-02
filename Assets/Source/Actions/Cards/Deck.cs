@@ -102,6 +102,8 @@ namespace Cardificer
                 pathToCardsDrawableCards = deck.drawableCards.Select(AssetDatabase.GetAssetPath).ToList();
                 pathToCardsInHandCards = deck.inHandCards.Select(AssetDatabase.GetAssetPath).ToList();
                 pathToCardsDiscardedCards = deck.discardedCards.Select(AssetDatabase.GetAssetPath).ToList();
+
+                AssetDatabase.FindAssets("l:Card");
 #else
                 pathToCards = deck.cards.Select(GetCardAssetName).ToList();
                 pathToCardsDrawableCards = deck.drawableCards.Select(GetCardAssetName).ToList();

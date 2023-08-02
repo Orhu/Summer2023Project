@@ -52,9 +52,17 @@ namespace Cardificer
         /// <summary>
         /// Sets the instance to this instance
         /// </summary>
-        private void Start()
+        private void Awake()
         {
             instance = this;
+            
+        }
+
+        /// <summary>
+        /// Assigns the onRoomChange event to grab current room
+        /// </summary>
+        private void Start()
+        {
             FloorGenerator.onRoomChange += GrabCurrentRoom;
         }
 
@@ -114,6 +122,11 @@ namespace Cardificer
         {
             // TODO subdividing unimplemented
             // add to appropriate lists (if there is a Null Reference in this area, it is most likely because a null tile slipped through the cracks)
+            if (tile == null)
+            {
+                Debug.LogWarning("Tile " + pos + " is null!");
+                return;
+            }
             roomGrid[pos.x, pos.y] = new PathfindingTile(tile, tile.walkMovementPenalty);
         }
 

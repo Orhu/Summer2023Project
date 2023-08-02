@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_ShockwaveSecondary
   m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 0}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 2
     damageType: 0
@@ -21,21 +24,29 @@ MonoBehaviour:
   applyDamageOnHit: 1
   modifiers:
   - {fileID: 11400000, guid: 9c4633d8a824c634f898384b85793b6a, type: 2}
+  immuneToShield: 0
+  immuneToReflect: 0
   shape: {fileID: 11400000, guid: ede695ec9a5651c41816c44a3c267fb7, type: 2}
-  lifetime: 0.25
+  lifetime: 0.5
   initialSpeed: 8
   acceleration: 0
   minSpeed: 0
   maxSpeed: 8
   homingSpeed: 0
   homingTime: 0
-  homingAimMode: 1
+  homingDelay: 0
+  homingAimMode: 3
+  switchAfterHit: 0
   visualObject: {fileID: 3251150922724365081, guid: d6e42bab9ed364948afb803239103164, type: 3}
   detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
   spawnLocation: 0
   aimMode: 3
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  waitForProjectileDeath: 0
+  chargeTime: 0
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     angle: 0
@@ -49,5 +60,5 @@ MonoBehaviour:
   - delay: 0
     angle: 270
     offset: {x: 0.4, y: 0}
-  randomAngle: 0
+  randomAngle: 90
   randomOffset: 0

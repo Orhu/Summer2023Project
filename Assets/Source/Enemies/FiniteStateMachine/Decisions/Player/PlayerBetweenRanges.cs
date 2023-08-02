@@ -19,7 +19,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         /// <param name="state"> The stateMachine to use </param>
         /// <returns> True if the target is within the specified range from this unit, false otherwise </returns>
-        protected override bool Evaluate(BaseStateMachine state)
+        public override bool Decide(BaseStateMachine state)
         {
             var dist = Vector2.Distance(Player.Get().transform.position, state.transform.position);
             return dist >= minRange && dist <= maxRange;

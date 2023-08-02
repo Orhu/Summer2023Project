@@ -16,14 +16,13 @@ MonoBehaviour:
   projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
   previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   attack:
-    damage: 2
+    damage: 1
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
   hitCount: 1
   applyDamageOnHit: 1
   modifiers:
-  - {fileID: 11400000, guid: f055ee4eadddfdc4aaec401ca5466e3e, type: 2}
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
   - {fileID: 11400000, guid: ca1ca5c908abfa847804e1e805337ce1, type: 2}
   immuneToShield: 1
@@ -37,7 +36,7 @@ MonoBehaviour:
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
-  homingAimMode: 1
+  homingAimMode: 3
   switchAfterHit: 0
   visualObject: {fileID: 2291022195297182687, guid: 41e8343bac70cb24c9dad99bc984424a, type: 3}
   detachVisualsBeforeDestroy: 0
@@ -54,19 +53,15 @@ MonoBehaviour:
     startingAngle: 0
     radius: 1
     orbitDirection: 0
-  - delay: 0.2
+  - delay: 0.25
     startingAngle: 0
     radius: 1
     orbitDirection: 0
-  - delay: 0.2
+  - delay: 0.25
     startingAngle: 0
     radius: 1
     orbitDirection: 0
-  - delay: 0.2
-    startingAngle: 0
-    radius: 1
-    orbitDirection: 0
-  - delay: 0.2
+  - delay: 0.25
     startingAngle: 0
     radius: 1
     orbitDirection: 0

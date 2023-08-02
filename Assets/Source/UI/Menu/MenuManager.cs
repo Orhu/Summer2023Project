@@ -1,3 +1,7 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace Cardificer
@@ -8,48 +12,7 @@ namespace Cardificer
     public class MenuManager : MonoBehaviour
     {
         // Singleton for the menu manager
-        [HideInInspector] public static MenuManager instance;
-
-        [Tooltip("Booster pack menu reference, assigned in inspector")]
-        [SerializeField] private BoosterPackMenu boosterPackMenu;
-
-        [Tooltip("Pause Menu reference, assigned in inspector")]
-        [SerializeField] private PauseMenu pauseMenu;
-
-        [Tooltip("Map Menu reference, assigned in inspector")]
-        [SerializeField] private MapMenu mapMenu;
-
-        [Tooltip("Card Menu reference, assigned in inspector")]
-        [SerializeField] private CardMenu cardMenu;
-
-        [Tooltip("Game Over Menu reference, assigned in inspector")]
-        [SerializeField] private GameOverMenu gameOverMenu;
-
-        [Tooltip("Instruction Menu reference, assigned in inspector")]
-        [SerializeField] private InstructionMenu instructionMenu;
-
-        // Reference to the player's game object
-        private GameObject playerGameObject;
-
-        // Know whether we currently have a menu open or not
-        public bool menuOpen { get; private set; }
-
-        /// <summary>
-        /// Enum for each of the menu types
-        /// </summary>
-        public enum MenuTypes
-        {
-            Default,
-            Pause,
-            Booster,
-            Map,
-            Card,
-            GameOver,
-            Instruction
-        }
-
-        // Internally know which menu is open
-        private MenuTypes currentMenu;
+        private static MenuManager instance;
 
         /// <summary>
         /// Assign singleton variable
@@ -59,263 +22,202 @@ namespace Cardificer
             if (instance == null)
             {
                 instance = this;
-                playerGameObject = Player.Get();
-
-                // Assign menu if they aren't found
-                if (boosterPackMenu == null)
-                {
-                    boosterPackMenu = GetComponentInChildren<BoosterPackMenu>();
-                }
-                if (pauseMenu == null)
-                {
-                    pauseMenu = GetComponentInChildren<PauseMenu>();
-                }
-                if (cardMenu == null)
-                {
-                    cardMenu = GetComponentInChildren<CardMenu>();
-                }
-                if (mapMenu == null)
-                {
-                    mapMenu = GetComponentInChildren<MapMenu>();
-                }
-                if (gameOverMenu == null)
-                {
-                    gameOverMenu = GetComponentInChildren<GameOverMenu>();
-                }
-                if (instructionMenu == null)
-                {
-                    instructionMenu = GetComponentInChildren<InstructionMenu>();
-                }
-
-                // The current menu is set to pause menu
-                currentMenu = MenuTypes.Pause;
-            }
-        }
-
-        /// <summary>
-        /// If it's a player's first time playing,
-        /// show them the instruction manual right away.
-        /// </summary>
-        private void Start()
-        {
-            // Check to see if they've seen the manual already
-            if (PlayerPrefs.GetInt("seenManual") == 0)
-            {
-                ToggleInstructionManual();
-            }
-        }
-
-        /// <summary>
-        /// Toggles whether the pause menu is open
-        /// </summary>
-        public static void TogglePause()
-        {
-            // Toggling pause always closes all menus
-            if (instance.menuOpen)
-            {
-                instance.CloseMenu();
+                DontDestroyOnLoad(gameObject);
             }
             else
             {
-                instance.CloseMenu();
-                OpenPauseMenu();
+                Destroy(gameObject);
             }
         }
 
+        // Stores the prefabs used when instantiating menus.
+        private Dictionary<Type, GameObject> menuTypesToPrefabs = new Dictionary<Type, GameObject>();
+
+        // The menus that are currently locked open.
+        private HashSet<GameObject> lockedOpenMenus = new HashSet<GameObject>();
+
+        // The menus that are currently pausing the game.
+        private HashSet<GameObject> pausingMenus = new HashSet<GameObject>();
+
         /// <summary>
-        /// Toggles whether the card menu is open
+        /// Opens a given menu.
         /// </summary>
-        public static void ToggleCardMenu()
+        /// <typeparam name="MenuType"> The type of menu to open. </typeparam>
+        /// <param name="pauseGame"> Whether or not this will pause the game until this menu is closed. </param>
+        /// <param name="closeOtherMenus"> Whether or not this will close other currently open menus. </param>
+        /// <param name="lockOpen"> Whether or not this menu will be allowed to be closed by the menu manager. </param>
+        /// <returns> The actual menu object that was opened. </returns>
+        public static MenuType Open<MenuType>(bool pauseGame = true,  bool lockOpen = false, bool closeOtherMenus = true) where MenuType : Component
         {
-            if (instance.menuOpen && instance.currentMenu == MenuTypes.Card)
+            return (MenuType)Open(typeof(MenuType), pauseGame, lockOpen, closeOtherMenus);
+        }
+        public static Component Open(Type menuType, bool pauseGame = true, bool lockOpen = false, bool closeOtherMenus = true)
+        {
+            if (closeOtherMenus)
             {
-                instance.CloseMenu();
+                CloseAllMenus();
+            }
+
+            Component menu = instance.GetComponentInChildren(menuType, true);
+            if (menu == null)
+            {
+                GameObject newMenu = Instantiate(GetMenuPrefab(menuType));
+                newMenu.transform.SetParent(instance.transform, false);
+                menu = newMenu.GetComponent(menuType);
+            }
+
+            if (lockOpen)
+            {
+                instance.lockedOpenMenus.Add(menu.gameObject);
             }
             else
             {
-                instance.CloseMenu();
-                OpenCardMenu();
+                instance.lockedOpenMenus.Remove(menu.gameObject);
             }
-        }
 
-        /// <summary>
-        /// Toggles whether the map menu is open
-        /// </summary>
-        public static void ToggleMap()
-        {
-
-            if (instance.menuOpen && instance.currentMenu == MenuTypes.Map)
+            if (pauseGame)
             {
-                instance.CloseMenu();
-            }
-            else
-            {
-                instance.CloseMenu();
-                OpenMapMenu();
-            }
-        }
-
-        /// <summary>
-        /// Toggles whether the Instruction menu is open
-        /// </summary>
-        public static void ToggleInstructionManual()
-        {
-            instance.CloseMenu();
-            OpenInstructionMenu();
-        }
-
-        /// <summary>
-        /// Opens the booster pack menu and populates the cards
-        /// </summary>
-        /// <param name="boosterPack">Booster pack prefab used in populating cards</param>
-        public static void OpenBoosterPackMenu(BoosterPack boosterPack)
-        {
-            if (!instance.menuOpen)
-            {
-                // "Pause the game", should probably be replaced with a more effective method
-                // Sets timeScale to 0, so all time related functions are stopped
                 Time.timeScale = 0;
-                instance.boosterPackMenu.gameObject.SetActive(true);
-                if (instance.boosterPackMenu.boosterPackObject != boosterPack)
-                {
-                    instance.boosterPackMenu.boosterPackObject = boosterPack;
-                }
-                // Disable player movement
-                instance.currentMenu = MenuTypes.Booster;
-                instance.menuOpen = true;
+                instance.pausingMenus.Add(menu.gameObject);
             }
+
+            menu.gameObject.SetActive(true);
+            return menu;
         }
 
         /// <summary>
-        /// Opens the pause menu
+        /// Closes a given menu.
         /// </summary>
-        public static void OpenPauseMenu()
+        /// <typeparam name="MenuType"> The type of menu to close. </typeparam>
+        /// <param name="closeLockedMenus"> Whether or not this will close locked menus. </param>
+        /// <returns> The actual menu object that was closed. </returns>
+        public static MenuType Close<MenuType>(bool closeLockedMenus = false) where MenuType : Component
         {
-            if (!instance.menuOpen)
-            {
-                // "Pause the game", should probably be replaced with a more effective method
-                // Sets timeScale to 0, so all time related functions are stopped
-                Time.timeScale = 0;
-                instance.pauseMenu.gameObject.SetActive(true);
-                // Disable player movement
-                instance.currentMenu = MenuTypes.Pause;
-                instance.menuOpen = true;
-            }
+            return (MenuType)Close(typeof(MenuType), closeLockedMenus);
         }
-
-        /// <summary>
-        /// Opens the map menu
-        /// </summary>
-        public static void OpenMapMenu()
+        public static Component Close(Type menuType, bool closeLockedMenus = false)
         {
-            if (!instance.menuOpen)
-            {
-                // "Pause the game", should probably be replaced with a more effective method
-                // Sets timeScale to 0, so all time related functions are stopped
-                Time.timeScale = 0;
-                instance.mapMenu.gameObject.SetActive(true);
-                // Disable player movement
-                instance.currentMenu = MenuTypes.Map;
-                instance.menuOpen = true;
-            }
-        }
+            Component menu = instance.GetComponentInChildren(menuType);
 
-        /// <summary>
-        /// Opens the card menu
-        /// </summary>
-        public static void OpenCardMenu()
-        {
-            if (!instance.menuOpen)
-            {
-                // "Pause the game", should probably be replaced with a more effective method
-                // Sets timeScale to 0, so all time related functions are stopped
-                Time.timeScale = 0;
-                instance.cardMenu.gameObject.SetActive(true);
-                // Disable player movement
-                instance.currentMenu = MenuTypes.Card;
-                instance.menuOpen = true;
-            }
-        }
+            if (menu == null || instance.lockedOpenMenus.Contains(menu.gameObject) && !closeLockedMenus) { return null; }
 
-        /// <summary>
-        /// Opens the game over menu
-        /// </summary>
-        public static void OpenGameOverMenu()
-        {
-            if (!instance.menuOpen)
-            {
-                // "Pause the game", should probably be replaced with a more effective method
-                // Sets timeScale to 0, so all time related functions are stopped
-                Time.timeScale = 0;
-                instance.gameOverMenu.gameObject.SetActive(true);
-                // Disable player movement
-                instance.currentMenu = MenuTypes.GameOver;
-                instance.menuOpen = true;
-            }
-        }
+            menu.gameObject.SetActive(false);
+            instance.pausingMenus.Remove(menu.gameObject);
 
-        /// <summary>
-        /// Opens the instruction menu
-        /// </summary>
-        public static void OpenInstructionMenu()
-        {
-            if (!instance.menuOpen)
+            if (instance.pausingMenus.Count == 0)
             {
-                // "Pause the game", should probably be replaced with a more effective method
-                // Sets timeScale to 0, so all time related functions are stopped
-                Time.timeScale = 0;
-                instance.instructionMenu.gameObject.SetActive(true);
-                instance.currentMenu = MenuTypes.Instruction;
-                instance.menuOpen = true;
-            }
-        }
-
-        /// <summary>
-        /// Called when any menu needs to be closed
-        /// </summary>
-        public void CloseMenu()
-        {
-            if (menuOpen && currentMenu != MenuTypes.GameOver && currentMenu != MenuTypes.Instruction) // Prevent closing of Game Over menu and Instruction menu
-            {
-                // "Resume the game", resumes all time related function
                 Time.timeScale = 1;
-
-                // close all menus
-                for (int i = 0; i < transform.childCount; i++)
-                {
-                    transform.GetChild(i).gameObject.SetActive(false);
-                }
-                currentMenu = MenuTypes.Pause;
-                menuOpen = false;
             }
+
+            return menu;
         }
 
         /// <summary>
-        /// Called when Instruction Menu needs to be closed
+        /// Closes all currently open menus.
         /// </summary>
-        public void CloseInstructionManual()
+        /// <param name="closeLockedMenus"> Whether or not this will close locked menus. </param>
+        public static void CloseAllMenus(bool closeLockedMenus = false)
         {
-            if (menuOpen) 
+            for (int i = 0; i < instance.transform.childCount; i++)
             {
-                // "Resume the game", resumes all time related function
-                Time.timeScale = 1;
-                // close all menus
-                for (int i = 0; i < transform.childCount; i++)
+                GameObject child = instance.transform.GetChild(i).gameObject;
+                if (closeLockedMenus || !instance.lockedOpenMenus.Contains(child))
                 {
-                    transform.GetChild(i).gameObject.SetActive(false);
+                    child.SetActive(false);
                 }
-                currentMenu = MenuTypes.Pause;
-                menuOpen = false;
             }
+            instance.pausingMenus.Clear();
+            Time.timeScale = 1;
         }
 
         /// <summary>
-        /// Setter for the current menu type
+        /// Toggles a given menu open/closed.
         /// </summary>
-        /// <param name="menuType">The menu type to set to</param>
-        public void SetCurrentMenu(MenuTypes menuType)
+        /// <typeparam name="MenuType"> The type of menu to toggle. </typeparam>
+        /// <param name="newIsOpened"> Whether or not the menu is now open or closed. </param>
+        /// <param name="closeOtherMenus"> Whether or not this will close other currently open menus. </param>
+        /// <returns> The actual menu object that was toggled. </returns>
+        public static MenuType Toggle<MenuType>(out bool newIsOpened, bool closeOtherMenus = true) where MenuType : Component
         {
-            currentMenu = menuType;
+            return (MenuType)Toggle(typeof(MenuType), out newIsOpened, closeOtherMenus);
+        }
+        public static Component Toggle(Type menuType, out bool newIsOpened, bool closeOtherMenus = true)
+        {
+            newIsOpened = !IsMenuOpen(menuType);
+            if (newIsOpened)
+            {
+                return Open(menuType, closeOtherMenus: closeOtherMenus);
+            }
+            else
+            {
+                return Close(menuType);
+            }
+        }
+        public static MenuType Toggle<MenuType>(bool closeOtherMenus = true) where MenuType : Component
+        {
+            return Toggle<MenuType>(out bool _, closeOtherMenus);
+        }
+        public static Component Toggle(Type menuType, bool closeOtherMenus = true)
+        {
+            return Toggle(menuType, out bool _, closeOtherMenus);
+        }
+
+        /// <summary>
+        /// Gets if a given menu is open.
+        /// </summary>
+        /// <typeparam name="MenuType"> The type of menu to see if its open. </typeparam>
+        /// <returns> True if the given menu is open. </returns>
+        public static bool IsMenuOpen<MenuType>() where MenuType : Component
+        {
+            return IsMenuOpen(typeof(MenuType));
+        }
+        public static bool IsMenuOpen(Type menuType)
+        {
+            return (instance.GetComponentInChildren(menuType)?.gameObject.activeSelf).GetValueOrDefault();
+        }
+
+
+        /// <summary>
+        /// Gets the prefab to instantiate for a given menu.
+        /// </summary>
+        /// <typeparam name="MenuType"> The type of menu get the prefab for. </typeparam>
+        /// <returns> The prefab of the given menu. </returns>
+        private static GameObject GetMenuPrefab(Type menuType)
+        {
+            if (instance.menuTypesToPrefabs.TryGetValue(menuType, out GameObject value))
+            {
+                return value;
+            }
+
+
+#if UNITY_EDITOR
+            foreach (string guid in AssetDatabase.FindAssets("*", new[] { "Assets/Source/UI/Menu/SubMenus" }))
+            {
+                GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(guid));
+                if (prefab?.GetComponent(menuType) != null)
+                {
+                    instance.menuTypesToPrefabs.Add(menuType, prefab);
+                    return prefab;
+                }
+            }
+
+            throw new System.Exception($"No prefab for {menuType} that is Assets/Source/UI/Menu/SubMenus IMPORTAINT: Be sure to add the asset to the menus asset bundle in addition to adding it to the folder.");
+#else
+            AssetBundle menusAssetBundle = AssetBundle.LoadFromFile(System.IO.Path.Combine(Application.streamingAssetsPath, "menus"));
+            foreach (GameObject prefab in menusAssetBundle.LoadAllAssets<GameObject>())
+            {
+                if (prefab.GetComponent(menuType) != null)
+                {
+                    instance.menuTypesToPrefabs.Add(menuType, prefab);
+                    menusAssetBundle.Unload(false);
+                    return prefab;
+                }
+            }
+
+            menusAssetBundle.Unload(false);
+            throw new System.Exception($"No prefab for {menuType} that is in the menus asset bundle.");
+#endif
+
         }
     }
 }

@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 182561204165410291}
   - component: {fileID: 3998074277089881796}
   - component: {fileID: 2224654609455803915}
-  m_Layer: 18
+  - component: {fileID: 3956215949734358099}
+  m_Layer: 19
   m_Name: Pit
   m_TagString: Inanimate
   m_Icon: {fileID: 0}
@@ -72,7 +73,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1762889847
-  m_SortingLayer: -3
+  m_SortingLayer: -6
   m_SortingOrder: 10
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -102,3 +103,17 @@ MonoBehaviour:
   flyMovementPenalty: 0
   burrowMovementPenalty: 0
   gridLocation: {x: 0, y: 0}
+  room: {fileID: 0}
+--- !u!114 &3956215949734358099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 381751726884581853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0dd8dc79da573c449f8849d57b2ecba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pitSprites: {fileID: 11400000, guid: a03f4487dd86aab49a79c5879ec90f2a, type: 2}

@@ -94,6 +94,16 @@ namespace Cardificer
             }
         }
 
+        // The currently saved floor number. Saving handled by autosaves. Use autosaveExists to check if data Valid.
+        public static int savedCurrentFloor
+        {
+            get
+            {
+                if (!autosaveExists) { return 0; }
+                return autosaver.latestAutosave.currentFloor;
+            }
+        }
+
         // The currently saved visited room data. X,Y = room location, Z = size of deck at the time of clearing. Saving handled by autosaves. Use autosaveExists to check if data Valid.
         public static List<Vector2Int> savedVisitedRooms
         {
@@ -289,6 +299,9 @@ namespace Cardificer
                 // The seed of the current floor.
                 public int floorSeed;
 
+                // The current floor number
+                public int currentFloor;
+
                 // The random state at the time of the autosave.
                 public Random.State randomState;
 
@@ -336,7 +349,7 @@ namespace Cardificer
             /// </summary>
             private void Autosave()
             {
-                if (!gameObject.scene.isLoaded || SceneManager.sceneCount > 1) { return; }
+                if (!gameObject.scene.isLoaded || SceneManager.sceneCount > 1 || Player.Get() == null) { return; }
 
                 AutosaveData saveData = latestAutosave == null ? new AutosaveData() : latestAutosave;
 
@@ -350,7 +363,7 @@ namespace Cardificer
                 saveData.playerCooldownReduction = Deck.playerDeck.cooldownReduction;
                 saveData.deckState = new Deck.State(Deck.playerDeck);
                 saveData.floorSeed = FloorGenerator.seed;
-
+                saveData.currentFloor = FloorSceneManager.currentFloor;
                 saveData.visitedRooms.Add(FloorGenerator.currentRoom.roomLocation);
                 saveData.destroyedTiles = DestroyableTile.destroyedTiles?.ToList();
                 saveData.remainingShopBuys = ShopSlot.savableRemainingShopBuys;
@@ -472,13 +485,18 @@ namespace Cardificer
             }
 
             /// <summary>
-            /// Creates an autosave if non exist.
+            /// Creates an autosave if none exist.
             /// </summary>
             private void Start()
             {
                 if (!FloorGenerator.IsValid()) { return; }
 
+                DontDestroyOnLoad(this);
+
                 FloorGenerator.onRoomChange += BindCleared;
+
+                // Start courotine so it's invoked on the next frame (leaving time for everything else that sets its saves up on start to start)
+                FloorGenerator.onGenerated += () => StartCoroutine(nameof(AutosaveAfterFrame));
 
                 Player.health.onDeath.AddListener(
                     () =>
@@ -487,8 +505,7 @@ namespace Cardificer
                         CancelInvoke();
                     });
 
-                if (autosaveExists) { return; }
-                Invoke(nameof(Autosave), 1f);
+                FloorSceneManager.onFloorLoaded += HandleFloorLoad;
             }
 
             /// <summary>
@@ -496,7 +513,39 @@ namespace Cardificer
             /// </summary>
             private void OnDestroy()
             {
-                FloorGenerator.onRoomChange -= BindCleared;
+                FloorSceneManager.onFloorLoaded -= HandleFloorLoad;
+            }
+
+            /// <summary>
+            /// Autosaves after a frame
+            /// </summary>
+            /// <returns> Waits one frame </returns>
+            private System.Collections.IEnumerator AutosaveAfterFrame()
+            {
+                yield return null;
+                Autosave();
+            }
+
+            /// <summary>
+            /// Handles the saving and loading when a floor is loaded
+            /// </summary>
+            private void HandleFloorLoad()
+            {
+                // Update everything except the current floor number (this is to ensure the floor generator understands that's it's not being loaded
+                // from an autosave load, the current floor number will be updated when the autosave happens)
+                AutosaveData saveData = latestAutosave;
+                if (saveData != null)
+                {
+                    // Handle floor load autosave
+                    Autosave();
+                    saveData.visitedRooms.Clear();
+                    saveData.playerPos = new Vector2(0, 0);
+                    if (saveData.destroyedTiles != null)
+                    {
+                        saveData.destroyedTiles.Clear();
+                    }
+                    latestAutosave = saveData;
+                }
             }
 
             /// <summary>

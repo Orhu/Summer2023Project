@@ -44,7 +44,7 @@ namespace Cardificer
         /// <returns> The status effect that was created. </returns>
         public virtual StatusEffect CreateCopy(GameObject gameObject)
         {
-            if (!gameObject.scene.isLoaded) { return null; }
+            if (gameObject == null || !gameObject.scene.isLoaded) { return null; }
             StatusEffect instance = Instantiate(this);
 
             instance.remainingDuration = duration;

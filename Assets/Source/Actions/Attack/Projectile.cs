@@ -112,7 +112,10 @@ namespace Cardificer
                 {
                     foreach (GameObject noLongerIgnoredObject in _ignoredObjects.Except(value))
                     {
-                        Physics2D.IgnoreCollision(collider, noLongerIgnoredObject.GetComponent<Collider2D>(), false);
+                        if(noLongerIgnoredObject.GetComponent<Collider2D>() != null)
+                        {
+                            Physics2D.IgnoreCollision(collider, noLongerIgnoredObject.GetComponent<Collider2D>(), false);
+                        }
                     }
                     foreach (GameObject newlyIgnoredObject in value.Except(_ignoredObjects))
                     {
@@ -224,6 +227,7 @@ namespace Cardificer
                     };
             }
 
+            modifiers.OrderBy((AttackModifier modifier) => { return modifier.priority; }); // reorder modifiers so that low priority ones get proc'd last.
 
             InitializeModifiers();
 
@@ -308,20 +312,22 @@ namespace Cardificer
         /// <returns> The position in world space of the spawn location. </returns>
         protected Vector3 GetSpawnLocation()
         {
-            if (actor == null) { return transform.position; }
 
             switch (attack.spawnLocation)
             {
                 case SpawnLocation.Actor:
+                    if (!IsActorValid()) { return transform.position; }
                     return actor.GetActionSourceTransform().position;
 
                 case SpawnLocation.AimPosition:
+                    if (!IsActorValid()) { return transform.position; }
                     return actor.GetActionAimPosition();
 
                 case SpawnLocation.RoomCenter:
                     return FloorGenerator.currentRoom.transform.position;
 
                 case SpawnLocation.Causer:
+                    if (causer == null) { return transform.position; }
                     return causer.transform.position;
 
                 case SpawnLocation.Player:
@@ -343,7 +349,7 @@ namespace Cardificer
             switch (aimMode)
             {
                 case AimMode.AtMouse:
-                    if (actor == null)
+                    if (!IsActorValid())
                     {
                         return transform.position + transform.right;
                     }
@@ -353,6 +359,10 @@ namespace Cardificer
                     return FindClosestTarget(transform.position, ref closestTargetToProjectile);
 
                 case AimMode.AtClosestEnemyToActor:
+                    if (!IsActorValid())
+                    {
+                        return transform.position + transform.right;
+                    }
                     return FindClosestTarget(actor.GetActionSourceTransform().position, ref closestTargetToActor);
 
                 case AimMode.AtClosestEnemyToAimLocation:
@@ -509,5 +519,21 @@ namespace Cardificer
             }
         }
 
+        /// <summary>
+        /// Gets whether this actor is valid.
+        /// </summary>
+        /// <returns> True if it is valid </returns>
+        private bool IsActorValid()
+        {
+            if (actor is MonoBehaviour mono)
+            {
+                return mono != null;
+            }
+            if (actor is ScriptableObject scriptable)
+            {
+                return scriptable != null;
+            }
+            return actor != null;
+        }
     }
 }
