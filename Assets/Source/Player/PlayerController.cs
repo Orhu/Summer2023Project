@@ -159,6 +159,61 @@ namespace Cardificer
         }
 
         /// <summary>
+        /// Previews a card
+        /// </summary>
+        public void OnPreviewCard6()
+        {
+            if (movingEnabled && canAct && !paused)
+            {
+                Deck.playerDeck.SelectCard(5);
+            }
+        }
+
+        /// <summary>
+        /// Previews a card
+        /// </summary>
+        public void OnPreviewCard7()
+        {
+            if (movingEnabled && canAct && !paused)
+            {
+                Deck.playerDeck.SelectCard(6);
+            }
+        }
+
+        /// <summary>
+        /// Previews a card
+        /// </summary>
+        public void OnPreviewCard8()
+        {
+            if (movingEnabled && canAct && !paused)
+            {
+                Deck.playerDeck.SelectCard(7);
+            }
+        }
+
+        /// <summary>
+        /// Previews a card
+        /// </summary>
+        public void OnPreviewCard9()
+        {
+            if (movingEnabled && canAct && !paused)
+            {
+                Deck.playerDeck.SelectCard(8);
+            }
+        }
+
+        /// <summary>
+        /// Previews a card
+        /// </summary>
+        public void OnPreviewCard10()
+        {
+            if (movingEnabled && canAct && !paused)
+            {
+                Deck.playerDeck.SelectCard(9);
+            }
+        }
+
+        /// <summary>
         /// Cast the selected cards
         /// </summary>
         public void OnCast()
