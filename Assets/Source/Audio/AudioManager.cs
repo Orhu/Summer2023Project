@@ -175,19 +175,19 @@ namespace Cardificer
     /// <summary>
     /// This class is for later implementation of random containers, random pitch and volume and overall a more fleshed out audio manager.
     /// </summary>
-    [System.Serializable]
-    public class Sound
-    {
-        public AudioClip clip;
-        public string name;
+    //[System.Serializable]
+    //public class Sound
+    //{
+    //    public AudioClip clip;
+    //    public string name;
 
 
-        [Range(0, 1f)] public float volume;
-        [Range(.1f, 3f)] public float pitch;
+    //    [Range(0, 1f)] public float volume;
+    //    [Range(.1f, 3f)] public float pitch;
 
-        public bool loop;
+    //    public bool loop;
 
 
-        [HideInInspector] public AudioSource source;
-    }
+    //    [HideInInspector] public AudioSource source;
+    //}
 }
