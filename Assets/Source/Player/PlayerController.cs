@@ -357,6 +357,19 @@ namespace Cardificer
         /// </summary>
         public void OnDash()
         {
+            lastInputWasGamepad = false;
+            if (movingEnabled && !paused)
+            {
+                dashAbility.StartDash();
+            }
+        }
+
+        /// <summary>
+        /// Dashing
+        /// </summary>
+        public void OnDashGamepad()
+        {
+            lastInputWasGamepad = true;
             if (movingEnabled && !paused)
             {
                 dashAbility.StartDash();

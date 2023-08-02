@@ -247,6 +247,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "DashGamepad",
+                    "type": "Button",
+                    "id": "117c3b27-1b20-4dbe-8fd2-44ce392589c9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -615,17 +624,6 @@
                 },
                 {
                     "name": "",
-                    "id": "9fbaa5c2-5d39-405f-acbd-73d94910f573",
-                    "path": "<Gamepad>/leftTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ChannelGamepad",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "d7cf84a6-aa7a-43f5-b71f-adbe89a1e689",
                     "path": "<Gamepad>/select",
                     "interactions": "",
@@ -698,6 +696,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d0637596-abc5-4894-91be-ff99c276d451",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DashGamepad",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
