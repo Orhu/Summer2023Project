@@ -363,15 +363,15 @@ namespace Cardificer
         public void OnChannelGamepad(InputValue input)
         {
             lastInputWasGamepad = true;
-            if (movingEnabled && canAct & !paused)
+            if (movingEnabled && canAct && !paused)
             {
                 if (input.isPressed)
                 {
-                    channelAbility.StartChanneling();
+                    basicAttack.StartFiringBasicAttack();
                 }
                 else
                 {
-                    channelAbility.StopChanneling();
+                    basicAttack.StopFiringBasicAttack();
                 }
             }
         }
