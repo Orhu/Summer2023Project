@@ -16,6 +16,9 @@ namespace Cardificer
         [Tooltip("The loot table to determine what is sellable in this slot and in what frequencies.")]
         public ShopSlotLootTable possibleItems;
 
+        [Tooltip("The number of times this item can be bought.")]
+        public AnimationCurve multiplierOverBuys;
+
         [Tooltip("The number of times this item can be bought.")] [Min(1)]
         public int buyCount = 1;
 
@@ -87,7 +90,7 @@ namespace Cardificer
         // The integer position of this slot.
         private Vector2Int intPosition;
 
-
+        private static int buys = 0;
 
         /// <summary>
         /// An object to sell and its price 
@@ -141,6 +144,19 @@ namespace Cardificer
             {
                 Player.onMoneyChanged += UpdateBuyability;
                 UpdateBuyability();
+
+                SceneManager.sceneLoaded += ResetBuys;
+
+                static void ResetBuys(Scene s, LoadSceneMode m)
+                {
+                    buys = 0;
+                }
+            }
+
+            private void Update()
+            {
+                shopSlot.onPriceSet?.Invoke(((int)(price * shopSlot.multiplierOverBuys.Evaluate(buys))).ToString());
+                UpdateBuyability();
             }
 
             /// <summary>
@@ -150,7 +166,7 @@ namespace Cardificer
             {
                 if (bought) { return; }
 
-                bool buyable = Player.GetMoney() >= price;
+                bool buyable = Player.GetMoney() >= (int)(price * shopSlot.multiplierOverBuys.Evaluate(buys));
                 collider.isTrigger = buyable;
 
                 if (buyable)
@@ -216,6 +232,7 @@ namespace Cardificer
                 () => 
                 { 
                     buyCount--;
+                    buys++;
                     locationsToRemainingShopBuys[intPosition] = buyCount;
                 });
         }
