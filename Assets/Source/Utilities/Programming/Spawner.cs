@@ -121,9 +121,10 @@ namespace Cardificer
 
                     // Spawn thing
                     GameObject spawnedThing = Instantiate(objectToSpawn.thingToSpawn);
+                    spawnedThing.transform.parent = transform;
                     do
                     {
-                        spawnedThing.transform.position = (Vector3)Player.GetFeetPosition() + Quaternion.AngleAxis(Random.Range(0, 360), Vector3.forward) * new Vector3(spawnDistance, 0, 0);
+                        spawnedThing.transform.position = (Vector3)Player.GetFeetPosition() + Quaternion.AngleAxis(Random.Range(0, 360), Vector3.forward) * new Vector3(Random.Range(spawnDistance-2, spawnDistance+2), 0, 0);
                     } while (!spawnBounds.Contains(spawnedThing.transform.position));
 
                     // Update spawned things

@@ -98,7 +98,7 @@ namespace Cardificer
                     }
 
                     // filling all full swords
-                    for (int i = 0; i < Mathf.Floor(_card.damage); i++)
+                    for (int i = 0; i < Mathf.Clamp(Mathf.Floor(_card.damage), 0, links.damageContainer.transform.childCount) - 1; i++)
                     {
                         links.damageContainer.transform.GetChild(i).GetComponent<Image>().sprite = fullSwordImage;
                         links.damageContainer.transform.GetChild(i).GetComponent<Image>().color = _card.chordColor;
@@ -107,7 +107,7 @@ namespace Cardificer
                     // If there is some remainder leftover, assign the last image to be a half sword
                     if (_card.damage % 1 != 0)
                     {
-                        int lastImageIndex = Mathf.CeilToInt(_card.damage) - 1;
+                        int lastImageIndex = (int)Mathf.Clamp(Mathf.Floor(_card.damage), 0, links.damageContainer.transform.childCount) - 1;
                         links.damageContainer.transform.GetChild(lastImageIndex).GetComponent<Image>().sprite = halfSwordImage;
                         links.damageContainer.transform.GetChild(lastImageIndex).GetComponent<Image>().color = _card.chordColor;
                     }

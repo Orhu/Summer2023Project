@@ -92,6 +92,8 @@ namespace Cardificer
 
         private static int buys = 0;
 
+        private static Dictionary<ShopSlotLootTable, int> categoryToBuys = new Dictionary<ShopSlotLootTable, int>();
+
         /// <summary>
         /// An object to sell and its price 
         /// </summary>
@@ -142,15 +144,9 @@ namespace Cardificer
             /// </summary>
             private void Start()
             {
+
                 Player.onMoneyChanged += UpdateBuyability;
                 UpdateBuyability();
-
-                SceneManager.sceneLoaded += ResetBuys;
-
-                static void ResetBuys(Scene s, LoadSceneMode m)
-                {
-                    buys = 0;
-                }
             }
 
             private void Update()
@@ -210,18 +206,21 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
+            categoryToBuys.TryAdd(possibleItems, 0);
+
+            SceneManager.sceneLoaded += ResetBuys;
+            static void ResetBuys(Scene s, LoadSceneMode m)
+            {
+                buys = 0;
+                categoryToBuys.Clear();
+            }
+
             intPosition = new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
 
-            int savedBuyCount;
-            if (locationsToRemainingShopBuys.TryGetValue(intPosition, out savedBuyCount))
+            if (categoryToBuys[possibleItems] >= buyCount)
             {
-                buyCount = savedBuyCount;
-
-                if (buyCount <= 0)
-                {
-                    Destroy(gameObject);
-                    return;
-                }
+                Destroy(gameObject);
+                return;
             }
 
             collider = GetComponent<Collider2D>();
@@ -231,10 +230,17 @@ namespace Cardificer
                 // Update buy count
                 () => 
                 { 
-                    buyCount--;
+                    categoryToBuys[possibleItems]++;
                     buys++;
-                    locationsToRemainingShopBuys[intPosition] = buyCount;
                 });
+        }
+
+        private void Update()
+        {
+            if (categoryToBuys[possibleItems] >= buyCount)
+            {
+                Destroy(gameObject);
+            }
         }
 
         /// <summary>
@@ -248,7 +254,12 @@ namespace Cardificer
             }
 
             PricedObject pricedObject = possibleItems.weightedLoot.GetRandomThing(transform.position);
-
+            if (pricedObject.gameObject == null)
+            {
+                Destroy(gameObject);
+                yield break;
+            }
+            
             GameObject sellableItem = Instantiate(pricedObject.gameObject);
             sellableItem.transform.parent = transform;
             sellableItem.transform.localPosition = Vector3.zero;
@@ -257,15 +268,7 @@ namespace Cardificer
             price.price = pricedObject.price;
             onPriceSet?.Invoke(pricedObject.price.ToString());
 
-
-            if (buyCount - 1 <= 0)
-            {
-                price.onDestroyed += () => { Destroy(gameObject); };
-            }
-            else
-            {
-                price.onDestroyed += () => { StartCoroutine(SpawnBuyableObject()); };
-            }
+            price.onDestroyed += () => { Destroy(gameObject); };
         }
     }
 }
