@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: BulletAttack_Sludgeball_Tier3
   m_EditorClassIdentifier: 
   actionAudioClip: {fileID: 0}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
     damage: 1
     damageType: 0
@@ -22,6 +24,8 @@ MonoBehaviour:
   applyDamageOnHit: 1
   modifiers:
   - {fileID: 11400000, guid: 2ded13b08b836ae439b4df7d44f41e23, type: 2}
+  immuneToShield: 0
+  immuneToReflect: 0
   shape: {fileID: 11400000, guid: 684ecade30e94324b8231e390a3ec1a7, type: 2}
   lifetime: 7
   initialSpeed: 10
@@ -36,18 +40,19 @@ MonoBehaviour:
   visualObject: {fileID: 4428131782608219174, guid: 564d7d48e5e4bd94599c1b6ff44eac1a, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  spawnLocation: 0
-  aimMode: 5
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
-  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
-  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  spawnLocation: 0
+  aimMode: 5
+  waitForProjectileDeath: 0
+  chargeTime: 0
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     angle: 135
-    offset: {x: 0, y: 0}
+    offset: {x: 0.3, y: 0}
   - delay: 0
     angle: 225
-    offset: {x: 0, y: 0}
-  randomAngle: 0
+    offset: {x: 0.3, y: 0}
+  randomAngle: 30
   randomOffset: 0

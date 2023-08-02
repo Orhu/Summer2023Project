@@ -456,6 +456,7 @@ namespace Cardificer
             if (hitHealth != null && applyDamageOnHit)
             {
                 hitHealth.ReceiveAttack(attackData);
+                Debug.Log("hit");
 
                 if (--remainingHits <= 0)
                 {
