@@ -16,6 +16,9 @@ namespace Cardificer.FiniteStateMachine
         
         [Tooltip("The distance this will try to orbit at.")] [Min(0)]
         [SerializeField] private float orbitDistance = 3;
+        
+        [Tooltip("The distance this will try to orbit at.")] [Min(0)]
+        [SerializeField] private float orbitWidth = 1;
 
         [Tooltip("The time this will orbit for.")] [Min(0)]
         [SerializeField] private float orbitTime = 1;
@@ -47,8 +50,23 @@ namespace Cardificer.FiniteStateMachine
             float timeElapsed = 0f;
             while (timeElapsed < orbitTime && stateMachine.pathData.keepFollowingPath)
             {
-                Vector2 directionToTarget = (stateMachine.currentPathfindingTarget - stateMachine.GetFeetPos()).normalized;
+                Vector2 directionToTarget = (stateMachine.currentPathfindingTarget - stateMachine.GetFeetPos());
+                float distanceToTarget = directionToTarget.magnitude;
+                directionToTarget.Normalize();
                 stateMachine.GetComponent<Movement>().movementInput = orbitClockwise ? new Vector2(-directionToTarget.y, directionToTarget.x) : new Vector2(directionToTarget.y, -directionToTarget.x);
+
+
+                if (distanceToTarget < orbitDistance - orbitWidth / 2)
+                {
+                    stateMachine.GetComponent<Movement>().movementInput -= directionToTarget;
+                    stateMachine.GetComponent<Movement>().movementInput.Normalize();
+                }
+                else if (distanceToTarget > orbitDistance + orbitWidth / 2)
+                {
+                    stateMachine.GetComponent<Movement>().movementInput += directionToTarget;
+                    stateMachine.GetComponent<Movement>().movementInput.Normalize();
+                }
+
 
                 yield return null;
                 timeElapsed += Time.deltaTime;
