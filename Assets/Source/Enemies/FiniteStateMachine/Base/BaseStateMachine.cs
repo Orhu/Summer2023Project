@@ -42,8 +42,9 @@ namespace Cardificer.FiniteStateMachine
             get
             {
                 if (pathData.path != null)
-                    return ((currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer) &&
-                           pathData.targetIndex == pathData.path.waypoints.Length - 1;
+                {
+                    return !pathData.keepFollowingPath;
+                }
                 else
                 {
                     return ((currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer);
