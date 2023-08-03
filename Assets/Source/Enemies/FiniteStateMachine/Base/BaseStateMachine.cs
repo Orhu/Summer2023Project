@@ -37,19 +37,7 @@ namespace Cardificer.FiniteStateMachine
         [HideInInspector] public float timeSinceTransition = 0f;
 
         // Tracks whether our destination has been reached or not
-        public bool destinationReached
-        {
-            get
-            {
-                if (pathData.path != null)
-                    return ((currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer) &&
-                           pathData.targetIndex == pathData.path.waypoints.Length - 1;
-                else
-                {
-                    return ((currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer);
-                }
-            }
-        }
+        public bool destinationReached => (currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer;
 
         // The distance margin of error 
         public float distanceBuffer
