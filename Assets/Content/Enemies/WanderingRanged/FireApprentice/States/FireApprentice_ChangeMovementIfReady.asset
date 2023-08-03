@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b7609383c524e9cb7c438272085f9b6, type: 3}
+  m_Name: FireApprentice_ChangeMovementIfReady
+  m_EditorClassIdentifier: 
+  decisions:
+  - invert: 0
+    decision: {fileID: 11400000, guid: da9e1463ea95c6847ba3adba97f0d1c7, type: 2}
+    nextOperator: 1
+  - invert: 0
+    decision: {fileID: 11400000, guid: eac8a9f7eca33494094f7383bed21966, type: 2}
+    nextOperator: 1
+  - invert: 0
+    decision: {fileID: 11400000, guid: 102c15fc9c5e5274aa645c281f66f480, type: 2}
+    nextOperator: 1
+  trueAction: {fileID: 11400000, guid: 8278d5a59b902974fa266b56d36a9461, type: 2}

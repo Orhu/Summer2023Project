@@ -16,7 +16,7 @@ namespace Cardificer.FiniteStateMachine
         private float pathLockout = 0.03f;
 
         [Tooltip("Starting at stopping dist from the target destination, move speed rapidly drops until target destination is reached.")]
-        [SerializeField] private float stoppingDist = 0.5f;
+        [SerializeField] private float stoppingDist = 0.1f;
 
         // need to track our current data
         private ChaseData chaseData;

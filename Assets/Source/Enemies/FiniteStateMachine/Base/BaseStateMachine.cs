@@ -101,6 +101,27 @@ namespace Cardificer.FiniteStateMachine
         // Cached feet collider
         private Collider2D _feetCollider;
 
+        // Tracks whether this enemy can currently dodge (off cooldown) or not
+        [HideInInspector] public bool canDodge = true;
+
+        // Tracks whether we need to dodge (projectile nearby)
+        private bool _needToDodge = false;
+        public bool needToDodge
+        {
+            get => _needToDodge;
+
+            set
+            {
+                if (canDodge)
+                {
+                    _needToDodge = value;
+                }
+            }
+        }
+        
+        // Tracks dodge direction
+        [HideInInspector] public Vector2 dodgeDir = Vector2.up;
+
         private Collider2D feetCollider
         {
             get
@@ -282,7 +303,7 @@ namespace Cardificer.FiniteStateMachine
                 firstTimeStarted = false;
                 currentState.OnStateEnter(this);
             }
-            
+
             currentState.OnStateUpdate(this);
         }
 
