@@ -50,7 +50,7 @@ namespace Cardificer
         /// <summary>
         /// Binds initialization.
         /// </summary>
-        private void Awake()
+        private void Start()
         {
             FloorGenerator.onGenerated += Initialize;
             FloorGenerator.onRoomChange += OnRoomChange;
