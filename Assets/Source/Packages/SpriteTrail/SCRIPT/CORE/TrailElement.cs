@@ -26,7 +26,7 @@ using UnityEngine.SceneManagement;
         bool m_NeedDequeue = false;
         public Transform m_Transform;
         private TrailElement m_TrailElement;
-		public GameObject m_GameObject;
+		public GameObject m_GameObjectOther;
 
 
         private TrailElement GetTrailElement() {
@@ -52,7 +52,7 @@ using UnityEngine.SceneManagement;
             //foreach to avoid allocating an array/list to iterate the stack
             foreach (var e in m_FreeElements) {
                 //objects in unloaded or invalid scenes are not useful for the cache
-                if (e != null && e.m_GameObject.scene.IsValid() && e.m_GameObject.scene.isLoaded) {
+                if (e != null && e.m_GameObjectOther.scene.IsValid() && e.m_GameObjectOther.scene.isLoaded) {
                     m_ValidFreeElements.Add(e);
                 }
             }
@@ -70,7 +70,7 @@ using UnityEngine.SceneManagement;
             m_NeedLateUpdate = false;
             m_TimeSinceCreation = 0;
             m_MotherTrail = trail;
-            this.m_GameObject.SetActive(true);
+            this.m_GameObjectOther.SetActive(true);
             m_TrailSettings = trail.m_CurrentTrailPreset;
             if (SpriteRenderer == null) {
                 SpriteRenderer = GetComponent<SpriteRenderer>();
@@ -118,7 +118,7 @@ using UnityEngine.SceneManagement;
 
         private void Awake() {
             m_Transform = transform;
-			m_GameObject = gameObject;
+			m_GameObjectOther = gameObject;
 		}
 
 
@@ -200,14 +200,14 @@ using UnityEngine.SceneManagement;
 
 
         public void Hide(bool AddToFree = true) {
-            if (m_GameObject == null || this == null)
+            if (m_GameObjectOther == null || this == null)
                 return;
 
             if (m_MotherTrail != null)
                 m_NeedDequeue = true;
             if (m_MotherTrail != null && m_MotherTrail.m_ElementsInTrail.Count > 0 && m_MotherTrail.m_ElementsInTrail.Peek().m_NeedDequeue)
                 m_MotherTrail.m_ElementsInTrail.Dequeue();
-            this.m_GameObject.SetActive(false);
+            this.m_GameObjectOther.SetActive(false);
             if (AddToFree) {
                 var t = this.GetTrailElement();
                 m_FreeElements.Push(t);
