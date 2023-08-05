@@ -84,6 +84,7 @@ namespace Cardificer
             var myWorldPos = transform.position;
             (PathfindingTile, bool) grabbedTile = RoomInterface.instance.WorldPosToTile(myWorldPos);
 
+            
             if (grabbedTile.Item2)
             {
                 grabbedTile.Item1.allowedMovementTypes |=
@@ -100,8 +101,6 @@ namespace Cardificer
                 createdTile.transform.parent = FloorGenerator.currentRoom.template.GetLayer(0).transform;
                 createdTile.transform.localPosition = new Vector3(pos.x, pos.y);
 
-                Debug.Log("current room: " + FloorGenerator.currentRoom);
-                Debug.Log("Position: " + pos);
                 FloorGenerator.currentRoom.roomGrid[pos.x, pos.y] = createdTile;
 
                 if (shouldDestroy)
