@@ -186,6 +186,13 @@ namespace Cardificer
                     }
                     runeRenderers[i].card = card;
                 }
+                else // Duplicate card, can keep the new cooldown time
+                {
+                    if (runeRenderers[i].card)
+                    {
+                        runeRenderers[i].totalCooldownTime = card.cooldownTime;
+                    }
+                }
                 // Set runeRenderers that are currently in the hand to not be greyed out
                 runeRenderers[i].greyedOut = false;
 

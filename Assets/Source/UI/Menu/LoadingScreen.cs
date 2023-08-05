@@ -36,9 +36,9 @@ namespace Cardificer
                 // Give a frame for vars to be set.
                 yield return null;
 
-                yield return new WaitForSeconds(minLoadingTime / 2);
+                yield return new WaitForSecondsRealtime(minLoadingTime / 2);
                 yield return operations;
-                yield return new WaitForSeconds(minLoadingTime / 2);
+                yield return new WaitForSecondsRealtime(minLoadingTime / 2);
 
                 operations.Clear();
                 MenuManager.Close<LoadingScreen>(true);
