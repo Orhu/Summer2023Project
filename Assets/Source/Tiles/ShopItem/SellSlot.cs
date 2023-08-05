@@ -70,9 +70,12 @@ public class SellSlot : MonoBehaviour
                 }
                 break;
 #else
-                AssetBundle assetBundle =
- AssetBundle.LoadFromFile(System.IO.Path.Combine(Application.streamingAssetsPath, "cards"));
-                cardPool = assetBundle.LoadAllAssets<Card>().ToList();
+                AssetBundle assetBundle = AssetBundle.LoadFromFile(System.IO.Path.Combine(Application.streamingAssetsPath, "cards"));
+                foreach (Card card in assetBundle.LoadAllAssets<Card>())
+                {
+                    possibleCardPool.Add(card, 1);
+                }
+                assetBundle.Unload(false);
                 break;
 #endif
             }
