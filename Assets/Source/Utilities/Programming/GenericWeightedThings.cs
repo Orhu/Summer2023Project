@@ -244,7 +244,7 @@ namespace Cardificer
         /// </summary>
         /// <param name="position"> The position to convert. </param>
         /// <returns> The seed corresponding to the position. </returns>
-        private int PositionToSeed(Vector3 position)
+        public static int PositionToSeed(Vector3 position)
         {
             // Szudzik's function:
             int x = (int)position.x >= 0 ? 2 * (int)position.x : -2 * (int)position.x - 1;
