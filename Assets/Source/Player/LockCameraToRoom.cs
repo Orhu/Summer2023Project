@@ -98,7 +98,7 @@ namespace Cardificer
 
             player = Player.Get();
 
-            DetermineMinAndMax(FloorGenerator.map.startRoom);
+            DetermineMinAndMax(FloorGenerator.currentRoom);
         }
         #endregion
 
