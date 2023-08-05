@@ -45,7 +45,7 @@ namespace Cardificer
                 {
                     _modifiedProjectile.onDestroyed += () => CreateBomb(); 
                 }
-                else if (spawnMode == SpawnMode.OnDestroyed)
+                else if (spawnMode == SpawnMode.OnHit)
                 {
                     _modifiedProjectile.onOverlap += (Collider2D collider) => CreateBomb(collider);
                     _modifiedProjectile.onHit += (Collision2D collision) => CreateBomb(collision.collider);
