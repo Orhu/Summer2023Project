@@ -38,7 +38,18 @@ namespace Cardificer.FiniteStateMachine
             
             if (targetType.HasFlag(TargetType.Pathfinding))
             {
-                stateMachine.currentPathfindingTarget += offset;
+                Vector2 newPathfindingTarget = stateMachine.currentPathfindingTarget + offset;
+                (PathfindingTile, bool) newPathfindingTargetTile = RoomInterface.instance.WorldPosToTile(newPathfindingTarget);
+                
+                // need to check that the new tile is valid
+                if (newPathfindingTargetTile.Item2 && newPathfindingTargetTile.Item1.allowedMovementTypes.HasFlag(stateMachine.currentMovementType))
+                {
+                    stateMachine.currentPathfindingTarget = newPathfindingTarget;
+                }
+                else
+                {
+                    Debug.LogWarning(stateMachine.gameObject.name + ": Randomly offset tile was not a valid tile! No offset will be applied.");
+                }
             }
 
             if (targetType.HasFlag(TargetType.Attack))
