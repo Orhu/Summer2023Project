@@ -106,9 +106,6 @@ namespace Cardificer.FiniteStateMachine
                 }
             }
         }
-        
-        // Tracks dodge direction
-        [HideInInspector] public Vector2 dodgeDir = Vector2.up;
 
         private Collider2D feetCollider
         {
