@@ -491,7 +491,7 @@ namespace Cardificer
             {
                 if (!FloorGenerator.IsValid()) { return; }
 
-                DontDestroyOnLoad(this);
+                //DontDestroyOnLoad(this);
 
                 FloorGenerator.onRoomChange += () => FloorGenerator.currentRoom.onCleared += Autosave;
 
@@ -529,7 +529,7 @@ namespace Cardificer
             /// <returns> Waits one frame </returns>
             private System.Collections.IEnumerator AutosaveAfterFrame()
             {
-                yield return null;
+                yield return new WaitForSeconds(Time.deltaTime);
                 Autosave();
             }
 
