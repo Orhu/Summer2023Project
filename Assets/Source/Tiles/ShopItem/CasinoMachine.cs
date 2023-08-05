@@ -65,7 +65,6 @@ namespace Cardificer
         void Start()
         {
             random = new System.Random(GenericWeightedThings<int>.PositionToSeed(transform.position));
-            Player.SetMoney(150);
             text.text = "Ready (" + GetWinChance() * 100 + "% to win)";
         }
 
