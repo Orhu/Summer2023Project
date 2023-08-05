@@ -15,15 +15,13 @@ namespace Cardificer
         [Tooltip("Time taken to transition between different screens.")]
         [SerializeField] private float transitionTime;
 
-        [Tooltip("The prefab used to draw cards")]
-        [SerializeField] private GameObject cardRendererPrefab;
-
         [Tooltip("The links to the necessary components for rendering.")]
         [SerializeField] private ComponentLinks links;
 
         // Screen that the card printer is currently on
         private GameObject currentScreen;
 
+       
         /// <summary>
         /// Struct for storing the needed component references.
         /// </summary>
@@ -101,7 +99,7 @@ namespace Cardificer
         /// <param name="screenComposition">The composition of the screen you are transitioning to</param>
         /// <param name="isLoading">Whether this is loading text or exit text</param>
         /// <returns></returns>
-        private IEnumerator DisplayTransitionScreen(GameScreenComposition screenComposition, bool isLoading, EndOfTransitionFunction endOfTransitionFunction = null)
+        private IEnumerator DisplayTransitionScreen(GameScreenComposition screenComposition, bool isLoading)
         {
             if (currentScreen != null)
             {
@@ -118,6 +116,7 @@ namespace Cardificer
                 textToDisplay = screenComposition.exitText;
             }
             links.TransitionScreen.SetActive(true);
+
             links.TransitionScreen.GetComponentInChildren<TextMeshProUGUI>().text = textToDisplay;
             yield return new WaitForSecondsRealtime(transitionTime / 4);
             links.TransitionScreen.GetComponentInChildren<TextMeshProUGUI>().text = textToDisplay + ".";
@@ -129,43 +128,17 @@ namespace Cardificer
 
             links.TransitionScreen.SetActive(false);
             screenComposition.screen.SetActive(true);
-            print("SCREEN CHANGE" + screenComposition.screen.name);
             currentScreen = screenComposition.screen;
-            if (endOfTransitionFunction != null)
-            {
-                endOfTransitionFunction();
-            }
         }
 
         public void MainMenuCardCopierButton()
         {
-            StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "CopyMachine"), true, PopulateCardList()));
-            PopulateCardList();
+            StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "CopyMachine"), true));
         }
 
         public void MainMenuShredderButton()
         {
             StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "Shredder"), true));
-            PopulateCardList();
-        }
-
-        private delegate void EndOfTransitionFunction();
-
-        private void PopulateCardList()
-        {
-            foreach(Transform child in currentScreen.transform)
-            {
-                print(child.name);
-            }
-            // Get the grid layout of the cards from the screen we're on.
-            GridLayoutGroup cardListLayout = currentScreen.transform.Find("SelectCardScreen").GetComponentInChildren<GridLayoutGroup>();
-            print(cardListLayout);
-
-            // We need 6 card slots
-            for (int i = 0; i < 5; i++)
-            {
-                Instantiate(cardRendererPrefab, cardListLayout.transform);
-            }
         }
     }
 }
