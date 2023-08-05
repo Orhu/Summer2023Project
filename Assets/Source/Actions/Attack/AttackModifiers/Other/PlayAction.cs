@@ -25,7 +25,7 @@ namespace Cardificer
             OnHit,
             OnOverlap,
             OnDestroyed,
-            Repeately,
+            Repeatedly,
         }
 
         [Tooltip("The number of times this can play an action.")] [Min(1)]
@@ -91,7 +91,7 @@ namespace Cardificer
 
                 switch (playTime)
                 {
-                    case PlayTime.Repeately:
+                    case PlayTime.Repeatedly:
                     case PlayTime.OnSpawned:
                         ignoredObjects = value.ignoredObjects;
                         value.StartCoroutine(DelayedPlayAction(playCount));
@@ -165,7 +165,7 @@ namespace Cardificer
                 }
 
                 yield return null;
-            } while (playTime == PlayTime.Repeately);
+            } while (playTime == PlayTime.Repeatedly);
         }
 
         #region IActor Implementation

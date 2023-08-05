@@ -12,29 +12,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: SubAction_BallLightning
   m_EditorClassIdentifier: 
-  attack:
-    damage: 2
-    damageType: 0
-    statusEffects: []
-    invertInvincibility: 0
-  hitCount: 1
-  applyDamageOnHit: 1
-  modifiers: []
-  shape: {fileID: 11400000, guid: f77cddef266b1e54b84a6b0499049178, type: 2}
-  lifetime: 1
-  initialSpeed: 50
-  acceleration: 0
-  minSpeed: 50
-  maxSpeed: 50
-  homingSpeed: 0.95
-  homingTime: 1
-  homingAimMode: 1
-  visualObject: {fileID: 1353898179390652710, guid: 100b999ba1df74143836093c002d115c, type: 3}
-  detachVisualsBeforeDestroy: 0
-  spawnLocation: 0
-  aimMode: 0
+  actionAudioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  attack:
+    damage: 2
+    damageType: 1
+    statusEffects: []
+    invertInvincibility: 0
+  hitCount: 999
+  applyDamageOnHit: 1
+  modifiers:
+  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
+  immuneToShield: 1
+  immuneToReflect: 1
+  shape: {fileID: 11400000, guid: e7212c638ce65774c9704c3cce5caa56, type: 2}
+  lifetime: 0.1
+  initialSpeed: 0
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 0
+  homingSpeed: 0
+  homingTime: 0
+  homingDelay: 0
+  homingAimMode: 1
+  switchAfterHit: 0
+  visualObject: {fileID: 1047600638572580625, guid: 86f4f8c20aee3cd40adf8e70608b982a, type: 3}
+  detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
+  travelAudioClip: {fileID: 0}
+  impactAudioClip: {fileID: 0}
+  spawnLocation: 0
+  aimMode: 5
+  waitForProjectileDeath: 0
+  chargeTime: 0
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     angle: 0
