@@ -20,19 +20,19 @@ namespace Cardificer
         [SerializeField] public System.Action onCooldownEnd;
 
         [Tooltip("The speed multiplier of the dash (multiplies the movement component's speed")]
-        [SerializeField] private float speedMultiplier;
+        [SerializeField] [Min(0)] private float speedMultiplier;
 
         [Tooltip("The amount of time the dash is active for")]
-        [SerializeField] private float time;
+        [SerializeField] [Min(0)] private float time;
 
         [Tooltip("The amount of time after a dash where you can't dash again (seconds)")]
-        [SerializeField] private float cooldown;
+        [SerializeField] [Min(0)] private float cooldown;
 
         [Tooltip("The amount of damage the dash does")]
-        [SerializeField] private int damage;
+        [SerializeField] [Min(0)] private int damage;
 
         [Tooltip("The amount that dashing through projectiles decreases card's cooldowns by (seconds)")]
-        [SerializeField] private float cardCooldownSubtraction;
+        [SerializeField] [Min(0)] private float cardCooldownSubtraction;
 
         [Tooltip("The dash indicator; indicates whether or not dashing is possible")]
         [SerializeField] private GameObject indicator;
@@ -53,10 +53,10 @@ namespace Cardificer
         [SerializeField] private LayerMask layers;
 
         // Tracks whether it's currently possible to dash
-        [System.NonSerialized] public bool canDash;
+        [System.NonSerialized] public bool canDash = true;
 
         // Tracks whether a dash is currently happening
-        [System.NonSerialized] public bool dashing;
+        [System.NonSerialized] public bool dashing = false;
 
         // A reference to the movement component
         [System.NonSerialized] private Movement movement;
@@ -79,7 +79,10 @@ namespace Cardificer
         /// <param name="deck"> The deck to reduce the cooldowns of </param>
         public void StartDash(Vector2 dashDirection, Deck deck = null)
         {
-            if (!canDash || dashing || dashDirection == Vector2.zero) { return; }
+            if (!canDash || dashing || dashDirection == Vector2.zero) 
+            {
+                return; 
+            }
 
             onDashBegin?.Invoke();
 
@@ -90,7 +93,7 @@ namespace Cardificer
 
             if (indicator)
             {
-                indicator.SetActive(true);
+                indicator.SetActive(false);
             }
 
             SetComponentsEnabled(true);
@@ -126,7 +129,6 @@ namespace Cardificer
             onDashEnd?.Invoke();
             dashing = false;
             deck = null;
-
             SetComponentsEnabled(false);
         }
 
