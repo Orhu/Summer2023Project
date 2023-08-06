@@ -316,7 +316,7 @@ namespace Cardificer
             lastInputWasGamepad = false;
             if (movingEnabled && !paused)
             {
-                dashAbility.StartDash(attemptedMovementInput);
+                dashAbility.StartDash(attemptedMovementInput, Deck.playerDeck);
             }
         }
 
@@ -328,7 +328,7 @@ namespace Cardificer
             lastInputWasGamepad = true;
             if (movingEnabled && !paused)
             {
-                dashAbility.StartDash(attemptedMovementInput);
+                dashAbility.StartDash(attemptedMovementInput, Deck.playerDeck);
             }
         }
 
