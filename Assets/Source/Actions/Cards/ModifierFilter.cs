@@ -22,11 +22,11 @@ namespace Cardificer
             {
                 if (_forbiddenModifierTypes == null)
                 {
-                    _forbiddenModifierTypes = new Type[_forbiddenModifierTypes.Length];
+                    _forbiddenModifierTypes = new Type[forbiddenModifiers.Length];
 
                     for (int i = 0; i < _forbiddenModifierTypes.Length; i++)
                     {
-                        _forbiddenModifierTypes[i] = Type.GetType($"Cardificer.{_forbiddenModifierTypes[i]}");
+                        _forbiddenModifierTypes[i] = Type.GetType($"Cardificer.{forbiddenModifiers[i]}");
                     }
                 }
 
