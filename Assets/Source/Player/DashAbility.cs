@@ -181,7 +181,6 @@ namespace Cardificer
 
             if (damage > 0 && collision.gameObject.GetComponent<Health>() != null)
             {
-                Debug.Log("damage");
                 DamageData dashDamage = new DamageData(new List<StatusEffect>(), gameObject);
                 dashDamage.damage = damage;
                 collision.gameObject.GetComponent<Health>().ReceiveAttack(dashDamage);
