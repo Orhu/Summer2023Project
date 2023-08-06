@@ -4,9 +4,14 @@ using UnityEngine;
 
 namespace Cardificer
 {
+    /// <summary>
+    /// Handles tutorial progression.
+    /// </summary>
     public class TutorialManager : MonoBehaviour
     {
-        // Start is called before the first frame update
+        /// <summary>
+        /// Opens manual.
+        /// </summary>
         void Start()
         {
             MenuManager.Open<InstructionMenu>(lockOpen: true);

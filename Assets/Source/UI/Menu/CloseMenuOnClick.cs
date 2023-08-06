@@ -4,6 +4,9 @@ using UnityEngine.UI;
 
 namespace Cardificer
 {
+    /// <summary>
+    /// Closes a given menu on click of a button attached to the same game object
+    /// </summary>
     [RequireComponent(typeof(Button))]
     public class CloseMenuOnClick : MonoBehaviour
     {

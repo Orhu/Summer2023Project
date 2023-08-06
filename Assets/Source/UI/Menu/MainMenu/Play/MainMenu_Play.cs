@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 namespace Cardificer
 { 
+    /// <summary>
+    /// Handles the functionality of the play screen on the main menu.
+    /// </summary>
     public class MainMenu_Play : MonoBehaviour
     {
         /// <summary>
@@ -39,8 +42,8 @@ namespace Cardificer
         /// </summary>
         public void Tutorial()
         {
-            // TODO: Implement loading screen.
-            SceneManager.LoadSceneAsync("Tutorial");
+            AsyncOperation operation = SceneManager.LoadSceneAsync("Tutorial");
+            MenuManager.Open<LoadingScreen>(true, true);
             MenuManager.Close<MainMenu_Play>();
         }
 
@@ -49,7 +52,6 @@ namespace Cardificer
         /// </summary>
         public void Sanctum()
         {
-            // TODO: Implement loading screen.
             MenuManager.Close<MainMenu_Play>();
             throw new System.NotImplementedException("Sanctum hasn't been made yet.");
         }
