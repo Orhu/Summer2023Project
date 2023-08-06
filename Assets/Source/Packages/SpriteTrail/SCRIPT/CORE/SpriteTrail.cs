@@ -483,7 +483,7 @@ using UnityEngine.Serialization;
 			_NewPos.z += m_CurrentDisplacement;
 			_TmpElement.m_Transform.position = _NewPos;
 			_TmpElement.Initialise(this);
-			_TmpElement.m_GameObject.layer = m_Layer;
+			_TmpElement.m_GameObjectTrail.layer = m_Layer;
 			_TmpElement.SpriteRenderer.sortingLayerID = m_SortingLayerID;
 			_TmpElement.SpriteRenderer.sortingOrder = m_OrderInSortingLayer;
 			/*m_CurrentDisplacement -= m_ZMoveStep;
@@ -530,7 +530,7 @@ using UnityEngine.Serialization;
             _NewPos.z = m_CurrentDisplacement;
             _TmpElement.m_Transform.position = _NewPos;
             _TmpElement.Initialise(this);
-            _TmpElement.m_GameObject.layer = m_Layer;
+            _TmpElement.m_GameObjectTrail.layer = m_Layer;
         }
 
 

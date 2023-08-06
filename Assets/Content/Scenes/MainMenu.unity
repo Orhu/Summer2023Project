@@ -7723,7 +7723,6 @@ GameObject:
   - component: {fileID: 5144515771810690892}
   - component: {fileID: 2677532259029424521}
   - component: {fileID: 5254971819218900146}
-  - component: {fileID: 6371583404552801927}
   m_Layer: 5
   m_Name: ContinueButton
   m_TagString: Untagged
@@ -8974,7 +8973,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5257604989550653388}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 252588730427602000}
+        m_TargetAssemblyTypeName: Cardificer.MainMenu, Assembly-CSharp
+        m_MethodName: Continue
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &5257604989550653388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9536,19 +9547,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
---- !u!114 &6371583404552801927
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3352186588777443919}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cf76463e3b195242b8ca30694aca3c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  menuName: DraftMenu
 --- !u!1 &6396839518333151345
 GameObject:
   m_ObjectHideFlags: 0
