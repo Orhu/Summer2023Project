@@ -34,14 +34,23 @@ namespace Cardificer
         [Tooltip("The amount that dashing through projectiles decreases card's cooldowns by (seconds)")]
         [SerializeField] private float cardCooldownSubtraction;
 
-        [Tooltip("The dash indicator")]
+        [Tooltip("The dash indicator; indicates whether or not dashing is possible")]
         [SerializeField] private GameObject indicator;
 
-        [Tooltip("The components to enable when dashing")]
-        [SerializeField] private List<MonoBehaviour> componentsToEnable;
+        [Tooltip("The colliders to enable when dashing")]
+        [SerializeField] private List<Collider2D> collidersToEnable;
 
-        [Tooltip("The components to disable when dashing")]
-        [SerializeField] private List<MonoBehaviour> componentsToDisable;
+        [Tooltip("The colliders to disable when dashing")]
+        [SerializeField] private List<Collider2D> collidersToDisable;
+
+        [Tooltip("The sprites to enable when dashing")]
+        [SerializeField] private List<SpriteRenderer> spritesToEnable;
+
+        [Tooltip("The sprites to disable when dashing")]
+        [SerializeField] private List<SpriteRenderer> spritesToDisable;
+
+        [Tooltip("The layers that the dash should interact with")]
+        [SerializeField] private LayerMask layers;
 
         // Tracks whether it's currently possible to dash
         [System.NonSerialized] public bool canDash;
@@ -84,21 +93,7 @@ namespace Cardificer
                 indicator.SetActive(true);
             }
 
-            if (componentsToEnable != null)
-            {
-                foreach (MonoBehaviour component in componentsToEnable)
-                {
-                    component.enabled = true;
-                }
-            }
-
-            if (componentsToDisable != null)
-            {
-                foreach (MonoBehaviour component in componentsToDisable)
-                {
-                    component.enabled = false;
-                }
-            }
+            SetComponentsEnabled(true);
 
             StartCoroutine(Dash());
         }
@@ -132,24 +127,44 @@ namespace Cardificer
             dashing = false;
             deck = null;
 
-            if (indicator)
-            {
-                indicator.SetActive(false);
-            }
+            SetComponentsEnabled(false);
+        }
 
-            if (componentsToEnable != null)
+        /// <summary>
+        /// Sets the dash components to enabled, and the non-dash components to disabled. Swaps if "enabled" is false.
+        /// </summary>
+        /// <param name="enabled"> Swaps the behavior of what components will be enabled </param>
+        private void SetComponentsEnabled(bool enabled)
+        {
+            if (collidersToEnable != null)
             {
-                foreach (MonoBehaviour component in componentsToEnable)
+                foreach (Collider2D collider in collidersToEnable)
                 {
-                    component.enabled = false;
+                    collider.enabled = enabled;
                 }
             }
 
-            if (componentsToDisable != null)
+            if (collidersToDisable != null)
             {
-                foreach (MonoBehaviour component in componentsToDisable)
+                foreach (Collider2D collider in collidersToDisable)
                 {
-                    component.enabled = true;
+                    collider.enabled = !enabled;
+                }
+            }
+
+            if (spritesToEnable != null)
+            {
+                foreach (SpriteRenderer sprites in spritesToEnable)
+                {
+                    sprites.enabled = enabled;
+                }
+            }
+
+            if (spritesToDisable != null)
+            {
+                foreach (SpriteRenderer sprites in spritesToDisable)
+                {
+                    sprites.enabled = !enabled;
                 }
             }
         }
@@ -160,7 +175,7 @@ namespace Cardificer
         /// <param name="collision"> The thing we've collided with </param>
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (!dashing) { return; }
+            if (!dashing || (collision.gameObject.layer & layers) == 0) { return; }
 
             if (damage > 0 && collision.gameObject.GetComponent<Health>() != null)
             {
@@ -169,7 +184,7 @@ namespace Cardificer
                 collision.gameObject.GetComponent<Health>().ReceiveAttack(dashDamage);
             }
 
-            if (deck != null) // and collision is projectile or enemy
+            if (deck != null)
             {
                 foreach (KeyValuePair<int, float> cardIndexToCooldown in new Dictionary<int, float>(deck.cardIndicesToCooldowns))
                 {
