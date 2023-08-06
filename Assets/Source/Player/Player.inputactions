@@ -15,9 +15,27 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "MoveGamepad",
+                    "type": "Value",
+                    "id": "014fbc46-2cf7-4697-a9d3-b8e26a29f560",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "PreviewCard1",
                     "type": "Button",
                     "id": "d8c99999-dafd-4834-840b-66ad5454d094",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PreviewCard1Gamepad",
+                    "type": "Button",
+                    "id": "1b84dfdd-204f-4af8-99ed-69a65ce0efdf",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -33,9 +51,27 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "PreviewCard2Gamepad",
+                    "type": "Button",
+                    "id": "a9814f33-8e55-461b-8c89-93ea649fcadd",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "PreviewCard3",
                     "type": "Button",
                     "id": "1c36aacf-881f-41e3-8842-60c8c51dc686",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PreviewCard3Gamepad",
+                    "type": "Button",
+                    "id": "faef6a98-d67f-460b-aafd-78d87da113e7",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -51,9 +87,27 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "PreviewCard4Gamepad",
+                    "type": "Button",
+                    "id": "7b090d86-b4c8-450a-be94-8f87b364b69f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "PreviewCard5",
                     "type": "Button",
                     "id": "272a0285-190e-4021-a9c1-813e432f8348",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PreviewCard5Gamepad",
+                    "type": "Button",
+                    "id": "55176e8b-b83d-4c24-b049-ecb406918585",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -69,9 +123,36 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "CastGamepad",
+                    "type": "Button",
+                    "id": "1cc56b98-bc6f-47c1-bf3b-0fccb7597201",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "AimGamepad",
+                    "type": "Value",
+                    "id": "f1e1dd16-4db7-4f0b-a68d-d0a208aee7dd",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Channel",
                     "type": "Button",
                     "id": "187684dc-b470-4a68-893b-174ff47da495",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(behavior=2)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ChannelGamepad",
+                    "type": "Button",
+                    "id": "41184434-07b6-4a9e-baf8-85b8d943b75b",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press(behavior=2)",
@@ -87,6 +168,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "PauseGamepad",
+                    "type": "Button",
+                    "id": "410bce6b-9a71-4732-ac2d-8f6ee797b273",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "OpenMap",
                     "type": "Button",
                     "id": "ee9e0828-f35f-4abe-b973-91ba8966c604",
@@ -96,9 +186,36 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "OpenMapGamepad",
+                    "type": "Button",
+                    "id": "44bda8d2-1c56-43a6-a480-c22ac44e925d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "OpenCardMenu",
                     "type": "Button",
                     "id": "43ef6a00-faa8-42fc-82b9-90f5c02539e2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "OpenCardMenuGamepad",
+                    "type": "Button",
+                    "id": "afbb08b3-6102-4b2a-8a23-0ed460a406a8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "UnselectSpellsGamepad",
+                    "type": "Button",
+                    "id": "5f8d37ee-1eff-4606-b8c5-fc065c51f78c",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -124,17 +241,6 @@
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "978bfe49-cc26-4a3d-ab7b-7d7a29327403",
-                    "path": "<Gamepad>/leftStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "WASD",
                     "id": "00ca640b-d935-4593-8157-c05846ea39b3",
@@ -236,33 +342,11 @@
                 },
                 {
                     "name": "",
-                    "id": "1635d3fe-58b6-4ba9-a4e2-f4b964f6b5c8",
-                    "path": "<XRController>/{Primary2DAxis}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "XR",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "3ea4d645-4504-4529-b061-ab81934c3752",
-                    "path": "<Joystick>/stick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Joystick",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "7fdbda99-f95f-4990-b230-25a406f88473",
                     "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "PreviewCard1",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -273,7 +357,7 @@
                     "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "PreviewCard1",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -284,7 +368,7 @@
                     "path": "<Keyboard>/2",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "PreviewCard2",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -295,7 +379,7 @@
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "PreviewCard2",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -306,7 +390,7 @@
                     "path": "<Keyboard>/3",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "PreviewCard3",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -317,7 +401,7 @@
                     "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "PreviewCard3",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -328,7 +412,7 @@
                     "path": "<Keyboard>/4",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "PreviewCard4",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -339,7 +423,7 @@
                     "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "PreviewCard4",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -350,7 +434,7 @@
                     "path": "<Keyboard>/5",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "PreviewCard5",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -361,7 +445,7 @@
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "PreviewCard5",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -372,19 +456,8 @@
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "Cast",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8163247a-1315-4cc1-814a-fbe0de89f718",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Channel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -394,7 +467,7 @@
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -405,7 +478,7 @@
                     "path": "<Keyboard>/tab",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "OpenMap",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -416,7 +489,7 @@
                     "path": "<Keyboard>/c",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "OpenCardMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -427,8 +500,184 @@
                     "path": "<Keyboard>/t",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard&Mouse",
                     "action": "ShowLayout",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "155e0ed5-4f34-4f7d-9ff2-cd8611ab61b7",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Channel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "09f44a17-2203-40e3-9bab-98e2999bf6ab",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AimGamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1635d3fe-58b6-4ba9-a4e2-f4b964f6b5c8",
+                    "path": "<XRController>/{Primary2DAxis}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "XR",
+                    "action": "MoveGamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3ea4d645-4504-4529-b061-ab81934c3752",
+                    "path": "<Joystick>/stick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Joystick",
+                    "action": "MoveGamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "978bfe49-cc26-4a3d-ab7b-7d7a29327403",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "MoveGamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0f9aac8c-7439-4eb0-99a2-cb4433b74c44",
+                    "path": "<Gamepad>/dpad",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "MoveGamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fd7c01c3-6167-4230-9552-5973f09a0b60",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "PreviewCard1Gamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "455f43cd-a1e2-4648-ba7b-c5eb86c1b364",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "PreviewCard2Gamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ee20fe66-c4ea-4095-b03b-53f35a01661b",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "PreviewCard3Gamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2c7424be-fe5f-4157-ae1a-7635c8c361e7",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "PreviewCard4Gamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7972b318-57f5-4d5e-a1eb-d6d35e098201",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "CastGamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9fbaa5c2-5d39-405f-acbd-73d94910f573",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChannelGamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d7cf84a6-aa7a-43f5-b71f-adbe89a1e689",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "OpenMapGamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "455df73d-2822-4ecc-9e88-aea73606ae41",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "OpenCardMenuGamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b357bb88-1128-4619-baf1-8fb837d70975",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "PauseGamepad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "21a60cd6-9a5b-4949-8dae-fba6531ab3fd",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "UnselectSpellsGamepad",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

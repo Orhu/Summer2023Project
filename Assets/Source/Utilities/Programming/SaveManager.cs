@@ -530,13 +530,18 @@ namespace Cardificer
             {
                 if (!FloorGenerator.IsValid()) { return; }
 
-                // Commented out because the autosaves broke and would stop saving if the tutorial was played and then a normal game started. Also doest appear to be needed as floor progression seems to still work.
-                //DontDestroyOnLoad(this);
 
-                FloorGenerator.onRoomChange += BindCleared;
+                FloorGenerator.onRoomChange += () => FloorGenerator.currentRoom.onCleared += Autosave;
 
                 // Start courotine so it's invoked on the next frame (leaving time for everything else that sets its saves up on start to start)
-                FloorGenerator.onGenerated += () => StartCoroutine(nameof(AutosaveAfterFrame));
+                if (FloorGenerator.hasGenerated)
+                {
+                    StartCoroutine(nameof(AutosaveAfterFrame));
+                }
+                else
+                {
+                    FloorGenerator.onGenerated += () => StartCoroutine(nameof(AutosaveAfterFrame));
+                }
 
                 Player.health.onDeath.AddListener(
                     () =>
@@ -562,7 +567,7 @@ namespace Cardificer
             /// <returns> Waits one frame </returns>
             private System.Collections.IEnumerator AutosaveAfterFrame()
             {
-                yield return null;
+                yield return new WaitForSeconds(Time.deltaTime);
                 Autosave();
             }
 
@@ -586,14 +591,6 @@ namespace Cardificer
                     }
                     latestAutosave = saveData;
                 }
-            }
-
-            /// <summary>
-            /// Binds cleared
-            /// </summary>
-            private void BindCleared()
-            {
-                FloorGenerator.currentRoom.onCleared += Autosave;
             }
             #endregion
         }
