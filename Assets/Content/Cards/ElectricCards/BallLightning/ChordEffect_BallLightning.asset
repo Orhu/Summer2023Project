@@ -14,8 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minAttackSequenceIndex: 0
   maxAttackSequenceIndex: 0
+  attackSequenceLoopInterval: 2147483647
+  priority: 0
   action: {fileID: 11400000, guid: b46bbc48a7106f74888c7cabaebd1139, type: 2}
+  filter: {fileID: 11400000, guid: 41d2be9215724f94a98b95b94ff4902c, type: 2}
   delay: 0.1
   playTime: 1
   playCount: 1000
   inheritModifiers: 0
+  applyToZeroDamage: 0
+  useThisAsActor: 0

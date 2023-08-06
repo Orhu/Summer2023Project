@@ -24,6 +24,9 @@ namespace Cardificer
         
         [Tooltip("The how this card will modify actions when used in a combo with itself.")] [EditInline]
         public List<AttackModifier> duplicateModifiers;
+        
+        [Tooltip("Which modifiers cannot be applied to each of the actions on this card. The index of an entry maps to the index of the attack action that will have its modifiers filtered.")] [EditInline]
+        public ModifierFilter[] modifierFilters;
 
         #region Previewing
         /// <summary>
@@ -137,12 +140,20 @@ namespace Cardificer
         {
             int numUnfinishedAttacks = 0;
 
-            foreach (Action action in actions)
+            for (int i = 0; i < actions.Length; i++)
             {
+                Action action = actions[i];
                 if (action is Attack)
                 {
                     numUnfinishedAttacks++;
-                    (action as Attack).Play(actor, modifiers,
+                    
+                    List<AttackModifier> actionModifiers = modifiers;
+                    if (modifierFilters.Length < i && modifierFilters[i] != null)
+                    {
+                        actionModifiers = modifierFilters[i].FilterModifierList(modifiers);
+                    }
+
+                    (action as Attack).Play(actor, actionModifiers,
                         // Calls attack finished when all attacks have been finished
                         attackFinished: () =>
                         {

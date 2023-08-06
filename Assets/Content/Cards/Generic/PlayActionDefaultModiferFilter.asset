@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae521aad527ed7e449352281fbf9e980, type: 3}
-  m_Name: PlayAction_Bonfire
+  m_Script: {fileID: 11500000, guid: a1e3e1c1bb425284c8ea340845fec7a5, type: 3}
+  m_Name: PlayActionDefaultModiferFilter
   m_EditorClassIdentifier: 
-  action: {fileID: 11400000, guid: 8e171b8e6be52434ca69aa91bee9d507, type: 2}
-  delay: 0.4
-  filter: {fileID: 11400000, guid: 41d2be9215724f94a98b95b94ff4902c, type: 2}
-  playTime: 4
+  forbiddenModifiers:
+  - PlayAction
+  - DuplicateAttackSequnce
