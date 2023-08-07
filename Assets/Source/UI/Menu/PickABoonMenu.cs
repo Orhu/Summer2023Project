@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Cardificer
@@ -10,6 +11,10 @@ namespace Cardificer
     /// </summary>
     public class PickABoonMenu : MonoBehaviour
     {
+        [Tooltip("Called when any boon has been selected.")]
+        [SerializeField] public UnityEvent onSelected;
+
+
         [Tooltip("The text to display the boon name in.")]
         [SerializeField] private TMP_Text boonNameTextbox;
 
@@ -26,6 +31,8 @@ namespace Cardificer
         // Called when a boon was picked by the player.
         public event System.Action onPicked;
 
+        // The currently selected boon.
+        public Boon selectedBoon { private set; get; }
 
         /// <summary>
         /// Used to organize the boons this menu can give.
@@ -47,6 +54,40 @@ namespace Cardificer
 
             [Tooltip("The boon to actually give the player.")]
             public Boon boon;
+
+            [Tooltip("Called when this boon has been selected.")]
+            [SerializeField] public UnityEvent onSelected;
+        }
+
+        /// <summary>
+        /// Initializes all bindings.
+        /// </summary>
+        private void Start()
+        {
+            foreach (BoonInfo boonInfo in boons)
+            {
+                boonInfo.button.onClick.AddListener(
+                    // Set text appropriately
+                    () =>
+                    {
+                        boonNameTextbox.text = boonInfo.nameText;
+                        boonDescriptionTextbox.text = boonInfo.descriptionText;
+                        boonPickCountTextbox.text = boonInfo.pickCountText.Replace("[Pick Count]", boonInfo.boon.pickCount.ToString());
+
+                        selectedBoon = boonInfo.boon;
+                        onSelected?.Invoke();
+                        boonInfo.onSelected?.Invoke();
+                    });
+            }
+        }
+
+        /// <summary>
+        /// Applies the selected boon and closes this.
+        /// </summary>
+        public void PickSelectedBoon()
+        {
+            selectedBoon.Apply();
+            MenuManager.Close<PickABoonMenu>(true);
         }
     }
 }
