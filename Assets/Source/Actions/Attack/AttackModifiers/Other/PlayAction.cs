@@ -14,6 +14,9 @@ namespace Cardificer
         [Tooltip("The action to play.")]
         [SerializeField] private Action action;
 
+        [Tooltip("The modifier types to not apply to this.")]
+        [SerializeField] private ModifierFilter filter;
+
         [Tooltip("The delay before the action is taken")] [Min(0f)]
         [SerializeField] private float delay = 0f;
 
@@ -79,20 +82,21 @@ namespace Cardificer
 
             if (inheritModifiers)
             {
-                modifiers = new List<AttackModifier>(value.modifiers);
-                modifiers.RemoveAll(
-                    // Remove all play action modifiers
-                    (AttackModifier modifier) =>
-                    {
-                        return modifier is PlayAction || modifier is DuplicateAttackSequence;
-                    });
+                if (filter == null)
+                {
+                    modifiers = new List<AttackModifier>(value.modifiers);
+                }
+                else
+                {
+                    modifiers = filter.FilterModifierList(value.modifiers);
+                }
             }
 
             int playCount = this.playCount;
 
             switch (playTime)
             {
-                case PlayTime.Repeately:
+                case PlayTime.Repeatedly:
                 case PlayTime.OnSpawned:
                     ignoredObjects = value.ignoredObjects;
                     value.StartCoroutine(DelayedPlayAction(playCount));
@@ -125,8 +129,8 @@ namespace Cardificer
                         {
                             if (value.forceDestroy) { return; }
 
-                                // Create runner object since the projectile will be null.
-                                GameObject coroutineRunner = new GameObject(value.name + " Play " + action.name + " Source");
+                            // Create runner object since the projectile will be null.
+                            GameObject coroutineRunner = new GameObject(value.name + " Play " + action.name + " Source");
                             coroutineRunner.transform.position = sourceTransform.position;
                             coroutineRunner.transform.rotation = sourceTransform.rotation;
                             coroutineRunner.transform.parent = playActionRoot.transform;

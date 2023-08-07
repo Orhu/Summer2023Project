@@ -28,6 +28,9 @@ namespace Cardificer
 
         [Tooltip("The how this card will modify actions when used in a combo with itself.")] [EditInline]
         public List<AttackModifier> duplicateModifiers;
+        
+        [Tooltip("Which modifiers cannot be applied to each of the actions on this card. The index of an entry maps to the index of the attack action that will have its modifiers filtered.")] [EditInline]
+        public List<ModifierFilter> modifierFilters;
 
         #region Previewing
         /// <summary>
@@ -76,7 +79,7 @@ namespace Cardificer
         /// <param name="chordedCard"> The card's who's modifiers should be added </param>
         public void AddToPreview(IActor actor, AttackCard chordedCard)
         {
-            AddToPreview(actor, GetAppliedModifers(chordedCard));
+            //AddToPreview(actor, GetAppliedModifers(chordedCard));
         }
 
         /// <summary>
@@ -99,7 +102,7 @@ namespace Cardificer
         /// <param name="chordedCard"> The card's who's modifiers should be removed </param>
         public void RemoveFromPreview(IActor actor, AttackCard chordedCard)
         {
-            RemoveFromPreview(actor, GetAppliedModifers(chordedCard));
+            //RemoveFromPreview(actor, GetAppliedModifers(chordedCard));
         }
 
         /// <summary>
@@ -122,23 +125,49 @@ namespace Cardificer
         /// <param name="attackFinished"> A callback for when the action is finished. </param>
         public void PlayActions(IActor actor, List<AttackCard> chordedCards, System.Action attackFinished = null)
         {
-            List<AttackModifier> modifiers = new List<AttackModifier>();
+            int numUnfinishedAttacks = 0;
 
-
-            foreach (AttackCard chordedCard in chordedCards)
+            for (int i = 0; i < actions.Length; i++)
             {
-                modifiers.AddRange(GetAppliedModifers(chordedCard));
-
-                // Chord VFX
-                if (chordedCard.chordVFXPrefabs != null && chordedCard.chordVFXPrefabs.Count > 0)
+                Action action = actions[i];
+                if (action is Attack)
                 {
-                    ChordVFXModifier vfxModifer = CreateInstance<ChordVFXModifier>();
-                    vfxModifer.cordVFXPrefabs = chordedCard.chordVFXPrefabs;
-                    modifiers.Add(vfxModifer);
+                    numUnfinishedAttacks++;
+
+                    List<AttackModifier> modifiers = new List<AttackModifier>();
+                    foreach (AttackCard chordedCard in chordedCards)
+                    {
+                        modifiers.AddRange(GetAppliedModifers(chordedCard, i));
+
+                        // Chord VFX
+                        if (chordedCard.chordVFXPrefabs != null && chordedCard.chordVFXPrefabs.Count > 0)
+                        {
+                            ChordVFXModifier vfxModifer = CreateInstance<ChordVFXModifier>();
+                            vfxModifer.cordVFXPrefabs = chordedCard.chordVFXPrefabs;
+                            modifiers.Add(vfxModifer);
+                        }
+                    }
+
+                    (action as Attack).Play(actor, modifiers,
+                        // Calls attack finished when all attacks have been finished
+                        attackFinished: () =>
+                        {
+                            if (--numUnfinishedAttacks == 0)
+                            {
+                                attackFinished?.Invoke();
+                            }
+                        });
+                }
+                else
+                {
+                    action.Play(actor);
                 }
             }
 
-            PlayActions(actor, modifiers, attackFinished);
+            if (numUnfinishedAttacks == 0)
+            {
+                attackFinished?.Invoke();
+            }
         }
 
         /// <summary>
@@ -151,11 +180,19 @@ namespace Cardificer
         {
             int numUnfinishedAttacks = 0;
 
-            foreach (Action action in actions)
+            for (int i = 0; i < actions.Length; i++)
             {
+                Action action = actions[i];
                 if (action is Attack)
                 {
                     numUnfinishedAttacks++;
+
+                    List<AttackModifier> actionModifiers = modifiers;
+                    if (modifierFilters.Count < i && modifierFilters[i] != null)
+                    {
+                        actionModifiers = modifierFilters[i].FilterModifierList(modifiers);
+                    }
+
                     (action as Attack).Play(actor, modifiers,
                         // Calls attack finished when all attacks have been finished
                         attackFinished: () =>
@@ -181,9 +218,10 @@ namespace Cardificer
         /// <summary>
         /// Gets the modifiers that another attack card would apply to this.
         /// </summary>
-        /// <param name="modifingCard"></param>
+        /// <param name="modifingCard"> The card doing the modification. </param>
+        /// <param name="index"> The index of the attack being modified. </param>
         /// <returns></returns>
-        List<AttackModifier> GetAppliedModifers(AttackCard modifingCard)
+        List<AttackModifier> GetAppliedModifers(AttackCard modifingCard, int index)
         {
             if (modifingCard == this)
             {
@@ -191,8 +229,14 @@ namespace Cardificer
             }
             else
             {
-                return modifingCard.chordModifiers;
+                List<AttackModifier> modifiers = modifingCard.chordModifiers;
+                if (modifierFilters.Count > index && modifierFilters[index] != null)
+                {
+                    modifiers = modifierFilters[index].FilterModifierList(modifiers);
+                }
+                return modifiers;
             }
         }
+
     }
 }
