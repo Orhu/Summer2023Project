@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,6 +26,36 @@ namespace Cardificer
     /// </example>
     public static class SaveManager
     {
+        // Whether or not the player has completed the tutorial.
+        private static SaveData<bool> _savedPlayerPosition = new SaveData<bool>("TutorialCompleated", true);
+        public static bool tutorialCompleted
+        {
+            get => _savedPlayerPosition.data;
+            set => _savedPlayerPosition.data = value;
+        }
+
+
+
+        // When the autosave was last played.
+        public static DateTime lastAutosaveTime
+            {
+                get
+                {
+                    if (!autosaveExists) { return DateTime.Now; }
+                    return DateTime.FromFileTime(autosaver.latestAutosave.saveTime);
+                }
+            }
+
+        // How long the current play session is in seconds.
+        public static TimeSpan savedPlaytime
+        {
+            get
+            {
+                if (!autosaveExists) { return default; }
+                return TimeSpan.FromSeconds(autosaver.latestAutosave.playtime);
+            }
+        }
+
         // The currently saved player deck. Saving handled by autosaves. Use autosaveExists to check if data Valid.
         public static Deck.State savedPlayerDeck
         {
@@ -296,6 +327,12 @@ namespace Cardificer
             [System.Serializable]
             public class AutosaveData
             {
+                // The time this was saved at.
+                public long saveTime;
+
+                // The amount of time this game has been running in seconds.
+                public float playtime;
+
                 // The seed of the current floor.
                 public int floorSeed;
 
@@ -303,7 +340,7 @@ namespace Cardificer
                 public int currentFloor;
 
                 // The random state at the time of the autosave.
-                public Random.State randomState;
+                public UnityEngine.Random.State randomState;
 
                 // The last position of the player.
                 public Vector2 playerPos;
@@ -354,6 +391,8 @@ namespace Cardificer
                 AutosaveData saveData = latestAutosave == null ? new AutosaveData() : latestAutosave;
 
                 // Add new save data Here:
+                saveData.saveTime = DateTime.Now.ToFileTime();
+                saveData.playtime = Mathf.Round(Player.Get().GetComponent<PlayerController>().playtime);
                 saveData.playerPos = Player.Get().transform.position;
                 saveData.playerHealth = Player.health.currentHealth;
                 saveData.playerMoney = Player.GetMoney();
@@ -491,7 +530,6 @@ namespace Cardificer
             {
                 if (!FloorGenerator.IsValid()) { return; }
 
-                //DontDestroyOnLoad(this);
 
                 FloorGenerator.onRoomChange += () => FloorGenerator.currentRoom.onCleared += Autosave;
 

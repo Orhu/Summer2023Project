@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
 namespace Cardificer
@@ -55,7 +56,20 @@ namespace Cardificer
         private void Awake()
         {
             instance = this;
-            
+
+            IEnumerator BindGrabCurrentRoomAfterFrame()
+            {
+                yield return null;
+                FloorGenerator.onRoomChange += GrabCurrentRoom;
+            }
+
+            if (!FloorGenerator.IsValid()) 
+            {
+                StartCoroutine(BindGrabCurrentRoomAfterFrame());
+                return;
+            }
+
+            FloorGenerator.onRoomChange += GrabCurrentRoom;
         }
 
         /// <summary>
@@ -63,7 +77,7 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
-            FloorGenerator.onRoomChange += GrabCurrentRoom;
+            //FloorGenerator.onRoomChange += GrabCurrentRoom;
         }
 
         /// <summary>

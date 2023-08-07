@@ -65,6 +65,7 @@ namespace Cardificer
         {
             if (!FloorGenerator.IsValid()) { return; }
             FloorGenerator.onRoomChange -= OnRoomEnter;
+
             // if scene is loaded
             if (!destroyedTiles.Contains(transform.position) && gameObject.scene.isLoaded && RoomInterface.instance != null)
             {
@@ -82,22 +83,26 @@ namespace Cardificer
         {
             var myWorldPos = transform.position;
             (PathfindingTile, bool) grabbedTile = RoomInterface.instance.WorldPosToTile(myWorldPos);
-            Vector2Int pos = grabbedTile.Item1.gridLocation;
 
-            Tile createdTile = new GameObject().AddComponent<Tile>();
-            createdTile.name = "Empty tile (" + pos.x + ", " + pos.y + ")";
-            createdTile.gridLocation = pos;
-            createdTile.allowedMovementTypes = RoomInterface.MovementType.Walking | RoomInterface.MovementType.Burrowing | RoomInterface.MovementType.Flying;
-            createdTile.transform.parent = FloorGenerator.currentRoom.template.GetLayer(0).transform;
-            createdTile.transform.localPosition = new Vector3(pos.x, pos.y);
-
-            FloorGenerator.currentRoom.roomGrid[pos.x, pos.y] = createdTile;
+            
             if (grabbedTile.Item2)
             {
                 grabbedTile.Item1.allowedMovementTypes |=
                     RoomInterface.MovementType.Walking | RoomInterface.MovementType.Flying |
                     RoomInterface.MovementType.Burrowing;
                 destroyedTiles.Add(myWorldPos);
+
+                Vector2Int pos = grabbedTile.Item1.gridLocation;
+
+                Tile createdTile = new GameObject().AddComponent<Tile>();
+                createdTile.name = "Empty tile (" + pos.x + ", " + pos.y + ")";
+                createdTile.gridLocation = pos;
+                createdTile.allowedMovementTypes = RoomInterface.MovementType.Walking | RoomInterface.MovementType.Burrowing | RoomInterface.MovementType.Flying;
+                createdTile.transform.parent = FloorGenerator.currentRoom.template.GetLayer(0).transform;
+                createdTile.transform.localPosition = new Vector3(pos.x, pos.y);
+
+                FloorGenerator.currentRoom.roomGrid[pos.x, pos.y] = createdTile;
+
                 if (shouldDestroy)
                 {
                     Destroy(gameObject);
