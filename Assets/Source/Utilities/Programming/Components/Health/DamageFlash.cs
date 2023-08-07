@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Cardificer
 {
-    [RequireComponent(typeof(Health), typeof(SpriteRenderer))]
+    [RequireComponent(typeof(Health))]
     public class DamageFlash : MonoBehaviour
     {
         [Tooltip("The color to make the sprite when damaged.")]
@@ -26,7 +26,7 @@ namespace Cardificer
                 {
                     StartCoroutine(Flash());
                 };
-            spriteRenderer = GetComponent<SpriteRenderer>();
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         }
 
 

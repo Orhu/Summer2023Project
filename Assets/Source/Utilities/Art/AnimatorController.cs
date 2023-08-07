@@ -20,14 +20,15 @@ namespace Cardificer
         private Dictionary<string, bool> mirrorParametersToValues = new Dictionary<string, bool>();
 
         // The animator to control
-        [Tooltip("The animator to control")]
-        [SerializeField] private Animator animator;
+        private Animator animator;
 
         /// <summary>
         /// Initialize reference.
         /// </summary>
         private void Awake()
         {
+            animator = GetComponentInChildren<Animator>();
+
             if (animator == null) 
             {
                 Debug.LogError($"Animator is not set on Animation Controller component. Source: {this.gameObject.name}");

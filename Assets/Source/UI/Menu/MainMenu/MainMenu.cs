@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 namespace Cardificer
 {
@@ -29,16 +29,6 @@ namespace Cardificer
         private void Start()
         {
             Time.timeScale = 1;
-            if (SaveManager.autosaveExists)
-            {
-                saveExists = true;
-                continueButton.gameObject.SetActive(true);
-            }
-            else
-            {
-                saveExists = false;
-                continueButton.gameObject.SetActive(false);
-            }
         }
 
 
