@@ -55,6 +55,9 @@ namespace Cardificer
         // The component responsible for the dashing ability
         private DashAbility dashAbility;
 
+        // The amount of time spent in the current run.
+        public float playtime { private set; get; } = 0f;
+
         /// <summary>
         /// Initialize components.
         /// </summary>
@@ -84,6 +87,8 @@ namespace Cardificer
                 return;
             }
 
+            playtime = (float)SaveManager.savedPlaytime.TotalSeconds;
+
             transform.position = SaveManager.savedPlayerPosition;
             // TODO: There is a small probability that the player position is invalid and is not caught by the default save file corruption detection.
 
@@ -105,6 +110,8 @@ namespace Cardificer
         /// </summary>
         private void Update()
         {
+            playtime += Time.deltaTime;
+
             if (canAct && !paused)
             {
                 animatorComponent.SetMirror("castLeft", GetActionAimPosition().x - transform.position.x < 0);
