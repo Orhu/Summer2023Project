@@ -10,7 +10,7 @@ namespace Cardificer
     public class LoadingScreen : MonoBehaviour
     {
         // The minimum time that this will load for.
-        [HideInInspector] public float minLoadingTime = 0.5f;
+        [HideInInspector] public float minLoadingTime = 1f;
 
         // All of the operations that this will wait for.
         private List<AsyncOperation> operations = new List<AsyncOperation>();
