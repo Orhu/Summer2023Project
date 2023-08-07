@@ -61,7 +61,7 @@ namespace Cardificer
                 }
             }
 
-            if (transform.GetChild(0) != null) 
+            if (transform.childCount != 0) 
             {
                 transform.GetChild(0).transform.parent = null;
             }
