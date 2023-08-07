@@ -12,7 +12,10 @@ namespace Cardificer
         [Tooltip("The amount to multiply the lifetime by")]
         [SerializeField] private float lifetimeFactor = 1f;
 
-        // The projectile this modifies
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
         public override void Initialize(Projectile value)
         {
             value.remainingLifetime += (lifetimeFactor - 1) * value.attack.lifetime;

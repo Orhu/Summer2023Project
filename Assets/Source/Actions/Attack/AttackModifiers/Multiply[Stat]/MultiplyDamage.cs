@@ -12,7 +12,10 @@ namespace Cardificer
         [Tooltip("The amount damage will be multiplied by.")]
         [SerializeField] private float damageFactor = 1f;
 
-        // The projectile this modifies
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
         public override void Initialize(Projectile value)
         {
             value.attackData.damage += (int)((damageFactor - 1) * value.attack.attack.damage);

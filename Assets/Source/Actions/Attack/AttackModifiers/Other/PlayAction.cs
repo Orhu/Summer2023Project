@@ -46,13 +46,13 @@ namespace Cardificer
         // The objects ignored by this.
         private List<GameObject> ignoredObjects;
 
-        // The projectile this modifies
+        // The source of the projectile.
         private Transform sourceTransform;
 
-        // The projectile this modifies
+        // Parent of the projectile to spawn.
         private IActor parentActor;
 
-        // The projectile this modifies
+        // The causer of the damage.
         private GameObject causer;
 
         // The objects ignored by this.
@@ -61,7 +61,10 @@ namespace Cardificer
         // The root of all projectiles
         private static GameObject playActionRoot;
 
-        // The projectile this modifies
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
         public override void Initialize(Projectile value)
         {
             if (!applyToZeroDamage && value.attackData.damage == 0) { return; }

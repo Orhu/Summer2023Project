@@ -14,7 +14,10 @@ namespace Cardificer
         [Tooltip("The amount to scale up the visuals by.")]
         [SerializeField] private float visualsScale;
 
-        // The projectile this modifies
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
         public override void Initialize(Projectile value)
         {
             if (value.shape is CircleProjectileShape circle)

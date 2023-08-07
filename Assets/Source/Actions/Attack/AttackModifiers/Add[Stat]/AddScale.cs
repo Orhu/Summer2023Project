@@ -11,7 +11,10 @@ namespace Cardificer
         [Tooltip("The amount to add to the scale.")]
         [SerializeField] private float scale;
 
-        // The projectile this modifies
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
         public override void Initialize(Projectile value)
         {
             value.transform.localScale = value.transform.localScale + new Vector3(scale, scale, scale);

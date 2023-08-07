@@ -11,7 +11,10 @@ namespace Cardificer
         // The owners of projectiles to ignore.
         private Projectile projectile;
 
-        // The projectile this modifies
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
         public override void Initialize(Projectile value)
         {
             GameObject shieldObject = new GameObject();

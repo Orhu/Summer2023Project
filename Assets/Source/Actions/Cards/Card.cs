@@ -22,9 +22,6 @@ namespace Cardificer
         [Tooltip("The actions that will be taken when this card is played as the root of a combo.")] [EditInline]
         public Action[] actions;
 
-        [Tooltip("The effects that this card will have on the dungeon while in the actor's deck.")] [EditInline]
-        public DungeonEffect[] effects;
-
 
 
         [Header("Visuals")]
@@ -70,33 +67,6 @@ namespace Cardificer
 
         [Tooltip("The text displayed in the card UI explaining what happens when you chord the card.")]
         public string chordEffectText = "Bees";
-
-
-
-        /// <summary>
-        /// Gets the description of this card by collecting all the formated descriptions from the card's mechanics.
-        /// </summary>
-        /// <param name="isActionSide"> Whether or not to get the description for the action side or the effect side of the card.</param>
-        /// <returns>The description.</returns>
-        public string GetDescription(bool isActionSide)
-        {
-            string description = "";
-            if (!isActionSide)
-            {
-                foreach (DungeonEffect cardEffect in effects)
-                {
-                    description += cardEffect.GetFormattedDescription() + "\n";
-                }
-            }
-            else
-            {
-                foreach (Action cardAction in actions)
-                {
-                    description += cardAction.GetFormattedDescription() + "\n";
-                }
-            }
-            return description;
-        }
 
 
         /// <summary>

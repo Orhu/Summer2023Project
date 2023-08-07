@@ -24,7 +24,7 @@ namespace Cardificer
         public List<AttackModifier> chordModifiers;
 
         [Tooltip("The prefabs that will be attached to the projectile when chorded.")]
-        public List<GameObject> cordVFXPrefabs;
+        public List<GameObject> chordVFXPrefabs;
 
         [Tooltip("The how this card will modify actions when used in a combo with itself.")] [EditInline]
         public List<AttackModifier> duplicateModifiers;
@@ -130,10 +130,10 @@ namespace Cardificer
                 modifiers.AddRange(GetAppliedModifers(chordedCard));
 
                 // Chord VFX
-                if (chordedCard.cordVFXPrefabs != null && chordedCard.cordVFXPrefabs.Count > 0)
+                if (chordedCard.chordVFXPrefabs != null && chordedCard.chordVFXPrefabs.Count > 0)
                 {
                     ChordVFXModifier vfxModifer = CreateInstance<ChordVFXModifier>();
-                    vfxModifer.cordVFXPrefabs = chordedCard.cordVFXPrefabs;
+                    vfxModifer.cordVFXPrefabs = chordedCard.chordVFXPrefabs;
                     modifiers.Add(vfxModifer);
                 }
             }

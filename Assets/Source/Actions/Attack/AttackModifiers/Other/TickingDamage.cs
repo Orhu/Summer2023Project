@@ -21,7 +21,10 @@ namespace Cardificer
         // The projectile to apply ticking damage under.
         private Projectile tickingDamageProjectile;
 
-        // The projectile this modifies
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
         public override void Initialize(Projectile value)
         {
             value.onOverlap += StartTicking;

@@ -21,7 +21,10 @@ namespace Cardificer
         [Tooltip("The new min speed to add in tiles/s.")]
         [SerializeField] private float minSpeed = -999f;
 
-        // The projectile this modifies
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
         public override void Initialize(Projectile value)
         {
             if (value.speed != -999f)
