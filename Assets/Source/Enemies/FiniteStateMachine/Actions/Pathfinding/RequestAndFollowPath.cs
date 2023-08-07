@@ -105,16 +105,15 @@ namespace Cardificer.FiniteStateMachine
                         {
                             stateMachine.pathData.keepFollowingPath = false;
                             stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
-                            stateMachine.currentPathfindingTarget = stateMachine.GetFeetPos();
                             stateMachine.cooldownData.cooldownReady[this] = true;
                             yield break;
                         }
                     }
-
+                    
                     var moveInput = (stateMachine.pathData.path.waypoints[stateMachine.pathData.targetIndex] -
                                      stateMachine.GetFeetPos()).normalized;
-
-                    if (moveInput == Vector2.zero)
+                    
+                    if (moveInput == Vector2.zero && stateMachine.pathData.targetIndex != stateMachine.pathData.path.finishLineIndex)
                     {
                         stateMachine.pathData.targetIndex++;
                     }
