@@ -110,10 +110,18 @@ namespace Cardificer.FiniteStateMachine
                             yield break;
                         }
                     }
+                    
+                    var moveInput = (stateMachine.pathData.path.waypoints[stateMachine.pathData.targetIndex] -
+                                     stateMachine.GetFeetPos()).normalized;
 
-                    stateMachine.GetComponent<Movement>().movementInput =
-                        (stateMachine.pathData.path.waypoints[stateMachine.pathData.targetIndex] -
-                         stateMachine.GetFeetPos()).normalized;
+                    if (moveInput == Vector2.zero && stateMachine.pathData.targetIndex != stateMachine.pathData.path.finishLineIndex)
+                    {
+                        stateMachine.pathData.targetIndex++;
+                    }
+                    else
+                    {
+                        stateMachine.GetComponent<Movement>().movementInput = moveInput;
+                    }
                 }
 
                 yield return null;
