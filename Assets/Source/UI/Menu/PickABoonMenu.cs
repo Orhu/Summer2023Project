@@ -22,6 +22,11 @@ namespace Cardificer
         [Tooltip("The boons in this menu.")]
         [SerializeField] private List<BoonInfo> boons;
 
+
+        // Called when a boon was picked by the player.
+        public event System.Action onPicked;
+
+
         /// <summary>
         /// Used to organize the boons this menu can give.
         /// </summary>
@@ -41,7 +46,7 @@ namespace Cardificer
             public Button button;
 
             [Tooltip("The boon to actually give the player.")]
-            public GameObject boonPrefab;
+            public Boon boon;
         }
     }
 }
