@@ -27,8 +27,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
   immuneToShield: 1
   immuneToReflect: 1
-  shape: {fileID: 11400000, guid: 7d40317448447dc4d87e8b87990c2a37, type: 2}
-  lifetime: 0.2
+  shape: {fileID: 11400000, guid: 52f26904f1aa243448d233ccde34bd5f, type: 2}
+  lifetime: 5
   initialSpeed: 6
   acceleration: 0
   minSpeed: 0
@@ -36,9 +36,9 @@ MonoBehaviour:
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
-  homingAimMode: 3
+  homingAimMode: 6
   switchAfterHit: 0
-  visualObject: {fileID: 2771917225502514506, guid: 70be133a208282147882ec0e5b9957f3, type: 3}
+  visualObject: {fileID: 4192319179383619776, guid: ad2a13c4060db604b98c7fc266580be9, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
   travelAudioClip: {fileID: 0}
@@ -46,11 +46,11 @@ MonoBehaviour:
   spawnLocation: 0
   aimMode: 0
   waitForProjectileDeath: 0
-  chargeTime: 0
+  chargeTime: 1
   additionalActionTime: 0
   _spawnSequence:
-  - delay: 0.5
+  - delay: 0
     angle: 0
-    offset: {x: 0, y: 0}
+    offset: {x: 1, y: 0}
   randomAngle: 0
   randomOffset: 0
