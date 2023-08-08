@@ -1,4 +1,5 @@
 using Skaillz.EditInline;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -176,7 +177,12 @@ namespace Cardificer
         /// <returns> This as a string. </returns>
         public override string ToString()
         {
-            string value = $"{damage}\n";
+            string value = "";
+            if (damage != 0)
+            {
+                value += $"{Math.Abs(damage)}\n";
+            }
+
             foreach (StatusEffect effect in statusEffects)
             {
                 value += $" + {effect.GetType().Name}";

@@ -137,13 +137,14 @@ namespace Cardificer
             if (attack.damage > 0)
             {
                 onDamageTaken?.Invoke();
+            }
 
-                if (damageNumberPrefab != null)
-                {
-                    GameObject damageNumber = Instantiate(damageNumberPrefab.gameObject);
-                    damageNumber.GetComponent<DamageNumber>().damageData = attack;
-                    damageNumber.transform.position = transform.position;
-                }
+
+            if ((attack.damage != 0 || attack.statusEffects.Count > 0) && damageNumberPrefab != null)
+            {
+                GameObject damageNumber = Instantiate(damageNumberPrefab.gameObject);
+                damageNumber.GetComponent<DamageNumber>().damageData = attack;
+                damageNumber.transform.position = transform.position;
             }
 
             if (currentHealth <= 0 && prevHealth > 0)
