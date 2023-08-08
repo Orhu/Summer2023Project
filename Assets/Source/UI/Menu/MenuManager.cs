@@ -25,7 +25,7 @@ namespace Cardificer
         private HashSet<GameObject> pausingMenus = new HashSet<GameObject>();
 
         // Whether or not the player is using the controller to navigate menu.
-        private static bool usingController = false;
+        public static bool usingNavigation { private set; get; } = false;
 
 
         /// <summary>
@@ -49,9 +49,9 @@ namespace Cardificer
         /// </summary>
         private void OnNavigate()
         {
+            usingNavigation = true;
             if (EventSystem.current.currentSelectedGameObject != null) { return; }
-            GetComponentInChildren<Menu>().InitializeSelection();
-            usingController = true;
+            GetComponentInChildren<Menu>(false)?.InitializeSelection();
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Cardificer
             }
 
             menu.gameObject.SetActive(true);
-            if (usingController)
+            if (usingNavigation)
             {
                 (menu as Menu).InitializeSelection();
             }
@@ -130,6 +130,7 @@ namespace Cardificer
                 Time.timeScale = 1;
             }
 
+            instance.GetComponentInChildren<Menu>(false)?.InitializeSelection();
             return menu;
         }
 
