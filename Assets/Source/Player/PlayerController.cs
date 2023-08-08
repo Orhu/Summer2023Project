@@ -372,7 +372,8 @@ namespace Cardificer
         public void OnOpenMap()
         {
             lastInputWasGamepad = false;
-            MenuManager.Toggle<MapMenu>();
+            // TODO REVERT BACK
+            MenuManager.Toggle<CardPrinterMenu>();
         }
 
         /// <summary>
@@ -390,8 +391,7 @@ namespace Cardificer
         public void OnOpenCardMenu()
         {
             lastInputWasGamepad = false;
-            // TODO REVERT BACK
-            MenuManager.Toggle<CardPrinterMenu>();
+            MenuManager.Toggle<CardMenu>();
         }
 
         /// <summary>

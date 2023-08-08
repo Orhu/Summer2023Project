@@ -481,6 +481,141 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &613086985700083690
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2542180100518802549}
+  - component: {fileID: 1017242942227612142}
+  - component: {fileID: 7134625436534851265}
+  m_Layer: 5
+  m_Name: ErrorText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2542180100518802549
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613086985700083690}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8540304822437374980}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0.0023804}
+  m_SizeDelta: {x: 0, y: 1630.3}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &1017242942227612142
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613086985700083690}
+  m_CullTransparentMesh: 1
+--- !u!114 &7134625436534851265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613086985700083690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: Error text
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 1b07323c020c6fd468f2aaa879cd3745, type: 2}
+  m_sharedMaterial: {fileID: -2896511317458517155, guid: 1b07323c020c6fd468f2aaa879cd3745, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 75
+  m_fontSizeBase: 75
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 1
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_enableWordWrapping: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 1
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 50, y: 50, z: 50, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &746805839017526774
 GameObject:
   m_ObjectHideFlags: 0
@@ -781,8 +916,11 @@ RectTransform:
   m_Children:
   - {fileID: 9148629309711238942}
   - {fileID: 3726925428771322793}
-  - {fileID: 4782060137641387350}
-  - {fileID: 7438369993982561962}
+  - {fileID: 3547098946301089015}
+  - {fileID: 1531280302095702439}
+  - {fileID: 521057928831439168}
+  - {fileID: 3025403705036044346}
+  - {fileID: 8540304822437374980}
   m_Father: {fileID: 1049292493342642472}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1112,7 +1250,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8240573041639283023}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4361252068811834403}
+        m_TargetAssemblyTypeName: Cardificer.ConfirmScreenScript, Assembly-CSharp
+        m_MethodName: ProcessShredTransaction
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1375193991944795955
 GameObject:
   m_ObjectHideFlags: 0
@@ -1392,13 +1542,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3547098946301089015}
+  - component: {fileID: 1120647407516518461}
   m_Layer: 5
   m_Name: CopierSelectCardScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3547098946301089015
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1406,7 +1557,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2027347839830251415}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1415,45 +1566,6 @@ RectTransform:
   - {fileID: 2692353677697489111}
   - {fileID: 1035008768423901721}
   - {fileID: 1248993520696218777}
-  m_Father: {fileID: 4782060137641387350}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &2065381985888098417
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4782060137641387350}
-  - component: {fileID: 7969071568271801068}
-  m_Layer: 5
-  m_Name: CopierScreen
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &4782060137641387350
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2065381985888098417}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 3547098946301089015}
-  - {fileID: 1531280302095702439}
   m_Father: {fileID: 498996362457337147}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1462,22 +1574,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &7969071568271801068
+--- !u!114 &1120647407516518461
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2065381985888098417}
+  m_GameObject: {fileID: 2027347839830251415}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9928b1339c148f44ab56d13b2e12b512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SelectCardScreen: {fileID: 2027347839830251415}
-  ConfirmScreen: {fileID: 4899644002837429408}
-  cardListLayout: {fileID: 701459000261190252}
+  cardContainer: {fileID: 701459000261190252}
+  upArrow: {fileID: 7397772855019513521}
+  downArrow: {fileID: 3490757171389484119}
   cardRendererPrefab: {fileID: 6389152267621796008, guid: aa42031081d0a0646bc09de347c558a2, type: 3}
+  selectedCard: {fileID: 0}
 --- !u!1 &2452539189296422964
 GameObject:
   m_ObjectHideFlags: 0
@@ -1600,7 +1713,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 223183978146027485}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Cardificer.InnerScreenScript, Assembly-CSharp
         m_MethodName: CancelTransaction
         m_Mode: 1
@@ -1734,8 +1847,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7969071568271801068}
-        m_TargetAssemblyTypeName: Cardificer.InnerScreenScript, Assembly-CSharp
+      - m_Target: {fileID: 4996441086399511595}
+        m_TargetAssemblyTypeName: Cardificer.CardPrinterMenu, Assembly-CSharp
         m_MethodName: CancelTransaction
         m_Mode: 1
         m_Arguments:
@@ -2073,12 +2186,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd45e136c0c18724db91c603ac916563, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transitionTime: 2
+  transitionTime: 1
   links:
     TransitionScreen: {fileID: 602470407318742848}
     MainScreen: {fileID: 499870875091494290}
-    CopierScreen: {fileID: 2065381985888098417}
-    ShredderScreen: {fileID: 5287704327247778830}
+    CopierSelectScreen: {fileID: 2027347839830251415}
+    CopierConfirmScreen: {fileID: 4899644002837429408}
+    ShredderSelectScreen: {fileID: 6477276297041719507}
+    ShredderConfirmScreen: {fileID: 6256927298252480397}
+    ErrorScreen: {fileID: 5323792717670165978}
 --- !u!1 &3811060110319814372
 GameObject:
   m_ObjectHideFlags: 0
@@ -2861,7 +2977,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3239587441720114690}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3236827508424818871}
+        m_TargetAssemblyTypeName: Cardificer.ConfirmScreenScript, Assembly-CSharp
+        m_MethodName: ProcessCopyTransaction
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4430432728280538236
 GameObject:
   m_ObjectHideFlags: 0
@@ -3605,6 +3733,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1531280302095702439}
+  - component: {fileID: 3236827508424818871}
   m_Layer: 5
   m_Name: CopierConfirmationScreen
   m_TagString: Untagged
@@ -3619,7 +3748,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4899644002837429408}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3627,45 +3756,6 @@ RectTransform:
   - {fileID: 5240759552943881691}
   - {fileID: 7124421825536992123}
   - {fileID: 5436937127890536621}
-  m_Father: {fileID: 4782060137641387350}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &5287704327247778830
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7438369993982561962}
-  - component: {fileID: 223183978146027485}
-  m_Layer: 5
-  m_Name: ShredderScreen
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!224 &7438369993982561962
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5287704327247778830}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 521057928831439168}
-  - {fileID: 3025403705036044346}
   m_Father: {fileID: 498996362457337147}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3674,22 +3764,57 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &223183978146027485
+--- !u!114 &3236827508424818871
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5287704327247778830}
+  m_GameObject: {fileID: 4899644002837429408}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9928b1339c148f44ab56d13b2e12b512, type: 3}
+  m_Script: {fileID: 11500000, guid: 7628b973785d2e244ace37ecb30cceca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SelectCardScreen: {fileID: 6477276297041719507}
-  ConfirmScreen: {fileID: 6256927298252480397}
-  cardListLayout: {fileID: 816624727078022725}
-  cardRendererPrefab: {fileID: 6389152267621796008, guid: aa42031081d0a0646bc09de347c558a2, type: 3}
+  selectedCardRenderer: {fileID: 3205863757963827524}
+  continueButton: {fileID: 442417119715872748}
+--- !u!1 &5323792717670165978
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8540304822437374980}
+  m_Layer: 5
+  m_Name: ErrorScreen
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &8540304822437374980
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5323792717670165978}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2542180100518802549}
+  m_Father: {fileID: 498996362457337147}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5772197036231564027
 GameObject:
   m_ObjectHideFlags: 0
@@ -3899,6 +4024,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3025403705036044346}
+  - component: {fileID: 4361252068811834403}
   m_Layer: 5
   m_Name: ShredderConfirmationScreen
   m_TagString: Untagged
@@ -3921,14 +4047,28 @@ RectTransform:
   - {fileID: 2426889168855381488}
   - {fileID: 1909203173071466454}
   - {fileID: 1510381013612665331}
-  m_Father: {fileID: 7438369993982561962}
-  m_RootOrder: 1
+  m_Father: {fileID: 498996362457337147}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4361252068811834403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6256927298252480397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7628b973785d2e244ace37ecb30cceca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedCardRenderer: {fileID: 6114861173217072617}
+  continueButton: {fileID: 8234811761289591006}
 --- !u!1 &6431698610754102052
 GameObject:
   m_ObjectHideFlags: 0
@@ -4073,13 +4213,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 521057928831439168}
+  - component: {fileID: 9116680408579709242}
   m_Layer: 5
   m_Name: ShredderSelectCardScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &521057928831439168
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4097,14 +4238,31 @@ RectTransform:
   - {fileID: 6209659060685007061}
   - {fileID: 7332329542300097183}
   - {fileID: 3584958153196011348}
-  m_Father: {fileID: 7438369993982561962}
-  m_RootOrder: 0
+  m_Father: {fileID: 498996362457337147}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &9116680408579709242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6477276297041719507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9928b1339c148f44ab56d13b2e12b512, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardContainer: {fileID: 816624727078022725}
+  upArrow: {fileID: 2918893976578044935}
+  downArrow: {fileID: 6167926276089069417}
+  cardRendererPrefab: {fileID: 6389152267621796008, guid: aa42031081d0a0646bc09de347c558a2, type: 3}
+  selectedCard: {fileID: 0}
 --- !u!1 &6514688526940162160
 GameObject:
   m_ObjectHideFlags: 0
@@ -5051,6 +5209,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 323306426268919066, guid: aa42031081d0a0646bc09de347c558a2, type: 3}
   m_PrefabInstance: {fileID: 2162369184135449292}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6114861173217072617 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5394782965144985381, guid: aa42031081d0a0646bc09de347c558a2, type: 3}
+  m_PrefabInstance: {fileID: 2162369184135449292}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52e716a912fee4c4f99fd8f993b26a10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7395925008388720225
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5180,6 +5349,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa42031081d0a0646bc09de347c558a2, type: 3}
+--- !u!114 &3205863757963827524 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5394782965144985381, guid: aa42031081d0a0646bc09de347c558a2, type: 3}
+  m_PrefabInstance: {fileID: 7395925008388720225}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52e716a912fee4c4f99fd8f993b26a10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &7124421825536992123 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 323306426268919066, guid: aa42031081d0a0646bc09de347c558a2, type: 3}

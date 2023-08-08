@@ -75,6 +75,12 @@ namespace Cardificer
         [Tooltip("The text displayed in the card UI explaining what happens when you chord the card.")]
         public string chordEffectText = "Bees";
 
+        [Tooltip("The cost to copy the card in the card printer")]
+        public int copyPrice = 5;
+
+        [Tooltip("The cost to shred the card in the card printer")]
+        public int shredPrice = 5;
+
 
 
         /// <summary>

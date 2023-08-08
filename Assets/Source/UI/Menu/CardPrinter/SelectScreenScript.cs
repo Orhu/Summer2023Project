@@ -2,25 +2,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Cardificer
 {
-    public class InnerScreenScript : MonoBehaviour
+    public class SelectScreenScript : MonoBehaviour
     {
+        [Tooltip("Reference to the card renderer container")]
+        [SerializeField] private GridLayoutGroup cardContainer;
 
-        public GameObject SelectCardScreen;
-        public GameObject ConfirmScreen;
+        [Tooltip("Up arrow for the card container")]
+        [SerializeField] private Button upArrow;
+
+        [Tooltip("Down arrow for the card container")]
+        [SerializeField] private Button downArrow;
 
         // The low end index of the player's deck (starts at 0)
         private int lowIndex = 0;
         // The high end index of the player's deck (the 6th card of the deck)
         private int highIndex = 6;
 
-        public GridLayoutGroup cardListLayout;
-
         [Tooltip("The prefab used to draw cards")]
         [SerializeField] private GameObject cardRendererPrefab;
 
+        private CardPrinterMenu cardPrinterMenu;
+
+        // To keep track of what card we are either shredding or copying
+        public Card selectedCard;
+
+        private void Awake()
+        {
+            cardPrinterMenu = gameObject.GetComponentInParent<CardPrinterMenu>();
+        }
 
         private void OnEnable()
         {
@@ -31,15 +44,12 @@ namespace Cardificer
         {
 
             // Delete all the children from cardlist layout
-            foreach (Transform child in cardListLayout.transform)
-            {
-                Destroy(child.gameObject);
-            }
+            ResetCardList();
 
             // Populate 6 card slots
             for (int i = lowIndex; i < highIndex; i++)
             {
-                GameObject tempCardRendererGameObject = Instantiate(cardRendererPrefab, cardListLayout.transform);
+                GameObject tempCardRendererGameObject = Instantiate(cardRendererPrefab, cardContainer.transform);
 
                 // Assign the game object a card.
                 tempCardRendererGameObject.GetComponent<CardRenderer>().card = Deck.playerDeck.cards[i];
@@ -49,11 +59,20 @@ namespace Cardificer
                 {
                     // Sets the selected card to the cardRenderer
                     SelectCard(tempCardRendererGameObject.GetComponent<CardRenderer>());
+                    cardPrinterMenu.SelectScreenToConfirmScreenCopier(tempCardRendererGameObject.GetComponent<CardRenderer>().card);
                 });
 
             }
         }
 
+        private void ResetCardList()
+        {
+            // Delete all the children from cardlist layout
+            foreach (Transform child in cardContainer.transform)
+            {
+                Destroy(child.gameObject);
+            }
+        }
 
         /// <summary>
         /// Setter used to set our selected card
@@ -61,19 +80,14 @@ namespace Cardificer
         /// <param name="theCard">Card used for setting</param>
         public void SelectCard(CardRenderer cardRenderer)
         {
-            SelectCardScreen.SetActive(false);
+            selectedCard = cardRenderer.card;
+            //continueButton.GetComponentInChildren<TextMeshProUGUI>().text = "Continue (" + cardRenderer.card.copyPrice + "g)";
 
-            ConfirmScreen.GetComponentInChildren<CardRenderer>().card = cardRenderer.card;
-            ConfirmScreen.SetActive(true);
-        }
-
-        public void CancelTransaction()
-        {
-            
-            ConfirmScreen.SetActive(false);
-            ConfirmScreen.GetComponentInChildren<CardRenderer>().card = null;
-
-            SelectCardScreen.SetActive(true);
+            // Delete all the children from cardlist layout
+            foreach (Transform child in cardContainer.transform)
+            {
+                Destroy(child.gameObject);
+            }
         }
 
         public void ScrollDownOneRow()
