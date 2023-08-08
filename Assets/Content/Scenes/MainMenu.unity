@@ -3508,6 +3508,54 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4074676047157292461, guid: 06930a8417aea364dbf491a5b1c7466f, type: 3}
+      propertyPath: m_FirstSelected
+      value: 
+      objectReference: {fileID: 3352186588777443919}
+    - target: {fileID: 8510483908273548141, guid: 06930a8417aea364dbf491a5b1c7466f, type: 3}
+      propertyPath: m_MoveAction
+      value: 
+      objectReference: {fileID: -3797037480437487012, guid: cb61ad84acfcac144b79dc6fe91b7bbc, type: 3}
+    - target: {fileID: 8510483908273548141, guid: 06930a8417aea364dbf491a5b1c7466f, type: 3}
+      propertyPath: m_PointAction
+      value: 
+      objectReference: {fileID: 2098916596912019524, guid: cb61ad84acfcac144b79dc6fe91b7bbc, type: 3}
+    - target: {fileID: 8510483908273548141, guid: 06930a8417aea364dbf491a5b1c7466f, type: 3}
+      propertyPath: m_ActionsAsset
+      value: 
+      objectReference: {fileID: -944628639613478452, guid: cb61ad84acfcac144b79dc6fe91b7bbc, type: 3}
+    - target: {fileID: 8510483908273548141, guid: 06930a8417aea364dbf491a5b1c7466f, type: 3}
+      propertyPath: m_CancelAction
+      value: 
+      objectReference: {fileID: -7515588297182629940, guid: cb61ad84acfcac144b79dc6fe91b7bbc, type: 3}
+    - target: {fileID: 8510483908273548141, guid: 06930a8417aea364dbf491a5b1c7466f, type: 3}
+      propertyPath: m_SubmitAction
+      value: 
+      objectReference: {fileID: -5549647774223529925, guid: cb61ad84acfcac144b79dc6fe91b7bbc, type: 3}
+    - target: {fileID: 8510483908273548141, guid: 06930a8417aea364dbf491a5b1c7466f, type: 3}
+      propertyPath: m_LeftClickAction
+      value: 
+      objectReference: {fileID: 6265057189857628656, guid: cb61ad84acfcac144b79dc6fe91b7bbc, type: 3}
+    - target: {fileID: 8510483908273548141, guid: 06930a8417aea364dbf491a5b1c7466f, type: 3}
+      propertyPath: m_RightClickAction
+      value: 
+      objectReference: {fileID: -3152986552927034447, guid: cb61ad84acfcac144b79dc6fe91b7bbc, type: 3}
+    - target: {fileID: 8510483908273548141, guid: 06930a8417aea364dbf491a5b1c7466f, type: 3}
+      propertyPath: m_MiddleClickAction
+      value: 
+      objectReference: {fileID: 4807697660995657956, guid: cb61ad84acfcac144b79dc6fe91b7bbc, type: 3}
+    - target: {fileID: 8510483908273548141, guid: 06930a8417aea364dbf491a5b1c7466f, type: 3}
+      propertyPath: m_ScrollWheelAction
+      value: 
+      objectReference: {fileID: -8154842080236664168, guid: cb61ad84acfcac144b79dc6fe91b7bbc, type: 3}
+    - target: {fileID: 8510483908273548141, guid: 06930a8417aea364dbf491a5b1c7466f, type: 3}
+      propertyPath: m_TrackedDevicePositionAction
+      value: 
+      objectReference: {fileID: 1142942467759801180, guid: cb61ad84acfcac144b79dc6fe91b7bbc, type: 3}
+    - target: {fileID: 8510483908273548141, guid: 06930a8417aea364dbf491a5b1c7466f, type: 3}
+      propertyPath: m_TrackedDeviceOrientationAction
+      value: 
+      objectReference: {fileID: -567970916667104441, guid: cb61ad84acfcac144b79dc6fe91b7bbc, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 06930a8417aea364dbf491a5b1c7466f, type: 3}
 --- !u!1 &1349063073
@@ -5881,6 +5929,7 @@ GameObject:
   - component: {fileID: 252588730427601999}
   - component: {fileID: 252588730427601998}
   - component: {fileID: 252588730427602000}
+  - component: {fileID: 252588730427602001}
   m_Layer: 5
   m_Name: MainMenuCanvas
   m_TagString: Untagged
@@ -5946,6 +5995,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   continueButton: {fileID: 5254971819218900146}
   overrideSavePopup: {fileID: 1751511256}
+--- !u!114 &252588730427602001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 252588730427601996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!224 &271802569370890871
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10052,6 +10118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 489448e34826a464da7a3a99bac9ce29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialSelection: {fileID: 0}
   manualPages:
   - {fileID: 21300000, guid: dc04687466632ed409913c1dab65652d, type: 3}
   - {fileID: 21300000, guid: 0d082dedc36dc0a419e031e6308d7f71, type: 3}

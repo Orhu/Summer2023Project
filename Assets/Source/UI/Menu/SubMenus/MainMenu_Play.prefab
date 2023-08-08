@@ -314,18 +314,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 5090905343862743541}
+    m_SelectOnDown: {fileID: 150920282898602918}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0, g: 0, b: 0, a: 1}
-    m_HighlightedColor: {r: 0.38679248, g: 0.12224101, b: 0.12224101, a: 1}
+    m_HighlightedColor: {r: 0.3882353, g: 0.12156863, b: 0.12156863, a: 1}
     m_PressedColor: {r: 0.745283, g: 0.19335175, b: 0.19335175, a: 1}
-    m_SelectedColor: {r: 0, g: 0, b: 0, a: 1}
+    m_SelectedColor: {r: 0.3882353, g: 0.12156863, b: 0.12156863, a: 1}
     m_DisabledColor: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0.7607843}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -427,7 +427,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48.6
+  m_fontSize: 46.1
   m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -740,18 +740,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 150920282898602918}
+    m_SelectOnDown: {fileID: 27779080902413245}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0, g: 0, b: 0, a: 1}
-    m_HighlightedColor: {r: 0.38679248, g: 0.12224101, b: 0.12224101, a: 1}
+    m_HighlightedColor: {r: 0.3882353, g: 0.12156863, b: 0.12156863, a: 1}
     m_PressedColor: {r: 0.745283, g: 0.19335175, b: 0.19335175, a: 1}
-    m_SelectedColor: {r: 0, g: 0, b: 0, a: 1}
+    m_SelectedColor: {r: 0.3882353, g: 0.12156863, b: 0.12156863, a: 1}
     m_DisabledColor: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0.7607843}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -830,7 +830,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48.6
+  m_fontSize: 46.1
   m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1036,18 +1036,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnDown: {fileID: 92849580793045910}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0, g: 0, b: 0, a: 1}
-    m_HighlightedColor: {r: 0.38679248, g: 0.12224101, b: 0.12224101, a: 1}
+    m_HighlightedColor: {r: 0.3882353, g: 0.12156863, b: 0.12156863, a: 1}
     m_PressedColor: {r: 0.745283, g: 0.19335175, b: 0.19335175, a: 1}
-    m_SelectedColor: {r: 0, g: 0, b: 0, a: 1}
+    m_SelectedColor: {r: 0.3882353, g: 0.12156863, b: 0.12156863, a: 1}
     m_DisabledColor: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0.7607843}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -1126,7 +1126,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48.6
+  m_fontSize: 46.1
   m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1843,6 +1843,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2fbd414567825a4085800dd7df36574, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialSelection: {fileID: 0}
+  continueButton: {fileID: 5090905343862743541}
+  newGameButton: {fileID: 92849580793045910}
+  tutorialButton: {fileID: 150920282898602918}
 --- !u!114 &5285886915128114535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2518,9 +2522,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
+    m_SelectOnUp: {fileID: 2239378185708829983}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
@@ -2529,7 +2533,7 @@ MonoBehaviour:
     m_NormalColor: {r: 0, g: 0, b: 0, a: 1}
     m_HighlightedColor: {r: 0.3882353, g: 0.12156863, b: 0.12156863, a: 1}
     m_PressedColor: {r: 0.745283, g: 0.19335175, b: 0.19335175, a: 1}
-    m_SelectedColor: {r: 0, g: 0, b: 0, a: 1}
+    m_SelectedColor: {r: 0.3882353, g: 0.12156863, b: 0.12156863, a: 1}
     m_DisabledColor: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0.7607843}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -2610,7 +2614,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 43.75
+  m_fontSize: 41.5
   m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3277,18 +3281,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnUp: {fileID: 92849580793045910}
+    m_SelectOnDown: {fileID: 2239378185708829983}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0, g: 0, b: 0, a: 1}
-    m_HighlightedColor: {r: 0.38679248, g: 0.12224101, b: 0.12224101, a: 1}
+    m_HighlightedColor: {r: 0.3882353, g: 0.12156863, b: 0.12156863, a: 1}
     m_PressedColor: {r: 0.745283, g: 0.19335175, b: 0.19335175, a: 1}
-    m_SelectedColor: {r: 0, g: 0, b: 0, a: 1}
+    m_SelectedColor: {r: 0.3882353, g: 0.12156863, b: 0.12156863, a: 1}
     m_DisabledColor: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0.7607843}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -3355,7 +3359,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48.6
+  m_fontSize: 46.1
   m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3523,7 +3527,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60.85
+  m_fontSize: 57.75
   m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3751,7 +3755,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72.3
+  m_fontSize: 68.6
   m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 1

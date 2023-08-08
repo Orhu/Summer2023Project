@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Cardificer
 {
-    public class DraftMenu : MonoBehaviour
+    public class DraftMenu : Menu
     {
         [Tooltip("The area to add draftable cards to.")]
         [SerializeField] private GameObject draftContainer;
@@ -99,6 +99,8 @@ namespace Cardificer
                     }
                 }
             }
+            initialSelection = draftContainer.transform.GetChild(0).gameObject;
+
 
             // Initializes the default deck
             foreach (Card card in settings.initialDeck)
@@ -136,6 +138,15 @@ namespace Cardificer
             }
 
             CheckDeckValidity();
+        }
+
+
+        /// <summary>
+        /// Reset initial selection.
+        /// </summary>
+        private void OnDisable()
+        {
+            initialSelection = null;
         }
 
         /// <summary>
