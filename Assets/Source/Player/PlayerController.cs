@@ -379,6 +379,7 @@ namespace Cardificer
         public void OnOpenMap()
         {
             lastInputWasGamepad = false;
+            if (MenuManager.IsMenuOpen(typeof(PauseMenu))) { return; }
             MenuManager.Toggle<MapMenu>();
         }
 
@@ -388,6 +389,7 @@ namespace Cardificer
         public void OnOpenMapGamepad()
         {
             lastInputWasGamepad = true;
+            if (MenuManager.IsMenuOpen(typeof(PauseMenu))) { return; }
             MenuManager.Toggle<MapMenu>();
         }
 
@@ -397,6 +399,7 @@ namespace Cardificer
         public void OnOpenCardMenu()
         {
             lastInputWasGamepad = false;
+            if (MenuManager.IsMenuOpen(typeof(PauseMenu))) { return; }
             MenuManager.Toggle<CardMenu>();
         }
 
@@ -406,6 +409,7 @@ namespace Cardificer
         public void OnOpenCardMenuGamepad()
         {
             lastInputWasGamepad = true;
+            if (MenuManager.IsMenuOpen(typeof(PauseMenu))) { return; }
             MenuManager.Toggle<CardMenu>();
         }
 
