@@ -169,5 +169,19 @@ namespace Cardificer
             Physical,
             Special,
         }
+
+        /// <summary>
+        /// To string.
+        /// </summary>
+        /// <returns> This as a string. </returns>
+        public override string ToString()
+        {
+            string value = $"{damage}\n";
+            foreach (StatusEffect effect in statusEffects)
+            {
+                value += $" + {effect.GetType().Name}";
+            }
+            return value;
+        }
     }
 }
