@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c5858af96344aaa9e636fdff62a26b5, type: 3}
+  m_Name: RottingPhantom_TeleportCharge
+  m_EditorClassIdentifier: 
+  enterActions:
+  - {fileID: 11400000, guid: c8be2937f0ddbad48a922fba67b86c24, type: 2}
+  - {fileID: 11400000, guid: 580bbc1804d035246ac968c1d31dc1f3, type: 2}
+  exitActions:
+  - {fileID: 11400000, guid: 4cd580186ca14d84ea9a618fbfe74a83, type: 2}
+  - {fileID: 11400000, guid: 5e9d48db6cbf4d8458d459210773fb3b, type: 2}
+  updateActions: []
+  transitions:
+  - {fileID: 11400000, guid: ef808a174048098468172de72d5bec60, type: 2}
