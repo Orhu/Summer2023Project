@@ -28,8 +28,8 @@ namespace Cardificer
         [Tooltip("The amount of time after a dash where you can't dash again (seconds)")]
         [SerializeField] [Min(0)] private float cooldown;
 
-        [Tooltip("The amount of damage the dash does")]
-        [SerializeField] [Min(0)] private int damage;
+        [Tooltip("The damage that the dash does")]
+        [SerializeField] private DamageData damage;
 
         [Tooltip("The amount that dashing through projectiles decreases card's cooldowns by (seconds)")]
         [SerializeField] [Min(0)] private float cardCooldownSubtraction;
@@ -179,11 +179,9 @@ namespace Cardificer
         {
             if (!dashing || (layers & (1 << collision.gameObject.layer)) == 0) { return; }
 
-            if (damage > 0 && collision.gameObject.GetComponent<Health>() != null)
+            if (damage.damage > 0 && collision.gameObject.GetComponent<Health>() != null)
             {
-                DamageData dashDamage = new DamageData(new List<StatusEffect>(), gameObject);
-                dashDamage.damage = damage;
-                collision.gameObject.GetComponent<Health>().ReceiveAttack(dashDamage);
+                collision.gameObject.GetComponent<Health>().ReceiveAttack(damage);
             }
 
             if (deck != null)
