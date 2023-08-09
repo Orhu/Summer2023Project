@@ -5,7 +5,7 @@ namespace Cardificer
     /// <summary>
     /// A status effect that reduces incoming knockback.
     /// </summary>
-    [CreateAssetMenu(menuName = "Status Effects/Damage Reduction")]
+    [CreateAssetMenu(menuName = "Status Effects/Knockback Reduction")]
     public class KnockbackReduction : StatusEffect
     {
         [Tooltip("The amount incoming knockback is multiplied by.")]
