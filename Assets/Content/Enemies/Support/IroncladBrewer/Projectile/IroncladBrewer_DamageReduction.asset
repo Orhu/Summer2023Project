@@ -9,12 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14b773a1c44f45147b4862b77fe00af1, type: 3}
-  m_Name: HasteBrewer_AttackSelectedEnemy
+  m_Script: {fileID: 11500000, guid: 31a40a7ea34bef2458f4181b8bb51faf, type: 3}
+  m_Name: IroncladBrewer_DamageReduction
   m_EditorClassIdentifier: 
-  actionChargeUpTime: 1
-  friendlyFire: 1
-  attacks:
-  - {fileID: 11400000, guid: b8fc954be6e609c44970054590ce06e1, type: 2}
-  variableName: SelectedEnemy
-  hitPlayer: 1
+  duration: 1
+  visualEffect: {fileID: 8535475495275938741, guid: 4ea47aa822c2f1f4398c7d261c3a101a, type: 3}
+  damageMultiplier: 0.5
+  additionalStackTime: 1
+  maxDuration: 5
