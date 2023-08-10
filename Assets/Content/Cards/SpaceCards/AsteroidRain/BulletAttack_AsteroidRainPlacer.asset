@@ -29,10 +29,10 @@ MonoBehaviour:
   immuneToReflect: 1
   shape: {fileID: 11400000, guid: 2d518888c7a7ab247a3208585fb1afc0, type: 2}
   lifetime: 0.01
-  initialSpeed: 10
-  acceleration: -1
-  minSpeed: 5
-  maxSpeed: 10
+  initialSpeed: 0
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 0
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
@@ -43,41 +43,23 @@ MonoBehaviour:
   detatchedVisualsTimeBeforeDestroy: 0
   travelAudioClip: {fileID: 0}
   impactAudioClip: {fileID: 0}
-  spawnLocation: 2
+  spawnLocation: 5
   aimMode: 5
-  waitForProjectileDeath: 0
+  waitForProjectileDeath: 1
   chargeTime: 0
-  additionalActionTime: 0.4
+  additionalActionTime: 0.2666667
   _spawnSequence:
   - delay: 0
     angle: 0
     offset: {x: 0, y: 0}
-  - delay: 0.2
+  - delay: 0.25
     angle: 0
     offset: {x: 0, y: 0}
-  - delay: 0.2
+  - delay: 0.25
     angle: 0
-    offset: {x: 1, y: 0}
-  - delay: 0.2
+    offset: {x: 0, y: 0}
+  - delay: 0.25
     angle: 0
-    offset: {x: -1, y: 0}
-  - delay: 0.2
-    angle: 0
-    offset: {x: 2, y: 1}
-  - delay: 0.2
-    angle: 0
-    offset: {x: -2, y: 0}
-  - delay: 0.2
-    angle: 0
-    offset: {x: 2.5, y: 0}
-  - delay: 0.2
-    angle: 0
-    offset: {x: -2.5, y: -1}
-  - delay: 0.2
-    angle: 0
-    offset: {x: 3, y: -1.5}
-  - delay: 0.2
-    angle: 0
-    offset: {x: -3, y: 1.5}
+    offset: {x: 0, y: 0}
   randomAngle: 0
   randomOffset: 0

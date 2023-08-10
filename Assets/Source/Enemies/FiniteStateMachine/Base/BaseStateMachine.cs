@@ -37,13 +37,7 @@ namespace Cardificer.FiniteStateMachine
         [HideInInspector] public float timeSinceTransition = 0f;
 
         // Tracks whether our destination has been reached or not
-        public bool destinationReached
-        {
-            get
-            {
-                return ((currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer);
-            }
-        }
+        public bool destinationReached => (currentPathfindingTarget - GetFeetPos()).sqrMagnitude <= distanceBuffer * distanceBuffer;
 
         // The distance margin of error 
         public float distanceBuffer
@@ -94,6 +88,24 @@ namespace Cardificer.FiniteStateMachine
 
         // Cached feet collider
         private Collider2D _feetCollider;
+
+        // Tracks whether this enemy can currently dodge (off cooldown) or not
+        [HideInInspector] public bool canDodge = true;
+
+        // Tracks whether we need to dodge (projectile nearby)
+        private bool _needToDodge = false;
+        public bool needToDodge
+        {
+            get => _needToDodge;
+
+            set
+            {
+                if (canDodge)
+                {
+                    _needToDodge = value;
+                }
+            }
+        }
 
         private Collider2D feetCollider
         {
@@ -276,7 +288,7 @@ namespace Cardificer.FiniteStateMachine
                 firstTimeStarted = false;
                 currentState.OnStateEnter(this);
             }
-            
+
             currentState.OnStateUpdate(this);
         }
 

@@ -14,6 +14,9 @@ namespace Cardificer
         [Tooltip("The action to play.")]
         [SerializeField] private Action action;
 
+        [Tooltip("The modifier types to not apply to this.")]
+        [SerializeField] private ModifierFilter filter;
+
         [Tooltip("The delay before the action is taken")] [Min(0f)]
         [SerializeField] private float delay = 0f;
 
@@ -25,7 +28,7 @@ namespace Cardificer
             OnHit,
             OnOverlap,
             OnDestroyed,
-            Repeately,
+            Repeatedly,
         }
 
         [Tooltip("The number of times this can play an action.")] [Min(1)]
@@ -78,20 +81,21 @@ namespace Cardificer
 
                 if (inheritModifiers)
                 {
-                    modifiers = new List<AttackModifier>(value.modifiers);
-                    modifiers.RemoveAll(
-                        // Remove all play action modifiers
-                        (AttackModifier modifier) =>
-                        {
-                            return modifier is PlayAction || modifier is DuplicateAttackSequence;
-                        });
+                    if (filter == null)
+                    {
+                        modifiers = new List<AttackModifier>(value.modifiers);
+                    }
+                    else
+                    {
+                        modifiers = filter.FilterModifierList(value.modifiers);
+                    }
                 }
 
                 int playCount = this.playCount;
 
                 switch (playTime)
                 {
-                    case PlayTime.Repeately:
+                    case PlayTime.Repeatedly:
                     case PlayTime.OnSpawned:
                         ignoredObjects = value.ignoredObjects;
                         value.StartCoroutine(DelayedPlayAction(playCount));
@@ -165,7 +169,7 @@ namespace Cardificer
                 }
 
                 yield return null;
-            } while (playTime == PlayTime.Repeately);
+            } while (playTime == PlayTime.Repeatedly);
         }
 
         #region IActor Implementation

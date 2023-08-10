@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b7609383c524e9cb7c438272085f9b6, type: 3}
+  m_Name: ManaApprentice_ChangeMovementIfReady
+  m_EditorClassIdentifier: 
+  decisions:
+  - invert: 0
+    decision: {fileID: 11400000, guid: e61b1f46f574bea49b30255fc9f780b8, type: 2}
+    nextOperator: 1
+  - invert: 0
+    decision: {fileID: 11400000, guid: a0bd2cc89fdd50c4491913c0b1754717, type: 2}
+    nextOperator: 1
+  - invert: 0
+    decision: {fileID: 11400000, guid: 1771d259d8581c441b622bfab0d6a10c, type: 2}
+    nextOperator: 1
+  trueAction: {fileID: 11400000, guid: 93bf60bbeadb45b4c86ed6c47a9d5b3d, type: 2}
