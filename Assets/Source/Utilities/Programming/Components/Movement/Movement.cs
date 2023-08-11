@@ -28,8 +28,11 @@ namespace Cardificer
         }
 
         // A delegate that is queried before moving to adjust the speed based on outside factors.
-        public delegate void ModifySpeed(ref float speed);
-        public ModifySpeed requestSpeedModifications;
+        public delegate void ModifyValue(ref float speed);
+        public ModifyValue requestSpeedModifications;
+
+        // A delegate that is queried before being knocked back to adjust the speed based on outside factors.
+        public ModifyValue requestKnockbackModifications;
 
         // animator component to make the pretty animations do their thing
         private AnimatorController animatorComponent;

@@ -15,6 +15,9 @@ namespace Cardificer
         [Tooltip("The knockback to apply every tick.")]
         public KnockbackInfo knockback = new KnockbackInfo(amount: 0f, resetMomentum: false);
 
+        [Tooltip("Whether or not to cleanse every tick.")]
+        public bool cleanseTarget = false;
+
         // The projectile to apply ticking damage under.
         private Rigidbody2D tickingDamageRigidbody;
 
@@ -60,6 +63,11 @@ namespace Cardificer
             {
                 healthToDamage?.ReceiveAttack(tickingDamageProjectile.attackData);
                 movementToKnockback?.Knockback((Vector2)collider.transform.position - tickingDamageRigidbody.position, knockback);
+
+                if (cleanseTarget)
+                {
+                    healthToDamage?.Cleanse();
+                }
 
                 if (--tickingDamageProjectile.remainingHits <= 0)
                 {
