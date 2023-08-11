@@ -25,7 +25,7 @@ namespace Cardificer.FiniteStateMachine
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
             yield return new WaitForSeconds(delay);
-            stateMachine.transform.position = FloorGenerator.currentRoom.roomLocation + posToTeleportTo;
+            stateMachine.transform.position = (Vector2)FloorGenerator.currentRoom.transform.position + posToTeleportTo;
             stateMachine.cooldownData.cooldownReady[this] = true;
             yield break;
         }

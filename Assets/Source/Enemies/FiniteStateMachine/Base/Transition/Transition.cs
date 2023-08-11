@@ -26,7 +26,6 @@ namespace Cardificer.FiniteStateMachine
             {
                 stateMachine.currentState.OnStateExit(stateMachine);
                 stateMachine.currentState = trueState.GetState();
-                stateMachine.timeSinceTransition = 0f;
                 stateMachine.currentState.OnStateEnter(stateMachine);
             }
         }
