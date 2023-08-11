@@ -19,13 +19,8 @@ namespace Cardificer
         [Tooltip("The amount of time this card reserves the hand slot for after being played.")]
         public float cooldownTime = 1.0f;
 
-        [Tooltip("The actions that will be taken when this card is played as the root of a combo.")]
-        [EditInline]
+        [Tooltip("The actions that will be taken when this card is played as the root of a combo.")] [EditInline]
         public Action[] actions;
-
-        [Tooltip("The effects that this card will have on the dungeon while in the actor's deck.")]
-        [EditInline]
-        public DungeonEffect[] effects;
 
 
 
@@ -34,12 +29,10 @@ namespace Cardificer
         [Tooltip("The name of the card as shown to the player.")]
         public string displayName = "Unnamed";
 
-        [Tooltip("The description where variable names inside of [] will be replaced with the variable's value when shown to the player.")]
-        [Multiline]
+        [Tooltip("The description where variable names inside of [] will be replaced with the variable's value when shown to the player.")] [Multiline]
         public string description = "No Description";
 
-        [Tooltip("The flavor text of the card as shown to the players.")]
-        [Multiline]
+        [Tooltip("The flavor text of the card as shown to the players.")] [Multiline]
         public string flavorText;
 
         [Tooltip("The card specific sprite on the Actions side of the card.")]
@@ -74,33 +67,6 @@ namespace Cardificer
 
         [Tooltip("The text displayed in the card UI explaining what happens when you chord the card.")]
         public string chordEffectText = "Bees";
-
-
-
-        /// <summary>
-        /// Gets the description of this card by collecting all the formated descriptions from the card's mechanics.
-        /// </summary>
-        /// <param name="isActionSide"> Whether or not to get the description for the action side or the effect side of the card.</param>
-        /// <returns>The description.</returns>
-        public string GetDescription(bool isActionSide)
-        {
-            string description = "";
-            if (!isActionSide)
-            {
-                foreach (DungeonEffect cardEffect in effects)
-                {
-                    description += cardEffect.GetFormattedDescription() + "\n";
-                }
-            }
-            else
-            {
-                foreach (Action cardAction in actions)
-                {
-                    description += cardAction.GetFormattedDescription() + "\n";
-                }
-            }
-            return description;
-        }
 
 
         /// <summary>

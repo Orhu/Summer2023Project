@@ -20,16 +20,16 @@ namespace Cardificer
         [Tooltip("The additional min speed to add in tiles/s.")]
         [SerializeField] private float minSpeedFactor = 1f;
 
-        // The projectile this modifies
-        public override Projectile modifiedProjectile
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.speed += (initialSpeedFactor - 1) * value.attack.initialSpeed;
-                value.acceleration += (accelerationFactor - 1) * value.attack.acceleration;
-                value.maxSpeed += (maxSpeedFactor - 1) * value.attack.maxSpeed;
-                value.minSpeed += (minSpeedFactor - 1) * value.attack.minSpeed;
-            }
+            value.speed += (initialSpeedFactor - 1) * value.attack.initialSpeed;
+            value.acceleration += (accelerationFactor - 1) * value.attack.acceleration;
+            value.maxSpeed += (maxSpeedFactor - 1) * value.attack.maxSpeed;
+            value.minSpeed += (minSpeedFactor - 1) * value.attack.minSpeed;
         }
     }
 }

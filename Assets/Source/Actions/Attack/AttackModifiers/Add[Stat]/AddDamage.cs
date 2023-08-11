@@ -15,13 +15,13 @@ namespace Cardificer
         [Tooltip("The additional status effects to apply")]
         [SerializeField] private List<StatusEffect> statusEffects;
 
-        // The projectile this modifies
-        public override Projectile modifiedProjectile
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.attackData = value.attackData + damage + statusEffects;
-            }
+            value.attackData = value.attackData + damage + statusEffects;
         }
     }
 }

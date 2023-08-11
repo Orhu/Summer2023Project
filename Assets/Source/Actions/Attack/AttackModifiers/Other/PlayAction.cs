@@ -49,13 +49,13 @@ namespace Cardificer
         // The objects ignored by this.
         private List<GameObject> ignoredObjects;
 
-        // The projectile this modifies
+        // The source of the projectile.
         private Transform sourceTransform;
 
-        // The projectile this modifies
+        // Parent of the projectile to spawn.
         private IActor parentActor;
 
-        // The projectile this modifies
+        // The causer of the damage.
         private GameObject causer;
 
         // The objects ignored by this.
@@ -64,84 +64,84 @@ namespace Cardificer
         // The root of all projectiles
         private static GameObject playActionRoot;
 
-        // The projectile this modifies
-        public override Projectile modifiedProjectile
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile value)
         {
-            set
+            if (!applyToZeroDamage && value.attackData.damage == 0) { return; }
+            if (playActionRoot == null)
             {
-                if (!applyToZeroDamage && value.attackData.damage == 0) { return; }
-                if (playActionRoot == null)
+                playActionRoot = new GameObject("Play Action Roots");
+            }
+
+            causer = value.causer;
+            parentActor = value.actor;
+            sourceTransform = value.transform;
+
+            if (inheritModifiers)
+            {
+                if (filter == null)
                 {
-                    playActionRoot = new GameObject("Play Action Roots");
+                    modifiers = new List<AttackModifier>(value.modifiers);
                 }
-
-                causer = value.causer;
-                parentActor = value.actor;
-                sourceTransform = value.transform;
-
-                if (inheritModifiers)
+                else
                 {
-                    if (filter == null)
+                    modifiers = filter.FilterModifierList(value.modifiers);
+                }
+            }
+
+            int playCount = this.playCount;
+
+            switch (playTime)
+            {
+                case PlayTime.Repeatedly:
+                case PlayTime.OnSpawned:
+                    ignoredObjects = value.ignoredObjects;
+                    value.StartCoroutine(DelayedPlayAction(playCount));
+                    break;
+
+                case PlayTime.OnHit:
+                    value.onHit += collision =>
                     {
-                        modifiers = new List<AttackModifier>(value.modifiers);
-                    }
-                    else
+                        ignoredObjects = new List<GameObject>(value.ignoredObjects);
+                        ignoredObjects.Add(collision.gameObject);
+                        if (--playCount < 0) { return; }
+                        value.StartCoroutine(DelayedPlayAction());
+                    };
+                    break;
+
+                case PlayTime.OnOverlap:
+                    value.onOverlap += hitCollider =>
                     {
-                        modifiers = filter.FilterModifierList(value.modifiers);
-                    }
-                }
+                        ignoredObjects = new List<GameObject>(value.ignoredObjects);
+                        ignoredObjects.Add(hitCollider.gameObject);
+                        if (--playCount < 0) { return; }
+                        value.StartCoroutine(DelayedPlayAction());
+                    };
+                    break;
 
-                int playCount = this.playCount;
-
-                switch (playTime)
-                {
-                    case PlayTime.Repeatedly:
-                    case PlayTime.OnSpawned:
-                        ignoredObjects = value.ignoredObjects;
-                        value.StartCoroutine(DelayedPlayAction(playCount));
-                        break;
-
-                    case PlayTime.OnHit:
-                        value.onHit += collision =>
+                case PlayTime.OnDestroyed:
+                    value.onDestroyed +=
+                        // Creates a new game object to act as the source of the played action
+                        () =>
                         {
+                            if (value.forceDestroy) { return; }
+
+                            // Create runner object since the projectile will be null.
+                            GameObject coroutineRunner = new GameObject(value.name + " Play " + action.name + " Source");
+                            coroutineRunner.transform.position = sourceTransform.position;
+                            coroutineRunner.transform.rotation = sourceTransform.rotation;
+                            coroutineRunner.transform.parent = playActionRoot.transform;
+                            sourceTransform = coroutineRunner.transform;
+                            MonoBehaviour mono = sourceTransform.gameObject.AddComponent<Empty>();
+                            FloorGenerator.onRoomChange += () => { Destroy(coroutineRunner); };
+
                             ignoredObjects = new List<GameObject>(value.ignoredObjects);
-                            ignoredObjects.Add(collision.gameObject);
-                            if (--playCount < 0) { return; }
-                            value.StartCoroutine(DelayedPlayAction());
+                            mono.GetComponent<MonoBehaviour>().StartCoroutine(DelayedPlayAction());
                         };
-                        break;
-
-                    case PlayTime.OnOverlap:
-                        value.onOverlap += hitCollider =>
-                        {
-                            ignoredObjects = new List<GameObject>(value.ignoredObjects);
-                            ignoredObjects.Add(hitCollider.gameObject);
-                            if (--playCount < 0) { return; }
-                            value.StartCoroutine(DelayedPlayAction());
-                        };
-                        break;
-
-                    case PlayTime.OnDestroyed:
-                        value.onDestroyed +=
-                            // Creates a new game object to act as the source of the played action
-                            () =>
-                            {
-                                if (value.forceDestroy) { return; }
-
-                                // Create runner object since the projectile will be null.
-                                GameObject coroutineRunner = new GameObject(value.name + " Play " + action.name + " Source");
-                                coroutineRunner.transform.position = sourceTransform.position;
-                                coroutineRunner.transform.rotation = sourceTransform.rotation;
-                                coroutineRunner.transform.parent = playActionRoot.transform;
-                                sourceTransform = coroutineRunner.transform;
-                                MonoBehaviour mono = sourceTransform.gameObject.AddComponent<Empty>();
-                                FloorGenerator.onRoomChange += () => { Destroy(coroutineRunner); };
-
-                                ignoredObjects = new List<GameObject>(value.ignoredObjects);
-                                mono.GetComponent<MonoBehaviour>().StartCoroutine(DelayedPlayAction());
-                            };
-                        break;
-                }
+                    break;
             }
         }
 

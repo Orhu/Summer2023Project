@@ -253,7 +253,7 @@ namespace Cardificer
                 if (modifier == null) { continue; }
 
                 AttackModifier instance = Instantiate(modifier);
-                instance.modifiedProjectile = this;
+                instance.Initialize(this);
                 newModifiers.Add(Instantiate(modifier));
             }
 

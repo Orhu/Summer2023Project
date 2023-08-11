@@ -15,13 +15,11 @@ namespace Cardificer
 
         // The projectile doing the polymorphing.
         private Projectile pollymorphProjectile;
-        public override Projectile modifiedProjectile
+
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.onOverlap += MorphObject;
-                pollymorphProjectile = value;
-            }
+            value.onOverlap += MorphObject;
+            pollymorphProjectile = value;
         }
 
         /// <summary>

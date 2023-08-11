@@ -18,14 +18,14 @@ namespace Cardificer
         [Tooltip("The amount of time to wait before homing begins, in seconds to add.")]
         [SerializeField] private float homingDelay;
 
-        // The projectile this modifies
-        public override Projectile modifiedProjectile
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.homingSpeed += homingSpeed * value.maxSpeed; // This allows homing to scale appropriately based on the velocity of the projectile
-                value.remainingHomingTime += homingTime;
-            }
+            value.homingSpeed += homingSpeed * value.maxSpeed; // This allows homing to scale appropriately based on the velocity of the projectile
+            value.remainingHomingTime += homingTime;
         }
     }
 }

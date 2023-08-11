@@ -14,18 +14,15 @@ namespace Cardificer
         private Projectile projectile;
 
         // Binds on overlap
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                projectile = value;
-                projectile.onOverlap +=
-                    (Collider2D collider) =>
-                    {
-                        value.StartCoroutine(SetBindings());
-                    };
-                projectile.onOverlap += HitAgain;
-            }
+            projectile = value;
+            projectile.onOverlap +=
+                (Collider2D collider) =>
+                {
+                    value.StartCoroutine(SetBindings());
+                };
+            projectile.onOverlap += HitAgain;
         }
 
         /// <summary>
