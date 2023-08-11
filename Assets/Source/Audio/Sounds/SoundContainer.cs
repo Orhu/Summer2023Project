@@ -25,6 +25,8 @@ namespace Cardificer
         private CancellationTokenSource _cancellationTokenSource;
         private CancellationToken _cancellationToken;
 
+        //private System.Random _randomSeed;
+
         public override string name { get { return _name; } }
         public override SoundType soundType { get { return SoundType.SoundContainer; } }
 
@@ -51,19 +53,24 @@ namespace Cardificer
             //_playingAudio = false;
             _cancellationTokenSource = new CancellationTokenSource();
             _cancellationToken = _cancellationTokenSource.Token;
+            Array.Clear(_audioSourcesInUse, 0, _audioSourcesInUse.Length);
+
+            if (_containerType != SoundContainerType.RandomBurst)
+                _audioSourcesInUse = AudioManager_NEW.instance.FindAvailableAudioSources(2);
+            //else if (_containerType != SoundContainerType.Sequential)
+            //    _randomSeed = new System.Random();
+
 
             switch (_containerType)
             {
                 case SoundContainerType.Sequential:
-
-                    SetSequentialDefaults();
-                    _audioSourcesInUse = AudioManager_NEW.instance.FindAvailableAudioSources(2);
-                    AssignMixer();
-
                     break;
 
                 case SoundContainerType.RandomSequential:
                     Debug.Log("Initialization of RandomSequential type not implemented");
+                    break;
+
+                case SoundContainerType.RandomRandom:
                     break;
 
                 case SoundContainerType.RandomOneShot:
@@ -74,19 +81,22 @@ namespace Cardificer
                     Debug.Log("Initialization of RandomBurst type not implemented");
                     break;
 
-                    #region set default methods
-                    void SetSequentialDefaults()
-                    {
-                        Array.Clear(_audioSourcesInUse, 0, _audioSourcesInUse.Length);
-                        //_shouldPlay = true;
-                        _indexOfNextSourceToLoad = 1;
-                        _awaitTimeMiliseconds = 0;
-                    }
+                    //#region set default methods
+                    //void SetSequentialDefaults()
+                    //{
+                    //    Array.Clear(_audioSourcesInUse, 0, _audioSourcesInUse.Length);
+                    //    //_shouldPlay = true;
+                    //    _indexOfNextSourceToLoad = 1;
+                    //    _awaitTimeMiliseconds = 0;
+                    //}
 
 
-                    #endregion
+                    //#endregion
 
             }
+
+            AssignMixer();
+
         }
 
         public override void Initialize(AudioSource _as)
@@ -117,8 +127,6 @@ namespace Cardificer
             if (_cancellationToken.IsCancellationRequested)
                 return;
 
-            //_shouldPlay = true; //doesnt really stop anything but is important for stopping async methods, should check for other variables (pause, etc)
-
             PlayContainer(_cancellationToken);
 
         }
@@ -146,13 +154,12 @@ namespace Cardificer
 
             //set next wait time
             double _processedAwaitTime = Math.Truncate(_sound.GetLength() * 1000);
-            //_awaitTimeMiliseconds = _shouldPlay ? (int)_processedAwaitTime : 0;
-            _awaitTimeMiliseconds =(int)_processedAwaitTime;
+            _awaitTimeMiliseconds = (int)_processedAwaitTime;
 
-            //Debug.Log($"Sound to play: {_sound.name} \nSource to load: {_sourceToLoad.name} \nWaiting before playing this sound: {_awaitTime} \nNext waiting time: {_awaitTimeMiliseconds}");
+            Debug.Log($"Sound to play: {_sound.name} \nSource to load: {_sourceToLoad.name} \nWaiting before playing this sound: {_awaitTime} \nNext waiting time: {_awaitTimeMiliseconds}");
 
-            //if (_token.IsCancellationRequested)
-            //    return;
+            if (_token.IsCancellationRequested)
+                return;
 
             //wait miliseconds
             await Task.Delay(_awaitTime, _token);
@@ -172,14 +179,15 @@ namespace Cardificer
             if (_token.IsCancellationRequested)
                 return;
 
-            //_playingAudio = true;
+            System.Random _randomSeed = new System.Random();
+
+            _awaitTimeMiliseconds = 0;
+            _indexOfNextSourceToLoad = 0;
 
             switch (_containerType)
             {
                 case SoundContainerType.Sequential:
 
-                    _awaitTimeMiliseconds = 0;
-                    _indexOfNextSourceToLoad = 0;
                     foreach (Sound _s in _sounds)
                     {
                         await LoadSoundAndPlayDelayed(_s, _audioSourcesInUse[_indexOfNextSourceToLoad], _awaitTimeMiliseconds, _token);
@@ -206,7 +214,33 @@ namespace Cardificer
                     break;
 
                 case SoundContainerType.RandomRandom:
-                    Debug.Log("Play of RandomSequential type not implemented");
+
+                    
+                    Debug.Log($"RandomRandom started playing. _sounds.Length = {_sounds.Length}");
+
+                    //play a random sound for the number of sounds in the _sounds array
+                    int _soundsArrayLength = _sounds.Length;
+                    for (int i = 1; i <= _soundsArrayLength; i++)
+                    {
+                        Debug.Log($"RandomRandom loop started");
+                        int _randomInt = _randomSeed.Next(_soundsArrayLength);
+                        Debug.Log($"RandomRandom loop started. _randomInt {_randomInt}");
+
+                        await LoadSoundAndPlayDelayed(_sounds[_randomSeed.Next(_soundsArrayLength)], _audioSourcesInUse[_indexOfNextSourceToLoad], _awaitTimeMiliseconds, _token);
+                        _indexOfNextSourceToLoad = _indexOfNextSourceToLoad == 0 ? 1 : 0;
+                    }
+
+                    if (_token.IsCancellationRequested)
+                        return;
+
+                    Debug.LogWarning($"Container done playing. Looping = {_loop}");
+
+                    if (_loop && !_token.IsCancellationRequested)
+                    {
+                        await Task.Delay(_awaitTimeMiliseconds);
+                        //Stop();
+                        Play();
+                    }
                     break;
 
                 case SoundContainerType.RandomOneShot:
@@ -230,6 +264,30 @@ namespace Cardificer
 
             return _totalLength;
         }
+
+        private int RandomExcept(int _rangeMax, int _exception, out int _newException)
+        {
+            System.Random _randomSeed = new System.Random();
+
+            int _returnValue = _randomSeed.Next(_rangeMax);
+            if (_returnValue == _exception)
+            {
+                do
+                    _returnValue = _randomSeed.Next(_rangeMax);
+                while
+                    (_returnValue == _exception);
+            }
+
+            _newException = _returnValue;
+
+            return _returnValue;
+
+        }
+
+        //private int RandomInt(int _rangeMax)
+        //{
+        //    return _randomSeed.Next(_rangeMax);
+        //}
 
 
     }

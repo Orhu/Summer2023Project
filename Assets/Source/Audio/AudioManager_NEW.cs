@@ -46,7 +46,7 @@ namespace Cardificer
             if (Input.GetKeyDown(KeyCode.Backspace))
                 StopSound(testSound);
 
-            print("Sound is playing: " + testSound.IsPlaying());
+            //print("Sound is playing: " + testSound.IsPlaying());
 
         }
 
