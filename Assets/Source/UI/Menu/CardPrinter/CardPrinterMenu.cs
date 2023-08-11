@@ -96,7 +96,7 @@ namespace Cardificer
             new GameScreenComposition("CopyMachineConfirm",links.CopierConfirmScreen, "Loading Selection", ""),
             new GameScreenComposition("ShredderSelect", links.ShredderSelectScreen, "Initializing Card_Shredder.exe", "Exiting Card_Shredder.exe"),
             new GameScreenComposition("ShredderConfirm", links.ShredderConfirmScreen, "Loading Selection", ""),
-            new GameScreenComposition("Error", links.ErrorScreen, "", ""),
+            new GameScreenComposition("Error", links.ErrorScreen, "Processing request", ""),
             });
         }
 
@@ -176,7 +176,7 @@ namespace Cardificer
 
         public void MoveToErrorScreen(string errorMessage)
         {
-            StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "Error"), true));
+            StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "Error"), true, null, 1));
             links.ErrorScreen.GetComponentInChildren<TextMeshProUGUI>().text = errorMessage;
         }
 
@@ -190,7 +190,11 @@ namespace Cardificer
             StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "CopyMachineSelect"), true, RestoreGridLayout));  
         }
 
-       
+        public IEnumerator ReturnBackToMainScreen(float waitTime)
+        {
+            yield return new WaitForSecondsRealtime(waitTime);
+            StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "MainScreen"), true));
+        }
 
     }
 }

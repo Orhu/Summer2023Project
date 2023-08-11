@@ -64,6 +64,7 @@ namespace Cardificer
                 // Add selected card to the deck
                 Deck.playerDeck.RemoveCard(selectedCardRenderer.card);
                 Player.AddMoney(-selectedCardRenderer.card.shredPrice);
+                cardPrinterMenu.MoveToErrorScreen("Success!");
             }
         }
     }
