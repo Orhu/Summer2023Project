@@ -11,7 +11,7 @@ namespace Cardificer
     public class ReduceCooldowns : Action
     {
         [Tooltip("The amount in seconds to subtract from all current cooldowns in seconds")] [Min(0f)]
-        [SerializeField] private float cooldownReduction = 0f;
+        [SerializeField] private float cooldownReduction = 1f;
 
         /// <summary>
         /// Plays this action and causes all its effects.

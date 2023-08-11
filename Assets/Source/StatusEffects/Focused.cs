@@ -33,7 +33,7 @@ namespace Cardificer
         public override void Update()
         {
             base.Update();
-            gameObject.GetComponent<Deck>()?.SubtractFromCooldowns(cooldownMultiplier * Time.deltaTime);
+            gameObject.GetComponent<Deck>()?.SubtractFromCooldowns((1/cooldownMultiplier) * Time.deltaTime);
         }
     }
 }
