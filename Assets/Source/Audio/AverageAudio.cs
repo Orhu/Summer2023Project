@@ -12,22 +12,20 @@ namespace Cardificer
         public List<Projectile> projectiles = new List<Projectile>();
 
         [Tooltip("The AudioClip to play at the averaged location")]
-        public AudioClip averageAudioClip;
+        public Sound averageSound;
 
 
         /// <summary>
         /// Adding an audio source and playing it after adjusting parameters
         /// </summary>
-        void Start()
+        public void PlayAverageAudio()
         {
 
             AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.clip = averageAudioClip;
-            audioSource.loop = true;
-            //audioSource.playOnAwake = true; 
-            audioSource.spatialBlend = 1f;
-            audioSource.pitch = UnityEngine.Random.Range(.8f, 1.1f);
+            AudioManager.instance.ApplySoundSettingsToAudioSource(averageSound, audioSource);
             audioSource.Play();
+
+            //AudioManager.instance.audioSourcesToKillList.Add(audioSource);
 
         }
 
@@ -67,21 +65,10 @@ namespace Cardificer
 
         }
 
-        /// <summary>
-        /// Set the list of projectiles
-        /// </summary>
-        /// <param name="setProjectiles">The list of projectiles to set</param>
-        public void SetProjectiles(List<Projectile> setProjectiles)
+        public void SetProjectilesAndSound(List<Projectile> projectiles, Sound sound)
         {
-            this.projectiles = setProjectiles;
-        }
-        /// <summary>
-        /// Set the audioclip to play
-        /// </summary>
-        /// <param name="audioClip">AudioClip to be played</param>
-        public void SetAudioClip(AudioClip audioClip)
-        {
-            this.averageAudioClip = audioClip;
+            this.projectiles = projectiles;
+            this.averageSound = sound;
         }
     }
     
