@@ -157,9 +157,9 @@ namespace Cardificer
     /// </summary>
     public enum SoundContainerType
     {
-        Sequential, //plays through each sound in the container from first -> last
-        RandomSequential, //plays through each sound in the container randomly, but never playing each sound more than once per loop
-        RandomRandom, //plays through each sound in the container, not caring if a sound plays more than once per loop
+        Sequential, //plays through each AudioClip in the container from first -> last
+        RandomSequential, //plays through each AudioClip in the container randomly, but never playing each sound more than once per loop
+        RandomRandom, //plays through each AudioClip in the container, not caring if a sound plays more than once per loop
         RandomOneshot, //plays only one random AudioClip in the SoundContainer
         //RandomBurst, //for the future?
     }

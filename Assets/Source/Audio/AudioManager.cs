@@ -172,7 +172,7 @@ namespace Cardificer
             switch (soundContainer.containerType)
             {
 
-                //plays through each sound in the container from first -> last
+                //plays through each AudioClip in the container from first -> last
                 case SoundContainerType.Sequential:
                     foreach (var audioClip in soundContainer.sounds)
                     {
@@ -188,7 +188,7 @@ namespace Cardificer
 
                     break;
 
-                //plays through each sound in the container randomly, but never playing each sound more than once per loop
+                //plays through each AudioClip in the container randomly, but never playing each sound more than once per loop
                 case SoundContainerType.RandomSequential:
 
                     List<AudioClip> clips = soundContainer.sounds.ToList();
@@ -211,7 +211,7 @@ namespace Cardificer
 
                     break;
 
-                //plays through each sound in the container, not caring if a sound plays more than once per loop
+                //plays through each AudioClip in the container, not caring if a sound plays more than once per loop
                 case SoundContainerType.RandomRandom:
 
                     for (int i = 0; i < soundsLength; i++)
