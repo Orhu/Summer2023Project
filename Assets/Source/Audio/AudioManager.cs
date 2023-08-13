@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using Vector2 = UnityEngine.Vector2;
 using System.Collections;
@@ -17,18 +16,14 @@ namespace Cardificer
         // Singleton Pattern
         public static AudioManager instance;
 
-        //[Tooltip("Sound Arrays for later Random Container Use")]
-        //public Sound[] sounds;
-
-        [Tooltip("List of all currently playing audio sources")]
-        [SerializeField] public List<SoundBase> soundsToKillList = new List<SoundBase>();
-
-        [Tooltip("List of Projectiles to pull the average audio position from")]
+        //Lists of objects to be destroyed or affected
+        private List<SoundBase> soundsToDestroyList = new List<SoundBase>();
         private List<AverageAudio> averageAudioList = new List<AverageAudio>();
+        private List<SoundContainer> activeSoundContainers = new List<SoundContainer>();
 
+        //Default SoundSettings to be applied per-SoundBase
         public SoundSettings _defaultSoundSettings;
         private System.Random random = new System.Random();
-        private List<SoundContainer> activeSoundContainers = new List<SoundContainer>();
 
         /// <summary>
         /// Implementing the singleton pattern. 
@@ -45,49 +40,128 @@ namespace Cardificer
             instance = this;
         }
 
+        /// <summary>
+        /// For testing methods.
+        /// </summary>
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Backspace))
                 StopAllContainers();
         }
 
-        public void StopAllContainers()
-        {
-            StopAllCoroutines();
-            foreach (SoundBase sb in activeSoundContainers)
-            {
-                sb.Stop();
-            }
-        }
-
         /// <summary>
-        /// Play attack card SFX when those cards are played that originate from the player.  
+        /// Play a Sound on an AudioSource attatched to an IActor. 
         /// </summary>
-        /// <param name="audioClip">The AudioClip of the Attack Card to be played. </param>
-        public void PlayAudioAtActor(Sound _sound, IActor _actor)
+        /// <param name="sound">The Sound to be played. </param>
+        /// <param name="actor">The IActor to get the AudioSource from. </param>
+        public void PlayAudioAtActor(Sound sound, IActor actor)
         {
-            var actorAudioSource = _actor.GetAudioSource();
+            var actorAudioSource = actor.GetAudioSource();
 
             if (actorAudioSource != null)
             {
-                ApplySoundSettingsToAudioSource(_sound, actorAudioSource);
+                ApplySoundSettingsToAudioSource(sound, actorAudioSource);
                 actorAudioSource.Play();
             }
 
         }
 
-        public void PlayAudioAtActor(SoundContainer _soundContainer, IActor _actor)
+        /// <summary>
+        /// Starts a SoundContainer on an AudioSource attatched to an IActor.  
+        /// </summary>
+        /// <param name="soundContainer">The SoundContainer to start. </param>
+        /// <param name="actor">The IActor to get the AudioSource from. </param>
+        public void PlayAudioAtActor(SoundContainer soundContainer, IActor actor)
         {
-            var actorAudioSource = _actor.GetAudioSource();
+            var actorAudioSource = actor.GetAudioSource();
 
             if (actorAudioSource != null)
             {
-                _soundContainer.shouldPlay = true;
-                StartCoroutine(PlaySoundContainer(_soundContainer, actorAudioSource));
+                soundContainer.shouldPlay = true;
+                StartCoroutine(PlaySoundContainer(soundContainer, actorAudioSource));
             }
 
         }
 
+        /// <summary>
+        /// Create an AudioSource GameObject at a specific position and play the associated Sound. 
+        /// </summary>
+        /// <param name="sound">The Sound to be played at a location.</param>
+        /// <param name="vector">The location for the Sound to be played.</param>
+        public void PlayAudioAtPos(Sound sound, Vector2 vector)
+        {
+            if (!SceneManager.GetActiveScene().isLoaded) { return; }
+            GameObject audioSourceGameObject = new GameObject();
+            audioSourceGameObject.transform.name = $"Play{sound.name}At{vector}Obj";
+            audioSourceGameObject.transform.position = vector;
+
+            AudioSource audioSource = audioSourceGameObject.AddComponent<AudioSource>();
+            ApplySoundSettingsToAudioSource(sound, audioSource);
+            sound.audioSourceInUse = audioSource;
+            audioSource.Play();
+
+            soundsToDestroyList.Add(sound);
+        }
+
+        /// <summary>
+        /// Create an AudioSource GameObject at a specific position and start the associated SoundContainer. 
+        /// </summary>
+        /// <param name="soundContainer">The SoundContainer to be started at a location.</param>
+        /// <param name="vector">The location for the SoundContainer to be played.</param>
+        public void PlayAudioAtPos(SoundContainer soundContainer, Vector2 vector)
+        {
+            if (!SceneManager.GetActiveScene().isLoaded) { return; }
+            GameObject audioSourceGameObject = new GameObject();
+            audioSourceGameObject.transform.name = $"Play{soundContainer.name}At{vector}Obj";
+            audioSourceGameObject.transform.position = vector;
+
+            AudioSource audioSource = audioSourceGameObject.AddComponent<AudioSource>();
+            soundContainer.audioSourceInUse = audioSource;
+            StartCoroutine(PlaySoundContainer(soundContainer, audioSource));
+
+            soundsToDestroyList.Add(soundContainer);
+        }
+
+        /// <summary>
+        /// Get the average audio location of multiple projectiles and create a gameobject with an audio source at the average position to play. 
+        /// </summary>
+        /// <param name="projectiles">The list of projectiles to find the average position of. </param>
+        /// <param name="sound">The audioclip to play at the location. </param>
+        /// <param name="averageOrFirst">Determines whether to get the average location of all projectiles or just use one projectile</param>
+        public void PlayAverageAudio(List<Projectile> projectiles, Sound sound, bool averageOrFirst)
+        {
+
+            if (averageOrFirst == true) //play at average position
+            {
+                AverageAudio averageAudioGameObject = new GameObject().AddComponent<AverageAudio>();
+                averageAudioGameObject.transform.name = $"AverageAudio({sound.name})GameObj";
+
+                AverageAudio averageAudioComponent = averageAudioGameObject.GetComponent<AverageAudio>();
+                averageAudioComponent.SetProjectilesAndSound(projectiles, sound);
+                averageAudioGameObject.transform.position = averageAudioGameObject.TryGetAveragePos();
+                averageAudioComponent.PlayAverageAudio();
+
+                averageAudioList.Add(averageAudioGameObject);
+
+            }
+
+            else //play at first projectile
+            {
+                
+                if (projectiles.Count == 0 || projectiles[0] == null)
+                    return; 
+
+                var audioSource = projectiles[0].gameObject.AddComponent<AudioSource>();
+                ApplySoundSettingsToAudioSource(sound, audioSource);
+                audioSource.Play();
+            }
+        }
+
+        /// <summary>
+        /// Loops through the sounds in the Container and plays them back based on the SoundContainerType of the SoundContainer.
+        /// </summary>
+        /// <param name="soundContainer">The SoundContainer to be used. </param>
+        /// <param name="audioSource">The AudioSource to use for playback. </param>
         private IEnumerator PlaySoundContainer(SoundContainer soundContainer, AudioSource audioSource)
         {
 
@@ -97,6 +171,8 @@ namespace Cardificer
 
             switch (soundContainer.containerType)
             {
+
+                //plays through each sound in the container from first -> last
                 case SoundContainerType.Sequential:
                     foreach (var audioClip in soundContainer.sounds)
                     {
@@ -112,6 +188,7 @@ namespace Cardificer
 
                     break;
 
+                //plays through each sound in the container randomly, but never playing each sound more than once per loop
                 case SoundContainerType.RandomSequential:
 
                     List<AudioClip> clips = soundContainer.sounds.ToList();
@@ -134,6 +211,7 @@ namespace Cardificer
 
                     break;
 
+                //plays through each sound in the container, not caring if a sound plays more than once per loop
                 case SoundContainerType.RandomRandom:
 
                     for (int i = 0; i < soundsLength; i++)
@@ -151,6 +229,7 @@ namespace Cardificer
 
                     break;
 
+                //plays only one random AudioClip in the SoundContainer
                 case SoundContainerType.RandomOneshot:
 
                     soundContainer.loopContainer = false;
@@ -169,17 +248,116 @@ namespace Cardificer
             {
                 soundContainer.isPlaying = false;
             }
-
-            //AudioClip RandomAudioClipFromArray(AudioClip[] clipsToChooseFrom, out AudioClip[] newClipList)
-            //{
-            //    AudioClip[] listToSendBack = clipsToChooseFrom;
-            //}
         }
 
+        /// <summary>
+        /// Applies the settings on a Sound to an AudioSource. Random values are assigned in this fuction.
+        /// </summary>
+        /// <param name="sound">The Sound to get the settings from.</param>
+        /// <param name="audioSource">The AudioSource to apply the settings onto.</param>
+        public void ApplySoundSettingsToAudioSource(Sound sound, AudioSource audioSource)
+        {
+            audioSource.clip = sound.audioClip;
+            audioSource.outputAudioMixerGroup = sound.outputAudioMixerGroup;
 
+            if (sound.useDefaultSettings) //default settings set on AudioManager Component
+            {
+
+                audioSource.priority = _defaultSoundSettings.priority;
+                audioSource.loop = _defaultSoundSettings.loop;
+                audioSource.pitch = _defaultSoundSettings.pitch;
+                audioSource.volume = _defaultSoundSettings.volume;
+                audioSource.spatialBlend = _defaultSoundSettings.spatialBlend;
+
+            }
+            else //use settings found on the Sound. Apply random values if wanted
+            {
+                audioSource.priority = sound.soundSettings.priority;
+                audioSource.loop = sound.soundSettings.loop;
+
+                if (sound.soundSettings.randomizePitch)
+                {
+                    audioSource.pitch = Random.Range(sound.soundSettings.pitchRandomRange.x, sound.soundSettings.pitchRandomRange.y);
+                }
+                else
+                {
+                    audioSource.pitch = sound.soundSettings.pitch;
+                }
+
+                if (sound.soundSettings.randomizeVolume)
+                {
+                    audioSource.volume = Random.Range(sound.soundSettings.volumeRandomRange.x, sound.soundSettings.volumeRandomRange.y);
+                }
+                else
+                {
+                    audioSource.volume = sound.soundSettings.volume;
+                }
+
+                audioSource.spatialBlend = sound.soundSettings.spatialBlend;
+            }
+        }
 
         /// <summary>
-        /// Checking for expired audio and destroying their objects on the Fixed Update. 
+        /// Applies the settings on a SoundContainer to an AudioSource. Random values are assigned in this fuction.
+        /// </summary>
+        /// <param name="soundContainer">The SoundContainer to get the settings from.</param>
+        /// <param name="audioSource">The AudioSource to apply the settings onto.</param>
+        /// <param name="clip">The AudioClip to assign to the AudioSource.</param>
+        public void ApplySoundSettingsToAudioSource(SoundContainer soundContainer, AudioSource audioSource, AudioClip clip)
+        {
+            audioSource.clip = clip;
+            audioSource.outputAudioMixerGroup = soundContainer.outputAudioMixerGroup;
+
+            if (soundContainer.useDefaultSettings) //default settings set on AudioManager Component
+            {
+
+                audioSource.priority = _defaultSoundSettings.priority;
+                audioSource.loop = _defaultSoundSettings.loop;
+                audioSource.pitch = _defaultSoundSettings.pitch;
+                audioSource.volume = _defaultSoundSettings.volume;
+                audioSource.spatialBlend = _defaultSoundSettings.spatialBlend;
+
+            }
+            else //use settings found on the SoundContainer. Apply random values if wanted
+            {
+                audioSource.priority = soundContainer.soundSettings.priority;
+
+                if (soundContainer.soundSettings.randomizePitch)
+                {
+                    audioSource.pitch = Random.Range(soundContainer.soundSettings.pitchRandomRange.x, soundContainer.soundSettings.pitchRandomRange.y);
+                }
+                else
+                {
+                    audioSource.pitch = soundContainer.soundSettings.pitch;
+                }
+
+                if (soundContainer.soundSettings.randomizeVolume)
+                {
+                    audioSource.volume = Random.Range(soundContainer.soundSettings.volumeRandomRange.x, soundContainer.soundSettings.volumeRandomRange.y);
+                }
+                else
+                {
+                    audioSource.volume = soundContainer.soundSettings.volume;
+                }
+
+                audioSource.spatialBlend = soundContainer.soundSettings.spatialBlend;
+            }
+        }
+
+        /// <summary>
+        /// Stops all active sound containers.
+        /// </summary>
+        public void StopAllContainers()
+        {
+            StopAllCoroutines();
+            foreach (SoundBase sb in activeSoundContainers)
+            {
+                sb.Stop();
+            }
+        }
+
+        /// <summary>
+        /// Checking for expired audio and destroying their objects on the FixedUpdate. 
         /// </summary>
         private void FixedUpdate()
         {
@@ -187,71 +365,19 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Create an AudioSource GameObject at a specific position and play the associated clip. 
+        /// Destroy audio in the scene after it has finished playing. 
         /// </summary>
-        /// <param name="audioClip">The audio clip to be played at a location.</param>
-        /// <param name="vector">The location for the audio clip to be played.</param>
-        public void PlayAudioAtPos(Sound sound, Vector2 vector)
+        private void DestroyExpiredAudio()
         {
-            if (!SceneManager.GetActiveScene().isLoaded) { return; }
-            GameObject audioSourceGameObject = new GameObject();
-            audioSourceGameObject.transform.name = $"Play{sound.name}At{vector}Obj";
-            audioSourceGameObject.transform.position = vector;
-
-            AudioSource audioSource = audioSourceGameObject.AddComponent<AudioSource>();
-            ApplySoundSettingsToAudioSource(sound, audioSource);
-            sound.audioSourceInUse = audioSource;
-            audioSource.Play();
-
-            soundsToKillList.Add(sound);
-        }
-
-        public void PlayAudioAtPos(SoundContainer soundContainer, Vector2 vector)
-        {
-            if (!SceneManager.GetActiveScene().isLoaded) { return; }
-            GameObject audioSourceGameObject = new GameObject();
-            audioSourceGameObject.transform.name = $"Play{soundContainer.name}At{vector}Obj";
-            audioSourceGameObject.transform.position = vector;
-
-            AudioSource audioSource = audioSourceGameObject.AddComponent<AudioSource>();
-            soundContainer.audioSourceInUse = audioSource;
-            StartCoroutine(PlaySoundContainer(soundContainer, audioSource));
-
-            soundsToKillList.Add(soundContainer);
-        }
-
-        /// <summary>
-        /// Get the average audio location of multiple projectiles and create a gameobject with an audio source at the average position to play. 
-        /// </summary>
-        /// <param name="projectiles">The list of projectiles to find the average position of. </param>
-        /// <param name="audioClip">The audioclip to play at the location. </param>
-        /// <param name="averageOrFirst">Determines whether to get the average location of all projectiles or just use one projectile</param>
-        public void PlayAverageAudio(List<Projectile> projectiles, Sound sound, bool averageOrFirst)
-        {
-
-            if (averageOrFirst == true)
+            foreach (SoundBase sb in soundsToDestroyList)
             {
-                AverageAudio averageAudioGameObject = new GameObject().AddComponent<AverageAudio>();
-                averageAudioGameObject.transform.name = $"AverageAudio({sound.name})GameObj";
-
-                AverageAudio averageAudioComponent = averageAudioGameObject.GetComponent<AverageAudio>();
-                averageAudioComponent.SetProjectilesAndSound(projectiles, sound);
-                averageAudioGameObject.transform.position = averageAudioGameObject.TryGetAveragePos();
-                averageAudioComponent.PlayAverageAudio();
-
-                averageAudioList.Add((averageAudioGameObject));
-
-            }
-
-            else
-            {
-                
-                if (projectiles.Count == 0 || projectiles[0] == null)
-                    return; 
-
-                var audioSource = projectiles[0].gameObject.AddComponent<AudioSource>();
-                ApplySoundSettingsToAudioSource(sound, audioSource);
-                audioSource.Play();
+                if (!sb.IsPlaying())
+                {
+                    soundsToDestroyList.Remove(sb);
+                    sb.Stop();
+                    sb.DestroyObject();
+                    return;
+                }
             }
         }
 
@@ -266,226 +392,8 @@ namespace Cardificer
             Destroy(averageAudio.gameObject);
 
         }
-        /// <summary>
-        /// Destroy audio in the scene after it has finished playing. 
-        /// </summary>
-        private void DestroyExpiredAudio()
-        {
-
-            foreach (SoundBase sb in soundsToKillList)
-            {
-                print($"{sb.name} IsPlaying() = {sb.IsPlaying()}");
-            }
-
-            foreach (SoundBase sb in soundsToKillList)
-            {
-                if (!sb.IsPlaying())
-                {
-                    soundsToKillList.Remove(sb);
-                    sb.Stop();
-                    sb.DestroyObject();
-                    return;
-                }
-            }
-        }
-
-        public void ApplySoundSettingsToAudioSource(Sound _sound, AudioSource _audioSource)
-        {
-            _audioSource.clip = _sound.audioClip;
-            _audioSource.outputAudioMixerGroup = _sound.outputAudioMixerGroup;
-
-            if (_sound.useDefaultSettings)
-            {
-
-                _audioSource.priority = _defaultSoundSettings.priority;
-                _audioSource.loop = _defaultSoundSettings.loop;
-                _audioSource.pitch = _defaultSoundSettings.pitch;
-                _audioSource.volume = _defaultSoundSettings.volume;
-                _audioSource.spatialBlend = _defaultSoundSettings.spatialBlend;
-
-            }
-            else
-            {
-                _audioSource.priority = _sound.soundSettings.priority;
-                _audioSource.loop = _sound.soundSettings.loop;
-
-                if (_sound.soundSettings.randomizePitch)
-                {
-                    _audioSource.pitch = Random.Range(_sound.soundSettings.pitchRandomRange.x, _sound.soundSettings.pitchRandomRange.y);
-                }
-                else
-                {
-                    _audioSource.pitch = _sound.soundSettings.pitch;
-                }
-
-                if (_sound.soundSettings.randomizeVolume)
-                {
-                    _audioSource.volume = Random.Range(_sound.soundSettings.volumeRandomRange.x, _sound.soundSettings.volumeRandomRange.y);
-                }
-                else
-                {
-                    _audioSource.volume = _sound.soundSettings.volume;
-                }
-
-                _audioSource.spatialBlend = _sound.soundSettings.spatialBlend;
-            }
-        }
-
-        public void ApplySoundSettingsToAudioSource(SoundContainer _soundContainer, AudioSource _audioSource, AudioClip clip)
-        {
-            _audioSource.clip = clip;
-            _audioSource.outputAudioMixerGroup = _soundContainer.outputAudioMixerGroup;
-
-            if (_soundContainer.useDefaultSettings)
-            {
-
-                _audioSource.priority = _defaultSoundSettings.priority;
-                _audioSource.loop = _defaultSoundSettings.loop;
-                _audioSource.pitch = _defaultSoundSettings.pitch;
-                _audioSource.volume = _defaultSoundSettings.volume;
-                _audioSource.spatialBlend = _defaultSoundSettings.spatialBlend;
-
-            }
-            else
-            {
-                _audioSource.priority = _soundContainer.soundSettings.priority;
-                //_audioSource.loop = _soundContainer.soundSettings.loop;
-
-                if (_soundContainer.soundSettings.randomizePitch)
-                {
-                    _audioSource.pitch = Random.Range(_soundContainer.soundSettings.pitchRandomRange.x, _soundContainer.soundSettings.pitchRandomRange.y);
-                }
-                else
-                {
-                    _audioSource.pitch = _soundContainer.soundSettings.pitch;
-                }
-
-                if (_soundContainer.soundSettings.randomizeVolume)
-                {
-                    _audioSource.volume = Random.Range(_soundContainer.soundSettings.volumeRandomRange.x, _soundContainer.soundSettings.volumeRandomRange.y);
-                }
-                else
-                {
-                    _audioSource.volume = _soundContainer.soundSettings.volume;
-                }
-
-                _audioSource.spatialBlend = _soundContainer.soundSettings.spatialBlend;
-            }
-        }
 
     }
 
-    [System.Serializable]
-    public abstract class SoundBase
-    {
-        public abstract string name { get; }
-        public AudioMixerGroup outputAudioMixerGroup;
-        public bool useDefaultSettings;
-        public SoundSettings soundSettings;
-        public AudioSource audioSourceInUse;
-        public abstract bool IsPlaying();
-        public abstract void Stop();
-        public abstract void DestroyObject();
-    }
-
-    /// <summary>
-    /// This class is for later implementation of random containers, random pitch and volume and overall a more fleshed out audio manager.
-    /// </summary>
-    [System.Serializable]
-    public class Sound : SoundBase
-    {
-
-        [Header("Sound Settings")]
-        public AudioClip audioClip;
-        public override string name { get { return audioClip.name; } }
-
-        public override void Stop()
-        {
-            audioSourceInUse.Stop();
-        }
-
-        public override bool IsPlaying()
-        {
-            if (audioSourceInUse != null)
-                return audioSourceInUse.isPlaying;
-            else
-                return false;
-        }
-
-        public override void DestroyObject()
-        {
-            if (audioSourceInUse != null)
-                Object.Destroy(audioSourceInUse.gameObject);
-        }
-
-    }
-
-    [System.Serializable]
-    public class SoundSettings
-    {
-        [Header("General Settings")]
-        [Range(0, 256)] public int priority = 128;
-        public bool loop;
-        public bool destroyOnComplete;
-
-        [Header("Pitch Settings")]
-        [Range(0.001f, 1)] public float volume = 1;
-        public bool randomizeVolume;
-        public Vector2 volumeRandomRange = new Vector2(.8f, 1f);
-
-        [Header("Volume Settings")]
-        [Range(0.001f, 3)] public float pitch = 1;
-        public bool randomizePitch;
-        public Vector2 pitchRandomRange = new Vector2(.8f, 1.1f);
-
-        [Header("Misc Settings")]
-        [Range(0, 1)] public float spatialBlend = 0.5f;
-        //[SerializeField] private bool _ignorePause;
-
-    }
-
-    [System.Serializable]
-    public class SoundContainer : SoundBase
-    {
-        [Header("Sound Container Settings")]
-        [SerializeField] private string containerName = "NewSoundContainer";
-        public AudioClip[] sounds;
-        public override string name { get { return containerName; } }
-        public SoundContainerType containerType;
-        public bool loopContainer = false;
-        public bool isPlaying;
-        [HideInInspector] public bool shouldPlay;
-        [HideInInspector] public IEnumerator coroutinePlayingThisContainer;
-
-        public override bool IsPlaying()
-        {
-            return isPlaying;
-        }
-
-        public override void Stop()
-        {
-            isPlaying = false;
-            shouldPlay = false;
-            if (audioSourceInUse != null)
-                audioSourceInUse.Stop();
-        }
-
-        public override void DestroyObject()
-        {
-            if (audioSourceInUse != null)
-                Object.Destroy(audioSourceInUse.gameObject);
-        }
-
-
-    }
-
-    public enum SoundContainerType
-    {
-        Sequential,
-        RandomSequential,
-        RandomRandom,
-        RandomOneshot,
-        //RandomBurst,
-    }
 
 }
