@@ -9,9 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42a1acf2e79005b458f58392b602218a, type: 3}
+  m_Script: {fileID: 11500000, guid: dae7b3630693a764aa1dd77d03584695, type: 3}
   m_Name: ChordEffect_Smite
   m_EditorClassIdentifier: 
-  damage: 0
-  statusEffects:
-  - {fileID: 11400000, guid: f402b60c09a13814e9854c1069dd2fa4, type: 2}
+  minAttackSequenceIndex: 0
+  maxAttackSequenceIndex: 2147483647
+  attackSequenceLoopInterval: 2147483647
+  priority: 0
+  action: {fileID: 11400000, guid: 30cfb421a47cee14381435a3e35c7dbd, type: 2}
+  filter: {fileID: 11400000, guid: 41d2be9215724f94a98b95b94ff4902c, type: 2}
+  delay: 0.125
+  playTime: 2
+  playCount: 1000
+  inheritModifiers: 1
+  applyToZeroDamage: 1
+  useThisAsActor: 0
+  inheritDamage: 1
+  inheritStatusEffects: 1

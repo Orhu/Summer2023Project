@@ -9,6 +9,9 @@ namespace Cardificer
     [CreateAssetMenu(fileName = "NewIntangible", menuName = "Status Effects/Intangible")]
     public class Intangible : StatusEffect
     {
+        [Tooltip("Max duration of the effect")]
+        [SerializeField] private float maxDuration = 16f;
+        
         /// <summary>
         /// Creates a new status effect that is a copy of the caller.
         /// </summary>
@@ -34,7 +37,7 @@ namespace Cardificer
             {
                 return false;
             }
-            other.remainingDuration = Mathf.Max(other.remainingDuration, duration);
+            other.remainingDuration = Mathf.Min(duration + other.remainingDuration, maxDuration);
             return true;
         }
 
