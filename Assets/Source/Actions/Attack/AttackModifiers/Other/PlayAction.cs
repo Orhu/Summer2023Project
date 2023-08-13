@@ -43,133 +43,116 @@ namespace Cardificer
         [Tooltip("Whether or not this will be the actor used as the source for playing actions (Does not affect attacks)")]
         [SerializeField] private bool useThisAsActor = false;
 
-        // The damage multiplier of this action
-        private float damageMultiplier = 1f;
+        // The modifiers that are applied to the action.
+        protected List<AttackModifier> modifiers = new List<AttackModifier>();
 
         // The objects ignored by this.
         private List<GameObject> ignoredObjects;
 
-        // The source of the projectile.
-        private Transform sourceTransform;
+        // The number of active attacks spawned by this.
+        private int numActiveAttacks = 0;
 
-        // Parent of the projectile to spawn.
-        private IActor parentActor;
+        // Whether or not this allows currently the destruction of the projectile this is attached to.
+        public override bool allowDestruction { get => numActiveAttacks == 0; }
 
-        // The causer of the damage.
-        private GameObject causer;
-
-        // The objects ignored by this.
-        protected List<AttackModifier> modifiers = new List<AttackModifier>();
-
-        // The root of all projectiles
-        private static GameObject playActionRoot;
+        // The projectile this is attached to.
+        private Projectile projectile;
 
         /// <summary>
         /// Initializes this modifier on the given projectile
         /// </summary>
         /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
-        public override void Initialize(Projectile value)
+        public override void Initialize(Projectile attachedProjectile)
         {
-            if (!applyToZeroDamage && value.attackData.damage == 0) { return; }
-            if (playActionRoot == null)
-            {
-                playActionRoot = new GameObject("Play Action Roots");
-            }
-
-            causer = value.causer;
-            parentActor = value.actor;
-            sourceTransform = value.transform;
+            if (!applyToZeroDamage && attachedProjectile.attackData.damage == 0) { return; }
 
             if (inheritModifiers)
             {
                 if (filter == null)
                 {
-                    modifiers = new List<AttackModifier>(value.modifiers);
+                    modifiers = new List<AttackModifier>(attachedProjectile.modifiers);
                 }
                 else
                 {
-                    modifiers = filter.FilterModifierList(value.modifiers);
+                    modifiers = filter.FilterModifierList(attachedProjectile.modifiers);
                 }
             }
 
+            projectile = attachedProjectile;
             int playCount = this.playCount;
 
             switch (playTime)
             {
                 case PlayTime.Repeatedly:
                 case PlayTime.OnSpawned:
-                    ignoredObjects = value.ignoredObjects;
-                    value.StartCoroutine(DelayedPlayAction(playCount));
+                    ignoredObjects = new List<GameObject>(attachedProjectile.ignoredObjects);
+                    attachedProjectile.StartCoroutine(DelayedPlayAction(playCount));
                     break;
 
                 case PlayTime.OnHit:
-                    value.onHit += collision =>
+                    attachedProjectile.onHit += collision =>
                     {
-                        ignoredObjects = new List<GameObject>(value.ignoredObjects);
+                        ignoredObjects = new List<GameObject>(attachedProjectile.ignoredObjects);
                         ignoredObjects.Add(collision.gameObject);
                         if (--playCount < 0) { return; }
-                        value.StartCoroutine(DelayedPlayAction());
+                        attachedProjectile.StartCoroutine(DelayedPlayAction());
                     };
                     break;
 
                 case PlayTime.OnOverlap:
-                    value.onOverlap += hitCollider =>
+                    attachedProjectile.onOverlap += hitCollider =>
                     {
-                        ignoredObjects = new List<GameObject>(value.ignoredObjects);
+                        ignoredObjects = new List<GameObject>(attachedProjectile.ignoredObjects);
                         ignoredObjects.Add(hitCollider.gameObject);
                         if (--playCount < 0) { return; }
-                        value.StartCoroutine(DelayedPlayAction());
+                        attachedProjectile.StartCoroutine(DelayedPlayAction());
                     };
                     break;
 
                 case PlayTime.OnDestroyed:
-                    value.onDestroyed +=
+                    attachedProjectile.onDestroyed +=
                         // Creates a new game object to act as the source of the played action
                         () =>
                         {
-                            if (value.forceDestroy) { return; }
-
-                            // Create runner object since the projectile will be null.
-                            GameObject coroutineRunner = new GameObject(value.name + " Play " + action.name + " Source");
-                            coroutineRunner.transform.position = sourceTransform.position;
-                            coroutineRunner.transform.rotation = sourceTransform.rotation;
-                            coroutineRunner.transform.parent = playActionRoot.transform;
-                            sourceTransform = coroutineRunner.transform;
-                            MonoBehaviour mono = sourceTransform.gameObject.AddComponent<Empty>();
-                            FloorGenerator.onRoomChange += () => { Destroy(coroutineRunner); };
-
-                            ignoredObjects = new List<GameObject>(value.ignoredObjects);
-                            mono.GetComponent<MonoBehaviour>().StartCoroutine(DelayedPlayAction());
+                            if (attachedProjectile.forceDestroy) { return; }
+                            ignoredObjects = new List<GameObject>(attachedProjectile.ignoredObjects);
+                            attachedProjectile.StartCoroutine(DelayedPlayAction());
                         };
                     break;
             }
-        }
 
-        /// <summary>
-        /// Plays the action.
-        /// </summary>
-        /// <returns> The time to wait to play it. </returns>
-        private IEnumerator DelayedPlayAction(int playCount = 1)
-        {
-            do
+            /// <summary>
+            /// Plays the action.
+            /// </summary>
+            /// <returns> The time to wait to play it. </returns>
+            IEnumerator DelayedPlayAction(int playCount = 1)
             {
-                if (--playCount < 0) { yield break; }
-                if (delay > 0)
+                do
                 {
-                    yield return new WaitForSeconds(delay);
-                }
+                    if (--playCount < 0) { yield break; }
+                    if (delay > 0)
+                    {
+                        yield return new WaitForSeconds(delay);
+                    }
 
-                if (action is Attack attack)
-                {
-                    attack.Play(this, modifiers, causer, ignoredObjects: ignoredObjects);
-                }
-                else
-                {
-                    action.Play(useThisAsActor ? this :parentActor, ignoredObjects);
-                }
+                    if (playTime == PlayTime.Repeatedly && projectile.isDestroyed) { yield break; }
+                    if (action is Attack attack)
+                    {
+                        numActiveAttacks++;
+                        attack.Play(this, modifiers, attachedProjectile.causer, ignoredObjects: ignoredObjects,
+                            attackFinished: () =>
+                            {
+                                numActiveAttacks--;
+                            });
+                    }
+                    else
+                    {
+                        action.Play(useThisAsActor ? this : attachedProjectile.actor, ignoredObjects);
+                    }
 
-                yield return null;
-            } while (playTime == PlayTime.Repeatedly);
+                    yield return null;
+                } while (playTime == PlayTime.Repeatedly);
+            }
         }
 
         #region IActor Implementation
@@ -192,7 +175,7 @@ namespace Cardificer
         /// <returns> The actor transform. </returns>
         public Transform GetActionSourceTransform()
         {
-            return sourceTransform;
+            return projectile.transform;
         }
 
 
@@ -202,7 +185,7 @@ namespace Cardificer
         /// <returns> The mouse position in world space. </returns>
         public Vector3 GetActionAimPosition()
         {
-            return parentActor.GetActionAimPosition();
+            return projectile.actor.GetActionAimPosition();
         }
 
 
@@ -212,7 +195,7 @@ namespace Cardificer
         /// <returns> The collider. </returns>
         public Collider2D GetCollider()
         {
-            return sourceTransform.GetComponent<Collider2D>();
+            return projectile.GetComponent<Collider2D>();
         }
 
 
@@ -230,7 +213,7 @@ namespace Cardificer
         /// <returns> The audiosource. </returns>
         public AudioSource GetAudioSource()
         {
-            return sourceTransform.GetComponent<AudioSource>();
+            return projectile.GetComponent<AudioSource>();
         }
 
         /// <summary>
@@ -239,14 +222,9 @@ namespace Cardificer
         /// <returns> The damage multiplier. </returns>
         public float GetDamageMultiplier()
         {
-            return damageMultiplier;
+            return projectile.actor.GetDamageMultiplier();
         }
 
         #endregion
-
-        /// <summary>
-        /// Empty MonoComponent class since MonoComponent can't be instantiated.
-        /// </summary>
-        private class Empty : MonoBehaviour { }
     }
 }

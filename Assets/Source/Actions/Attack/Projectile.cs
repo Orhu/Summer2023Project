@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Cardificer
 {
@@ -173,7 +175,7 @@ namespace Cardificer
         public bool forceDestroy = false;
 
         // Invoked when this is destroyed.
-        private bool isDestroyed = false;
+        public bool isDestroyed { get; private set; } = false;
         #endregion
 
 
@@ -254,7 +256,7 @@ namespace Cardificer
 
                 AttackModifier instance = Instantiate(modifier);
                 instance.Initialize(this);
-                newModifiers.Add(Instantiate(modifier));
+                newModifiers.Add(instance);
             }
 
             modifiers = newModifiers;
@@ -268,6 +270,8 @@ namespace Cardificer
         /// </summary>
         protected void FixedUpdate()
         {
+            if (isDestroyed) { return; }
+
             speed = Mathf.Clamp(speed + acceleration * Time.fixedDeltaTime, minSpeed, maxSpeed);
             velocity = (Vector2)transform.right * speed;
 
@@ -294,6 +298,8 @@ namespace Cardificer
         /// </summary>
         protected void Update()
         {
+            if (isDestroyed) { return; }
+
             remainingLifetime -= Time.deltaTime;
             if (remainingHomingDelay <= 0)
             {
@@ -302,7 +308,7 @@ namespace Cardificer
             remainingHomingDelay -= Time.deltaTime;
             if (remainingLifetime <= 0)
             {
-                Destroy(gameObject);
+                Destroy();
             }
         }
 
@@ -452,6 +458,7 @@ namespace Cardificer
         /// <param name="collision"></param>
         public void OnTriggerEnter2D(Collider2D collision)
         {
+            if (isDestroyed) { return; }
             if (ignoredObjects.Contains(collision.gameObject) || remainingHits <= 0) { return; }
 
             Health hitHealth = collision.gameObject.GetComponent<Health>();
@@ -462,7 +469,7 @@ namespace Cardificer
                 if (--remainingHits <= 0)
                 {
                     playImpactAudio?.Invoke(transform.position);
-                    Destroy(gameObject);
+                    Destroy();
                 }
             }
             onOverlap?.Invoke(collision);
@@ -474,6 +481,7 @@ namespace Cardificer
         /// <param name="collision"> The collision data </param>
         private void OnCollisionEnter2D(Collision2D collision)
         {
+            if (isDestroyed) { return; }
             Invoke(nameof(DestroyOnWallHit), Time.fixedDeltaTime);
             onHit?.Invoke(collision);
             playImpactAudio?.Invoke(transform.position);
@@ -484,24 +492,24 @@ namespace Cardificer
         /// </summary>
         private void DestroyOnWallHit()
         {
-            Destroy(gameObject);
+            Destroy();
         }
         #endregion
 
+        #region Destruction
         /// <summary>
         /// Destroys this without triggering onDestroyed.
         /// </summary>
         private void ForceDestroy()
         {
             forceDestroy = true;
-            Destroy(gameObject);
+            Destroy();
         }
-
 
         /// <summary>
         /// Allows for visuals to be detached and calls delegate.
         /// </summary>
-        protected void OnDestroy()
+        public void Destroy()
         {
             FloorGenerator.onRoomChange -= ForceDestroy;
             if (!gameObject.scene.isLoaded) { return; }
@@ -512,14 +520,37 @@ namespace Cardificer
             onDestroyed?.Invoke();
             if (attack.detachVisualsBeforeDestroy)
             {
-                GameObject childObj = transform.GetChild(0).gameObject;
-                childObj.transform.parent = null;
+                visualObject.transform.parent = null;
                 if (attack.detatchedVisualsTimeBeforeDestroy != 0f)
                 {
-                    Destroy(childObj, attack.detatchedVisualsTimeBeforeDestroy);
+                    Destroy(visualObject, attack.detatchedVisualsTimeBeforeDestroy);
                 }
             }
+            else
+            {
+                for (int i = 0; i < transform.childCount; i++)
+                {
+                    Destroy(transform.GetChild(i).gameObject);
+                }
+            }
+
+            StartCoroutine(DestroyWhenAllowed());
+            IEnumerator DestroyWhenAllowed()
+            {
+                while (modifiers.Exists(
+                    (AttackModifier modifier) =>
+                    {
+                        return !modifier.allowDestruction;
+                    }))
+                {
+                    yield return new WaitForSeconds(1f);
+                }
+
+                Destroy(gameObject);
+            }
         }
+
+        #endregion
 
         /// <summary>
         /// Gets whether this actor is valid.

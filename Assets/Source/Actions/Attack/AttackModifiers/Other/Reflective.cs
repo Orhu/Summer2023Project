@@ -44,7 +44,7 @@ namespace Cardificer
 
                 if (--projectile.remainingHits <= 0)
                 {
-                    Destroy(projectile.gameObject);
+                    projectile.Destroy();
                 }
             }
         }

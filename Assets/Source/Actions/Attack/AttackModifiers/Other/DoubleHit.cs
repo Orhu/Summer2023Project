@@ -13,29 +13,22 @@ namespace Cardificer
         [Tooltip("The time until the second hit is applied in seconds")] [Min(0)]
         [SerializeField] private float delay = 0.5f;
         
-
         // The projectile that will hit again.
         private Projectile projectile;
 
-        // The object that runs the double hit coroutines.
-        private static MonoBehaviour _routineRunner;
-        private static MonoBehaviour routineRunner
-        {
-            get
-            {
-                if (_routineRunner == null)
-                {
-                    _routineRunner = new GameObject("DoubleHitRoutineRunner").AddComponent<Empty>();
-                }
+        // Whether or not this allows currently the destruction of the projectile this is attached to.
+        public override bool allowDestruction { get => delayedHitCompleated; }
 
-                return _routineRunner;
-            }
-        }
+        // Whether or not the delayed hit has occurred.
+        private bool delayedHitCompleated = false;
 
-        // Binds on overlap
-        public override void Initialize(Projectile value)
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile attachedProjectile)
         {
-            projectile = value;
+            projectile = attachedProjectile;
 
             projectile.onOverlap += HitAgain;
         }
@@ -49,11 +42,14 @@ namespace Cardificer
             System.Action<Collider2D> overlapEffects = null;
             int numOtherDoubleHits = 0;
             int? index = null;
+            // Remove double hit bindings
             foreach (System.Delegate method in projectile.onOverlap.GetInvocationList())
             {
                 if (method.Target.GetType() == GetType())
                 {
+#pragma warning disable CS0253 // Possible unintended reference comparison; right hand side needs cast
                     if (this == method.Target)
+#pragma warning restore CS0253 // Possible unintended reference comparison; right hand side needs cast
                     {
                         index = numOtherDoubleHits + 1;
                     }
@@ -68,12 +64,8 @@ namespace Cardificer
                 }
             }
 
-            Health hitHealth = collider.gameObject.GetComponent<Health>();
-            bool applyDamage = hitHealth != null && projectile.applyDamageOnHit;
 
-            DamageData damageData = new DamageData(projectile.attackData, projectile.attackData.causer);
-
-            routineRunner.StartCoroutine(DelayedHit());
+            projectile.StartCoroutine(DelayedHit());
             IEnumerator DelayedHit()
             {
                 yield return new WaitForSeconds(delay * index.Value);
@@ -81,14 +73,14 @@ namespace Cardificer
                 if (collider == null) { yield break; }
                 overlapEffects?.Invoke(collider);
 
-                if (applyDamage)
+                Health hitHealth = collider.gameObject.GetComponent<Health>();
+                if (hitHealth != null && projectile.applyDamageOnHit)
                 {
-                    hitHealth.ReceiveAttack(damageData);
+                    hitHealth.ReceiveAttack(projectile.attackData);
                 }
 
+                delayedHitCompleated = true;
             }
         }
-
-        private class Empty : MonoBehaviour { }
     }
 }

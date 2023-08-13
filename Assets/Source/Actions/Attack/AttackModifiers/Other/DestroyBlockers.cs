@@ -21,6 +21,7 @@ namespace Cardificer
                     {
                         value.CancelInvoke("DestroyOnWallHit");
                     }
+                    
                     Destroy(collision.gameObject);
                 };
         }

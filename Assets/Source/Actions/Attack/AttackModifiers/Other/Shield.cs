@@ -39,11 +39,11 @@ namespace Cardificer
                 && !hitProjectile.immuneToShield
                 && !projectile.ignoredObjects.Contains(hitProjectile.causer))
             {
-                Destroy(collider.gameObject);
+                hitProjectile.Destroy();
 
                 if (--projectile.remainingHits <= 0)
                 {
-                    Destroy(projectile.gameObject);
+                    projectile.Destroy();
                 }
             }
         }

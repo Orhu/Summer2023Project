@@ -71,7 +71,7 @@ namespace Cardificer
 
                 if (--tickingDamageProjectile.remainingHits <= 0)
                 {
-                    Destroy(tickingDamageProjectile.gameObject);
+                    tickingDamageProjectile.Destroy();
                 }
 
                 yield return new WaitForSeconds(damageInterval);
