@@ -8,8 +8,8 @@ namespace Cardificer
     [CreateAssetMenu(menuName = "Loot/Cooldown Boon")]
     public class CooldownBoon : Boon
     {
-        [Tooltip("The amount to multiply the current cooldown reduction by.")] [Min(1)]
-        [SerializeField] private float cooldownMultiplier = 1.1f;
+        [Tooltip("The amount to add to the player's cooldown reduction multiplier. (0.1 adds a flat 10% cooldown reduction)")] [Min(0)]
+        [SerializeField] private float cooldownMultiplier = 0.1f;
 
         /// <summary>
         /// Applied the effects of this boon to the player.
@@ -17,7 +17,7 @@ namespace Cardificer
         public override void Apply()
         {
             pickCount++;
-            Deck.playerDeck.cooldownReduction *= cooldownMultiplier;
+            Deck.playerDeck.cooldownReduction += cooldownMultiplier;
         }
     }
 }

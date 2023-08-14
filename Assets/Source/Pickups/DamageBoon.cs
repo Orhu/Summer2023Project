@@ -8,8 +8,8 @@ namespace Cardificer
     [CreateAssetMenu(menuName = "Loot/Damage Boon")]
     public class DamageBoon : Boon
     {
-        [Tooltip("The amount to multiply the player's current damage multiplier by.")] [Min(1)]
-        [SerializeField] private float damageIncrease = 1.1f;
+        [Tooltip("The amount to add to the player's damage multiplier. (0.1 adds a flat 10% damage)")] [Min(0)]
+        [SerializeField] private float damageIncrease = 0.1f;
 
         /// <summary>
         /// Applied the effects of this boon to the player.
@@ -17,7 +17,7 @@ namespace Cardificer
         public override void Apply()
         {
             pickCount++;
-            Player.Get().GetComponent<PlayerController>().damageMultiplier *= damageIncrease;
+            Player.Get().GetComponent<PlayerController>().damageMultiplier += damageIncrease;
         }
     }
 }

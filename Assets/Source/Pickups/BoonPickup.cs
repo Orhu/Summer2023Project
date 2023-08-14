@@ -13,7 +13,7 @@ namespace Cardificer
         /// <summary>
         /// Pickup boon.
         /// </summary>
-        /// <param name="collision"> If player give coins. </param>
+        /// <param name="collision"> Thing that collided with boon ground pickup </param>
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("Player"))

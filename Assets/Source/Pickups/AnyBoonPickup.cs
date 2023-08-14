@@ -8,9 +8,9 @@ namespace Cardificer
     public class AnyBoonPickup : MonoBehaviour
     {
         /// <summary>
-        /// Pickup coins.
+        /// Open pick a boon menu
         /// </summary>
-        /// <param name="collision"> If player give coins. </param>
+        /// <param name="collision"> Thing that collided with boon ground pickup </param>
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (collision.CompareTag("Player"))
