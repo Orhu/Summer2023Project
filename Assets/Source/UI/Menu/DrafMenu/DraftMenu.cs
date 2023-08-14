@@ -88,6 +88,8 @@ namespace Cardificer
                 Toggle rendererToggle = renderer.GetComponent<Toggle>();
                 rendererToggle.onValueChanged.AddListener(AddToDeck);
 
+                UpdateNavigation();
+
                 // Moves the renderer if it is selected.
                 void AddToDeck(bool shouldAdd)
                 {
@@ -99,6 +101,8 @@ namespace Cardificer
                         rendererToggle.isOn = false;
                         deckSize++;
                         CheckDeckValidity();
+
+                        UpdateNavigation();
                     }
                 }
                 void AddToDraft(bool shouldAdd)
@@ -111,6 +115,8 @@ namespace Cardificer
                         rendererToggle.isOn = false;
                         deckSize--;
                         CheckDeckValidity();
+
+                        UpdateNavigation();
                     }
                 }
 
@@ -128,6 +134,8 @@ namespace Cardificer
                 Toggle rendererToggle = renderer.GetComponent<Toggle>();
                 rendererToggle.onValueChanged.AddListener(AddToDraft);
 
+                UpdateNavigation();
+
                 // Moves the renderer if it is selected.
                 void AddToDeck(bool shouldAdd)
                 {
@@ -139,6 +147,8 @@ namespace Cardificer
                         rendererToggle.isOn = false;
                         deckSize++;
                         CheckDeckValidity();
+
+                        UpdateNavigation();
                     }
                 }
                 void AddToDraft(bool shouldAdd)
@@ -150,6 +160,8 @@ namespace Cardificer
                         rendererToggle.onValueChanged.AddListener(AddToDeck);
                         deckSize--;
                         CheckDeckValidity();
+
+                        UpdateNavigation();
                     }
                     rendererToggle.isOn = false;
                 }
@@ -187,6 +199,65 @@ namespace Cardificer
                 deckValidated?.Invoke();
                 return true;
             }
+        }
+
+        /// <summary>
+        /// Ensures everything has proper navigation after rearrangement.
+        /// </summary>
+        private void UpdateNavigation()
+        {
+            Selectable[] deckCard = deckContainer.GetComponentsInChildren<Selectable>();
+            for (int i = 0; i < deckCard.Length; i++)
+            {
+                Navigation navigation = new Navigation();
+                navigation.mode = Navigation.Mode.Explicit;
+                navigation.selectOnUp = draftScrollRect.horizontalScrollbar;
+                navigation.selectOnDown = deckScrollRect.horizontalScrollbar;
+
+                if (i > 0)
+                {
+                    Navigation neighborNavigation = deckCard[i - 1].navigation;
+                    neighborNavigation.selectOnRight = deckCard[i];
+                    deckCard[i - 1].navigation = neighborNavigation;
+
+                    navigation.selectOnLeft = deckCard[i - 1];
+                }
+                deckCard[i].navigation = navigation;
+            }
+
+            Selectable[] draftCard = draftContainer.GetComponentsInChildren<Selectable>();
+            for (int i = 0; i < draftCard.Length; i++)
+            {
+                Navigation navigation = new Navigation();
+                navigation.mode = Navigation.Mode.Explicit;
+                navigation.selectOnUp = null;
+                navigation.selectOnDown = draftScrollRect.horizontalScrollbar;
+
+                if (i > 0)
+                {
+                    Navigation neighborNavigation = draftCard[i - 1].navigation;
+                    neighborNavigation.selectOnRight = draftCard[i];    
+                    draftCard[i - 1].navigation = neighborNavigation;
+
+                    navigation.selectOnLeft = draftCard[i - 1];
+                }
+                draftCard[i].navigation = navigation;
+            }
+
+            Navigation draftScrollNavigation = draftScrollRect.horizontalScrollbar.navigation;
+            draftScrollNavigation.selectOnDown = deckContainer.transform.childCount > 0 ?
+                deckContainer.transform.GetChild(deckContainer.transform.childCount / 2).GetComponent<Selectable>() :
+                deckScrollRect.horizontalScrollbar;
+            draftScrollNavigation.selectOnUp = draftContainer.transform.childCount > 0 ?
+                draftContainer.transform.GetChild(draftContainer.transform.childCount / 2).GetComponent<Selectable>() :
+                null;
+            draftScrollRect.horizontalScrollbar.navigation = draftScrollNavigation;
+
+            Navigation deckScrollNavigation = deckScrollRect.horizontalScrollbar.navigation;
+            deckScrollNavigation.selectOnUp = deckContainer.transform.childCount > 0 ?
+                deckContainer.transform.GetChild(deckContainer.transform.childCount / 2).GetComponent<Selectable>() :
+                draftScrollRect.horizontalScrollbar;
+            deckScrollRect.horizontalScrollbar.navigation = deckScrollNavigation;
         }
     }
 }
