@@ -130,7 +130,10 @@ namespace Cardificer
                 Time.timeScale = 1;
             }
 
-            instance.GetComponentInChildren<Menu>(false)?.InitializeSelection();
+            if (usingNavigation)
+            {
+                instance.GetComponentInChildren<Menu>(false)?.InitializeSelection();
+            }
             return menu;
         }
 
