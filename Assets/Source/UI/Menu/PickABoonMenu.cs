@@ -12,7 +12,10 @@ namespace Cardificer
     public class PickABoonMenu : MonoBehaviour
     {
         [Tooltip("Called when any boon has been selected.")]
-        [SerializeField] public UnityEvent onSelected;
+        public UnityEvent onSelected;
+
+        [Tooltip("Called when any boon has been deselected.")]
+        public UnityEvent onDeselected;
 
 
         [Tooltip("The text to display the boon name in.")]
@@ -64,6 +67,12 @@ namespace Cardificer
         /// </summary>
         private void Start()
         {
+            onDeselected.AddListener(
+                () =>
+                {
+                    selectedBoon = null;
+                });
+
             foreach (BoonInfo boonInfo in boons)
             {
                 boonInfo.button.onClick.AddListener(
@@ -79,6 +88,14 @@ namespace Cardificer
                         boonInfo.onSelected?.Invoke();
                     });
             }
+        }
+
+        /// <summary>
+        /// Reset on reopen
+        /// </summary>
+        private void OnEnable()
+        {
+            onDeselected?.Invoke();
         }
 
         /// <summary>
