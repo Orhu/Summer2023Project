@@ -9,10 +9,10 @@ namespace Cardificer
     public class DraftMenu : Menu
     {
         [Tooltip("The area to add draftable cards to.")]
-        [SerializeField] private GameObject draftContainer;
+        [SerializeField] private ScrollRect draftScrollRect;
 
         [Tooltip("The area to add the chosen cards to.")]
-        [SerializeField] private GameObject deckContainer;
+        [SerializeField] private ScrollRect deckScrollRect;
 
         [Tooltip("The prefab to use when rendering cards.")]
         [SerializeField] private CardRenderer cardRendererPrefab;
@@ -30,6 +30,15 @@ namespace Cardificer
 
         // The settings that determine how this acts.
         private DraftSettings settings;
+
+        // The current size of the drafted deck.
+        private int deckSize = 0;
+
+        // The container to add the draft cards to.
+        private GameObject draftContainer => draftScrollRect.viewport.transform.GetChild(0).gameObject;
+
+        // The container to add the deck cards to.
+        private GameObject deckContainer => deckScrollRect.viewport.transform.GetChild(0).gameObject;
 
         /// <summary>
         /// Adds the drafted cards to the player deck.
@@ -49,6 +58,8 @@ namespace Cardificer
         /// </summary>
         private void OnEnable()
         {
+            deckSize = 0;
+            initialSelection = null;
             settings = DraftSettings.Get();
 
             for (int i = 0; i < draftContainer.transform.childCount; i++)
@@ -84,6 +95,7 @@ namespace Cardificer
                         rendererToggle.onValueChanged.RemoveListener(AddToDeck);
                         rendererToggle.onValueChanged.AddListener(AddToDraft);
                         rendererToggle.isOn = false;
+                        deckSize++;
                         CheckDeckValidity();
                     }
                 }
@@ -95,11 +107,13 @@ namespace Cardificer
                         rendererToggle.onValueChanged.RemoveListener(AddToDraft);
                         rendererToggle.onValueChanged.AddListener(AddToDeck);
                         rendererToggle.isOn = false;
+                        deckSize--;
                         CheckDeckValidity();
                     }
                 }
+
+                initialSelection ??= renderer.gameObject;
             }
-            initialSelection = draftContainer.transform.GetChild(0).gameObject;
 
 
             // Initializes the default deck
@@ -121,6 +135,7 @@ namespace Cardificer
                         rendererToggle.onValueChanged.RemoveListener(AddToDeck);
                         rendererToggle.onValueChanged.AddListener(AddToDraft);
                         rendererToggle.isOn = false;
+                        deckSize++;
                         CheckDeckValidity();
                     }
                 }
@@ -131,6 +146,7 @@ namespace Cardificer
                         renderer.transform.SetParent(draftContainer.transform, false);
                         rendererToggle.onValueChanged.RemoveListener(AddToDraft);
                         rendererToggle.onValueChanged.AddListener(AddToDeck);
+                        deckSize--;
                         CheckDeckValidity();
                     }
                     rendererToggle.isOn = false;
@@ -139,6 +155,75 @@ namespace Cardificer
 
             CheckDeckValidity();
         }
+
+        // None of the below works because it does not account for updating 
+        
+        ///// <summary>
+        ///// Sets the navigation of a card renderer that has been added to the deck.
+        ///// </summary>
+        ///// <param name="rendererToggle"> The toggle of the renderer. </param>
+        //private void SetToDeckNavigation(Toggle rendererToggle)
+        //{
+        //    Selectable neighbor = draftContainer.transform.GetChild(draftContainer.transform.childCount - 1).GetComponent<Selectable>();
+
+        //    Navigation navigation = new Navigation();
+        //    navigation.mode = Navigation.Mode.Explicit;
+        //    navigation.selectOnUp = draftScrollRect.horizontalScrollbar;
+        //    navigation.selectOnDown = deckScrollRect.horizontalScrollbar;
+        //    rendererToggle.navigation = navigation;
+
+        //    UpdateNavigation(rendererToggle, neighbor);
+        //}
+
+        ///// <summary>
+        ///// Sets the navigation of a card renderer that has been added to the draft.
+        ///// </summary>
+        ///// <param name="rendererToggle"> The toggle of the renderer. </param>
+        //private void SetToDraftNavigation(Toggle rendererToggle)
+        //{
+        //    Selectable neighbor = draftContainer.transform.GetChild(draftContainer.transform.childCount - 1).GetComponent<Selectable>();
+
+        //    Navigation navigation = new Navigation();
+        //    navigation.mode = Navigation.Mode.Explicit;
+        //    navigation.selectOnUp = null;
+        //    navigation.selectOnDown = draftScrollRect.horizontalScrollbar;
+        //    rendererToggle.navigation = navigation;
+
+        //    UpdateNavigation(rendererToggle, neighbor);
+        //}
+
+        ///// <summary>
+        ///// Ensures everything has proper navigation after rearrangement.
+        ///// </summary>
+        ///// <param name="rendererToggle"> The renderer that was moved. </param>
+        ///// <param name="neighbor"> The new neighbor of that renderer. </param>
+        //private void UpdateNavigation(Toggle rendererToggle, Selectable neighbor)
+        //{
+        //    Navigation navigation = rendererToggle.navigation;
+        //    navigation.selectOnLeft = neighbor;
+        //    rendererToggle.navigation = navigation;
+
+        //    Navigation neighborNavigation = neighbor.navigation;
+        //    neighborNavigation.selectOnRight = rendererToggle;
+        //    neighbor.navigation = neighborNavigation;
+
+
+        //    Navigation draftScrollNavigation = draftScrollRect.horizontalScrollbar.navigation;
+        //    draftScrollNavigation.selectOnDown = deckContainer.transform.childCount > 0 ?
+        //        deckContainer.transform.GetChild(deckContainer.transform.childCount / 2).GetComponent<Selectable>() :
+        //        null;
+        //    draftScrollNavigation.selectOnUp = draftContainer.transform.childCount > 0 ?
+        //        draftContainer.transform.GetChild(draftContainer.transform.childCount / 2).GetComponent<Selectable>() :
+        //        null;
+        //    draftScrollRect.horizontalScrollbar.navigation = draftScrollNavigation;
+
+
+        //    Navigation deckScrollNavigation = deckScrollRect.horizontalScrollbar.navigation;
+        //    deckScrollNavigation.selectOnUp = deckContainer.transform.childCount > 0 ?
+        //        deckContainer.transform.GetChild(deckContainer.transform.childCount / 2).GetComponent<Selectable>() :
+        //        null;
+        //    deckScrollRect.horizontalScrollbar.navigation = deckScrollNavigation;
+        //}
 
 
         /// <summary>
@@ -154,7 +239,6 @@ namespace Cardificer
         /// </summary>
         private void CheckDeckValidity()
         {
-            int deckSize = deckContainer.transform.childCount;
             if (settings.maxPlayerDeckSize < deckSize)
             {
                 deckInvalidated_SizeTooLarge?.Invoke();

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 
 namespace Cardificer
 {
@@ -24,6 +25,9 @@ namespace Cardificer
         // The menus that are currently pausing the game.
         private HashSet<GameObject> pausingMenus = new HashSet<GameObject>();
 
+        // The input module for this.
+        public static InputSystemUIInputModule uiInputModule => instance.GetComponent<InputSystemUIInputModule>();
+
         // Whether or not the player is using the controller to navigate menu.
         public static bool usingNavigation { private set; get; } = false;
 
@@ -42,6 +46,14 @@ namespace Cardificer
             {
                 Destroy(gameObject);
             }
+
+            uiInputModule.move.action.performed +=
+                (UnityEngine.InputSystem.InputAction.CallbackContext context) =>
+                {
+                    usingNavigation = true;
+                    if (EventSystem.current.currentSelectedGameObject != null) { return; }
+                    instance.GetComponentInChildren<Menu>(false)?.InitializeSelection();
+                };
         }
 
         /// <summary>
@@ -49,9 +61,6 @@ namespace Cardificer
         /// </summary>
         private void OnNavigate()
         {
-            usingNavigation = true;
-            if (EventSystem.current.currentSelectedGameObject != null) { return; }
-            GetComponentInChildren<Menu>(false)?.InitializeSelection();
         }
 
         /// <summary>

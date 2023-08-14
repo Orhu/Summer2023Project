@@ -68,6 +68,8 @@ namespace Cardificer
             dashAbility = GetComponent<DashAbility>();
             dashAbility.onDashBegin += OnDashBegin;
             dashAbility.onDashEnd += OnDashEnd;
+
+            GetComponent<PlayerInput>().uiInputModule = MenuManager.uiInputModule;
         }
 
         /// <summary>
