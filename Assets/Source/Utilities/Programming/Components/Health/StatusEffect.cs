@@ -52,7 +52,7 @@ namespace Cardificer
 
             if (visualEffect != null)
             {
-                instance.visualEffect = Instantiate<GameObject>(visualEffect);
+                instance.visualEffect = Instantiate(visualEffect);
                 instance.visualEffect.transform.parent = gameObject.transform;
                 instance.visualEffect.transform.localPosition = Vector3.zero;
             }

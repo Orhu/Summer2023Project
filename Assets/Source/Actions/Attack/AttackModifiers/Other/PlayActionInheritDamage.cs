@@ -17,18 +17,18 @@ namespace Cardificer
         [Tooltip("Whether or not to inherit the status effects of the parent.")]
         public bool inheritStatusEffects = true;
 
-        // The projectile this modifies
-        public override Projectile modifiedProjectile
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                base.modifiedProjectile = value;
-                OverrideDamage damgeOverride = CreateInstance<OverrideDamage>();
-                damgeOverride.damageData = value.attack.attack;
-                damgeOverride.overrideDamage = inheritDamage;
-                damgeOverride.overrideStatusEffects = inheritStatusEffects;
-                modifiers.Insert(0, damgeOverride);
-            }
+            base.Initialize(value);
+            OverrideDamage damgeOverride = CreateInstance<OverrideDamage>();
+            damgeOverride.damageData = value.attack.attack;
+            damgeOverride.overrideDamage = inheritDamage;
+            damgeOverride.overrideStatusEffects = inheritStatusEffects;
+            modifiers.Insert(0, damgeOverride);
         }
     }
 }

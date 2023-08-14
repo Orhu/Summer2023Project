@@ -12,13 +12,10 @@ namespace Cardificer
         public DamageData damageData;
 
         // Gets the damage multiplier from the causer.
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                base.modifiedProjectile = value;
-                damageData.damage = Mathf.RoundToInt(damageData.damage * value.causer.GetComponent<IActor>().GetDamageMultiplier());
-            }
+            base.Initialize(value);
+            damageData.damage = Mathf.RoundToInt(damageData.damage * value.causer.GetComponent<IActor>().GetDamageMultiplier());
         }
 
         /// <summary>

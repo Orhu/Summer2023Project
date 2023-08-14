@@ -10,22 +10,20 @@ namespace Cardificer
     public class DestroyBlockers : AttackModifier
     {
         // Binds Destroys blockers on hit
-        public override Projectile modifiedProjectile
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.onHit +=
-                    (Collision2D collision) =>
-                    {
-                        if (collision.gameObject.layer != LayerMask.NameToLayer("Blockers")) { return; }
+            value.onHit +=
+                (Collision2D collision) =>
+                {
+                    if (collision.gameObject.layer != LayerMask.NameToLayer("Blockers")) { return; }
 
-                        if (--value.remainingHits > 0)
-                        {
-                            value.CancelInvoke("DestroyOnWallHit");
-                        }
-                        Destroy(collision.gameObject);
-                    };
-            }
+                    if (--value.remainingHits > 0)
+                    {
+                        value.CancelInvoke("DestroyOnWallHit");
+                    }
+                    
+                    Destroy(collision.gameObject);
+                };
         }
     }
 }
