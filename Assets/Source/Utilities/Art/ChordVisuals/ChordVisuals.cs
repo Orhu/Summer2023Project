@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 namespace Cardificer
 {
-    [AddComponentMenu("Projectile Visuals")]
+    [AddComponentMenu("Chord Visuals")]
     public class ChordVisuals : MonoBehaviour
     {
 

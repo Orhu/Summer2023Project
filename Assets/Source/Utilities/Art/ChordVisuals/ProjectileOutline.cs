@@ -14,10 +14,10 @@ namespace Cardificer
         private GameObject visualObject;
 
         // The sprite of visual object this is outlining.
-        SpriteRenderer targetRenderer;
+        private SpriteRenderer targetRenderer;
 
         // The outline sprite.
-        SpriteRenderer sprite;
+        private SpriteRenderer sprite;
 
         /// <summary>
         /// Starts drawing the outline of this projectile. 
