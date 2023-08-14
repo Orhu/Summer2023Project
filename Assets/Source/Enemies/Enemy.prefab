@@ -153,7 +153,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
 --- !u!95 &8241900991551053353
@@ -275,6 +275,7 @@ MonoBehaviour:
   currentState: {fileID: 0}
   exhausted: 0
   timeSinceTransition: 0
+  canDodge: 1
   startingMovementType: 1
   speedPercent: 1
   ignoreDifficultyProgression: 0
@@ -294,6 +295,7 @@ MonoBehaviour:
   _maxHealth: 5
   invincibilityDuration: 0
   immuneStatusEffects: []
+  damageNumberPrefab: {fileID: 7542948855267751516, guid: cac35974a90e4314a992cb101272aaa4, type: 3}
   onDeath:
     m_PersistentCalls:
       m_Calls:
@@ -354,7 +356,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultMirrorParam: lookingLeft
   _animactionClipsToMirrorParameters: []
-  animator: {fileID: 8241900991551053353}
 --- !u!114 &683462632588320263
 MonoBehaviour:
   m_ObjectHideFlags: 0

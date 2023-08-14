@@ -12,7 +12,7 @@ namespace Cardificer
     public class ModifierFilter : ScriptableObject
     {
         [Tooltip("A lits of the class names of modifiers to not apply to this action.")]
-        [SerializeField] private string[] forbiddenModifiers;
+        [SerializeField] private string[] forbiddenModifiers = new string[0];
 
         // The forbidden modifiers converted to System.Type
         private Type[] _forbiddenModifierTypes;
@@ -27,6 +27,10 @@ namespace Cardificer
                     for (int i = 0; i < _forbiddenModifierTypes.Length; i++)
                     {
                         _forbiddenModifierTypes[i] = Type.GetType($"Cardificer.{forbiddenModifiers[i]}");
+                        if (_forbiddenModifierTypes[i] == null)
+                        {
+                            throw new Exception($"Error: Can't find modifier with name: {forbiddenModifiers[i]} which is listed in {name}.");
+                        }
                     }
                 }
 
