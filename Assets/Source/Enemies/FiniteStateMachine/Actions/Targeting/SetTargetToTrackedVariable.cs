@@ -44,7 +44,7 @@ namespace Cardificer.FiniteStateMachine
                 {
                     SetTarget(vector);
                 }
-                else
+                else if (value != null)
                 {
                     Debug.LogError($"Tried to set target to {variableName} but it is not a game object or vector 2 on {stateMachine}.");
                 }

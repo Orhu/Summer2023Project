@@ -37,7 +37,7 @@ namespace Cardificer
         {
             damage = attack.damage;
             damageType = attack.damageType;
-            statusEffects = attack.statusEffects;
+            statusEffects = new List<StatusEffect>(attack.statusEffects);
             invertInvincibility = attack.invertInvincibility;
             this.causer = causer;
         }

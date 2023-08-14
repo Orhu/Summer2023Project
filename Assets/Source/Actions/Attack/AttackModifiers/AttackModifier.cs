@@ -16,11 +16,17 @@ namespace Cardificer
 
         [Tooltip("The interval on which the range of this modifier's valid indices loops")] [Min(2)]
         public int attackSequenceLoopInterval = int.MaxValue;
-
-        // The projectile this modifies
-        public abstract Projectile modifiedProjectile { set; }
-
+        
         [Tooltip("Determines the order in which the modifier is applied to an action based on other modifier's priorities (lower values first)")]
         public int priority = 0;
+
+        // Whether or not this allows currently the destruction of the projectile this is attached to.
+        public virtual bool allowDestruction { get => true; }
+
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public abstract void Initialize(Projectile attachedProjectile);
     }
 }

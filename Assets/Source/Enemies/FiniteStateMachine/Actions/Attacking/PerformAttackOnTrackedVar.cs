@@ -35,6 +35,10 @@ namespace Cardificer.FiniteStateMachine
                 ignoredObjects.Remove(trackedObject);
                 return ignoredObjects;
             }
+            else if (trackedValue == null)
+            {
+                return new List<GameObject>(FloorGenerator.currentRoom.livingEnemies);
+            }
             throw new System.Exception($"Can't perform attack only on {variableName} as it does not exist or is not a game object on {stateMachine}.");
         }
     }

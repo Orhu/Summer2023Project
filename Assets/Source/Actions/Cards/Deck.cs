@@ -326,6 +326,26 @@ namespace Cardificer
         }
 
         /// <summary>
+        /// Subtracts time from all current cooldowns.
+        /// </summary>
+        /// <param name="amount"> The amount to subtract in seconds. </param>
+        public void SubtractFromCooldowns(float amount)
+        {
+            foreach (KeyValuePair<int, float> cardIndexToCooldown in new Dictionary<int, float>(cardIndicesToCooldowns))
+            {
+                float newValue = cardIndexToCooldown.Value - amount;
+                if (newValue <= 0)
+                {
+                    cardIndicesToCooldowns.Remove(cardIndexToCooldown.Key);
+                }
+                else
+                {
+                    cardIndicesToCooldowns[cardIndexToCooldown.Key] = newValue;
+                }
+            }
+        }
+
+        /// <summary>
         /// Resets all card cooldowns back to 0.
         /// </summary>
         public void ClearCooldowns()
