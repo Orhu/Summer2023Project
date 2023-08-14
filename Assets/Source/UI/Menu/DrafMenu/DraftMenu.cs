@@ -45,6 +45,8 @@ namespace Cardificer
         /// </summary>
         public void ConfirmDeck()
         {
+            if (!CheckDeckValidity()) { return; }
+
             foreach (CardRenderer renderer in deckContainer.GetComponentsInChildren<CardRenderer>())
             {
                 Deck.playerDeck.AddCard(renderer.card, Deck.AddCardLocation.BottomOfDrawPile);
@@ -156,75 +158,6 @@ namespace Cardificer
             CheckDeckValidity();
         }
 
-        // None of the below works because it does not account for updating 
-        
-        ///// <summary>
-        ///// Sets the navigation of a card renderer that has been added to the deck.
-        ///// </summary>
-        ///// <param name="rendererToggle"> The toggle of the renderer. </param>
-        //private void SetToDeckNavigation(Toggle rendererToggle)
-        //{
-        //    Selectable neighbor = draftContainer.transform.GetChild(draftContainer.transform.childCount - 1).GetComponent<Selectable>();
-
-        //    Navigation navigation = new Navigation();
-        //    navigation.mode = Navigation.Mode.Explicit;
-        //    navigation.selectOnUp = draftScrollRect.horizontalScrollbar;
-        //    navigation.selectOnDown = deckScrollRect.horizontalScrollbar;
-        //    rendererToggle.navigation = navigation;
-
-        //    UpdateNavigation(rendererToggle, neighbor);
-        //}
-
-        ///// <summary>
-        ///// Sets the navigation of a card renderer that has been added to the draft.
-        ///// </summary>
-        ///// <param name="rendererToggle"> The toggle of the renderer. </param>
-        //private void SetToDraftNavigation(Toggle rendererToggle)
-        //{
-        //    Selectable neighbor = draftContainer.transform.GetChild(draftContainer.transform.childCount - 1).GetComponent<Selectable>();
-
-        //    Navigation navigation = new Navigation();
-        //    navigation.mode = Navigation.Mode.Explicit;
-        //    navigation.selectOnUp = null;
-        //    navigation.selectOnDown = draftScrollRect.horizontalScrollbar;
-        //    rendererToggle.navigation = navigation;
-
-        //    UpdateNavigation(rendererToggle, neighbor);
-        //}
-
-        ///// <summary>
-        ///// Ensures everything has proper navigation after rearrangement.
-        ///// </summary>
-        ///// <param name="rendererToggle"> The renderer that was moved. </param>
-        ///// <param name="neighbor"> The new neighbor of that renderer. </param>
-        //private void UpdateNavigation(Toggle rendererToggle, Selectable neighbor)
-        //{
-        //    Navigation navigation = rendererToggle.navigation;
-        //    navigation.selectOnLeft = neighbor;
-        //    rendererToggle.navigation = navigation;
-
-        //    Navigation neighborNavigation = neighbor.navigation;
-        //    neighborNavigation.selectOnRight = rendererToggle;
-        //    neighbor.navigation = neighborNavigation;
-
-
-        //    Navigation draftScrollNavigation = draftScrollRect.horizontalScrollbar.navigation;
-        //    draftScrollNavigation.selectOnDown = deckContainer.transform.childCount > 0 ?
-        //        deckContainer.transform.GetChild(deckContainer.transform.childCount / 2).GetComponent<Selectable>() :
-        //        null;
-        //    draftScrollNavigation.selectOnUp = draftContainer.transform.childCount > 0 ?
-        //        draftContainer.transform.GetChild(draftContainer.transform.childCount / 2).GetComponent<Selectable>() :
-        //        null;
-        //    draftScrollRect.horizontalScrollbar.navigation = draftScrollNavigation;
-
-
-        //    Navigation deckScrollNavigation = deckScrollRect.horizontalScrollbar.navigation;
-        //    deckScrollNavigation.selectOnUp = deckContainer.transform.childCount > 0 ?
-        //        deckContainer.transform.GetChild(deckContainer.transform.childCount / 2).GetComponent<Selectable>() :
-        //        null;
-        //    deckScrollRect.horizontalScrollbar.navigation = deckScrollNavigation;
-        //}
-
 
         /// <summary>
         /// Reset initial selection.
@@ -237,19 +170,22 @@ namespace Cardificer
         /// <summary>
         /// Calls the appropriate validity event for the current deck.
         /// </summary>
-        private void CheckDeckValidity()
+        private bool CheckDeckValidity()
         {
             if (settings.maxPlayerDeckSize < deckSize)
             {
                 deckInvalidated_SizeTooLarge?.Invoke();
+                return false;
             }
             else if (settings.minPlayerDeckSize > deckSize)
             {
                 deckInvalidated_SizeTooSmall?.Invoke();
+                return false;
             }
             else
             {
                 deckValidated?.Invoke();
+                return true;
             }
         }
     }
