@@ -17,10 +17,10 @@ namespace Cardificer
         private Projectile projectile;
 
         // Whether or not this allows currently the destruction of the projectile this is attached to.
-        public override bool allowDestruction { get => delayedHitCompleated; }
+        public override bool allowDestruction { get => delayedHitCompleted; }
 
         // Whether or not the delayed hit has occurred.
-        private bool delayedHitCompleated = false;
+        private bool delayedHitCompleted = false;
 
         /// <summary>
         /// Initializes this modifier on the given projectile
@@ -79,7 +79,7 @@ namespace Cardificer
                     hitHealth.ReceiveAttack(projectile.attackData);
                 }
 
-                delayedHitCompleated = true;
+                delayedHitCompleted = true;
             }
         }
     }
