@@ -56,10 +56,10 @@ namespace Cardificer
         public class BoonToPickCountEntry
         {
             // The boon who's pick count is being serialized.
-            [SerializeField] private string boonPath;
+            [SerializeField, HideInInspector] private string boonPath;
 
             // The pick count.
-            [SerializeField] private int pickCount;
+            [SerializeField, HideInInspector] private int pickCount;
 
             /// <summary>
             /// Constructor.

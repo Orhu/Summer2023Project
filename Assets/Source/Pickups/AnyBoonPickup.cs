@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Cardificer
 {
+    /// <summary>
+    /// A pickup that opens the pick a boon menu.
+    /// </summary>
     public class AnyBoonPickup : MonoBehaviour
     {
         /// <summary>
