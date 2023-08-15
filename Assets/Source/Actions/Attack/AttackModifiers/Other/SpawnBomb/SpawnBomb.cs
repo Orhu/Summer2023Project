@@ -35,33 +35,40 @@ namespace Cardificer
 
 
         // The projectile this modifies
-        private Projectile _modifiedProjectile;
-        public override Projectile modifiedProjectile
+        private Projectile modifiedProjectile;
+
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile value)
         {
-            set
+            modifiedProjectile = value;
+            if (spawnMode == SpawnMode.OnDestroyed)
             {
-                _modifiedProjectile = value;
-                if (spawnMode == SpawnMode.OnDestroyed)
-                {
-                    _modifiedProjectile.onDestroyed += () => CreateBomb(); 
-                }
-                else if (spawnMode == SpawnMode.OnHit)
-                {
-                    _modifiedProjectile.onOverlap += (Collider2D collider) => CreateBomb(collider);
-                    _modifiedProjectile.onHit += (Collision2D collision) => CreateBomb(collision.collider);
-                }
-                else
-                {
-                    System.Action<Collider2D> spawnBombOnOverlap = (Collider2D collider) => CreateBomb(collider);
-                    _modifiedProjectile.onDestroyed +=
-                        () =>
-                        {
-                            _modifiedProjectile.onOverlap -= spawnBombOnOverlap;
-                            CreateBomb();
-                        };
-                    _modifiedProjectile.onOverlap += spawnBombOnOverlap;
-                    _modifiedProjectile.onHit += (Collision2D collision) => CreateBomb(collision.collider);
-                }
+                modifiedProjectile = value;
+            }
+
+            if (spawnMode == SpawnMode.OnDestroyed)
+            {
+                modifiedProjectile.onDestroyed += () => CreateBomb(); 
+            }
+            else if (spawnMode == SpawnMode.OnHit)
+            {
+                modifiedProjectile.onOverlap += (Collider2D collider) => CreateBomb(collider);
+                modifiedProjectile.onHit += (Collision2D collision) => CreateBomb(collision.collider);
+            }
+            else
+            {
+                System.Action<Collider2D> spawnBombOnOverlap = (Collider2D collider) => CreateBomb(collider);
+                modifiedProjectile.onDestroyed +=
+                    () =>
+                    {
+                        modifiedProjectile.onOverlap -= spawnBombOnOverlap;
+                        CreateBomb();
+                    };
+                modifiedProjectile.onOverlap += spawnBombOnOverlap;
+                modifiedProjectile.onHit += (Collision2D collision) => CreateBomb(collision.collider);
             }
         }
 
@@ -72,7 +79,7 @@ namespace Cardificer
         /// <returns> The bomb that was created. </returns>
         protected virtual Bomb CreateBomb(Collider2D collision = null)
         {
-            if (_modifiedProjectile.forceDestroy) 
+            if (modifiedProjectile.forceDestroy) 
             {
                 return null;
             }
@@ -83,7 +90,7 @@ namespace Cardificer
             bomb.explosionRadius = explosionRadius;
             bomb.destroyBlockers = destroyBlockers;
             bomb.fuseTime = fuseTime;
-            bomb.damageData = _modifiedProjectile.attackData;
+            bomb.damageData = modifiedProjectile.attackData;
 
             if (bombVisuals != null)
             {
@@ -92,7 +99,7 @@ namespace Cardificer
 
             if (inheritIgnore)
             {
-                bomb.ignoredObjects = _modifiedProjectile.ignoredObjects;
+                bomb.ignoredObjects = modifiedProjectile.ignoredObjects;
             }
 
             if (sticky && collision != null)
@@ -100,7 +107,7 @@ namespace Cardificer
                 bomb.transform.parent = collision.transform;
             }
 
-            bomb.transform.position = _modifiedProjectile.transform.position;
+            bomb.transform.position = modifiedProjectile.transform.position;
             return bomb;
         }
     }

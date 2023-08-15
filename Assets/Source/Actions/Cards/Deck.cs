@@ -102,8 +102,6 @@ namespace Cardificer
                 pathToCardsDrawableCards = deck.drawableCards.Select(AssetDatabase.GetAssetPath).ToList();
                 pathToCardsInHandCards = deck.inHandCards.Select(AssetDatabase.GetAssetPath).ToList();
                 pathToCardsDiscardedCards = deck.discardedCards.Select(AssetDatabase.GetAssetPath).ToList();
-
-                AssetDatabase.FindAssets("l:Card");
 #else
                 pathToCards = deck.cards.Select(GetCardAssetName).ToList();
                 pathToCardsDrawableCards = deck.drawableCards.Select(GetCardAssetName).ToList();
@@ -158,7 +156,7 @@ namespace Cardificer
 
 #region GetCardAssetName
 
-#if !UNITY_EDITOR
+#if UNITY_EDITOR
             // Cards mapped to their asset names.
             static Dictionary<Card, string> cardsToAssetNames = new Dictionary<Card, string>();
 
@@ -325,6 +323,26 @@ namespace Cardificer
 
             onDiscardPileChanged?.Invoke();
             onDrawPileChanged?.Invoke();
+        }
+
+        /// <summary>
+        /// Subtracts time from all current cooldowns.
+        /// </summary>
+        /// <param name="amount"> The amount to subtract in seconds. </param>
+        public void SubtractFromCooldowns(float amount)
+        {
+            foreach (KeyValuePair<int, float> cardIndexToCooldown in new Dictionary<int, float>(cardIndicesToCooldowns))
+            {
+                float newValue = cardIndexToCooldown.Value - amount;
+                if (newValue <= 0)
+                {
+                    cardIndicesToCooldowns.Remove(cardIndexToCooldown.Key);
+                }
+                else
+                {
+                    cardIndicesToCooldowns[cardIndexToCooldown.Key] = newValue;
+                }
+            }
         }
 
         /// <summary>

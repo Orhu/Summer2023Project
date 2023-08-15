@@ -8,13 +8,13 @@ namespace Cardificer
     [CreateAssetMenu(fileName = "NewPhantasmal", menuName = "Cards/AttackModifers/Phantasmal")]
     public class Phantasmal : AttackModifier
     {
-        // The projectile this modifies
-        public override Projectile modifiedProjectile
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.gameObject.layer = LayerMask.NameToLayer("PhantasmalProjectile");
-            }
+            value.gameObject.layer = LayerMask.NameToLayer("PhantasmalProjectile");
         }
     }
 }

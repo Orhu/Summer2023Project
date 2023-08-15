@@ -12,14 +12,14 @@ namespace Cardificer
         [Tooltip("The amount scale will be multiplied by.")]
         [SerializeField] private float scaleFactor = 1f;
 
-        // The projectile this modifies
-        public override Projectile modifiedProjectile
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                float newScale = value.transform.localScale.x + scaleFactor - 1;
-                value.transform.localScale = new Vector3(newScale, newScale, newScale);
-            }
+            float newScale = value.transform.localScale.x + scaleFactor - 1;
+            value.transform.localScale = new Vector3(newScale, newScale, newScale);
         }
     }
 }

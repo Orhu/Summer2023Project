@@ -24,15 +24,15 @@ namespace Cardificer
         // The projectile to apply ticking damage under.
         private Projectile tickingDamageProjectile;
 
-        // The projectile this modifies
-        public override Projectile modifiedProjectile
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.onOverlap += StartTicking;
-                tickingDamageProjectile = value;
-                tickingDamageRigidbody = value.GetComponent<Rigidbody2D>();
-            }
+            value.onOverlap += StartTicking;
+            tickingDamageProjectile = value;
+            tickingDamageRigidbody = value.GetComponent<Rigidbody2D>();
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Cardificer
 
                 if (--tickingDamageProjectile.remainingHits <= 0)
                 {
-                    Destroy(tickingDamageProjectile.gameObject);
+                    tickingDamageProjectile.Destroy();
                 }
 
                 yield return new WaitForSeconds(damageInterval);
