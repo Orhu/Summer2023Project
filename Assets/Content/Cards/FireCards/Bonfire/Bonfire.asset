@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 15
   actions:
   - {fileID: 11400000, guid: 8bbfa56e1a8ab7444b1fdd339722a552, type: 2}
-  effects: []
   displayName: Bonfire
   description: <b>Ignite,</b> <b>Spellcaster.</b> Conjure an inferno that spews out
     flames.
@@ -33,6 +32,8 @@ MonoBehaviour:
   chordEffectText: Inferno Spell
   chordModifiers:
   - {fileID: 11400000, guid: 60960a7d28038a048a29360004d0de94, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
   - {fileID: 11400000, guid: 60960a7d28038a048a29360004d0de94, type: 2}
-  modifierFilters: []
+  modifierFilters:
+  - {fileID: 11400000, guid: f16b062581399044d9c0344f4253dd91, type: 2}

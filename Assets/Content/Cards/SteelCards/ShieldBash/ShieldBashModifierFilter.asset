@@ -13,4 +13,7 @@ MonoBehaviour:
   m_Name: ShieldBashModifierFilter
   m_EditorClassIdentifier: 
   forbiddenModifiers:
-  - Reflective
+  - forbiddenModifierName: Reflective
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: DuplicateAttackSequence
+    replaceWith: {fileID: 11400000, guid: 74700c414e6ca9c42b2d06c5649a36d4, type: 2}

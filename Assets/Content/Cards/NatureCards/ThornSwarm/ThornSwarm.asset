@@ -16,7 +16,6 @@ MonoBehaviour:
   actions:
   - {fileID: 11400000, guid: bb58d35cb72247e47bf68394c22b15ff, type: 2}
   - {fileID: 11400000, guid: 1471bdfca9cace742aa41b8d199c206e, type: 2}
-  effects: []
   displayName: Thorn Swarm
   description: Create a swarm of thorns that greatly knock enemies back.
   flavorText: <i>A gift from the rose.</i>
@@ -33,6 +32,8 @@ MonoBehaviour:
   chordEffectText: + <b>Thorns</b>
   chordModifiers:
   - {fileID: 11400000, guid: 20960e38be9142948bafe73f1b5f07e3, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
   - {fileID: 11400000, guid: 20960e38be9142948bafe73f1b5f07e3, type: 2}
-  modifierFilters: []
+  modifierFilters:
+  - {fileID: 11400000, guid: d1f76e712d47b1741a232b67dbedd285, type: 2}

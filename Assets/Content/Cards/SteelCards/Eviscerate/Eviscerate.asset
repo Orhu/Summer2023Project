@@ -16,7 +16,6 @@ MonoBehaviour:
   actions:
   - {fileID: 11400000, guid: 5f8512bff6abbc04caacd65a92e57ba0, type: 2}
   - {fileID: 11400000, guid: 495e61cd8c88443478129c99adf7c2fa, type: 2}
-  effects: []
   displayName: Eviscerate
   description: Summon a legendary blade and cleave through your enemies.
   flavorText: <i>A sword fit for a hero.</i>
@@ -33,6 +32,8 @@ MonoBehaviour:
   chordEffectText: ++ Damage
   chordModifiers:
   - {fileID: 11400000, guid: adf686b923c95d646af9a7f66166f3d4, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
   - {fileID: 11400000, guid: adf686b923c95d646af9a7f66166f3d4, type: 2}
-  modifierFilters: []
+  modifierFilters:
+  - {fileID: 11400000, guid: 23b55eebb4c154242a2601f0b3834c96, type: 2}

@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 6
   actions:
   - {fileID: 11400000, guid: 4697386da7cc38946a624acaa55dc5a0, type: 2}
-  effects: []
   displayName: Boulder Lob
   description: <b>Stun.</b> Launch an exploding boulder.
   flavorText: 
@@ -32,6 +31,8 @@ MonoBehaviour:
   chordEffectText: + <b>Stun</b>
   chordModifiers:
   - {fileID: 11400000, guid: 4e22a9fc36e259147b920366d0b66f6b, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
   - {fileID: 11400000, guid: 4e22a9fc36e259147b920366d0b66f6b, type: 2}
-  modifierFilters: []
+  modifierFilters:
+  - {fileID: 11400000, guid: 0825907a3168a5644946b793d6b64643, type: 2}

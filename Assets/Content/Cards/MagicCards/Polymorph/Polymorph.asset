@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 8
   actions:
   - {fileID: 11400000, guid: d0cbc24336d85af47b148adbba59c297, type: 2}
-  effects: []
   displayName: Polymorph
   description: Create an orb that polymorphs any living thing it touches.
   flavorText: 
@@ -32,6 +31,8 @@ MonoBehaviour:
   chordEffectText: + <b>Polymorph</b>
   chordModifiers:
   - {fileID: 11400000, guid: 39dae6e80719c6a498908aa8ae1cd1bc, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
   - {fileID: 11400000, guid: 39dae6e80719c6a498908aa8ae1cd1bc, type: 2}
-  modifierFilters: []
+  modifierFilters:
+  - {fileID: 11400000, guid: 99325d8ca2fedcf46a8d2100e0713a58, type: 2}

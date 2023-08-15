@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 4
   actions:
   - {fileID: 11400000, guid: 20af737fe2807d0489e800ee00d5fc5e, type: 2}
-  effects: []
   displayName: Fireball
   description: <b>Ignite.</b> Conjure a fireball that burns enemies over time.
   flavorText: <i>And the flames burned bright against the night sky.</i>
@@ -32,8 +31,8 @@ MonoBehaviour:
   chordEffectText: + <b>Ignite</b>
   chordModifiers:
   - {fileID: 11400000, guid: 43cfe48fe07343e46989c92eda87a4f3, type: 2}
-  cordVFXPrefabs:
-  - {fileID: 8131533795434180474, guid: 6346c852adc64a3439746dd0bc21ca85, type: 3}
+  chordVFXPrefabs: []
   duplicateModifiers:
   - {fileID: 11400000, guid: 43cfe48fe07343e46989c92eda87a4f3, type: 2}
-  modifierFilters: []
+  modifierFilters:
+  - {fileID: 11400000, guid: ae3ef4c5c2e367a4fa81940f0cc09c96, type: 2}

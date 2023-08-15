@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 5
   actions:
   - {fileID: 11400000, guid: 10db46f47f12291439dd91c1fcfcba28, type: 2}
-  effects: []
   displayName: Smite
   description: <b>Silence,</b> <b>Delayed.</b> Invoke the wrath of the gods.
   flavorText: 
@@ -32,6 +31,8 @@ MonoBehaviour:
   chordEffectText: + <b>Silence</b>
   chordModifiers:
   - {fileID: 11400000, guid: 8eed69b6c6a992e4d8e833f30cf3bf92, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
   - {fileID: 11400000, guid: 8eed69b6c6a992e4d8e833f30cf3bf92, type: 2}
-  modifierFilters: []
+  modifierFilters:
+  - {fileID: 11400000, guid: c2c16b688c3c8294fa2d1bf6b7a806ac, type: 2}

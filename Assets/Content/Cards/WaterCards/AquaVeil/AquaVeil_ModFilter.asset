@@ -13,5 +13,9 @@ MonoBehaviour:
   m_Name: AquaVeil_ModFilter
   m_EditorClassIdentifier: 
   forbiddenModifiers:
-  - PlayAction
-  - PlayActionInheritDamage
+  - forbiddenModifierName: PlayAction
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: PlayActionInheritDamage
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: DuplicateAttackSequence
+    replaceWith: {fileID: 11400000, guid: 103747a1b56782846857fcc1737cd123, type: 2}

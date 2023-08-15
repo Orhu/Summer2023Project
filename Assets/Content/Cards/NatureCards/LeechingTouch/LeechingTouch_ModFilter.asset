@@ -13,5 +13,9 @@ MonoBehaviour:
   m_Name: LeechingTouch_ModFilter
   m_EditorClassIdentifier: 
   forbiddenModifiers:
-  - Reflective
-  - Shield
+  - forbiddenModifierName: Shield
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: Reflective
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: DuplicateAttackSequence
+    replaceWith: {fileID: 11400000, guid: c329392ed9d7ed147939c1ceef753856, type: 2}

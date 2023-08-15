@@ -13,7 +13,15 @@ MonoBehaviour:
   m_Name: Bomb_ModFilter
   m_EditorClassIdentifier: 
   forbiddenModifiers:
-  - AddLifetime
-  - OverrideLifetime
-  - MultiplyLifetime
-  - PlayAction
+  - forbiddenModifierName: AddLifetime
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: MultiplyLifetime
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: OverrideLifetime
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: PlayAction
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: PlayActionInheritDamage
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: DuplicateAttackSequence
+    replaceWith: {fileID: 11400000, guid: c29b1905505399f4f990ec30837c0bec, type: 2}

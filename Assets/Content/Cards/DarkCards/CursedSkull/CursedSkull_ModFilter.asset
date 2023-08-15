@@ -13,4 +13,7 @@ MonoBehaviour:
   m_Name: CursedSkull_ModFilter
   m_EditorClassIdentifier: 
   forbiddenModifiers:
-  - Knockback
+  - forbiddenModifierName: Knockback
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: DuplicateAttackSequence
+    replaceWith: {fileID: 11400000, guid: 7e47433d8b99f7e49a0f0982dc644200, type: 2}

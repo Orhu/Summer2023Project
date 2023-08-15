@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 8
   actions:
   - {fileID: 11400000, guid: 8c81afa14ce260449907c0757684a5a5, type: 2}
-  effects: []
   displayName: Sludgeball
   description: <b>Poisonous.</b> Hurl a ball of compacted slime that splits on contact.
   flavorText: 
@@ -32,6 +31,8 @@ MonoBehaviour:
   chordEffectText: + <b>Poisonous</b>
   chordModifiers:
   - {fileID: 11400000, guid: 0a7fdf8a91dab6f4ebab04c365029517, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
   - {fileID: 11400000, guid: 0a7fdf8a91dab6f4ebab04c365029517, type: 2}
-  modifierFilters: []
+  modifierFilters:
+  - {fileID: 11400000, guid: 17e4335812b518f48a959cbdd5d9cef8, type: 2}

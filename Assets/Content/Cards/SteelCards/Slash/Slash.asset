@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 3
   actions:
   - {fileID: 11400000, guid: 1dac8b3bcd7081e4ba81dc9ada6efa3c, type: 2}
-  effects: []
   displayName: Slash
   description: Summon a magical blade that slashes around you.
   flavorText: <i>I have yet to see steel match the strength of magic.</i>
@@ -32,8 +31,8 @@ MonoBehaviour:
   chordEffectText: + Damage
   chordModifiers:
   - {fileID: 11400000, guid: c359ce74591abff49a388af13094c7a2, type: 2}
-  cordVFXPrefabs:
-  - {fileID: 2399121630474963493, guid: 373db81a0e545fd42b26132dcf4ec2ab, type: 3}
+  chordVFXPrefabs: []
   duplicateModifiers:
   - {fileID: 11400000, guid: 103eb08df66a7d04f91b6613b2a54a3e, type: 2}
-  modifierFilters: []
+  modifierFilters:
+  - {fileID: 11400000, guid: b951d741d0cdfe04cbeb7b5c547e1402, type: 2}

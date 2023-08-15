@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: InsectSwarm_ModFilter
   m_EditorClassIdentifier: 
   forbiddenModifiers:
-  - Knockback
-  - SpawnBomb
-  - SpawnBombCustom
+  - forbiddenModifierName: Knockback
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: SpawnBomb
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: SpawnBombCustom
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: DuplicateAttackSequence
+    replaceWith: {fileID: 11400000, guid: 457284482a2276f4caa2634d3645de9b, type: 2}

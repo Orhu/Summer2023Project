@@ -13,10 +13,19 @@ MonoBehaviour:
   m_Name: Winter_ModFilter
   m_EditorClassIdentifier: 
   forbiddenModifiers:
-  - DestroyBlockers
-  - DoubleHit
-  - Knockback
-  - PlayAction
-  - PlayActionInheritDamage
-  - SpawnBomb
-  - SpawnBombCustom
+  - forbiddenModifierName: DestroyBlockers
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: DoubleHit
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: Knockback
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: PlayAction
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: PlayActionInheritDamage
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: SpawnBomb
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: SpawnBombCustom
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: DuplicateAttackSequence
+    replaceWith: {fileID: 11400000, guid: b0bafdac7667c714393ccf1527c485e3, type: 2}

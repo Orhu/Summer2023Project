@@ -13,11 +13,21 @@ MonoBehaviour:
   m_Name: FreezingWind_ModFilter
   m_EditorClassIdentifier: 
   forbiddenModifiers:
-  - DestroyBlockers
-  - DoubleHit
-  - Knockback
-  - PlayAction
-  - PlayActionInheritDamage
-  - Shatter
-  - SpawnBomb
-  - SpawnBombCustom
+  - forbiddenModifierName: DestroyBlockers
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: DoubleHit
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: Knockback
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: PlayAction
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: PlayActionInheritDamage
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: Shatter
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: SpawnBomb
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: SpawnBombCustom
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: DuplicateAttackSequence
+    replaceWith: {fileID: 11400000, guid: 2825382afbeb0ec489cd48c5f3a4b0c0, type: 2}

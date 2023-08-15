@@ -13,21 +13,39 @@ MonoBehaviour:
   m_Name: BlackHoleGravityWell_ModFilter
   m_EditorClassIdentifier: 
   forbiddenModifiers:
-  - AddDamage
-  - AddHoming
-  - AddSpeed
-  - DoubleHit
-  - DuplicateAttackSequence
-  - Knockback
-  - Lifesteal
-  - MultiplyDamage
-  - MultiplySpeed
-  - OverrideDamage
-  - OverrideSpeed
-  - PlayAction
-  - PlayActionInheritDamage
-  - Reflective
-  - Shatter
-  - Shield
-  - SpawnBomb
-  - SpawnBombCustom
+  - forbiddenModifierName: AddDamage
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: AddSpeed
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: Bouncy
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: DuplicateAttackSequence
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: Knockback
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: Lifesteal
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: MultiplySpeed
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: MultiplyStatusEffects
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: OverrideSpeed
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: PlayAction
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: PlayActionInheritModifiers
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: Polymorph
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: Reflective
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: Shatter
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: Shield
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: SpawnBomb
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: SpawnBombCustom
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: TickingDamage
+    replaceWith: {fileID: 0}

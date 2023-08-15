@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 4
   actions:
   - {fileID: 11400000, guid: fc061b383e357b640a34010761a5f0ce, type: 2}
-  effects: []
   displayName: Lightning
   description: <b>Phantasmal.</b> Channel a lightning bolt to strike an enemy.
   flavorText: <i>The night of the battle was a tempestuous one.</i>
@@ -32,6 +31,8 @@ MonoBehaviour:
   chordEffectText: Seeking Spell
   chordModifiers:
   - {fileID: 11400000, guid: 6cb07fe5ad953e24eb3c9c1c58a0f569, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
   - {fileID: 11400000, guid: 6cb07fe5ad953e24eb3c9c1c58a0f569, type: 2}
-  modifierFilters: []
+  modifierFilters:
+  - {fileID: 11400000, guid: 42885c36cda643a47af8c9cdff0e4559, type: 2}

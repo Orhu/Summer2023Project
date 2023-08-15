@@ -13,7 +13,13 @@ MonoBehaviour:
   m_Name: ThousandBlades_ModFilter
   m_EditorClassIdentifier: 
   forbiddenModifiers:
-  - Knockback
-  - Shield
-  - SpawnBomb
-  - SpawnBombCustom
+  - forbiddenModifierName: Knockback
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: Shield
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: SpawnBomb
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: SpawnBombCustom
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: DuplicateAttackSequence
+    replaceWith: {fileID: 11400000, guid: 467d6ea889112b14aaca8fe3a50c3095, type: 2}
