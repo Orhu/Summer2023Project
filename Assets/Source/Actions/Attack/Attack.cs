@@ -167,7 +167,7 @@ namespace Cardificer
         /// <param name="ignoredObjects"> The objects this action will ignore. </param>
         public virtual void Play(IActor actor, List<AttackModifier> modifiers, GameObject causer, System.Action attackFinished = null, List<GameObject> ignoredObjects = null)
         {
-            AudioManager.instance.PlayAudioAtActor(actionSound, actor);
+            AudioManager.instance.PlaySoundOnActor(actionSound, actor);
             actor.GetActionSourceTransform().GetComponent<MonoBehaviour>().StartCoroutine(PlaySpawnSequence(actor, modifiers, causer, attackFinished, ignoredObjects));
 
         }
@@ -239,7 +239,7 @@ namespace Cardificer
             yield return new WaitForSeconds(additionalActionTime);
             attackFinished?.Invoke();
             
-            AudioManager.instance.PlayAverageAudio(projectileList, travelSound, projectileList.Count > 1);
+            AudioManager.instance.PlaySoundAtAveragePos(projectileList, travelSound, projectileList.Count > 1);
         }
 
 
@@ -285,7 +285,7 @@ namespace Cardificer
         /// <param name="pos">Position of the impact audio sound</param>
         protected void PlayImpactAtPos(Vector2 pos)
         {
-            AudioManager.instance.PlayAudioAtPos(impactSound, pos);
+            AudioManager.instance.PlaySoundAtPos(impactSound, pos);
         } 
         #endregion
     }

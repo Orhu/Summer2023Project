@@ -82,7 +82,7 @@ namespace Cardificer
                 health.ReceiveAttack(damageData);
                 if (damageOnInteractSound != null)
                 {
-                    AudioManager.instance.PlayAudioAtPos(damageOnInteractSound, transform.position);
+                    AudioManager.instance.PlaySoundAtPos(damageOnInteractSound, transform.position);
 
                 }
             }
@@ -93,7 +93,7 @@ namespace Cardificer
                 health.ReceiveAttack(damageData);
                 if (damageOnInteractSound != null)
                 {
-                    AudioManager.instance.PlayAudioAtPos(damageOnInteractSound, transform.position);
+                    AudioManager.instance.PlaySoundAtPos(damageOnInteractSound, transform.position);
 
                 }
                 yield return new WaitForSeconds(damageInterval);

@@ -188,7 +188,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1067833387}
   - component: {fileID: 1067833386}
-  - component: {fileID: 1067833385}
+  - component: {fileID: 1067833388}
   m_Layer: 0
   m_Name: TestActor
   m_TagString: Untagged
@@ -196,43 +196,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1067833385
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1067833384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 315926d0317aa374388d8d898ab7a16b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _testSound:
-    outputAudioMixerGroup: {fileID: 5509230318350582375, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
-    useDefaultSettings: 1
-    soundSettings:
-      priority: 128
-      loop: 0
-      destroyOnComplete: 0
-      volume: 1
-      randomizeVolume: 0
-      volumeRandomRange: {x: 0.8, y: 1}
-      pitch: 1
-      randomizePitch: 0
-      pitchRandomRange: {x: 0.8, y: 1.1}
-      spatialBlend: 0.5
-    audioSourceInUse: {fileID: 0}
-    containerName: NewSoundContainer
-    sounds:
-    - {fileID: 8300000, guid: a83213a926b6e914bafb609086edb6d4, type: 3}
-    - {fileID: 8300000, guid: 02730f795de31b24d97b1c4250655527, type: 3}
-    - {fileID: 8300000, guid: 4c6780302bdee704f8cab262b532a5a8, type: 3}
-    - {fileID: 8300000, guid: 5d12c4cffeac5c94a85b4b1c2f827142, type: 3}
-    containerType: 2
-    loopContainer: 1
-    isPlaying: 0
-    shouldPlay: 0
 --- !u!82 &1067833386
 AudioSource:
   m_ObjectHideFlags: 0
@@ -344,6 +307,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1067833388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067833384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 315926d0317aa374388d8d898ab7a16b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _testSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      destroyOnComplete: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    containerName: NewSoundContainer
+    sounds: []
+    containerType: 0
+    loopContainer: 0
+    isPlaying: 0
+    shouldPlay: 0
 --- !u!1 &1436015334
 GameObject:
   m_ObjectHideFlags: 0

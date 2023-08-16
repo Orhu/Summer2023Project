@@ -27,7 +27,7 @@ public class CreateAudioSource : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
-        AudioManager.instance.PlayAudioAtPos(onDestroySound, transform.position);
+        AudioManager.instance.PlaySoundAtPos(onDestroySound, transform.position);
     }
 
    

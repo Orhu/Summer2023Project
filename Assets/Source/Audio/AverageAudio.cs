@@ -24,9 +24,6 @@ namespace Cardificer
             AudioSource audioSource = gameObject.AddComponent<AudioSource>();
             AudioManager.instance.ApplySoundSettingsToAudioSource(averageSound, audioSource);
             audioSource.Play();
-
-            //AudioManager.instance.audioSourcesToKillList.Add(audioSource);
-
         }
 
         /// <summary>
@@ -56,15 +53,24 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Update the average pos of the projectiles. 
+        /// Set the position of the GameObject to the average position of the projectiles. 
         /// </summary>
-        // Update is called once per frame
         private void FixedUpdate()
         {
             transform.position = TryGetAveragePos();
 
+            if (!averageSound.IsPlaying())
+            {
+                AudioManager.KillAverageAudio(this);
+            }
+
         }
 
+        /// <summary>
+        /// Sets the list of Projectiles and the Sound used for this AverageAudio. 
+        /// </summary>
+        /// <param name="projectiles">The list of projectiles this AverageAudio will use to calculate average positions. </param>
+        /// <param name="sound">The Sound this AverageAudio will play. </param>
         public void SetProjectilesAndSound(List<Projectile> projectiles, Sound sound)
         {
             this.projectiles = projectiles;

@@ -9,11 +9,11 @@ namespace Cardificer
 {
 
     /// <summary>
-    /// An Audio Manager meant to coordinate all audio for the game, ideally and eventually. Play sounds at points, contain the music system, etc. 
+    /// Contains all the logic to playback audio. Currently plays back Sounds and SoundContainers, and eventually music.
     /// </summary>
     public class AudioManager : MonoBehaviour
     {
-        // Singleton Pattern
+        //Singleton Pattern
         public static AudioManager instance;
 
         //Lists of objects to be destroyed or affected
@@ -21,8 +21,10 @@ namespace Cardificer
         private List<AverageAudio> averageAudioList = new List<AverageAudio>();
         private List<SoundContainer> activeSoundContainers = new List<SoundContainer>();
 
-        //Default SoundSettings to be applied per-SoundBase
+        [Tooltip("Default SoundSettings to be applied when a SoundBase has 'Use Default Settings' set to true.")]
         public SoundSettings _defaultSoundSettings;
+
+        //Serialized Random for use in random SoundContainer playback
         private System.Random random = new System.Random();
 
         /// <summary>
@@ -50,11 +52,30 @@ namespace Cardificer
         }
 
         /// <summary>
+        /// Play an AudioClip on an AudioSource attatched to an IActor. This method uses the settings of the AudioSource already on the IActor, and does not apply any other SoundSettings.
+        /// </summary>
+        /// <param name="audioClip">The AudioClip to be played. </param>
+        /// <param name="actor">The IActor to get the AudioSource from. </param>
+        public void PlaySoundOnActor(AudioClip audioClip, IActor actor)
+        {
+            Debug.LogWarning("You are using a depreciated method of playing audio. Please use Sounds instead of AudioClips to play audio.");
+
+            var actorAudioSource = actor.GetAudioSource();
+
+            if (actorAudioSource != null)
+            {
+                actorAudioSource.clip = audioClip;
+                actorAudioSource.Play();
+            }
+
+        }
+
+        /// <summary>
         /// Play a Sound on an AudioSource attatched to an IActor. 
         /// </summary>
         /// <param name="sound">The Sound to be played. </param>
         /// <param name="actor">The IActor to get the AudioSource from. </param>
-        public void PlayAudioAtActor(Sound sound, IActor actor)
+        public void PlaySoundOnActor(Sound sound, IActor actor)
         {
             var actorAudioSource = actor.GetAudioSource();
 
@@ -71,7 +92,7 @@ namespace Cardificer
         /// </summary>
         /// <param name="soundContainer">The SoundContainer to start. </param>
         /// <param name="actor">The IActor to get the AudioSource from. </param>
-        public void PlayAudioAtActor(SoundContainer soundContainer, IActor actor)
+        public void PlaySoundOnActor(SoundContainer soundContainer, IActor actor)
         {
             var actorAudioSource = actor.GetAudioSource();
 
@@ -88,7 +109,7 @@ namespace Cardificer
         /// </summary>
         /// <param name="sound">The Sound to be played at a location.</param>
         /// <param name="vector">The location for the Sound to be played.</param>
-        public void PlayAudioAtPos(Sound sound, Vector2 vector)
+        public void PlaySoundAtPos(Sound sound, Vector2 vector)
         {
             if (!SceneManager.GetActiveScene().isLoaded) { return; }
             GameObject audioSourceGameObject = new GameObject();
@@ -108,7 +129,7 @@ namespace Cardificer
         /// </summary>
         /// <param name="soundContainer">The SoundContainer to be started at a location.</param>
         /// <param name="vector">The location for the SoundContainer to be played.</param>
-        public void PlayAudioAtPos(SoundContainer soundContainer, Vector2 vector)
+        public void PlaySoundAtPos(SoundContainer soundContainer, Vector2 vector)
         {
             if (!SceneManager.GetActiveScene().isLoaded) { return; }
             GameObject audioSourceGameObject = new GameObject();
@@ -128,14 +149,16 @@ namespace Cardificer
         /// <param name="projectiles">The list of projectiles to find the average position of. </param>
         /// <param name="sound">The audioclip to play at the location. </param>
         /// <param name="averageOrFirst">Determines whether to get the average location of all projectiles or just use one projectile</param>
-        public void PlayAverageAudio(List<Projectile> projectiles, Sound sound, bool averageOrFirst)
+        public void PlaySoundAtAveragePos(List<Projectile> projectiles, Sound sound, bool averageOrFirst)
         {
 
             if (averageOrFirst == true) //play at average position
             {
+                //Create a GameObject and attach an AverageAudio component to it
                 AverageAudio averageAudioGameObject = new GameObject().AddComponent<AverageAudio>();
                 averageAudioGameObject.transform.name = $"AverageAudio({sound.name})GameObj";
 
+                //Initialize the AverageAudio component and play the sound. The AverageAudio component keeps the AudioSource's GameObject at the average location of the projectiles
                 AverageAudio averageAudioComponent = averageAudioGameObject.GetComponent<AverageAudio>();
                 averageAudioComponent.SetProjectilesAndSound(projectiles, sound);
                 averageAudioGameObject.transform.position = averageAudioGameObject.TryGetAveragePos();
@@ -165,16 +188,16 @@ namespace Cardificer
         private IEnumerator PlaySoundContainer(SoundContainer soundContainer, AudioSource audioSource)
         {
 
-            int soundsLength = soundContainer.sounds.Length;
+            int soundsLength = soundContainer.clipsInContainer.Length;
             soundContainer.isPlaying = true;
             activeSoundContainers.Add(soundContainer);
 
             switch (soundContainer.containerType)
             {
 
-                //plays through each AudioClip in the container from first -> last
+                //Plays through each AudioClip in the container from first -> last
                 case SoundContainerType.Sequential:
-                    foreach (var audioClip in soundContainer.sounds)
+                    foreach (var audioClip in soundContainer.clipsInContainer)
                     {
                         ApplySoundSettingsToAudioSource(soundContainer, audioSource, audioClip);
                         audioSource.Play();
@@ -188,10 +211,10 @@ namespace Cardificer
 
                     break;
 
-                //plays through each AudioClip in the container randomly, but never playing each sound more than once per loop
+                //Plays through each AudioClip in the container randomly, but never playing each sound more than once per loop
                 case SoundContainerType.RandomSequential:
 
-                    List<AudioClip> clips = soundContainer.sounds.ToList();
+                    List<AudioClip> clips = soundContainer.clipsInContainer.ToList();
 
                     for (int i = 0; i < soundsLength; i++)
                     {
@@ -200,7 +223,7 @@ namespace Cardificer
                         AudioClip clipToPlay = clips[randomInt];
                         float awaitTime = clipToPlay.length;
                         ApplySoundSettingsToAudioSource(soundContainer, audioSource, clipToPlay);
-                        Debug.Log($"Now playing {clipToPlay.name}");
+
                         audioSource.Play();
                         clips.Remove(clipToPlay);
                         yield return new WaitForSeconds(awaitTime);
@@ -211,13 +234,13 @@ namespace Cardificer
 
                     break;
 
-                //plays through each AudioClip in the container, not caring if a sound plays more than once per loop
+                //Plays through each AudioClip in the container randomly, not caring if a sound plays more than once per loop
                 case SoundContainerType.RandomRandom:
 
                     for (int i = 0; i < soundsLength; i++)
                     {
                         int randomInt = random.Next(soundsLength);
-                        AudioClip clipToPlay = soundContainer.sounds[randomInt];
+                        AudioClip clipToPlay = soundContainer.clipsInContainer[randomInt];
                         float awaitTime = clipToPlay.length;
                         ApplySoundSettingsToAudioSource(soundContainer, audioSource, clipToPlay);
                         audioSource.Play();
@@ -229,12 +252,12 @@ namespace Cardificer
 
                     break;
 
-                //plays only one random AudioClip in the SoundContainer
+                //Plays only one random AudioClip in the SoundContainer
                 case SoundContainerType.RandomOneshot:
 
                     soundContainer.loopContainer = false;
 
-                    AudioClip oneshotToPlay = soundContainer.sounds[random.Next(soundsLength)];
+                    AudioClip oneshotToPlay = soundContainer.clipsInContainer[random.Next(soundsLength)];
                     ApplySoundSettingsToAudioSource(soundContainer, audioSource, oneshotToPlay);
                     audioSource.PlayOneShot(oneshotToPlay);
 
@@ -251,7 +274,7 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Applies the settings on a Sound to an AudioSource. Random values are assigned in this fuction.
+        /// Applies the settings on a Sound to an AudioSource. Random values are assigned in this method.
         /// </summary>
         /// <param name="sound">The Sound to get the settings from.</param>
         /// <param name="audioSource">The AudioSource to apply the settings onto.</param>
@@ -298,7 +321,7 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Applies the settings on a SoundContainer to an AudioSource. Random values are assigned in this fuction.
+        /// Applies the settings on a SoundContainer to an AudioSource. Random values are assigned in this method.
         /// </summary>
         /// <param name="soundContainer">The SoundContainer to get the settings from.</param>
         /// <param name="audioSource">The AudioSource to apply the settings onto.</param>
