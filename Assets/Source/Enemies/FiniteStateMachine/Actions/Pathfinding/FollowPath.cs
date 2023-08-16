@@ -13,7 +13,7 @@ namespace Cardificer.FiniteStateMachine
     public class FollowPath : SingleAction
     {
         [Tooltip("Starting at stopping dist from the target destination, move speed rapidly drops until target destination is reached.")]
-        [SerializeField] private float stoppingDist = 0.5f;
+        [SerializeField] private float stoppingDist = 0.1f;
         
         // need to track our current data
         private ChaseData chaseData;
@@ -34,6 +34,7 @@ namespace Cardificer.FiniteStateMachine
             stateMachine.pathData.prevFollowCoroutine = newCoroutine;
             stateMachine.pathData.targetIndex = 0;
             stateMachine.pathData.keepFollowingPath = true;
+            stateMachine.pathData.path.stoppingDist = stoppingDist;
             stateMachine.StartCoroutine(newCoroutine);
             yield break;
         }
@@ -74,12 +75,12 @@ namespace Cardificer.FiniteStateMachine
 
                 if (stateMachine.pathData.keepFollowingPath)
                 {
-                    if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.slowDownIndex && stoppingDist > 0)
+                    if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.slowDownIndex && stateMachine.pathData.path.stoppingDist > 0)
                     {
                         stateMachine.speedPercent = Mathf.Clamp01(stateMachine.pathData.path
                                                          .turnBoundaries[stateMachine.pathData.path.finishLineIndex]
                                                          .DistanceFromPoint(stateMachine.GetFeetPos()) /
-                                                     stoppingDist);
+                                                                  stateMachine.pathData.path.stoppingDist);
                         if (stateMachine.speedPercent < 0.01f)
                         {
                             stateMachine.pathData.keepFollowingPath = false;

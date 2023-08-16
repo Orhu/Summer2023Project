@@ -8,9 +8,9 @@ using Random = System.Random;
 namespace Cardificer.FiniteStateMachine
 {
     /// <summary>
-    /// Represents an action that draws some number of cards and adds them to the state machine.
+    /// Represents an action that sets the path to a circle pattern
     /// </summary>
-    [CreateAssetMenu(menuName = "FSM/Floor Boss/Lost Creature/Set Path To Figure8 Or Infinity")]
+    [CreateAssetMenu(menuName = "FSM/Floor Boss/Hero of Black Petals/Circle Path")]
     public class HOBP_CirclePath : SingleAction
     {
         [Tooltip("Center point of the path shape, as an offset from the room's center")]
@@ -30,7 +30,7 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> Does not wait. </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
-            stateMachine.pathData.path = new Path(FormulatePath(), stateMachine.GetFeetPos(), 0);
+            stateMachine.pathData.path = new Path(FormulatePath(), stateMachine.GetFeetPos());
             stateMachine.cooldownData.cooldownReady[this] = true;
             yield break;
         }
@@ -44,7 +44,7 @@ namespace Cardificer.FiniteStateMachine
             Vector2 roomCenter = RoomInterface.instance.myWorldPosition;
             List<Vector2> points = new List<Vector2>();
 
-            for (int i = 0; i <= shapePoints; i++)
+            for (int i = 1; i <= shapePoints; i++)
             {
                 var x = ((float)i / shapePoints) * (2 * Mathf.PI);
                 var vecX = radius * Mathf.Cos(x);

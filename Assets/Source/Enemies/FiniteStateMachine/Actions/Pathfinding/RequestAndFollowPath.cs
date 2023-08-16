@@ -28,6 +28,7 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> Waits pathLockout seconds before allowing another request. </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
+            stateMachine.pathData.path.stoppingDist = stoppingDist;
             RequestPath(stateMachine);
             yield return new UnityEngine.WaitForSeconds(pathLockout);
             stateMachine.cooldownData.cooldownReady[this] = true;
@@ -43,7 +44,7 @@ namespace Cardificer.FiniteStateMachine
             {
                 if (!successful || stateMachine == null || stateMachine.pathData.ignorePathRequests) return;
 
-                stateMachine.pathData.path = new Path(path, stateMachine.GetFeetPos(), stoppingDist);
+                stateMachine.pathData.path = new Path(path, stateMachine.GetFeetPos());
 
                 if (stateMachine.pathData.prevFollowCoroutine != null)
                 {
