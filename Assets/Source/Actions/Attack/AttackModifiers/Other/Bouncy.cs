@@ -24,17 +24,17 @@ namespace Cardificer
         // The normal of the last wall bounced off of this frame
         Vector2 lastBounceNormal = Vector2.zero;
 
-        // The projectile this modifies
-        public override Projectile modifiedProjectile
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile value)
         {
-            set
+            if (value.onHit == null || !value.onHit.GetInvocationList().Contains((Action<Collision2D>)Bounce))
             {
-                if (value.onHit == null || !value.onHit.GetInvocationList().Contains((Action<Collision2D>)Bounce))
-                {
-                    value.onHit += Bounce;
-                    bouncyProjectile = value;
-                    bouncyRigidbody = value.GetComponent<Rigidbody2D>();
-                }
+                value.onHit += Bounce;
+                bouncyProjectile = value;
+                bouncyRigidbody = value.GetComponent<Rigidbody2D>();
             }
         }
 

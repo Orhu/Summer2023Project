@@ -261,6 +261,7 @@ namespace Cardificer
             }
 
             Projectile projectile = Instantiate(projectilePrefab.gameObject).GetComponent<Projectile>();
+            projectile.name = name + " Projectile";
             projectile.attack = this;
             projectile.actor = actor;
             projectile.modifiers = this.modifiers.Concat(modifiers).SkipWhile(

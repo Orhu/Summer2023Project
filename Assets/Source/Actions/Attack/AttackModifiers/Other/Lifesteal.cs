@@ -18,14 +18,12 @@ namespace Cardificer
 
         // The projectile that will steal life.
         Projectile lifestealingProjectile;
-        public override Projectile modifiedProjectile
+
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.onOverlap += HealCauser;
-                causerHealth = value.causer.GetComponent<Health>();
-                lifestealingProjectile = value;
-            }
+            value.onOverlap += HealCauser;
+            causerHealth = value.causer.GetComponent<Health>();
+            lifestealingProjectile = value;
         }
 
         /// <summary>

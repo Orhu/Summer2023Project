@@ -22,32 +22,28 @@ namespace Cardificer
         [Tooltip("The force in tiles/s added to hit objects.")]
         [SerializeField] private PushDirection pushDirection;
 
-        // The projectile this modifies
+        // The object that is the source of the knockback.
         private GameObject knockbackSource = null;
-        public override Projectile modifiedProjectile
+
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile value)
         {
-            set
+            switch (pushDirection)
             {
-                switch (pushDirection)
-                {
-                    case PushDirection.AwayFromProjectile:
-                        knockbackSource = value.gameObject;
-                        break;
+                case PushDirection.AwayFromProjectile:
+                case PushDirection.InProjectileForwardDirection:
+                    knockbackSource = value.gameObject;
+                    break;
 
-                    case PushDirection.InProjectileForwardDirection:
-                        knockbackSource = value.gameObject;
-                        break;
-
-                    case PushDirection.AwayFromSpawner:
-                        knockbackSource = value.actor.GetActionSourceTransform().gameObject;
-                        break;
-
-                    case PushDirection.InSpawnerForwardDirection:
-                        knockbackSource = value.actor.GetActionSourceTransform().gameObject;
-                        break;
-                }
-                value.onOverlap += ApplyKnockback;
+                case PushDirection.AwayFromSpawner:
+                case PushDirection.InSpawnerForwardDirection:
+                    knockbackSource = value.actor.GetActionSourceTransform().gameObject;
+                    break;
             }
+            value.onOverlap += ApplyKnockback;
         }
 
         /// <summary>

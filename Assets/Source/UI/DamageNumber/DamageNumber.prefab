@@ -9,11 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5018936466292226029}
-  - component: {fileID: 493923927472807787}
   - component: {fileID: 36107095188389268}
   - component: {fileID: 7363531875937493200}
   - component: {fileID: 4557196015587724367}
-  - component: {fileID: 8220707855989407503}
   m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
@@ -30,7 +28,7 @@ RectTransform:
   m_GameObject: {fileID: 1684011874254715121}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1710861763947665004}
@@ -41,27 +39,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &493923927472807787
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1684011874254715121}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 078693956bcc2e94db4c9c7bad74ab41, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &36107095188389268
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91,7 +68,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4283236172
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -180,19 +157,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1684011874254715121}
   m_CullTransparentMesh: 1
---- !u!114 &8220707855989407503
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1684011874254715121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cee7b6ce1412d7647aa5ebf11c7202be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  destructionDelay: 0
 --- !u!1 &3578995657599305310
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,6 +167,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1710861763947665004}
   - component: {fileID: 7542948855267751516}
+  - component: {fileID: 1503316223855793311}
+  - component: {fileID: 5305208717587591822}
   m_Layer: 0
   m_Name: DamageNumber
   m_TagString: Untagged
@@ -238,3 +204,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af04416fe45dd9746a784cb5a89d100a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1503316223855793311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3578995657599305310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cee7b6ce1412d7647aa5ebf11c7202be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destructionDelay: 0
+--- !u!95 &5305208717587591822
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3578995657599305310}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 078693956bcc2e94db4c9c7bad74ab41, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
