@@ -34,7 +34,6 @@ namespace Cardificer.FiniteStateMachine
             stateMachine.pathData.prevFollowCoroutine = newCoroutine;
             stateMachine.pathData.targetIndex = 0;
             stateMachine.pathData.keepFollowingPath = true;
-            stateMachine.pathData.path.stoppingDist = stoppingDist;
             stateMachine.StartCoroutine(newCoroutine);
             yield break;
         }
@@ -75,12 +74,12 @@ namespace Cardificer.FiniteStateMachine
 
                 if (stateMachine.pathData.keepFollowingPath)
                 {
-                    if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.slowDownIndex && stateMachine.pathData.path.stoppingDist > 0)
+                    if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.slowDownIndex && stoppingDist > 0)
                     {
                         stateMachine.speedPercent = Mathf.Clamp01(stateMachine.pathData.path
                                                          .turnBoundaries[stateMachine.pathData.path.finishLineIndex]
                                                          .DistanceFromPoint(stateMachine.GetFeetPos()) /
-                                                                  stateMachine.pathData.path.stoppingDist);
+                                                                  stoppingDist);
                         if (stateMachine.speedPercent < 0.01f)
                         {
                             stateMachine.pathData.keepFollowingPath = false;

@@ -28,7 +28,6 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> Waits pathLockout seconds before allowing another request. </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
-            stateMachine.pathData.path.stoppingDist = stoppingDist;
             RequestPath(stateMachine);
             yield return new UnityEngine.WaitForSeconds(pathLockout);
             stateMachine.cooldownData.cooldownReady[this] = true;
@@ -44,7 +43,7 @@ namespace Cardificer.FiniteStateMachine
             {
                 if (!successful || stateMachine == null || stateMachine.pathData.ignorePathRequests) return;
 
-                stateMachine.pathData.path = new Path(path, stateMachine.GetFeetPos());
+                stateMachine.pathData.path = new Path(path, stateMachine.GetFeetPos(), 0);
 
                 if (stateMachine.pathData.prevFollowCoroutine != null)
                 {
@@ -67,7 +66,8 @@ namespace Cardificer.FiniteStateMachine
         private IEnumerator TracePath(BaseStateMachine stateMachine)
         {
             stateMachine.speedPercent = 1f; // reset speed percent to normal
-
+            stateMachine.currentPathfindingTarget = stateMachine.pathData.path.waypoints[^1];
+            
             if (stateMachine.pathData.path.waypoints.Length == 0)
             {
                 yield break;
@@ -82,8 +82,8 @@ namespace Cardificer.FiniteStateMachine
                     {
                         stateMachine.pathData.keepFollowingPath = false;
                         stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
-                        stateMachine.currentPathfindingTarget = stateMachine.GetFeetPos();
                         stateMachine.cooldownData.cooldownReady[this] = true;
+                        stateMachine.currentPathfindingTarget = stateMachine.GetFeetPos();
                         yield break;
                     }
                     else
@@ -94,39 +94,27 @@ namespace Cardificer.FiniteStateMachine
 
                 if (stateMachine.pathData.keepFollowingPath)
                 {
-                    if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.slowDownIndex &&
-                        stoppingDist > 0)
+                    if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.slowDownIndex && stoppingDist > 0)
                     {
                         stateMachine.speedPercent = Mathf.Clamp01(stateMachine.pathData.path
-                                                                      .turnBoundaries[
-                                                                          stateMachine.pathData.path.finishLineIndex]
-                                                                      .DistanceFromPoint(stateMachine.GetFeetPos()) /
+                                                         .turnBoundaries[stateMachine.pathData.path.finishLineIndex]
+                                                         .DistanceFromPoint(stateMachine.GetFeetPos()) /
                                                                   stoppingDist);
                         if (stateMachine.speedPercent < 0.01f)
                         {
                             stateMachine.pathData.keepFollowingPath = false;
                             stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
                             stateMachine.cooldownData.cooldownReady[this] = true;
+                            stateMachine.currentPathfindingTarget = stateMachine.GetFeetPos();
                             yield break;
                         }
                     }
-                    
-                    var moveInput = (stateMachine.pathData.path.waypoints[stateMachine.pathData.targetIndex] -
-                                     stateMachine.GetFeetPos()).normalized;
-                    
-                    if (moveInput == Vector2.zero && stateMachine.pathData.targetIndex != stateMachine.pathData.path.finishLineIndex)
-                    {
-                        stateMachine.pathData.targetIndex++;
-                    }
-                    else
-                    {
-                        stateMachine.GetComponent<Movement>().movementInput = moveInput;
-                    }
+                    stateMachine.GetComponent<Movement>().movementInput =
+                        (stateMachine.pathData.path.waypoints[stateMachine.pathData.targetIndex] - stateMachine.GetFeetPos()).normalized;
                 }
-
+                
                 yield return null;
             }
-
             stateMachine.cooldownData.cooldownReady[this] = true;
         }
     }

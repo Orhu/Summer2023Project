@@ -18,16 +18,14 @@ namespace Cardificer
 
         // What index waypoint should slowdown start
         public readonly int slowDownIndex;
-        
-        // Distance from endpoint to begin slowing down
-        public float stoppingDist = 0f;
 
         /// <summary>
         /// Initialize a new instance of a Path, creating a Line object between each waypoint
         /// </summary>
         /// <param name="waypoints"> Array of waypoints to travel down </param>
         /// <param name="startPos"> Starting position </param>
-        public Path(Vector2[] waypoints, Vector3 startPos)
+        /// <param name="stoppingDist"> How close to endpoint before starting to slow down </param>
+        public Path(Vector2[] waypoints, Vector3 startPos, float stoppingDist = 0)
         {
             this.waypoints = waypoints;
             turnBoundaries = new Line[this.waypoints.Length];
