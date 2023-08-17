@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 9
   actions:
   - {fileID: 11400000, guid: 1aa70f1b86ec0174ea33bbfcaba9d185, type: 2}
-  effects: []
   displayName: Mystical Shield
   description: <b>Shielded.</b> Create an orbiting shield of concentrated energy.
   flavorText: <i>You can never be too safe.</i>
@@ -32,6 +31,8 @@ MonoBehaviour:
   chordEffectText: + <b>Shielded</b>
   chordModifiers:
   - {fileID: 11400000, guid: ca1ca5c908abfa847804e1e805337ce1, type: 2}
+  chordVFXPrefabs:
+  - {fileID: 3378121504974007400, guid: 02838155e156db14692bbe22351bfcbc, type: 3}
   duplicateModifiers:
   - {fileID: 11400000, guid: ca1ca5c908abfa847804e1e805337ce1, type: 2}
   modifierFilters:
