@@ -59,14 +59,15 @@ namespace Cardificer
         public AudioClip audioClip;
 
         //Returns the name of the AudioClip played by this sound.
-        public override string name { get { return audioClip.name; } }
+        public override string name { get { return audioClip == null ? "AudioClip in Sound not set!" : audioClip.name; } }
 
         /// <summary>
         /// Stops this Sound. 
         /// </summary>
         public override void Stop()
         {
-            audioSourceInUse.Stop();
+            if (audioSourceInUse != null)
+                audioSourceInUse.Stop();
         }
 
         /// <summary>
