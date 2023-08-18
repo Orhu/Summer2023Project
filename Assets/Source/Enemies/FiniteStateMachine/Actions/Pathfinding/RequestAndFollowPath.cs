@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 using ChaseData = Cardificer.FiniteStateMachine.BaseStateMachine.ChaseData;
 
@@ -12,8 +13,8 @@ namespace Cardificer.FiniteStateMachine
     [CreateAssetMenu(menuName="FSM/Actions/Pathfinding/Request and Follow Path")]
     public class RequestAndFollowPath : SingleAction
     {
-        [Tooltip("After a Path request is submitted, how long before another one is allowed?")] [SerializeField]
-        private float pathLockout = 0.03f;
+        [Tooltip("After a Path request is submitted, how long before another one is allowed?")] [Min(0.1f)] // If this number goes too low, can get buggy behaviors. Test with ~10 pathfinding enemies in a room before decreasing min!
+        [SerializeField] private float pathLockout = 0.1f;
 
         [Tooltip("Starting at stopping dist from the target destination, move speed rapidly drops until target destination is reached.")]
         [SerializeField] private float stoppingDist = 0.1f;
@@ -27,8 +28,8 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> stateMachine to be used </param>
         /// <returns> Waits pathLockout seconds before allowing another request. </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
-        {
-            RequestPath(stateMachine);
+        { 
+           RequestPath(stateMachine);
             yield return new UnityEngine.WaitForSeconds(pathLockout);
             stateMachine.cooldownData.cooldownReady[this] = true;
         }

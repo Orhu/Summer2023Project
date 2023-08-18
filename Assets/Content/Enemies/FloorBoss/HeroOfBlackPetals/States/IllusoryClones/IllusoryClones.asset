@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcd82c67ef760b0449e19f947e9fe6d2, type: 3}
-  m_Name: SpawnThing
+  m_Script: {fileID: 11500000, guid: 5c5858af96344aaa9e636fdff62a26b5, type: 3}
+  m_Name: IllusoryClones
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 0}
-  thing: {fileID: 4664199254330675353, guid: ad478f926a6e0c346a5365acbf0722ae, type: 3}
-  delay: 0
+  enterActions:
+  - {fileID: 11400000, guid: 3848d11dbc272ef4aa939459bec62edc, type: 2}
+  exitActions: []
+  updateActions: []
+  transitions: []
