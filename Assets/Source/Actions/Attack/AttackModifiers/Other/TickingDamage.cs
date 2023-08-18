@@ -15,21 +15,24 @@ namespace Cardificer
         [Tooltip("The knockback to apply every tick.")]
         public KnockbackInfo knockback = new KnockbackInfo(amount: 0f, resetMomentum: false);
 
+        [Tooltip("Whether or not to cleanse every tick.")]
+        public bool cleanseTarget = false;
+
         // The projectile to apply ticking damage under.
         private Rigidbody2D tickingDamageRigidbody;
 
         // The projectile to apply ticking damage under.
         private Projectile tickingDamageProjectile;
 
-        // The projectile this modifies
-        public override Projectile modifiedProjectile
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.onOverlap += StartTicking;
-                tickingDamageProjectile = value;
-                tickingDamageRigidbody = value.GetComponent<Rigidbody2D>();
-            }
+            value.onOverlap += StartTicking;
+            tickingDamageProjectile = value;
+            tickingDamageRigidbody = value.GetComponent<Rigidbody2D>();
         }
 
         /// <summary>
@@ -61,9 +64,14 @@ namespace Cardificer
                 healthToDamage?.ReceiveAttack(tickingDamageProjectile.attackData);
                 movementToKnockback?.Knockback((Vector2)collider.transform.position - tickingDamageRigidbody.position, knockback);
 
+                if (cleanseTarget)
+                {
+                    healthToDamage?.Cleanse();
+                }
+
                 if (--tickingDamageProjectile.remainingHits <= 0)
                 {
-                    Destroy(tickingDamageProjectile.gameObject);
+                    tickingDamageProjectile.Destroy();
                 }
 
                 yield return new WaitForSeconds(damageInterval);

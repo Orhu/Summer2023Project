@@ -1,4 +1,5 @@
 using Skaillz.EditInline;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,7 +37,7 @@ namespace Cardificer
         {
             damage = attack.damage;
             damageType = attack.damageType;
-            statusEffects = attack.statusEffects;
+            statusEffects = new List<StatusEffect>(attack.statusEffects);
             invertInvincibility = attack.invertInvincibility;
             this.causer = causer;
         }
@@ -168,6 +169,25 @@ namespace Cardificer
         {
             Physical,
             Special,
+        }
+
+        /// <summary>
+        /// To string.
+        /// </summary>
+        /// <returns> This as a string. </returns>
+        public override string ToString()
+        {
+            string value = "";
+            if (damage != 0)
+            {
+                value += $"{Math.Abs(damage)}\n";
+            }
+
+            foreach (StatusEffect effect in statusEffects)
+            {
+                value += $" + {effect.GetType().Name}";
+            }
+            return value;
         }
     }
 }

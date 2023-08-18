@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: PlayActionDefaultModiferFilter
   m_EditorClassIdentifier: 
   forbiddenModifiers:
-  - PlayAction
-  - DuplicateAttackSequnce
+  - forbiddenModifierName: PlayAction
+    replaceWith: {fileID: 0}
+  - forbiddenModifierName: DuplicateAttackSequence
+    replaceWith: {fileID: 0}

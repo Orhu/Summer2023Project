@@ -18,24 +18,24 @@ namespace Cardificer
         [Tooltip("Whether or not to override the status effects of the parent.")]
         public bool overrideStatusEffects = true;
 
-        // The projectile this modifies
-        public override Projectile modifiedProjectile
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile value)
         {
-            set
+            if (overrideDamage)
             {
-                if (overrideDamage)
-                {
-                    value.attackData.damage = damageData.damage;
+                value.attackData.damage = damageData.damage;
 
-                    if (value.causer != null && value.causer?.GetComponent<IActor>() is IActor causedBy)
-                    {
-                        value.attackData.damage = Mathf.RoundToInt(value.attackData.damage * causedBy.GetDamageMultiplier());
-                    }
-                }
-                if (overrideStatusEffects)
+                if (value.causer != null && value.causer?.GetComponent<IActor>() is IActor causedBy)
                 {
-                    value.attackData.statusEffects = damageData.statusEffects;
+                    value.attackData.damage = Mathf.RoundToInt(value.attackData.damage * causedBy.GetDamageMultiplier());
                 }
+            }
+            if (overrideStatusEffects)
+            {
+                value.attackData.statusEffects = damageData.statusEffects;
             }
         }
     }

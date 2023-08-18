@@ -12,13 +12,13 @@ namespace Cardificer
         [Tooltip("The number additional hits to add")]
         [SerializeField] private int hitCountToAdd;
 
-        // The projectile this modifies
-        public override Projectile modifiedProjectile
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.remainingHits += hitCountToAdd;
-            }
+            value.remainingHits += hitCountToAdd;
         }
     }
 }
