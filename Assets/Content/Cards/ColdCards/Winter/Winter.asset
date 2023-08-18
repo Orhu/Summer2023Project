@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 10
   actions:
   - {fileID: 11400000, guid: 2fde052814e6140499e1b237727d42d0, type: 2}
-  effects: []
   displayName: Winter
   description: <b>Freezing,</b> <b>Cloud.</b> Fill the room with a frigid blizzard.
   flavorText: <i>The cold of the dungeon in the grip of winter... may you never forget
@@ -33,6 +32,8 @@ MonoBehaviour:
   chordEffectText: Shattering Spell
   chordModifiers:
   - {fileID: 11400000, guid: fc5b56785b53f504e8080f4816b57df1, type: 2}
+  chordVFXPrefabs:
+  - {fileID: 2809569760718847691, guid: 3a5e0f6ff5fc786488fbda1f9b0c7549, type: 3}
   duplicateModifiers:
   - {fileID: 11400000, guid: fc5b56785b53f504e8080f4816b57df1, type: 2}
   modifierFilters:
