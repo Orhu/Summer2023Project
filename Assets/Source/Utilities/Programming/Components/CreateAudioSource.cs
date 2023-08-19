@@ -6,10 +6,10 @@ using UnityEngine;
 public class CreateAudioSource : MonoBehaviour
 {
     [Tooltip("The AudioClip for destruction of the object")]
-    [SerializeField] private AudioClip onDestroyAudioClip;
+    [SerializeField] private Sound onDestroySound;
 
     [Tooltip("The AudioClip for the lifetime  of the object")]
-    [SerializeField] private AudioClip lifetimeAudioClip;
+    [SerializeField] private Sound lifetimeSound;
 
     /// <summary>
     /// Gets the audio source component and plays it. 
@@ -17,10 +17,7 @@ public class CreateAudioSource : MonoBehaviour
     void Start()
     {
         var audioSource = gameObject.GetComponent<AudioSource>();
-        audioSource.clip = lifetimeAudioClip;
-        audioSource.loop = true;
-        audioSource.spatialBlend = .5f;
-        audioSource.pitch = UnityEngine.Random.Range(.8f, 1.1f);
+        AudioManager.instance.ApplySoundSettingsToAudioSource(lifetimeSound, audioSource);
         audioSource.Play();
 
     }
@@ -30,7 +27,7 @@ public class CreateAudioSource : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
-        AudioManager.instance.PlayAudioAtPos(onDestroyAudioClip, transform.position);
+        AudioManager.instance.PlaySoundAtPos(onDestroySound, transform.position);
     }
 
    
