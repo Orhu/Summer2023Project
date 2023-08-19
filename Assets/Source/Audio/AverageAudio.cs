@@ -12,23 +12,18 @@ namespace Cardificer
         public List<Projectile> projectiles = new List<Projectile>();
 
         [Tooltip("The AudioClip to play at the averaged location")]
-        public AudioClip averageAudioClip;
+        public Sound averageSound;
 
 
         /// <summary>
         /// Adding an audio source and playing it after adjusting parameters
         /// </summary>
-        void Start()
+        public void PlayAverageAudio()
         {
 
             AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.clip = averageAudioClip;
-            audioSource.loop = true;
-            //audioSource.playOnAwake = true; 
-            audioSource.spatialBlend = 1f;
-            audioSource.pitch = UnityEngine.Random.Range(.8f, 1.1f);
+            AudioManager.instance.ApplySoundSettingsToAudioSource(averageSound, audioSource);
             audioSource.Play();
-
         }
 
         /// <summary>
@@ -58,30 +53,28 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Update the average pos of the projectiles. 
+        /// Set the position of the GameObject to the average position of the projectiles. 
         /// </summary>
-        // Update is called once per frame
         private void FixedUpdate()
         {
             transform.position = TryGetAveragePos();
 
+            if (!averageSound.IsPlaying())
+            {
+                AudioManager.KillAverageAudio(this);
+            }
+
         }
 
         /// <summary>
-        /// Set the list of projectiles
+        /// Sets the list of Projectiles and the Sound used for this AverageAudio. 
         /// </summary>
-        /// <param name="setProjectiles">The list of projectiles to set</param>
-        public void SetProjectiles(List<Projectile> setProjectiles)
+        /// <param name="projectiles">The list of projectiles this AverageAudio will use to calculate average positions. </param>
+        /// <param name="sound">The Sound this AverageAudio will play. </param>
+        public void SetProjectilesAndSound(List<Projectile> projectiles, Sound sound)
         {
-            this.projectiles = setProjectiles;
-        }
-        /// <summary>
-        /// Set the audioclip to play
-        /// </summary>
-        /// <param name="audioClip">AudioClip to be played</param>
-        public void SetAudioClip(AudioClip audioClip)
-        {
-            this.averageAudioClip = audioClip;
+            this.projectiles = projectiles;
+            this.averageSound = sound;
         }
     }
     
