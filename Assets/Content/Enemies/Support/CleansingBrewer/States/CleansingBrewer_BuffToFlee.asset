@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a35acca2b866a4a854023149e2de6f, type: 3}
+  m_Name: CleansingBrewer_BuffToFlee
+  m_EditorClassIdentifier: 
+  trueState: {fileID: 11400000, guid: 22516eb3497165e4b9f8541fa960673b, type: 2}
+  decisions:
+  - invert: 0
+    decision: {fileID: 11400000, guid: 8c71e213ff27aee4f8d992d594957310, type: 2}
+    nextOperator: 1
+  - invert: 0
+    decision: {fileID: 11400000, guid: e4c00d6975d51464d8aef73e8b304e50, type: 2}
+    nextOperator: 1
+  - invert: 0
+    decision: {fileID: 11400000, guid: 4a5411de71beac842bc16b17c8fff3fe, type: 2}
+    nextOperator: 0

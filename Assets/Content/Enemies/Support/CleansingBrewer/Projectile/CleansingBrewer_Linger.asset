@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
-  m_Name: SturdyBrewer_Linger
+  m_Name: CleansingBrewer_Linger
   m_EditorClassIdentifier: 
   actionSound:
     outputAudioMixerGroup: {fileID: 0}
@@ -32,17 +32,16 @@ MonoBehaviour:
   attack:
     damage: 0
     damageType: 0
-    statusEffects:
-    - {fileID: 11400000, guid: f88b0bf6c13b0a340bd72443c7473550, type: 2}
+    statusEffects: []
     invertInvincibility: 0
   hitCount: 999999
   applyDamageOnHit: 1
   modifiers:
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
-  - {fileID: 11400000, guid: 1e212915126a0ab4e890b779ebff82b3, type: 2}
+  - {fileID: 11400000, guid: e64b4150ca89a1a4d918cec04fbc10b0, type: 2}
   immuneToShield: 0
   immuneToReflect: 0
-  shape: {fileID: 11400000, guid: 84f038f6a1a87054f8f560d6874d3bd7, type: 2}
+  shape: {fileID: 11400000, guid: 6156d571e1558d74490e631f0f101900, type: 2}
   lifetime: 3
   initialSpeed: 0
   acceleration: 0
@@ -53,7 +52,7 @@ MonoBehaviour:
   homingDelay: 0
   homingAimMode: 0
   switchAfterHit: 0
-  visualObject: {fileID: 6365975272701914270, guid: ebc066de918db4d49b3d6be12b476bce, type: 3}
+  visualObject: {fileID: 6365975272701914270, guid: b8ac330d8c2ed004da0842eefac26b64, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
   travelSound:
