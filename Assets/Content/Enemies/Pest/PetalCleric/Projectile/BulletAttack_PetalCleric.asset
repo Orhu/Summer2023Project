@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
-  m_Name: RottingBat_ThrowRock
+  m_Name: BulletAttack_PetalCleric
   m_EditorClassIdentifier: 
   actionSound:
     outputAudioMixerGroup: {fileID: 0}
@@ -30,28 +30,32 @@ MonoBehaviour:
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
-    damage: 2
+    damage: 6
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
   hitCount: 1
   applyDamageOnHit: 1
   modifiers:
-  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
+  - {fileID: 11400000, guid: 4db00e30cb485914980b8d29faa3969e, type: 2}
+  - {fileID: 11400000, guid: 8df4cddf2500dd94e826ccbf684f1eab, type: 2}
+  - {fileID: 11400000, guid: bd5cbefd2c368e34ead20bd16f5f4924, type: 2}
+  - {fileID: 11400000, guid: c69b82309fd0e4e4d9c0fb09e294b7af, type: 2}
+  - {fileID: 11400000, guid: 586bf6400fef28e4d916ac7140d14ad5, type: 2}
   immuneToShield: 0
   immuneToReflect: 0
-  shape: {fileID: 11400000, guid: dfc9fb43e4a3a134f8d710ccdcb6ed6a, type: 2}
-  lifetime: 2
-  initialSpeed: 5
-  acceleration: 0
+  shape: {fileID: 11400000, guid: 30acad41d445cc943b991ed2c16933ee, type: 2}
+  lifetime: 3
+  initialSpeed: 10
+  acceleration: -5
   minSpeed: 0
   maxSpeed: 10
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
-  homingAimMode: 0
+  homingAimMode: 1
   switchAfterHit: 0
-  visualObject: {fileID: 8412107525280692032, guid: d0ba6c91c644fc44da8ea8128c473331, type: 3}
+  visualObject: {fileID: 5105573067353007232, guid: f6e741702becb804ea46f521f27cff2a, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
   travelSound:
@@ -88,10 +92,10 @@ MonoBehaviour:
   aimMode: 0
   waitForProjectileDeath: 0
   chargeTime: 0
-  additionalActionTime: 1
+  additionalActionTime: 3
   _spawnSequence:
   - delay: 0
     angle: 0
-    offset: {x: 0, y: 0}
-  randomAngle: 30
+    offset: {x: 1, y: 0}
+  randomAngle: 360
   randomOffset: 0
