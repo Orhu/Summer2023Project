@@ -9,7 +9,7 @@ namespace Cardificer
     /// <summary>
     /// Menu for choosing what boon to pickup
     /// </summary>
-    public class PickABoonMenu : MonoBehaviour
+    public class PickABoonMenu : Menu
     {
         [Tooltip("Called when any boon has been selected.")]
         public UnityEvent onSelected;
