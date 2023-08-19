@@ -11,7 +11,7 @@ namespace Cardificer
     /// Map manager script for handling rendering and logic
     /// for the map menu UI object
     /// </summary>
-    public class MapMenu : MonoBehaviour
+    public class MapMenu : Menu
     {
         [Tooltip("Grid layout for organizing room visuals")]
         [SerializeField] private GameObject roomImageContainer;

@@ -9,7 +9,7 @@ namespace Cardificer
     /// <summary>
     /// A component for rendering cards in UI space.
     /// </summary>
-    public class CardRenderer : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler // Handlers function as UI OnMouseEnter
+    public class CardRenderer : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler // Handlers function as UI OnMouseEnter
     {
         [Tooltip("The card to render.")]
         [SerializeField] private Card _card;
@@ -143,7 +143,7 @@ namespace Cardificer
         /// <summary>
         /// Assign member variable values.
         /// </summary>
-        private void Start()
+        private void Awake()
         {
             originalScale = transform.localScale;
         }
@@ -311,6 +311,48 @@ namespace Cardificer
         {
             renderActionSide = !renderActionSide;
         }
+
+        /// <summary>
+        /// Called when this has been selected
+        /// </summary>
+        public void OnSelect(BaseEventData eventData)
+        {
+            if (!isHovered)
+            {
+                // Make the card grow
+                StartCoroutine(ScaleCardRenderer(true));
+
+                // Play the shake animation
+                GetComponent<Animator>().Play("A_CardRenderer_Shake");
+
+                // Turn on the compendium button
+                compendiumButton.gameObject.SetActive(true);
+                // Set hovered to true
+                isHovered = true;
+            }
+        }
+
+        /// <summary>
+        /// Called when this has been deselected
+        /// </summary>
+        /// <param name="eventData"></param>
+        public void OnDeselect(BaseEventData eventData)
+        {
+            if (isHovered)
+            {
+                // Shrink the card
+                StartCoroutine(ScaleCardRenderer(false));
+
+                // Play the base animation
+                GetComponent<Animator>().Play("A_CardRenderer_Base");
+
+                // Turn off the compendium button
+                compendiumButton.gameObject.SetActive(false);
+                // Set hovered to false
+                isHovered = false;
+            }
+        }
+
 
         /// <summary>
         /// Struct for storing the needed component references.
