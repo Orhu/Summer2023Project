@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 4
   actions:
   - {fileID: 11400000, guid: 535c86eb63967cc4aad29aa96a92d17a, type: 2}
-  effects: []
   displayName: Poison Blade
   description: <b>Poisonous.</b> Throw a blade soaked in a magical poison.
   flavorText: <i>If it works for rats...</i>
@@ -32,6 +31,9 @@ MonoBehaviour:
   chordEffectText: + <b>Poisonous</b>
   chordModifiers:
   - {fileID: 11400000, guid: 8f20b6d01c7782c4a82d4aab72928dbc, type: 2}
+  chordVFXPrefabs:
+  - {fileID: 3378121504974007400, guid: a9461f41a025e7d4682016126d6bad21, type: 3}
   duplicateModifiers:
-  - {fileID: 11400000, guid: c572d717945905446847af279e74b69b, type: 2}
   - {fileID: 11400000, guid: 8f20b6d01c7782c4a82d4aab72928dbc, type: 2}
+  modifierFilters:
+  - {fileID: 11400000, guid: a4f288fde65eeae4384ddf2b4d931802, type: 2}

@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 12
   actions:
   - {fileID: 11400000, guid: b6ae58de1f6041343bde5191e4e4309b, type: 2}
-  effects: []
   displayName: Escape Velocity
   description: <b>Shielded.</b> Summons small orbiting moons that are ejected outwards.
   flavorText: 
@@ -31,7 +30,9 @@ MonoBehaviour:
   damage: 2
   chordEffectText: Quickened Spell
   chordModifiers:
-  - {fileID: 11400000, guid: b419f14a1639d2541a52747a84fa49f3, type: 2}
+  - {fileID: 11400000, guid: 1487d83e25cb2414b8d87225e0266a49, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
-  - {fileID: 11400000, guid: 82d5bf918cb90a547a68a8cd8b19f101, type: 2}
-  - {fileID: 11400000, guid: 20901251ba5ebb943aef2de879166562, type: 2}
+  - {fileID: 11400000, guid: 1487d83e25cb2414b8d87225e0266a49, type: 2}
+  modifierFilters:
+  - {fileID: 11400000, guid: d86dbe0cc1edc004f833303ba6d53bbc, type: 2}

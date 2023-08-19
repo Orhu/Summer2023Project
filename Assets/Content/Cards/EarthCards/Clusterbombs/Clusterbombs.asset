@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 9
   actions:
   - {fileID: 11400000, guid: e9e9d0cf4c9016c4da7d524e43ff47f7, type: 2}
-  effects: []
   displayName: Clusterbomb
   description: Launch a bomb that splits into more bombs that split into more bombs.
   flavorText: <i>Carpet bomber? I hardly know her!</i>
@@ -32,6 +31,8 @@ MonoBehaviour:
   chordEffectText: Clustering Spell
   chordModifiers:
   - {fileID: 11400000, guid: 122199beb51a9de44b36b06a66591055, type: 2}
+  chordVFXPrefabs:
+  - {fileID: 2809569760718847691, guid: ba07119019d48df4e917f00a4529f282, type: 3}
   duplicateModifiers:
-  - {fileID: 11400000, guid: f038bfa4b251b674bb6faf70e71cbb99, type: 2}
-  - {fileID: 11400000, guid: 8a1ae8224d1256f41b27db672ec7865c, type: 2}
+  - {fileID: 11400000, guid: 122199beb51a9de44b36b06a66591055, type: 2}
+  modifierFilters: []

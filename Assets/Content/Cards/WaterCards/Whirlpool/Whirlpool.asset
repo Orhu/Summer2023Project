@@ -17,7 +17,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 32f63754b9315d14ca46e8e8a8bf9210, type: 2}
   - {fileID: 11400000, guid: d01a692b040bcef408a97dc6e228d41c, type: 2}
   - {fileID: 11400000, guid: 7dd2a3592c2c13f44b392fa1579cb856, type: 2}
-  effects: []
   displayName: Whirlpool
   description: <b>Cloud.</b> Create a whirlpool that damages any enemies caught within.
   flavorText: 
@@ -33,7 +32,10 @@ MonoBehaviour:
   damage: 0.5
   chordEffectText: Extended Spell
   chordModifiers:
-  - {fileID: 11400000, guid: 0e8fba77096a2d4428126f9f98e2361e, type: 2}
+  - {fileID: 11400000, guid: 8ee228d351b6faa4c8ef1c664102dddc, type: 2}
+  chordVFXPrefabs:
+  - {fileID: 3378121504974007400, guid: 4c35ddcd3b26e9a478f98838059cd427, type: 3}
   duplicateModifiers:
-  - {fileID: 11400000, guid: 5ee93f9647456c74fbd85d42af9dd6f3, type: 2}
-  - {fileID: 11400000, guid: 263485fd2d5f7b142b9712258602ffe3, type: 2}
+  - {fileID: 11400000, guid: 8ee228d351b6faa4c8ef1c664102dddc, type: 2}
+  modifierFilters:
+  - {fileID: 11400000, guid: 3457f3c853af0aa47876fe767eb8867c, type: 2}
