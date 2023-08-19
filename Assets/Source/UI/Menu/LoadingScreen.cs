@@ -7,7 +7,7 @@ namespace Cardificer
     /// <summary>
     /// A loading screen for hiding async function calls.
     /// </summary>
-    public class LoadingScreen : MonoBehaviour
+    public class LoadingScreen : Menu
     {
         // The minimum time that this will load for.
         [HideInInspector] public float minLoadingTime = 1f;
