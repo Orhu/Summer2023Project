@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 
 namespace Cardificer
 {
@@ -13,6 +15,22 @@ namespace Cardificer
     {
         // Singleton for the menu manager
         private static MenuManager instance;
+
+        // Stores the prefabs used when instantiating menus.
+        private Dictionary<Type, GameObject> menuTypesToPrefabs = new Dictionary<Type, GameObject>();
+
+        // The menus that are currently locked open.
+        private HashSet<GameObject> lockedOpenMenus = new HashSet<GameObject>();
+
+        // The menus that are currently pausing the game.
+        private HashSet<GameObject> pausingMenus = new HashSet<GameObject>();
+
+        // The input module for this.
+        public static InputSystemUIInputModule uiInputModule => instance.GetComponent<InputSystemUIInputModule>();
+
+        // Whether or not the player is using the controller to navigate menu.
+        public static bool usingNavigation { private set; get; } = false;
+
 
         /// <summary>
         /// Assign singleton variable
@@ -28,16 +46,22 @@ namespace Cardificer
             {
                 Destroy(gameObject);
             }
+
+            uiInputModule.move.action.performed +=
+                (UnityEngine.InputSystem.InputAction.CallbackContext context) =>
+                {
+                    usingNavigation = true;
+                    if (EventSystem.current.currentSelectedGameObject != null) { return; }
+                    instance.GetComponentInChildren<Menu>(false)?.InitializeSelection();
+                };
         }
 
-        // Stores the prefabs used when instantiating menus.
-        private Dictionary<Type, GameObject> menuTypesToPrefabs = new Dictionary<Type, GameObject>();
-
-        // The menus that are currently locked open.
-        private HashSet<GameObject> lockedOpenMenus = new HashSet<GameObject>();
-
-        // The menus that are currently pausing the game.
-        private HashSet<GameObject> pausingMenus = new HashSet<GameObject>();
+        /// <summary>
+        /// Handle selection initialization.
+        /// </summary>
+        private void OnNavigate()
+        {
+        }
 
         /// <summary>
         /// Opens a given menu.
@@ -47,7 +71,7 @@ namespace Cardificer
         /// <param name="closeOtherMenus"> Whether or not this will close other currently open menus. </param>
         /// <param name="lockOpen"> Whether or not this menu will be allowed to be closed by the menu manager. </param>
         /// <returns> The actual menu object that was opened. </returns>
-        public static MenuType Open<MenuType>(bool pauseGame = true,  bool lockOpen = false, bool closeOtherMenus = true) where MenuType : Component
+        public static MenuType Open<MenuType>(bool pauseGame = true,  bool lockOpen = false, bool closeOtherMenus = true) where MenuType : Menu
         {
             return (MenuType)Open(typeof(MenuType), pauseGame, lockOpen, closeOtherMenus);
         }
@@ -59,12 +83,14 @@ namespace Cardificer
             }
 
             Component menu = instance.GetComponentInChildren(menuType, true);
-            if (menu == null)
+            if (menu == null || menu.gameObject.activeSelf)
             {
                 GameObject newMenu = Instantiate(GetMenuPrefab(menuType));
                 newMenu.transform.SetParent(instance.transform, false);
                 menu = newMenu.GetComponent(menuType);
             }
+
+            menu.transform.SetAsLastSibling();
 
             if (lockOpen)
             {
@@ -82,6 +108,10 @@ namespace Cardificer
             }
 
             menu.gameObject.SetActive(true);
+            if (usingNavigation)
+            {
+                (menu as Menu).InitializeSelection();
+            }
             return menu;
         }
 
@@ -91,7 +121,7 @@ namespace Cardificer
         /// <typeparam name="MenuType"> The type of menu to close. </typeparam>
         /// <param name="closeLockedMenus"> Whether or not this will close locked menus. </param>
         /// <returns> The actual menu object that was closed. </returns>
-        public static MenuType Close<MenuType>(bool closeLockedMenus = false) where MenuType : Component
+        public static MenuType Close<MenuType>(bool closeLockedMenus = false) where MenuType : Menu
         {
             return (MenuType)Close(typeof(MenuType), closeLockedMenus);
         }
@@ -109,6 +139,10 @@ namespace Cardificer
                 Time.timeScale = 1;
             }
 
+            if (usingNavigation)
+            {
+                instance.GetComponentInChildren<Menu>(false)?.InitializeSelection();
+            }
             return menu;
         }
 
@@ -137,7 +171,7 @@ namespace Cardificer
         /// <param name="newIsOpened"> Whether or not the menu is now open or closed. </param>
         /// <param name="closeOtherMenus"> Whether or not this will close other currently open menus. </param>
         /// <returns> The actual menu object that was toggled. </returns>
-        public static MenuType Toggle<MenuType>(out bool newIsOpened, bool closeOtherMenus = true) where MenuType : Component
+        public static MenuType Toggle<MenuType>(out bool newIsOpened, bool closeOtherMenus = true) where MenuType : Menu
         {
             return (MenuType)Toggle(typeof(MenuType), out newIsOpened, closeOtherMenus);
         }
@@ -153,7 +187,7 @@ namespace Cardificer
                 return Close(menuType);
             }
         }
-        public static MenuType Toggle<MenuType>(bool closeOtherMenus = true) where MenuType : Component
+        public static MenuType Toggle<MenuType>(bool closeOtherMenus = true) where MenuType : Menu
         {
             return Toggle<MenuType>(out bool _, closeOtherMenus);
         }
@@ -167,7 +201,7 @@ namespace Cardificer
         /// </summary>
         /// <typeparam name="MenuType"> The type of menu to see if its open. </typeparam>
         /// <returns> True if the given menu is open. </returns>
-        public static bool IsMenuOpen<MenuType>() where MenuType : Component
+        public static bool IsMenuOpen<MenuType>() where MenuType : Menu
         {
             return IsMenuOpen(typeof(MenuType));
         }

@@ -63,6 +63,7 @@ namespace Cardificer.FiniteStateMachine
                         stateMachine.pathData.keepFollowingPath = false;
                         stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
                         stateMachine.cooldownData.cooldownReady[this] = true;
+                        stateMachine.currentPathfindingTarget = stateMachine.GetFeetPos();
                         yield break;
                     }
                     else
@@ -84,6 +85,7 @@ namespace Cardificer.FiniteStateMachine
                             stateMachine.pathData.keepFollowingPath = false;
                             stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
                             stateMachine.cooldownData.cooldownReady[this] = true;
+                            stateMachine.currentPathfindingTarget = stateMachine.GetFeetPos();
                             yield break;
                         }
                     }

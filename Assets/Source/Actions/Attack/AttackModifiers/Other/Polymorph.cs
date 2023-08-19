@@ -14,14 +14,12 @@ namespace Cardificer
         [SerializeField] private GameObject morphInto;
 
         // The projectile doing the polymorphing.
-        private Projectile pollymorphProjectile;
-        public override Projectile modifiedProjectile
+        private Projectile polymorphProjectile;
+
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.onOverlap += MorphObject;
-                pollymorphProjectile = value;
-            }
+            value.onOverlap += MorphObject;
+            polymorphProjectile = value;
         }
 
         /// <summary>
@@ -38,7 +36,7 @@ namespace Cardificer
             createdObject.transform.position = component.transform.position;
             createdObject.transform.rotation = component.transform.rotation;
 
-            pollymorphProjectile.ignoredObjects.Add(createdObject);
+            polymorphProjectile.ignoredObjects.Add(createdObject);
 
             Destroy(component.gameObject);
         }

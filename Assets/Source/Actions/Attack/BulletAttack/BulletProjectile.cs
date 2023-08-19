@@ -20,8 +20,8 @@ namespace Cardificer
             BulletSpawnInfo bulletSpawnInfo = spawnSequence[index] as BulletSpawnInfo;
 
             // Position
-            transform.position = GetSpawnLocation();
-            Vector3 aimDirection = (GetAimTarget(attack.aimMode) - GetSpawnLocation()).normalized;
+            transform.position = GetSpawnLocation() ?? Vector2.zero;
+            Vector3 aimDirection = (GetAimTarget(attack.aimMode) - transform.position).normalized;
             transform.position += (Vector3)Random.insideUnitCircle * bulletAttack.randomOffset;
 
             // Rotation

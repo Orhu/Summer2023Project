@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a35acca2b866a4a854023149e2de6f, type: 3}
+  m_Name: HushAlchemist_FleeToWander
+  m_EditorClassIdentifier: 
+  trueState: {fileID: 11400000, guid: efef04309cddc9448bcd11975471a4ec, type: 2}
+  decisions:
+  - invert: 1
+    decision: {fileID: 11400000, guid: fcbcd681bc263cc4f892ff1e5f756edc, type: 2}
+    nextOperator: 2
+  - invert: 0
+    decision: {fileID: 11400000, guid: e912b5e548226d743b9cc134e1bfed18, type: 2}
+    nextOperator: 0

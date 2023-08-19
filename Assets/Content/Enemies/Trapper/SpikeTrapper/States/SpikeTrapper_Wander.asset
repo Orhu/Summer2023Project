@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c5858af96344aaa9e636fdff62a26b5, type: 3}
+  m_Name: SpikeTrapper_Wander
+  m_EditorClassIdentifier: 
+  enterActions:
+  - {fileID: 11400000, guid: 47b704b20835da2478af6dc5c1a51c32, type: 2}
+  exitActions: []
+  updateActions:
+  - {fileID: 11400000, guid: 2438e6231aa69174aa333899e4036b4a, type: 2}
+  - {fileID: 11400000, guid: 01945a05b27af984d96fa2c48734f0b0, type: 2}
+  - {fileID: 11400000, guid: f43c5b02875b42a41a7540d0ddba8cdd, type: 2}
+  transitions:
+  - {fileID: 11400000, guid: 55e39d7a562bcc64b85fdb6f935e1595, type: 2}
+  - {fileID: 11400000, guid: 405e77cb281e9924f939d6b88f0ab0c5, type: 2}

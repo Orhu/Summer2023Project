@@ -7,10 +7,10 @@ namespace Cardificer
     /// <summary>
     /// A loading screen for hiding async function calls.
     /// </summary>
-    public class LoadingScreen : MonoBehaviour
+    public class LoadingScreen : Menu
     {
         // The minimum time that this will load for.
-        [HideInInspector] public float minLoadingTime = 0.5f;
+        [HideInInspector] public float minLoadingTime = 1f;
 
         // All of the operations that this will wait for.
         private List<AsyncOperation> operations = new List<AsyncOperation>();
@@ -36,9 +36,9 @@ namespace Cardificer
                 // Give a frame for vars to be set.
                 yield return null;
 
-                yield return new WaitForSeconds(minLoadingTime / 2);
+                yield return new WaitForSecondsRealtime(minLoadingTime / 2);
                 yield return operations;
-                yield return new WaitForSeconds(minLoadingTime / 2);
+                yield return new WaitForSecondsRealtime(minLoadingTime / 2);
 
                 operations.Clear();
                 MenuManager.Close<LoadingScreen>(true);

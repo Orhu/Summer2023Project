@@ -9,7 +9,7 @@ namespace Cardificer
     /// Game Over manager script for handling rendering and logic
     /// for the Game Over menu UI object
     /// </summary>
-    public class GameOverMenu : MonoBehaviour
+    public class GameOverMenu : Menu
     {
         [Tooltip("Animator for the player death")]
         [SerializeField] private Animator playerDeathAnim;

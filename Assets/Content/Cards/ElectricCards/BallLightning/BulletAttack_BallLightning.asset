@@ -16,23 +16,24 @@ MonoBehaviour:
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
-    damage: 6
+    damage: 2
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
   hitCount: 999
   applyDamageOnHit: 1
   modifiers:
-  - {fileID: 11400000, guid: 41c9983c9a74be24581769fa5de4ee2f, type: 2}
   - {fileID: 11400000, guid: 4db00e30cb485914980b8d29faa3969e, type: 2}
+  - {fileID: 11400000, guid: 41c9983c9a74be24581769fa5de4ee2f, type: 2}
+  - {fileID: 11400000, guid: f5c6f660dd3241e46be3ddbd02d93b89, type: 2}
   immuneToShield: 0
   immuneToReflect: 0
   shape: {fileID: 11400000, guid: 6890f8eb407e60842ac49dd98276e895, type: 2}
   lifetime: 7.5
-  initialSpeed: 2.5
+  initialSpeed: 4
   acceleration: 0
   minSpeed: 0
-  maxSpeed: 5
+  maxSpeed: 4
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
@@ -47,7 +48,7 @@ MonoBehaviour:
   aimMode: 0
   waitForProjectileDeath: 0
   chargeTime: 1.1
-  additionalActionTime: 0
+  additionalActionTime: 4
   _spawnSequence:
   - delay: 0
     angle: 0
