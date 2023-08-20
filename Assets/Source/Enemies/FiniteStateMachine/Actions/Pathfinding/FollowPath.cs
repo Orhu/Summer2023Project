@@ -12,12 +12,12 @@ namespace Cardificer.FiniteStateMachine
     [CreateAssetMenu(menuName="FSM/Actions/Pathfinding/Follow Path (No Request)")]
     public class FollowPath : SingleAction
     {
-        [Tooltip("Starting at stopping dist from the target destination, move speed rapidly drops until target destination is reached.")]
-        [SerializeField] private float stoppingDist = 0.1f;
-     
         [Tooltip("After a path is starting to be followed, how long before another follow request?")] [Min(0.1f)] // Since this action does not interact with pathfinding, this min is not needed but serves for consistency between FollowPath and RequestAndFollowPath
         [SerializeField] private float pathLockout = 0.1f;
         
+        [Tooltip("Starting at stopping dist from the target destination, move speed rapidly drops until target destination is reached.")]
+        [SerializeField] private float stoppingDist = 0.1f;
+
         // need to track our current data
         private ChaseData chaseData;
 
