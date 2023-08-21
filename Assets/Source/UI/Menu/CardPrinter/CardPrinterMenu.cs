@@ -162,16 +162,19 @@ namespace Cardificer
             StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "ShredderSelect"), true, null, 1));
         }
 
-        public void SelectScreenToConfirmScreenCopier(Card card)
+        public void SelectScreenToConfirmScreen(Card card, bool isCopier)
         {
-            StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "CopyMachineConfirm"), true));
-            links.CopierConfirmScreen.GetComponent<ConfirmScreenScript>().SetCopyCardRendererCard(card);
-        }
-
-        public void SelectScreenToConfirmScreenShredder(Card card)
-        {
-            StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "ShredderConfirm"), true));
-            links.CopierConfirmScreen.GetComponent<ConfirmScreenScript>().SetShredCardRendererCard(card);
+            if (isCopier)
+            {
+                StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "CopyMachineConfirm"), true));
+                links.CopierConfirmScreen.GetComponent<ConfirmScreenScript>().SetCopyCardRendererCard(card);
+            }
+            else
+            {
+                StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "ShredderConfirm"), true));
+                links.ShredderConfirmScreen.GetComponent<ConfirmScreenScript>().SetCopyCardRendererCard(card);
+            }
+            
         }
 
         public void MoveToErrorScreen(string errorMessage)
@@ -185,9 +188,14 @@ namespace Cardificer
             currentScreen.GetComponentInChildren<GridLayoutGroup>().gameObject.SetActive(true);
         }
 
-        public void CancelTransaction()
+        public void CopyCancelTransaction()
         {
             StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "CopyMachineSelect"), true, RestoreGridLayout));  
+        }
+
+        public void ShredCancelTransaction()
+        {
+            StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "ShredderSelect"), true, RestoreGridLayout));
         }
 
         public IEnumerator ReturnBackToMainScreen(float waitTime)

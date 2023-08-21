@@ -27,6 +27,9 @@ namespace Cardificer
 
         private CardPrinterMenu cardPrinterMenu;
 
+        [Tooltip("Whether or not this is the copier screen")]
+        public bool isCopierScreen;
+
         // To keep track of what card we are either shredding or copying
         public Card selectedCard;
 
@@ -59,7 +62,7 @@ namespace Cardificer
                 {
                     // Sets the selected card to the cardRenderer
                     SelectCard(tempCardRendererGameObject.GetComponent<CardRenderer>());
-                    cardPrinterMenu.SelectScreenToConfirmScreenCopier(tempCardRendererGameObject.GetComponent<CardRenderer>().card);
+                    cardPrinterMenu.SelectScreenToConfirmScreen(tempCardRendererGameObject.GetComponent<CardRenderer>().card, isCopierScreen);
                 });
 
             }
