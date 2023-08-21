@@ -23,6 +23,9 @@ namespace Cardificer
 
         [Tooltip("If true, the attached collider can not deal damage.")]
         [SerializeField] private bool noCollisionDamage;
+        
+        [Tooltip("If true, this enemy dies when it touches an enemy (only applies if immediately damage is set to true)")]
+        [SerializeField] private bool fragile;
 
         [Tooltip("AudioClip for Damage On Interact")] 
         [SerializeField] private AudioClip audioClip; 
@@ -80,6 +83,10 @@ namespace Cardificer
             if (immediatelyDamage)
             {
                 health.ReceiveAttack(damageData);
+                if (fragile)
+                {
+                    Destroy(transform.parent.gameObject);
+                }
                 if (audioClip != null)
                 {
                     AudioManager.instance.PlayAudioAtPos(audioClip, transform.position);
