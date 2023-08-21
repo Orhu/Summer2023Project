@@ -18,17 +18,17 @@ namespace Cardificer
         // The initial length of the attack sequence.
         List<ProjectileSpawnInfo> spawnSequence;
 
-        // The projectile this modifies
-        public override Projectile modifiedProjectile
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile value)
         {
-            set
+            if (value.index == 0)
             {
-                if (value.index == 0)
-                {
-                    spawnSequence = value.spawnSequence;
-                    sequenceLength = spawnSequence.Count;
-                    value.StartCoroutine(UpadateSpawnSequnce());
-                }
+                spawnSequence = value.spawnSequence;
+                sequenceLength = spawnSequence.Count;
+                value.StartCoroutine(UpadateSpawnSequnce());
             }
         }
 

@@ -7,7 +7,7 @@ namespace Cardificer
     /// Pause manager script for handling rendering and logic
     /// for the pause menu UI object
     /// </summary>
-    public class PauseMenu : MonoBehaviour
+    public class PauseMenu : Menu
     {
         [Tooltip("Main container that opens when you pause the game (not options or anything)")]
         [SerializeField] private GameObject mainPauseMenuContainer;

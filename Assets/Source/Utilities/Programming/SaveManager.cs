@@ -176,6 +176,16 @@ namespace Cardificer
         }
 
 
+        // The saved list of destroyed tile world positions
+        public static List<Boon.BoonToPickCountEntry> savedBoonsToPickCounts
+        {
+            get
+            {
+                if (!autosaveExists) { return new List<Boon.BoonToPickCountEntry>(); }
+                return autosaver.latestAutosave.boonsToPickCounts;
+            }
+        }
+
 
         /// <summary>
         /// Class for storing any kinda of data persistently, and handling loading and storing of that data as needed.
@@ -375,6 +385,9 @@ namespace Cardificer
                 // The current destroyed tiles world positions
                 public List<Vector2> destroyedTiles;
 
+                // How many times each boon has been picked.
+                public List<Boon.BoonToPickCountEntry> boonsToPickCounts;
+
                 /// <summary>
                 /// Default constructor.
                 /// </summary>
@@ -406,6 +419,7 @@ namespace Cardificer
                 saveData.visitedRooms.Add(FloorGenerator.currentRoom.roomLocation);
                 saveData.destroyedTiles = DestroyableTile.destroyedTiles?.ToList();
                 saveData.remainingShopBuys = ShopSlot.savableRemainingShopBuys;
+                saveData.boonsToPickCounts = Boon.BoonToPickCountEntry.GetAll();
 
                 latestAutosave = saveData;
             }

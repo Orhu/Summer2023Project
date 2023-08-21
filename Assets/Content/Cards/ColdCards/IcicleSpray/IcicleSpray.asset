@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 6
   actions:
   - {fileID: 11400000, guid: 19d7b12aa26c6d04ab455edfe7b83f62, type: 2}
-  effects: []
   displayName: Icicle Spray
   description: <b>Freezing.</b> Fire a volley of icicles that freeze anything they
     touch.
@@ -33,6 +32,8 @@ MonoBehaviour:
   chordEffectText: + <b>Freezing</b>
   chordModifiers:
   - {fileID: 11400000, guid: 8f4914498d97fe54baeb94805ffc241e, type: 2}
+  chordVFXPrefabs:
+  - {fileID: 3378121504974007400, guid: a1223cec1a676ba42ba142ef240ed9a3, type: 3}
   duplicateModifiers:
-  - {fileID: 11400000, guid: c66feaced63896349b0f59bc677785fe, type: 2}
-  - {fileID: 11400000, guid: afe5d7c48b1d54142b09f1860ed346c8, type: 2}
+  - {fileID: 11400000, guid: 8f4914498d97fe54baeb94805ffc241e, type: 2}
+  modifierFilters: []

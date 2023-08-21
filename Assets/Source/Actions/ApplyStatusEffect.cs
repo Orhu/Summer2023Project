@@ -16,6 +16,9 @@ namespace Cardificer
         [Tooltip("The delay before it is applied")] [Min(0f)]
         [SerializeField] private float delay = 0f;
 
+        [Tooltip("Whether or not to create a damage number prefab on trigger")]
+        [SerializeField] private bool dontShowDamageNumber = false;
+
         /// <summary>
         /// Plays this action and causes all its effects.
         /// </summary>
@@ -25,7 +28,7 @@ namespace Cardificer
         {
             if (delay <= 0)
             {
-                actor.GetActionSourceTransform().GetComponent<Health>().ReceiveAttack(new DamageData(statusEffects, actor.GetActionSourceTransform().gameObject));
+                actor.GetActionSourceTransform().GetComponent<Health>().ReceiveAttack(new DamageData(statusEffects, actor.GetActionSourceTransform().gameObject, false, dontShowDamageNumber));
             }
             else
             {
@@ -39,7 +42,7 @@ namespace Cardificer
         private IEnumerator DelayedApply(IActor actor)
         {
             yield return new WaitForSeconds(delay);
-            actor.GetActionSourceTransform().GetComponent<Health>().ReceiveAttack(new DamageData(statusEffects, actor.GetActionSourceTransform().gameObject));
+            actor.GetActionSourceTransform().GetComponent<Health>().ReceiveAttack(new DamageData(statusEffects, actor.GetActionSourceTransform().gameObject, false, dontShowDamageNumber));
         }
     }
 }

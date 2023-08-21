@@ -2,14 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Cardificer
 { 
     /// <summary>
     /// Handles the functionality of the play screen on the main menu.
     /// </summary>
-    public class MainMenu_Play : MonoBehaviour
+    public class MainMenu_Play : Menu
     {
+        [Tooltip("The button bound to the Continue() function.")]
+        [SerializeField] private Button continueButton;
+
+        [Tooltip("The button bound to the NewGame() function.")]
+        [SerializeField] private Button newGameButton;
+
+        [Tooltip("The button bound to the Tutorial() function.")]
+        [SerializeField] private Button tutorialButton;
+
+        /// <summary>
+        /// Set initial selection.
+        /// </summary>
+        private void OnEnable()
+        {
+            initialSelection = (SaveManager.autosaveExists ? continueButton : (SaveManager.tutorialCompleted ? newGameButton : tutorialButton)).gameObject;
+        }
+
+        /// <summary>
+        /// Reset initial selection.
+        /// </summary>
+        private void OnDisable()
+        {
+            initialSelection = null;
+        }
+
         /// <summary>
         /// Continues the current game.
         /// </summary>

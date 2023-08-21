@@ -12,13 +12,13 @@ namespace Cardificer
         [Tooltip("Whether or not this projectile should apply damage on hit.")]
         [SerializeField] private bool newApplyDamageOnHit;
 
-        // The projectile this modifies
-        public override Projectile modifiedProjectile
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.applyDamageOnHit = newApplyDamageOnHit;
-            }
+            value.applyDamageOnHit = newApplyDamageOnHit;
         }
     }
 }

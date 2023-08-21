@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 5
   actions:
   - {fileID: 11400000, guid: e54586a694e555b44b74b80e409b4152, type: 2}
-  effects: []
   displayName: Bomb
   description: Summon an explosive bomb underfoot.
   flavorText: <i>Shape the world.</i>
@@ -32,5 +31,9 @@ MonoBehaviour:
   chordEffectText: Bomber Spell
   chordModifiers:
   - {fileID: 11400000, guid: 7e9273cf5e0c0784a9b2bfacae4bb473, type: 2}
+  chordVFXPrefabs:
+  - {fileID: 2809569760718847691, guid: d207c6a92ba528b42a896d8a1f2c49fc, type: 3}
   duplicateModifiers:
-  - {fileID: 11400000, guid: 5a57547082d7fc941938c3cd630331a7, type: 2}
+  - {fileID: 11400000, guid: 7e9273cf5e0c0784a9b2bfacae4bb473, type: 2}
+  modifierFilters:
+  - {fileID: 11400000, guid: 58cc979ff6fcfa54295e2ce9c1e6c87c, type: 2}

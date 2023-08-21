@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 6
   actions:
   - {fileID: 11400000, guid: 3f1b062778b0f46499d1085b20d0c241, type: 2}
-  effects: []
   displayName: Bolt of Light
   description: <b>Phantasmal.</b> Conjure glowing darts of light that home to enemies.
   flavorText: 
@@ -32,6 +31,8 @@ MonoBehaviour:
   chordEffectText: + <b>Spellcaster</b>
   chordModifiers:
   - {fileID: 11400000, guid: fb056416aa4477d478976556a80d7189, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
-  - {fileID: 11400000, guid: c83333607c31d284f8c74e334c1841e6, type: 2}
-  - {fileID: 11400000, guid: da19024b888b0ec47bd8d2327a1b846c, type: 2}
+  - {fileID: 11400000, guid: fb056416aa4477d478976556a80d7189, type: 2}
+  modifierFilters:
+  - {fileID: 11400000, guid: 2fc185f15b100fd4db07fc62a3a74efe, type: 2}

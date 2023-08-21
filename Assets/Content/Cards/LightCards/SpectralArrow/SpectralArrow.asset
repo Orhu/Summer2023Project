@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 5
   actions:
   - {fileID: 11400000, guid: 8dab47f493a55d545be2f83e1fd156e0, type: 2}
-  effects: []
   displayName: Spectral Arrow
   description: <b>Phantasmal.</b> Fire a homing arrow that cannot miss.
   flavorText: <i>May you never miss your goal.</i>
@@ -32,6 +31,8 @@ MonoBehaviour:
   chordEffectText: + <b>Phantasmal</b>
   chordModifiers:
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
-  - {fileID: 11400000, guid: 43c4cb8f592b07c47a0385df9ceafa08, type: 2}
-  - {fileID: 11400000, guid: 43c4cb8f592b07c47a0385df9ceafa08, type: 2}
+  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
+  modifierFilters:
+  - {fileID: 11400000, guid: 27d0ccac52079124f84dddb0947233c8, type: 2}

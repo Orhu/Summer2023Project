@@ -9,7 +9,7 @@ namespace Cardificer
     /// Instruction manager script for handling rendering and logic
     /// for the Instruction menu UI object
     /// </summary>
-    public class InstructionMenu : MonoBehaviour
+    public class InstructionMenu : Menu
     {
         [Tooltip("List of pages in the manual in order")]
         [SerializeField] private Sprite[] manualPages;

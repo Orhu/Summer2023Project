@@ -13,8 +13,8 @@ namespace Cardificer {
         protected string description = "";
 
         [Header("Action Audio")]
-        [Tooltip("Taking an Action Audio Clip variable")]
-        [SerializeField] protected AudioClip actionAudioClip;
+        [Tooltip("Taking an Action Sound variable")]
+        [SerializeField] protected Sound actionSound;
 
         /// <summary>
         /// Gets the formatted description of this card.

@@ -228,7 +228,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3605828306234353333
 RectTransform:
   m_ObjectHideFlags: 0
@@ -265,6 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efdd07e6991250445b8b518e8a536f6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  intialSelection: {fileID: 0}
   cardRenderers: []
   cardLayoutArea: {fileID: 3605828304783324421}
   cardRendererTemplate: {fileID: 5394782965144985381, guid: 9a3905e9a7988f0488d83b42a37e1fb1, type: 3}
@@ -572,7 +573,7 @@ MonoBehaviour:
   m_text: Select a Card
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2acfb72208e546943ace8802d5273384, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 1551447067489636112, guid: 2acfb72208e546943ace8802d5273384, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

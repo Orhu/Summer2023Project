@@ -184,21 +184,7 @@ namespace Cardificer
                 collision.gameObject.GetComponent<Health>().ReceiveAttack(damage);
             }
 
-            if (deck != null)
-            {
-                foreach (KeyValuePair<int, float> cardIndexToCooldown in new Dictionary<int, float>(deck.cardIndicesToCooldowns))
-                {
-                    float newValue = cardIndexToCooldown.Value - cardCooldownSubtraction;
-                    if (newValue <= 0)
-                    {
-                        deck.cardIndicesToCooldowns.Remove(cardIndexToCooldown.Key);
-                    }
-                    else
-                    {
-                        deck.cardIndicesToCooldowns[cardIndexToCooldown.Key] = newValue;
-                    }
-                }
-            }
+            deck?.SubtractFromCooldowns(cardCooldownSubtraction);
         }
     }
 }

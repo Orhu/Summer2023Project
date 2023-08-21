@@ -23,12 +23,9 @@ namespace Cardificer
 
         [Tooltip("If true, the attached collider can not deal damage.")]
         [SerializeField] private bool noCollisionDamage;
-        
-        [Tooltip("If true, this enemy dies when it touches an enemy (only applies if immediately damage is set to true)")]
-        [SerializeField] private bool fragile;
 
         [Tooltip("AudioClip for Damage On Interact")] 
-        [SerializeField] private AudioClip audioClip; 
+        [SerializeField] private Sound damageOnInteractSound; 
 
         // The collider used for overlap detection.
         private new Collider2D collider;
@@ -83,13 +80,9 @@ namespace Cardificer
             if (immediatelyDamage)
             {
                 health.ReceiveAttack(damageData);
-                if (fragile)
+                if (damageOnInteractSound != null)
                 {
-                    Destroy(transform.parent.gameObject);
-                }
-                if (audioClip != null)
-                {
-                    AudioManager.instance.PlayAudioAtPos(audioClip, transform.position);
+                    AudioManager.instance.PlaySoundAtPos(damageOnInteractSound, transform.position);
 
                 }
             }
@@ -98,9 +91,9 @@ namespace Cardificer
             while (other != null && collider.IsTouching(other))
             {
                 health.ReceiveAttack(damageData);
-                if (audioClip != null)
+                if (damageOnInteractSound != null)
                 {
-                    AudioManager.instance.PlayAudioAtPos(audioClip, transform.position);
+                    AudioManager.instance.PlaySoundAtPos(damageOnInteractSound, transform.position);
 
                 }
                 yield return new WaitForSeconds(damageInterval);
