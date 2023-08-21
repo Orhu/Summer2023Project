@@ -12,6 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b067eac9463a37f41b382167fcdf564f, type: 3}
   m_Name: ChordAction_ApplyExhaust
   m_EditorClassIdentifier: 
+  actionSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
   statusEffects:
-  - {fileID: 11400000, guid: 7865c7782cabbb14f9c15a0248e745d8, type: 2}
-  delay: 0.1
+  - {fileID: 11400000, guid: 2792a7b2f3f9a5541934363c3a9eae32, type: 2}
+  delay: 0
+  dontShowDamageNumber: 0
