@@ -58,7 +58,6 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> The state machine to be used. </param>
         public void OnStateExit(BaseStateMachine stateMachine)
         {
-            stateMachine.timeSinceTransition = 0f;
             foreach (var action in exitActions)
             {
                 action.Execute(stateMachine);
