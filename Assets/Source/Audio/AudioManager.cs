@@ -48,8 +48,8 @@ namespace Cardificer
         /// </summary>
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Backspace))
-                StopAllContainers();
+            //if (Input.GetKeyDown(KeyCode.Backspace))
+            //    StopAllContainers();
         }
 #endif
 
