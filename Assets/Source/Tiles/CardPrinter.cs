@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace Cardificer
 {
+    /// <summary>
+    /// Class representing the card printer prefab object.
+    /// Handles collision with the player to open the card printer menu
+    /// </summary>
     public class CardPrinter : MonoBehaviour
     {
         /// <summary>
