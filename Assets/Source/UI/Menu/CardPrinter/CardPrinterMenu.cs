@@ -11,7 +11,7 @@ namespace Cardificer
     /// Card printer manager script for handling rendering and logic
     /// for the card printer UI object
     /// </summary>
-    public class CardPrinterMenu : MonoBehaviour
+    public class CardPrinterMenu : Menu
     {
         [Tooltip("Time taken to transition between different screens.")]
         [SerializeField] private float defaultTransitionTime;
@@ -152,16 +152,32 @@ namespace Cardificer
             transitionFunction?.Invoke();
         }
 
+        /// <summary>
+        /// Logic for the "copier" button on the main menu.
+        /// Takes the user to the select page of the copier.
+        /// </summary>
         public void MainMenuCardCopierButton()
         {
             StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "CopyMachineSelect"), true, null, 1));
         }
 
+        /// <summary>
+        /// Logic for the "shredder" button on the main menu.
+        /// Takes the user to the select page of the shredder.
+        /// </summary>
         public void MainMenuShredderButton()
         {
             StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "ShredderSelect"), true, null, 1));
         }
 
+        /// <summary>
+        /// Takes the user from the select a card screen
+        /// to the confirm the card screen. The screen
+        /// changes depending on if the user is on the copier
+        /// screen or shredder screen.
+        /// </summary>
+        /// <param name="card">Card that was selected in the select screen</param>
+        /// <param name="isCopier">Whether the screen was the copy screen or not</param>
         public void SelectScreenToConfirmScreen(Card card, bool isCopier)
         {
             if (isCopier)
@@ -177,6 +193,10 @@ namespace Cardificer
             
         }
 
+        /// <summary>
+        /// Moves to a screen for error messages
+        /// </summary>
+        /// <param name="errorMessage">The error message to display</param>
         public void MoveToErrorScreen(string errorMessage)
         {
             StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "Error"), true, null, 1));
@@ -188,20 +208,41 @@ namespace Cardificer
             currentScreen.GetComponentInChildren<GridLayoutGroup>().gameObject.SetActive(true);
         }
 
+        /// <summary>
+        /// Cancel the transaction in the copy confirm screen
+        /// brings the user back to the copy select screen
+        /// </summary>
         public void CopyCancelTransaction()
         {
             StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "CopyMachineSelect"), true, RestoreGridLayout));  
         }
 
+        /// <summary>
+        /// Cancel the transaction in the shredder confirm screen
+        /// brings the user back to the shredder select screen
+        /// </summary>
         public void ShredCancelTransaction()
         {
             StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "ShredderSelect"), true, RestoreGridLayout));
         }
 
+        /// <summary>
+        /// After a wait period, brings the user back to the main menu screen.
+        /// </summary>
+        /// <param name="waitTime">The time to wait until returning</param>
+        /// <returns>IEnumerator</returns>
         public IEnumerator ReturnBackToMainScreen(float waitTime)
         {
             yield return new WaitForSecondsRealtime(waitTime);
             StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "MainScreen"), true));
+        }
+
+        /// <summary>
+        /// Exits the menu with the exit button
+        /// </summary>
+        public void ExitMenu()
+        {
+            MenuManager.Close<CardPrinterMenu>();
         }
 
     }

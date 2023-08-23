@@ -369,7 +369,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0.2, y: 0.65}
-  m_AnchoredPosition: {x: 10.000458, y: 10}
+  m_AnchoredPosition: {x: 10.000427, y: 10}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6142060982179481751
@@ -714,7 +714,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 23.65
+  m_fontSize: 35
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1609,6 +1609,7 @@ MonoBehaviour:
   scaleFactor: 1.06
   scaleDuration: 0.2
   isSelected: 0
+  isHoverable: 1
   links:
     nameTextBox: {fileID: 194833537011146976}
     descriptionTextBox: {fileID: 430826756743227616}
@@ -1621,6 +1622,7 @@ MonoBehaviour:
     projectileTypeImage: {fileID: 3372789239388068220}
     rarityImage: {fileID: 1488946250820030135}
     chordEffectText: {fileID: 788179036452983611}
+    priceText: {fileID: 0}
   _renderActionSide: 1
 --- !u!114 &745902946420790642
 MonoBehaviour:
@@ -1751,7 +1753,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.6862745}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1780,7 +1782,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 1, g: 1, b: 1, a: 0.6862745}
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 1}
   m_EffectDistance: {x: 8, y: -8}
   m_UseGraphicAlpha: 1
 --- !u!1 &8081768732228548907
@@ -2067,7 +2069,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25.7
+  m_fontSize: 32
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

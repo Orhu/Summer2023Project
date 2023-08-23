@@ -81,9 +81,10 @@ namespace Cardificer
             else
             {
                 // Remove selected card from the deck
-                bool canRemoveCard = Deck.playerDeck.RemoveCard(selectedCardRenderer.card);
-                if (canRemoveCard)
+                DraftSettings deckLimitSettings = DraftSettings.Get();
+                if (deckLimitSettings.minPlayerDeckSize < Deck.playerDeck.cards.Count)
                 {
+                    Deck.playerDeck.RemoveCard(selectedCardRenderer.card);
                     Player.AddMoney(-selectedCardRenderer.card.shredPrice);
                     cardPrinterMenu.MoveToErrorScreen("Success!");
                 }
