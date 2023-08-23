@@ -16,7 +16,6 @@ MonoBehaviour:
   actions:
   - {fileID: 11400000, guid: f5cb8856501838a4e853b82092658726, type: 2}
   - {fileID: 11400000, guid: 79448cf807735a348b72d451dda81a5c, type: 2}
-  effects: []
   displayName: Echoing Shout
   description: <b>Panic.</b> Unleash a surge of thunderous sound in all directions.
   flavorText: 
@@ -30,9 +29,11 @@ MonoBehaviour:
   isRare: 0
   damageTypeSprite: {fileID: 0}
   damage: 1.5
-  chordEffectText: Piercing Spell
+  chordEffectText: Panic
   chordModifiers:
   - {fileID: 11400000, guid: 23a23a0aa2eeb3548bb57056ffec646c, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
-  - {fileID: 11400000, guid: 8cc21a01bbcf2b6458ec839318816651, type: 2}
-  - {fileID: 11400000, guid: 39c71f86836486e49a86abbb95e61b2b, type: 2}
+  - {fileID: 11400000, guid: 23a23a0aa2eeb3548bb57056ffec646c, type: 2}
+  modifierFilters:
+  - {fileID: 11400000, guid: f327710caa446ea40a9504542d6e7cac, type: 2}

@@ -24,6 +24,9 @@ namespace Cardificer
         [Tooltip("Makes this cause invincibility if it does no damage and not cause invincibility if it does.")]
         public bool invertInvincibility = false;
 
+        [Tooltip("Whether or not to not create a damage number prefab on hit.")]
+        public bool dontShowDamageNumber = false;
+
         // The causer of this attack.
         [System.NonSerialized]
         public GameObject causer;
@@ -39,6 +42,7 @@ namespace Cardificer
             damageType = attack.damageType;
             statusEffects = new List<StatusEffect>(attack.statusEffects);
             invertInvincibility = attack.invertInvincibility;
+            dontShowDamageNumber = attack.dontShowDamageNumber;
             this.causer = causer;
         }
 
@@ -49,12 +53,14 @@ namespace Cardificer
         /// <param name="damageType"> The type of damage dealt. </param>
         /// <param name="causer"> The causer of the damage </param>
         /// <param name="invertInvincibility"> Whether or not this should cause invincibility if it does no damage and not cause invincibility if it does. </param>
-        public DamageData(int damage, DamageType damageType, GameObject causer, bool invertInvincibility = false)
+        /// <param name="dontShowDamageNumber"> Whether or not to create a damage number prefab on hit. </param>
+        public DamageData(int damage, DamageType damageType, GameObject causer, bool invertInvincibility = false, bool dontShowDamageNumber = false)
         {
             this.damage = damage;
             this.damageType = damageType;
             this.causer = causer;
             this.invertInvincibility = invertInvincibility;
+            this.dontShowDamageNumber = dontShowDamageNumber;
         }
 
         /// <summary>
@@ -65,7 +71,8 @@ namespace Cardificer
         /// <param name="statusEffects"> The status effects applied. </param>
         /// <param name="causer"> The causer of the damage </param>
         /// <param name="invertInvincibility"> Whether or not this should cause invincibility if it does no damage and not cause invincibility if it does. </param>
-        public DamageData(int damage, DamageType damageType, List<StatusEffect> statusEffects, GameObject causer, bool invertInvincibility = false) : this(damage, damageType, causer, invertInvincibility)
+        /// <param name="dontShowDamageNumber"> Whether or not to create a damage number prefab on hit. </param>
+        public DamageData(int damage, DamageType damageType, List<StatusEffect> statusEffects, GameObject causer, bool invertInvincibility = false, bool dontShowDamageNumber = false) : this(damage, damageType, causer, invertInvincibility, dontShowDamageNumber)
         {
             this.statusEffects = new List<StatusEffect>(statusEffects);
         }
@@ -76,11 +83,13 @@ namespace Cardificer
         /// <param name="statusEffects"> The status effects applied. </param>
         /// <param name="causer"> The causer of the damage. </param>
         /// <param name="invertInvincibility"> Whether or not this should cause invincibility if it does no damage and not cause invincibility if it does. </param>
-        public DamageData(List<StatusEffect> statusEffects, GameObject causer, bool invertInvincibility = false)
+        /// <param name="dontShowDamageNumber"> Whether or not to create a damage number prefab on hit. </param>
+        public DamageData(List<StatusEffect> statusEffects, GameObject causer, bool invertInvincibility = false, bool dontShowDamageNumber = false)
         {
             this.statusEffects = new List<StatusEffect>(statusEffects);
             this.causer = causer;
             this.invertInvincibility = invertInvincibility;
+            this.dontShowDamageNumber = dontShowDamageNumber;
         }
 
         /// <summary>

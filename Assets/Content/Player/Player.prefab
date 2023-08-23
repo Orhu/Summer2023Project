@@ -201,6 +201,7 @@ MonoBehaviour:
   _maxHealth: 12
   invincibilityDuration: 0.25
   immuneStatusEffects: []
+  damageNumberPrefab: {fileID: 0}
   onDeath:
     m_PersistentCalls:
       m_Calls:
@@ -487,6 +488,130 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 120ff32c-b8f2-47b4-8f8d-c16d2e9c6062
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 014fbc46-2cf7-4697-a9d3-b8e26a29f560
+    m_ActionName: Player/MoveGamepad[/DualShock4GamepadHID/leftStick,/DualShock4GamepadHID/dpad]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1b84dfdd-204f-4af8-99ed-69a65ce0efdf
+    m_ActionName: Player/PreviewCard1Gamepad[/DualShock4GamepadHID/leftShoulder]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a9814f33-8e55-461b-8c89-93ea649fcadd
+    m_ActionName: Player/PreviewCard2Gamepad[/DualShock4GamepadHID/buttonWest]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: faef6a98-d67f-460b-aafd-78d87da113e7
+    m_ActionName: Player/PreviewCard3Gamepad[/DualShock4GamepadHID/buttonNorth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7b090d86-b4c8-450a-be94-8f87b364b69f
+    m_ActionName: Player/PreviewCard4Gamepad[/DualShock4GamepadHID/rightShoulder]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 55176e8b-b83d-4c24-b049-ecb406918585
+    m_ActionName: Player/PreviewCard5Gamepad
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1cc56b98-bc6f-47c1-bf3b-0fccb7597201
+    m_ActionName: Player/CastGamepad[/DualShock4GamepadHID/rightTrigger]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f1e1dd16-4db7-4f0b-a68d-d0a208aee7dd
+    m_ActionName: Player/AimGamepad[/DualShock4GamepadHID/rightStick]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 41184434-07b6-4a9e-baf8-85b8d943b75b
+    m_ActionName: Player/DashGamepad[/DualShock4GamepadHID/leftTrigger]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 76604897-54c5-4dfa-8e43-19bc4cf18b3e
+    m_ActionName: Player/Pause[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 410bce6b-9a71-4732-ac2d-8f6ee797b273
+    m_ActionName: Player/PauseGamepad[/DualShock4GamepadHID/start]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ee9e0828-f35f-4abe-b973-91ba8966c604
+    m_ActionName: Player/OpenMap[/Keyboard/tab]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 44bda8d2-1c56-43a6-a480-c22ac44e925d
+    m_ActionName: Player/OpenMapGamepad[/DualShock4GamepadHID/select]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 43ef6a00-faa8-42fc-82b9-90f5c02539e2
+    m_ActionName: Player/OpenCardMenu[/Keyboard/c]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: afbb08b3-6102-4b2a-8a23-0ed460a406a8
+    m_ActionName: Player/OpenCardMenuGamepad[/DualShock4GamepadHID/dpad/up]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5f8d37ee-1eff-4606-b8c5-fc065c51f78c
+    m_ActionName: Player/UnselectSpellsGamepad[/DualShock4GamepadHID/rightStickPress]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4daa01c0-eb2a-43ca-a706-713ceef82e6d
+    m_ActionName: Player/ShowLayout[/Keyboard/t]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a64b4ed0-9613-4850-8148-ac5f879a57ee
+    m_ActionName: Player/PrintCurrentRoomTemplate[/Keyboard/y]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c1494af9-ea72-46f1-a6ea-1653bcefee6e
+    m_ActionName: TemplateCreator/Copy[/Keyboard/q,/Keyboard/ctrl,/Keyboard/c]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b4852320-1bfb-4297-b2c2-ec5da710a89e
+    m_ActionName: TemplateCreator/Select[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 499fbb1c-dafd-4a96-901b-444f2c320daf
+    m_ActionName: TemplateCreator/Pan[/Mouse/middleButton,/Keyboard/shift,/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 75b566f8-07aa-4e31-9e18-b2370d040e6a
+    m_ActionName: TemplateCreator/Erase[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bb54ed51-c1ee-4489-8aeb-282cd4ee3d79
+    m_ActionName: TemplateCreator/Zoom[/Mouse/scroll/y]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c3778475-bdb6-4890-b150-b9414542e46b
+    m_ActionName: TemplateCreator/Undo[/Keyboard/ctrl,/Keyboard/z]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8358c704-1c42-4976-ae5f-9ff0bf7b910e
+    m_ActionName: TemplateCreator/Redo[/Keyboard/ctrl,/Keyboard/y]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f19bac84-fd78-4d6c-82f7-92aac3dbeacd
+    m_ActionName: MapMenu/Select[/Mouse/leftButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3fc73648-1647-426a-b98e-a815f58bcc82
+    m_ActionName: MapMenu/Erase[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9db8c4ac-40cb-4e4c-88d7-9e7aa5436dd8
+    m_ActionName: MapMenu/Copy[/Keyboard/q,/Keyboard/ctrl,/Keyboard/c]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 885375ba-a80e-475e-8ad5-d0696e3fcd89
+    m_ActionName: MapMenu/Pan[/Mouse/middleButton,/Keyboard/shift,/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 21eb31f6-e972-4f4b-88a2-325ac46e52b7
+    m_ActionName: MapMenu/Zoom[/Mouse/scroll/y]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7b3531c6-c1a2-436e-bfc6-91c36fee186b
+    m_ActionName: MapMenu/Reset[/Mouse/rightButton,/DualShock4GamepadHID/buttonSouth]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -538,7 +663,11 @@ MonoBehaviour:
   speedMultiplier: 5
   time: 0.2
   cooldown: 0.5
-  damage: 0
+  damage:
+    damage: 0
+    damageType: 0
+    statusEffects: []
+    invertInvincibility: 0
   cardCooldownSubtraction: 2
   indicator: {fileID: 211204829442419275}
   collidersToEnable:

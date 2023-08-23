@@ -8,7 +8,7 @@ namespace Cardificer
     /// Card manager script for handling rendering and logic
     /// for the card menu UI object
     /// </summary>
-    public class CardMenu : MonoBehaviour
+    public class CardMenu : Menu
     {
         [Tooltip("List of cardRender UI elements for displaying booster pack cards")]
         public List<CardRenderer> cardRenderers = new List<CardRenderer>();
@@ -62,6 +62,16 @@ namespace Cardificer
                 // Adds the cardRenderer to the list of cardRenderers
                 cardRenderers.Add(tempCardRendererGameObject.GetComponent<CardRenderer>());
             }
+
+            initialSelection = cardRenderers[0].gameObject;
+        }
+
+        /// <summary>
+        /// Reset initial selection.
+        /// </summary>
+        private void OnDisable()
+        {
+            initialSelection = null;
         }
     }
 }

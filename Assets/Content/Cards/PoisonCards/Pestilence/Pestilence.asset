@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 8
   actions:
   - {fileID: 11400000, guid: d6c81f94280e2044da02e539782c5021, type: 2}
-  effects: []
   displayName: Pestilence
   description: <b>Toxic.</b> Create a ball of pure death.
   flavorText: <i>Let the rot consume you.</i>
@@ -29,9 +28,12 @@ MonoBehaviour:
   isRare: 0
   damageTypeSprite: {fileID: 0}
   damage: 0.5
-  chordEffectText: + <b>Toxic</b>
+  chordEffectText: Toxic
   chordModifiers:
   - {fileID: 11400000, guid: 28b00828d8855004c967a715711b5fe0, type: 2}
+  chordVFXPrefabs:
+  - {fileID: 3378121504974007400, guid: a1b811f2be36f9d4fa9d168038c158b3, type: 3}
   duplicateModifiers:
-  - {fileID: 11400000, guid: 061d2eac829aa124cb4e1887a51da07d, type: 2}
-  - {fileID: 11400000, guid: 4d6d9d4024a912043ad317078848083c, type: 2}
+  - {fileID: 11400000, guid: 28b00828d8855004c967a715711b5fe0, type: 2}
+  modifierFilters:
+  - {fileID: 11400000, guid: fa77b8c3348f66646b0913882f80b7f0, type: 2}

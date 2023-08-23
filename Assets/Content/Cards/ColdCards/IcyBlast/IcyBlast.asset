@@ -17,7 +17,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b3c7dda393d8be348a80c708bf830380, type: 2}
   - {fileID: 11400000, guid: 162efe06d73f13a46bf169dfdf132a6a, type: 2}
   - {fileID: 11400000, guid: 8217512e01d92324a9ff2076a6ef26d3, type: 2}
-  effects: []
   displayName: Icy Blast
   description: <b>Freezing.</b> Fire a blast of ice in front of you.
   flavorText: 
@@ -31,9 +30,11 @@ MonoBehaviour:
   isRare: 0
   damageTypeSprite: {fileID: 0}
   damage: 2.5
-  chordEffectText: + <b>Snowy Spell</b>
+  chordEffectText: Make Flurries
   chordModifiers:
   - {fileID: 11400000, guid: a32674e3f91f0664d9e6a1fde9c714bf, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
-  - {fileID: 11400000, guid: ac25a0c91fe1f3346a0019c3cdceeff0, type: 2}
-  - {fileID: 11400000, guid: e38e9b6b3852d114294eb0b9eb594bb4, type: 2}
+  - {fileID: 11400000, guid: a32674e3f91f0664d9e6a1fde9c714bf, type: 2}
+  modifierFilters:
+  - {fileID: 11400000, guid: d9ee90a57735d8f48823378fa3a22736, type: 2}

@@ -15,10 +15,8 @@ MonoBehaviour:
   cooldownTime: 15
   actions:
   - {fileID: 11400000, guid: 1c85cfb5a01ebb64ca59d96afb82a06d, type: 2}
-  effects: []
   displayName: Cursed Skull
-  description: <b>Cursed,</b> <b>Spellcaster.</b> Conjure a fiery skull that attacks
-    enemies for you.
+  description: <b>Cursed.</b> Conjure a fiery skull that attacks enemies for you.
   flavorText: 
   actionImage: {fileID: 21300000, guid: 85fe885bf9295d2478879be6636b1c77, type: 3}
   actionBackground: {fileID: 21300000, guid: 1d3e10ede9181be46be82c8c8cf052fc, type: 3}
@@ -30,8 +28,12 @@ MonoBehaviour:
   isRare: 0
   damageTypeSprite: {fileID: 0}
   damage: 2
-  chordEffectText: + <b>Cursed</b>
+  chordEffectText: Cursed
   chordModifiers:
   - {fileID: 11400000, guid: b44a18de3b344f24c8a4fc6e09644309, type: 2}
+  chordVFXPrefabs:
+  - {fileID: 3378121504974007400, guid: 6ba7a88fde0160c4fb5830050f4ff9a4, type: 3}
   duplicateModifiers:
-  - {fileID: 11400000, guid: 7e47433d8b99f7e49a0f0982dc644200, type: 2}
+  - {fileID: 11400000, guid: b44a18de3b344f24c8a4fc6e09644309, type: 2}
+  modifierFilters:
+  - {fileID: 11400000, guid: 2e02ced4e1046ac46b7cc7552cbffe38, type: 2}

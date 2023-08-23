@@ -182,12 +182,21 @@ namespace Cardificer
                 {
                     if (runeRenderers[i].card)
                     {
-                        runeRenderers[i].totalCooldownTime = runeRenderers[i].card.cooldownTime;
+                        /* 
+                        NOTE FOR ALEX: This line should be moved so it is set when the card is actually played, with totalCooldownTime 
+                        being assigned when the card is cast so that it will have an accurate maximum value. 
+                        */
+
+                        runeRenderers[i].totalCooldownTime = runeRenderers[i].card.cooldownTime; 
                     }
                     runeRenderers[i].card = card;
                 }
                 else // Duplicate card, can keep the new cooldown time
-                {
+                { 
+                    /* 
+                    NOTE FOR ALEX: This should not be here at all since cooldown times will change depending on whether it is cast as a chord or not. 
+                    */
+                    
                     if (runeRenderers[i].card)
                     {
                         runeRenderers[i].totalCooldownTime = card.cooldownTime;

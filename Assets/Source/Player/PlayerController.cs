@@ -68,6 +68,8 @@ namespace Cardificer
             dashAbility = GetComponent<DashAbility>();
             dashAbility.onDashBegin += OnDashBegin;
             dashAbility.onDashEnd += OnDashEnd;
+
+            GetComponent<PlayerInput>().uiInputModule = MenuManager.uiInputModule;
         }
 
         /// <summary>
@@ -379,8 +381,8 @@ namespace Cardificer
         private void OnOpenMap()
         {
             lastInputWasGamepad = false;
-            // TODO REVERT BACK
-            MenuManager.Toggle<CardPrinterMenu>();
+            if (MenuManager.IsMenuOpen(typeof(PauseMenu))) { return; }
+            MenuManager.Toggle<MapMenu>();
         }
 
         /// <summary>
@@ -389,6 +391,7 @@ namespace Cardificer
         private void OnOpenMapGamepad()
         {
             lastInputWasGamepad = true;
+            if (MenuManager.IsMenuOpen(typeof(PauseMenu))) { return; }
             MenuManager.Toggle<MapMenu>();
         }
 
@@ -398,6 +401,7 @@ namespace Cardificer
         private void OnOpenCardMenu()
         {
             lastInputWasGamepad = false;
+            if (MenuManager.IsMenuOpen(typeof(PauseMenu))) { return; }
             MenuManager.Toggle<CardMenu>();
         }
 
@@ -407,6 +411,7 @@ namespace Cardificer
         private void OnOpenCardMenuGamepad()
         {
             lastInputWasGamepad = true;
+            if (MenuManager.IsMenuOpen(typeof(PauseMenu))) { return; }
             MenuManager.Toggle<CardMenu>();
         }
 
