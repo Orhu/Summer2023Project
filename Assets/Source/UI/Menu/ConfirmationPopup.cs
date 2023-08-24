@@ -7,7 +7,7 @@ namespace Cardificer
     /// <summary>
     /// Class for creating a popup menu for an action.
     /// </summary>
-    public class ConfirmationPopup : MonoBehaviour
+    public class ConfirmationPopup : Menu
     {
         [Tooltip("The text box that describes what is being confirmed/denied.")]
         [SerializeField] private TMP_Text descriptionTextBox;

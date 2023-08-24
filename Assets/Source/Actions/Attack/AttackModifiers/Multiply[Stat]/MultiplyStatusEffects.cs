@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,8 +12,14 @@ namespace Cardificer
     [CreateAssetMenu(menuName = "Cards/AttackModifers/Multiply[Stat]/MultiplyStatusEffects")]
     public class MultiplyStatusEffects : AttackModifier
     {
-        [Tooltip("The amount the status effect count will be multiplied by.")] [Min(2)]
-        [SerializeField] private int damageFactor = 2;
+        [Tooltip("Number of multiples to create for each valid status effect")]
+        [SerializeField] private int multiplier = 1;
+
+        [Tooltip("The type of status effect to be multiplied. If no instances of the status effect are found, an instance of this status effect will be added instead.")]
+        [SerializeField] private StatusEffect statusToMultiply;
+
+        // Number of multiplied statuses (if 0 at end of Initialize, will place a copy of statusToMultiply status on the projectile instead).
+        private int multipleCount = 0; 
 
 
         /// <summary>
@@ -20,14 +28,21 @@ namespace Cardificer
         /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
         public override void Initialize(Projectile attachedProjectile)
         {
+            Type statusType = statusToMultiply.GetType();
             List<StatusEffect> originalStatusEffects = new List<StatusEffect>(attachedProjectile.attack.attack.statusEffects);
-            for (int i = 1; i < damageFactor; i++)
+            for (int i = 1; i < multiplier; i++)
             {
                 foreach (StatusEffect statusEffect in originalStatusEffects)
                 {
-                    attachedProjectile.attackData.statusEffects.Add(statusEffect);
+                    if (statusEffect.GetType() == statusType) {
+                        multipleCount += 1;
+                        attachedProjectile.attackData.statusEffects.Add(statusEffect);
+                    }
                 }
             }
+            if (multipleCount == 0) {
+                attachedProjectile.attackData.statusEffects.Add(statusToMultiply);
+            } 
         }
     }
 }

@@ -42,14 +42,16 @@ namespace Cardificer
             instance = this;
         }
 
+#if UNITY_EDITOR
         /// <summary>
         /// For testing methods.
         /// </summary>
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Backspace))
-                StopAllContainers();
+            //if (Input.GetKeyDown(KeyCode.Backspace))
+            //    StopAllContainers();
         }
+#endif
 
         /// <summary>
         /// Play an AudioClip on an AudioSource attatched to an IActor. This method uses the settings of the AudioSource already on the IActor, and does not apply any other SoundSettings.
