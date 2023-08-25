@@ -14,13 +14,13 @@ namespace Cardificer.FiniteStateMachine
         [Tooltip("How should we compare the state variable")]
         [SerializeField] private ComparisonType comparison = ComparisonType.Equal;
         
-        [Tooltip("Transition returns true when the state variable is compared to this number")]
+        [Tooltip("Transition returns true when the state variable is compared to this number (3 and GreaterThan would check if stateVar > 3)")]
         [SerializeField] private int numberToCheck;
 
         /// <summary>
         /// Enum used for representing a comparison type
         /// </summary>
-        private enum ComparisonType
+        public enum ComparisonType
         {
             GreaterThan,
             GreaterThanOrEqual,
