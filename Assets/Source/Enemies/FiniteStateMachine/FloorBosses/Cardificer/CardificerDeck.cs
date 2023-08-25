@@ -45,9 +45,22 @@ namespace Cardificer
         private static List<CardificerCard> discardPile;
         public static int cardsInDiscardPile => discardPile.Count;
 
+        /// <summary>
+        /// Assigns instance
+        /// </summary>
         void Awake()
         {
             instance = this;
+        }
+
+        /// <summary>
+        /// Initializes various variables
+        /// </summary>
+        void Start()
+        {
+            currentDeck = cardificerDeck;
+            currentHand = new List<CardificerCard>();
+            discardPile = new List<CardificerCard>();
         }
 
         /// <summary>
