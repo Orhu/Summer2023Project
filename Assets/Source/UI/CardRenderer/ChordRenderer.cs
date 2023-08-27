@@ -55,7 +55,7 @@ namespace Cardificer
         {
             chordBackgroundImage.color = currentCardInHand.chordColor;
             chordEffectText.enabled = true;
-            chordEffectText.text = currentCardInHand.chordEffectText;
+            chordEffectText.text = "+" + currentCardInHand.chordEffectText;
             chordEffectText.color = currentCardInHand.chordColor;
         }
 
