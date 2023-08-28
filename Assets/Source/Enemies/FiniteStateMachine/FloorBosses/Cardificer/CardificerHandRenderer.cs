@@ -30,7 +30,7 @@ namespace Cardificer
         {
             for (int i = 0; i < cardsInHand.Count; i++)
             {
-                CardificerDeck.CardificerCard card = CardificerDeck.GetCardFromHand(i);
+                CardificerCard card = CardificerDeck.GetCardFromHand(i);
 
                 cardsInHand[i].sprite = card == null ? emptyRuneSprite : card.runeSprite;
             }

@@ -6,9 +6,11 @@ using UnityEngine;
 
 namespace Cardificer
 {
+
     /// <summary>
     /// Represents a dodge area around an enemy that flags the state machine to dodge when an enemy projectile enters the radius
     /// </summary>
+    [RequireComponent(typeof(Collider2D))]
     public class DodgeArea : MonoBehaviour
     {
         [Tooltip("Tolerance for angle comparison in degrees")]

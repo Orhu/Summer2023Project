@@ -1,30 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using Cardificer.FiniteStateMachine;
-using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
 namespace Cardificer
 {
     public class CardificerDeck : MonoBehaviour
     {
-        [CreateAssetMenu(menuName="Cards/CardificerCard")]
-        public class CardificerCard : ScriptableObject
-        {
-            [Tooltip("Sprite representing the rune of this card")]
-            [SerializeField] public Sprite runeSprite;
-
-            [Tooltip("Action time (duration) of this card")]
-            [SerializeField] public float actionTime;
-
-            [Tooltip("What state to enter when this card is played")]
-            [SerializeField] public BaseState stateToEnter;
-            
-            [Tooltip("What state to enter when the action time is complete")]
-            [SerializeField] public BaseState stateToExit;
-
-        }
-
         private static CardificerDeck instance;
 
         [Tooltip("Cardificer's hand size")]

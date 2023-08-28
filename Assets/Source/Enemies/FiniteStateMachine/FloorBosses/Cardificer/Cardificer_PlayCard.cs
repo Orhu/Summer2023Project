@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using CardificerCard = Cardificer.CardificerDeck.CardificerCard;
 
 namespace Cardificer.FiniteStateMachine
 {
