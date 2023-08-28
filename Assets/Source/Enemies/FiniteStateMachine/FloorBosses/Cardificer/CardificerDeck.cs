@@ -61,6 +61,24 @@ namespace Cardificer
             currentDeck = cardificerDeck;
             currentHand = new List<CardificerCard>();
             discardPile = new List<CardificerCard>();
+            
+        }
+        
+        /// <summary>
+        /// Gets a card from the Cardificer's hand at the given index
+        /// </summary>
+        /// <param name="index"> The index in the hand </param>
+        /// <returns> The card retrieved, or null if the index is out of bounds </returns>
+        public static CardificerCard GetCardFromHand(int index)
+        {
+            if (index > currentHand.Count - 1 || index < 0)
+            {
+                return null;
+            }
+            else
+            {
+                return currentHand[index];
+            }
         }
 
         /// <summary>
