@@ -6,6 +6,9 @@ namespace Cardificer
     [CreateAssetMenu(menuName = "Cards/CardificerCard")]
     public class CardificerCard : ScriptableObject
     {
+        [Tooltip("Name of this card (used for Counterspell and Board Wipe hand checks)")]
+        [SerializeField] public string cardName;
+        
         [Tooltip("Sprite representing the rune of this card")]
         [SerializeField] public Sprite runeSprite;
 
@@ -17,6 +20,9 @@ namespace Cardificer
 
         [Tooltip("What state to enter when the action time is complete")]
         [SerializeField] public BaseState stateToExit;
+        
+        [Tooltip("Is this card playable?")]
+        [SerializeField] public bool playable = true;
 
     }
 }
