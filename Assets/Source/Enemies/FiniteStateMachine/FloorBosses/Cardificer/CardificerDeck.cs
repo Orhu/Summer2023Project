@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Cardificer
 {
@@ -25,6 +27,14 @@ namespace Cardificer
         // Cardificer's discard pile
         private static List<CardificerCard> discardPile;
         public static int cardsInDiscardPile => discardPile.Count;
+        
+        // Currently selected card index in hand
+        private int selectedCard = 0;
+        public static int selectedCardIndex
+        {
+            get => instance.selectedCard;
+            set => instance.selectedCard = value > cardsInHand - 1 || value <= 0 ? 0 : value;
+        }
 
         /// <summary>
         /// Assigns instance
@@ -39,6 +49,7 @@ namespace Cardificer
         /// </summary>
         void Start()
         {
+            Shuffle(cardificerDeck);
             currentDeck = cardificerDeck;
             currentHand = new List<CardificerCard>();
             discardPile = new List<CardificerCard>();
@@ -49,95 +60,70 @@ namespace Cardificer
         /// Gets a card from the Cardificer's hand at the given index
         /// </summary>
         /// <param name="index"> The index in the hand </param>
+        /// <param name="shouldDiscard"> Whether to discard the card </param>
         /// <returns> The card retrieved, or null if the index is out of bounds </returns>
-        public static CardificerCard GetCardFromHand(int index)
+        public static CardificerCard GetCardFromHand(int index, bool shouldDiscard = false)
         {
-            if (index > currentHand.Count - 1 || index < 0)
+            if (currentHand == null || index < 0 || index > currentHand.Count - 1)
             {
-                return null;
+                return null; 
             }
             else
             {
-                return currentHand[index];
-            }
-        }
-
-        /// <summary>
-        /// Retrieves a card from the top of the hand, and optionally deletes the card from the hand
-        /// </summary>
-        /// <param name="card"> The card </param>
-        /// <param name="deleteCardAfterGrab"> Whether or not to delete the card after it is grabbed </param>
-        /// <returns> True if a card was grabbed, false if the hand is empty </returns>
-        public static bool GetTopCard(out CardificerCard card, bool deleteCardAfterGrab = false)
-        {
-            if (cardsInHand > 0)
-            {
-                card = currentHand[0];
-                if (deleteCardAfterGrab)
+                CardificerCard chosenCard = currentHand[index];
+                if (shouldDiscard)
                 {
-                    currentHand.RemoveAt(0);
+                    discardPile.Add(chosenCard);
+                    currentHand.RemoveAt(index);
                 }
-
-                return true;
-            }
-            else
-            {
-                card = null;
-                return false;
+                return chosenCard;
             }
         }
 
         /// <summary>
-        /// Reshuffles the discard pile and hand back into the deck, then refills the hand
+        /// Reshuffles the discard pile back into the deck
         /// </summary>
-        private static void ReshuffleDeckAndHand()
+        public static void ReshuffleDiscardIntoDeck()
         {
-            // Place hand into discard pile
-            DiscardHand();
-            
             // Add discarded cards back to deck
             for (int i = 0; i < cardsInDiscardPile; i++)
             {
                 currentDeck.Add(discardPile[i]);
             }
+            
+            // Clear discard pile
+            discardPile.Clear();
 
             // Shuffle deck
             Shuffle(currentDeck);
-            
-            // Clear hand and discard pile
-            discardPile.Clear();
-            currentHand.Clear();
-
-            // Fill up the hand with cards
-            instance.StartCoroutine(DrawCards());
-            IEnumerator DrawCards()
-            {
-                while (TryDrawCard())
-                {
-                    yield return null;
-                }
-                yield break;
-            }
         }
 
         /// <summary>
         /// Moves all cards from the hand into the discard pile
         /// </summary>
-        private static void DiscardHand()
+        public static void DiscardHand()
         {
             for (int i = 0; i < cardsInHand; i++)
             {
-                discardPile.Add(currentHand[i]);
+                DiscardFromHand(i);
             }
-            
-            currentHand.Clear();
+        }
+        
+        /// <summary>
+        /// Adds a card at the given index in the hand to the discard pile, then removes that card from the hand
+        /// </summary>
+        /// <param name="index"> The index in the hand </param>
+        public static void DiscardFromHand(int index)
+        {
+           discardPile.Add(currentHand[index]);
+           currentHand.RemoveAt(index);
         }
 
         /// <summary>
         /// Attempts to place the first card from the deck into the hand. Does not draw if the hand is full or deck is empty.
         /// </summary>
         /// <returns> True if a card was drawn, false otherwise </returns>
-        private static bool TryDrawCard()
+        public static bool TryDrawCard()
         {
             if (cardsInHand < instance.handSize && cardsInDeck > 0)
             {

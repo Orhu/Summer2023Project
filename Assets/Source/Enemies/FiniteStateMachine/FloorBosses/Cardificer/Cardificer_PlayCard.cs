@@ -9,6 +9,9 @@ namespace Cardificer.FiniteStateMachine
     [CreateAssetMenu(menuName = "FSM/Floor Boss/Cardificer/Play Card")]
     public class Cardificer_PlayCard : SingleAction
     {
+        [Tooltip("Whether to discard the card as soon as it is played")]
+        [SerializeField] private bool shouldDiscard = true;
+        
         /// <summary>
         /// Plays the card attached to this scriptable object
         /// </summary>
@@ -16,12 +19,19 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> Waits until the action time on the card is complete. </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
-            bool cardAvailable = CardificerDeck.GetTopCard(out CardificerCard cardToPlay, true);
+            CardificerCard cardToPlay = CardificerDeck.GetCardFromHand(CardificerDeck.selectedCardIndex, shouldDiscard);
 
-            if (cardAvailable)
+            if (cardToPlay != null)
             {
-                stateMachine.currentState = cardToPlay.stateToEnter.GetState();
+                State stateToEnter = cardToPlay.stateToEnter.GetState();
+                stateToEnter.OnStateEnter(stateMachine);
+                stateMachine.currentState = stateToEnter;
+                
                 yield return new WaitForSeconds(cardToPlay.actionTime);
+                stateToEnter.OnStateExit(stateMachine);
+
+                State stateToExit = cardToPlay.stateToExit.GetState();
+                stateToExit.OnStateEnter(stateMachine);
                 stateMachine.currentState = cardToPlay.stateToExit.GetState();
 
                 stateMachine.cooldownData.cooldownReady[this] = true;

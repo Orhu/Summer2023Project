@@ -9,6 +9,9 @@ namespace Cardificer
         [Tooltip("The rune sprite to use when a hand slot is empty")]
         [SerializeField] private Sprite emptyRuneSprite;
         
+        [Tooltip("Currently Selected Card highlight object")]
+        [SerializeField] private Image selectedCardHighlight;
+        
         // Component for image UI elements in hand
         List<Image> cardsInHand = new List<Image>();
         
@@ -34,6 +37,8 @@ namespace Cardificer
 
                 cardsInHand[i].sprite = card == null ? emptyRuneSprite : card.runeSprite;
             }
+
+            selectedCardHighlight.transform.position = cardsInHand[CardificerDeck.selectedCardIndex].transform.position;
         }
     }
 }
