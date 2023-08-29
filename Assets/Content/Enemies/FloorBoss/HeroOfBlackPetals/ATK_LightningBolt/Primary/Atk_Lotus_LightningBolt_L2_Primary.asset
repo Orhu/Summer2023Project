@@ -12,7 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
   m_Name: Atk_Lotus_LightningBolt_L2_Primary
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 0}
+  actionSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
   projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
   previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   attack:
@@ -20,12 +34,15 @@ MonoBehaviour:
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
+    dontShowDamageNumber: 0
   hitCount: 999
   applyDamageOnHit: 0
   modifiers:
   - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
   - {fileID: 11400000, guid: 066562b20ed30f84fa45f638f23eb6e8, type: 2}
   - {fileID: 11400000, guid: 1f556d950b16fe64cb827044b508b32e, type: 2}
+  immuneToShield: 1
+  immuneToReflect: 1
   shape: {fileID: 11400000, guid: eb53fce9c76f3ea42beed344d6343f14, type: 2}
   lifetime: 2
   initialSpeed: 0
@@ -40,8 +57,36 @@ MonoBehaviour:
   visualObject: {fileID: 587928409461862577, guid: cb67e55210d77ab4b910e28c8481f225, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  travelAudioClip: {fileID: 0}
-  impactAudioClip: {fileID: 0}
+  travelSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
+  impactSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
   spawnLocation: 4
   aimMode: 5
   waitForProjectileDeath: 0
