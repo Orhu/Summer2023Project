@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cardificer.FiniteStateMachine;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Cardificer
 {
+    [RequireComponent(typeof(BaseStateMachine), typeof(GoldenShield), typeof(Health))]
     public class CardificerDeck : MonoBehaviour
     {
         private static CardificerDeck instance;
@@ -27,6 +29,9 @@ namespace Cardificer
         // Cardificer's discard pile
         private static List<CardificerCard> discardPile;
         public static int cardsInDiscardPile => discardPile.Count;
+
+        // Cardificer's state machine
+        private BaseStateMachine stateMachine;
         
         // Currently selected card index in hand
         private int selectedCard = 0;
@@ -53,7 +58,22 @@ namespace Cardificer
             currentDeck = cardificerDeck;
             currentHand = new List<CardificerCard>();
             discardPile = new List<CardificerCard>();
-            
+            stateMachine = GetComponent<BaseStateMachine>();
+            stateMachine.GetComponent<Health>().onDamageTaken += OnDamageTaken;
+        }
+
+        /// <summary>
+        /// Called whenever the Cardificer takes damage, activates golden shield if health is below 50%
+        /// </summary>
+        void OnDamageTaken()
+        {
+            // safe to do repeated GetComponent calls because the stateMachine caches GetComponent
+            if (!stateMachine.GetComponent<GoldenShield>().goldenShieldActive && 
+                stateMachine.GetComponent<Health>().currentHealth <=
+                stateMachine.GetComponent<Health>().maxHealth * 0.5f)
+            {
+                stateMachine.GetComponent<GoldenShield>().ActivateGoldenShield();
+            }
         }
         
         /// <summary>
