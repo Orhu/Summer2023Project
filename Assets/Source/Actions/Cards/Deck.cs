@@ -156,7 +156,7 @@ namespace Cardificer
 
 #region GetCardAssetName
 
-#if UNITY_EDITOR
+#if !UNITY_EDITOR
             // Cards mapped to their asset names.
             static Dictionary<Card, string> cardsToAssetNames = new Dictionary<Card, string>();
 
