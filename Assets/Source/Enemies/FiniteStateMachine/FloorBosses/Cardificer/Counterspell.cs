@@ -27,7 +27,7 @@ public class Counterspell : MonoBehaviour
         for (int i = 0; i < CardificerDeck.cardsInHand - 1; i++)
         {
             CardificerCard currentCard = CardificerDeck.GetCardFromHand(i);
-            if (currentCard.name == counterspellCardName)
+            if (currentCard != null && currentCard.name == counterspellCardName)
             {
                 foundCounterspell = true;
                 currentlyInHand = true;

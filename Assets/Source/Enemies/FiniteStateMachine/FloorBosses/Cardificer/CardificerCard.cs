@@ -24,5 +24,18 @@ namespace Cardificer
         [Tooltip("Is this card playable?")]
         [SerializeField] public bool playable = true;
 
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        /// <param name="otherCard"> The card to copy </param>
+        public CardificerCard(CardificerCard otherCard)
+        {
+            cardName = otherCard.cardName;
+            runeSprite = otherCard.runeSprite;
+            actionTime = otherCard.actionTime;
+            stateToEnter = otherCard.stateToEnter;
+            stateToExit = otherCard.stateToExit;
+            playable = otherCard.playable;
+        }
     }
 }

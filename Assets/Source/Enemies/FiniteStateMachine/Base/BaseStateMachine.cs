@@ -282,6 +282,7 @@ namespace Cardificer.FiniteStateMachine
         /// </summary>
         private void Update()
         {
+            print(currentState);
             if (exhausted || Time.time - timeStarted <= delayBeforeLogic)
             {
                 movementComponent.movementInput = Vector2.zero;

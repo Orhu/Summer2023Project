@@ -14,7 +14,7 @@ namespace Cardificer
 
         [Tooltip("Cardificer's hand size")]
         [SerializeField] private int handSize = 4;
-        
+
         [Tooltip("Cardificer's starting deck")]
         [SerializeField] private List<CardificerCard> cardificerDeck;
 
@@ -23,8 +23,8 @@ namespace Cardificer
         public static int cardsInDeck => currentDeck.Count;
 
         // Cardificer's hand
-        private static List<CardificerCard> currentHand;
-        public static int cardsInHand => currentHand.Count;
+        private static CardificerCard[] currentHand;
+        public static int cardsInHand => currentHand.Length;
 
         // Cardificer's discard pile
         private static List<CardificerCard> discardPile;
@@ -32,14 +32,17 @@ namespace Cardificer
 
         // Cardificer's state machine
         private BaseStateMachine stateMachine;
-        
+
         // Currently selected card index in hand
         private int selectedCard = 0;
+
         public static int selectedCardIndex
         {
             get => instance.selectedCard;
             set => instance.selectedCard = value > cardsInHand - 1 || value <= 0 ? 0 : value;
         }
+
+        [HideInInspector] public static int playableCardsInHand => PlayableCardsInHand();
 
         /// <summary>
         /// Assigns instance
@@ -56,7 +59,7 @@ namespace Cardificer
         {
             Shuffle(cardificerDeck);
             currentDeck = cardificerDeck;
-            currentHand = new List<CardificerCard>();
+            currentHand = new CardificerCard[4];
             discardPile = new List<CardificerCard>();
             stateMachine = GetComponent<BaseStateMachine>();
             stateMachine.GetComponent<Health>().onDamageTaken += OnDamageTaken;
@@ -68,35 +71,29 @@ namespace Cardificer
         void OnDamageTaken()
         {
             // safe to do repeated GetComponent calls because the stateMachine caches GetComponent
-            if (!stateMachine.GetComponent<GoldenShield>().goldenShieldActive && 
+            if (!stateMachine.GetComponent<GoldenShield>().goldenShieldActive &&
                 stateMachine.GetComponent<Health>().currentHealth <=
                 stateMachine.GetComponent<Health>().maxHealth * 0.5f)
             {
                 stateMachine.GetComponent<GoldenShield>().ActivateGoldenShield();
             }
         }
-        
+
         /// <summary>
         /// Gets a card from the Cardificer's hand at the given index
         /// </summary>
         /// <param name="index"> The index in the hand </param>
-        /// <param name="shouldDiscard"> Whether to discard the card </param>
         /// <returns> The card retrieved, or null if the index is out of bounds </returns>
-        public static CardificerCard GetCardFromHand(int index, bool shouldDiscard = false)
+        public static CardificerCard GetCardFromHand(int index)
         {
-            if (currentHand == null || index < 0 || index > currentHand.Count - 1)
+            if (currentHand == null || index < 0 || index > currentHand.Length - 1)
             {
-                return null; 
+                return null;
             }
             else
             {
                 CardificerCard chosenCard = currentHand[index];
-                if (shouldDiscard)
-                {
-                    discardPile.Add(chosenCard);
-                    currentHand.RemoveAt(index);
-                }
-                return chosenCard;
+                return chosenCard; // this can be null if the slot is empty
             }
         }
 
@@ -110,7 +107,7 @@ namespace Cardificer
             {
                 currentDeck.Add(discardPile[i]);
             }
-            
+
             // Clear discard pile
             discardPile.Clear();
 
@@ -119,24 +116,14 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Moves all cards from the hand into the discard pile
-        /// </summary>
-        public static void DiscardHand()
-        {
-            for (int i = 0; i < cardsInHand; i++)
-            {
-                DiscardFromHand(i);
-            }
-        }
-        
-        /// <summary>
         /// Adds a card at the given index in the hand to the discard pile, then removes that card from the hand
         /// </summary>
         /// <param name="index"> The index in the hand </param>
         public static void DiscardFromHand(int index)
         {
-           discardPile.Add(currentHand[index]);
-           currentHand.RemoveAt(index);
+            discardPile.Add(currentHand[index]);
+
+            currentHand[index] = null;
         }
 
         /// <summary>
@@ -145,12 +132,16 @@ namespace Cardificer
         /// <returns> True if a card was drawn, false otherwise </returns>
         public static bool TryDrawCard()
         {
-            if (cardsInHand < instance.handSize && cardsInDeck > 0)
+            if (PlayableCardsInHand() < instance.handSize && cardsInDeck > 0)
             {
                 // Put a card from the deck into the hand
-                currentHand.Add(currentDeck[0]);
-                currentDeck.RemoveAt(0);
-                return true;
+                if (PlaceInHand(currentDeck[0]))
+                {
+                    currentDeck.RemoveAt(0);
+                    return true;
+                }
+                // hand placement failed (likely because hand is full)
+                return false;
             }
             else
             {
@@ -159,18 +150,89 @@ namespace Cardificer
             }
         }
 
+        private static int PlayableCardsInHand()
+        {
+            if (playableCardsInHand == 0) return 0;
+
+            int validIndicesCount = 0;
+
+            for (int i = 0; i < cardsInHand; i++)
+            {
+                if (currentHand[i] != null && currentHand[i].playable)
+                {
+                    validIndicesCount++;
+                }
+            }
+            
+            return validIndicesCount;
+            
+        }
+        
+        /// <summary>
+        /// Places a given CardificerCard into an empty slot in the hand. If there is no empty slot, does nothing.
+        /// </summary>
+        /// <param name="card"> The card to be placed </param>
+        /// <returns> True if a card was placed, false otherwise </returns>
+        private static bool PlaceInHand(CardificerCard card)
+        {
+            for (int i = 0; i < cardsInHand; i++)
+            {
+                if (currentHand[i] == null)
+                {
+                    currentHand[i] = card;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static void SelectRandomCard()
+        {
+            selectedCardIndex = GetRandomPlayableCardIndex();
+        }
+
         /// <summary>
         /// Utilizes Fisher-Yates shuffle to shuffle the given list of CardificerCards
         /// </summary>
         /// <param name="list"> The list of CardificerCards to be shuffled </param>
-        private static void Shuffle(List<CardificerCard> list)  
-        {  
-            int n = list.Count;  
-            while (n > 1) {  
-                n--;  
-                int k = Random.Range(0, n + 1);  
+        private static void Shuffle(List<CardificerCard> list)
+        {
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = Random.Range(0, n + 1);
                 (list[k], list[n]) = (list[n], list[k]);
-            }  
+            }
+        }
+
+        public static int GetRandomPlayableCardIndex()
+        {
+            if (playableCardsInHand == 0) return 0;
+
+            List<int> validIndices = new List<int>();
+
+            for (int i = 0; i < cardsInHand; i++)
+            {
+                if (currentHand[i] != null && currentHand[i].playable)
+                {
+                    validIndices.Add(i);
+                }
+            }
+            
+            return validIndices[Random.Range(0, validIndices.Count)];
+        }
+
+        public static void DiscardHand()
+        {
+            for (int i = 0; i < cardsInHand; i++)
+            {
+                if (currentHand[i] != null)
+                {
+                    DiscardFromHand(i);
+                }
+            }
         }
     }
 }

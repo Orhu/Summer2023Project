@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c5858af96344aaa9e636fdff62a26b5, type: 3}
-  m_Name: Cardificer_Channel
+  m_Name: Cardificer_SelectRandomCard
   m_EditorClassIdentifier: 
   enterActions:
-  - {fileID: 11400000, guid: e0e647801484f0d41a71be8ad40c3dad, type: 2}
-  - {fileID: 11400000, guid: b3a46187d9203bc48a212c5d62091a39, type: 2}
-  exitActions: []
+  - {fileID: 11400000, guid: 7c82efbb23eea6e42be9326e1474f66d, type: 2}
+  exitActions:
+  - {fileID: 11400000, guid: 38ad27923cdbfde4e8674a58de2b6b29, type: 2}
   updateActions: []
-  transitions: []
+  transitions:
+  - {fileID: 11400000, guid: 7da31068f859bd943bc7a20c634f21ea, type: 2}

@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c5858af96344aaa9e636fdff62a26b5, type: 3}
-  m_Name: Cardificer_Channel
+  m_Name: Cardificer_EnterBasicBehavior
   m_EditorClassIdentifier: 
-  enterActions:
-  - {fileID: 11400000, guid: e0e647801484f0d41a71be8ad40c3dad, type: 2}
-  - {fileID: 11400000, guid: b3a46187d9203bc48a212c5d62091a39, type: 2}
+  enterActions: []
   exitActions: []
   updateActions: []
-  transitions: []
+  transitions:
+  - {fileID: 11400000, guid: 7217e6389e9ecd546ba89165326750e4, type: 2}
+  - {fileID: 11400000, guid: 1758ace388f261e43b05e95c11456bc3, type: 2}

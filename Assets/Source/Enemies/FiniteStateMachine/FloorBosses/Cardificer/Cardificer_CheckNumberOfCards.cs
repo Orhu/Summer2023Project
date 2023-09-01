@@ -40,7 +40,7 @@ namespace Cardificer.FiniteStateMachine
                     threshold = CardificerDeck.cardsInDeck;
                     break;
                 case CardificerDeckType.Hand:
-                    threshold = CardificerDeck.cardsInHand;
+                    threshold = CardificerDeck.playableCardsInHand;
                     break;
                 case CardificerDeckType.DiscardPile:
                     threshold = CardificerDeck.cardsInDiscardPile;

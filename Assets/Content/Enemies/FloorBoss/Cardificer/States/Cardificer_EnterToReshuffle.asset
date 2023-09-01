@@ -10,10 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d3a35acca2b866a4a854023149e2de6f, type: 3}
-  m_Name: Cardificer_DrawToPlay
+  m_Name: Cardificer_EnterToReshuffle
   m_EditorClassIdentifier: 
-  trueState: {fileID: 11400000, guid: f093516de7271f44a8df4d43700ed497, type: 2}
+  trueState: {fileID: 11400000, guid: 4d5d38b90f2d46c4a87128ebe122b7e5, type: 2}
   decisions:
   - invert: 0
-    decision: {fileID: 11400000, guid: fc8a12a06173c914fbe0203034907b86, type: 2}
+    decision: {fileID: 11400000, guid: 9fcf8e6b40f72234485c9114631ef7d8, type: 2}
+    nextOperator: 0
+  - invert: 0
+    decision: {fileID: 11400000, guid: 43d14ac018ef9c148bff2f38aafdc5e7, type: 2}
     nextOperator: 0
