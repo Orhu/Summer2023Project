@@ -59,5 +59,10 @@ namespace Cardificer
 
             gameObject.GetComponent<Health>().onRequestIncomingAttackModification -= PreventAttack;
         }
+
+        public override StatusEffectType StatusType()
+        {
+            return StatusEffectType.Invulnerable;
+        }
     }
 }

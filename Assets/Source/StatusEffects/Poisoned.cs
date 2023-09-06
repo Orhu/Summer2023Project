@@ -58,5 +58,10 @@ namespace Cardificer
                 timeToDamage += tickInterval;
             }
         }
+
+        public override StatusEffectType StatusType()
+        {
+            return StatusEffectType.Poisoned;
+        }
     }
 }

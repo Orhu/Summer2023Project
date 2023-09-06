@@ -4,15 +4,15 @@ using UnityEngine;
 namespace Cardificer
 {
     /// <summary>
-    /// A class to leverage average audio positions when projectiles are involved in a card. 
+    /// A class to leverage average audio positions of multiple transforms. 
     /// </summary>
     public class AverageAudio : MonoBehaviour
     {
-        [Tooltip("The list of spawned projectiles")]
-        public List<Projectile> projectiles = new List<Projectile>();
+        [Tooltip("The list of transforms to track")]
+        public List<Transform> transforms = new List<Transform>();
 
-        [Tooltip("The AudioClip to play at the averaged location")]
-        public Sound averageSound;
+        [Tooltip("The Sound to play at the averaged location")] 
+        public BasicSound averageSound;
 
 
         /// <summary>
@@ -20,27 +20,26 @@ namespace Cardificer
         /// </summary>
         public void PlayAverageAudio()
         {
-
             AudioSource audioSource = gameObject.AddComponent<AudioSource>();
             AudioManager.instance.ApplySoundSettingsToAudioSource(averageSound, audioSource);
             audioSource.Play();
         }
 
         /// <summary>
-        /// Get the average transform of the projectiles
+        /// Get the average transform of the transforms
         /// </summary>
-        /// <returns>Returns the average position of a list of projectiles</returns>
+        /// <returns>Returns the average position of the transforms</returns>
         public Vector2 TryGetAveragePos()
         {
             float totalX = 0;
             float totalY = 0;
 
-            foreach (var projectile in projectiles)
+            foreach (var transform in transforms)
             {
-                if (projectile != null)
+                if (transform != null)
                 {
-                    totalX += projectile.transform.position.x;
-                    totalY += projectile.transform.position.y;
+                    totalX += transform.position.x;
+                    totalY += transform.position.y;
                 }
             }
 
@@ -49,11 +48,11 @@ namespace Cardificer
                 AudioManager.KillAverageAudio(this);
             }
 
-            return new Vector2(totalX / projectiles.Count, totalY / projectiles.Count);
+            return new Vector2(totalX / transforms.Count, totalY / transforms.Count);
         }
 
         /// <summary>
-        /// Set the position of the GameObject to the average position of the projectiles. 
+        /// Set the position of the GameObject to the average position of the transforms. 
         /// </summary>
         private void FixedUpdate()
         {
@@ -67,15 +66,15 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Sets the list of Projectiles and the Sound used for this AverageAudio. 
+        /// Sets the list of Transforms and the Sound used for this AverageAudio. 
         /// </summary>
-        /// <param name="projectiles">The list of projectiles this AverageAudio will use to calculate average positions. </param>
+        /// <param name="transforms">The list of projectiles this AverageAudio will use to calculate average positions. </param>
         /// <param name="sound">The Sound this AverageAudio will play. </param>
-        public void SetProjectilesAndSound(List<Projectile> projectiles, Sound sound)
+        public void SetTransformsAndSound(List<Transform> transforms, BasicSound sound)
         {
-            this.projectiles = projectiles;
+            this.transforms = transforms;
             this.averageSound = sound;
         }
     }
-    
+
 }

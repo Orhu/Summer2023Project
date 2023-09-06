@@ -76,6 +76,8 @@ namespace Cardificer
             return true;
         }
 
+        public abstract StatusEffectType StatusType();
+
         /// <summary>
         /// Called every tick and updates the duration.
         /// </summary>

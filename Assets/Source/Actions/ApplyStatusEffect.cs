@@ -35,7 +35,7 @@ namespace Cardificer
                 actor.GetActionSourceTransform().GetComponent<MonoBehaviour>().StartCoroutine(DelayedApply(actor));
             }
 
-            AudioManager.instance.PlaySoundOnActor(actionSound, actor);
+            //AudioManager.instance.PlaySoundOnTarget(actionSound, transform);
 
         }
 

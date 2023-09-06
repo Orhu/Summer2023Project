@@ -9,7 +9,7 @@ namespace Cardificer.FiniteStateMachine
     /// </summary>
     [CreateAssetMenu(menuName = "FSM/State")]
     public sealed class State : BaseState
-    {
+    { 
         [Tooltip("Actions run when the state is entered.")] [EditInline]
         public List<BaseAction> enterActions = new List<BaseAction>();
 

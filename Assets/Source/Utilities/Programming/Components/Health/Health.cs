@@ -89,6 +89,15 @@ namespace Cardificer
         // All status effects currently affecting this
         private List<StatusEffect> statusEffects = new List<StatusEffect>();
 
+        [Tooltip("Sound played on death")]
+        public SoundContainer deathSounds;
+        [Tooltip("Sound played when damaged")]
+        public SoundContainer hitSounds;
+        [Tooltip("Sound played when cleansed")]
+        public BasicSound cleanseSound;
+
+        private
+
         /// <summary>
         /// Initializes current health.
         /// </summary>
@@ -101,6 +110,19 @@ namespace Cardificer
             
             if (currentHealth != 0) { return; }
             currentHealth = maxHealth;
+
+            deathSounds.containerType = SoundContainerType.RandomOneshot;
+            hitSounds.containerType = SoundContainerType.RandomOneshot;
+
+            hitSounds.useDefaultSettings = false;
+            hitSounds.soundSettings.randomizePitch = true;
+
+            if (gameObject.tag != "Player")
+            {
+                deathSounds.outputAudioMixerGroup = SoundGetter.Instance.enemyAudioMixerGroup;
+                hitSounds.outputAudioMixerGroup = SoundGetter.Instance.enemyAudioMixerGroup;
+            }
+
         }
 
         /// <summary>
@@ -137,6 +159,7 @@ namespace Cardificer
             if (attack.damage > 0)
             {
                 onDamageTaken?.Invoke();
+                AudioManager.instance.PlaySoundBaseOnTarget(hitSounds, transform, false);
             }
 
 
@@ -153,6 +176,9 @@ namespace Cardificer
                 {
                     BossHealthbarManager.instance.DisableHealthbar();
                 }
+
+                AudioManager.instance.PlaySoundBaseAtPos(deathSounds, transform.position, gameObject.name);
+                //print($"{gameObject.name} calling DeathSounds to play at position.");
                 onDeath?.Invoke();
                 return;
             }
@@ -171,6 +197,7 @@ namespace Cardificer
                     if (matchingEffect == null)
                     {
                         statusEffects.Add(statusEffect.CreateCopy(gameObject));
+                        AudioManager.instance.PlaySoundBaseOnTarget(SoundGetter.Instance.GetStatusEffectSound(statusEffect.StatusType()), transform, true);
                     }
                 }
             }
@@ -206,6 +233,9 @@ namespace Cardificer
                 Destroy(statusEffects[statusEffects.Count - 1]);
                 statusEffects.RemoveAt(statusEffects.Count - 1);
             }
+
+            AudioManager.instance.PlayOneshotOnTarget(cleanseSound, transform);
+
         }
 
         /// <summary>

@@ -1,5 +1,24 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!243 &-8374846687826135380
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Environmental
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 149bf620ea0c4184ab4aa72e22d9b500
+  m_Children: []
+  m_Volume: fac62d81a0faaa0458540c7194dcebd3
+  m_Pitch: ca2ba419be9123c4fbb8bcfb7ff4ba54
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -4982081473251206712}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!244 &-8226024295239923515
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -57,6 +76,20 @@ AudioMixerEffectController:
   m_EffectID: b3fe4b319b414c2418c30d13beec6296
   m_EffectName: Attenuation
   m_MixLevel: 83f2839b38e533841a31f2a82de4bcf6
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!244 &-4982081473251206712
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: abb3f72fc8da60743a7d025b3787d00c
+  m_EffectName: Attenuation
+  m_MixLevel: 8f53b2ced8977ea45b43ac805557cf49
   m_Parameters: []
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
@@ -154,6 +187,7 @@ AudioMixerController:
     - 1b78de75651f3c247858f0babd472ef2
     - 1b46fe33eedae344582a50ae70fe7827
     - 6a16fc510dd27fc4da0281c86c44ebb4
+    - 149bf620ea0c4184ab4aa72e22d9b500
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -202,6 +236,7 @@ AudioMixerSnapshotController:
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: 2660c395525dbab41a863171abe730e8
   m_FloatValues:
+    912c08302a68fad4ab35ec2a536ea2a8: -0.025776558
     946e8f14dd7fc2f43902a401e2c763e2: -0.16685188
   m_TransitionOverrides: {}
 --- !u!244 &292500899712271085
@@ -379,6 +414,7 @@ AudioMixerGroupController:
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 949e16dabc116304686bc83ba713f782
   m_Children:
+  - {fileID: -8374846687826135380}
   - {fileID: 3308674434069215686}
   - {fileID: 5509230318350582375}
   - {fileID: 2021301823164702670}

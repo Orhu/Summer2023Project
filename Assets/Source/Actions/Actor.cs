@@ -36,7 +36,7 @@ namespace Cardificer
         /// Gets the audio source component of the object. 
         /// </summary>
         /// <returns></returns>
-        public abstract AudioSource GetAudioSource();
+        public abstract AudioSource GetAudioSource(); 
 
         /// <summary>
         /// Gets the damage multiplier of this IActor

@@ -226,6 +226,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3903429820662665704, guid: 500bb8368d1e9424db6fdff88fb7c7e8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 8.511719
+      objectReference: {fileID: 0}
     - target: {fileID: 7455040429996825992, guid: 500bb8368d1e9424db6fdff88fb7c7e8, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -245,6 +249,14 @@ PrefabInstance:
     - target: {fileID: 7475618277515066268, guid: 500bb8368d1e9424db6fdff88fb7c7e8, type: 3}
       propertyPath: healthFillDuration
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7509378420298427892, guid: 500bb8368d1e9424db6fdff88fb7c7e8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 378.02698
+      objectReference: {fileID: 0}
+    - target: {fileID: 7509378420298427892, guid: 500bb8368d1e9424db6fdff88fb7c7e8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -195.02734
       objectReference: {fileID: 0}
     - target: {fileID: 9013634635224526587, guid: 500bb8368d1e9424db6fdff88fb7c7e8, type: 3}
       propertyPath: m_text
@@ -316,6 +328,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8563880425545905597, guid: 8632f6f27e13c5a4db34ed52aaad2360, type: 3}
+      propertyPath: damageSounds.containerType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -8563880425545905597, guid: 8632f6f27e13c5a4db34ed52aaad2360, type: 3}
+      propertyPath: damageSounds.clipsInContainer.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8563880425545905597, guid: 8632f6f27e13c5a4db34ed52aaad2360, type: 3}
+      propertyPath: damageSounds.clipsInContainer.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 0b1955f4f9abd3543bb1333b87db0bd9, type: 3}
     - target: {fileID: 608508398850829056, guid: 8632f6f27e13c5a4db34ed52aaad2360, type: 3}
       propertyPath: m_Name
       value: Player
@@ -769,7 +793,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1776291737}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!20 &1776291739
 Camera:
   m_ObjectHideFlags: 0
@@ -960,6 +984,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 830157999317965900, guid: f5aee9267801be0448ed6816571ed007, type: 3}
+      propertyPath: healthPickupSound.audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: ae8fd2a1436020c4a8fc7a7cf46713c4, type: 3}
+    - target: {fileID: 830157999317965900, guid: f5aee9267801be0448ed6816571ed007, type: 3}
+      propertyPath: healthPickupSound.outputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 2021301823164702670, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
     - target: {fileID: 7011871634388846849, guid: f5aee9267801be0448ed6816571ed007, type: 3}
       propertyPath: m_Name
       value: AudioManager

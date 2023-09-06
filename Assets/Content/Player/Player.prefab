@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 8061370563630907577}
   - component: {fileID: -672801363122478915}
   - component: {fileID: 1810700651662587120}
+  - component: {fileID: 1273441284455391763}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -218,6 +219,63 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   hasBossHealthbar: 0
+  deathSounds:
+    outputAudioMixerGroup: {fileID: 2021301823164702670, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    containerName: Player Death Sound
+    clipsInContainer:
+    - {fileID: 8300000, guid: ed5c913460f328e46b54f4ab201a4bc5, type: 3}
+    containerType: 3
+    loopContainer: 0
+    isPlaying: 0
+    shouldPlay: 0
+  hitSounds:
+    outputAudioMixerGroup: {fileID: 2021301823164702670, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 1
+      pitchRandomRange: {x: 0.9, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    containerName: PlayerHitSounds
+    clipsInContainer:
+    - {fileID: 8300000, guid: 0b1955f4f9abd3543bb1333b87db0bd9, type: 3}
+    containerType: 0
+    loopContainer: 0
+    isPlaying: 0
+    shouldPlay: 0
+  cleanseSound:
+    outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 6d46b1ce516c561449af697aba93eb84, type: 3}
 --- !u!114 &1503026418
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -668,6 +726,7 @@ MonoBehaviour:
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
+    dontShowDamageNumber: 0
   cardCooldownSubtraction: 2
   indicator: {fileID: 211204829442419275}
   collidersToEnable:
@@ -683,6 +742,14 @@ MonoBehaviour:
   layers:
     serializedVersion: 2
     m_Bits: 25472
+--- !u!81 &1273441284455391763
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608508398850829056}
+  m_Enabled: 1
 --- !u!1 &876363838080623800
 GameObject:
   m_ObjectHideFlags: 0

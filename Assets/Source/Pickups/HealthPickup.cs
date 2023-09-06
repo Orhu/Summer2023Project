@@ -23,6 +23,7 @@ namespace Cardificer
                 if (playerHealth.currentHealth < playerHealth.maxHealth) 
                 {
                     playerHealth.Heal(healAmount);
+                    AudioManager.instance.PlaySoundBaseAtPos(SoundGetter.Instance.healthPickupSound, transform.position, gameObject.name);
                     Destroy(gameObject);
                 }
             }

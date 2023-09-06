@@ -67,5 +67,11 @@ namespace Cardificer
 
             gameObject.GetComponent<Health>().onRequestIncomingAttackModification -= MultiplyDamage;
         }
+
+        public override StatusEffectType StatusType()
+        {
+            return StatusEffectType.Cursed;
+        }
+
     }
 }

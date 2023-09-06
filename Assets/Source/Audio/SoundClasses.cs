@@ -23,6 +23,8 @@ namespace Cardificer
         //The name of this SoundBase
         public abstract string name { get; }
 
+        public abstract SoundType GetSoundType();
+
         public bool useDefaultSettings = true;
 
         [Tooltip("The SoundSettings used by this SoundBase. These settings are ignored if Use Default Settings is true.")]
@@ -44,14 +46,31 @@ namespace Cardificer
         /// <summary>
         /// Destroys the GameObject the AudioSource used by this SoundBase is attached to.
         /// </summary>
-        public abstract void DestroyObject();
+        public void DestroyObject()
+        {
+            if (audioSourceInUse != null)
+                Object.Destroy(audioSourceInUse.gameObject);
+        }
+
+        public abstract bool IsValid();
+
+        public float GetVolume()
+        {
+            return soundSettings.randomizeVolume ? Random.Range(soundSettings.volumeRandomRange.x, soundSettings.volumeRandomRange.y) : soundSettings.volume;
+        }
+
+        public float GetPitch()
+        {
+            return soundSettings.randomizePitch ? Random.Range(soundSettings.pitchRandomRange.x, soundSettings.pitchRandomRange.y) : soundSettings.pitch;
+        }
+
     }
 
     /// <summary>
     /// Meant for playing Oneshot style SFX.
     /// </summary>
     [System.Serializable]
-    public class Sound : SoundBase
+    public class BasicSound : SoundBase
     {
 
         [Header("Sound Settings")]
@@ -79,17 +98,17 @@ namespace Cardificer
                 return audioSourceInUse.isPlaying;
             else
                 return false;
-        }
+        }        
 
-        /// <summary>
-        /// Destroys the GameObject attached to the AudioSource used by this Sound.
-        /// </summary>
-        public override void DestroyObject()
+        public override SoundType GetSoundType()
         {
-            if (audioSourceInUse != null)
-                Object.Destroy(audioSourceInUse.gameObject);
+            return SoundType.Sound;
         }
 
+        public override bool IsValid()
+        {
+            return audioClip == null ? false : true;
+        }
     }
 
     /// <summary>
@@ -144,15 +163,15 @@ namespace Cardificer
                 audioSourceInUse.Stop();
         }
 
-        /// <summary>
-        /// Destroys the GameObject attached to the AudioSource used by this SoundContainer.
-        /// </summary>
-        public override void DestroyObject()
+        public override SoundType GetSoundType()
         {
-            if (audioSourceInUse != null)
-                Object.Destroy(audioSourceInUse.gameObject);
+            return SoundType.SoundContainer;
         }
 
+        public override bool IsValid()
+        {
+            return clipsInContainer[0] == null ? false : true;
+        }
 
     }
 
@@ -212,4 +231,11 @@ namespace Cardificer
         RandomOneshot, //plays only one random AudioClip in the SoundContainer
         //RandomBurst, //for the future?
     }
+
+    public enum SoundType
+    {
+        Sound,
+        SoundContainer,
+    }
+
 }

@@ -1,13 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Vector2 = UnityEngine.Vector2;
 using System.Collections;
 using System.Linq;
 
 namespace Cardificer
 {
-
     /// <summary>
     /// Contains all the logic to playback audio. Currently plays back Sounds and SoundContainers, and eventually music.
     /// </summary>
@@ -20,6 +18,7 @@ namespace Cardificer
         private List<SoundBase> soundsToDestroyList = new List<SoundBase>();
         private List<AverageAudio> averageAudioList = new List<AverageAudio>();
         private List<SoundContainer> activeSoundContainers = new List<SoundContainer>();
+        private List<AudioSource> audioSourcesToDestroy = new List<AudioSource>();
 
         [Tooltip("Default SoundSettings to be applied when a SoundBase has 'Use Default Settings' set to true.")]
         public SoundSettings _defaultSoundSettings;
@@ -42,7 +41,6 @@ namespace Cardificer
             instance = this;
         }
 
-#if UNITY_EDITOR
         /// <summary>
         /// For testing methods.
         /// </summary>
@@ -51,118 +49,159 @@ namespace Cardificer
             //if (Input.GetKeyDown(KeyCode.Backspace))
             //    StopAllContainers();
         }
-#endif
 
         /// <summary>
-        /// Play an AudioClip on an AudioSource attatched to an IActor. This method uses the settings of the AudioSource already on the IActor, and does not apply any other SoundSettings.
+        /// Starts a SoundBase on an AudioSource.  
         /// </summary>
-        /// <param name="audioClip">The AudioClip to be played. </param>
-        /// <param name="actor">The IActor to get the AudioSource from. </param>
-        public void PlaySoundOnActor(AudioClip audioClip, IActor actor)
+        /// <param name="soundBase">The SoundContainer to start. </param>
+        /// <param name="target">The IActor to get the AudioSource from. </param>
+        public void PlaySoundBaseOnTarget(SoundBase soundBase, Transform target, bool makeUnique)
         {
-            Debug.LogWarning("You are using a depreciated method of playing audio. Please use Sounds instead of AudioClips to play audio.");
+            
+            if (!SceneManager.GetActiveScene().isLoaded) { return; }
+            if (!soundBase.IsValid()) { return; }
 
-            var actorAudioSource = actor.GetAudioSource();
-
-            if (actorAudioSource != null)
-            {
-                actorAudioSource.clip = audioClip;
-                actorAudioSource.Play();
-            }
+            PlaySoundBaseOnAudioSource(soundBase, GetAudioSourceFromTarget(target, makeUnique));
 
         }
 
-        /// <summary>
-        /// Play a Sound on an AudioSource attatched to an IActor. 
-        /// </summary>
-        /// <param name="sound">The Sound to be played. </param>
-        /// <param name="actor">The IActor to get the AudioSource from. </param>
-        public void PlaySoundOnActor(Sound sound, IActor actor)
-        {
-            var actorAudioSource = actor.GetAudioSource();
-
-            if (actorAudioSource != null)
-            {
-                ApplySoundSettingsToAudioSource(sound, actorAudioSource);
-                actorAudioSource.Play();
-            }
-
-        }
-
-        /// <summary>
-        /// Starts a SoundContainer on an AudioSource attatched to an IActor.  
-        /// </summary>
-        /// <param name="soundContainer">The SoundContainer to start. </param>
-        /// <param name="actor">The IActor to get the AudioSource from. </param>
-        public void PlaySoundOnActor(SoundContainer soundContainer, IActor actor)
-        {
-            var actorAudioSource = actor.GetAudioSource();
-
-            if (actorAudioSource != null)
-            {
-                soundContainer.shouldPlay = true;
-                StartCoroutine(PlaySoundContainer(soundContainer, actorAudioSource));
-            }
-
-        }
-
-        /// <summary>
-        /// Create an AudioSource GameObject at a specific position and play the associated Sound. 
-        /// </summary>
-        /// <param name="sound">The Sound to be played at a location.</param>
-        /// <param name="vector">The location for the Sound to be played.</param>
-        public void PlaySoundAtPos(Sound sound, Vector2 vector)
+        public void PlayOneshotOnTarget(BasicSound sound, Transform target)
         {
             if (!SceneManager.GetActiveScene().isLoaded) { return; }
-            GameObject audioSourceGameObject = new GameObject();
-            audioSourceGameObject.transform.name = $"Play{sound.name}At{vector}Obj";
-            audioSourceGameObject.transform.position = vector;
+            if (!sound.IsValid()) { return; }
 
-            AudioSource audioSource = audioSourceGameObject.AddComponent<AudioSource>();
-            ApplySoundSettingsToAudioSource(sound, audioSource);
-            sound.audioSourceInUse = audioSource;
-            audioSource.Play();
+            PlayOneshot(sound, GetAudioSourceFromTarget(target, false));
 
-            soundsToDestroyList.Add(sound);
+        }
+
+        private AudioSource GetAudioSourceFromTarget(Transform target, bool makeUnique)
+        {
+
+            AudioSource targetAudioSource = target.GetComponent<AudioSource>();
+
+            if (targetAudioSource == null || (makeUnique && targetAudioSource.isPlaying))
+            {
+                targetAudioSource = target.gameObject.AddComponent<AudioSource>();
+
+                if (makeUnique)
+                {
+                    audioSourcesToDestroy.Add(targetAudioSource);
+                }
+
+            }
+
+            return targetAudioSource;
         }
 
         /// <summary>
-        /// Create an AudioSource GameObject at a specific position and start the associated SoundContainer. 
+        /// Create an AudioSource GameObject at a specific position and play a sound. 
         /// </summary>
         /// <param name="soundContainer">The SoundContainer to be started at a location.</param>
         /// <param name="vector">The location for the SoundContainer to be played.</param>
-        public void PlaySoundAtPos(SoundContainer soundContainer, Vector2 vector)
+        public void PlaySoundBaseAtPos(SoundBase soundBase, Vector2 vector, string objCalledFrom)
         {
             if (!SceneManager.GetActiveScene().isLoaded) { return; }
+            if (!soundBase.IsValid()) { return; }
+
             GameObject audioSourceGameObject = new GameObject();
-            audioSourceGameObject.transform.name = $"Play{soundContainer.name}At{vector}Obj";
+            audioSourceGameObject.transform.name = $"Playing {soundBase.name} at {vector}. Created by {objCalledFrom}"; //can be deleted for final builds
             audioSourceGameObject.transform.position = vector;
 
             AudioSource audioSource = audioSourceGameObject.AddComponent<AudioSource>();
-            soundContainer.audioSourceInUse = audioSource;
-            StartCoroutine(PlaySoundContainer(soundContainer, audioSource));
+            PlaySoundBaseOnAudioSource(soundBase, audioSource);
 
-            soundsToDestroyList.Add(soundContainer);
+            soundsToDestroyList.Add(soundBase);
+        }
+
+        private void PlaySoundBaseOnAudioSource(SoundBase soundBase, AudioSource audioSource)
+        {
+
+            soundBase.audioSourceInUse = audioSource;
+
+            switch (soundBase.GetSoundType())
+            {
+                case SoundType.Sound:
+                {
+
+                    BasicSound sound = (BasicSound)soundBase;
+                    PlaySound(sound, audioSource); 
+
+                    break;
+                }
+                    
+                case SoundType.SoundContainer:
+                {
+
+                    SoundContainer container = (SoundContainer)soundBase;
+                    container.shouldPlay = true;
+                    StartCoroutine(PlaySoundContainer(container, audioSource));
+
+                    break;
+                }
+
+                default:
+                {
+                    print("Default case in AudioManager.PlaySoundBaseOnAudioSource reached!\nSoundBases can only be of type 'BasicSound' or 'SoundContainer'");
+                    break;
+                }
+            }
+        }
+
+        private void PlaySound(BasicSound sound, AudioSource audioSource)
+        {
+            if (audioSource.isPlaying)
+            {
+                GameObject go = audioSource.gameObject;
+                audioSource = go.AddComponent<AudioSource>();
+
+            }
+
+            audioSource.clip = sound.audioClip;
+            ApplySoundSettingsToAudioSource(sound, audioSource);
+
+            if (sound.audioClip != null)
+                audioSource.Play();
+            else
+                print($"Tried to play a sound ({sound.name}) on {audioSource.gameObject.name}.");
+
+        }
+        private void PlayOneshot(BasicSound sound,  AudioSource audioSource)
+        {
+
+            AudioSource newAudioSource = audioSource;
+
+            float volume = sound.GetVolume();
+
+            if (sound.audioClip != null)
+                newAudioSource.PlayOneShot(sound.audioClip, volume);
+            else
+                print($"Tried to play a oneshot sound ({sound.name}) on {newAudioSource.gameObject.name}.");
+
         }
 
         /// <summary>
         /// Get the average audio location of multiple projectiles and create a gameobject with an audio source at the average position to play. 
         /// </summary>
-        /// <param name="projectiles">The list of projectiles to find the average position of. </param>
+        /// <param name="transforms">The list of projectiles to find the average position of. </param>
         /// <param name="sound">The audioclip to play at the location. </param>
         /// <param name="averageOrFirst">Determines whether to get the average location of all projectiles or just use one projectile</param>
-        public void PlaySoundAtAveragePos(List<Projectile> projectiles, Sound sound, bool averageOrFirst)
+        public void PlaySoundAtAveragePos(List<Transform> transforms, BasicSound sound, bool averageOrFirst)
         {
+
+            if (sound.audioClip == null) 
+            {
+                return;
+            }
 
             if (averageOrFirst == true) //play at average position
             {
                 //Create a GameObject and attach an AverageAudio component to it
                 AverageAudio averageAudioGameObject = new GameObject().AddComponent<AverageAudio>();
-                averageAudioGameObject.transform.name = $"AverageAudio({sound.name})GameObj";
+                averageAudioGameObject.transform.name = $"AverageAudio ({sound.name}) GameObj";
 
                 //Initialize the AverageAudio component and play the sound. The AverageAudio component keeps the AudioSource's GameObject at the average location of the projectiles
                 AverageAudio averageAudioComponent = averageAudioGameObject.GetComponent<AverageAudio>();
-                averageAudioComponent.SetProjectilesAndSound(projectiles, sound);
+                averageAudioComponent.SetTransformsAndSound(transforms, sound);
                 averageAudioGameObject.transform.position = averageAudioGameObject.TryGetAveragePos();
                 averageAudioComponent.PlayAverageAudio();
 
@@ -172,11 +211,11 @@ namespace Cardificer
 
             else //play at first projectile
             {
-                
-                if (projectiles.Count == 0 || projectiles[0] == null)
-                    return; 
 
-                var audioSource = projectiles[0].gameObject.AddComponent<AudioSource>();
+                if (transforms.Count == 0 || transforms[0] == null)
+                    return;
+
+                var audioSource = transforms[0].gameObject.AddComponent<AudioSource>();
                 ApplySoundSettingsToAudioSource(sound, audioSource);
                 audioSource.Play();
             }
@@ -191,6 +230,13 @@ namespace Cardificer
         {
 
             int soundsLength = soundContainer.clipsInContainer.Length;
+
+            if (soundsLength < 1)
+            {
+                print($"Tried to play a sound container ({soundContainer.name}) on {audioSource.gameObject.name}.");
+                yield break;
+            }
+
             soundContainer.isPlaying = true;
             activeSoundContainers.Add(soundContainer);
 
@@ -201,6 +247,7 @@ namespace Cardificer
                 case SoundContainerType.Sequential:
                     foreach (var audioClip in soundContainer.clipsInContainer)
                     {
+
                         ApplySoundSettingsToAudioSource(soundContainer, audioSource, audioClip);
                         audioSource.Play();
                         float awaitTime = audioClip.length;
@@ -208,7 +255,6 @@ namespace Cardificer
 
                         if (!soundContainer.shouldPlay)
                             break;
-
                     }
 
                     break;
@@ -257,11 +303,25 @@ namespace Cardificer
                 //Plays only one random AudioClip in the SoundContainer
                 case SoundContainerType.RandomOneshot:
 
+                    if (soundContainer.clipsInContainer.Length == 0)
+                    {
+                        print($"No clips found in {soundContainer.name} trying to play on {audioSource.gameObject.name}");
+                        break;
+                    }
+
                     soundContainer.loopContainer = false;
 
                     AudioClip oneshotToPlay = soundContainer.clipsInContainer[random.Next(soundsLength)];
-                    ApplySoundSettingsToAudioSource(soundContainer, audioSource, oneshotToPlay);
+
+                    if (!audioSource.isPlaying)
+                    {
+                        ApplySoundSettingsToAudioSource(soundContainer, audioSource, oneshotToPlay);
+                    }
+
                     audioSource.PlayOneShot(oneshotToPlay);
+
+                    float clipLength = oneshotToPlay.length;
+                    StartCoroutine(HandleRandomOneShotPlayback(soundContainer, clipLength));
 
                     break;
 
@@ -269,10 +329,16 @@ namespace Cardificer
 
             if (soundContainer.loopContainer)
                 StartCoroutine(PlaySoundContainer(soundContainer, audioSource));
-            else
+            else if (soundContainer.containerType != SoundContainerType.RandomOneshot)
             {
                 soundContainer.isPlaying = false;
             }
+        }
+
+        private IEnumerator HandleRandomOneShotPlayback(SoundContainer soundContainer, float clipLength)
+        {
+            yield return new WaitForSeconds(clipLength);
+            soundContainer.isPlaying = false;
         }
 
         /// <summary>
@@ -280,7 +346,7 @@ namespace Cardificer
         /// </summary>
         /// <param name="sound">The Sound to get the settings from.</param>
         /// <param name="audioSource">The AudioSource to apply the settings onto.</param>
-        public void ApplySoundSettingsToAudioSource(Sound sound, AudioSource audioSource)
+        public void ApplySoundSettingsToAudioSource(BasicSound sound, AudioSource audioSource)
         {
             audioSource.clip = sound.audioClip;
             audioSource.outputAudioMixerGroup = sound.outputAudioMixerGroup;
@@ -295,29 +361,12 @@ namespace Cardificer
                 audioSource.spatialBlend = _defaultSoundSettings.spatialBlend;
 
             }
-            else //use settings found on the Sound. Apply random values if wanted
+            else //use settings found on the Sound.
             {
                 audioSource.priority = sound.soundSettings.priority;
                 audioSource.loop = sound.soundSettings.loop;
-
-                if (sound.soundSettings.randomizePitch)
-                {
-                    audioSource.pitch = Random.Range(sound.soundSettings.pitchRandomRange.x, sound.soundSettings.pitchRandomRange.y);
-                }
-                else
-                {
-                    audioSource.pitch = sound.soundSettings.pitch;
-                }
-
-                if (sound.soundSettings.randomizeVolume)
-                {
-                    audioSource.volume = Random.Range(sound.soundSettings.volumeRandomRange.x, sound.soundSettings.volumeRandomRange.y);
-                }
-                else
-                {
-                    audioSource.volume = sound.soundSettings.volume;
-                }
-
+                audioSource.volume = sound.GetVolume();
+                audioSource.pitch = sound.GetPitch();
                 audioSource.spatialBlend = sound.soundSettings.spatialBlend;
             }
         }
@@ -337,34 +386,16 @@ namespace Cardificer
             {
 
                 audioSource.priority = _defaultSoundSettings.priority;
-                audioSource.loop = _defaultSoundSettings.loop;
                 audioSource.pitch = _defaultSoundSettings.pitch;
                 audioSource.volume = _defaultSoundSettings.volume;
                 audioSource.spatialBlend = _defaultSoundSettings.spatialBlend;
 
             }
-            else //use settings found on the SoundContainer. Apply random values if wanted
+            else //use settings found on the SoundContainer.
             {
                 audioSource.priority = soundContainer.soundSettings.priority;
-
-                if (soundContainer.soundSettings.randomizePitch)
-                {
-                    audioSource.pitch = Random.Range(soundContainer.soundSettings.pitchRandomRange.x, soundContainer.soundSettings.pitchRandomRange.y);
-                }
-                else
-                {
-                    audioSource.pitch = soundContainer.soundSettings.pitch;
-                }
-
-                if (soundContainer.soundSettings.randomizeVolume)
-                {
-                    audioSource.volume = Random.Range(soundContainer.soundSettings.volumeRandomRange.x, soundContainer.soundSettings.volumeRandomRange.y);
-                }
-                else
-                {
-                    audioSource.volume = soundContainer.soundSettings.volume;
-                }
-
+                audioSource.volume = soundContainer.GetVolume();
+                audioSource.pitch = soundContainer.GetPitch();
                 audioSource.spatialBlend = soundContainer.soundSettings.spatialBlend;
             }
         }
@@ -396,11 +427,34 @@ namespace Cardificer
         {
             foreach (SoundBase sb in soundsToDestroyList)
             {
+                if (sb == null)
+                {
+                    soundsToDestroyList.Remove(sb);
+                    return;
+                }
+
                 if (!sb.IsPlaying())
                 {
                     soundsToDestroyList.Remove(sb);
                     sb.Stop();
                     sb.DestroyObject();
+                    return;
+                }
+            }
+
+            foreach (AudioSource audioSource in audioSourcesToDestroy)
+            {
+                if (audioSource == null)
+                {
+                    audioSourcesToDestroy.Remove(audioSource);
+                    return;
+                }
+
+                if (!audioSource.isPlaying)
+                {
+                    audioSourcesToDestroy.Remove(audioSource);
+                    audioSource.Stop();
+                    Destroy(audioSource);
                     return;
                 }
             }
@@ -418,7 +472,33 @@ namespace Cardificer
 
         }
 
+        public IEnumerator Fade(AudioSource audioSourceToFade, float duration, float targetVolume, bool stopOnEnd)
+        {
+
+
+            float timeElapsed = 0;
+
+            while (timeElapsed < duration)
+            {
+                audioSourceToFade.volume = Mathf.Lerp(audioSourceToFade.volume, targetVolume, timeElapsed / duration);
+                timeElapsed += Time.fixedDeltaTime;
+                yield return null;
+            }
+
+            if (stopOnEnd && timeElapsed < duration)
+            {
+                audioSourceToFade.Stop();
+            }
+
+        }
+
+        public void ApplySoundSettingsToSound(SoundBase soundToCopySettings, SoundBase soundToApplySettings)
+        {
+            soundToApplySettings.outputAudioMixerGroup = soundToCopySettings.outputAudioMixerGroup;
+            soundToApplySettings.soundSettings = soundToCopySettings.soundSettings;
+        }
+
     }
 
-
 }
+

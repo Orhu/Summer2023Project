@@ -65,5 +65,10 @@ namespace Cardificer
                 movment.requestSpeedModifications -= PreventMovement;
             }
         }
+
+        public override StatusEffectType StatusType()
+        {
+            return StatusEffectType.Rooted;
+        }
     }
 }
