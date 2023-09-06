@@ -27,6 +27,9 @@ namespace Cardificer
         [Tooltip("Whether or not to not create a damage number prefab on hit.")]
         public bool dontShowDamageNumber = false;
 
+        //[Tooltip("Whether or not to show more damage numbers after first hit on a given enemy")]
+        // public bool repeatedDamageNumbers = true;
+
         // The causer of this attack.
         [System.NonSerialized]
         public GameObject causer;
