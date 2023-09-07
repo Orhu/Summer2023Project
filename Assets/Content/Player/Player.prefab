@@ -232,6 +232,8 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     containerName: Player Death Sound
     clipsInContainer:
@@ -253,6 +255,8 @@ MonoBehaviour:
       randomizePitch: 1
       pitchRandomRange: {x: 0.9, y: 1.1}
       spatialBlend: 0.5
+      bufferTime: 0.3
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     containerName: PlayerHitSounds
     clipsInContainer:
@@ -274,6 +278,8 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 8300000, guid: 6d46b1ce516c561449af697aba93eb84, type: 3}
 --- !u!114 &1503026418
@@ -1031,7 +1037,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!95 &5557397690985917640
 Animator:
   serializedVersion: 5

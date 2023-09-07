@@ -58,8 +58,7 @@ namespace Cardificer
         public void PlaySoundBaseOnTarget(SoundBase soundBase, Transform target, bool makeUnique)
         {
             
-            if (!SceneManager.GetActiveScene().isLoaded) { return; }
-            if (!soundBase.IsValid()) { return; }
+            if (!SoundShouldPlay(soundBase)) { return; }
 
             PlaySoundBaseOnAudioSource(soundBase, GetAudioSourceFromTarget(target, makeUnique));
 
@@ -67,8 +66,8 @@ namespace Cardificer
 
         public void PlayOneshotOnTarget(BasicSound sound, Transform target)
         {
-            if (!SceneManager.GetActiveScene().isLoaded) { return; }
-            if (!sound.IsValid()) { return; }
+
+            if (!SoundShouldPlay(sound)) { return; }
 
             PlayOneshot(sound, GetAudioSourceFromTarget(target, false));
 
@@ -100,8 +99,8 @@ namespace Cardificer
         /// <param name="vector">The location for the SoundContainer to be played.</param>
         public void PlaySoundBaseAtPos(SoundBase soundBase, Vector2 vector, string objCalledFrom)
         {
-            if (!SceneManager.GetActiveScene().isLoaded) { return; }
-            if (!soundBase.IsValid()) { return; }
+
+            if (!SoundShouldPlay(soundBase)) { return; }
 
             GameObject audioSourceGameObject = new GameObject();
             audioSourceGameObject.transform.name = $"Playing {soundBase.name} at {vector}. Created by {objCalledFrom}"; //can be deleted for final builds
@@ -188,10 +187,8 @@ namespace Cardificer
         public void PlaySoundAtAveragePos(List<Transform> transforms, BasicSound sound, bool averageOrFirst)
         {
 
-            if (sound.audioClip == null) 
-            {
-                return;
-            }
+            if (!SoundShouldPlay(sound)) { return; }
+
 
             if (averageOrFirst == true) //play at average position
             {
@@ -348,6 +345,9 @@ namespace Cardificer
         /// <param name="audioSource">The AudioSource to apply the settings onto.</param>
         public void ApplySoundSettingsToAudioSource(BasicSound sound, AudioSource audioSource)
         {
+
+            if (!SoundShouldPlay(sound)) { return; }
+
             audioSource.clip = sound.audioClip;
             audioSource.outputAudioMixerGroup = sound.outputAudioMixerGroup;
 
@@ -379,6 +379,9 @@ namespace Cardificer
         /// <param name="clip">The AudioClip to assign to the AudioSource.</param>
         public void ApplySoundSettingsToAudioSource(SoundContainer soundContainer, AudioSource audioSource, AudioClip clip)
         {
+
+            if (!SoundShouldPlay(soundContainer)) { return; }
+
             audioSource.clip = clip;
             audioSource.outputAudioMixerGroup = soundContainer.outputAudioMixerGroup;
 
@@ -494,8 +497,21 @@ namespace Cardificer
 
         public void ApplySoundSettingsToSound(SoundBase soundToCopySettings, SoundBase soundToApplySettings)
         {
+
+            if (!SoundShouldPlay(soundToCopySettings) || !SoundShouldPlay(soundToApplySettings)) { return; }
+
             soundToApplySettings.outputAudioMixerGroup = soundToCopySettings.outputAudioMixerGroup;
             soundToApplySettings.soundSettings = soundToCopySettings.soundSettings;
+        }
+
+        private bool SoundShouldPlay(SoundBase sound)
+        {
+            
+            if (!SceneManager.GetActiveScene().isLoaded) { return false; }
+            else if (!sound.IsValid()) { return false; }
+            else if (sound.SoundInCooldown(Time.time)) { return false; }
+            else { return true; }
+
         }
 
     }

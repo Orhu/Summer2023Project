@@ -2,7 +2,7 @@ using UnityEngine.Audio;
 using UnityEngine;
 using System.Collections;
 
-namespace Cardificer
+namespace Cardificer 
 {
 
 
@@ -62,6 +62,36 @@ namespace Cardificer
         public float GetPitch()
         {
             return soundSettings.randomizePitch ? Random.Range(soundSettings.pitchRandomRange.x, soundSettings.pitchRandomRange.y) : soundSettings.pitch;
+        }
+
+        public bool SoundInCooldown(float askToTriggerTime)
+        {
+
+            //Debug.Log($"sound cooldown queried on {name}. Buffer time is {soundSettings.bufferTime}.");
+
+            if (soundSettings.bufferTime <= 0)
+            {
+                return false;
+            }
+
+            if (soundSettings.lastTriggeredTime == 50000f)
+            {
+                soundSettings.lastTriggeredTime = askToTriggerTime;
+                return false;
+            }
+
+            float checkTime = askToTriggerTime - soundSettings.lastTriggeredTime;
+            bool soundInCooldown = checkTime < soundSettings.bufferTime ? true : false;
+
+            //Debug.Log($"checkTime = {checkTime}. soundInCooldown = {soundInCooldown}.");
+
+            if (!soundInCooldown)
+            {
+                soundSettings.lastTriggeredTime = askToTriggerTime;
+            }
+
+            return soundInCooldown;
+
         }
 
     }
@@ -170,7 +200,18 @@ namespace Cardificer
 
         public override bool IsValid()
         {
-            return clipsInContainer[0] == null ? false : true;
+
+            if (clipsInContainer == null)
+            {
+                return false;
+            }
+
+            if (clipsInContainer.Length < 1)
+            {
+                return false;
+            }
+
+            return true;
         }
 
     }
@@ -217,6 +258,9 @@ namespace Cardificer
         [Tooltip("Set the Spacial Blend for this Sound. 0 = 2D playback, 1 = full 3D playback.")]
         [Range(0, 1)] public float spatialBlend = 0.5f;
         //[SerializeField] private bool _ignorePause;
+
+        public float bufferTime = 0f;
+        [HideInInspector] public float lastTriggeredTime = 50000f;
 
     }
 

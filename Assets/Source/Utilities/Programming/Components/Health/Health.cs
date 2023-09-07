@@ -111,11 +111,13 @@ namespace Cardificer
             if (currentHealth != 0) { return; }
             currentHealth = maxHealth;
 
+            //set default settings for Health Sounds for ease of implementation. If these need to change this can happen in the future!
             deathSounds.containerType = SoundContainerType.RandomOneshot;
             hitSounds.containerType = SoundContainerType.RandomOneshot;
 
             hitSounds.useDefaultSettings = false;
             hitSounds.soundSettings.randomizePitch = true;
+            hitSounds.soundSettings.bufferTime = 0.3f;
 
             if (gameObject.tag != "Player")
             {
