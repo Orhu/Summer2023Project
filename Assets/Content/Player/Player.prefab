@@ -199,7 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 12
-  invincibilityDuration: 0.25
+  invincibilityDuration: 1
   immuneStatusEffects: []
   damageNumberPrefab: {fileID: 0}
   onDeath:
@@ -668,6 +668,7 @@ MonoBehaviour:
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
+    dontShowDamageNumber: 0
   cardCooldownSubtraction: 2
   indicator: {fileID: 211204829442419275}
   collidersToEnable:

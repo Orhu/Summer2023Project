@@ -192,12 +192,19 @@ namespace Cardificer
             string value = "";
             if (damage != 0)
             {
-                value += $"{Math.Abs(damage)}\n";
+                value += $"{Math.Abs(damage)}";
             }
 
             foreach (StatusEffect effect in statusEffects)
             {
-                value += $" + {effect.GetType().Name}";
+                if (effect.GetType().Name.StartsWith("Slowed")) 
+                {
+                    value += "\n+ Freeze";
+                }
+                else
+                {
+                    value += $"\n+ {effect.GetType().Name}";
+                }
             }
             return value;
         }
