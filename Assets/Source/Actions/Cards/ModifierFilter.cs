@@ -13,7 +13,7 @@ namespace Cardificer
     public class ModifierFilter : ScriptableObject
     {
         [Tooltip("A lits of the class names of modifiers to not apply to this action. Null is a valid replacement modifier")]
-        [SerializeField] private ForbiddenToReplacementModifers[] forbiddenModifiers = new ForbiddenToReplacementModifers[0];
+        [SerializeField] private ForbiddenToReplacementModifiers[] forbiddenModifiers = new ForbiddenToReplacementModifiers[0];
 
         /// <summary>
         /// Filters a list of modifiers based off of this
@@ -25,18 +25,19 @@ namespace Cardificer
             return modifiers.Select(ReplaceModifiers).Where(item => item != null).ToList();
         }
 
+
         /// <summary>
-        /// Gets whether a modifier is allowed by this filter.
+        /// Replaces all modifiers that need to be replaced.
         /// </summary>
         /// <param name="modifier"> The modifier to test. </param>
-        /// <returns> True if the modifier is allowed. </returns>
+        /// <returns> The replacement modifier. </returns>
         public AttackModifier ReplaceModifiers(AttackModifier modifier)
         {
-            foreach (ForbiddenToReplacementModifers forbiddenModifier in forbiddenModifiers)
+            foreach (ForbiddenToReplacementModifiers forbiddenModifier in forbiddenModifiers)
             {
                 if (forbiddenModifier.forbiddenModifierType.IsInstanceOfType(modifier))
                 { 
-                    return forbiddenModifier.replaceWith; 
+                    return forbiddenModifier.replaceWith;
                 }
             }
             return modifier;
@@ -48,7 +49,7 @@ namespace Cardificer
         /// Class for mapping modifiers to their replacement.
         /// </summary>
         [System.Serializable]
-        private class ForbiddenToReplacementModifers
+        private class ForbiddenToReplacementModifiers
         {
             [Tooltip("The name of the modifier to forbid.")]
             [SerializeField]private string forbiddenModifierName;
@@ -65,8 +66,8 @@ namespace Cardificer
         /// <summary>
         /// Class for making the DecisionPair easier to read in the inspector.
         /// </summary>
-        [CustomPropertyDrawer(typeof(ForbiddenToReplacementModifers))]
-        public class ForbiddenToReplacementModifersPropertyDrawer : PropertyDrawer
+        [CustomPropertyDrawer(typeof(ForbiddenToReplacementModifiers))]
+        public class ForbiddenToReplacementModifiersPropertyDrawer : PropertyDrawer
         {
             // Draw the property inside the given rect
             public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
