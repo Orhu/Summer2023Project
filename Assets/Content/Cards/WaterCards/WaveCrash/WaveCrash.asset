@@ -16,7 +16,6 @@ MonoBehaviour:
   actions:
   - {fileID: 11400000, guid: aa803f3897d3e8f4a81075726322e12d, type: 2}
   - {fileID: 11400000, guid: bebb419d0f5632f4fb53840b266704ad, type: 2}
-  effects: []
   displayName: Wave Crash
   description: <b>Soaking,</b> <b>Phantasmal.</b> Release a powerful wave of water
     that covers the room.
@@ -31,9 +30,11 @@ MonoBehaviour:
   isRare: 0
   damageTypeSprite: {fileID: 0}
   damage: 2
-  chordEffectText: + <b>Flow</b>
+  chordEffectText: Flowing
   chordModifiers:
-  - {fileID: 11400000, guid: 6356da3a847d0174d94e1cf235549f90, type: 2}
+  - {fileID: 11400000, guid: 2104b76d98f0ac343abff7394515b7b6, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
-  - {fileID: 11400000, guid: 863cc805ea49b7246813f77d6ceaa660, type: 2}
-  - {fileID: 11400000, guid: 6a700bf50a7af614c8bfef781603a039, type: 2}
+  - {fileID: 11400000, guid: 2104b76d98f0ac343abff7394515b7b6, type: 2}
+  modifierFilters:
+  - {fileID: 11400000, guid: f1de681a8c59949478dbc9d964429e23, type: 2}

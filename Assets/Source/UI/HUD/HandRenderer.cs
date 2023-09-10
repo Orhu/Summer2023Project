@@ -38,12 +38,6 @@ namespace Cardificer
         [Tooltip("How offset the hand is from the player in the game world")]
         [SerializeField] private Vector2 handInGameWorldOffset = new Vector2(0.7f, 0.3f);
 
-        // Boolean telling whether the runeRenderers are visible
-        private bool runeRenderersVisible;
-
-        // The timer variable which will be decremented
-        private float fadeOutCooldown;
-
         // NOTE: I would suggest not changing these values unless good reason.
         [Header("Radial Settings")]
 
@@ -72,8 +66,6 @@ namespace Cardificer
         {
             chordContainer = GameObject.FindGameObjectWithTag("HUD").GetComponentInChildren<ChordRenderer>();
             playerObject = Player.Get().gameObject;
-            runeRenderersVisible = true;
-            fadeOutCooldown = totalFadeOutCooldown;
 
             // Instantiate as many RuneRenderers as we have hand size
             for (int i = 0; i < maxHandSize; i++)
@@ -190,9 +182,25 @@ namespace Cardificer
                 {
                     if (runeRenderers[i].card)
                     {
-                        runeRenderers[i].totalCooldownTime = runeRenderers[i].card.cooldownTime;
+                        /* 
+                        NOTE FOR ALEX: This line should be moved so it is set when the card is actually played, with totalCooldownTime 
+                        being assigned when the card is cast so that it will have an accurate maximum value. 
+                        */
+
+                        runeRenderers[i].totalCooldownTime = runeRenderers[i].card.cooldownTime; 
                     }
                     runeRenderers[i].card = card;
+                }
+                else // Duplicate card, can keep the new cooldown time
+                { 
+                    /* 
+                    NOTE FOR ALEX: This should not be here at all since cooldown times will change depending on whether it is cast as a chord or not. 
+                    */
+                    
+                    if (runeRenderers[i].card)
+                    {
+                        runeRenderers[i].totalCooldownTime = card.cooldownTime;
+                    }
                 }
                 // Set runeRenderers that are currently in the hand to not be greyed out
                 runeRenderers[i].greyedOut = false;
@@ -254,29 +262,6 @@ namespace Cardificer
                 {
                     runeRenderers[i].currentCooldownTime = 0;
                     runeRenderers[i].actionTime = 0;
-                }
-            }
-
-
-            if (Deck.playerDeck.previewedCardIndices.Count > 0 && !runeRenderersVisible) // One of the buttons has been pressed
-            {
-                runeRenderersVisible = true;
-                fadeOutCooldown = totalFadeOutCooldown;
-                for (int i = 0; i < Deck.playerDeck.handSize; i++)
-                {
-                    runeRenderers[i].GetComponent<Animator>().Play("A_RuneRenderer_FadeIn");
-                }
-            }
-            else if (Deck.playerDeck.previewedCardIndices.Count <= 0 && runeRenderersVisible)
-            {
-                fadeOutCooldown -= Time.deltaTime;
-                if (fadeOutCooldown <= 0)
-                {
-                    runeRenderersVisible = false;
-                    for (int i = 0; i < Deck.playerDeck.handSize; i++)
-                    {
-                        runeRenderers[i].GetComponent<Animator>().Play("A_RuneRenderer_FadeOut");
-                    }
                 }
             }
         }

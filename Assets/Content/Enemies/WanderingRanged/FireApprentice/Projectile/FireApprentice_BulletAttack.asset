@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
+  m_Name: FireApprentice_BulletAttack
+  m_EditorClassIdentifier: 
+  actionAudioClip: {fileID: 8300000, guid: c4915dafd9bf301479e3731e70417325, type: 3}
+  projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
+  previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
+  attack:
+    damage: 2
+    damageType: 0
+    statusEffects:
+    - {fileID: 11400000, guid: 7d8ee4313abef7e4eadf7231c9c02606, type: 2}
+    invertInvincibility: 0
+  hitCount: 1
+  applyDamageOnHit: 1
+  modifiers: []
+  immuneToShield: 0
+  immuneToReflect: 0
+  shape: {fileID: 11400000, guid: a9b689a2260cd2345b7c3103b63604e0, type: 2}
+  lifetime: 1.375
+  initialSpeed: 8
+  acceleration: 0
+  minSpeed: 0
+  maxSpeed: 8
+  homingSpeed: 0
+  homingTime: 0
+  homingDelay: 0
+  homingAimMode: 2
+  switchAfterHit: 0
+  visualObject: {fileID: 2809569760718847691, guid: 9c10c4d19d2c1d54b9d1351d5fadbb09, type: 3}
+  detachVisualsBeforeDestroy: 0
+  detatchedVisualsTimeBeforeDestroy: 0
+  travelAudioClip: {fileID: 8300000, guid: fa2bb40dda326ee42834e9c144a2b6e7, type: 3}
+  impactAudioClip: {fileID: 8300000, guid: 89ae884dcd988e2489fe61202f7364a9, type: 3}
+  spawnLocation: 0
+  aimMode: 0
+  waitForProjectileDeath: 0
+  chargeTime: 0
+  additionalActionTime: 4
+  _spawnSequence:
+  - delay: 0
+    angle: 0
+    offset: {x: 0, y: 0}
+  randomAngle: 0
+  randomOffset: 0

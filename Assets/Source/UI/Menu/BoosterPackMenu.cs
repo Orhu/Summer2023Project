@@ -7,7 +7,7 @@ namespace Cardificer
     /// <summary>
     /// Handles creation and maintenance of Booster Pack UI
     /// </summary>
-    public class BoosterPackMenu : MonoBehaviour
+    public class BoosterPackMenu : Menu
     {
         // Card gets populated by card buttons (selected in UI)
         public Card selectedCard { get; set; }
@@ -83,6 +83,8 @@ namespace Cardificer
                         // Assign it the random card
                         cardRenderers[i].card = tempCard;
                     }
+
+                    initialSelection = cardLayoutArea.transform.GetChild(0).gameObject;
                 }
             }
             else

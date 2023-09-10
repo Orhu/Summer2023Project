@@ -11,6 +11,9 @@ namespace Cardificer
         [Tooltip("The speed in tiles/s that is added to the player's speed")] [Range(0f, 1f)]
         [SerializeField] private float addedSpeed = 0.25f;
 
+        [Tooltip("Max duration of the effect")]
+        [SerializeField] private float maxDuration = 20f;
+
         /// <summary>
         /// Creates a new status effect that is a copy of the caller.
         /// </summary>
@@ -38,7 +41,7 @@ namespace Cardificer
                 return false;
             }
 
-            other.remainingDuration = Mathf.Max(duration, other.remainingDuration);
+            other.remainingDuration = Mathf.Min(duration + other.remainingDuration, maxDuration);
             return true;
         }
 

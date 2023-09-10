@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5dd09abb2f10ba48b1ad730fbb847cf, type: 3}
   m_Name: Bubble
   m_EditorClassIdentifier: 
-  cooldownTime: 4
+  cooldownTime: 6
   actions:
   - {fileID: 11400000, guid: 2486f3fb496a4e141b680ae531478876, type: 2}
-  effects: []
   displayName: Bubble
   description: Hurl a bouncing bubble that lingers after being fired.
   flavorText: <i>Bubbles? Surely you can't be serious...</i>
@@ -29,10 +28,11 @@ MonoBehaviour:
   isRare: 0
   damageTypeSprite: {fileID: 0}
   damage: 1
-  chordEffectText: Bouncy Spell
+  chordEffectText: Bouncy
   chordModifiers:
   - {fileID: 11400000, guid: 4db00e30cb485914980b8d29faa3969e, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
-  - {fileID: 11400000, guid: cfc78cd95ef6efb41825603e92f42a8d, type: 2}
-  - {fileID: 11400000, guid: 93fa4c0185f61e146bbe52570d1bc4d1, type: 2}
-  - {fileID: 11400000, guid: 7588423baa64d8b42a52efe276546bcf, type: 2}
+  - {fileID: 11400000, guid: 4db00e30cb485914980b8d29faa3969e, type: 2}
+  modifierFilters:
+  - {fileID: 11400000, guid: a6c006c4c7ccc614d89f7346acb73687, type: 2}

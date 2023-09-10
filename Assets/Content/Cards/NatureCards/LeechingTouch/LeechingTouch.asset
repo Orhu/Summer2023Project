@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 9
   actions:
   - {fileID: 11400000, guid: c6e8b26e0eeb2794f82df244735fae40, type: 2}
-  effects: []
   displayName: Leeching Touch
   description: Summon an orb of natural energy that saps health.
   flavorText: 
@@ -29,9 +28,11 @@ MonoBehaviour:
   isRare: 1
   damageTypeSprite: {fileID: 0}
   damage: 0.5
-  chordEffectText: Sapping Spell
+  chordEffectText: Life Steal
   chordModifiers:
   - {fileID: 11400000, guid: 5a099c5928324a3438286531e53c6c5a, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
-  - {fileID: 11400000, guid: 3867812d0a4ef8945ac9ab1dbf92b6ea, type: 2}
-  - {fileID: 11400000, guid: ca034b561f7c5dc4f9678de4ed8ef2fd, type: 2}
+  - {fileID: 11400000, guid: 5a099c5928324a3438286531e53c6c5a, type: 2}
+  modifierFilters:
+  - {fileID: 11400000, guid: e4b82e90013b15946b9a091a422d909b, type: 2}

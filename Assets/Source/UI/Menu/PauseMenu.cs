@@ -7,12 +7,14 @@ namespace Cardificer
     /// Pause manager script for handling rendering and logic
     /// for the pause menu UI object
     /// </summary>
-    public class PauseMenu : MonoBehaviour
+    public class PauseMenu : Menu
     {
         [Tooltip("Main container that opens when you pause the game (not options or anything)")]
         [SerializeField] private GameObject mainPauseMenuContainer;
+
         [Tooltip("Use this to close all menu containers without closing things like game title.")]
         [SerializeField] private GameObject pauseMenuController;
+
         /// <summary>
         /// Resumes the game
         /// </summary>
@@ -45,7 +47,7 @@ namespace Cardificer
         /// </summary>
         public void InstructionManual()
         {
-            MenuManager.Toggle<InstructionMenu>();
+            MenuManager.Toggle<InstructionMenu>(false);
         }
 
         /// <summary>
@@ -55,6 +57,7 @@ namespace Cardificer
         public void SaveAndQuit()
         {
             SceneManager.LoadScene("MainMenu");
+            MenuManager.Close<PauseMenu>();
         }
         /// <summary>
         /// When the pause menu is reenabled, 

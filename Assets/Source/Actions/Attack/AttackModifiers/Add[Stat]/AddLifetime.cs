@@ -12,13 +12,13 @@ namespace Cardificer
         [Tooltip("The additional lifetime in seconds")]
         [SerializeField] private float lifetime;
 
-        // The projectile this modifies
-        public override Projectile modifiedProjectile
+        /// <summary>
+        /// Initializes this modifier on the given projectile
+        /// </summary>
+        /// <param name="attachedProjectile"> The projectile this modifier is attached to. </param>
+        public override void Initialize(Projectile value)
         {
-            set
-            {
-                value.remainingLifetime += lifetime;
-            }
+            value.remainingLifetime += lifetime;
         }
     }
 }

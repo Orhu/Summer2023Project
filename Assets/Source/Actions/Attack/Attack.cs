@@ -95,10 +95,10 @@ namespace Cardificer
         [Header("Projectile Audio")]
 
         [Tooltip("AudioClip for projectile travel")]
-        [SerializeField] protected AudioClip travelAudioClip;
+        [SerializeField] protected Sound travelSound;
 
         [Tooltip("AudioClip for projectile impact.")]
-        [SerializeField] protected AudioClip impactAudioClip;
+        [SerializeField] protected Sound impactSound;
 
         // The root of all projectiles
         private static GameObject projectileRoot;
@@ -167,7 +167,7 @@ namespace Cardificer
         /// <param name="ignoredObjects"> The objects this action will ignore. </param>
         public virtual void Play(IActor actor, List<AttackModifier> modifiers, GameObject causer, System.Action attackFinished = null, List<GameObject> ignoredObjects = null)
         {
-            AudioManager.instance.PlayAudioAtActor(actionAudioClip, actor);
+            AudioManager.instance.PlaySoundOnActor(actionSound, actor);
             actor.GetActionSourceTransform().GetComponent<MonoBehaviour>().StartCoroutine(PlaySpawnSequence(actor, modifiers, causer, attackFinished, ignoredObjects));
 
         }
@@ -239,7 +239,7 @@ namespace Cardificer
             yield return new WaitForSeconds(additionalActionTime);
             attackFinished?.Invoke();
             
-            AudioManager.instance.GetAverageAudioSource(projectileList, travelAudioClip, projectileList.Count > 1);
+            AudioManager.instance.PlaySoundAtAveragePos(projectileList, travelSound, projectileList.Count > 1);
         }
 
 
@@ -261,6 +261,7 @@ namespace Cardificer
             }
 
             Projectile projectile = Instantiate(projectilePrefab.gameObject).GetComponent<Projectile>();
+            projectile.name = name + " Projectile";
             projectile.attack = this;
             projectile.actor = actor;
             projectile.modifiers = this.modifiers.Concat(modifiers).SkipWhile(
@@ -284,7 +285,7 @@ namespace Cardificer
         /// <param name="pos">Position of the impact audio sound</param>
         protected void PlayImpactAtPos(Vector2 pos)
         {
-            AudioManager.instance.PlayAudioAtPos(impactAudioClip, pos);
+            AudioManager.instance.PlaySoundAtPos(impactSound, pos);
         } 
         #endregion
     }

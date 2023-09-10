@@ -25,6 +25,9 @@ namespace Cardificer
         // The starting angle of this projectile
         private float startingRotation;
 
+        // The starting angle of this projectile
+        private Vector2 lastSpawnLocation;
+
         /// <summary>
         /// Handles initial position and rotation.
         /// </summary>
@@ -35,7 +38,7 @@ namespace Cardificer
             radius = orbitSpawnInfo.radius + Random.Range(orbitAttack.randomRadius / -2f, orbitAttack.randomRadius / 2f);
 
             // Position
-            transform.position = GetSpawnLocation();
+            transform.position = (Vector3)GetSpawnLocation();
             if (!orbitAttack.attachedToSpawnLocation)
             {
                 centerPosition = transform.position;
@@ -79,7 +82,8 @@ namespace Cardificer
             Vector2 offset = centerPosition + (Vector2)transform.up * radius;
             if (orbitAttack.attachedToSpawnLocation)
             {
-                offset += (Vector2)GetSpawnLocation();
+                offset += GetSpawnLocation() ?? lastSpawnLocation;
+                lastSpawnLocation = GetSpawnLocation() ?? lastSpawnLocation;
             }
             rigidBody.MovePosition(offset);
         }

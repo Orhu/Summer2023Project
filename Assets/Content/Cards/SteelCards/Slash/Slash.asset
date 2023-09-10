@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5dd09abb2f10ba48b1ad730fbb847cf, type: 3}
   m_Name: Slash
   m_EditorClassIdentifier: 
-  cooldownTime: 4
+  cooldownTime: 3
   actions:
   - {fileID: 11400000, guid: 1dac8b3bcd7081e4ba81dc9ada6efa3c, type: 2}
-  effects: []
   displayName: Slash
   description: Summon a magical blade that slashes around you.
   flavorText: <i>I have yet to see steel match the strength of magic.</i>
@@ -29,9 +28,11 @@ MonoBehaviour:
   isRare: 0
   damageTypeSprite: {fileID: 21300000, guid: 6dcb709a95c005e439b69c24f25483c1, type: 3}
   damage: 1
-  chordEffectText: + Damage
+  chordEffectText: Double Hit
   chordModifiers:
-  - {fileID: 11400000, guid: c359ce74591abff49a388af13094c7a2, type: 2}
+  - {fileID: 11400000, guid: 103eb08df66a7d04f91b6613b2a54a3e, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
-  - {fileID: 11400000, guid: 5f737aff8b9d8fb42a96fe22519be810, type: 2}
-  - {fileID: 11400000, guid: e2260ea90cf75c74dbd216e59ffa39ad, type: 2}
+  - {fileID: 11400000, guid: 103eb08df66a7d04f91b6613b2a54a3e, type: 2}
+  modifierFilters:
+  - {fileID: 11400000, guid: b951d741d0cdfe04cbeb7b5c547e1402, type: 2}

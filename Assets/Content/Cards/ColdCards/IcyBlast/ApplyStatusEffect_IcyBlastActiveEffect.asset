@@ -12,7 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b067eac9463a37f41b382167fcdf564f, type: 3}
   m_Name: ApplyStatusEffect_IcyBlastActiveEffect
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 0}
+  actionSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
   statusEffects:
   - {fileID: 11400000, guid: 95ac03bde28a96d42967102d6b92e5b7, type: 2}
   delay: 1.5
+  dontShowDamageNumber: 1

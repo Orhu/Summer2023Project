@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,8 +13,7 @@ namespace Cardificer
     /// </summary>
     public class Health : MonoBehaviour
     {
-        [Tooltip("The Max health of this object")]
-        [Min(1)]
+        [Tooltip("The Max health of this object")] [Min(1)]
         [SerializeField] private int _maxHealth = 5;
         public int maxHealth
         {
@@ -48,6 +48,9 @@ namespace Cardificer
 
         [Tooltip("All status effects this is immune to.")]
         public List<StatusEffect> immuneStatusEffects = new List<StatusEffect>();
+
+        [Tooltip("The prefab to spawn to indicate damage numbers.")]
+        public DamageNumber damageNumberPrefab;
 
         [Tooltip("Called when this dies")]
         public UnityEvent onDeath;
@@ -134,6 +137,14 @@ namespace Cardificer
             if (attack.damage > 0)
             {
                 onDamageTaken?.Invoke();
+            }
+
+
+            if (!attack.dontShowDamageNumber && ((attack.damage != 0 || attack.statusEffects.Count > 0) && damageNumberPrefab != null))
+            {
+                GameObject damageNumber = Instantiate(damageNumberPrefab.gameObject);
+                damageNumber.GetComponent<DamageNumber>().damageData = attack;
+                damageNumber.transform.position = transform.position;
             }
 
             if (currentHealth <= 0 && prevHealth > 0)

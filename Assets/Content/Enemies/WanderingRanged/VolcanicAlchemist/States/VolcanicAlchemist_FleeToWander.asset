@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a35acca2b866a4a854023149e2de6f, type: 3}
+  m_Name: VolcanicAlchemist_FleeToWander
+  m_EditorClassIdentifier: 
+  trueState: {fileID: 11400000, guid: 86ebdbf0350013a43877592012b06237, type: 2}
+  decisions:
+  - invert: 1
+    decision: {fileID: 11400000, guid: 4259357d33fc69c4e82c87fdfe834822, type: 2}
+    nextOperator: 2
+  - invert: 0
+    decision: {fileID: 11400000, guid: fb5cafc955f2c264b993abf720cd35bc, type: 2}
+    nextOperator: 0

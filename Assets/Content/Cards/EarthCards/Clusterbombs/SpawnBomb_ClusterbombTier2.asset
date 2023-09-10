@@ -12,8 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91eb735b7a0c96c41927a38f682802fa, type: 3}
   m_Name: SpawnBomb_ClusterbombTier2
   m_EditorClassIdentifier: 
+  minAttackSequenceIndex: 0
+  maxAttackSequenceIndex: 2147483647
+  attackSequenceLoopInterval: 2147483647
+  priority: 0
   explosionRadius: 0.75
-  fuseTime: 0.25
+  knockback:
+    amount: 0
+    duration: 0.2
+    resetMomentum: 0
+  fuseTime: 0
+  destroyBlockers: 0
   sticky: 0
   inheritIgnore: 0
   spawnMode: 1

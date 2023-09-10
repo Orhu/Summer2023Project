@@ -22,9 +22,16 @@ namespace Cardificer.FiniteStateMachine
         {
             List<GameObject> validEnemies = new List<GameObject>(FloorGenerator.currentRoom.livingEnemies);
             validEnemies.Remove(stateMachine.gameObject);
-            GameObject randomEnemy = validEnemies[Random.Range(0, validEnemies.Count)];
-            stateMachine.trackedVariables.TryAdd(trackedVariableName, randomEnemy);
-            stateMachine.trackedVariables[trackedVariableName] = randomEnemy;
+            if (validEnemies.Count > 0)
+            {
+                GameObject randomEnemy = validEnemies[Random.Range(0, validEnemies.Count)];
+                stateMachine.trackedVariables.TryAdd(trackedVariableName, randomEnemy);
+                stateMachine.trackedVariables[trackedVariableName] = randomEnemy;
+            }
+            else
+            {
+                stateMachine.trackedVariables[trackedVariableName] = null;
+            }
             stateMachine.cooldownData.cooldownReady[this] = true;
             yield break;
         }

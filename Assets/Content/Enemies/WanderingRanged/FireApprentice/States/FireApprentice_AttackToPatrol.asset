@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a35acca2b866a4a854023149e2de6f, type: 3}
+  m_Name: FireApprentice_AttackToPatrol
+  m_EditorClassIdentifier: 
+  trueState: {fileID: 11400000, guid: f9a65c73bdbcd2b40b86a157fcc5415a, type: 2}
+  decisions:
+  - invert: 1
+    decision: {fileID: 11400000, guid: 2414a2374ed682f41a15e721d3fb7cd6, type: 2}
+    nextOperator: 1
+  - invert: 1
+    decision: {fileID: 11400000, guid: 3531bf1b137479942971a3c8b03bcbca, type: 2}
+    nextOperator: 1
+  - invert: 1
+    decision: {fileID: 11400000, guid: 4190266c83c678d4bb21680bd4c28ff0, type: 2}
+    nextOperator: 1
+  - invert: 0
+    decision: {fileID: 11400000, guid: a318e8b086c19e3439ff0fb427ce7395, type: 2}
+    nextOperator: 1

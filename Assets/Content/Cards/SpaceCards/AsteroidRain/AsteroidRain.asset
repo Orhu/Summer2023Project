@@ -15,7 +15,6 @@ MonoBehaviour:
   cooldownTime: 20
   actions:
   - {fileID: 11400000, guid: 357656775fc7eaa468db3ca2259d5f0e, type: 2}
-  effects: []
   displayName: Asteroid Rain
   description: <b>Delayed.</b> Bring down the sky.
   flavorText: 
@@ -29,8 +28,10 @@ MonoBehaviour:
   isRare: 1
   damageTypeSprite: {fileID: 0}
   damage: 3
-  chordEffectText: Meteoric Spell
+  chordEffectText: Summon Meteor
   chordModifiers:
   - {fileID: 11400000, guid: 08869bbc4c2364342a6cebfda54f0f6e, type: 2}
+  chordVFXPrefabs: []
   duplicateModifiers:
-  - {fileID: 11400000, guid: d58e1c33b49e877448b7ebadb694e996, type: 2}
+  - {fileID: 11400000, guid: 08869bbc4c2364342a6cebfda54f0f6e, type: 2}
+  modifierFilters: []
