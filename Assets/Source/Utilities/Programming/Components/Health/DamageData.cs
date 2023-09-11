@@ -27,6 +27,9 @@ namespace Cardificer
         [Tooltip("Whether or not to not create a damage number prefab on hit.")]
         public bool dontShowDamageNumber = false;
 
+        //[Tooltip("Whether or not to show more damage numbers after first hit on a given enemy")]
+        // public bool repeatedDamageNumbers = true;
+
         // The causer of this attack.
         [System.NonSerialized]
         public GameObject causer;
@@ -189,12 +192,19 @@ namespace Cardificer
             string value = "";
             if (damage != 0)
             {
-                value += $"{Math.Abs(damage)}\n";
+                value += $"{Math.Abs(damage)}";
             }
 
             foreach (StatusEffect effect in statusEffects)
             {
-                value += $" + {effect.GetType().Name}";
+                if (effect.GetType().Name.StartsWith("Slowed")) 
+                {
+                    value += "\n+ Freeze";
+                }
+                else
+                {
+                    value += $"\n+ {effect.GetType().Name}";
+                }
             }
             return value;
         }

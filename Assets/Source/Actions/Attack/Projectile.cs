@@ -21,10 +21,10 @@ namespace Cardificer
         [NonSerialized] public IActor actor;
 
         // The actor of the projectile.
-        [NonSerialized] public GameObject causer;
+        [SerializeField] public GameObject causer;
 
         // The modifiers applied to this.
-        [NonSerialized] public List<AttackModifier> modifiers;
+        [SerializeField] public List<AttackModifier> modifiers;
 
         // The rigidbody responsible for the collision of this projectile.
         protected Rigidbody2D rigidBody;
