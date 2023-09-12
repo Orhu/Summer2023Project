@@ -137,7 +137,22 @@ namespace Cardificer
 
         public override bool IsValid()
         {
-            return audioClip == null ? false : true;
+            bool isValid = true;
+
+            if (audioClip == null)
+            {
+                if (AudioManager.instance.printDebugMessages) Debug.Log($"{name} does not have an audio clip!");
+                isValid = false;
+            }
+            
+            //if (audioSourceInUse == null) 
+            //{
+
+            //    if (AudioManager.instance.printDebugMessages) Debug.Log($"{name} does not have an audio source!");
+            //    isValid = false;
+            //}
+
+            return isValid;
         }
     }
 
@@ -200,18 +215,25 @@ namespace Cardificer
 
         public override bool IsValid()
         {
+            bool isValid = true;
 
-            if (clipsInContainer == null)
+            //if (audioSourceInUse == null) 
+            //{
+
+            //    if (AudioManager.instance.printDebugMessages) Debug.Log($"{name} does not have an audio source!");
+            //    isValid = false;
+
+            //}
+            
+            if(clipsInContainer.Length < 1)
             {
-                return false;
+
+                if (AudioManager.instance.printDebugMessages) Debug.Log($"{name} on {audioSourceInUse.gameObject.name} does not have any clips in it's container!");
+                isValid = false;
+
             }
 
-            if (clipsInContainer.Length < 1)
-            {
-                return false;
-            }
-
-            return true;
+            return isValid;
         }
 
     }
@@ -258,6 +280,8 @@ namespace Cardificer
         [Tooltip("Set the Spacial Blend for this Sound. 0 = 2D playback, 1 = full 3D playback.")]
         [Range(0, 1)] public float spatialBlend = 0.5f;
         //[SerializeField] private bool _ignorePause;
+
+        [Range(0, 1)] public float spread = 0f;
 
         public float bufferTime = 0f;
         [HideInInspector] public float lastTriggeredTime = 50000f;

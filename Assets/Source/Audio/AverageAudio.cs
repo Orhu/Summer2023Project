@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Cardificer
@@ -8,22 +9,12 @@ namespace Cardificer
     /// </summary>
     public class AverageAudio : MonoBehaviour
     {
+
         [Tooltip("The list of transforms to track")]
-        public List<Transform> transforms = new List<Transform>();
+        public List<Transform> listOfTransformsToTrack = new List<Transform>();
 
-        [Tooltip("The Sound to play at the averaged location")] 
-        public BasicSound averageSound;
-
-
-        /// <summary>
-        /// Adding an audio source and playing it after adjusting parameters
-        /// </summary>
-        public void PlayAverageAudio()
-        {
-            AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-            AudioManager.instance.ApplySoundSettingsToAudioSource(averageSound, audioSource);
-            audioSource.Play();
-        }
+        public AudioSource audioSource;
+        public BasicSound sound;
 
         /// <summary>
         /// Get the average transform of the transforms
@@ -34,7 +25,7 @@ namespace Cardificer
             float totalX = 0;
             float totalY = 0;
 
-            foreach (var transform in transforms)
+            foreach (var transform in listOfTransformsToTrack) 
             {
                 if (transform != null)
                 {
@@ -43,12 +34,7 @@ namespace Cardificer
                 }
             }
 
-            if (totalX == 0 && totalY == 0)
-            {
-                AudioManager.KillAverageAudio(this);
-            }
-
-            return new Vector2(totalX / transforms.Count, totalY / transforms.Count);
+            return new Vector2(totalX / listOfTransformsToTrack.Count, totalY / listOfTransformsToTrack.Count);
         }
 
         /// <summary>
@@ -57,24 +43,13 @@ namespace Cardificer
         private void FixedUpdate()
         {
             transform.position = TryGetAveragePos();
-
-            if (!averageSound.IsPlaying())
-            {
-                AudioManager.KillAverageAudio(this);
-            }
-
         }
 
-        /// <summary>
-        /// Sets the list of Transforms and the Sound used for this AverageAudio. 
-        /// </summary>
-        /// <param name="transforms">The list of projectiles this AverageAudio will use to calculate average positions. </param>
-        /// <param name="sound">The Sound this AverageAudio will play. </param>
-        public void SetTransformsAndSound(List<Transform> transforms, BasicSound sound)
+        public void DestroyAverageAudio(float fadeDuration)
         {
-            this.transforms = transforms;
-            this.averageSound = sound;
+            AudioManager.instance.FadeToDestroy(audioSource, audioSource.volume, fadeDuration, true);
         }
+
     }
 
 }

@@ -59,6 +59,9 @@ MonoBehaviour:
         randomizePitch: 1
         pitchRandomRange: {x: 0.7, y: 1.15}
         spatialBlend: 0.532
+        spread: 0
+        bufferTime: 0
+        lastTriggeredTime: 50000
       audioSourceInUse: {fileID: 0}
       audioClip: {fileID: 8300000, guid: de0d16ead9c92924ca329b5345a18e0e, type: 3}
   - effectType: 10
@@ -75,6 +78,9 @@ MonoBehaviour:
         randomizePitch: 1
         pitchRandomRange: {x: 0.7, y: 1.15}
         spatialBlend: 0.532
+        spread: 0
+        bufferTime: 0
+        lastTriggeredTime: 50000
       audioSourceInUse: {fileID: 0}
       audioClip: {fileID: 8300000, guid: fca89775e6acc26438b5efb9f7024bef, type: 3}
   - effectType: 14
@@ -91,6 +97,9 @@ MonoBehaviour:
         randomizePitch: 1
         pitchRandomRange: {x: 0.7, y: 1.15}
         spatialBlend: 0.532
+        spread: 0
+        bufferTime: 0
+        lastTriggeredTime: 50000
       audioSourceInUse: {fileID: 0}
       audioClip: {fileID: 8300000, guid: 503a7e05f258954418507b161895dd08, type: 3}
   - effectType: 12
@@ -107,9 +116,13 @@ MonoBehaviour:
         randomizePitch: 1
         pitchRandomRange: {x: 0.7, y: 1.15}
         spatialBlend: 0.532
+        spread: 0
+        bufferTime: 0
+        lastTriggeredTime: 50000
       audioSourceInUse: {fileID: 0}
       audioClip: {fileID: 8300000, guid: 91b7ea5b87212ee4294dbd0c16dbcae6, type: 3}
   enemyAudioMixerGroup: {fileID: -2650589480174368790, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+  playerActionsAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
   healthPickupSound:
     outputAudioMixerGroup: {fileID: 2021301823164702670, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
     useDefaultSettings: 1
@@ -123,6 +136,9 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 8300000, guid: ae8fd2a1436020c4a8fc7a7cf46713c4, type: 3}
 --- !u!1 &7011871634388846849
@@ -170,6 +186,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1f54b309b577274db5c527115c3dcb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  printDebugMessages: 0
+  usePlayerAudioListener: 1
   _defaultSoundSettings:
     priority: 128
     loop: 0
@@ -180,3 +198,6 @@ MonoBehaviour:
     randomizePitch: 0
     pitchRandomRange: {x: 0.8, y: 1.1}
     spatialBlend: 1
+    spread: 0
+    bufferTime: 0
+    lastTriggeredTime: 50000

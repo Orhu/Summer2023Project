@@ -15,6 +15,7 @@ namespace Cardificer {
         [Header("Action Audio")]
         [Tooltip("Taking an Action Sound variable")]
         [SerializeField] protected BasicSound actionSound; 
+        [SerializeField] protected bool stopActionSoundOnActionComplete;
 
         /// <summary>
         /// Gets the formatted description of this card.

@@ -86,10 +86,12 @@ namespace Cardificer
                 Debug.LogWarning("Attempted to load floor " + floorNumber + ", which does not exist!");
                 return false;
             }
+
+            AudioManager.instance.ResetAudioListener();
             currentFloor = floorNumber;
             onFloorLoaded?.Invoke();
             AsyncOperation operation = SceneManager.LoadSceneAsync(floors[floorNumber].sceneName);
-            MenuManager.Open<LoadingScreen>(false, true).AddAsyncOperation(operation);
+            MenuManager.Open<LoadingScreen>(false, true).AddAsyncOperation(operation); 
             return true;
         }
 

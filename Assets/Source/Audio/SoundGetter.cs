@@ -13,7 +13,7 @@ namespace Cardificer
         public StatusSound[] statusSounds;
         private Dictionary<StatusEffectType, BasicSound> statusSoundsDict = new Dictionary<StatusEffectType, BasicSound>();
 
-        public AudioMixerGroup enemyAudioMixerGroup;
+        public AudioMixerGroup enemyAudioMixerGroup, playerActionsAudioMixerGroup;
 
         public BasicSound healthPickupSound;
 
@@ -25,7 +25,7 @@ namespace Cardificer
         {
             if (Instance != null)
             {
-                Debug.LogError("There's more than one SoundGetter!" + transform + " - " + Instance);
+                Debug.LogWarning("There's more than one SoundGetter! " + transform + " - " + Instance);
                 Destroy(gameObject);
                 return;
             }
@@ -46,7 +46,7 @@ namespace Cardificer
                 //print("GetSound Succeeded! " + statusSoundsDict[type].name + " got.");
                 return statusSoundsDict[type];
 
-            } catch (System.Exception e)
+            } catch
             {
                 print($"GetStatusEffectSound of type {type} failed!");
                 return new BasicSound();

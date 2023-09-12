@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BulletAttack_Haze
   m_EditorClassIdentifier: 
   actionSound:
-    outputAudioMixerGroup: {fileID: 0}
-    useDefaultSettings: 1
+    outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
     soundSettings:
       priority: 128
       loop: 0
@@ -22,11 +22,15 @@ MonoBehaviour:
       randomizeVolume: 0
       volumeRandomRange: {x: 0.8, y: 1}
       pitch: 1
-      randomizePitch: 0
+      randomizePitch: 1
       pitchRandomRange: {x: 0.8, y: 1.1}
-      spatialBlend: 0.5
+      spatialBlend: 0.429
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: a75b329b7b588054ab8850d30f2ed038, type: 3}
+  stopActionSoundOnActionComplete: 0
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
@@ -57,20 +61,24 @@ MonoBehaviour:
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
   travelSound:
-    outputAudioMixerGroup: {fileID: 0}
-    useDefaultSettings: 1
+    outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
     soundSettings:
       priority: 128
-      loop: 0
-      volume: 1
+      loop: 1
+      volume: 0.631
       randomizeVolume: 0
       volumeRandomRange: {x: 0.8, y: 1}
-      pitch: 1
-      randomizePitch: 0
-      pitchRandomRange: {x: 0.8, y: 1.1}
-      spatialBlend: 0.5
+      pitch: 0.43
+      randomizePitch: 1
+      pitchRandomRange: {x: 0.2, y: 0.25}
+      spatialBlend: 0.609
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 0}
+  travelSoundFadeOutTime: 0.3
   impactSound:
     outputAudioMixerGroup: {fileID: 0}
     useDefaultSettings: 1
@@ -83,9 +91,30 @@ MonoBehaviour:
       pitch: 1
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
-      spatialBlend: 0.5
+      spatialBlend: 1.1
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 0}
+  chargeSound:
+    outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 0.791
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 1
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: a75b329b7b588054ab8850d30f2ed038, type: 3}
   spawnLocation: 0
   aimMode: 5
   waitForProjectileDeath: 0

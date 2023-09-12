@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3142853830394281802}
   - component: {fileID: -5224780727194444313}
+  - component: {fileID: 6691636550882638193}
   m_Layer: 0
   m_Name: Prj_ClusterbombTier3
   m_TagString: Untagged
@@ -84,3 +85,33 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6691636550882638193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4138988773086412605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b1bcbc95275adf4b93bd6fa0cb38a65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundToPlayOnDestroy:
+    outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 0.197
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 1
+      pitchRandomRange: {x: 2.5, y: 3}
+      spatialBlend: 0.904
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 304b91fde48549d42ac579a0e7860579, type: 3}

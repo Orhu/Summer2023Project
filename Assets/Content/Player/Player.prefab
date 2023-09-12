@@ -106,7 +106,6 @@ GameObject:
   - component: {fileID: 8061370563630907577}
   - component: {fileID: -672801363122478915}
   - component: {fileID: 1810700651662587120}
-  - component: {fileID: 1273441284455391763}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -232,6 +231,7 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
       bufferTime: 0
       lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
@@ -255,6 +255,7 @@ MonoBehaviour:
       randomizePitch: 1
       pitchRandomRange: {x: 0.9, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
       bufferTime: 0.3
       lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
@@ -278,6 +279,7 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
       bufferTime: 0
       lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
@@ -748,14 +750,6 @@ MonoBehaviour:
   layers:
     serializedVersion: 2
     m_Bits: 25472
---- !u!81 &1273441284455391763
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 608508398850829056}
-  m_Enabled: 1
 --- !u!1 &876363838080623800
 GameObject:
   m_ObjectHideFlags: 0

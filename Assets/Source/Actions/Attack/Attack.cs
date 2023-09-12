@@ -95,11 +95,16 @@ namespace Cardificer
 
         [Header("Projectile Audio")]
 
-        [Tooltip("AudioClip for projectile travel")]
+        [Tooltip("BasicSound for projectile travel")]
         [SerializeField] protected BasicSound travelSound;
 
-        [Tooltip("AudioClip for projectile impact.")]
-        [SerializeField] protected BasicSound impactSound;
+        [SerializeField] protected float travelSoundFadeOutTime = 0.3f;
+
+        [Tooltip("BasicSound for projectile impact.")]
+        [SerializeField] protected BasicSound impactSound; 
+        
+        [Tooltip("BasicSound for attack charge.")]
+        [SerializeField] protected BasicSound chargeSound;
 
         // The root of all projectiles
         private static GameObject projectileRoot;
@@ -202,11 +207,10 @@ namespace Cardificer
         {
             List<ProjectileSpawnInfo> spawnSequence = new List<ProjectileSpawnInfo>(this.spawnSequence);
             var projectileTransformList = new List<Transform>();
-            int destroyedProejectiles = 0;
+            int destroyedProjectiles = 0;
+            AverageAudio averageAudio = null;
 
-            actionSound.soundSettings.spatialBlend = 1;
-            impactSound.soundSettings.spatialBlend = 1;
-            travelSound.soundSettings.spatialBlend = 1;
+            AudioManager.instance.PlaySoundBaseOnTarget(chargeSound, actor.GetActionSourceTransform(), true);
 
             yield return new WaitForSeconds(chargeTime);
 
@@ -219,12 +223,26 @@ namespace Cardificer
                 var spawnedProjectile = SpawnProjectile(actor, modifiers, causer, ignoredObjects, i, spawnSequence);
                 projectileTransformList.Add(spawnedProjectile.transform);
                 spawnedProjectile.playImpactAudio += (Vector2 pos) => PlayImpactAtPos(pos, spawnedProjectile.gameObject);
-                AudioManager.instance.PlaySoundBaseOnTarget(actionSound, spawnedProjectile.transform, true);
+
+                AudioManager.instance.PlaySoundBaseOnTarget(actionSound, actor.GetActionSourceTransform(), true);
+
+                if (travelSound.IsValid())
+                {
+                    if (i == 0)
+                    {
+                        Destroy(averageAudio);
+                        averageAudio = AudioManager.instance.CreateAndPlayAverageAudioSource(travelSound);
+                    }
+                    
+                    averageAudio.listOfTransformsToTrack.Add(spawnedProjectile.transform);
+
+                }
+
 
                 if (waitForProjectileDeath)
                 {
                     spawnedProjectile.onDestroyed += () => { 
-                        destroyedProejectiles++;
+                        destroyedProjectiles++;
                     };
                 }
 
@@ -237,10 +255,8 @@ namespace Cardificer
                 }
             }
 
-            AudioManager.instance.PlaySoundAtAveragePos(projectileTransformList, travelSound, projectileTransformList.Count > 1);
-
             // Wait for projectile death
-            while (waitForProjectileDeath && destroyedProejectiles != spawnSequence.Count)
+            while (waitForProjectileDeath && destroyedProjectiles != spawnSequence.Count)
             {
                 yield return null;
             }
@@ -248,6 +264,21 @@ namespace Cardificer
             yield return new WaitForSeconds(additionalActionTime);
             attackFinished?.Invoke();
 
+            CleanUpAttackAudio();
+
+            void CleanUpAttackAudio()
+            {
+                if (travelSound.soundSettings.loop && averageAudio != null && travelSound.IsValid())
+                {
+                    averageAudio.DestroyAverageAudio(travelSoundFadeOutTime);
+                }
+
+                if (stopActionSoundOnActionComplete && actionSound.IsPlaying())
+                {
+                    AudioManager.instance.FadeToDestroy(actionSound.audioSourceInUse, actionSound.audioSourceInUse.volume, 0.3f, false);
+                }
+
+            }
         }
 
 
@@ -293,6 +324,7 @@ namespace Cardificer
         /// <param name="pos">Position of the impact audio sound</param>
         protected void PlayImpactAtPos(Vector2 pos, GameObject obj)
         {
+            Debug.Log("Playing impact sound!");
             AudioManager.instance.PlaySoundBaseAtPos(impactSound, pos, obj.name);
         }
         #endregion
