@@ -13,7 +13,7 @@ namespace Cardificer
         public DamageData damageData
         {
             set
-            {
+            {                
                 GetComponentInChildren<TMP_Text>().text = value.ToString();
                 GetComponentInChildren<Animator>().SetInteger("Damage", value.damage);
                 _damageData = value;
