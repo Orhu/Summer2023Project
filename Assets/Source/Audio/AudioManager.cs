@@ -7,19 +7,24 @@ using System.Linq;
 namespace Cardificer
 {
     /// <summary>
-    /// Contains all the logic to playback audio. Currently plays back Sounds and SoundContainers, and eventually music.
+    /// Contains all the logic to playback SoundBases (SFX) and control general audio settings.
     /// </summary>
     public class AudioManager : MonoBehaviour
     {
         //Singleton Pattern
         public static AudioManager instance;
+
+        [Tooltip("Toggle AudioManager debug messages.")]
         public bool printDebugMessages;
+
+        [Tooltip("Attach the AudioListener to the player or the AudioManager.")]
         public bool usePlayerAudioListener;
+
         private GameObject audioListenerGameObject;
 
         //Lists of objects to be destroyed or affected
         private List<SoundBase> soundsToDestroyList = new List<SoundBase>();
-        private List<AverageAudio> averageAudioList = new List<AverageAudio>();
+        //private List<AverageAudio> averageAudioList = new List<AverageAudio>();
         private List<SoundContainer> activeSoundContainers = new List<SoundContainer>();
         private List<AudioSource> audioSourcesToDestroy = new List<AudioSource>();
 
@@ -30,7 +35,7 @@ namespace Cardificer
         private System.Random random = new System.Random();
 
         /// <summary>
-        /// Implementing the singleton pattern and DontDestroyOnLoad. 
+        /// Implementing the singleton pattern and DontDestroyOnLoad. Creates the AudioListener GameObject. 
         /// </summary>
         private void Awake()
         {
@@ -53,6 +58,7 @@ namespace Cardificer
 
         }
 
+        #region event subscription in OnEnable and OnDisable
         private void OnEnable()
         {
 
@@ -64,19 +70,28 @@ namespace Cardificer
 
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
+        #endregion
 
+
+        /// <summary>
+        /// The event called when a Scene is loaded. 
+        /// </summary>
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-
-            //StartCoroutine(SetUpAudioListeners());
             SetUpAudioListeners();
         }
 
+        /// <summary>
+        /// Makes the AudioListener a child of the AudioManager so it doesn't get destroyed when a scene changes.
+        /// </summary>
         public void ResetAudioListener()
         {
             audioListenerGameObject.transform.SetParent(transform);
         }
 
+        /// <summary>
+        /// Destroys all AudioListeners in a scene then attaches the AudioListener to the Player if usePlayerAudioListener is true.
+        /// </summary>
         private void SetUpAudioListeners()
         {
             AudioListener[] audiolistenersInScene = FindObjectsOfType<AudioListener>();
@@ -113,29 +128,17 @@ namespace Cardificer
                 }
 
             }
-            //else
-            //{
-            //    audioListenerGameObject.transform.SetParent(Camera.main.transform, false);
-            //}
 
             audioListenerGameObject.transform.position = new Vector3(0, 0, 5);
 
         }
 
         /// <summary>
-        /// For testing methods.
+        /// Starts a SoundBase on a Transform.  
         /// </summary>
-        private void Update()
-        {
-            //if (Input.GetKeyDown(KeyCode.Backspace))
-            //    StopAllContainers();
-        }
-
-        /// <summary>
-        /// Starts a SoundBase on an AudioSource.  
-        /// </summary>
-        /// <param name="soundBase">The SoundContainer to start. </param>
-        /// <param name="target">The IActor to get the AudioSource from. </param>
+        /// <param name="soundBase">The SoundBase to play. </param>
+        /// <param name="target">The Transform to play the SoundBase on. </param>
+        /// <param name="makeUnique">If true will create a new AudioSource if there is one currently playing on the Target. </param>
         public void PlaySoundBaseOnTarget(SoundBase soundBase, Transform target, bool makeUnique)
         {
             
@@ -145,6 +148,11 @@ namespace Cardificer
 
         }
 
+        /// <summary>
+        /// Plays a OneShot on a Transform. OneShots cannot have pitch automation or loop.  
+        /// </summary>
+        /// <param name="sound">The BasicSound to play as a OneShot. </param>
+        /// <param name="target">The Transform to play the BasicSound on. </param>
         public void PlayOneshotOnTarget(BasicSound sound, Transform target)
         {
 
@@ -154,6 +162,12 @@ namespace Cardificer
 
         }
 
+        /// <summary>
+        /// Returns any AUdioSource found on the target Transform. If there are none or we want a unique sound we will create and return a new AudioSource.
+        /// </summary>
+        /// <param name="target">The Transform to get the AudioSource from. </param>
+        /// <param name="makeUnique">If true will create a new AudioSource if there is one currently playing on the Target. </param>
+        /// <returns> Always returns an AudioSource even if there is no AudioSource on the target Transform </returns>
         private AudioSource GetAudioSourceFromTarget(Transform target, bool makeUnique)
         {
 
@@ -176,8 +190,9 @@ namespace Cardificer
         /// <summary>
         /// Create an AudioSource GameObject at a specific position and play a sound. 
         /// </summary>
-        /// <param name="soundContainer">The SoundContainer to be started at a location.</param>
-        /// <param name="vector">The location for the SoundContainer to be played.</param>
+        /// <param name="soundBase">The SoundBase to start playing at a location.</param>
+        /// <param name="vector">The location for the SoundBase to be played.</param>
+        /// <param name="objCalledFrom">The name of the object creating the AudioSource GameObject.</param>
         public void PlaySoundBaseAtPos(SoundBase soundBase, Vector2 vector, string objCalledFrom)
         {
 
@@ -193,6 +208,11 @@ namespace Cardificer
             soundsToDestroyList.Add(soundBase);
         }
 
+        /// <summary>
+        /// Plays a SoundBase on an AudioSource. 
+        /// </summary>
+        /// <param name="soundBase">The SoundBase to play on the specified AudioSource.</param>
+        /// <param name="audioSource">The AudioSource that will play the SoundBase.</param>
         private void PlaySoundBaseOnAudioSource(SoundBase soundBase, AudioSource audioSource)
         {
 
@@ -200,7 +220,7 @@ namespace Cardificer
 
             switch (soundBase.GetSoundType())
             {
-                case SoundType.Sound:
+                case SoundType.BasicSound:
                 {
 
                     BasicSound sound = (BasicSound)soundBase;
@@ -227,6 +247,11 @@ namespace Cardificer
             }
         }
 
+        /// <summary>
+        /// Plays a BasicSound on an AudioSource. 
+        /// </summary>
+        /// <param name="sound">The BasicSound to start playing at a location.</param>
+        /// <param name="audioSource">The AudioSource that will play the BasicSound.</param>
         private void PlaySound(BasicSound sound, AudioSource audioSource)
         {
             if (audioSource.isPlaying)
@@ -245,6 +270,12 @@ namespace Cardificer
                 print($"Tried to play a sound ({sound.name}) on {audioSource.gameObject.name}.");
 
         }
+
+        /// <summary>
+        /// Plays a BasicSound on an AudioSource as a OneShot. 
+        /// </summary>
+        /// <param name="sound">The BasicSound to play as a OneShot.</param>
+        /// <param name="audioSource">The AudioSource to play the OneShot on.</param>
         private void PlayOneshot(BasicSound sound,  AudioSource audioSource)
         {
 
@@ -259,6 +290,11 @@ namespace Cardificer
 
         }
 
+        /// <summary>
+        /// Creates and initializes an AverageAudio GameObject.
+        /// </summary>
+        /// <param name="sound">The BasicSound to play on the AverageAudio GameObject.</param>
+        /// <returns> Returns an AverageAudio with a BasicSound initialized. </returns>
         public AverageAudio CreateAndPlayAverageAudioSource(BasicSound sound)
         {
             if (!sound.IsValid()) return null;
@@ -391,6 +427,11 @@ namespace Cardificer
             }
         }
 
+        /// <summary>
+        /// Stops a SoundContainer after a specified time. 
+        /// </summary>
+        /// <param name="soundContainer">The SoundContainer to control.</param>
+        /// <param name="clipLength">The length of time to wait before stopping the SoundContainer.</param>
         private IEnumerator HandleRandomOneShotPlayback(SoundContainer soundContainer, float clipLength)
         {
             yield return new WaitForSeconds(clipLength);
@@ -398,9 +439,9 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Applies the settings on a Sound to an AudioSource. Random values are assigned in this method.
+        /// Applies the settings on a BasicSound to an AudioSource. Random values are assigned in this method.
         /// </summary>
-        /// <param name="sound">The Sound to get the settings from.</param>
+        /// <param name="sound">The BasicSound to get the settings from.</param>
         /// <param name="audioSource">The AudioSource to apply the settings onto.</param>
         public void ApplySoundSettingsToAudioSource(BasicSound sound, AudioSource audioSource)
         {
@@ -493,6 +534,7 @@ namespace Cardificer
         /// </summary>
         private void DestroyExpiredAudio()
         {
+         
             foreach (SoundBase sb in soundsToDestroyList)
             {
                 if (sb == null)
@@ -529,42 +571,25 @@ namespace Cardificer
             }
         }
 
-        ///// <summary>
-        ///// Kill the average audio object after it is finished playing
-        ///// </summary>
-        ///// <param name="averageAudio">What average audio object to kill</param>
-        //public static void KillAverageAudio(AverageAudio averageAudio)
-        //{
-
-        //    instance.averageAudioList.Remove(averageAudio);
-        //    Destroy(averageAudio.gameObject);
-
-        //}
-
-        public IEnumerator FadeMusic(AudioSource audioSourceToFade, float duration, float targetVolume, bool stopOnEnd)
-        {
-
-            float timeElapsed = 0;
-
-            while (timeElapsed < duration)
-            {
-                audioSourceToFade.volume = Mathf.Lerp(audioSourceToFade.volume, targetVolume, timeElapsed / duration);
-                timeElapsed += Time.fixedDeltaTime;
-                yield return null;
-            }
-
-            if (stopOnEnd && timeElapsed < duration)
-            {
-                audioSourceToFade.Stop();
-            }
-
-        }
-
+        /// <summary>
+        /// Starts the Coroutine that fades the volume of an AudioSource out then destroys an Object.
+        /// </summary>
+        /// <param name="audioSourceToFade">The AudioSource to fade the volume of. </param>
+        /// <param name="startValue">The initial volume. </param>
+        /// <param name="duration">How long the fade lasts. </param>
+        /// <param name="destroyObjectOrAudioSource">If true will destroy the GameObject attached to the AudioSource, otherwise will destroy the AudioSource if there is more than one on the GameObject. </param>
         public void FadeToDestroy(AudioSource audioSourceToFade, float startValue, float duration, bool destroyObjectOrAudioSource)
         {
             StartCoroutine(FadeToDestroyCoroutine(audioSourceToFade, startValue, duration, destroyObjectOrAudioSource));
         }
 
+        /// <summary>
+        /// Fades the volume of an AudioSource out then destroys an Object.
+        /// </summary>
+        /// <param name="audioSourceToFade">The AudioSource to fade the volume of. </param>
+        /// <param name="startValue">The initial volume. </param>
+        /// <param name="duration">How long the fade lasts. </param>
+        /// <param name="destroyObjectOrAudioSource">If true will destroy the GameObject attached to the AudioSource, otherwise will destroy the AudioSource if there is more than one on the GameObject. </param>
         public IEnumerator FadeToDestroyCoroutine(AudioSource audioSourceToFade, float startValue, float duration, bool destroyObjectOrAudioSource)
         {
 
@@ -599,6 +624,11 @@ namespace Cardificer
             } 
         }
 
+        /// <summary>
+        /// Applies SoundSettings of one SoundBase to another SoundBase.
+        /// </summary>
+        /// <param name="soundToCopySettings">The SoundBase to get the SoundSettings from. </param>
+        /// <param name="soundToApplySettings">The SoundBase to apply new SoundSettings to.</param>
         public void ApplySoundSettingsToSound(SoundBase soundToCopySettings, SoundBase soundToApplySettings)
         {
 
@@ -608,6 +638,11 @@ namespace Cardificer
             soundToApplySettings.soundSettings = soundToCopySettings.soundSettings;
         }
 
+        /// <summary>
+        /// Checks whether or not a SoundBase should play.
+        /// </summary>
+        /// <param name="sound">The SoundBase to check whether or not it should play. </param>
+        /// <returns> Returns true if a SoundBase should play, false if it shouldn't. </returns>
         private bool SoundShouldPlay(SoundBase sound)
         {
             

@@ -7,7 +7,7 @@ namespace Cardificer
 
 
     /// <summary>
-    /// The base of the Sound and SoundContainer class (Eventually the Music class to). Sounds allow for greater audio flexibility.
+    /// The base of the Sound and SoundContainer class. SoundBases allow for greater audio flexibility.
     /// </summary>
     [System.Serializable]
     public abstract class SoundBase
@@ -18,13 +18,16 @@ namespace Cardificer
         [Tooltip("The Mixer Group this SoundBase should be assigned to.")]
         public AudioMixerGroup outputAudioMixerGroup; //will allow for better audio settings in the future
 
-        [Tooltip("Set if this SoundBase should use the default SoundSettings. The default SoundSettings are found on the AudioManager class.")]
-
         //The name of this SoundBase
         public abstract string name { get; }
 
+        /// <summary>
+        /// Returns whether this SoundBase is a BasicSound or SoundContainer.
+        /// </summary>
+        /// <returns>The SoundType of this SoundBase</returns>
         public abstract SoundType GetSoundType();
 
+        [Tooltip("Set if this SoundBase should use the default SoundSettings. The default SoundSettings are found on the AudioManager class.")]
         public bool useDefaultSettings = true;
 
         [Tooltip("The SoundSettings used by this SoundBase. These settings are ignored if Use Default Settings is true.")]
@@ -52,18 +55,35 @@ namespace Cardificer
                 Object.Destroy(audioSourceInUse.gameObject);
         }
 
+        /// <summary>
+        /// Checks if this SoundBase is valid. Used for playback purposes.
+        /// </summary>
+        /// <returns>Returns true if this SoundBase can be played</returns>
         public abstract bool IsValid();
 
+        /// <summary>
+        /// Returns the volume of this SoundBase. Handles random volume logic.
+        /// </summary>
+        /// <returns> Returns the volume this SoundBase should be played at. </returns>
         public float GetVolume()
         {
             return soundSettings.randomizeVolume ? Random.Range(soundSettings.volumeRandomRange.x, soundSettings.volumeRandomRange.y) : soundSettings.volume;
         }
 
+        /// <summary>
+        /// Returns the pitch of this SoundBase. Handles random pitch logic.
+        /// </summary>
+        /// <returns> Returns the pitch this SoundBase should be played at. </returns>
         public float GetPitch()
         {
             return soundSettings.randomizePitch ? Random.Range(soundSettings.pitchRandomRange.x, soundSettings.pitchRandomRange.y) : soundSettings.pitch;
         }
 
+        /// <summary>
+        /// Checks if this SoundBase is in cooldown.
+        /// </summary>
+        /// <param name="askToTriggerTime">When the sound has been requested to play. </param>
+        /// <returns> Returns true if the SoundBase is in cooldown (should not be played). </returns>
         public bool SoundInCooldown(float askToTriggerTime)
         {
 
@@ -83,7 +103,7 @@ namespace Cardificer
             float checkTime = askToTriggerTime - soundSettings.lastTriggeredTime;
             bool soundInCooldown = checkTime < soundSettings.bufferTime ? true : false;
 
-            //Debug.Log($"checkTime = {checkTime}. soundInCooldown = {soundInCooldown}.");
+            if (AudioManager.instance.printDebugMessages) Debug.Log($"checkTime = {checkTime}. {name} in cooldown = {soundInCooldown}.");
 
             if (!soundInCooldown)
             {
@@ -97,7 +117,7 @@ namespace Cardificer
     }
 
     /// <summary>
-    /// Meant for playing Oneshot style SFX.
+    /// Meant for playing basic sounds.
     /// </summary>
     [System.Serializable]
     public class BasicSound : SoundBase
@@ -128,13 +148,21 @@ namespace Cardificer
                 return audioSourceInUse.isPlaying;
             else
                 return false;
-        }        
-
-        public override SoundType GetSoundType()
-        {
-            return SoundType.Sound;
         }
 
+        /// <summary>
+        /// Used to see what type this SoundBase is.
+        /// </summary>
+        /// <returns>Returns SoundType.Sound</returns>
+        public override SoundType GetSoundType()
+        {
+            return SoundType.BasicSound;
+        }
+
+        /// <summary>
+        /// Checks if this BasicSound is valid. Used for playback purposes.
+        /// </summary>
+        /// <returns>Returns true if this BasicSound can be played. </returns>
         public override bool IsValid()
         {
             bool isValid = true;
@@ -208,11 +236,19 @@ namespace Cardificer
                 audioSourceInUse.Stop();
         }
 
+        /// <summary>
+        /// Used to see what type this SoundBase is.
+        /// </summary>
+        /// <returns>Returns SoundType.SoundContainer</returns>
         public override SoundType GetSoundType()
         {
             return SoundType.SoundContainer;
         }
 
+        /// <summary>
+        /// Checks if this SoundContainer is valid. Used for playback purposes.
+        /// </summary>
+        /// <returns>Returns true if this SoundContainer can be played. </returns>
         public override bool IsValid()
         {
             bool isValid = true;
@@ -281,9 +317,13 @@ namespace Cardificer
         [Range(0, 1)] public float spatialBlend = 0.5f;
         //[SerializeField] private bool _ignorePause;
 
+        [Tooltip("Set the Spread for this Sound.")]
         [Range(0, 1)] public float spread = 0f;
 
+        [Tooltip("Set the cooldown for this Sound.")]
         public float bufferTime = 0f;
+
+        //The last triggered time of this Sound. It is set wierd because I set it this way initially and would be a big task to correct it now for some reason - Kyle
         [HideInInspector] public float lastTriggeredTime = 50000f;
 
     }
@@ -300,9 +340,12 @@ namespace Cardificer
         //RandomBurst, //for the future?
     }
 
+    /// <summary>
+    /// Describes the SoundType type of a SoundBase.
+    /// </summary>
     public enum SoundType
     {
-        Sound,
+        BasicSound,
         SoundContainer,
     }
 

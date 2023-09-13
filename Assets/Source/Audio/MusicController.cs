@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace Cardificer
 {
@@ -203,6 +204,32 @@ namespace Cardificer
             }
 
             shouldPlay = false;
+
+        }
+
+        /// <summary>
+        /// Fades an AudioSource to a target volume.
+        /// </summary>
+        /// <param name="audioSourceToFade">The AUdioSource to fade the volume of. </param>
+        /// <param name="duration">How long the fade lasts. </param>
+        /// <param name="targetVolume">The volume to fade to. </param>
+        /// <param name="stopOnEnd">Should the AudioSource stop once the fade has finished? </param>
+        public IEnumerator FadeMusic(AudioSource audioSourceToFade, float duration, float targetVolume, bool stopOnEnd)
+        {
+
+            float timeElapsed = 0;
+
+            while (timeElapsed < duration)
+            {
+                audioSourceToFade.volume = Mathf.Lerp(audioSourceToFade.volume, targetVolume, timeElapsed / duration);
+                timeElapsed += Time.fixedDeltaTime;
+                yield return null;
+            }
+
+            if (stopOnEnd && timeElapsed < duration)
+            {
+                audioSourceToFade.Stop();
+            }
 
         }
 

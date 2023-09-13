@@ -5,21 +5,28 @@ using UnityEngine.Audio;
 
 namespace Cardificer
 {
+    /// <summary>
+    /// Holds references to Audio things that are referenced by other classes. This class is for easy implementation and may be in constant flux as to what lives here.
+    /// </summary>
     public class SoundGetter : MonoBehaviour
     {
-
+        //Singleton pattern
         public static SoundGetter Instance;
 
+        [Tooltip("The list of sounds for each status effect.")]
         public StatusSound[] statusSounds;
         private Dictionary<StatusEffectType, BasicSound> statusSoundsDict = new Dictionary<StatusEffectType, BasicSound>();
 
-        public AudioMixerGroup enemyAudioMixerGroup, playerActionsAudioMixerGroup;
+        [Tooltip("The AudioMixer Group associated with enemy audio.")]
+        public AudioMixerGroup enemyAudioMixerGroup;
+        [Tooltip("The AudioMixer Group associated with Player Actions.")]
+        public AudioMixerGroup playerActionsAudioMixerGroup;
 
+        [Tooltip("The Sound played when health is picked up.")]
         public BasicSound healthPickupSound;
 
-
         /// <summary>
-        /// Implementing the singleton pattern. 
+        /// Implementing the singleton pattern and initializing the dictionary. 
         /// </summary>
         private void Awake()
         {
@@ -39,6 +46,11 @@ namespace Cardificer
 
         }
 
+        /// <summary>
+        /// Returns a BasicSound associated with a specified StatusEffectType. 
+        /// </summary>
+        /// <param name="type">The StatusEffectType to query the dictionary of StatusEffectSounds. </param>
+        /// <returns> Returns a BasicSound associated with the given StatusEffectType. </returns>
         public BasicSound GetStatusEffectSound(StatusEffectType type)
         {
             try
@@ -56,6 +68,9 @@ namespace Cardificer
 
     }
 
+    /// <summary>
+    /// Used for inspector serialization. Values added to a dictionary at runtime.
+    /// </summary>
     [System.Serializable]
     public struct StatusSound
     {
@@ -64,6 +79,9 @@ namespace Cardificer
         public BasicSound effectApplySound;
     }
 
+    /// <summary>
+    /// Describes a kind of status effect.
+    /// </summary>
     public enum StatusEffectType
     {
         Burning,//

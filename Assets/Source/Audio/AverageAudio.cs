@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Cardificer
 {
     /// <summary>
-    /// A class to leverage average audio positions of multiple transforms. 
+    /// A class that keeps a GameObject at an average position between a list of Transforms. 
     /// </summary>
     public class AverageAudio : MonoBehaviour
     {
@@ -13,7 +13,10 @@ namespace Cardificer
         [Tooltip("The list of transforms to track")]
         public List<Transform> listOfTransformsToTrack = new List<Transform>();
 
+        [Tooltip("The AudioSource playing a BasicSound")]
         public AudioSource audioSource;
+
+        [Tooltip("The BasicSound to play on this GameObject")]
         public BasicSound sound;
 
         /// <summary>
@@ -45,6 +48,9 @@ namespace Cardificer
             transform.position = TryGetAveragePos();
         }
 
+        /// <summary>
+        /// Fade out the BasicSound playing on this GameObject and destroy this GameObject once the AudioSource has reached 0 volume
+        /// </summary>
         public void DestroyAverageAudio(float fadeDuration)
         {
             AudioManager.instance.FadeToDestroy(audioSource, audioSource.volume, fadeDuration, true);
