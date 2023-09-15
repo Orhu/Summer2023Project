@@ -99,7 +99,7 @@ namespace Cardificer
         private
 
         /// <summary>
-        /// Initializes current health.
+        /// Initializes current health and health sounds.
         /// </summary>
         void Start()
         {
@@ -107,9 +107,6 @@ namespace Cardificer
             {
                 BossHealthbarManager.instance.StartHealthbar(maxHealth);
             }
-            
-            if (currentHealth != 0) { return; }
-            currentHealth = maxHealth;
 
             //set default settings for Health Sounds for ease of implementation. If these need to change this can happen in the future!
             deathSounds.containerType = SoundContainerType.RandomOneshot;
@@ -124,6 +121,9 @@ namespace Cardificer
                 deathSounds.outputAudioMixerGroup = SoundGetter.Instance.enemyAudioMixerGroup;
                 hitSounds.outputAudioMixerGroup = SoundGetter.Instance.enemyAudioMixerGroup;
             }
+
+            if (currentHealth != 0) { return; }
+            currentHealth = maxHealth;
 
         }
 

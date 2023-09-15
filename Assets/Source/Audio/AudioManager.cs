@@ -129,7 +129,7 @@ namespace Cardificer
 
             }
 
-            audioListenerGameObject.transform.position = new Vector3(0, 0, 5);
+            audioListenerGameObject.transform.position = new Vector3(0, 0, -5);
 
         }
 
@@ -485,7 +485,7 @@ namespace Cardificer
 
             if (!SoundShouldPlay(soundContainer)) { return; }
 
-            audioSource.clip = clip;
+            //audioSource.clip = clip;
             audioSource.outputAudioMixerGroup = soundContainer.outputAudioMixerGroup;
             soundContainer.audioSourceInUse = audioSource;
 
