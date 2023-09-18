@@ -217,6 +217,9 @@ namespace Cardificer
         {
 
             soundBase.audioSourceInUse = audioSource;
+            if (!SoundShouldPlay(soundBase)) { return; }
+        
+            if (printDebugMessages) print($"Playing {soundBase.name} on {audioSource.gameObject.name}");
 
             switch (soundBase.GetSoundType())
             {
@@ -434,6 +437,7 @@ namespace Cardificer
         /// <param name="clipLength">The length of time to wait before stopping the SoundContainer.</param>
         private IEnumerator HandleRandomOneShotPlayback(SoundContainer soundContainer, float clipLength)
         {
+            if (printDebugMessages) print($"Handling RandomOneshotPlayback. Waiting {clipLength} seconds");
             yield return new WaitForSeconds(clipLength);
             soundContainer.isPlaying = false;
         }
@@ -482,8 +486,6 @@ namespace Cardificer
         /// <param name="clip">The AudioClip to assign to the AudioSource.</param>
         public void ApplySoundSettingsToAudioSource(SoundContainer soundContainer, AudioSource audioSource, AudioClip clip)
         {
-
-            if (!SoundShouldPlay(soundContainer)) { return; }
 
             //audioSource.clip = clip;
             audioSource.outputAudioMixerGroup = soundContainer.outputAudioMixerGroup;
@@ -592,13 +594,16 @@ namespace Cardificer
         /// <param name="destroyObjectOrAudioSource">If true will destroy the GameObject attached to the AudioSource, otherwise will destroy the AudioSource if there is more than one on the GameObject. </param>
         public IEnumerator FadeToDestroyCoroutine(AudioSource audioSourceToFade, float startValue, float duration, bool destroyObjectOrAudioSource)
         {
+            if (printDebugMessages) { print($"Fading the AudioSource on {audioSourceToFade.gameObject.name}. Destroying object = {destroyObjectOrAudioSource}."); }
 
             float timeElapsed = 0;
 
             while (timeElapsed < duration)
             {
-                audioSourceToFade.volume = Mathf.Lerp(startValue, 0, timeElapsed / duration);
+                float newVolume = Mathf.Lerp(startValue, 0, timeElapsed / duration);
+                audioSourceToFade.volume = newVolume;
                 timeElapsed += Time.deltaTime;
+                if (printDebugMessages) { print($"AudioSource on {audioSourceToFade.gameObject.name} volume = {newVolume}."); }
                 yield return null;
             }
 

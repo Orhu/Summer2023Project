@@ -102,13 +102,16 @@ namespace Cardificer
 
             float checkTime = askToTriggerTime - soundSettings.lastTriggeredTime;
             bool soundInCooldown = checkTime < soundSettings.bufferTime ? true : false;
+            if (askToTriggerTime < soundSettings.lastTriggeredTime) soundInCooldown = false;
 
-            if (AudioManager.instance.printDebugMessages) Debug.Log($"checkTime = {checkTime}. {name} in cooldown = {soundInCooldown}.");
+
+            if (AudioManager.instance.printDebugMessages) Debug.Log($"checkTime = {checkTime} ({askToTriggerTime} - {soundSettings.lastTriggeredTime}. {name} in cooldown = {soundInCooldown}.");
 
             if (!soundInCooldown)
             {
                 soundSettings.lastTriggeredTime = askToTriggerTime;
             }
+
 
             return soundInCooldown;
 
@@ -169,7 +172,7 @@ namespace Cardificer
 
             if (audioClip == null)
             {
-                if (AudioManager.instance.printDebugMessages) Debug.Log($"{name} does not have an audio clip!");
+                //if (AudioManager.instance.printDebugMessages) Debug.Log($"{name} does not have an audio clip!");
                 isValid = false;
             }
             

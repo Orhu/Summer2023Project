@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -19,25 +20,49 @@ namespace Cardificer
         [Tooltip("The BasicSound to play on this GameObject")]
         public BasicSound sound;
 
+        //Checks whether or not we are already destroying the average audio
+        private bool destroyingAverageAudio = false;
+
+        private float minX, minY, maxX, maxY;
+
+        private void Start()
+        {
+
+        }
+
         /// <summary>
         /// Get the average transform of the transforms
         /// </summary>
         /// <returns>Returns the average position of the transforms</returns>
         public Vector2 TryGetAveragePos()
         {
-            float totalX = 0;
-            float totalY = 0;
 
-            foreach (var transform in listOfTransformsToTrack) 
+            if (listOfTransformsToTrack.Count <= 0)
             {
-                if (transform != null)
+                if (!destroyingAverageAudio)
                 {
-                    totalX += transform.position.x;
-                    totalY += transform.position.y;
+                    DestroyAverageAudio(0.5f);
                 }
+                return transform.position;
+            }
+            else
+            {
+
+                float totalX = 0;
+                float totalY = 0;
+
+                foreach (var transform in listOfTransformsToTrack)
+                {
+                    if (transform != null)
+                    {
+                        totalX += transform.position.x;
+                        totalY += transform.position.y;
+                    }
+                }
+
+                return new Vector2(totalX / listOfTransformsToTrack.Count, totalY / listOfTransformsToTrack.Count);
             }
 
-            return new Vector2(totalX / listOfTransformsToTrack.Count, totalY / listOfTransformsToTrack.Count);
         }
 
         /// <summary>
@@ -46,6 +71,13 @@ namespace Cardificer
         private void FixedUpdate()
         {
             transform.position = TryGetAveragePos();
+
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
+
+            if ((screenPos.y < 0 || screenPos.y > Screen.height || screenPos.x < 0 || screenPos.x > Screen.width) && !destroyingAverageAudio)
+            {
+                DestroyAverageAudio(1f);
+            }
         }
 
         /// <summary>
@@ -53,6 +85,8 @@ namespace Cardificer
         /// </summary>
         public void DestroyAverageAudio(float fadeDuration)
         {
+            if (AudioManager.instance.printDebugMessages) print("destroying AverageAudio: " + gameObject.name + ". fadeDuration = " + fadeDuration);
+            destroyingAverageAudio = true;
             AudioManager.instance.FadeToDestroy(audioSource, audioSource.volume, fadeDuration, true);
         }
 

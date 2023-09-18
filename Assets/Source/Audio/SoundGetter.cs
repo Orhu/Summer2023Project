@@ -60,7 +60,7 @@ namespace Cardificer
 
             } catch
             {
-                print($"GetStatusEffectSound of type {type} failed!");
+                if (AudioManager.instance.printDebugMessages) print($"GetStatusEffectSound of type {type} failed!");
                 return new BasicSound();
             }
 

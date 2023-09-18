@@ -324,7 +324,6 @@ namespace Cardificer
         /// <param name="pos">Position of the impact audio sound</param>
         protected void PlayImpactAtPos(Vector2 pos, GameObject obj)
         {
-            Debug.Log("Playing impact sound!");
             AudioManager.instance.PlaySoundBaseAtPos(impactSound, pos, obj.name);
         }
         #endregion

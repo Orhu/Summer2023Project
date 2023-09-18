@@ -114,7 +114,7 @@ namespace Cardificer
 
             hitSounds.useDefaultSettings = false;
             hitSounds.soundSettings.randomizePitch = true;
-            hitSounds.soundSettings.bufferTime = 0.3f;
+            hitSounds.soundSettings.bufferTime = 0.1f;
 
             if (gameObject.tag != "Player")
             {
