@@ -203,9 +203,20 @@ namespace Cardificer
             links.ErrorScreen.GetComponentInChildren<TextMeshProUGUI>().text = errorMessage;
         }
 
+        /// <summary>
+        /// Set the gridlayout of the select screen back to true
+        /// </summary>
         private void RestoreGridLayout()
         {
             currentScreen.GetComponentInChildren<GridLayoutGroup>().gameObject.SetActive(true);
+        }
+
+        /// <summary>
+        /// When the player presses back on the select card screen, return them to the main screen
+        /// </summary>
+        public void ReturnToMainMenu()
+        {
+            StartCoroutine(DisplayTransitionScreen(screenCompositions.Find(screen => screen.screenName == "MainScreen"), true));
         }
 
         /// <summary>

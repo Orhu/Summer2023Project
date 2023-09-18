@@ -171,5 +171,11 @@ namespace Cardificer
             }
 
         }
+
+
+        public void MoveToMainScreen()
+        {
+            StartCoroutine(cardPrinterMenu.ReturnBackToMainScreen(0f));
+        }
     }
 }
