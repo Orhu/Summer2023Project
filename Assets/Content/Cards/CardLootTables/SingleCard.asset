@@ -9,7 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4602e5369662eaf4087ae73454dbf40a, type: 3}
-  m_Name: ChordEffect_GammaBurst_LifetimeMultiplier
+  m_Script: {fileID: 11500000, guid: 6c65abeb205b3bb48a7e3acdd1689ecf, type: 3}
+  m_Name: SingleCard
   m_EditorClassIdentifier: 
-  lifetimeFactor: 0.25
+  weightedLoot:
+    things:
+    - thing: {fileID: 11400000, guid: 657e16d5dc6d38c4fa342a25bfd1a1c0, type: 2}
+      weight: 1
+      maxChosen: -1
