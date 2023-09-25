@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minAttackSequenceIndex: 0
   maxAttackSequenceIndex: 3
+  attackSequenceLoopInterval: 2147483647
+  priority: 0
   explosionRadius: 2.5
   knockback:
     amount: 0
     duration: 0.2
     resetMomentum: 0
-  fuseTime: 2
+  fuseTime: 3
   destroyBlockers: 0
   sticky: 0
   inheritIgnore: 0
@@ -30,3 +32,4 @@ MonoBehaviour:
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
+    dontShowDamageNumber: 0

@@ -12,7 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
   m_Name: OrbitAttack_LeechingTouch
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 0}
+  actionSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
   projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
   previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   attack:
@@ -20,6 +34,7 @@ MonoBehaviour:
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
+    dontShowDamageNumber: 0
   hitCount: 1
   applyDamageOnHit: 1
   modifiers:
@@ -42,8 +57,36 @@ MonoBehaviour:
   visualObject: {fileID: 6147264819674008988, guid: ec7afea880b70324d844b62e5048d9da, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  travelAudioClip: {fileID: 0}
-  impactAudioClip: {fileID: 0}
+  travelSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
+  impactSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
   spawnLocation: 0
   aimMode: 3
   waitForProjectileDeath: 1
@@ -51,10 +94,6 @@ MonoBehaviour:
   additionalActionTime: 0
   _spawnSequence:
   - delay: 0
-    startingAngle: 0
-    radius: 0.75
-    orbitDirection: 0
-  - delay: 0.2
     startingAngle: 0
     radius: 0.75
     orbitDirection: 0
