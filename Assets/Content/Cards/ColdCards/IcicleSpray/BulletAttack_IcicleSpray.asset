@@ -12,7 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_IcicleSpray
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 8300000, guid: f08398216d2ffed4db52d45c619ad268, type: 3}
+  actionSound:
+    outputAudioMixerGroup: {fileID: 8348430849657092177, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      destroyOnComplete: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: f08398216d2ffed4db52d45c619ad268, type: 3}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
@@ -41,8 +56,38 @@ MonoBehaviour:
   visualObject: {fileID: 8372843719696061205, guid: 52c86cacb8340f64da2452cbfd01e0a7, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  travelAudioClip: {fileID: 8300000, guid: 13145fee271fd7f419c68bff198da894, type: 3}
-  impactAudioClip: {fileID: 8300000, guid: d252452035447734d89f5f6ea3f4e509, type: 3}
+  travelSound:
+    outputAudioMixerGroup: {fileID: 8348430849657092177, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 128
+      loop: 1
+      destroyOnComplete: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 13145fee271fd7f419c68bff198da894, type: 3}
+  impactSound:
+    outputAudioMixerGroup: {fileID: 8348430849657092177, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      destroyOnComplete: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: d252452035447734d89f5f6ea3f4e509, type: 3}
   spawnLocation: 0
   aimMode: 0
   waitForProjectileDeath: 0

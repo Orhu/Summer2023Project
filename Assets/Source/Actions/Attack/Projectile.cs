@@ -485,6 +485,9 @@ namespace Cardificer
             Invoke(nameof(DestroyOnWallHit), Time.fixedDeltaTime);
             onHit?.Invoke(collision);
             playImpactAudio?.Invoke(transform.position);
+
+            //print($"{gameObject.name} collided with {collision.gameObject.name}");
+
         }
 
         /// <summary>

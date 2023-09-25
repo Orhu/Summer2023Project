@@ -64,5 +64,10 @@ namespace Cardificer
         }
 
         // TODO: need functionality to suport removal of this status when the affected entity picks up a healing item (should only ever be something the player does).
+
+        public override StatusEffectType StatusType()
+        {
+            return StatusEffectType.Toxic;
+        }
     }
 }

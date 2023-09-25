@@ -75,7 +75,7 @@ namespace Cardificer
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                AudioManager.instance.PlaySoundAtPos(_testSound, new Vector2(0, 0));
+                //AudioManager.instance.PlaySoundAtPos(_testSound, new Vector2(0, 0));
                 //AudioManager.instance.PlayAudioAtActor(_testSound, this);
             }
         }

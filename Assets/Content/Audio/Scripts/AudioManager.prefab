@@ -1,5 +1,146 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4061888833403217252
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8182064089468341341}
+  - component: {fileID: 830157999317965900}
+  m_Layer: 0
+  m_Name: SoundGetter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8182064089468341341
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4061888833403217252}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7011871634388846855}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &830157999317965900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4061888833403217252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccd37116d27253a4682d7dda5b46d4dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statusSounds:
+  - effectType: 0
+    effectApplySound:
+      outputAudioMixerGroup: {fileID: -6007624078402004579, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+      useDefaultSettings: 1
+      soundSettings:
+        priority: 128
+        loop: 0
+        volume: 0
+        randomizeVolume: 1
+        volumeRandomRange: {x: 0.8, y: 1}
+        pitch: 0
+        randomizePitch: 1
+        pitchRandomRange: {x: 0.7, y: 1.15}
+        spatialBlend: 0.532
+        spread: 0
+        bufferTime: 0
+        lastTriggeredTime: 50000
+      audioSourceInUse: {fileID: 0}
+      audioClip: {fileID: 8300000, guid: de0d16ead9c92924ca329b5345a18e0e, type: 3}
+  - effectType: 10
+    effectApplySound:
+      outputAudioMixerGroup: {fileID: -6007624078402004579, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+      useDefaultSettings: 0
+      soundSettings:
+        priority: 128
+        loop: 0
+        volume: 0
+        randomizeVolume: 1
+        volumeRandomRange: {x: 0.8, y: 1}
+        pitch: 0
+        randomizePitch: 1
+        pitchRandomRange: {x: 0.7, y: 1.15}
+        spatialBlend: 0.532
+        spread: 0
+        bufferTime: 0
+        lastTriggeredTime: 50000
+      audioSourceInUse: {fileID: 0}
+      audioClip: {fileID: 8300000, guid: fca89775e6acc26438b5efb9f7024bef, type: 3}
+  - effectType: 14
+    effectApplySound:
+      outputAudioMixerGroup: {fileID: -6007624078402004579, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+      useDefaultSettings: 1
+      soundSettings:
+        priority: 128
+        loop: 0
+        volume: 0
+        randomizeVolume: 1
+        volumeRandomRange: {x: 0.8, y: 1}
+        pitch: 0
+        randomizePitch: 1
+        pitchRandomRange: {x: 0.7, y: 1.15}
+        spatialBlend: 0.532
+        spread: 0
+        bufferTime: 0
+        lastTriggeredTime: 50000
+      audioSourceInUse: {fileID: 0}
+      audioClip: {fileID: 8300000, guid: 503a7e05f258954418507b161895dd08, type: 3}
+  - effectType: 12
+    effectApplySound:
+      outputAudioMixerGroup: {fileID: -6007624078402004579, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+      useDefaultSettings: 1
+      soundSettings:
+        priority: 128
+        loop: 0
+        volume: 0
+        randomizeVolume: 1
+        volumeRandomRange: {x: 0.8, y: 1}
+        pitch: 0
+        randomizePitch: 1
+        pitchRandomRange: {x: 0.7, y: 1.15}
+        spatialBlend: 0.532
+        spread: 0
+        bufferTime: 0
+        lastTriggeredTime: 50000
+      audioSourceInUse: {fileID: 0}
+      audioClip: {fileID: 8300000, guid: 91b7ea5b87212ee4294dbd0c16dbcae6, type: 3}
+  enemyAudioMixerGroup: {fileID: -2650589480174368790, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+  playerActionsAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+  healthPickupSound:
+    outputAudioMixerGroup: {fileID: 2021301823164702670, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: ae8fd2a1436020c4a8fc7a7cf46713c4, type: 3}
 --- !u!1 &7011871634388846849
 GameObject:
   m_ObjectHideFlags: 0
@@ -28,7 +169,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8182064089468341341}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -44,4 +186,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1f54b309b577274db5c527115c3dcb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sounds: []
+  printDebugMessages: 0
+  usePlayerAudioListener: 1
+  _defaultSoundSettings:
+    priority: 128
+    loop: 0
+    volume: 1
+    randomizeVolume: 0
+    volumeRandomRange: {x: 0.8, y: 1}
+    pitch: 1
+    randomizePitch: 0
+    pitchRandomRange: {x: 0.8, y: 1.1}
+    spatialBlend: 1
+    spread: 0
+    bufferTime: 0
+    lastTriggeredTime: 50000

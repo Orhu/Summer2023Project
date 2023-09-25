@@ -89,8 +89,17 @@ namespace Cardificer
         // All status effects currently affecting this
         private List<StatusEffect> statusEffects = new List<StatusEffect>();
 
+        [Tooltip("Sound played on death")]
+        public SoundContainer deathSounds;
+        [Tooltip("Sound played when damaged")]
+        public SoundContainer hitSounds;
+        [Tooltip("Sound played when cleansed")]
+        public BasicSound cleanseSound;
+
+        private
+
         /// <summary>
-        /// Initializes current health.
+        /// Initializes current health and health sounds.
         /// </summary>
         void Start()
         {
@@ -98,9 +107,24 @@ namespace Cardificer
             {
                 BossHealthbarManager.instance.StartHealthbar(maxHealth);
             }
-            
+
+            //set default settings for Health Sounds for ease of implementation. If these need to change this can happen in the future!
+            deathSounds.containerType = SoundContainerType.RandomOneshot;
+            hitSounds.containerType = SoundContainerType.RandomOneshot;
+
+            hitSounds.useDefaultSettings = false;
+            hitSounds.soundSettings.randomizePitch = true;
+            hitSounds.soundSettings.bufferTime = 0.1f;
+
+            if (gameObject.tag != "Player")
+            {
+                deathSounds.outputAudioMixerGroup = SoundGetter.Instance.enemyAudioMixerGroup;
+                hitSounds.outputAudioMixerGroup = SoundGetter.Instance.enemyAudioMixerGroup;
+            }
+
             if (currentHealth != 0) { return; }
             currentHealth = maxHealth;
+
         }
 
         /// <summary>
@@ -137,6 +161,7 @@ namespace Cardificer
             if (attack.damage > 0)
             {
                 onDamageTaken?.Invoke();
+                AudioManager.instance.PlaySoundBaseOnTarget(hitSounds, transform, false);
             }
 
 
@@ -153,6 +178,9 @@ namespace Cardificer
                 {
                     BossHealthbarManager.instance.DisableHealthbar();
                 }
+
+                AudioManager.instance.PlaySoundBaseAtPos(deathSounds, transform.position, gameObject.name);
+                //print($"{gameObject.name} calling DeathSounds to play at position.");
                 onDeath?.Invoke();
                 return;
             }
@@ -171,6 +199,7 @@ namespace Cardificer
                     if (matchingEffect == null)
                     {
                         statusEffects.Add(statusEffect.CreateCopy(gameObject));
+                        AudioManager.instance.PlaySoundBaseOnTarget(SoundGetter.Instance.GetStatusEffectSound(statusEffect.StatusType()), transform, true);
                     }
                 }
             }
@@ -206,6 +235,9 @@ namespace Cardificer
                 Destroy(statusEffects[statusEffects.Count - 1]);
                 statusEffects.RemoveAt(statusEffects.Count - 1);
             }
+
+            AudioManager.instance.PlayOneshotOnTarget(cleanseSound, transform);
+
         }
 
         /// <summary>
