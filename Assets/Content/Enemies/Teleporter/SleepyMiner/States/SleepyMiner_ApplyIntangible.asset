@@ -12,7 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b067eac9463a37f41b382167fcdf564f, type: 3}
   m_Name: SleepyMiner_ApplyIntangible
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 0}
+  actionSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
+  stopActionSoundOnActionComplete: 0
   statusEffects:
   - {fileID: 11400000, guid: 79c3cd6fa2bfcf74196470c84cf6c492, type: 2}
   delay: 0
+  dontShowDamageNumber: 1

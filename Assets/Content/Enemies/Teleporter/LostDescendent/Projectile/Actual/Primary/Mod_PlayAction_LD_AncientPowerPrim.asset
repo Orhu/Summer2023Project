@@ -9,21 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91eb735b7a0c96c41927a38f682802fa, type: 3}
-  m_Name: LostDescendent_SpawnBomb
+  m_Script: {fileID: 11500000, guid: ae521aad527ed7e449352281fbf9e980, type: 3}
+  m_Name: Mod_PlayAction_LD_AncientPowerPrim
   m_EditorClassIdentifier: 
   minAttackSequenceIndex: 0
   maxAttackSequenceIndex: 2147483647
   attackSequenceLoopInterval: 2147483647
   priority: 0
-  explosionRadius: 1
-  knockback:
-    amount: 0
-    duration: 0.2
-    resetMomentum: 0
-  fuseTime: 0
-  destroyBlockers: 0
-  sticky: 0
-  inheritIgnore: 0
-  spawnMode: 0
-  bombVisuals: {fileID: 4150273622258982097, guid: 0d821aeb4f584494abc52f941c82b566, type: 3}
+  action: {fileID: 11400000, guid: 42c3d85b09d564c438f3757d71d21e3f, type: 2}
+  filter: {fileID: 11400000, guid: 41d2be9215724f94a98b95b94ff4902c, type: 2}
+  delay: 0
+  playTime: 3
+  playCount: 1000
+  inheritModifiers: 0
+  applyToZeroDamage: 1
+  useThisAsActor: 0

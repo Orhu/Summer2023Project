@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
-  m_Name: LostDescendent_BulletAttack
+  m_Name: Atk_LD_AncientPowerTer
   m_EditorClassIdentifier: 
   actionSound:
     outputAudioMixerGroup: {fileID: 0}
@@ -25,34 +25,38 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 0}
+  stopActionSoundOnActionComplete: 0
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
-    damage: 5
+    damage: 2
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
+    dontShowDamageNumber: 0
   hitCount: 1
   applyDamageOnHit: 1
   modifiers:
-  - {fileID: 11400000, guid: b790a9a74036bed429c905836194ee53, type: 2}
-  - {fileID: 11400000, guid: 0adbbb3155d690047ae7571c1044e766, type: 2}
+  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
   immuneToShield: 0
   immuneToReflect: 0
-  shape: {fileID: 11400000, guid: 9e9cdf959a002d24fad6d8282560b208, type: 2}
-  lifetime: 8
-  initialSpeed: 3
-  acceleration: -0.05
+  shape: {fileID: 11400000, guid: f0e06cc40a1760740815b552f9a69900, type: 2}
+  lifetime: 3
+  initialSpeed: 12
+  acceleration: 0
   minSpeed: 0
-  maxSpeed: 8
+  maxSpeed: 12
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
   homingAimMode: 0
   switchAfterHit: 0
-  visualObject: {fileID: 2809569760718847691, guid: 138fe5e443fd20541907580e3f5e9a2a, type: 3}
+  visualObject: {fileID: 1783548796883191249, guid: 0af03d6de3fadbb4f871a366ca516bbc, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
   travelSound:
@@ -68,8 +72,12 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 0}
+  travelSoundFadeOutTime: 0.3
   impactSound:
     outputAudioMixerGroup: {fileID: 0}
     useDefaultSettings: 1
@@ -83,16 +91,37 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
+  chargeSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 0}
   spawnLocation: 0
-  aimMode: 0
+  aimMode: 6
   waitForProjectileDeath: 0
   chargeTime: 0
-  additionalActionTime: 4
+  additionalActionTime: 0
   _spawnSequence:
   - delay: 0
     angle: 0
     offset: {x: 0, y: 0}
-  randomAngle: 90
+  randomAngle: 0
   randomOffset: 0
