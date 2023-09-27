@@ -1638,6 +1638,7 @@ MonoBehaviour:
   scaleFactor: 1.5
   scaleDuration: 0.5
   isSelected: 0
+  isHoverable: 1
   links:
     nameTextBox: {fileID: 191538492664580812}
     descriptionTextBox: {fileID: 7299610429551907816}
@@ -1650,6 +1651,7 @@ MonoBehaviour:
     projectileTypeImage: {fileID: 2977915841064164881}
     rarityImage: {fileID: 8558327075634802032}
     chordEffectText: {fileID: 10781193092167952}
+    priceText: {fileID: 0}
   _renderActionSide: 1
 --- !u!114 &745902946420790642
 MonoBehaviour:
@@ -1792,7 +1794,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.6862745}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1821,7 +1823,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EffectColor: {r: 1, g: 1, b: 1, a: 0.6862745}
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 1}
   m_EffectDistance: {x: 10, y: -10}
   m_UseGraphicAlpha: 1
 --- !u!1 &8076743682122166913

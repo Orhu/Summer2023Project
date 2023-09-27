@@ -61,5 +61,10 @@ namespace Cardificer
 
             gameObject.GetComponent<Health>().onRequestIncomingAttackModification -= AttackBack;
         }
+
+        public override StatusEffectType StatusType()
+        {
+            return StatusEffectType.Thorns;
+        }
     }
 }

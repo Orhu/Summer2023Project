@@ -54,5 +54,11 @@ namespace Cardificer
             }
             return false;
         }
+
+        public override StatusEffectType StatusType()
+        {
+            //Debug.Log("BURNING TypeGot");
+            return StatusEffectType.Burning;
+        }
     }
 }

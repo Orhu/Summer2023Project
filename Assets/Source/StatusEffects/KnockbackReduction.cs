@@ -67,5 +67,10 @@ namespace Cardificer
 
             gameObject.GetComponent<Movement>().requestKnockbackModifications -= MultiplyKnockback;
         }
+
+        public override StatusEffectType StatusType()
+        {
+            return StatusEffectType.KnockbackReduction;
+        }
     }
 }

@@ -71,5 +71,10 @@ namespace Cardificer
             gameObject.GetComponent<Health>().onRequestIncomingAttackModification -= MutiplyDamage;
             gameObject.GetComponent<Movement>().requestSpeedModifications -= PreventMovement;
         }
+
+        public override StatusEffectType StatusType()
+        {
+            return StatusEffectType.Exhausted;
+        }
     }
 }

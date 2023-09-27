@@ -182,16 +182,13 @@ namespace Cardificer
                 {
                     if (runeRenderers[i].card)
                     {
-                        runeRenderers[i].totalCooldownTime = runeRenderers[i].card.cooldownTime;
+                        // Assign rune renderer cooldown based on the deck's cardIndicesToCooldowns variable.
+                        if (Deck.playerDeck.cardIndicesToCooldowns.ContainsKey(i))
+                        {
+                            runeRenderers[i].totalCooldownTime = Deck.playerDeck.cardIndicesToCooldowns[i];
+                        }
                     }
                     runeRenderers[i].card = card;
-                }
-                else // Duplicate card, can keep the new cooldown time
-                {
-                    if (runeRenderers[i].card)
-                    {
-                        runeRenderers[i].totalCooldownTime = card.cooldownTime;
-                    }
                 }
                 // Set runeRenderers that are currently in the hand to not be greyed out
                 runeRenderers[i].greyedOut = false;
@@ -226,12 +223,6 @@ namespace Cardificer
                     {
                         chordContainer.DisplayChordLevelTwo(runeRenderers[i].card);
                     }
-                    // Obtain the third card of the chord
-                    else if (Deck.playerDeck.previewedCardIndices.Count == 3 && Deck.playerDeck.previewedCardIndices[2] == i)
-                    {
-                        chordContainer.DisplayChordLevelThree(runeRenderers[i].card);
-                    }
-
                 }
                 // Reset chord
                 else if (Deck.playerDeck.previewedCardIndices.Count <= 0)

@@ -12,7 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c7094102d886a743a01c2beb7cae5be, type: 3}
   m_Name: OrbitAttack_EjectSatellite
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 0}
+  actionSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
   projectilePrefab: {fileID: -6696317441843078609, guid: c932b539772659a48bf453f3bf9146c4, type: 3}
   previewerPrefab: {fileID: -6604723256437912730, guid: 23e67e6bf63695142ab5b191ae6b6227, type: 3}
   attack:
@@ -20,12 +34,14 @@ MonoBehaviour:
     damageType: 0
     statusEffects: []
     invertInvincibility: 0
-  hitCount: 999
+    dontShowDamageNumber: 0
+  hitCount: 4
   applyDamageOnHit: 1
   modifiers:
   - {fileID: 11400000, guid: ca1ca5c908abfa847804e1e805337ce1, type: 2}
   - {fileID: 11400000, guid: c10c4eea0e70fcf45a90c17019b46004, type: 2}
   - {fileID: 11400000, guid: d3b5a797c781d4144b70f303206f0484, type: 2}
+  - {fileID: 11400000, guid: 14f79b5e6187da84cbab707b1b5d48d2, type: 2}
   immuneToShield: 1
   immuneToReflect: 1
   shape: {fileID: 11400000, guid: d66dacfc75790ed46b50cf2b04725031, type: 2}
@@ -42,8 +58,36 @@ MonoBehaviour:
   visualObject: {fileID: 5228815503458858761, guid: 1ec6b52aea4e5c640938c3f792053e96, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  travelAudioClip: {fileID: 0}
-  impactAudioClip: {fileID: 0}
+  travelSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
+  impactSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
   spawnLocation: 0
   aimMode: 3
   waitForProjectileDeath: 1

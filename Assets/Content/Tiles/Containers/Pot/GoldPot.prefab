@@ -186,6 +186,7 @@ MonoBehaviour:
   _maxHealth: 1
   invincibilityDuration: 0
   immuneStatusEffects: []
+  damageNumberPrefab: {fileID: 0}
   onDeath:
     m_PersistentCalls:
       m_Calls:
@@ -214,6 +215,63 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   hasBossHealthbar: 0
+  deathSounds:
+    outputAudioMixerGroup: {fileID: -8374846687826135380, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 1
+      volumeRandomRange: {x: 0.9, y: 1}
+      pitch: 1
+      randomizePitch: 1
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    containerName: Pot_BreakSound
+    clipsInContainer:
+    - {fileID: 8300000, guid: a7de26457ce40504abca491f98e75138, type: 3}
+    containerType: 0
+    loopContainer: 0
+    isPlaying: 0
+    shouldPlay: 0
+  hitSounds:
+    outputAudioMixerGroup: {fileID: -8374846687826135380, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 1
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    containerName: Pot_BreakSound
+    clipsInContainer:
+    - {fileID: 8300000, guid: a7de26457ce40504abca491f98e75138, type: 3}
+    containerType: 0
+    loopContainer: 0
+    isPlaying: 0
+    shouldPlay: 0
+  cleanseSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
 --- !u!114 &6258890840212835944
 MonoBehaviour:
   m_ObjectHideFlags: 0

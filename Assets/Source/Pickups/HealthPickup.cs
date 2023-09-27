@@ -17,8 +17,15 @@ namespace Cardificer
         {
             if (collision.CompareTag("Player"))
             {
-                collision.GetComponentInParent<Health>().Heal(healAmount);
-                Destroy(gameObject);
+                Health playerHealth = collision.GetComponentInParent<Health>();
+
+                // Make sure that the player will actually heal from picking this heart up.
+                if (playerHealth.currentHealth < playerHealth.maxHealth) 
+                {
+                    playerHealth.Heal(healAmount);
+                    AudioManager.instance.PlaySoundBaseAtPos(SoundGetter.Instance.healthPickupSound, transform.position, gameObject.name);
+                    Destroy(gameObject);
+                }
             }
         }
     }

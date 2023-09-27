@@ -12,7 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: BulletAttack_EchoingShout
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 8300000, guid: 4791a2acbd482dd49829960fb200f8a2, type: 3}
+  actionSound:
+    outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 0.301
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 84b37cad5c68d754691a86dfec8e0ac1, type: 3}
+  stopActionSoundOnActionComplete: 0
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
@@ -20,11 +38,11 @@ MonoBehaviour:
     damageType: 1
     statusEffects: []
     invertInvincibility: 0
+    dontShowDamageNumber: 0
   hitCount: 1
   applyDamageOnHit: 1
   modifiers:
   - {fileID: 11400000, guid: 983f33c68b89d6f4db70ae60e7508528, type: 2}
-  - {fileID: 11400000, guid: c6b2661fd8c5b574aad3ebe0717a80cf, type: 2}
   immuneToShield: 0
   immuneToReflect: 0
   shape: {fileID: 11400000, guid: a80cdd12837da664290f207130e228a6, type: 2}
@@ -41,8 +59,61 @@ MonoBehaviour:
   visualObject: {fileID: 4721454448969483725, guid: 2a0763c8cb61468478bff92a9600038f, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  travelAudioClip: {fileID: 0}
-  impactAudioClip: {fileID: 0}
+  travelSound:
+    outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 1
+      pitchRandomRange: {x: 0.3, y: 0.5}
+      spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 304b91fde48549d42ac579a0e7860579, type: 3}
+  travelSoundFadeOutTime: 0.3
+  impactSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
+  chargeSound:
+    outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.3, y: 0.5}
+      spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
   spawnLocation: 0
   aimMode: 3
   waitForProjectileDeath: 0

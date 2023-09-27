@@ -156,7 +156,7 @@ namespace Cardificer
 
 #region GetCardAssetName
 
-#if UNITY_EDITOR
+#if !UNITY_EDITOR
             // Cards mapped to their asset names.
             static Dictionary<Card, string> cardsToAssetNames = new Dictionary<Card, string>();
 
@@ -436,8 +436,22 @@ namespace Cardificer
             }
             else
             {
-                rootCard.AddToPreview(actor, card);
-                previewedCardIndices.Add(handIndex);
+                // Added a limit of 2 cards to be chorded, a root and a chord.
+
+                // If we only have one card previewed, we can add a second.
+                if (previewedCardIndices.Count < 2)
+                {
+                    rootCard.AddToPreview(actor, card);
+                    previewedCardIndices.Add(handIndex);
+                }
+                // If we have 2 cards selected, and we go to select another
+                // that isn't the root or the second (chorded) card we already have,
+                // swap out the second (chorded) card.
+                else
+                {
+                    rootCard.AddToPreview(actor, card);
+                    previewedCardIndices[1] = handIndex;
+                }
             }
         }
 

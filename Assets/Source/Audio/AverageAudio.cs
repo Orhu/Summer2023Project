@@ -1,81 +1,95 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Cardificer
 {
     /// <summary>
-    /// A class to leverage average audio positions when projectiles are involved in a card. 
+    /// A class that keeps a GameObject at an average position between a list of Transforms. 
     /// </summary>
     public class AverageAudio : MonoBehaviour
     {
-        [Tooltip("The list of spawned projectiles")]
-        public List<Projectile> projectiles = new List<Projectile>();
 
-        [Tooltip("The AudioClip to play at the averaged location")]
-        public Sound averageSound;
+        [Tooltip("The list of transforms to track")]
+        public List<Transform> listOfTransformsToTrack = new List<Transform>();
 
+        [Tooltip("The AudioSource playing a BasicSound")]
+        public AudioSource audioSource;
 
-        /// <summary>
-        /// Adding an audio source and playing it after adjusting parameters
-        /// </summary>
-        public void PlayAverageAudio()
+        [Tooltip("The BasicSound to play on this GameObject")]
+        public BasicSound sound;
+
+        //Checks whether or not we are already destroying the average audio
+        private bool destroyingAverageAudio = false;
+
+        private float minX, minY, maxX, maxY;
+
+        private void Start()
         {
 
-            AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-            AudioManager.instance.ApplySoundSettingsToAudioSource(averageSound, audioSource);
-            audioSource.Play();
         }
 
         /// <summary>
-        /// Get the average transform of the projectiles
+        /// Get the average transform of the transforms
         /// </summary>
-        /// <returns>Returns the average position of a list of projectiles</returns>
+        /// <returns>Returns the average position of the transforms</returns>
         public Vector2 TryGetAveragePos()
         {
-            float totalX = 0;
-            float totalY = 0;
 
-            foreach (var projectile in projectiles)
+            if (listOfTransformsToTrack.Count <= 0)
             {
-                if (projectile != null)
+                if (!destroyingAverageAudio)
                 {
-                    totalX += projectile.transform.position.x;
-                    totalY += projectile.transform.position.y;
+                    DestroyAverageAudio(0.5f);
                 }
+                return transform.position;
             }
-
-            if (totalX == 0 && totalY == 0)
+            else
             {
-                AudioManager.KillAverageAudio(this);
+
+                float totalX = 0;
+                float totalY = 0;
+
+                foreach (var transform in listOfTransformsToTrack)
+                {
+                    if (transform != null)
+                    {
+                        totalX += transform.position.x;
+                        totalY += transform.position.y;
+                    }
+                }
+
+                return new Vector2(totalX / listOfTransformsToTrack.Count, totalY / listOfTransformsToTrack.Count);
             }
 
-            return new Vector2(totalX / projectiles.Count, totalY / projectiles.Count);
         }
 
         /// <summary>
-        /// Set the position of the GameObject to the average position of the projectiles. 
+        /// Set the position of the GameObject to the average position of the transforms. 
         /// </summary>
         private void FixedUpdate()
         {
             transform.position = TryGetAveragePos();
 
-            if (!averageSound.IsPlaying())
-            {
-                AudioManager.KillAverageAudio(this);
-            }
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
 
+            if ((screenPos.y < 0 || screenPos.y > Screen.height || screenPos.x < 0 || screenPos.x > Screen.width) && !destroyingAverageAudio)
+            {
+                DestroyAverageAudio(1f);
+            }
         }
 
         /// <summary>
-        /// Sets the list of Projectiles and the Sound used for this AverageAudio. 
+        /// Fade out the BasicSound playing on this GameObject and destroy this GameObject once the AudioSource has reached 0 volume
         /// </summary>
-        /// <param name="projectiles">The list of projectiles this AverageAudio will use to calculate average positions. </param>
-        /// <param name="sound">The Sound this AverageAudio will play. </param>
-        public void SetProjectilesAndSound(List<Projectile> projectiles, Sound sound)
+        public void DestroyAverageAudio(float fadeDuration)
         {
-            this.projectiles = projectiles;
-            this.averageSound = sound;
+            if (AudioManager.instance.printDebugMessages) print("destroying AverageAudio: " + gameObject.name + ". fadeDuration = " + fadeDuration);
+            destroyingAverageAudio = true;
+            AudioManager.instance.FadeToDestroy(audioSource, audioSource.volume, fadeDuration, true);
         }
+
     }
-    
+
 }
