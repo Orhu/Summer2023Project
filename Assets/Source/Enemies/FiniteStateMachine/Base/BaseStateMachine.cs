@@ -190,6 +190,12 @@ namespace Cardificer.FiniteStateMachine
 
         [Tooltip("Draw debug gizmos? Pathfinding target is magenta, attack target is yellow, current waypoint is cyan")]
         [SerializeField] private bool drawGizmos;
+        
+        [Tooltip("Cost of cardinal moves (default 10) (lower is preferred)")]
+        [SerializeField] public int cardinalMoveCost = 10;
+        
+        [Tooltip("Cost of diagonal moves (default 14) (lower is preferred)")]
+        [SerializeField] public int diagonalMoveCost = 14;
 
         /// <summary>
         /// Initialize variables

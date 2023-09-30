@@ -27,6 +27,12 @@ namespace Cardificer
             
             // store movement type of this request
             public MovementType movementType;
+            
+            // stores the cardinal cost of movement with this request
+            public int cardinalCost;
+            
+            // stores the diagonal cost of movement with this request
+            public int diagonalCost;
 
             /// <summary>
             /// Constructor for a pathfinding request
@@ -39,6 +45,8 @@ namespace Cardificer
                 startPos = stateMachine.GetFeetPos();
                 endPos = stateMachine.currentPathfindingTarget;
                 movementType = stateMachine.currentMovementType;
+                cardinalCost = stateMachine.cardinalMoveCost;
+                diagonalCost = stateMachine.diagonalMoveCost;
             }
 
             /// <summary>
@@ -48,12 +56,16 @@ namespace Cardificer
             /// <param name="endPos"> End position to path to </param>
             /// <param name="movementType"> Movement type of the path request </param>
             /// <param name="callback"> What function to call when path calculation is complete </param>
-            public PathRequest(Vector2 startPos, Vector2 endPos, MovementType movementType, Action<Vector2[], bool> callback = null)
+            /// <param name="cardinalCost"> The cardinal movement cost with this request (default 10) </param>
+            /// <param name="diagonalCost"> The diagonal movement cost with this request (default 14) </param>
+            public PathRequest(Vector2 startPos, Vector2 endPos, MovementType movementType, Action<Vector2[], bool> callback = null, int cardinalCost = 10, int diagonalCost = 14)
             {
                 this.callback = callback;
                 this.startPos = startPos;
                 this.endPos = endPos;
                 this.movementType = movementType;
+                this.cardinalCost = cardinalCost;
+                this.diagonalCost = diagonalCost;
             }
         }
 
