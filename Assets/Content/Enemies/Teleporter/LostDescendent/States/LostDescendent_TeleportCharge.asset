@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c5858af96344aaa9e636fdff62a26b5, type: 3}
+  m_Name: LostDescendent_TeleportCharge
+  m_EditorClassIdentifier: 
+  enterActions:
+  - {fileID: 11400000, guid: e4720c0704795cf4eb2d6d3edf28961c, type: 2}
+  - {fileID: 11400000, guid: 82a26b1a9977b3849bef8f9e5e06f1e0, type: 2}
+  exitActions:
+  - {fileID: 11400000, guid: de245fde995944a4bba296286aca8bf4, type: 2}
+  - {fileID: 11400000, guid: 5e9d48db6cbf4d8458d459210773fb3b, type: 2}
+  updateActions: []
+  transitions:
+  - {fileID: 11400000, guid: 7c800915451ef7349a2ff5c0b20c7e2d, type: 2}
