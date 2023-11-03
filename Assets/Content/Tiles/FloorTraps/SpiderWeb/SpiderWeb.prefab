@@ -102,7 +102,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.8, y: 0.8}
   m_EdgeRadius: 0
 --- !u!114 &-3354115583031457070
 MonoBehaviour:
@@ -122,8 +122,26 @@ MonoBehaviour:
     statusEffects:
     - {fileID: 11400000, guid: f0fbbe2e75076784baf2afdd5736dbe7, type: 2}
     invertInvincibility: 0
+    dontShowDamageNumber: 0
   damageInterval: 0.1
   immediatelyDamage: 1
   noTriggerDamage: 0
   noCollisionDamage: 0
-  audioClip: {fileID: 0}
+  damageOnInteractSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}

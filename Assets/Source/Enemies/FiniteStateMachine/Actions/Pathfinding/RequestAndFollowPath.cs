@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 using ChaseData = Cardificer.FiniteStateMachine.BaseStateMachine.ChaseData;
 
@@ -12,8 +13,8 @@ namespace Cardificer.FiniteStateMachine
     [CreateAssetMenu(menuName="FSM/Actions/Pathfinding/Request and Follow Path")]
     public class RequestAndFollowPath : SingleAction
     {
-        [Tooltip("After a Path request is submitted, how long before another one is allowed?")] [SerializeField]
-        private float pathLockout = 0.03f;
+        [Tooltip("After a Path request is submitted, how long before another one is allowed?")] [Min(0.1f)] // If this number goes too low, can get buggy behaviors. Test with ~10 pathfinding enemies in a room before decreasing min!
+        [SerializeField] private float pathLockout = 0.1f;
 
         [Tooltip("Starting at stopping dist from the target destination, move speed rapidly drops until target destination is reached.")]
         [SerializeField] private float stoppingDist = 0.1f;
@@ -27,8 +28,8 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> stateMachine to be used </param>
         /// <returns> Waits pathLockout seconds before allowing another request. </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
-        {
-            RequestPath(stateMachine);
+        { 
+           RequestPath(stateMachine);
             yield return new UnityEngine.WaitForSeconds(pathLockout);
             stateMachine.cooldownData.cooldownReady[this] = true;
         }
@@ -43,7 +44,7 @@ namespace Cardificer.FiniteStateMachine
             {
                 if (!successful || stateMachine == null || stateMachine.pathData.ignorePathRequests) return;
 
-                stateMachine.pathData.path = new Path(path, stateMachine.GetFeetPos(), stoppingDist);
+                stateMachine.pathData.path = new Path(path, stateMachine.GetFeetPos(), 0);
 
                 if (stateMachine.pathData.prevFollowCoroutine != null)
                 {
@@ -66,7 +67,8 @@ namespace Cardificer.FiniteStateMachine
         private IEnumerator TracePath(BaseStateMachine stateMachine)
         {
             stateMachine.speedPercent = 1f; // reset speed percent to normal
-
+            stateMachine.currentPathfindingTarget = stateMachine.pathData.path.waypoints[^1];
+            
             if (stateMachine.pathData.path.waypoints.Length == 0)
             {
                 yield break;
@@ -81,8 +83,8 @@ namespace Cardificer.FiniteStateMachine
                     {
                         stateMachine.pathData.keepFollowingPath = false;
                         stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
-                        stateMachine.currentPathfindingTarget = stateMachine.GetFeetPos();
                         stateMachine.cooldownData.cooldownReady[this] = true;
+                        stateMachine.currentPathfindingTarget = stateMachine.GetFeetPos();
                         yield break;
                     }
                     else
@@ -93,39 +95,27 @@ namespace Cardificer.FiniteStateMachine
 
                 if (stateMachine.pathData.keepFollowingPath)
                 {
-                    if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.slowDownIndex &&
-                        stoppingDist > 0)
+                    if (stateMachine.pathData.targetIndex >= stateMachine.pathData.path.slowDownIndex && stoppingDist > 0)
                     {
                         stateMachine.speedPercent = Mathf.Clamp01(stateMachine.pathData.path
-                                                                      .turnBoundaries[
-                                                                          stateMachine.pathData.path.finishLineIndex]
-                                                                      .DistanceFromPoint(stateMachine.GetFeetPos()) /
+                                                         .turnBoundaries[stateMachine.pathData.path.finishLineIndex]
+                                                         .DistanceFromPoint(stateMachine.GetFeetPos()) /
                                                                   stoppingDist);
                         if (stateMachine.speedPercent < 0.01f)
                         {
                             stateMachine.pathData.keepFollowingPath = false;
                             stateMachine.GetComponent<Movement>().movementInput = Vector2.zero;
                             stateMachine.cooldownData.cooldownReady[this] = true;
+                            stateMachine.currentPathfindingTarget = stateMachine.GetFeetPos();
                             yield break;
                         }
                     }
-                    
-                    var moveInput = (stateMachine.pathData.path.waypoints[stateMachine.pathData.targetIndex] -
-                                     stateMachine.GetFeetPos()).normalized;
-                    
-                    if (moveInput == Vector2.zero && stateMachine.pathData.targetIndex != stateMachine.pathData.path.finishLineIndex)
-                    {
-                        stateMachine.pathData.targetIndex++;
-                    }
-                    else
-                    {
-                        stateMachine.GetComponent<Movement>().movementInput = moveInput;
-                    }
+                    stateMachine.GetComponent<Movement>().movementInput =
+                        (stateMachine.pathData.path.waypoints[stateMachine.pathData.targetIndex] - stateMachine.GetFeetPos()).normalized;
                 }
-
+                
                 yield return null;
             }
-
             stateMachine.cooldownData.cooldownReady[this] = true;
         }
     }

@@ -30,7 +30,7 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> Does not wait. </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
-            stateMachine.pathData.path = new Path(FormulatePath(), stateMachine.GetFeetPos(), 0);
+            stateMachine.pathData.path = new Path(FormulatePath(), stateMachine.GetFeetPos());
             stateMachine.cooldownData.cooldownReady[this] = true;
             yield break;
         }

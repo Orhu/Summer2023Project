@@ -21,9 +21,6 @@ namespace Cardificer
         [Tooltip("The speed in maxSpeed/s at which this accelerates to zero velocity")]
         public float deceleration = 100;
 
-        [Tooltip("Is this unit immune to movement-altering grounds (eg ice)?")]
-        public bool immuneToGroundEffects = false;
-
         // cache original values in case they are needed
         public float originalMaxSpeed { get; private set; }
         public float originalAcceleration { get; private set; }

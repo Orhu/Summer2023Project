@@ -82,7 +82,7 @@ namespace Cardificer
                     // grab lowest fCost tile. Due to the heap data structure, this will always be the first element
                     PathfindingTile currentNode = openSet.RemoveFirst();
                     closedSet.Add(currentNode);
-                    if (GetDistance(currentNode, targetNode) < GetDistance(closestNodeToTargetNode, targetNode))
+                    if (GetDistance(currentNode, targetNode, request) < GetDistance(closestNodeToTargetNode, targetNode, request))
                     {
                         closestNodeToTargetNode = currentNode;
                     }
@@ -103,12 +103,12 @@ namespace Cardificer
                             continue;
                         }
 
-                        int newMovementCostToNeighbor = currentNode.gCost + GetDistance(currentNode, neighbor) +
+                        int newMovementCostToNeighbor = currentNode.gCost + GetDistance(currentNode, neighbor, request) +
                                                         neighbor.movementPenalty;
                         if (newMovementCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor))
                         {
                             neighbor.gCost = newMovementCostToNeighbor;
-                            neighbor.hCost = GetDistance(neighbor, targetNode);
+                            neighbor.hCost = GetDistance(neighbor, targetNode, request);
                             neighbor.retraceStep = currentNode;
 
                             if (!openSet.Contains(neighbor))
@@ -196,12 +196,12 @@ namespace Cardificer
                             continue;
                         }
 
-                        int newMovementCostToNeighbor = currentNode.gCost + GetDistance(currentNode, neighbor) +
+                        int newMovementCostToNeighbor = currentNode.gCost + GetDistance(currentNode, neighbor, request) +
                                                         neighbor.movementPenalty;
                         if (newMovementCostToNeighbor < neighbor.gCost || !openSet.Contains(neighbor))
                         {
                             neighbor.gCost = newMovementCostToNeighbor;
-                            neighbor.hCost = GetDistance(neighbor, targetNode);
+                            neighbor.hCost = GetDistance(neighbor, targetNode, request);
                             neighbor.retraceStep = currentNode;
 
                             if (!openSet.Contains(neighbor))
@@ -274,20 +274,18 @@ namespace Cardificer
         /// <param name="a"> First tile </param>
         /// <param name="b"> Second tile </param>
         /// <returns> Distance, in tiles (moves), between the two tiles </returns>
-        int GetDistance(PathfindingTile a, PathfindingTile b)
+        int GetDistance(PathfindingTile a, PathfindingTile b, PathRequest request)
         {
             int distX = Mathf.Abs(a.gridLocation.x - b.gridLocation.x);
             int distY = Mathf.Abs(a.gridLocation.y - b.gridLocation.y);
 
             if (distX > distY)
             {
-                // 30 is the cost of a diagonal move
-                // 10 is the cost of a straight move
-                return 30 * distY + 10 * (distX - distY);
+                return request.diagonalCost * distY + request.cardinalCost * (distX - distY);
             }
             else
             {
-                return 30 * distX + 10 * (distY - distX);
+                return request.diagonalCost * distX + request.cardinalCost * (distY - distX);
             }
         }
     }

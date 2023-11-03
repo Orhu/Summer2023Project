@@ -32,6 +32,9 @@ namespace Cardificer.FiniteStateMachine
     {
         [Tooltip("After requesting an action, how long does it take for the action to be performed?")]
         public float actionChargeUpTime;
+        
+        [Tooltip("After performing an action, how long until another one is allowed?")]
+        public float actionCooldownTime;
 
         [Tooltip("Whether or not this will hit everything.")]
         public bool friendlyFire = false;
@@ -100,6 +103,7 @@ namespace Cardificer.FiniteStateMachine
 
                 if (!attackPlayed)
                 {
+                    yield return new WaitForSeconds(actionCooldownTime);
                     stateMachine.cooldownData.cooldownReady[this] = true;
                 }
                 (stateMachine.trackedVariables["OnAttack"] as System.Action)?.Invoke();
