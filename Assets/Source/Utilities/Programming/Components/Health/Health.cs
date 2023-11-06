@@ -109,8 +109,24 @@ namespace Cardificer
             }
 
             //set default settings for Health Sounds for ease of implementation. If these need to change this can happen in the future!
-            deathSounds.containerType = SoundContainerType.RandomOneshot;
-            hitSounds.containerType = SoundContainerType.RandomOneshot;
+            deathSounds.containerType = SoundContainerType.RandomRandom;
+            hitSounds.containerType = SoundContainerType.RandomRandom;
+
+            if (!deathSounds.IsValid())
+            {
+                deathSounds.clipsInContainer = new AudioClip[] { SoundGetter.Instance.defaultDeathAudioClip };
+                deathSounds.soundSettings.volume = 1.2f;
+                deathSounds.soundSettings.loop = false;
+                if(AudioManager.instance.printDebugMessages) Debug.Log("No death sound set on " + gameObject.name + ". Setting deathsound to Default Death Sound.", gameObject);
+            }
+
+            if (!hitSounds.IsValid())
+            {
+                hitSounds.clipsInContainer = new AudioClip[] { SoundGetter.Instance.defaultHitAudioClip };
+                hitSounds.soundSettings.volume = 1.2f;
+                hitSounds.soundSettings.loop = false;
+                if (AudioManager.instance.printDebugMessages) Debug.Log("No hit sounds set on " + gameObject.name + ". Setting deathsound to hit Death Sound.", gameObject);
+            }
 
             hitSounds.useDefaultSettings = false;
             hitSounds.soundSettings.randomizePitch = true;
@@ -161,7 +177,7 @@ namespace Cardificer
             if (attack.damage > 0)
             {
                 onDamageTaken?.Invoke();
-                AudioManager.instance.PlaySoundBaseOnTarget(hitSounds, transform, false);
+                AudioManager.instance.PlaySoundBaseOnTarget(hitSounds, transform, true);
             }
 
 

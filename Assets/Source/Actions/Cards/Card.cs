@@ -81,6 +81,9 @@ namespace Cardificer
         /// <param name="actor"> The actor that will be playing this action. </param>
         public void PlayActions(IActor actor)
         {
+
+            Debug.Log($"Card played!");
+
             foreach (Action cardAction in actions)
             {
                 cardAction.Play(actor);

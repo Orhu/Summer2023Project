@@ -1,6 +1,7 @@
 using UnityEngine.Audio;
 using UnityEngine;
 using System.Collections;
+using System;
 
 namespace Cardificer 
 {
@@ -10,7 +11,7 @@ namespace Cardificer
     /// The base of the Sound and SoundContainer class. SoundBases allow for greater audio flexibility.
     /// </summary>
     [System.Serializable]
-    public abstract class SoundBase
+    public abstract class SoundBase : ICloneable
     {
 
         [Header("Sound Base Settings")]
@@ -52,7 +53,7 @@ namespace Cardificer
         public void DestroyObject()
         {
             if (audioSourceInUse != null)
-                Object.Destroy(audioSourceInUse.gameObject);
+                UnityEngine.Object.Destroy(audioSourceInUse.gameObject);
         }
 
         /// <summary>
@@ -67,7 +68,7 @@ namespace Cardificer
         /// <returns> Returns the volume this SoundBase should be played at. </returns>
         public float GetVolume()
         {
-            return soundSettings.randomizeVolume ? Random.Range(soundSettings.volumeRandomRange.x, soundSettings.volumeRandomRange.y) : soundSettings.volume;
+            return soundSettings.randomizeVolume ? UnityEngine.Random.Range(soundSettings.volumeRandomRange.x, soundSettings.volumeRandomRange.y) : soundSettings.volume;
         }
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace Cardificer
         /// <returns> Returns the pitch this SoundBase should be played at. </returns>
         public float GetPitch()
         {
-            return soundSettings.randomizePitch ? Random.Range(soundSettings.pitchRandomRange.x, soundSettings.pitchRandomRange.y) : soundSettings.pitch;
+            return soundSettings.randomizePitch ? UnityEngine.Random.Range(soundSettings.pitchRandomRange.x, soundSettings.pitchRandomRange.y) : soundSettings.pitch;
         }
 
         /// <summary>
@@ -87,7 +88,7 @@ namespace Cardificer
         public bool SoundInCooldown(float askToTriggerTime)
         {
 
-            //Debug.Log($"sound cooldown queried on {name}. Buffer time is {soundSettings.bufferTime}.");
+            if (AudioManager.instance.printDebugMessages) Debug.Log($"sound cooldown queried on {name}. Buffer time is {soundSettings.bufferTime}.");
 
             if (soundSettings.bufferTime <= 0)
             {
@@ -117,6 +118,10 @@ namespace Cardificer
 
         }
 
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 
     /// <summary>
@@ -172,11 +177,11 @@ namespace Cardificer
 
             if (audioClip == null)
             {
-                //if (AudioManager.instance.printDebugMessages) Debug.Log($"{name} does not have an audio clip!");
+                if (AudioManager.instance.printDebugMessages) Debug.Log($"{name} does not have an audio clip!");
                 isValid = false;
             }
-            
-            //if (audioSourceInUse == null) 
+
+            //if (audioSourceInUse == null)
             //{
 
             //    if (AudioManager.instance.printDebugMessages) Debug.Log($"{name} does not have an audio source!");
@@ -185,6 +190,7 @@ namespace Cardificer
 
             return isValid;
         }
+
     }
 
     /// <summary>
@@ -256,18 +262,18 @@ namespace Cardificer
         {
             bool isValid = true;
 
-            //if (audioSourceInUse == null) 
+            //if (audioSourceInUse == null)
             //{
 
             //    if (AudioManager.instance.printDebugMessages) Debug.Log($"{name} does not have an audio source!");
             //    isValid = false;
 
             //}
-            
-            if(clipsInContainer.Length < 1)
+
+            if (clipsInContainer.Length < 1)
             {
 
-                if (AudioManager.instance.printDebugMessages) Debug.Log($"{name} on {audioSourceInUse.gameObject.name} does not have any clips in it's container!");
+                if (AudioManager.instance.printDebugMessages && audioSourceInUse != null) Debug.Log($"{name} on {audioSourceInUse.gameObject.name} does not have any clips in it's container!");
                 isValid = false;
 
             }

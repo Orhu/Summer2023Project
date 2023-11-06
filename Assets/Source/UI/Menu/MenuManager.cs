@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -31,6 +32,8 @@ namespace Cardificer
         // Whether or not the player is using the controller to navigate menu.
         public static bool usingNavigation { private set; get; } = false;
 
+        public BasicSound[] uiSounds;
+
 
         /// <summary>
         /// Assign singleton variable
@@ -47,6 +50,11 @@ namespace Cardificer
                 Destroy(gameObject);
             }
 
+            foreach(BasicSound sound in uiSounds)
+            {
+                sound.outputAudioMixerGroup = SoundGetter.Instance.uiAudioMixerGroup;
+            }
+
             uiInputModule.move.action.performed +=
                 (UnityEngine.InputSystem.InputAction.CallbackContext context) =>
                 {
@@ -61,6 +69,26 @@ namespace Cardificer
         /// </summary>
         private void OnNavigate()
         {
+        }
+
+        public void PlayUISound(string soundbaseName)
+        {
+
+            AudioManager.instance.PlaySoundBaseAtPos(GetUISoundBase(soundbaseName), new Vector2(0, 0), gameObject.name);
+
+            BasicSound GetUISoundBase(string name)
+            {
+
+                foreach (BasicSound sb in uiSounds)
+                {
+                    if (sb.name == name) return sb;
+                }
+
+                print("UI Sound " + name + " not found in uiSounds! Playing default sounds.");
+
+                return SoundGetter.Instance.defaultMMSelect;
+
+            }
         }
 
         /// <summary>

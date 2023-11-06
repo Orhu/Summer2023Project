@@ -19,11 +19,25 @@ namespace Cardificer
 
         [Tooltip("The AudioMixer Group associated with enemy audio.")]
         public AudioMixerGroup enemyAudioMixerGroup;
+
         [Tooltip("The AudioMixer Group associated with Player Actions.")]
         public AudioMixerGroup playerActionsAudioMixerGroup;
 
+        [Tooltip("The AudioMixer Group associated with UI Sounds.")]
+        public AudioMixerGroup uiAudioMixerGroup;
+
         [Tooltip("The Sound played when health is picked up.")]
         public BasicSound healthPickupSound;
+
+        [Tooltip("These AudioClips will be called if there are no sounds present in each of their respecive containers.")]
+        public AudioClip defaultHitAudioClip, defaultDeathAudioClip;
+
+        [Tooltip("These BasicSounds will be called if there are no sounds present in each of their respecive containers.")]
+        public BasicSound defaultMMSelect;
+
+        public BasicSound[] cardSelectSounds, cardDeselectSounds, chordSelectSounds, chordDeselectSounds;
+
+        [HideInInspector] public Transform playerTransform;
 
         /// <summary>
         /// Implementing the singleton pattern and initializing the dictionary. 
@@ -44,6 +58,11 @@ namespace Cardificer
                 statusSoundsDict.Add(s.effectType, s.effectApplySound);
             }
 
+        }
+
+        private void Start()
+        {
+            playerTransform = GameObject.Find("Player").transform;
         }
 
         /// <summary>

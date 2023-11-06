@@ -142,9 +142,16 @@ namespace Cardificer
         public void PlaySoundBaseOnTarget(SoundBase soundBase, Transform target, bool makeUnique)
         {
             
-            if (!SoundShouldPlay(soundBase)) { return; }
+            if (!SoundShouldPlay(soundBase)) { 
 
-            PlaySoundBaseOnAudioSource(soundBase, GetAudioSourceFromTarget(target, makeUnique));
+                if (printDebugMessages) print("sound should not play!"); 
+            }
+
+            else
+            {
+                if (printDebugMessages) print("Playing soundbase!");
+                PlaySoundBaseOnAudioSource(soundBase, GetAudioSourceFromTarget(target, makeUnique));
+            }
 
         }
 
@@ -163,7 +170,7 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Returns any AUdioSource found on the target Transform. If there are none or we want a unique sound we will create and return a new AudioSource.
+        /// Returns any AudioSource found on the target Transform. If there are none or we want a unique sound we will create and return a new AudioSource.
         /// </summary>
         /// <param name="target">The Transform to get the AudioSource from. </param>
         /// <param name="makeUnique">If true will create a new AudioSource if there is one currently playing on the Target. </param>
@@ -203,9 +210,10 @@ namespace Cardificer
             audioSourceGameObject.transform.position = vector;
 
             AudioSource audioSource = audioSourceGameObject.AddComponent<AudioSource>();
-            PlaySoundBaseOnAudioSource(soundBase, audioSource);
+            SoundBase uniqueSoundBase = (SoundBase)soundBase.Clone();
+            PlaySoundBaseOnAudioSource(uniqueSoundBase, audioSource);
 
-            soundsToDestroyList.Add(soundBase);
+            soundsToDestroyList.Add(uniqueSoundBase);
         }
 
         /// <summary>
@@ -217,15 +225,14 @@ namespace Cardificer
         {
 
             soundBase.audioSourceInUse = audioSource;
-            if (!SoundShouldPlay(soundBase)) { return; }
+            //if (!SoundShouldPlay(soundBase)) { return; }
         
-            if (printDebugMessages) print($"Playing {soundBase.name} on {audioSource.gameObject.name}");
+            if (printDebugMessages) print($"Playing {soundBase.name} ({soundBase.GetSoundType()}) on {audioSource.gameObject.name}");
 
             switch (soundBase.GetSoundType())
             {
                 case SoundType.BasicSound:
                 {
-
                     BasicSound sound = (BasicSound)soundBase;
                     PlaySound(sound, audioSource); 
 
@@ -234,7 +241,7 @@ namespace Cardificer
                     
                 case SoundType.SoundContainer:
                 {
-
+                        
                     SoundContainer container = (SoundContainer)soundBase;
                     container.shouldPlay = true;
                     StartCoroutine(PlaySoundContainer(container, audioSource));
@@ -323,6 +330,7 @@ namespace Cardificer
         /// <param name="audioSource">The AudioSource to use for playback. </param>
         private IEnumerator PlaySoundContainer(SoundContainer soundContainer, AudioSource audioSource)
         {
+            if (!soundContainer.IsValid()) yield break;
 
             int soundsLength = soundContainer.clipsInContainer.Length;
 
@@ -422,12 +430,15 @@ namespace Cardificer
 
             }
 
-            if (soundContainer.loopContainer)
-                StartCoroutine(PlaySoundContainer(soundContainer, audioSource));
-            else if (soundContainer.containerType != SoundContainerType.RandomOneshot)
+            if ((!soundContainer.loopContainer && soundContainer.containerType != SoundContainerType.RandomOneshot) || soundContainer.audioSourceInUse == null)
             {
                 soundContainer.isPlaying = false;
             }
+            else
+            {
+                StartCoroutine(PlaySoundContainer(soundContainer, audioSource));
+            }
+
         }
 
         /// <summary>
@@ -484,7 +495,7 @@ namespace Cardificer
         /// <param name="soundContainer">The SoundContainer to get the settings from.</param>
         /// <param name="audioSource">The AudioSource to apply the settings onto.</param>
         /// <param name="clip">The AudioClip to assign to the AudioSource.</param>
-        public void ApplySoundSettingsToAudioSource(SoundContainer soundContainer, AudioSource audioSource, AudioClip clip)
+        public void ApplySoundSettingsToAudioSource(SoundContainer soundContainer, AudioSource audioSource)
         {
 
             //audioSource.clip = clip;
@@ -509,6 +520,12 @@ namespace Cardificer
                 audioSource.spatialBlend = soundContainer.soundSettings.spatialBlend;
                 audioSource.spread = soundContainer.soundSettings.spread;
             }
+        }
+
+        public void ApplySoundSettingsToAudioSource(SoundContainer soundContainer, AudioSource audioSource, AudioClip clip)
+        {
+            audioSource.clip = clip;
+            ApplySoundSettingsToAudioSource(soundContainer, audioSource);
         }
 
         /// <summary>
@@ -536,7 +553,7 @@ namespace Cardificer
         /// </summary>
         private void DestroyExpiredAudio()
         {
-         
+
             foreach (SoundBase sb in soundsToDestroyList)
             {
                 if (sb == null)
@@ -549,7 +566,7 @@ namespace Cardificer
                 {
                     soundsToDestroyList.Remove(sb);
                     sb.Stop();
-                    //print("destroying " + sb.name);
+                    if (printDebugMessages) print("destroying " + sb.name);
                     sb.DestroyObject();
                     return;
                 }
@@ -567,6 +584,7 @@ namespace Cardificer
                 {
                     audioSourcesToDestroy.Remove(audioSource);
                     audioSource.Stop();
+                    if (printDebugMessages) print("destroying audio source on " + audioSource.name);
                     Destroy(audioSource);
                     return;
                 }

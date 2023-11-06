@@ -72,7 +72,7 @@ namespace Cardificer
             // Keep track of a list of seen cells when drawing all cells each update
             List<MapCell> seenCells = new List<MapCell>();
 
-            print(FloorGenerator.map.map.GetLength(0));
+            //print(FloorGenerator.map.map.GetLength(0));
             // Loop through the floorgenerators map
             for (int i = 0; i < FloorGenerator.map.map.GetLength(0); i++)
             {
