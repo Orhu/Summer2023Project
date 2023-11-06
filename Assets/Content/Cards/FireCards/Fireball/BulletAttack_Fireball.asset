@@ -25,10 +25,12 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
       bufferTime: 0
       lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 8300000, guid: a144d8ba5f8e397448c10fa14c433ce0, type: 3}
+  stopActionSoundOnActionComplete: 0
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
@@ -70,10 +72,12 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
       bufferTime: 0
       lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 0}
+  travelSoundFadeOutTime: 0.3
   impactSound:
     outputAudioMixerGroup: {fileID: -8374846687826135380, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
     useDefaultSettings: 0
@@ -87,7 +91,8 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.7
-      bufferTime: 0
+      spread: 0
+      bufferTime: 0.1
       lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 8300000, guid: 304b91fde48549d42ac579a0e7860579, type: 3}
@@ -104,6 +109,7 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
       bufferTime: 0
       lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}

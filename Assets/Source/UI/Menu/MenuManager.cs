@@ -15,7 +15,7 @@ namespace Cardificer
     public class MenuManager : MonoBehaviour
     {
         // Singleton for the menu manager
-        private static MenuManager instance;
+        public static MenuManager instance;
 
         // Stores the prefabs used when instantiating menus.
         private Dictionary<Type, GameObject> menuTypesToPrefabs = new Dictionary<Type, GameObject>();
@@ -74,7 +74,7 @@ namespace Cardificer
         public void PlayUISound(string soundbaseName)
         {
 
-            AudioManager.instance.PlaySoundBaseAtPos(GetUISoundBase(soundbaseName), new Vector2(0, 0), gameObject.name);
+            AudioManager.instance.PlaySoundBaseOnTarget(GetUISoundBase(soundbaseName), AudioManager.instance.transform, true);
 
             BasicSound GetUISoundBase(string name)
             {
@@ -84,7 +84,7 @@ namespace Cardificer
                     if (sb.name == name) return sb;
                 }
 
-                print("UI Sound " + name + " not found in uiSounds! Playing default sounds.");
+                if (AudioManager.instance.printDebugMessages) print("UI Sound " + name + " not found in uiSounds! Playing default sounds.");
 
                 return SoundGetter.Instance.defaultMMSelect;
 

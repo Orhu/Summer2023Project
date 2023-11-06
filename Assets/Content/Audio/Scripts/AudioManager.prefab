@@ -146,17 +146,17 @@ MonoBehaviour:
   defaultDeathAudioClip: {fileID: 8300000, guid: 831dc179fbef965499ed17e19e1e0859, type: 3}
   defaultMMSelect:
     outputAudioMixerGroup: {fileID: 5143456497020459200, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
-    useDefaultSettings: 1
+    useDefaultSettings: 0
     soundSettings:
       priority: 128
       loop: 0
-      volume: 1
+      volume: 0.23
       randomizeVolume: 0
       volumeRandomRange: {x: 0.8, y: 1}
       pitch: 1
-      randomizePitch: 0
+      randomizePitch: 1
       pitchRandomRange: {x: 0.8, y: 1.1}
-      spatialBlend: 0.5
+      spatialBlend: 0
       spread: 0
       bufferTime: 0
       lastTriggeredTime: 50000
@@ -438,7 +438,6 @@ MonoBehaviour:
       lastTriggeredTime: 0
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 8300000, guid: 7100d6ffe4cf9a240b44169b6ae6598b, type: 3}
-  playerTransform: {fileID: 0}
 --- !u!1 &7011871634388846849
 GameObject:
   m_ObjectHideFlags: 0

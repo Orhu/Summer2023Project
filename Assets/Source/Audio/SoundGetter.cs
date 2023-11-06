@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 namespace Cardificer
 {
@@ -37,8 +38,6 @@ namespace Cardificer
 
         public BasicSound[] cardSelectSounds, cardDeselectSounds, chordSelectSounds, chordDeselectSounds;
 
-        [HideInInspector] public Transform playerTransform;
-
         /// <summary>
         /// Implementing the singleton pattern and initializing the dictionary. 
         /// </summary>
@@ -58,11 +57,6 @@ namespace Cardificer
                 statusSoundsDict.Add(s.effectType, s.effectApplySound);
             }
 
-        }
-
-        private void Start()
-        {
-            playerTransform = GameObject.Find("Player").transform;
         }
 
         /// <summary>
