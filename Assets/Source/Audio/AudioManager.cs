@@ -494,7 +494,6 @@ namespace Cardificer
         /// </summary>
         /// <param name="soundContainer">The SoundContainer to get the settings from.</param>
         /// <param name="audioSource">The AudioSource to apply the settings onto.</param>
-        /// <param name="clip">The AudioClip to assign to the AudioSource.</param>
         public void ApplySoundSettingsToAudioSource(SoundContainer soundContainer, AudioSource audioSource)
         {
 
@@ -522,8 +521,16 @@ namespace Cardificer
             }
         }
 
+        /// <summary>
+        /// Apply SoundSettings from a SoundContainer to an AudioSource, using a clip from a different source.
+        /// </summary>
+        /// <param name="soundContainer">The SoundContainer to get the settings from.</param>
+        /// <param name="audioSource">The AudioSource to apply the settings onto.</param>
+        /// <param name="clip">The AudioClip to assign to the AudioSource.</param>
         public void ApplySoundSettingsToAudioSource(SoundContainer soundContainer, AudioSource audioSource, AudioClip clip)
         {
+            if (audioSource == null) return;
+
             audioSource.clip = clip;
             ApplySoundSettingsToAudioSource(soundContainer, audioSource);
         }
@@ -612,12 +619,16 @@ namespace Cardificer
         /// <param name="destroyObjectOrAudioSource">If true will destroy the GameObject attached to the AudioSource, otherwise will destroy the AudioSource if there is more than one on the GameObject. </param>
         public IEnumerator FadeToDestroyCoroutine(AudioSource audioSourceToFade, float startValue, float duration, bool destroyObjectOrAudioSource)
         {
+
+            if (audioSourceToFade == null)  yield break;
+
             if (printDebugMessages) { print($"Fading the AudioSource on {audioSourceToFade.gameObject.name}. Destroying object = {destroyObjectOrAudioSource}."); }
 
             float timeElapsed = 0;
 
             while (timeElapsed < duration)
             {
+                if (audioSourceToFade == null) break;
                 float newVolume = Mathf.Lerp(startValue, 0, timeElapsed / duration);
                 audioSourceToFade.volume = newVolume;
                 timeElapsed += Time.deltaTime;
@@ -625,7 +636,7 @@ namespace Cardificer
                 yield return null;
             }
 
-            if (destroyObjectOrAudioSource)
+            if (destroyObjectOrAudioSource || audioSourceToFade == null)
             {
                 Destroy(audioSourceToFade.gameObject);
 

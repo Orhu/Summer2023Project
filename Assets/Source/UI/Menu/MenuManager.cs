@@ -71,6 +71,10 @@ namespace Cardificer
         {
         }
 
+        /// <summary>
+        /// Plays a UI sound or plays the default sound.
+        /// </summary>
+        /// <param name="soundbaseName"> The name of the sound you want to play. </param>
         public void PlayUISound(string soundbaseName)
         {
 

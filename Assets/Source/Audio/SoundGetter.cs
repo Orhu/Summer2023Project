@@ -33,9 +33,10 @@ namespace Cardificer
         [Tooltip("These AudioClips will be called if there are no sounds present in each of their respecive containers.")]
         public AudioClip defaultHitAudioClip, defaultDeathAudioClip;
 
-        [Tooltip("These BasicSounds will be called if there are no sounds present in each of their respecive containers.")]
+        [Tooltip("This is the default UI Sound.")]
         public BasicSound defaultMMSelect;
 
+        [Tooltip("A list of card select sounds. They are here so that any deck can access them.")]
         public BasicSound[] cardSelectSounds, cardDeselectSounds, chordSelectSounds, chordDeselectSounds;
 
         /// <summary>
