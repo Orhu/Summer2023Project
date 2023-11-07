@@ -176,7 +176,6 @@ namespace Cardificer
         /// </summary>
         private void OnPreviewCard1()
         {
-            Debug.Log("previewed card");
             lastInputWasGamepad = false;
             if (movingEnabled && canAct && !paused)
             {
@@ -189,7 +188,6 @@ namespace Cardificer
         /// </summary>
         private void OnPreviewCard1Gamepad()
         {
-            Debug.Log("previewed card");
             lastInputWasGamepad = true;
             if (movingEnabled && canAct && !paused)
             {
@@ -202,7 +200,6 @@ namespace Cardificer
         /// </summary>
         private void OnPreviewCard2()
         {
-            Debug.Log("previewed card");
             lastInputWasGamepad = false;
             if (movingEnabled && canAct && !paused)
             {
@@ -215,7 +212,6 @@ namespace Cardificer
         /// </summary>
         private void OnPreviewCard2Gamepad()
         {
-            Debug.Log("previewed card");
             lastInputWasGamepad = true;
             if (movingEnabled && canAct && !paused)
             {
@@ -228,7 +224,6 @@ namespace Cardificer
         /// </summary>
         private void OnPreviewCard3()
         {
-            Debug.Log("previewed card");
             lastInputWasGamepad = false;
             if (movingEnabled && canAct && !paused)
             {
@@ -241,7 +236,6 @@ namespace Cardificer
         /// </summary>
         private void OnPreviewCard3Gamepad()
         {
-            Debug.Log("previewed card");
             lastInputWasGamepad = true;
             if (movingEnabled && canAct && !paused)
             {
@@ -254,7 +248,6 @@ namespace Cardificer
         /// </summary>
         private void OnPreviewCard4()
         {
-            Debug.Log("previewed card");
             lastInputWasGamepad = false;
             if (movingEnabled && canAct && !paused)
             {
@@ -267,7 +260,6 @@ namespace Cardificer
         /// </summary>
         private void OnPreviewCard4Gamepad()
         {
-            Debug.Log("previewed card");
             lastInputWasGamepad = true;
             if (movingEnabled && canAct && !paused)
             {
@@ -280,7 +272,6 @@ namespace Cardificer
         /// </summary>
         private void OnPreviewCard5()
         {
-            Debug.Log("previewed card");
             lastInputWasGamepad = false;
             if (movingEnabled && canAct && !paused)
             {
@@ -293,7 +284,6 @@ namespace Cardificer
         /// </summary>
         private void OnPreviewCard5Gamepad()
         {
-            Debug.Log("previewed card");
             lastInputWasGamepad = true;
             if (movingEnabled && canAct && !paused)
             {
