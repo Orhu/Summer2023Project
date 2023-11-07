@@ -393,6 +393,7 @@ namespace Cardificer
                         int randomInt = random.Next(soundsLength);
                         AudioClip clipToPlay = soundContainer.clipsInContainer[randomInt];
                         float awaitTime = clipToPlay.length;
+                        if (audioSource == null) yield break;
                         ApplySoundSettingsToAudioSource(soundContainer, audioSource, clipToPlay);
                         audioSource.Play();
                         yield return new WaitForSeconds(awaitTime);
@@ -636,7 +637,7 @@ namespace Cardificer
                 yield return null;
             }
 
-            if (destroyObjectOrAudioSource || audioSourceToFade == null)
+            if (destroyObjectOrAudioSource)
             {
                 Destroy(audioSourceToFade.gameObject);
 

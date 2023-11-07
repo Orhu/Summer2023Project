@@ -18,7 +18,6 @@ namespace Cardificer
         public void InitializeSelection()
         {
             StartCoroutine(WaitForIntialization());
-            print("Starting menu Initialization.");
             IEnumerator WaitForIntialization()
             {
                 for (int i = 0; i < 30 && initialSelection == null; i++)
@@ -26,7 +25,6 @@ namespace Cardificer
                     yield return null;
                 }
                 EventSystem.current.SetSelectedGameObject(initialSelection);
-                print("Menu initialized.");
             }
         }
     }
