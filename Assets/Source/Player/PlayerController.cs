@@ -372,6 +372,7 @@ namespace Cardificer
         {
             lastInputWasGamepad = false;
             MenuManager.Toggle<PauseMenu>();
+            MenuManager.instance.PlayUISound("");
         }
 
         /// <summary>
@@ -381,6 +382,7 @@ namespace Cardificer
         {
             lastInputWasGamepad = true;
             MenuManager.Toggle<PauseMenu>();
+            MenuManager.instance.PlayUISound("");
         }
 
         /// <summary>
@@ -391,6 +393,7 @@ namespace Cardificer
             lastInputWasGamepad = false;
             if (MenuManager.IsMenuOpen(typeof(PauseMenu))) { return; }
             MenuManager.Toggle<MapMenu>();
+            MenuManager.instance.PlayUISound("");
         }
 
         /// <summary>
@@ -401,6 +404,7 @@ namespace Cardificer
             lastInputWasGamepad = true;
             if (MenuManager.IsMenuOpen(typeof(PauseMenu))) { return; }
             MenuManager.Toggle<MapMenu>();
+            MenuManager.instance.PlayUISound("");
         }
 
         /// <summary>
@@ -411,6 +415,7 @@ namespace Cardificer
             lastInputWasGamepad = false;
             if (MenuManager.IsMenuOpen(typeof(PauseMenu))) { return; }
             MenuManager.Toggle<CardMenu>();
+            MenuManager.instance.PlayUISound("");
         }
 
         /// <summary>
@@ -421,6 +426,7 @@ namespace Cardificer
             lastInputWasGamepad = true;
             if (MenuManager.IsMenuOpen(typeof(PauseMenu))) { return; }
             MenuManager.Toggle<CardMenu>();
+            MenuManager.instance.PlayUISound("");
         }
 
         /// <summary>

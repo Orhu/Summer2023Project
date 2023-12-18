@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 namespace Cardificer
 {
@@ -19,11 +20,24 @@ namespace Cardificer
 
         [Tooltip("The AudioMixer Group associated with enemy audio.")]
         public AudioMixerGroup enemyAudioMixerGroup;
+
         [Tooltip("The AudioMixer Group associated with Player Actions.")]
         public AudioMixerGroup playerActionsAudioMixerGroup;
 
+        [Tooltip("The AudioMixer Group associated with UI Sounds.")]
+        public AudioMixerGroup uiAudioMixerGroup;
+
         [Tooltip("The Sound played when health is picked up.")]
         public BasicSound healthPickupSound;
+
+        [Tooltip("These AudioClips will be called if there are no sounds present in each of their respecive containers.")]
+        public AudioClip defaultHitAudioClip, defaultDeathAudioClip;
+
+        [Tooltip("This is the default UI Sound.")]
+        public BasicSound defaultMMSelect;
+
+        [Tooltip("A list of card select sounds. They are here so that any deck can access them.")]
+        public BasicSound[] cardSelectSounds, cardDeselectSounds, chordSelectSounds, chordDeselectSounds;
 
         /// <summary>
         /// Implementing the singleton pattern and initializing the dictionary. 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,7 +15,7 @@ namespace Cardificer
     public class MenuManager : MonoBehaviour
     {
         // Singleton for the menu manager
-        private static MenuManager instance;
+        public static MenuManager instance;
 
         // Stores the prefabs used when instantiating menus.
         private Dictionary<Type, GameObject> menuTypesToPrefabs = new Dictionary<Type, GameObject>();
@@ -30,6 +31,8 @@ namespace Cardificer
 
         // Whether or not the player is using the controller to navigate menu.
         public static bool usingNavigation { private set; get; } = false;
+
+        public BasicSound[] uiSounds;
 
 
         /// <summary>
@@ -47,6 +50,11 @@ namespace Cardificer
                 Destroy(gameObject);
             }
 
+            foreach(BasicSound sound in uiSounds)
+            {
+                sound.outputAudioMixerGroup = SoundGetter.Instance.uiAudioMixerGroup;
+            }
+
             uiInputModule.move.action.performed +=
                 (UnityEngine.InputSystem.InputAction.CallbackContext context) =>
                 {
@@ -61,6 +69,30 @@ namespace Cardificer
         /// </summary>
         private void OnNavigate()
         {
+        }
+
+        /// <summary>
+        /// Plays a UI sound or plays the default sound.
+        /// </summary>
+        /// <param name="soundbaseName"> The name of the sound you want to play. </param>
+        public void PlayUISound(string soundbaseName)
+        {
+
+            AudioManager.instance.PlaySoundBaseOnTarget(GetUISoundBase(soundbaseName), AudioManager.instance.transform, true);
+
+            BasicSound GetUISoundBase(string name)
+            {
+
+                foreach (BasicSound sb in uiSounds)
+                {
+                    if (sb.name == name) return sb;
+                }
+
+                if (AudioManager.instance.printDebugMessages) print("UI Sound " + name + " not found in uiSounds! Playing default sounds.");
+
+                return SoundGetter.Instance.defaultMMSelect;
+
+            }
         }
 
         /// <summary>

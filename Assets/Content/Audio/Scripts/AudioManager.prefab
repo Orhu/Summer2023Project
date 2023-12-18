@@ -123,6 +123,7 @@ MonoBehaviour:
       audioClip: {fileID: 8300000, guid: 91b7ea5b87212ee4294dbd0c16dbcae6, type: 3}
   enemyAudioMixerGroup: {fileID: -2650589480174368790, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
   playerActionsAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+  uiAudioMixerGroup: {fileID: 5143456497020459200, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
   healthPickupSound:
     outputAudioMixerGroup: {fileID: 2021301823164702670, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
     useDefaultSettings: 1
@@ -141,6 +142,302 @@ MonoBehaviour:
       lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 8300000, guid: ae8fd2a1436020c4a8fc7a7cf46713c4, type: 3}
+  defaultHitAudioClip: {fileID: 8300000, guid: a0a2dc85eb14cb9499b449aec0f51488, type: 3}
+  defaultDeathAudioClip: {fileID: 8300000, guid: 831dc179fbef965499ed17e19e1e0859, type: 3}
+  defaultMMSelect:
+    outputAudioMixerGroup: {fileID: 5143456497020459200, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 0.23
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 1
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 1070f84ed51ac15419d80ce3b6b1dd32, type: 3}
+  cardSelectSounds:
+  - outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 0
+      loop: 0
+      volume: 0.8
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0, y: 0}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0, y: 0}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 0
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: d6c8ef804e24e004abc82e304d800806, type: 3}
+  - outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 0
+      loop: 0
+      volume: 0.8
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0, y: 0}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0, y: 0}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 0
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 6af6dc1bcb58cf24d8ba25c11c2b5883, type: 3}
+  - outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 0
+      loop: 0
+      volume: 0.8
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0, y: 0}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0, y: 0}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 0
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 8e0f6c333e9b80e44a57a8fe5404f51a, type: 3}
+  - outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 0
+      loop: 0
+      volume: 0.8
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0, y: 0}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0, y: 0}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 0
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 3d44417ed6165054c84215d58940817e, type: 3}
+  cardDeselectSounds:
+  - outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 0
+      loop: 0
+      volume: 0.8
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0, y: 0}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0, y: 0}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 0
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: bb36dde3c66074c498eb0e80186ed1c8, type: 3}
+  - outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 0
+      loop: 0
+      volume: 0.8
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0, y: 0}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0, y: 0}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 0
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: bf31fda2b3893bf43b38ef06623d684b, type: 3}
+  - outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 0
+      loop: 0
+      volume: 0.8
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0, y: 0}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0, y: 0}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 0
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 36827e447ac32574399bb5c080271aa2, type: 3}
+  - outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 0
+      loop: 0
+      volume: 0.8
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0, y: 0}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0, y: 0}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 0
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 7100d6ffe4cf9a240b44169b6ae6598b, type: 3}
+  chordSelectSounds:
+  - outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 0
+      loop: 0
+      volume: 0.8
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0, y: 0}
+      pitch: 0.63
+      randomizePitch: 0
+      pitchRandomRange: {x: 0, y: 0}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 0
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: d6c8ef804e24e004abc82e304d800806, type: 3}
+  - outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 0
+      loop: 0
+      volume: 0.8
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0, y: 0}
+      pitch: 0.63
+      randomizePitch: 0
+      pitchRandomRange: {x: 0, y: 0}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 0
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 6af6dc1bcb58cf24d8ba25c11c2b5883, type: 3}
+  - outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 0
+      loop: 0
+      volume: 0.8
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0, y: 0}
+      pitch: 0.63
+      randomizePitch: 0
+      pitchRandomRange: {x: 0, y: 0}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 0
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 8e0f6c333e9b80e44a57a8fe5404f51a, type: 3}
+  - outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 0
+      loop: 0
+      volume: 0.8
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0, y: 0}
+      pitch: 0.63
+      randomizePitch: 0
+      pitchRandomRange: {x: 0, y: 0}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 0
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 3d44417ed6165054c84215d58940817e, type: 3}
+  chordDeselectSounds:
+  - outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 0
+      loop: 0
+      volume: 0.8
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0, y: 0}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0, y: 0}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 0
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: bb36dde3c66074c498eb0e80186ed1c8, type: 3}
+  - outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 0
+      loop: 0
+      volume: 0.8
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0, y: 0}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0, y: 0}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 0
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: bf31fda2b3893bf43b38ef06623d684b, type: 3}
+  - outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 0
+      loop: 0
+      volume: 0.8
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0, y: 0}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0, y: 0}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 0
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 36827e447ac32574399bb5c080271aa2, type: 3}
+  - outputAudioMixerGroup: {fileID: 3308674434069215686, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 0
+      loop: 0
+      volume: 0.8
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0, y: 0}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0, y: 0}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 0
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 7100d6ffe4cf9a240b44169b6ae6598b, type: 3}
 --- !u!1 &7011871634388846849
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,6 +448,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7011871634388846855}
   - component: {fileID: 7011871634388846848}
+  - component: {fileID: 1443078942}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -201,3 +499,99 @@ MonoBehaviour:
     spread: 0
     bufferTime: 0
     lastTriggeredTime: 50000
+--- !u!82 &1443078942
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7011871634388846849}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

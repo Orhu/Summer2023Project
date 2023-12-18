@@ -604,16 +604,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1602502014}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: SFX_UI_MM_Select
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 6541421928326456978}
@@ -629,6 +629,18 @@ MonoBehaviour:
           m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 1562381606215578674}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 752266629}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -1764,6 +1776,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SFX_UI_MM_Select
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 252588730427602000}
         m_TargetAssemblyTypeName: Cardificer.MainMenu, Assembly-CSharp
         m_MethodName: ConfirmNewGame
@@ -3240,16 +3264,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6541421928326456978}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: SFX_UI_MM_Select
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 1602502014}
@@ -3265,6 +3289,18 @@ MonoBehaviour:
           m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 1562381606215578674}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 752266629}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -4699,6 +4735,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SFX_UI_MM_Select
+          m_BoolArgument: 1
+        m_CallState: 2
       - m_Target: {fileID: 11464827509115547}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
@@ -4758,6 +4806,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1738010998 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5888431357857361642, guid: 06930a8417aea364dbf491a5b1c7466f, type: 3}
+  m_PrefabInstance: {fileID: 1328021376}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6a1412c112604645b5dbc546cc61aec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1751511256
@@ -5020,7 +5079,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1751511256}
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SFX_UI_MM_Select
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6541421928326456978}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -5030,7 +5101,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 6541421928326456978}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
@@ -6254,7 +6325,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6541421928326456978}
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SFX_UI_MM_Select
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 7710164308026132041}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -6264,7 +6347,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 7710164308026132041}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
@@ -6491,6 +6574,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SFX_UI_MM_Select
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 252588730427602000}
         m_TargetAssemblyTypeName: Cardificer.MainMenu, Assembly-CSharp
         m_MethodName: Quit
@@ -6546,7 +6641,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7045979274504252387}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SFX_UI_MM_Select
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &1259708376631387845
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6616,6 +6723,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SFX_UI_MM_Select
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 11464827509115547}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
@@ -6705,7 +6824,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5698925994761603799}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SFX_UI_MM_Select
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1633533980122016511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7355,7 +7486,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6774493663772722424}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SFX_UI_MM_Select
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!224 &2480113785588349450
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8320,7 +8463,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5794826838298214014}
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SFX_UI_MM_Select
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6541421928326456978}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -8330,7 +8485,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 6541421928326456978}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
@@ -8633,6 +8788,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SFX_UI_MM_PageTurn
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 7862403707211977254}
         m_TargetAssemblyTypeName: InstructionMenu, Assembly-CSharp
         m_MethodName: NextPage
@@ -8998,7 +9165,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5257604989550653388}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SFX_UI_MM_Select
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &5257604989550653388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9435,6 +9614,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SFX_UI_MM_PageTurn
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 7862403707211977254}
         m_TargetAssemblyTypeName: InstructionMenu, Assembly-CSharp
         m_MethodName: PreviousPage
@@ -10122,7 +10313,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7710164308026132041}
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SFX_UI_MM_Select
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6541421928326456978}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -10132,7 +10335,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 6541421928326456978}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
@@ -10425,7 +10628,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2408244743166507645}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SFX_UI_MM_Select
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8251164834366923729
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10470,7 +10685,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6541421928326456978}
+      - m_Target: {fileID: 1738010998}
+        m_TargetAssemblyTypeName: Cardificer.MenuManager, Assembly-CSharp
+        m_MethodName: PlayUISound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: SFX_UI_MM_Select
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 5794826838298214014}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -10480,7 +10707,7 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 5794826838298214014}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine

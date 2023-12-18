@@ -233,13 +233,16 @@ MonoBehaviour:
     soundSettings:
       priority: 128
       loop: 0
-      volume: 1
+      volume: 0.59
       randomizeVolume: 1
       volumeRandomRange: {x: 0.9, y: 1}
       pitch: 1
       randomizePitch: 1
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     containerName: Pot_BreakSound
     clipsInContainer:
@@ -261,6 +264,9 @@ MonoBehaviour:
       randomizePitch: 1
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     containerName: Pot_BreakSound
     clipsInContainer:
@@ -282,6 +288,9 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 0}
 --- !u!114 &6258890840212835944
