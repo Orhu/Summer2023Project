@@ -79,18 +79,6 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Gets the value of a mirror parameter.
-        /// </summary>
-        /// <param name="name"> The parameter name. </param>
-        /// <returns> The value of a mirror parameter. </returns>
-        public bool GetMirror(string name)
-        {
-            if (!animator.hasBoundPlayables) { return false; }
-
-            return mirrorParametersToValues[name];
-        }
-
-        /// <summary>
         /// Sets the value of the given boolean parameter.
         /// </summary>
         /// <param name="name"> The parameter name. </param>
