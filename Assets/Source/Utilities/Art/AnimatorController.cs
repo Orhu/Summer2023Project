@@ -1,4 +1,6 @@
+using JetBrains.Annotations;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -9,6 +11,9 @@ namespace Cardificer
     /// </summary>
     public class AnimatorController : MonoBehaviour
     {
+        [Tooltip("The name of the animator trigger parameter to set if this sprite should be mirrored.")]
+        [SerializeField] private string flipParamName = "Flip";
+
         [Tooltip("The default mirror parameter, if empty no parameter will be set by default.")]
         [SerializeField] private string defaultMirrorParam;
 
@@ -21,6 +26,9 @@ namespace Cardificer
 
         // The animator to control
         private Animator animator;
+
+        // Whether or not this is mirrored.
+        private bool mirrored = false;
 
         /// <summary>
         /// Initialize reference.
@@ -59,11 +67,28 @@ namespace Cardificer
             { 
                 if (defaultMirrorParam.Length > 0)
                 {
-                    transform.localScale = new Vector3(mirrorParametersToValues[defaultMirrorParam] ? -1 : 1, 1, 1);
+                    SetMirrored(mirrorParametersToValues[defaultMirrorParam]);
                 }
                 return; 
             }
-            transform.localScale = new Vector3(mirrorParametersToValues[animactionClipsToMirrorParameters[currentClip]] ? -1 : 1, 1, 1);
+            SetMirrored(mirrorParametersToValues[animactionClipsToMirrorParameters[currentClip]]);
+
+
+            void SetMirrored(bool newMirrored)
+            {
+                if (mirrored != newMirrored)
+                {
+                    mirrored = newMirrored;
+                    if (animator.parameters.Any(p => p.name == flipParamName))
+                    {
+                        animator.SetTrigger(flipParamName);
+                    }
+                    else
+                    {
+                        transform.localScale = new Vector3(newMirrored ? -1 : 1, 1, 1);
+                    }
+                }
+            }
         }
 
         /// <summary>
