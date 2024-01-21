@@ -86,7 +86,7 @@ namespace Cardificer
         public bool GetMirror(string name)
         {
             if (!animator.hasBoundPlayables) { return false; }
-
+            if (!mirrorParametersToValues.ContainsKey(name)) { return false; }
             return mirrorParametersToValues[name];
         }
 
