@@ -12,9 +12,9 @@ namespace Cardificer
         [Tooltip("The time to make this a different color for.")]
         [SerializeField] private float flashDuration = 0.25f;
 
-
-
         private SpriteRenderer spriteRenderer;
+
+        bool useMultipleSprites = false; 
 
         /// <summary>
         /// Initializes references

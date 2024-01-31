@@ -35,7 +35,7 @@ AnimatorController:
   m_Name: Trap_Default
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: Trigger
+  - m_Name: triggerTrap
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -63,7 +63,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Trigger
+    m_ConditionEvent: triggerTrap
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3645355911251667843}
@@ -90,7 +90,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -3645355911251667843}
-    m_Position: {x: 340, y: 0, z: 0}
+    m_Position: {x: 340, y: 10, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8870248453147334012}
     m_Position: {x: 340, y: 120, z: 0}
