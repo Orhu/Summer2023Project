@@ -25,8 +25,12 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 8300000, guid: 630a07c5ecf9a614ebda5a5cc96672fb, type: 3}
+  stopActionSoundOnActionComplete: 0
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
@@ -53,9 +57,9 @@ MonoBehaviour:
   homingDelay: 0
   homingAimMode: 0
   switchAfterHit: 0
-  visualObject: {fileID: 2809569760718847691, guid: 58cb80ca99a21384c938e575fad9e95a, type: 3}
-  detachVisualsBeforeDestroy: 0
-  detatchedVisualsTimeBeforeDestroy: 0
+  visualObject: {fileID: 215188564930514452, guid: e895579ae2d5a7e4e94c78db220c9729, type: 3}
+  detachVisualsBeforeDestroy: 1
+  detatchedVisualsTimeBeforeDestroy: 1
   travelSound:
     outputAudioMixerGroup: {fileID: 0}
     useDefaultSettings: 1
@@ -69,8 +73,12 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 0}
+  travelSoundFadeOutTime: 0.3
   impactSound:
     outputAudioMixerGroup: {fileID: 0}
     useDefaultSettings: 1
@@ -84,8 +92,29 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 8300000, guid: b04e9014883b08342b8715bee45320fa, type: 3}
+  chargeSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
   spawnLocation: 0
   aimMode: 0
   waitForProjectileDeath: 0
