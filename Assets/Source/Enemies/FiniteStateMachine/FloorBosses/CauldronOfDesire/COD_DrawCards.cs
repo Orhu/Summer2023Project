@@ -15,6 +15,7 @@ namespace Cardificer.FiniteStateMachine
         [SerializeField] private float displayCardTime;
 
         [Tooltip("Possible actions that could be drawn to play")]
+        //Note:Emmeline - can edit this to trigger animations
         [SerializeField] private GenericWeightedThings<AttackSequence> cardDrawPool;
         
         /// <summary>
@@ -80,6 +81,7 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> The display game object. </returns>
         private GameObject DisplayCard(BaseStateMachine stateMachine, AttackSequence cardToDisplay)
         {
+            //TODO Emmeline
             GameObject gameObject = new GameObject();
             gameObject.transform.name = "CardPickDisplay";
             gameObject.transform.position = stateMachine.transform.position + (Vector3.up * 2f); 
