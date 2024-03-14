@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: -672801363122478915}
   - component: {fileID: 1810700651662587120}
   m_Layer: 7
-  m_Name: Player
+  m_Name: OLDPlayer
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -218,8 +218,6 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   hasBossHealthbar: 0
-  animateWhenHurt: 0
-  hurtAnimatorObjName: 
   deathSounds:
     outputAudioMixerGroup: {fileID: 2021301823164702670, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
     useDefaultSettings: 1
@@ -340,9 +338,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 059485bb3fc502f49928b10a7bfc2323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  flipParamName: 
   defaultMirrorParam: 
-  _animactionClipsToMirrorParameters: []
+  _animactionClipsToMirrorParameters:
+  - clip: {fileID: 7400000, guid: 1670950a09ca1a745afc54d500acd406, type: 2}
+    parameterName: castLeft
+  - clip: {fileID: 7400000, guid: bb297b674181c2f4ba87dce3eba0939f, type: 2}
+    parameterName: runLeft
+  - clip: {fileID: 7400000, guid: 825a49953a8a8b547bd2fe82cbf4416a, type: 2}
+    parameterName: idleLeft
+  - clip: {fileID: 7400000, guid: 27f9e1fa60bc2b8448ef8ec0e564d7df, type: 2}
+    parameterName: castLeft
 --- !u!82 &548517994
 AudioSource:
   m_ObjectHideFlags: 0
@@ -967,8 +972,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8950986621476600270}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.031, y: 0.075, z: 0}
-  m_LocalScale: {x: 1.2610219, y: 1.2769841, z: 1.2769841}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6351846847079443315}
@@ -1015,7 +1020,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 675787508, guid: 16fd31da66874634fb6c8316066a0aa5, type: 3}
+  m_Sprite: {fileID: -1368825985, guid: 6724260901b175544be7a0bffbddfa26, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1036,7 +1041,7 @@ Animator:
   m_GameObject: {fileID: 8950986621476600270}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b2ee6cf28d905f84a8a0ecc5b7df3922, type: 2}
+  m_Controller: {fileID: 9100000, guid: 07833e07c480fed489ffce290e5a430b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1101,10 +1106,6 @@ PrefabInstance:
     - target: {fileID: 8835863453068094398, guid: b38315103bb7df24da42bf91ff156e1c, type: 3}
       propertyPath: m_Name
       value: PlayerAimIndicator
-      objectReference: {fileID: 0}
-    - target: {fileID: 8835863453068094398, guid: b38315103bb7df24da42bf91ff156e1c, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b38315103bb7df24da42bf91ff156e1c, type: 3}
