@@ -5,32 +5,27 @@ using UnityEngine;
 //applied to projectile that should spin + change spin direction when it hits another surface
 public class ProjectileRotation : MonoBehaviour
 {
-    private GameObject objToRotate;
+    //previous position - used to see when ball should change direction
+    private Vector3 prevPos;
+
     private Vector3 rollTransform = new Vector3(0.0f, 0.0f, 3f);
     private Transform startingParent;
 
-    // Start is called before the first frame update
+    //Start is called before the first frame update
     void Start()
     {
-        objToRotate = this.gameObject;
-        startingParent = objToRotate.transform.parent;
+        prevPos = gameObject.transform.position;
+        startingParent = gameObject.transform.parent;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //z increases = counter clockwise
-        objToRotate.transform.Rotate(rollTransform);
-        
-        //check if we should play despawn animation
-        if(transform.parent != startingParent)
-        {
-            GetComponent<Animator>().SetTrigger("despawn");
-        }
+    void FixedUpdate()
+    { 
+        gameObject.transform.Rotate(rollTransform);
     }
 
     public void SwitchRollDirection()
     {
+        //note: increasing z rolls counter clockwise and decreasing z rolls clockwise
         rollTransform = new Vector3(rollTransform.x, rollTransform.y, (rollTransform.z * -1f));
     }
 }

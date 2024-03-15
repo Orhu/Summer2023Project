@@ -26,14 +26,6 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// When we enable the menu, play the player death animation
-        /// </summary>
-        private void OnEnable()
-        {
-            playerDeathAnim.Play("A_DeathScreen_PlayerSpin");
-        }
-
-        /// <summary>
         /// Ability to reset the game.
         /// Clears saves and reloads the current scene
         /// </summary>
@@ -55,4 +47,3 @@ namespace Cardificer
         }
     }
 }
-
