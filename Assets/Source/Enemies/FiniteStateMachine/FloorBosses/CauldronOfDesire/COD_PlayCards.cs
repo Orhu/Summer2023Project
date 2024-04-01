@@ -18,6 +18,9 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> Waits amount of time specified by the given attack sequence </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
+            //get animator used to trigger when an attack starts/ stops
+            Animator anim = stateMachine.gameObject.transform.Find("Sprite").GetComponent<Animator>();
+
             stateMachine.trackedVariables.TryAdd("CardsPlayed", 0);
             stateMachine.trackedVariables.TryAdd("ActionTimeComplete", false);
 
@@ -35,7 +38,10 @@ namespace Cardificer.FiniteStateMachine
             for (int i = 0; i < currentAttackSequence.actionSequence.Count; i++)
             {
                 stateMachine.trackedVariables["ActionTimeComplete"] = false;
-                
+
+                //open mouth - works but decided not to include
+                //anim.SetBool("isAttacking", true);
+
                 actionSequence[i].Play(stateMachine, FloorGenerator.currentRoom.livingEnemies, () =>
                 {
                     stateMachine.trackedVariables["ActionTimeComplete"] = true;
@@ -43,7 +49,10 @@ namespace Cardificer.FiniteStateMachine
                 
                 yield return new WaitUntil(() => (bool)stateMachine.trackedVariables["ActionTimeComplete"]);
             }
-            
+
+            //close mouth - works but decided not to include
+            //anim.SetBool("isAttacking", false);
+
             stateMachine.cooldownData.cooldownReady[this] = true;
             stateMachine.trackedVariables["CardsPlayed"] = (int)stateMachine.trackedVariables["CardsPlayed"] + 1;
             yield break;

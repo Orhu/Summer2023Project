@@ -15,7 +15,6 @@ namespace Cardificer.FiniteStateMachine
         [SerializeField] private float displayCardTime;
 
         [Tooltip("Possible actions that could be drawn to play")]
-        //Note:Emmeline - can edit this to trigger animations
         [SerializeField] private GenericWeightedThings<AttackSequence> cardDrawPool;
         
         /// <summary>
@@ -47,17 +46,24 @@ namespace Cardificer.FiniteStateMachine
             
             stateMachine.trackedVariables.TryAdd("CardsDrawn", 0);
             stateMachine.trackedVariables.TryAdd("CardsDisplayed", 0);
-            
+
             stateMachine.trackedVariables.Remove("Card"  + stateMachine.trackedVariables["CardsDrawn"]); // if the card exists already, remove it
 
             AttackSequence selectedAttackSequence = PickRandomAttack();
-            
+
+            //if we haven't drawn a card yet, wait for brewing animation to finish, then display cards
+            if ((int)stateMachine.trackedVariables["CardsDrawn"] == 0)
+            {
+                yield return new UnityEngine.WaitForSeconds(2.1f);
+            }
+
             stateMachine.trackedVariables.Add("Card" + (int)stateMachine.trackedVariables["CardsDrawn"], selectedAttackSequence);
             stateMachine.trackedVariables["CardsDrawn"] = (int)stateMachine.trackedVariables["CardsDrawn"] + 1;
-            
+ 
             GameObject cardDisplay = DisplayCard(stateMachine, selectedAttackSequence);
             yield return new UnityEngine.WaitForSeconds(displayCardTime);
             Destroy(cardDisplay);
+
             stateMachine.trackedVariables["CardsDisplayed"] = (int)stateMachine.trackedVariables["CardsDisplayed"] + 1;
 
             stateMachine.cooldownData.cooldownReady[this] = true;
@@ -81,20 +87,34 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> The display game object. </returns>
         private GameObject DisplayCard(BaseStateMachine stateMachine, AttackSequence cardToDisplay)
         {
-            //TODO Emmeline
             GameObject gameObject = new GameObject();
+            gameObject.transform.parent = FindDeepChild(stateMachine.gameObject.transform, "DrawnAttackCard");
             gameObject.transform.name = "CardPickDisplay";
-            gameObject.transform.position = stateMachine.transform.position + (Vector3.up * 2f); 
-            
+
+            //emmeline: hardcoded position and scale to fit cauldron attack art
+            gameObject.transform.localScale = new Vector3(0.128f, 0.128f, 0.128f);     
+            gameObject.transform.localPosition = new Vector3(.296f, -.139f, 0f);
+
+            //show attack sequence with sprite
             SpriteRenderer spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
             spriteRenderer.sprite = cardToDisplay.abilitySprite;
+            spriteRenderer.sortingOrder = 100;
 
-            Rigidbody2D rigidbody = gameObject.AddComponent<Rigidbody2D>();
-            rigidbody.velocity = Vector3.up;
-            rigidbody.isKinematic = true;
-            
             gameObject.SetActive(true);
             return gameObject;
+        }
+
+        private Transform FindDeepChild(Transform aParent, string aName)
+        {
+            Queue<Transform> queue = new Queue<Transform>();
+            queue.Enqueue(aParent);
+            while (queue.Count > 0)
+            {
+                var c = queue.Dequeue();
+                if (c.name == aName) return c;
+                foreach (Transform t in c) queue.Enqueue(t);
+            }
+            return null;
         }
     }
 }
