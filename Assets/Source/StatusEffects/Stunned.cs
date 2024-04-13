@@ -73,5 +73,10 @@ namespace Cardificer
             gameObject.GetComponent<IActor>().GetOnRequestCanAct() -= PreventAction;
             gameObject.GetComponent<Movement>().requestSpeedModifications -= PreventMovement;
         }
+
+        public override StatusEffectType StatusType()
+        {
+            return StatusEffectType.Stunned;
+        }
     }
 }

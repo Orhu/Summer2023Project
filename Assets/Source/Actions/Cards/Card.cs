@@ -68,6 +68,12 @@ namespace Cardificer
         [Tooltip("The text displayed in the card UI explaining what happens when you chord the card.")]
         public string chordEffectText = "Bees";
 
+        [Tooltip("The cost to copy the card in the card printer")]
+        public int copyPrice = 5;
+
+        [Tooltip("The cost to shred the card in the card printer")]
+        public int shredPrice = 5;
+
 
         /// <summary>
         /// Plays all of the actions of this card from the actor.
@@ -75,6 +81,9 @@ namespace Cardificer
         /// <param name="actor"> The actor that will be playing this action. </param>
         public void PlayActions(IActor actor)
         {
+
+            Debug.Log($"Card played!");
+
             foreach (Action cardAction in actions)
             {
                 cardAction.Play(actor);

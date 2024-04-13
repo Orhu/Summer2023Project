@@ -15,7 +15,7 @@ namespace Cardificer
             value.onHit +=
                 (Collision2D collision) =>
                 {
-                    if (collision.gameObject.layer != LayerMask.NameToLayer("Blockers")) { return; }
+                    if (collision.gameObject.layer != LayerMask.NameToLayer("Walls")) { return; }
 
                     if (--value.remainingHits > 0)
                     {

@@ -63,5 +63,10 @@ namespace Cardificer
             }
             base.OnDestroy();
         }
+
+        public override StatusEffectType StatusType()
+        {
+            return StatusEffectType.Slowed_DurationsAddOnStack;
+        }
     }
 }

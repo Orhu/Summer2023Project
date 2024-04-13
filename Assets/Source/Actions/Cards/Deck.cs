@@ -156,7 +156,7 @@ namespace Cardificer
 
 #region GetCardAssetName
 
-#if UNITY_EDITOR
+#if !UNITY_EDITOR
             // Cards mapped to their asset names.
             static Dictionary<Card, string> cardsToAssetNames = new Dictionary<Card, string>();
 
@@ -383,10 +383,14 @@ namespace Cardificer
         /// <param name="handIndex"> The index in the hand of the card. </param>
         public void SelectCard(int handIndex)
         {
+
             if (inHandCards.Count <= handIndex || inHandCards[handIndex] == null || cardIndicesToCooldowns.ContainsKey(handIndex) || actingCardIndices.Contains(handIndex))
             {
                 return;
             }
+
+            int selectSoundsLength = SoundGetter.Instance.cardSelectSounds.Length;
+            int soundIndex = handIndex > selectSoundsLength ? handIndex - selectSoundsLength : handIndex;
 
             // Play normal cards.
             if (inHandCards[handIndex] is not AttackCard)
@@ -402,6 +406,7 @@ namespace Cardificer
             {
                 card.PreviewActions(actor);
                 previewedCardIndices.Add(handIndex);
+                AudioManager.instance.PlaySoundBaseOnTarget(SoundGetter.Instance.cardSelectSounds[soundIndex], AudioManager.instance.transform, true);
                 return;
             }
 
@@ -411,6 +416,7 @@ namespace Cardificer
             {
                 previewedCardIndices.RemoveAt(0);
                 rootCard.CancelPreviewActions(actor);
+                AudioManager.instance.PlaySoundBaseOnTarget(SoundGetter.Instance.cardDeselectSounds[soundIndex], AudioManager.instance.transform, true);
 
                 // If there are still previewed cards
                 if (previewedCardIndices.Count > 0)
@@ -433,11 +439,30 @@ namespace Cardificer
             {
                 rootCard.RemoveFromPreview(actor, card);
                 previewedCardIndices.Remove(handIndex);
+                AudioManager.instance.PlaySoundBaseOnTarget(SoundGetter.Instance.chordDeselectSounds[soundIndex], AudioManager.instance.transform, true);
             }
             else
             {
-                rootCard.AddToPreview(actor, card);
-                previewedCardIndices.Add(handIndex);
+                // Added a limit of 2 cards to be chorded, a root and a chord.
+
+                // If we only have one card previewed, we can add a second.
+                if (previewedCardIndices.Count < 2)
+                {
+                    rootCard.AddToPreview(actor, card);
+                    previewedCardIndices.Add(handIndex);
+                    AudioManager.instance.PlaySoundBaseOnTarget(SoundGetter.Instance.chordSelectSounds[soundIndex], AudioManager.instance.transform, true);
+                }
+                // If we have 2 cards selected, and we go to select another
+                // that isn't the root or the second (chorded) card we already have,
+                // swap out the second (chorded) card.
+                else
+                {
+                    rootCard.AddToPreview(actor, card);
+                    previewedCardIndices[1] = handIndex; 
+                    AudioManager.instance.PlaySoundBaseOnTarget(SoundGetter.Instance.chordDeselectSounds[soundIndex], AudioManager.instance.transform, true);
+                }
+
+
             }
         }
 

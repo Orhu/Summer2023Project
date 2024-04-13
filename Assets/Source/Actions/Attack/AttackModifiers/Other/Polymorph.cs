@@ -30,7 +30,7 @@ namespace Cardificer
         {
             if (component.CompareTag("Boss") || component.CompareTag("Inanimate")) { return; }
             if (component.GetComponent<Health>() == null) { return; }
-            if (component.gameObject.name.Split("(")[0] == morphInto.name) { return; }
+            //if (component.gameObject.name.Split("(")[0] == morphInto.name) { return; } 
 
             GameObject createdObject = Instantiate(morphInto);
             createdObject.transform.position = component.transform.position;
@@ -38,7 +38,10 @@ namespace Cardificer
 
             polymorphProjectile.ignoredObjects.Add(createdObject);
 
-            Destroy(component.gameObject);
+            if (component.gameObject.name.Split("(")[0] != morphInto.name)
+            {
+                Destroy(component.gameObject);
+            }
         }
     }
 }

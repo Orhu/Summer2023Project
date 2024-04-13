@@ -17,6 +17,10 @@
             /// <returns> Ends when the action is complete. </returns>
             protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
             {
+                if (stateMachine.pathData.prevFollowCoroutine != null)
+                {
+                    stateMachine.StopCoroutine(stateMachine.pathData.prevFollowCoroutine);
+                }
                 stateMachine.pathData.keepFollowingPath = false;
                 stateMachine.pathData.ignorePathRequests = true;
                 stateMachine.GetComponent<SimpleMovement>().movementInput = Vector2.zero;

@@ -24,8 +24,8 @@ namespace Cardificer
         /// </summary>
         /// <param name="waypoints"> Array of waypoints to travel down </param>
         /// <param name="startPos"> Starting position </param>
-        /// <param name="stoppingDist"> Distance from endpoint to begin slowing down and stopping </param>
-        public Path(Vector2[] waypoints, Vector3 startPos, float stoppingDist)
+        /// <param name="stoppingDist"> How close to endpoint before starting to slow down </param>
+        public Path(Vector2[] waypoints, Vector3 startPos, float stoppingDist = 0)
         {
             this.waypoints = waypoints;
             turnBoundaries = new Line[this.waypoints.Length];

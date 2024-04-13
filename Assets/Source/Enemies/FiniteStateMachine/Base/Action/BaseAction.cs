@@ -11,6 +11,6 @@ namespace Cardificer.FiniteStateMachine
         /// Run this action
         /// </summary>
         /// <param name="stateMachine"> The state machine to be used. </param>
-        public abstract void Execute(BaseStateMachine stateMachine);
+        public abstract void Execute(BaseStateMachine stateMachine); 
     }
 }

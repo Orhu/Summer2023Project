@@ -58,5 +58,10 @@ namespace Cardificer
 
             gameObject.GetComponent<Health>().onRequestIncomingAttackModification -= PreventStatusEffects;
         }
+
+        public override StatusEffectType StatusType()
+        {
+            return StatusEffectType.Purified;
+        }
     }
 }

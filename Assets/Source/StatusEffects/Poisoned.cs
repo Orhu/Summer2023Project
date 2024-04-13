@@ -16,7 +16,7 @@ namespace Cardificer
         [SerializeField] private int perStackDamageMultiplier = 2;
 
         [Tooltip("Damage per second per stack.")]
-        [SerializeField] private float perStackAdditionalDuration = 1f;
+        [SerializeField] private float perStackAdditionalDuration = 0.5f;
 
         [Tooltip("The time in seconds between dealing damage.")]
         [SerializeField] private float tickInterval = 2f;
@@ -31,7 +31,10 @@ namespace Cardificer
             protected set
             {
                 remainingDuration = duration + value * perStackAdditionalDuration;
-                damage *= perStackDamageMultiplier;
+                if (value <= 3) 
+                {
+                    damage *= perStackDamageMultiplier;
+                }
                 _stacks = value;
             }
             get { return _stacks; }
@@ -57,6 +60,11 @@ namespace Cardificer
                 gameObject.GetComponent<Health>().ReceiveAttack(new DamageData(damage, DamageData.DamageType.Special, null, false), true);
                 timeToDamage += tickInterval;
             }
+        }
+
+        public override StatusEffectType StatusType()
+        {
+            return StatusEffectType.Poisoned;
         }
     }
 }

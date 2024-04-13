@@ -18,6 +18,9 @@ namespace Cardificer.FiniteStateMachine
         [Tooltip("Max number (exclusive)")]
         [SerializeField] private int maxNumber;
 
+        [Tooltip("Allow the same number to be picked again? If false, will only pick a unique number (not the one already assigned to the var).")]
+        [SerializeField] private bool allowSameNumber = true;
+
         /// <summary>
         /// Sets the requested name variable to a randomly picked int.
         /// </summary>
@@ -25,10 +28,26 @@ namespace Cardificer.FiniteStateMachine
         /// <returns> Does not wait </returns>
         protected override IEnumerator PlayAction(BaseStateMachine stateMachine)
         {
+            bool valAlreadyExists = stateMachine.trackedVariables.TryGetValue(trackedVariableName, out var currentNum);
             int randomNum = Random.Range(minNumber, maxNumber);
-            stateMachine.trackedVariables.TryAdd(trackedVariableName, randomNum);
-            stateMachine.trackedVariables[trackedVariableName] = randomNum;
-            stateMachine.cooldownData.cooldownReady[this] = true;
+
+            if (valAlreadyExists && !allowSameNumber)
+            {
+                while (randomNum == (int)currentNum)
+                {
+                    // Reroll until we get a unique number
+                    randomNum = Random.Range(minNumber, maxNumber);
+                }
+                stateMachine.trackedVariables[trackedVariableName] = randomNum;
+                stateMachine.cooldownData.cooldownReady[this] = true;
+            }
+            else
+            {
+                stateMachine.trackedVariables.TryAdd(trackedVariableName, randomNum);
+                stateMachine.trackedVariables[trackedVariableName] = randomNum;
+                stateMachine.cooldownData.cooldownReady[this] = true;
+            }
+
             yield break;
         }
     }

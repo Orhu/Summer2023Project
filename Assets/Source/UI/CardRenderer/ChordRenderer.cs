@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 namespace Cardificer
 {
@@ -14,8 +15,11 @@ namespace Cardificer
         [Tooltip("Image representing the chorded runes background image")]
         public Image chordBackgroundImage;
 
-        [Tooltip("Star representing the third card that's chorded")]
-        public Image chordStarImage;
+        [Tooltip("The text representing the name of the root chord card.")]
+        public TextMeshProUGUI chordRootText;
+
+        [Tooltip("The text representing the effect of the second chorded card.")]
+        public TextMeshProUGUI chordEffectText;
 
         [Tooltip("Animator for the chordRenderer")]
         public Animator chordAnimator;
@@ -37,7 +41,10 @@ namespace Cardificer
             chordRootImage.enabled = true;
             chordRootImage.sprite = currentCardInHand.chordImage;
             chordBackgroundImage.color = currentCardInHand.chordColor;
-            chordStarImage.enabled = false;
+            chordEffectText.text = "";
+            chordEffectText.enabled = false;
+            chordRootText.enabled = true;
+            chordRootText.text = currentCardInHand.displayName;
         }
 
         /// <summary>
@@ -47,18 +54,9 @@ namespace Cardificer
         public void DisplayChordLevelTwo(Card currentCardInHand)
         {
             chordBackgroundImage.color = currentCardInHand.chordColor;
-            chordStarImage.enabled = false;
-        }
-
-        /// <summary>
-        /// Displays the third level of chording, displays the rotating star 
-        /// with the color of the currentCardInHand
-        /// </summary>
-        /// <param name="currentCardInHand">The card that is being previewed (being chorded)</param>
-        public void DisplayChordLevelThree(Card currentCardInHand)
-        {
-            chordStarImage.enabled = true;
-            chordStarImage.color = currentCardInHand.chordColor;
+            chordEffectText.enabled = true;
+            chordEffectText.text = "+" + currentCardInHand.chordEffectText;
+            chordEffectText.color = currentCardInHand.chordColor;
         }
 
         /// <summary>
@@ -68,8 +66,11 @@ namespace Cardificer
         {
             chordRootCard = null;
             chordRootImage.enabled = false;
-            chordStarImage.enabled = false;
             chordBackgroundImage.color = Color.white;
+            chordRootText.text = "";
+            chordRootText.enabled = false;
+            chordEffectText.text = "";
+            chordEffectText.enabled = false;
         }
     }
 }

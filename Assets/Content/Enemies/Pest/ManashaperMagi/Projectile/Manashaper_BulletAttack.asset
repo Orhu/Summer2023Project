@@ -12,7 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: Manashaper_BulletAttack
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 8300000, guid: 4791a2acbd482dd49829960fb200f8a2, type: 3}
+  actionSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
@@ -20,13 +34,13 @@ MonoBehaviour:
     damageType: 1
     statusEffects: []
     invertInvincibility: 0
+    dontShowDamageNumber: 0
   hitCount: 1
   applyDamageOnHit: 1
-  modifiers:
-  - {fileID: 11400000, guid: 983f33c68b89d6f4db70ae60e7508528, type: 2}
+  modifiers: []
   immuneToShield: 0
   immuneToReflect: 0
-  shape: {fileID: 11400000, guid: a80cdd12837da664290f207130e228a6, type: 2}
+  shape: {fileID: 11400000, guid: 8762e8d6e20c5fc46866940dae03bfde, type: 2}
   lifetime: 1.5
   initialSpeed: 10
   acceleration: 0
@@ -37,11 +51,39 @@ MonoBehaviour:
   homingDelay: 0
   homingAimMode: 1
   switchAfterHit: 0
-  visualObject: {fileID: 4721454448969483725, guid: 2a0763c8cb61468478bff92a9600038f, type: 3}
+  visualObject: {fileID: 4721454448969483725, guid: f9a6361677a163548aee803e722dc6e7, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  travelAudioClip: {fileID: 0}
-  impactAudioClip: {fileID: 0}
+  travelSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
+  impactSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
   spawnLocation: 0
   aimMode: 3
   waitForProjectileDeath: 1

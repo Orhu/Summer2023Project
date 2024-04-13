@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b7609383c524e9cb7c438272085f9b6, type: 3}
+  m_Name: CleansingBrewer_ShouldFollow
+  m_EditorClassIdentifier: 
+  decisions:
+  - invert: 1
+    decision: {fileID: 11400000, guid: 1170ac53731ca874c9b4aea1729ad9f5, type: 2}
+    nextOperator: 1
+  - invert: 1
+    decision: {fileID: 11400000, guid: 5d5dd0f2d4dda3442a2dbcbd6664a56c, type: 2}
+    nextOperator: 0
+  trueAction: {fileID: 11400000, guid: 8f0e30cd4faad6d449f2fdebd8263cf5, type: 2}

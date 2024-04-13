@@ -35,5 +35,10 @@ namespace Cardificer
             base.Update();
             gameObject.GetComponent<Deck>()?.SubtractFromCooldowns((1/cooldownMultiplier) * Time.deltaTime);
         }
+
+        public override StatusEffectType StatusType()
+        {
+            return StatusEffectType.Focused;
+        }
     }
 }

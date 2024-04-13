@@ -21,6 +21,9 @@ namespace Cardificer
         [Tooltip("The time in seconds between dealing damage.")]
         [SerializeField] private float tickInterval = 1f;
 
+        [Tooltip("The amount to speed up the tick rate each stack.")]
+        [SerializeField] private float tickIntervalDecreaseRate = 0.5f;
+
         // The time until the next damage tick is applied
         private float timeToDamage;
 
@@ -32,6 +35,7 @@ namespace Cardificer
             {
                 remainingDuration = perStackAdditionalDuration; // reset to max duration on stack
                 damage *= perStackDamageMultiplier;
+                tickInterval *= tickIntervalDecreaseRate;
                 _stacks = value;
             }
             get { return _stacks; }
@@ -60,5 +64,10 @@ namespace Cardificer
         }
 
         // TODO: need functionality to suport removal of this status when the affected entity picks up a healing item (should only ever be something the player does).
+
+        public override StatusEffectType StatusType()
+        {
+            return StatusEffectType.Toxic;
+        }
     }
 }

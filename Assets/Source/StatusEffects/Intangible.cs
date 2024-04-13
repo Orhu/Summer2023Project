@@ -51,5 +51,10 @@ namespace Cardificer
             if (gameObject == null) { return; }
             gameObject.GetComponent<Collider2D>().enabled = true;
         }
+
+        public override StatusEffectType StatusType()
+        {
+            return StatusEffectType.Intangible;
+        }
     }
 }

@@ -36,7 +36,10 @@ namespace Cardificer
         public float scaleDuration = 0.25f;
 
         [Tooltip("Set by the CardRenderer's manager when the card is selected.")]
-        public bool isSelected;
+        [HideInInspector] public bool isSelected;
+
+        [Tooltip("Set when you want a card to be hoverable.")]
+        public bool isHoverable;
 
         // Simple flag for knowing when the mouse is hovering over
         // the CardRenderer
@@ -60,6 +63,10 @@ namespace Cardificer
                 links.projectileTypeImage.enabled = shouldEnable;
                 links.flavorTextBox.enabled = shouldEnable;
                 links.coolDownOverlayText.enabled = shouldEnable;
+                if (links.priceText)
+                {
+                    links.priceText.enabled = shouldEnable;
+                }
                 if (shouldEnable)
                 {
                     // Name of the card
@@ -126,7 +133,7 @@ namespace Cardificer
         }
 
         [Tooltip("The links to the necessary components for rendering.")]
-        [SerializeField] private ComponentLinks links;
+        public ComponentLinks links;
 
         [Tooltip("Whether to render the action side or the effect side of the card.")]
         [SerializeField] private bool _renderActionSide;
@@ -188,7 +195,10 @@ namespace Cardificer
         /// <param name="eventData">Not used</param>
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (!isHovered)
+            //enable outline
+            links.outlineSprite.gameObject.SetActive(true);
+
+            if (!isHovered && isHoverable)
             {
                 // Make the card grow
                 StartCoroutine(ScaleCardRenderer(true));
@@ -209,7 +219,10 @@ namespace Cardificer
         /// <param name="eventData">Not used</param>
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (isHovered)
+            //disable outline
+            links.outlineSprite.gameObject.SetActive(false);
+            
+            if (isHovered && isHoverable)
             {
                 // Shrink the card
                 StartCoroutine(ScaleCardRenderer(false));
@@ -317,7 +330,9 @@ namespace Cardificer
         /// </summary>
         public void OnSelect(BaseEventData eventData)
         {
-            if (!isHovered)
+            //enable outline
+            links.outlineSprite.gameObject.SetActive(true);
+            if (!isHovered && isHoverable)
             {
                 // Make the card grow
                 StartCoroutine(ScaleCardRenderer(true));
@@ -338,7 +353,9 @@ namespace Cardificer
         /// <param name="eventData"></param>
         public void OnDeselect(BaseEventData eventData)
         {
-            if (isHovered)
+            //disable outline
+            links.outlineSprite.gameObject.SetActive(false);
+            if (isHovered && isHoverable)
             {
                 // Shrink the card
                 StartCoroutine(ScaleCardRenderer(false));
@@ -358,7 +375,7 @@ namespace Cardificer
         /// Struct for storing the needed component references.
         /// </summary>
         [System.Serializable]
-        struct ComponentLinks
+        public struct ComponentLinks
         {
             [Tooltip("The text boxed used to display the name of the card.")]
             public TMP_Text nameTextBox;
@@ -392,6 +409,9 @@ namespace Cardificer
 
             [Tooltip("The text displaying the card's chord effect.")]
             public TMP_Text chordEffectText;
+
+            [Tooltip("The text displaying the card's price.")]
+            public TMP_Text priceText;
         }
     }
 }

@@ -101,6 +101,7 @@ namespace Cardificer
         public void SelectCard(CardRenderer cardRenderer)
         {
             selectedCard = cardRenderer.card;
+            MenuManager.instance.PlayUISound("");
         }
 
         /// <summary>
@@ -115,6 +116,7 @@ namespace Cardificer
             // Remove the reference to the game world booster pack object
             _boosterPackObject = null;
 
+            MenuManager.instance.PlayUISound("");
             MenuManager.Close<BoosterPackMenu>();
         }
     }

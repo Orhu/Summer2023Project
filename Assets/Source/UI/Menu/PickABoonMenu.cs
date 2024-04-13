@@ -86,6 +86,7 @@ namespace Cardificer
                         selectedBoon = boonInfo.boon;
                         onSelected?.Invoke();
                         boonInfo.onSelected?.Invoke();
+                        MenuManager.instance.PlayUISound("");
                     });
             }
         }
@@ -104,6 +105,7 @@ namespace Cardificer
         public void PickSelectedBoon()
         {
             selectedBoon.Apply();
+            MenuManager.instance.PlayUISound("");
             MenuManager.Close<PickABoonMenu>(true);
         }
     }

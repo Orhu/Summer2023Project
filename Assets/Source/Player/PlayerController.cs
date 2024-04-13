@@ -79,8 +79,16 @@ namespace Cardificer
         {
             if (!SaveManager.autosaveExists) 
             {
+                /* Disabled to allow for trial of starting decks.
                 MenuManager.Open<DraftMenu>(lockOpen: true);
                 return; 
+                */
+
+                // Check for starter deck value, default 0
+                // Call to starter deck thing I'm going to make what stores all the different starting decks
+                
+                StarterDeckManager.FillDeck();
+                return;
             }
 
             if (!Player.SetMoney(SaveManager.savedPlayerMoney))
@@ -364,6 +372,7 @@ namespace Cardificer
         {
             lastInputWasGamepad = false;
             MenuManager.Toggle<PauseMenu>();
+            MenuManager.instance.PlayUISound("");
         }
 
         /// <summary>
@@ -373,6 +382,7 @@ namespace Cardificer
         {
             lastInputWasGamepad = true;
             MenuManager.Toggle<PauseMenu>();
+            MenuManager.instance.PlayUISound("");
         }
 
         /// <summary>
@@ -383,6 +393,7 @@ namespace Cardificer
             lastInputWasGamepad = false;
             if (MenuManager.IsMenuOpen(typeof(PauseMenu))) { return; }
             MenuManager.Toggle<MapMenu>();
+            MenuManager.instance.PlayUISound("");
         }
 
         /// <summary>
@@ -393,6 +404,7 @@ namespace Cardificer
             lastInputWasGamepad = true;
             if (MenuManager.IsMenuOpen(typeof(PauseMenu))) { return; }
             MenuManager.Toggle<MapMenu>();
+            MenuManager.instance.PlayUISound("");
         }
 
         /// <summary>
@@ -403,6 +415,7 @@ namespace Cardificer
             lastInputWasGamepad = false;
             if (MenuManager.IsMenuOpen(typeof(PauseMenu))) { return; }
             MenuManager.Toggle<CardMenu>();
+            MenuManager.instance.PlayUISound("");
         }
 
         /// <summary>
@@ -413,6 +426,7 @@ namespace Cardificer
             lastInputWasGamepad = true;
             if (MenuManager.IsMenuOpen(typeof(PauseMenu))) { return; }
             MenuManager.Toggle<CardMenu>();
+            MenuManager.instance.PlayUISound("");
         }
 
         /// <summary>
