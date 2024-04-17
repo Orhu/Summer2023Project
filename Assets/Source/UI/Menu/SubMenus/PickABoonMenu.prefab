@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -190,7 +190,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -220,10 +220,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_NormalColor: {r: 0.20784315, g: 0.16470589, b: 0.2784314, a: 1}
+    m_HighlightedColor: {r: 0.6132076, g: 0.10702208, b: 0.10702208, a: 1}
+    m_PressedColor: {r: 0.8584906, g: 0.124724075, b: 0.124724075, a: 1}
+    m_SelectedColor: {r: 0.6132076, g: 0.10702208, b: 0.10702208, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -239,7 +239,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 0
-  m_TargetGraphic: {fileID: 5234795511253164835}
+  m_TargetGraphic: {fileID: 3316510598786225686}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -323,8 +323,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: You have gotten this boon [BoonCount] times.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2acfb72208e546943ace8802d5273384, type: 2}
-  m_sharedMaterial: {fileID: 1551447067489636112, guid: 2acfb72208e546943ace8802d5273384, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4ef76d47b89e2d94ca3ec0dd500f00c1, type: 2}
+  m_sharedMaterial: {fileID: -7764493418682149774, guid: 4ef76d47b89e2d94ca3ec0dd500f00c1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -348,7 +348,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 68.05
+  m_fontSize: 38.3
   m_fontSizeBase: 500
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -743,7 +743,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.25, y: 0.87}
   m_AnchorMax: {x: 0.75, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -23}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3983395317155200495
@@ -776,15 +776,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Pick A Boon
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 55496c6b99b6115458594536a8f9313a, type: 2}
-  m_sharedMaterial: {fileID: 2648412495557280930, guid: 55496c6b99b6115458594536a8f9313a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: f1daf530f9a23f547bde8257fa5284b2, type: 2}
+  m_sharedMaterial: {fileID: -761639945707892177, guid: f1daf530f9a23f547bde8257fa5284b2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -801,7 +801,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 69.35
+  m_fontSize: 129.85
   m_fontSizeBase: 500
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -910,7 +910,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ef663ba8e57231840b8162ad7cb8bd53, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d07f9d361f6567d45b5c5c4b7e11b6e0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1002,8 +1002,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Loarum ipsum blah blably blah did the blahble blah
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2acfb72208e546943ace8802d5273384, type: 2}
-  m_sharedMaterial: {fileID: 1551447067489636112, guid: 2acfb72208e546943ace8802d5273384, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4ef76d47b89e2d94ca3ec0dd500f00c1, type: 2}
+  m_sharedMaterial: {fileID: -7764493418682149774, guid: 4ef76d47b89e2d94ca3ec0dd500f00c1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1027,7 +1027,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 80
+  m_fontSize: 68.15
   m_fontSizeBase: 500
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1137,8 +1137,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: '[Boon Name]'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 55496c6b99b6115458594536a8f9313a, type: 2}
-  m_sharedMaterial: {fileID: 2648412495557280930, guid: 55496c6b99b6115458594536a8f9313a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4ef76d47b89e2d94ca3ec0dd500f00c1, type: 2}
+  m_sharedMaterial: {fileID: -7764493418682149774, guid: 4ef76d47b89e2d94ca3ec0dd500f00c1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1162,7 +1162,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 173.95
+  m_fontSize: 96.65
   m_fontSizeBase: 500
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1272,15 +1272,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Confirm
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 4ef76d47b89e2d94ca3ec0dd500f00c1, type: 2}
+  m_sharedMaterial: {fileID: -7764493418682149774, guid: 4ef76d47b89e2d94ca3ec0dd500f00c1, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4282853941
+  m_fontColor: {r: 0.20784315, g: 0.16470589, b: 0.2784314, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1399,6 +1399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e5e0665ecdb9ac4ca81aa2495db2893, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialSelection: {fileID: 0}
   onSelected:
     m_PersistentCalls:
       m_Calls:
