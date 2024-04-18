@@ -58,6 +58,12 @@ namespace Cardificer
         [Tooltip("Indicates whether this enemy has an associated boss health bar")]
         [SerializeField] private bool hasBossHealthbar = false;
 
+        //for show "damaged version" of bosses
+        [Tooltip("Indicates whether we should trigger a hurt animation on half health")]
+        [SerializeField] private bool animateWhenHurt = false;
+        [Tooltip("The animator with a hurt parameter to be triggered at half health")]
+        [SerializeField] private Animator hurtAnimator;
+
         // Called when invincibility changes and passes the new invincibility
         public Action<bool> onInvincibilityChanged;
 
@@ -177,6 +183,13 @@ namespace Cardificer
             if (attack.damage > 0)
             {
                 onDamageTaken?.Invoke();
+
+                //shows "hurt" phase of animations/ damaged version of the sprite
+                if (animateWhenHurt && currentHealth <= (maxHealth/2) && hurtAnimator != null)
+                {
+                    hurtAnimator.SetTrigger("hurt");
+                }
+
                 AudioManager.instance.PlaySoundBaseOnTarget(hitSounds, transform, true);
             }
 

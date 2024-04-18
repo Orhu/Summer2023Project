@@ -43,11 +43,16 @@ namespace Cardificer
         [Tooltip("The colliders to disable when dashing")]
         [SerializeField] private List<Collider2D> collidersToDisable;
 
-        [Tooltip("The sprites to enable when dashing")]
-        [SerializeField] private List<SpriteRenderer> spritesToEnable;
+        //TODO: DELETE THIS & TRIGGER ANIMATION INSTEAD
+        /*        [Tooltip("The sprites to enable when dashing")]
+                [SerializeField] private List<SpriteRenderer> spritesToEnable;
 
-        [Tooltip("The sprites to disable when dashing")]
-        [SerializeField] private List<SpriteRenderer> spritesToDisable;
+                [Tooltip("The sprites to disable when dashing")]
+                [SerializeField] private List<SpriteRenderer> spritesToDisable;
+        */
+
+        [Tooltip("The animator containing the dash animation")]
+        public Animator animator;
 
         [Tooltip("The layers that the dash should interact with")]
         [SerializeField] private LayerMask layers;
@@ -57,7 +62,7 @@ namespace Cardificer
 
         // Tracks whether a dash is currently happening
         [System.NonSerialized] public bool dashing = false;
-
+     
         // A reference to the movement component
         [System.NonSerialized] private Movement movement;
 
@@ -96,6 +101,11 @@ namespace Cardificer
                 indicator.SetActive(false);
             }
 
+            if(animator == null)
+            {
+                animator = GetComponentInChildren<Animator>();
+            }
+
             SetComponentsEnabled(true);
 
             StartCoroutine(Dash());
@@ -107,6 +117,9 @@ namespace Cardificer
         /// <returns> Waits for the dash time to end the dash, then the cooldown time to reset canDash </returns>
         private IEnumerator Dash()
         {
+
+            animator.SetTrigger("dodge");
+
             yield return new WaitForSeconds(time);
             EndDash();
             yield return new WaitForSeconds(cooldown);
@@ -154,7 +167,7 @@ namespace Cardificer
                 }
             }
 
-            if (spritesToEnable != null)
+/*            if (spritesToEnable != null)
             {
                 foreach (SpriteRenderer sprites in spritesToEnable)
                 {
@@ -168,7 +181,7 @@ namespace Cardificer
                 {
                     sprites.enabled = !enabled;
                 }
-            }
+            }*/
         }
 
         /// <summary>

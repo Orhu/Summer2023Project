@@ -7,7 +7,7 @@ namespace Cardificer
     /// <summary>
     /// Agent serves as the brain of any agent. Has the ability to input basic tasks, delegating them to various parts of the agent as needed.
     /// </summary>
-    [RequireComponent(typeof(Movement), typeof(AnimatorController), typeof(DashAbility))]
+    [RequireComponent(typeof(Movement), typeof(DashAbility))]
     public class PlayerController : MonoBehaviour, IActor
     {
         [Tooltip("The amount that the aim direction angle has to change before it counts as an input")]
@@ -49,8 +49,8 @@ namespace Cardificer
         // The attempted movement input
         private Vector2 attemptedMovementInput;
 
-        // Animator component to make the pretty animations do their thing.
-        private AnimatorController animatorComponent;
+        // Animator to make the pretty animations do their thing.
+        private Animator animator;
 
         // The component responsible for the dashing ability
         private DashAbility dashAbility;
@@ -64,12 +64,13 @@ namespace Cardificer
         private void Awake()
         {
             movementComponent = GetComponent<Movement>();
-            animatorComponent = GetComponent<AnimatorController>();
             dashAbility = GetComponent<DashAbility>();
             dashAbility.onDashBegin += OnDashBegin;
             dashAbility.onDashEnd += OnDashEnd;
 
             GetComponent<PlayerInput>().uiInputModule = MenuManager.uiInputModule;
+
+            animator = GetComponentInChildren<Animator>();
         }
 
         /// <summary>
@@ -122,14 +123,12 @@ namespace Cardificer
         {
             playtime += Time.deltaTime;
 
-            if (canAct && !paused)
-            {
-                animatorComponent.SetMirror("castLeft", GetActionAimPosition().x - transform.position.x < 0);
-            }
-
             if (movingEnabled && !paused)
             {
                 movementComponent.movementInput = attemptedMovementInput;
+                //do movement animation? - give it vertical & horizontal params
+                animator.SetFloat("Horizontal", attemptedMovementInput.x);
+                animator.SetFloat("Vertical", attemptedMovementInput.y);
                 return;
             }
         }
@@ -301,9 +300,15 @@ namespace Cardificer
             {
                 if (Deck.playerDeck.PlayChord())
                 {
-                    animatorComponent.SetTrigger("cast");
-                    animatorComponent.SetMirror("idleLeft", GetActionAimPosition().x - transform.position.x < 0);
-                    animatorComponent.SetMirror("runLeft", GetActionAimPosition().x - transform.position.x < 0);
+                    //specify aim direction before casting to determine which idle cast is used
+                    bool castRight = true;
+                    if (transform.position.x > GetActionAimPosition().x)
+                    {
+                        castRight = false;
+                    }
+                   
+                    animator.SetBool("CastOnRight", castRight);
+                    animator.SetTrigger("cast");
                 }
             }
         }
@@ -318,9 +323,7 @@ namespace Cardificer
             {
                 if (Deck.playerDeck.PlayChord())
                 {
-                    animatorComponent.SetTrigger("cast");
-                    animatorComponent.SetMirror("idleLeft", GetActionAimPosition().x - transform.position.x < 0);
-                    animatorComponent.SetMirror("runLeft", GetActionAimPosition().x - transform.position.x < 0);
+                    animator.SetTrigger("cast");
                 }
             }
         }
@@ -355,6 +358,7 @@ namespace Cardificer
         private void OnDashBegin()
         {
             movingEnabled = false;
+            animator.SetTrigger("dodge");
         }
 
         /// <summary>

@@ -270,7 +270,7 @@ namespace Cardificer
         /// </summary>
         protected void FixedUpdate()
         {
-            if (isDestroyed) { return; }
+            if (isDestroyed || rigidBody == null) { return; }
 
             speed = Mathf.Clamp(speed + acceleration * Time.fixedDeltaTime, minSpeed, maxSpeed);
             velocity = (Vector2)transform.right * speed;
@@ -290,6 +290,7 @@ namespace Cardificer
             {
                 transform.right = velocity;
             }
+   
             rigidBody.velocity = velocity;
         }
 
