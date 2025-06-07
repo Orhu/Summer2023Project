@@ -268,6 +268,12 @@ namespace Cardificer
 
             void CleanUpAttackAudio()
             {
+
+                if (travelSound == null)
+                {
+                    if (AudioManager.instance.printDebugMessages) Debug.Log(projectilePrefab.name + "'s travelSound ==  null, and therefore cannot clean up the attack audio.");
+                }
+
                 if (travelSound.soundSettings.loop && averageAudio != null && travelSound.IsValid())
                 {
                     averageAudio.DestroyAverageAudio(travelSoundFadeOutTime);

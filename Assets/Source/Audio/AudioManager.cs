@@ -144,12 +144,12 @@ namespace Cardificer
             
             if (!SoundShouldPlay(soundBase)) { 
 
-                if (printDebugMessages) print("sound should not play!"); 
+                /*if (printDebugMessages)*/ print($"{soundBase.name} should not play!"); 
             }
 
             else
             {
-                if (printDebugMessages) print("Playing soundbase!");
+                if (printDebugMessages) print($"Playing {soundBase.name}!");
                 PlaySoundBaseOnAudioSource(soundBase, GetAudioSourceFromTarget(target, makeUnique));
             }
 
@@ -249,9 +249,17 @@ namespace Cardificer
                     break;
                 }
 
+                case SoundType.MusicSound:
+                {
+                    MusicSound music = (MusicSound)soundBase;
+                    PlayMusic(music, audioSource);
+
+                    break;
+                }
+
                 default:
                 {
-                    print("Default case in AudioManager.PlaySoundBaseOnAudioSource reached!\nSoundBases can only be of type 'BasicSound' or 'SoundContainer'");
+                    print("Default case in AudioManager.PlaySoundBaseOnAudioSource reached!\nSoundBases can only be of type 'BasicSound', 'SoundContainer', or 'MusicSound'");
                     break;
                 }
             }
@@ -279,6 +287,24 @@ namespace Cardificer
             else
                 print($"Tried to play a sound ({sound.name}) on {audioSource.gameObject.name}.");
 
+        }
+
+        private void PlayMusic(MusicSound musicSound, AudioSource audioSource)
+        {
+            if (audioSource.isPlaying)
+            {
+                GameObject go = audioSource.gameObject;
+                audioSource = go.AddComponent<AudioSource>();
+
+            }
+
+            audioSource.clip = musicSound.audioClip;
+            ApplySoundSettingsToAudioSource(musicSound, audioSource);
+
+            if (musicSound.audioClip != null)
+                audioSource.Play();
+            else
+                print($"Tried to play a sound ({musicSound.name}) on {audioSource.gameObject.name}.");
         }
 
         /// <summary>
@@ -523,6 +549,40 @@ namespace Cardificer
         }
 
         /// <summary>
+        /// Applies the settings from a MusicSound to an AudioSource. Random values are assigned in this method.
+        /// </summary>
+        /// <param name="musicSound">The SoundContainer to get the settings from.</param>
+        /// <param name="audioSource">The AudioSource to apply the settings onto.</param>
+        public void ApplySoundSettingsToAudioSource(MusicSound musicSound, AudioSource audioSource)
+        {
+
+            //audioSource.clip = clip;
+            audioSource.outputAudioMixerGroup = musicSound.outputAudioMixerGroup;
+            musicSound.audioSourceInUse = audioSource;
+
+            if (musicSound.useDefaultSettings) //default settings set on AudioManager Component
+            {
+
+                audioSource.priority = _defaultSoundSettings.priority;
+                audioSource.loop = _defaultSoundSettings.loop;
+                audioSource.pitch = _defaultSoundSettings.pitch;
+                audioSource.volume = _defaultSoundSettings.volume;
+                audioSource.spatialBlend = _defaultSoundSettings.spatialBlend;
+                audioSource.spread = _defaultSoundSettings.spread;
+
+            }
+            else //use settings found on the MusicSound.
+            {
+                audioSource.priority = musicSound.soundSettings.priority;
+                audioSource.loop = musicSound.soundSettings.loop;
+                audioSource.volume = musicSound.GetVolume();
+                audioSource.pitch = musicSound.GetPitch();
+                audioSource.spatialBlend = musicSound.soundSettings.spatialBlend;
+                audioSource.spread = musicSound.soundSettings.spread;
+            }
+        }
+
+        /// <summary>
         /// Apply SoundSettings from a SoundContainer to an AudioSource, using a clip from a different source.
         /// </summary>
         /// <param name="soundContainer">The SoundContainer to get the settings from.</param>
@@ -637,7 +697,7 @@ namespace Cardificer
                 yield return null;
             }
 
-            if (destroyObjectOrAudioSource)
+            if (destroyObjectOrAudioSource && audioSourceToFade != null)
             {
                 Destroy(audioSourceToFade.gameObject);
 

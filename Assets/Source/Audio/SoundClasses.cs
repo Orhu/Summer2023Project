@@ -283,6 +283,73 @@ namespace Cardificer
 
     }
 
+    [System.Serializable]
+    public class MusicSound : SoundBase
+    {
+
+        [Header("Sound Container Settings")]
+        public AudioClip audioClip;
+        [HideInInspector] public bool musicSpeedChanging = false;
+
+        public void SetAudioMixerGroup(AudioMixerGroup audioMixerGroupToSet)
+        {
+            outputAudioMixerGroup = audioMixerGroupToSet;
+        }
+
+        public override SoundType GetSoundType()
+        {
+            return SoundType.MusicSound;
+        }
+
+        /// <summary>
+        /// Checks if this MusicTrack is playing.
+        /// </summary>
+        public override bool IsPlaying()
+        {
+            if (audioSourceInUse != null)
+                return audioSourceInUse.isPlaying;
+            else
+                return false;
+        }
+
+        /// <summary>
+        /// Checks if this BasicSound is valid. Used for playback purposes.
+        /// </summary>
+        /// <returns>Returns true if this BasicSound can be played. </returns>
+        public override bool IsValid()
+        {
+            bool isValid = true;
+
+            if (audioClip == null)
+            {
+                if (AudioManager.instance.printDebugMessages) Debug.Log($"{name} does not have an audio clip!");
+                isValid = false;
+            }
+
+            //if (audioSourceInUse == null)
+            //{
+
+            //    if (AudioManager.instance.printDebugMessages) Debug.Log($"{name} does not have an audio source!");
+            //    isValid = false;
+            //}
+
+            return isValid;
+        }
+
+        //Returns the name of the AudioClip played by this sound.
+        public override string name { get { return audioClip == null ? "AudioClip in Sound not set!" : audioClip.name; } }
+
+        /// <summary>
+        /// Stops this MusicTrack. 
+        /// </summary>
+        public override void Stop()
+        {
+            if (audioSourceInUse != null)
+                audioSourceInUse.Stop();
+        }
+
+    }
+
     /// <summary>
     /// The settings for Sounds, SoundContainers, and eventually Music. Random values/ranges will not be applied if the corresponding bools are not true.
     /// </summary>
@@ -356,6 +423,7 @@ namespace Cardificer
     {
         BasicSound,
         SoundContainer,
+        MusicSound
     }
 
 }
