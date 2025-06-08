@@ -37,6 +37,14 @@ namespace Cardificer
             }
         }
 
+        /// <summary>
+        /// Button to swap to the Map Menu
+        /// </summary>
+        public void MapMenuButtonEvent()
+        {
+            MenuManager.Toggle<MapMenu>();
+        }
+
         void InstantiateCardLayoutArea()
         {
             for (int i = 0; i < Deck.playerDeck.cards.Count; i++)
