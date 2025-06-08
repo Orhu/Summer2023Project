@@ -17,6 +17,7 @@ public class MusicManager : MonoBehaviour
     public AudioMixerGroup bossAudioMixerGroup;
     public float speedUpDuration, slowDownDuration;
     private float pitchChangeAmountTargetUp = 1.222222222222222222222222222222f, pitchChangeAmountTargetDown = 0.81818181818181818181818f;
+    public int frameDelaySetPoint;
 
 
     private void Awake()
@@ -48,10 +49,10 @@ public class MusicManager : MonoBehaviour
         foreach (MusicSound battleMusicSound in battleTracks)
         {
             battleMusicSound.SetAudioMixerGroup(battleAudioMixerGroup);
-            battleAudioMixerGroup.audioMixer.SetFloat("battlePitchBend", pitchChangeAmountTargetUp);
             AudioManager.instance.PlaySoundBaseOnTarget(battleMusicSound, this.gameObject.transform, true);
             battleMusicSound.audioSourceInUse.pitch = pitchChangeAmountTargetDown;
-            battleMusicSound.audioSourceInUse.volume = 0;
+            battleAudioMixerGroup.audioMixer.SetFloat("battlePitchBend", pitchChangeAmountTargetUp);
+            //battleMusicSound.audioSourceInUse.volume = 0;
         }
 
     }
@@ -78,7 +79,8 @@ public class MusicManager : MonoBehaviour
     private IEnumerator SetMusicBattleState(float fadeToBattleTime)
     {
         musicSpeedChanging = true;
-        float curTime = 0; 
+        float curTime = 0;
+        int frameDelay = 0;
 
         while (curTime < fadeToBattleTime) 
         {
@@ -99,21 +101,26 @@ public class MusicManager : MonoBehaviour
 
             ambientAudioMixerGroup.audioMixer.SetFloat("ambiPitchBend", 1f / curAmbiPitchChangeAmount);
 
-            ////Speed up and fade in battle music-----------------------
-            float curBattlePitchChangeAmount = Mathf.Lerp(pitchChangeAmountTargetDown, 1, curTime / fadeToBattleTime);
-
-            foreach (MusicSound battleMusic in battleTracks)
+            if (frameDelay > frameDelaySetPoint)
             {
-                battleMusic.audioSourceInUse.pitch = curBattlePitchChangeAmount;
+                ////Speed up and fade in battle music-----------------------
+                float curBattlePitchChangeAmount = Mathf.Lerp(pitchChangeAmountTargetDown, 1, curTime / fadeToBattleTime);
 
-                float volume = Mathf.Lerp(0, battleMusic.GetVolume(), curTime / fadeToBattleTime);
-                battleMusic.audioSourceInUse.volume = volume;
+                foreach (MusicSound battleMusic in battleTracks)
+                {
+                    battleMusic.audioSourceInUse.pitch = curBattlePitchChangeAmount;
+
+                    float volume = Mathf.Lerp(0, battleMusic.GetVolume(), curTime / fadeToBattleTime);
+                    battleMusic.audioSourceInUse.volume = volume;
+
+                }
+
+                ambientAudioMixerGroup.audioMixer.SetFloat("battlePitchBend", 1f / curBattlePitchChangeAmount);
 
             }
 
-            ambientAudioMixerGroup.audioMixer.SetFloat("battlePitchBend", 1f / curBattlePitchChangeAmount);
-
             curTime += Time.deltaTime;
+            frameDelay += 1;
             yield return null;
 
         }
@@ -148,28 +155,34 @@ public class MusicManager : MonoBehaviour
     {
         musicSpeedChanging = true;
         float curTime = 0;
+        int frameDelay = 0;
 
         while (curTime < fadeToAmbienceTime)
         {
 
-            //Slow down and fade in ambiences----------------------------
-            float curAmbiPitchChangeAmount = Mathf.Lerp(pitchChangeAmountTargetUp, 1, curTime / fadeToAmbienceTime);
+            
 
-            foreach (MusicSound musicSound in ambientTracks)
+            if (frameDelay > frameDelaySetPoint)
             {
-                musicSound.audioSourceInUse.pitch = curAmbiPitchChangeAmount;
+                //Slow down and fade in ambiences----------------------------
+                float curAmbiPitchChangeAmount = Mathf.Lerp(pitchChangeAmountTargetUp, 1, curTime / fadeToAmbienceTime);
 
-                float volume = Mathf.Lerp(0, musicSound.GetVolume(), curTime / fadeToAmbienceTime);
-                musicSound.audioSourceInUse.volume = volume;
+                foreach (MusicSound musicSound in ambientTracks)
+                {
+                    musicSound.audioSourceInUse.pitch = curAmbiPitchChangeAmount;
 
-                print(volume);
+                    float volume = Mathf.Lerp(0, musicSound.GetVolume(), curTime / fadeToAmbienceTime);
+                    musicSound.audioSourceInUse.volume = volume;
 
+                    print(volume);
+
+                }
+
+                ambientAudioMixerGroup.audioMixer.SetFloat("ambiPitchBend", 1f / curAmbiPitchChangeAmount);
             }
 
-            ambientAudioMixerGroup.audioMixer.SetFloat("ambiPitchBend", 1f / curAmbiPitchChangeAmount);
-
             ////Slow down and fade out battle music-----------------------
-            float curBattlePitchChangeAmount = Mathf.Lerp(1, pitchChangeAmountTargetDown, curTime / fadeToAmbienceTime);
+                        float curBattlePitchChangeAmount = Mathf.Lerp(1, pitchChangeAmountTargetDown, curTime / fadeToAmbienceTime);
 
             foreach (MusicSound battleMusic in battleTracks)
             {
@@ -183,6 +196,7 @@ public class MusicManager : MonoBehaviour
             ambientAudioMixerGroup.audioMixer.SetFloat("battlePitchBend", 1f / pitchChangeAmountTargetDown);
 
             curTime += Time.deltaTime;
+            frameDelay += 1;
             yield return null;
 
         }
