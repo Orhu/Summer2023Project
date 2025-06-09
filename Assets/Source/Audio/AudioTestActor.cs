@@ -68,6 +68,11 @@ namespace Cardificer
         }
         #endregion
 
+        private void Start()
+        {
+            AudioManager.instance.StartMusic();
+        }
+
         /// <summary>
         /// Used for playing audio
         /// </summary>

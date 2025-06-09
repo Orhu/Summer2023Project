@@ -34,6 +34,8 @@ namespace Cardificer
         //Serialized Random for use in random SoundContainer playback
         private System.Random random = new System.Random();
 
+        private MusicManager musicManager;
+
         /// <summary>
         /// Implementing the singleton pattern and DontDestroyOnLoad. Creates the AudioListener GameObject. 
         /// </summary>
@@ -55,6 +57,8 @@ namespace Cardificer
             audioListenerGameObject.name = "AudioListenerGameObject";
             audioListenerGameObject.AddComponent<AudioListener>();
             audioListenerGameObject.transform.SetParent(transform);
+
+            musicManager = GetComponentInChildren<MusicManager>();
 
         }
 
@@ -79,6 +83,36 @@ namespace Cardificer
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             SetUpAudioListeners();
+
+            switch (scene.name)
+            {
+                case ("Floor1"):
+
+                    musicManager.StartMusic();
+                    break;
+
+                default:
+
+                    print("You went to a scene without a set action for transitioning the music and the default case in the AudioManager OnSceneLoaded method was reached.");
+                    break;            
+            
+            }
+
+        }
+
+        public void StartMusic()
+        {
+            musicManager.StartMusic();
+        }
+
+        public void SetMusicStateToAmbient()
+        {
+            musicManager.SetMusicToAmbientState_public();
+        }
+
+        public void SetMusicStateToBattle()
+        {
+            musicManager.SetMusicToBattleState_public();
         }
 
         /// <summary>

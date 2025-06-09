@@ -15,22 +15,22 @@ public class MusicManager : MonoBehaviour
     public AudioMixerGroup ambientAudioMixerGroup;
     public AudioMixerGroup battleAudioMixerGroup;
     public AudioMixerGroup bossAudioMixerGroup;
-    public float speedUpDuration, slowDownDuration;
+    public float speedUpDuration, slowDownDuration, durationToFadeOutChuggingAmbience, fadeOutChuggingAmbienceDuration;
     private float pitchChangeAmountTargetUp = 1.222222222222222222222222222222f, pitchChangeAmountTargetDown = 0.81818181818181818181818f;
     public int frameDelaySetPoint;
 
 
     private void Awake()
     {
-        if (instance != null)
-        {
-            Debug.LogWarning("There's more than one MusicManager! " + transform + " - " + instance);
-            Destroy(gameObject);
-            return;
-        }
+        //if (instance != null)
+        //{
+        //    Debug.LogWarning("There's more than one MusicManager! " + transform + " - " + instance);
+        //    Destroy(gameObject);
+        //    return;
+        //}
 
-        instance = this;
-        DontDestroyOnLoad(this.gameObject); 
+        //instance = this;
+        //DontDestroyOnLoad(this.gameObject); 
         transform.position = new Vector3(0, 0, 0);
 
         //ambientAudioMixerGroup.audioMixer.SetFloat("ambiVolume", ambiMixerGroupDefaultVolume);
@@ -40,20 +40,20 @@ public class MusicManager : MonoBehaviour
 
     private void Start()
     {
-        foreach (MusicSound ambMusicSound in ambientTracks) 
-        { 
-            ambMusicSound.SetAudioMixerGroup(ambientAudioMixerGroup);
-            AudioManager.instance.PlaySoundBaseOnTarget(ambMusicSound, this.gameObject.transform, true);
-        }
+        //foreach (MusicSound ambMusicSound in ambientTracks) 
+        //{ 
+        //    ambMusicSound.SetAudioMixerGroup(ambientAudioMixerGroup);
+        //    AudioManager.instance.PlaySoundBaseOnTarget(ambMusicSound, this.gameObject.transform, true);
+        //}
 
-        foreach (MusicSound battleMusicSound in battleTracks)
-        {
-            battleMusicSound.SetAudioMixerGroup(battleAudioMixerGroup);
-            AudioManager.instance.PlaySoundBaseOnTarget(battleMusicSound, this.gameObject.transform, true);
-            battleMusicSound.audioSourceInUse.pitch = pitchChangeAmountTargetDown;
-            battleAudioMixerGroup.audioMixer.SetFloat("battlePitchBend", pitchChangeAmountTargetUp);
-            //battleMusicSound.audioSourceInUse.volume = 0;
-        }
+        //foreach (MusicSound battleMusicSound in battleTracks)
+        //{
+        //    battleMusicSound.SetAudioMixerGroup(battleAudioMixerGroup);
+        //    AudioManager.instance.PlaySoundBaseOnTarget(battleMusicSound, this.gameObject.transform, true);
+        //    battleMusicSound.audioSourceInUse.pitch = pitchChangeAmountTargetDown;
+        //    battleAudioMixerGroup.audioMixer.SetFloat("battlePitchBend", pitchChangeAmountTargetUp);
+        //    battleMusicSound.audioSourceInUse.volume = 0;
+        //}
 
     }
 
@@ -76,8 +76,43 @@ public class MusicManager : MonoBehaviour
         }
     }
 
+    public void SetMusicToAmbientState_public()
+    {
+        StartCoroutine(SetMusicAmbientState(slowDownDuration));
+    }
+
+    public void SetMusicToBattleState_public()
+    {
+        StartCoroutine(SetMusicBattleState(speedUpDuration));
+
+    }
+
+    public void StartMusic()
+    {
+        foreach (MusicSound ambMusicSound in ambientTracks)
+        {
+            ambMusicSound.SetAudioMixerGroup(ambientAudioMixerGroup);
+            AudioManager.instance.PlaySoundBaseOnTarget(ambMusicSound, this.gameObject.transform, true);
+        }
+
+        foreach (MusicSound battleMusicSound in battleTracks)
+        {
+            battleMusicSound.SetAudioMixerGroup(battleAudioMixerGroup);
+            AudioManager.instance.PlaySoundBaseOnTarget(battleMusicSound, this.gameObject.transform, true);
+            battleMusicSound.audioSourceInUse.pitch = pitchChangeAmountTargetDown;
+            battleAudioMixerGroup.audioMixer.SetFloat("battlePitchBend", pitchChangeAmountTargetUp);
+            battleMusicSound.audioSourceInUse.volume = 0;
+        }
+
+        StartCoroutine(FadeOutChuggingAmbientTrack());
+
+    }
+
     private IEnumerator SetMusicBattleState(float fadeToBattleTime)
     {
+
+        //StopAllCoroutines();
+
         musicSpeedChanging = true;
         float curTime = 0;
         int frameDelay = 0;
@@ -94,8 +129,6 @@ public class MusicManager : MonoBehaviour
 
                 float volume = Mathf.Lerp(musicSound.GetVolume(), 0, curTime/fadeToBattleTime);
                 musicSound.audioSourceInUse.volume = volume;
-
-                print (volume);
 
             }
 
@@ -151,16 +184,59 @@ public class MusicManager : MonoBehaviour
 
     }
 
+    private IEnumerator FadeOutChuggingAmbientTrack()
+    {
+        bool finished = false;
+        float curTime = 0;
+        float fadingTime = 0;
+        MusicSound chuggingAmbience = ambientTracks[1];
+
+        while (!finished)
+        {
+
+            if (curTime < durationToFadeOutChuggingAmbience)
+            {
+                curTime += Time.deltaTime;
+                yield return null;
+
+            } else if (curTime > durationToFadeOutChuggingAmbience)
+            {
+                             
+
+                fadingTime = curTime - durationToFadeOutChuggingAmbience;
+                float volume = Mathf.Lerp(chuggingAmbience.GetVolume(), 0, fadingTime / fadeOutChuggingAmbienceDuration);
+
+                chuggingAmbience.audioSourceInUse.volume = volume;
+                curTime += Time.deltaTime;
+
+                if (fadingTime > fadeOutChuggingAmbienceDuration)
+                {
+                    finished = true;
+                }
+
+                yield return null;
+
+            }
+
+            //print("curTime = " + curTime + ".\nfadingTime = " + fadingTime + "\nVolume = " + chuggingAmbience.audioSourceInUse.volume);
+
+        }
+
+        chuggingAmbience.audioSourceInUse.volume = 0;
+        //print("done");
+
+    }
+
     private IEnumerator SetMusicAmbientState(float fadeToAmbienceTime)
     {
+        StartCoroutine(FadeOutChuggingAmbientTrack());
+        //StopAllCoroutines();
         musicSpeedChanging = true;
         float curTime = 0;
         int frameDelay = 0;
 
         while (curTime < fadeToAmbienceTime)
-        {
-
-            
+        {            
 
             if (frameDelay > frameDelaySetPoint)
             {
@@ -174,7 +250,7 @@ public class MusicManager : MonoBehaviour
                     float volume = Mathf.Lerp(0, musicSound.GetVolume(), curTime / fadeToAmbienceTime);
                     musicSound.audioSourceInUse.volume = volume;
 
-                    print(volume);
+                    //print(volume);
 
                 }
 
