@@ -60,7 +60,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GoblinSpearThrower_Moving
+  m_Name: CosmicApprentice_Moving
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -74,7 +74,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 6331ee57d56ff584dacffba361261604, type: 2}
+  m_Motion: {fileID: 7400000, guid: aabe5df9911bbaf4292631521acd4102, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -87,7 +87,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GoblinSpearThrower_Idle
+  m_Name: CosmicApprentice_Idle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -102,7 +102,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 04bfb566b32a8a24ab174b1df5a6cef2, type: 2}
+  m_Motion: {fileID: 7400000, guid: 1c5aabef5f0265e42b1f4d9b0577e33d, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -122,13 +122,13 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   - m_Name: moving
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -221,7 +221,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GoblinSpearThrower_Attack
+  m_Name: CosmicApprentice_Attack
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -235,7 +235,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: af901bf2c08d6f44f80e679f30c03787, type: 2}
+  m_Motion: {fileID: 7400000, guid: d13082d13ff23034bae9110de8bd267d, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
