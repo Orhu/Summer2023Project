@@ -58,6 +58,9 @@ namespace Cardificer
         /// </summary>
         public void OpenDoors()
         {
+
+            AudioManager.instance.SetMusicStateToAmbient();
+
             foreach (Door door in doors)
             {
                 door.Open();
@@ -69,6 +72,9 @@ namespace Cardificer
         /// </summary>
         public void CloseDoors()
         {
+
+            AudioManager.instance.SetMusicStateToBattle();
+
             foreach (Door door in doors)
             {
                 door.Close();
