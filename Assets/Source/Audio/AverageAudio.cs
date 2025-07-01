@@ -85,6 +85,7 @@ namespace Cardificer
         /// </summary>
         public void DestroyAverageAudio(float fadeDuration)
         {
+            if (audioSource == null) return;
             if (AudioManager.instance.printDebugMessages) print("destroying AverageAudio: " + gameObject.name + ". fadeDuration = " + fadeDuration);
             destroyingAverageAudio = true;
             AudioManager.instance.FadeToDestroy(audioSource, audioSource.volume, fadeDuration, true);

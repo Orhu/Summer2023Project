@@ -98,13 +98,17 @@ namespace Cardificer
         [Tooltip("BasicSound for projectile travel")]
         [SerializeField] protected BasicSound travelSound;
 
-        [SerializeField] protected float travelSoundFadeOutTime = 0.3f;
+        [SerializeField] protected float travelSoundFadeOutTime = 0.2f;
+
 
         [Tooltip("BasicSound for projectile impact.")]
         [SerializeField] protected BasicSound impactSound; 
         
         [Tooltip("BasicSound for attack charge.")]
         [SerializeField] protected BasicSound chargeSound;
+
+        [Tooltip("Select if this attack should use the default Charge Sound.")]
+        [SerializeField] protected bool shouldUseDefaultChargeSound = false;
 
         // The root of all projectiles
         private static GameObject projectileRoot;
@@ -210,7 +214,17 @@ namespace Cardificer
             int destroyedProjectiles = 0;
             AverageAudio averageAudio = null;
 
-            AudioManager.instance.PlaySoundBaseOnTarget(chargeSound, actor.GetActionSourceTransform(), true);
+            if (shouldUseDefaultChargeSound) 
+            {
+
+                AudioManager.instance.PlayDefaultChargeSoundOnTarget(chargeTime, actor.GetActionSourceTransform());
+
+            }
+            else
+            {
+                AudioManager.instance.PlaySoundBaseOnTarget(chargeSound, actor.GetActionSourceTransform(), true);
+
+            }
 
             yield return new WaitForSeconds(chargeTime);
 
@@ -264,27 +278,38 @@ namespace Cardificer
             yield return new WaitForSeconds(additionalActionTime);
             attackFinished?.Invoke();
 
-            CleanUpAttackAudio();
+            if (travelSound == null)
+            {
+                if (AudioManager.instance.printDebugMessages) Debug.Log(projectilePrefab.name + "'s travelSound ==  null, and therefore cannot clean up the attack audio.");
+            }
 
-            void CleanUpAttackAudio()
+            if (stopActionSoundOnActionComplete && actionSound.IsPlaying())
+            {
+                AudioManager.instance.FadeToDestroy(actionSound.audioSourceInUse, actionSound.audioSourceInUse.volume, 0.3f, false);
+            }
+
+            if (travelSound.soundSettings.loop && averageAudio != null && travelSound.IsValid())
             {
 
-                if (travelSound == null)
-                {
-                    if (AudioManager.instance.printDebugMessages) Debug.Log(projectilePrefab.name + "'s travelSound ==  null, and therefore cannot clean up the attack audio.");
-                }
+                yield return new WaitForSeconds(Mathf.Clamp(lifetime - additionalActionTime - travelSoundFadeOutTime, 0, 999));
 
-                if (travelSound.soundSettings.loop && averageAudio != null && travelSound.IsValid())
-                {
-                    averageAudio.DestroyAverageAudio(travelSoundFadeOutTime);
-                }
-
-                if (stopActionSoundOnActionComplete && actionSound.IsPlaying())
-                {
-                    AudioManager.instance.FadeToDestroy(actionSound.audioSourceInUse, actionSound.audioSourceInUse.volume, 0.3f, false);
-                }
-
+                averageAudio.DestroyAverageAudio(travelSoundFadeOutTime);
             }
+
+            //if (travelSound.soundSettings.loop && averageAudio != null && travelSound.IsValid() && destroyedProjectiles != spawnSequence.Count)
+            //{
+            //    if (additionalActionTime == 0)
+            //    {
+            //        while (destroyedProjectiles != spawnSequence.Count) { yield return null; }
+
+            //    } else
+            //    {
+
+            //        yield return new WaitForSeconds(Mathf.Clamp(lifetime - additionalActionTime, 0, 999));
+
+            //    }
+            //    averageAudio.DestroyAverageAudio(travelSoundFadeOutTime);
+            //}
         }
 
 

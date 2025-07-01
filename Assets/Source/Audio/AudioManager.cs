@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Linq;
+using System;
 
 namespace Cardificer
 {
@@ -178,13 +179,37 @@ namespace Cardificer
             
             if (!SoundShouldPlay(soundBase)) { 
 
-                /*if (printDebugMessages)*/ print($"{soundBase.name} should not play!"); 
+                if (printDebugMessages) print($"{soundBase.name} should not play!"); 
             }
 
             else
             {
-                if (printDebugMessages) print($"Playing {soundBase.name}!");
+                if (printDebugMessages) print($"Playing {soundBase.name} on {target.name}!");
                 PlaySoundBaseOnAudioSource(soundBase, GetAudioSourceFromTarget(target, makeUnique));
+            }
+
+        }
+
+        /// <summary>
+        /// Starts a SoundBase on a Transform.  
+        /// </summary>
+        /// <param name="soundBase">The SoundBase to play. </param>
+        /// <param name="target">The Transform to play the SoundBase on. </param>
+        /// <param name="makeUnique">If true will create a new AudioSource if there is one currently playing on the Target. </param>
+        public void PlaySoundBaseOnTarget(SoundBase soundBase, Transform target, bool makeUnique, out AudioSource audioSourcePlayingOn)
+        {
+
+            if (!SoundShouldPlay(soundBase))
+            {
+                audioSourcePlayingOn = null;
+                if (printDebugMessages) print($"{soundBase.name} should not play!");
+            }
+
+            else
+            {
+                audioSourcePlayingOn = GetAudioSourceFromTarget(target, makeUnique);
+                if (printDebugMessages) print($"Playing {soundBase.name} on {target.name}!");
+                PlaySoundBaseOnAudioSource(soundBase, audioSourcePlayingOn);
             }
 
         }
@@ -319,7 +344,7 @@ namespace Cardificer
             if (sound.audioClip != null)
                 audioSource.Play();
             else
-                print($"Tried to play a sound ({sound.name}) on {audioSource.gameObject.name}.");
+                print($"Tried to play a sound ({sound.name}) on {audioSource.gameObject.name}, but the AudioClip was null.");
 
         }
 
@@ -686,7 +711,7 @@ namespace Cardificer
                 {
                     audioSourcesToDestroy.Remove(audioSource);
                     audioSource.Stop();
-                    if (printDebugMessages) print("destroying audio source on " + audioSource.name);
+                    //print("destroying audio source on " + audioSource.name);
                     Destroy(audioSource);
                     return;
                 }
@@ -793,6 +818,35 @@ namespace Cardificer
             else { return true; }
 
         }
+
+        public void PlayDefaultChargeSoundOnTarget(float chargeTime, Transform transform)
+        {
+            StartCoroutine(PlayDefaultChargeSound(chargeTime, transform));
+        }
+
+        private IEnumerator PlayDefaultChargeSound(float chargeTime, Transform target)
+        {
+
+            BasicSound defaultChargeSFX = SoundGetter.Instance.defaultChargeSound;
+            float curTime = 0;
+
+            PlaySoundBaseOnTarget(defaultChargeSFX, target, true, out AudioSource audioSourceToManipulate);
+            audioSourceToManipulate.volume = 0;
+
+            while (curTime < chargeTime) 
+            {
+                float value = Mathf.Lerp(0, defaultChargeSFX.GetVolume(), curTime / chargeTime);
+                audioSourceToManipulate.volume = 1 - Mathf.Cos((value * Mathf.PI) / 2); ;
+
+                curTime += Time.deltaTime;
+                yield return null;
+            
+            }
+
+            audioSourceToManipulate.Stop();
+
+        }
+
 
     }
 

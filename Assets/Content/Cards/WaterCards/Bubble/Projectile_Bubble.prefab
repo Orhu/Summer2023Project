@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4251361716094279211}
   - component: {fileID: 9206082393754590782}
   - component: {fileID: 2009907312840190046}
+  - component: {fileID: 5703538142038743268}
   m_Layer: 0
   m_Name: Projectile_Bubble
   m_TagString: Untagged
@@ -106,3 +107,33 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5703538142038743268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5105573067353007232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b1bcbc95275adf4b93bd6fa0cb38a65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundToPlayOnDestroy:
+    outputAudioMixerGroup: {fileID: 5509230318350582375, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 1
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 835cec8417d21e94bb7e96135774f30d, type: 3}

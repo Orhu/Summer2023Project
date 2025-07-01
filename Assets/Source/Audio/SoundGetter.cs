@@ -39,6 +39,9 @@ namespace Cardificer
         [Tooltip("A list of card select sounds. They are here so that any deck can access them.")]
         public BasicSound[] cardSelectSounds, cardDeselectSounds, chordSelectSounds, chordDeselectSounds;
 
+        [Tooltip("The default charge sound that is manipulated by code to match th charge time.")]
+        public BasicSound defaultChargeSound;
+
         /// <summary>
         /// Implementing the singleton pattern and initializing the dictionary. 
         /// </summary>

@@ -34,6 +34,7 @@ public class AudioFadeOutOnDestroy : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
+                    print("YEP1");
         averageAudio.DestroyAverageAudio(fadeOutTime);
     }
 
