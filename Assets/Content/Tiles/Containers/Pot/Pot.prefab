@@ -223,14 +223,16 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   hasBossHealthbar: 0
+  animateWhenHurt: 0
+  hurtAnimator: {fileID: 0}
   deathSounds:
     outputAudioMixerGroup: {fileID: -8374846687826135380, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
     useDefaultSettings: 0
     soundSettings:
       priority: 128
       loop: 0
-      volume: 0.59
-      randomizeVolume: 1
+      volume: 0.479
+      randomizeVolume: 0
       volumeRandomRange: {x: 0.9, y: 1}
       pitch: 1
       randomizePitch: 1
@@ -253,7 +255,7 @@ MonoBehaviour:
     soundSettings:
       priority: 128
       loop: 0
-      volume: 1
+      volume: 0.347
       randomizeVolume: 0
       volumeRandomRange: {x: 0.8, y: 1}
       pitch: 1

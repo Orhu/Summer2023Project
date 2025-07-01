@@ -418,6 +418,9 @@ namespace Cardificer
             if (!soundContainer.IsValid()) yield break;
 
             int soundsLength = soundContainer.clipsInContainer.Length;
+            bool shouldPlay = true;
+            AudioClip clipToPlay = null;
+            int randomInt;
 
             if (soundsLength < 1)
             {
@@ -455,8 +458,8 @@ namespace Cardificer
                     for (int i = 0; i < soundsLength; i++)
                     {
 
-                        int randomInt = random.Next(clips.Count);
-                        AudioClip clipToPlay = clips[randomInt];
+                        randomInt = random.Next(clips.Count);
+                        clipToPlay = clips[randomInt];
                         float awaitTime = clipToPlay.length;
                         ApplySoundSettingsToAudioSource(soundContainer, audioSource, clipToPlay);
 
@@ -469,14 +472,15 @@ namespace Cardificer
                     }
 
                     break;
+                    
 
                 //Plays through each AudioClip in the container randomly, not caring if a sound plays more than once per loop
                 case SoundContainerType.RandomRandom:
 
                     for (int i = 0; i < soundsLength; i++)
                     {
-                        int randomInt = random.Next(soundsLength);
-                        AudioClip clipToPlay = soundContainer.clipsInContainer[randomInt];
+                        randomInt = random.Next(soundsLength);
+                        clipToPlay = soundContainer.clipsInContainer[randomInt];
                         float awaitTime = clipToPlay.length;
                         if (audioSource == null) yield break;
                         ApplySoundSettingsToAudioSource(soundContainer, audioSource, clipToPlay);
@@ -492,31 +496,19 @@ namespace Cardificer
                 //Plays only one random AudioClip in the SoundContainer
                 case SoundContainerType.RandomOneshot:
 
-                    if (!soundContainer.IsValid())
-                    {
-                        print($"No clips found in {soundContainer.name} trying to play on {audioSource.gameObject.name}");
-                        break;
-                    }
-
-                    soundContainer.loopContainer = false;
-
-                    AudioClip oneshotToPlay = soundContainer.clipsInContainer[random.Next(soundsLength)];
-
-                    if (!audioSource.isPlaying)
-                    {
-                        ApplySoundSettingsToAudioSource(soundContainer, audioSource, oneshotToPlay);
-                    }
-
-                    audioSource.PlayOneShot(oneshotToPlay);
-
-                    float clipLength = oneshotToPlay.length;
-                    StartCoroutine(HandleRandomOneShotPlayback(soundContainer, clipLength));
+                    randomInt = random.Next(soundsLength);
+                    clipToPlay = soundContainer.clipsInContainer[randomInt];
+                    float awaitTimeOneshot = clipToPlay.length;
+                    if (audioSource == null) yield break;
+                    ApplySoundSettingsToAudioSource(soundContainer, audioSource, clipToPlay);
+                    audioSource.Play();
+                    yield return new WaitForSeconds(awaitTimeOneshot);
 
                     break;
 
             }
 
-            if ((!soundContainer.loopContainer && soundContainer.containerType != SoundContainerType.RandomOneshot) || soundContainer.audioSourceInUse == null)
+            if (!soundContainer.loopContainer || soundContainer.audioSourceInUse == null)
             {
                 soundContainer.isPlaying = false;
             }
@@ -763,6 +755,8 @@ namespace Cardificer
             }
             else
             {
+
+                if (audioSourceToFade == null) yield break;
 
                 AudioSource[] sources = audioSourceToFade.gameObject.GetComponents<AudioSource>();
                 if (sources.Length <= 1)

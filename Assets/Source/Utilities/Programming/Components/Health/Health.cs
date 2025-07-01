@@ -115,8 +115,8 @@ namespace Cardificer
             }
 
             //set default settings for Health Sounds for ease of implementation. If these need to change this can happen in the future!
-            deathSounds.containerType = SoundContainerType.RandomRandom;
-            hitSounds.containerType = SoundContainerType.RandomRandom;
+            deathSounds.containerType = SoundContainerType.RandomOneshot;
+            hitSounds.containerType = SoundContainerType.RandomOneshot;
 
             if (!deathSounds.IsValid())
             {

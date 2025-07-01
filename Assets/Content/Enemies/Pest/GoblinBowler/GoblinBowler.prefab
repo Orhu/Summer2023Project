@@ -1277,7 +1277,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: deathSounds.containerName
-      value: GobBowler Death Sounds (small)
+      value: GobBowler Death Sounds (Large)
       objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: deathSounds.containerType
@@ -1292,6 +1292,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: hitSounds.soundSettings.volume
+      value: 0.47
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: damageSounds.useDefaultSettings
       value: 0
       objectReference: {fileID: 0}
@@ -1299,6 +1303,10 @@ PrefabInstance:
       propertyPath: hitSounds.outputAudioMixerGroup
       value: 
       objectReference: {fileID: -2650589480174368790, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: deathSounds.soundSettings.volume
+      value: 0.76
+      objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: damageSound.outputAudioMixerGroup
       value: 
@@ -1320,6 +1328,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: hitSounds.soundSettings.randomizePitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: deathSounds.clipsInContainer.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -1328,15 +1340,31 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: deathSounds.soundSettings.randomizePitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: hitSounds.clipsInContainer.Array.data[0]
       value: 
-      objectReference: {fileID: 8300000, guid: 74158f4ad6c530e4fab5ea843282f9e0, type: 3}
+      objectReference: {fileID: 8300000, guid: 0419a4a1aebf7ef419093d328754d521, type: 3}
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: hitSounds.clipsInContainer.Array.data[1]
       value: 
-      objectReference: {fileID: 8300000, guid: 0ec0c26922a82a84d8f7e7ef40052cdc, type: 3}
+      objectReference: {fileID: 8300000, guid: 2fe6fdc7ff37c8641bc42102dff32534, type: 3}
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: hitSounds.clipsInContainer.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 6fa511bf4e323b54ea37d2a85cbb37fd, type: 3}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: hitSounds.clipsInContainer.Array.data[3]
+      value: 
+      objectReference: {fileID: 8300000, guid: 74158f4ad6c530e4fab5ea843282f9e0, type: 3}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: hitSounds.clipsInContainer.Array.data[4]
+      value: 
+      objectReference: {fileID: 8300000, guid: 0ec0c26922a82a84d8f7e7ef40052cdc, type: 3}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: hitSounds.clipsInContainer.Array.data[5]
       value: 
       objectReference: {fileID: 8300000, guid: 9afa911cd380cc9478867eb9ffc44cad, type: 3}
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
@@ -1346,15 +1374,15 @@ PrefabInstance:
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: deathSounds.clipsInContainer.Array.data[0]
       value: 
-      objectReference: {fileID: 8300000, guid: 8342e0b99e8135d4a86bbf9556e95124, type: 3}
+      objectReference: {fileID: 8300000, guid: 1f94da6812374624abf90456ed9223cd, type: 3}
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: deathSounds.clipsInContainer.Array.data[1]
       value: 
-      objectReference: {fileID: 8300000, guid: 7fcc2feed0c9c4645b645f4784b41796, type: 3}
+      objectReference: {fileID: 8300000, guid: bc2cbf77b46ac1340bfa5197e90c459f, type: 3}
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: deathSounds.clipsInContainer.Array.data[2]
       value: 
-      objectReference: {fileID: 8300000, guid: a11cba22c6eb2924cb46abbab44611e0, type: 3}
+      objectReference: {fileID: 8300000, guid: 0deef2bb245083340b1546a0e71639fb, type: 3}
     - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: damageSounds.clipsInContainer.Array.data[0]
       value: 
@@ -1367,6 +1395,14 @@ PrefabInstance:
       propertyPath: damageSounds.clipsInContainer.Array.data[2]
       value: 
       objectReference: {fileID: 8300000, guid: 9afa911cd380cc9478867eb9ffc44cad, type: 3}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: deathSounds.soundSettings.pitchRandomRange.x
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7281680880204442666, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
+      propertyPath: deathSounds.soundSettings.pitchRandomRange.y
+      value: 0.9
+      objectReference: {fileID: 0}
     - target: {fileID: 7281680880204442667, guid: d19eb3fb9d048ba4bac6075e7faea80e, type: 3}
       propertyPath: m_RootOrder
       value: 0
