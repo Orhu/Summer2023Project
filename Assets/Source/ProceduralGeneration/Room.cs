@@ -20,6 +20,8 @@ namespace Cardificer
         // Called when all enemies in this room are killed.
         public System.Action onCleared;
 
+        private bool bossRoom = false;
+
         /// <summary>
         /// Adds an enemy to the list of living enemies
         /// </summary>
@@ -27,6 +29,10 @@ namespace Cardificer
         public void AddEnemy(GameObject enemy)
         {
             livingEnemies.Add(enemy);
+            if (enemy.name == "DefaultCauldron")
+            {
+                bossRoom = true;
+            }
         }
 
         /// <summary>
@@ -58,13 +64,14 @@ namespace Cardificer
         /// </summary>
         public void OpenDoors()
         {
-
-            AudioManager.instance.SetMusicStateToAmbient();
+            MusicManager.instance.SetMusicToAmbientState_public();
 
             foreach (Door door in doors)
             {
                 door.Open();
             }
+
+
         }
 
         /// <summary>
@@ -73,7 +80,7 @@ namespace Cardificer
         public void CloseDoors()
         {
 
-            AudioManager.instance.SetMusicStateToBattle();
+            MusicManager.instance.SetMusicToBattleState_public();
 
             foreach (Door door in doors)
             {

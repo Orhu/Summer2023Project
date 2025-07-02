@@ -56,7 +56,7 @@ MonoBehaviour:
       pitch: 1
       randomizePitch: 0
       pitchRandomRange: {x: 0, y: 0}
-      spatialBlend: 0.5
+      spatialBlend: 0
       spread: 0
       bufferTime: 0
       lastTriggeredTime: 0
@@ -74,7 +74,7 @@ MonoBehaviour:
       pitch: 1
       randomizePitch: 0
       pitchRandomRange: {x: 0, y: 0}
-      spatialBlend: 0.5
+      spatialBlend: 0
       spread: 0
       bufferTime: 0
       lastTriggeredTime: 0
@@ -93,7 +93,7 @@ MonoBehaviour:
       pitch: 1
       randomizePitch: 0
       pitchRandomRange: {x: 0, y: 0}
-      spatialBlend: 0.5
+      spatialBlend: 0
       spread: 0
       bufferTime: 0
       lastTriggeredTime: 0
@@ -108,6 +108,44 @@ MonoBehaviour:
   durationToFadeOutChuggingAmbience: 20
   fadeOutChuggingAmbienceDuration: 10
   frameDelaySetPoint: 20
+  mainMenuMusic:
+    outputAudioMixerGroup: {fileID: 4941467244766181081, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 0.766
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 763d0cd0a2262ba469ed660a4e880812, type: 3}
+    musicSpeedChanging: 0
+  bossMusic:
+    outputAudioMixerGroup: {fileID: -6801332617967227567, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 128
+      loop: 1
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 615cc12671fb9944fbfc775040b24655, type: 3}
+    musicSpeedChanging: 0
 --- !u!1 &4061888833403217252
 GameObject:
   m_ObjectHideFlags: 0
@@ -613,6 +651,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   printDebugMessages: 0
   usePlayerAudioListener: 1
+  audioSourcesToDestroy: []
   _defaultSoundSettings:
     priority: 128
     loop: 0
@@ -622,7 +661,7 @@ MonoBehaviour:
     pitch: 1
     randomizePitch: 0
     pitchRandomRange: {x: 0.8, y: 1.1}
-    spatialBlend: 1
+    spatialBlend: 0.575
     spread: 0
     bufferTime: 0
     lastTriggeredTime: 50000

@@ -1,8 +1,10 @@
 using Cardificer;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.Rendering;
 
 public class MusicManager : MonoBehaviour
 {
@@ -19,17 +21,20 @@ public class MusicManager : MonoBehaviour
     private float pitchChangeAmountTargetUp = 1.222222222222222222222222222222f, pitchChangeAmountTargetDown = 0.81818181818181818181818f;
     public int frameDelaySetPoint;
 
+    public MusicSound mainMenuMusic, bossMusic;
+    private bool levelStarted = false;
+
 
     private void Awake()
     {
-        //if (instance != null)
-        //{
-        //    Debug.LogWarning("There's more than one MusicManager! " + transform + " - " + instance);
-        //    Destroy(gameObject);
-        //    return;
-        //}
+        if (instance != null)
+        {
+            Debug.LogWarning("There's more than one MusicManager! " + transform + " - " + instance);
+            Destroy(gameObject);
+            return;
+        }
 
-        //instance = this;
+        instance = this;
         //DontDestroyOnLoad(this.gameObject); 
         transform.position = new Vector3(0, 0, 0);
 
@@ -59,52 +64,207 @@ public class MusicManager : MonoBehaviour
 
     private void Update()
     {
-        if (!musicSpeedChanging && Input.GetKeyDown(KeyCode.P))
+        //if (!musicSpeedChanging && Input.GetKeyDown(KeyCode.P))
+        //{
+
+        //    if (musicSpeed == 0)
+        //    {
+        //        StartCoroutine(SetMusicBattleState(speedUpDuration));
+
+        //    }
+        //    else if (musicSpeed == 1)
+        //    {
+
+        //        StartCoroutine(SetMusicAmbientState(slowDownDuration));
+
+        //    }
+        //}
+    }
+
+    public void SetMusicToBossMusic_public()
+    {
+
+        StartCoroutine(SetMusicToBossMusic());
+
+    }
+
+    private IEnumerator SetMusicToBossMusic()
+    {
+
+        float fadeOutTime = 0.5f;
+
+        foreach (MusicSound musicSound in battleTracks)
         {
-
-            if (musicSpeed == 0)
-            {
-                StartCoroutine(SetMusicBattleState(speedUpDuration));
-
-            }
-            else if (musicSpeed == 1)
-            {
-
-                StartCoroutine(SetMusicAmbientState(slowDownDuration));
-
-            }
+            StartCoroutine(FadeOutTrack(musicSound, fadeOutTime, false));
         }
+
+        foreach (MusicSound musicSound in ambientTracks)
+        {
+            StartCoroutine(FadeOutTrack(musicSound, fadeOutTime, false));
+        }
+
+        yield return new WaitForSeconds(fadeOutTime);
+
+        StartMusicTracksAtZeroVolume(bossMusic);
+        StartCoroutine(FadeInTrack(bossMusic, 0.3f));
+        battleAudioMixerGroup.audioMixer.SetFloat("battleVolume", -80);
+        
+
     }
 
     public void SetMusicToAmbientState_public()
     {
-        StartCoroutine(SetMusicAmbientState(slowDownDuration));
+        if (!levelStarted) return;
+
+
+        foreach (MusicSound musicSound in battleTracks)
+        {
+            StartCoroutine(FadeOutTrack(musicSound, 1.3f, false));
+        }
+
+        foreach (MusicSound musicSound in ambientTracks)
+        {
+            StartCoroutine(FadeInTrack(musicSound, 1.3f));
+        }
+
     }
 
     public void SetMusicToBattleState_public()
     {
-        StartCoroutine(SetMusicBattleState(speedUpDuration));
+        foreach (MusicSound musicSound in battleTracks)
+        {
+            StartCoroutine(FadeInTrack(musicSound, 1.3f));
+        }
+
+        foreach (MusicSound musicSound in ambientTracks)
+        {
+            StartCoroutine(FadeOutTrack(musicSound, 1.3f, false));
+        }
+    }
+
+    public void StartLevelMusic()
+    {
+
+        StartCoroutine(FadeOutTrack(mainMenuMusic, 1.5f, true));
+        StartMusicTracksAtZeroVolume(ambientTracks, battleTracks);
+        foreach (MusicSound musicSound in ambientTracks)
+        {
+            StartCoroutine(FadeInTrack(musicSound, 2f));
+        }
+
+        StartCoroutine(WaitForRoomsToLoad());
+
+
+        //foreach (MusicSound ambMusicSound in ambientTracks)
+        //{
+        //    ambMusicSound.SetAudioMixerGroup(ambientAudioMixerGroup);
+        //    AudioManager.instance.PlaySoundBaseOnTarget(ambMusicSound, this.gameObject.transform, true);
+        //}
+
+        //foreach (MusicSound battleMusicSound in battleTracks)
+        //{
+        //    battleMusicSound.SetAudioMixerGroup(battleAudioMixerGroup);
+        //    AudioManager.instance.PlaySoundBaseOnTarget(battleMusicSound, this.gameObject.transform, true, 0);
+        //    battleMusicSound.audioSourceInUse.pitch = pitchChangeAmountTargetDown;
+        //    battleAudioMixerGroup.audioMixer.SetFloat("battlePitchBend", pitchChangeAmountTargetUp);
+        //    battleMusicSound.audioSourceInUse.volume = 0;
+        //}
+
+        //StartCoroutine(FadeOutChuggingAmbientTrack());
 
     }
 
-    public void StartMusic()
+    private IEnumerator WaitForRoomsToLoad()
     {
-        foreach (MusicSound ambMusicSound in ambientTracks)
+        yield return new WaitForSeconds(1);
+
+        levelStarted = true;
+    }
+
+    private void StartMusicTracksAtZeroVolume(MusicSound[] ambientMusicTracks, MusicSound[] battleMusicTracks)
+    {
+
+        foreach (MusicSound track in ambientMusicTracks)
         {
-            ambMusicSound.SetAudioMixerGroup(ambientAudioMixerGroup);
-            AudioManager.instance.PlaySoundBaseOnTarget(ambMusicSound, this.gameObject.transform, true);
+
+            track.audioSourceInUse = this.gameObject.AddComponent<AudioSource>();
+            ApplySoundSettingsToAudioSource(track, track.audioSourceInUse);
+            track.audioSourceInUse.volume = 0f;
+            track.audioSourceInUse.Play();
         }
 
-        foreach (MusicSound battleMusicSound in battleTracks)
+        foreach (MusicSound track in battleMusicTracks)
         {
-            battleMusicSound.SetAudioMixerGroup(battleAudioMixerGroup);
-            AudioManager.instance.PlaySoundBaseOnTarget(battleMusicSound, this.gameObject.transform, true);
-            battleMusicSound.audioSourceInUse.pitch = pitchChangeAmountTargetDown;
-            battleAudioMixerGroup.audioMixer.SetFloat("battlePitchBend", pitchChangeAmountTargetUp);
-            battleMusicSound.audioSourceInUse.volume = 0;
+
+            track.audioSourceInUse = this.gameObject.AddComponent<AudioSource>();
+            ApplySoundSettingsToAudioSource(track, track.audioSourceInUse);
+            track.audioSourceInUse.volume = 0f;
+            track.audioSourceInUse.Play();
         }
 
-        StartCoroutine(FadeOutChuggingAmbientTrack());
+    }
+
+    private void StartMusicTracksAtZeroVolume(MusicSound bossMusicTrack)
+    {
+        bossMusicTrack.audioSourceInUse = this.gameObject.AddComponent<AudioSource>();
+        ApplySoundSettingsToAudioSource(bossMusicTrack, bossMusicTrack.audioSourceInUse);
+        bossMusicTrack.audioSourceInUse.volume = 0f;
+        bossMusicTrack.audioSourceInUse.Play();
+    }
+
+
+    private void ApplySoundSettingsToAudioSource(MusicSound sound, AudioSource audioSource)
+    {
+
+        audioSource.clip = sound.audioClip;
+        audioSource.outputAudioMixerGroup = sound.outputAudioMixerGroup;
+        sound.audioSourceInUse = audioSource;
+
+        audioSource.priority = sound.soundSettings.priority;
+        audioSource.loop = sound.soundSettings.loop;
+        audioSource.volume = sound.GetVolume();
+        audioSource.pitch = sound.GetPitch();
+        audioSource.spatialBlend = sound.soundSettings.spatialBlend;
+        audioSource.spread = sound.soundSettings.spread;
+    }
+
+    private IEnumerator FadeOutTrack(SoundBase musicToFadeOut, float fadeOutDuration, bool shouldStop)
+    {
+
+        if (musicToFadeOut.audioSourceInUse == null || musicToFadeOut.audioSourceInUse.volume == 0f) yield break;
+
+        float curTime = 0;
+
+        while (curTime < fadeOutDuration)
+        { 
+            
+            musicToFadeOut.audioSourceInUse.volume = Mathf.Lerp(musicToFadeOut.soundSettings.volume, 0, curTime/fadeOutDuration);
+            curTime += Time.deltaTime;
+            yield return null;
+        
+        }
+
+        if (shouldStop)
+        { 
+            musicToFadeOut.audioSourceInUse.Stop();
+            AudioManager.instance.audioSourcesToDestroy.Add(musicToFadeOut.audioSourceInUse);
+
+        }
+
+    }
+
+    private IEnumerator FadeInTrack (MusicSound musicToFadeIn, float fadeInDuration)
+    {
+        float curTime = 0;
+
+        while (curTime < fadeInDuration)
+        {
+
+            musicToFadeIn.audioSourceInUse.volume = Mathf.Lerp(0, musicToFadeIn.soundSettings.volume, curTime / fadeInDuration);
+            curTime += Time.deltaTime;
+            yield return null;
+
+        }
 
     }
 
@@ -303,5 +463,32 @@ public class MusicManager : MonoBehaviour
 
     }
 
+    internal void StartMainMenuMusic()
+    {
+        AudioManager.instance.PlaySoundBaseOnTarget(mainMenuMusic, this.transform, true);
+    }
+
+    public void SetMusicToAmbientMusicFromBossMusic_public()
+    {
+        SetMusicToAmbientMusicFromBossMusic();
+    }
+
+    private void SetMusicToAmbientMusicFromBossMusic()
+    {
+        StartCoroutine(FadeOutTrack(bossMusic, 1, true));
+        foreach (MusicSound track in ambientTracks)
+        {
+            FadeInTrack(track, 1);
+        }
+        StartCoroutine(FadeInBattleMixer());
+
+        IEnumerator FadeInBattleMixer()
+        {
+            yield return new WaitForSeconds(1);
+            battleAudioMixerGroup.audioMixer.SetFloat("battleVolume", 0);
+        }
+
+
+    }
 
 }

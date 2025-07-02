@@ -27,7 +27,7 @@ namespace Cardificer
         private List<SoundBase> soundsToDestroyList = new List<SoundBase>();
         //private List<AverageAudio> averageAudioList = new List<AverageAudio>();
         private List<SoundContainer> activeSoundContainers = new List<SoundContainer>();
-        private List<AudioSource> audioSourcesToDestroy = new List<AudioSource>();
+        public List<AudioSource> audioSourcesToDestroy = new List<AudioSource>();
 
         [Tooltip("Default SoundSettings to be applied when a SoundBase has 'Use Default Settings' set to true.")]
         public SoundSettings _defaultSoundSettings;
@@ -84,12 +84,18 @@ namespace Cardificer
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             SetUpAudioListeners();
+            //print(scene.name);
 
             switch (scene.name)
             {
+
+                case ("MainMenu"):
+                    musicManager.StartMainMenuMusic();
+                    break;
+
                 case ("Floor1"):
 
-                    musicManager.StartMusic();
+                    musicManager.StartLevelMusic();
                     break;
 
                 default:
@@ -103,7 +109,7 @@ namespace Cardificer
 
         public void StartMusic()
         {
-            musicManager.StartMusic();
+            musicManager.StartLevelMusic();
         }
 
         public void SetMusicStateToAmbient()
@@ -190,6 +196,23 @@ namespace Cardificer
 
         }
 
+        public void PlaySoundBaseOnTarget(SoundBase soundBase, Transform target, bool makeUnique, float startVolume)
+        {
+
+            if (!SoundShouldPlay(soundBase))
+            {
+
+                if (printDebugMessages) print($"{soundBase.name} should not play!");
+            }
+
+            else
+            {
+                if (printDebugMessages) print($"Playing {soundBase.name} on {target.name}!");
+                PlaySoundBaseOnAudioSource(soundBase, GetAudioSourceFromTarget(target, makeUnique));
+            }
+
+        }
+
         /// <summary>
         /// Starts a SoundBase on a Transform.  
         /// </summary>
@@ -234,7 +257,7 @@ namespace Cardificer
         /// <param name="target">The Transform to get the AudioSource from. </param>
         /// <param name="makeUnique">If true will create a new AudioSource if there is one currently playing on the Target. </param>
         /// <returns> Always returns an AudioSource even if there is no AudioSource on the target Transform </returns>
-        private AudioSource GetAudioSourceFromTarget(Transform target, bool makeUnique)
+        public AudioSource GetAudioSourceFromTarget(Transform target, bool makeUnique)
         {
 
             AudioSource targetAudioSource = target.GetComponent<AudioSource>();
@@ -324,12 +347,24 @@ namespace Cardificer
             }
         }
 
-        /// <summary>
-        /// Plays a BasicSound on an AudioSource. 
-        /// </summary>
-        /// <param name="sound">The BasicSound to start playing at a location.</param>
-        /// <param name="audioSource">The AudioSource that will play the BasicSound.</param>
-        private void PlaySound(BasicSound sound, AudioSource audioSource)
+
+        private void PlaySoundBaseOnAudioSource(SoundBase soundBase, AudioSource audioSource, float startVolume)
+        {
+
+            soundBase.audioSourceInUse = audioSource;
+            audioSource.volume = startVolume;
+
+            MusicSound music = (MusicSound)soundBase;
+            PlayMusic(music, audioSource);
+        
+        }
+
+            /// <summary>
+            /// Plays a BasicSound on an AudioSource. 
+            /// </summary>
+            /// <param name="sound">The BasicSound to start playing at a location.</param>
+            /// <param name="audioSource">The AudioSource that will play the BasicSound.</param>
+            private void PlaySound(BasicSound sound, AudioSource audioSource)
         {
             if (audioSource.isPlaying)
             {
