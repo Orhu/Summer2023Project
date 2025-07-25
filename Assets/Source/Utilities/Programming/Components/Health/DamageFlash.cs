@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Cardificer
@@ -12,9 +13,7 @@ namespace Cardificer
         [Tooltip("The time to make this a different color for.")]
         [SerializeField] private float flashDuration = 0.25f;
 
-        private SpriteRenderer spriteRenderer;
-
-        bool useMultipleSprites = false; 
+        private List<SavedSpriteRenderer> spriteRenderers = new List<SavedSpriteRenderer>();
 
         /// <summary>
         /// Initializes references
@@ -26,9 +25,32 @@ namespace Cardificer
                 {
                     StartCoroutine(Flash());
                 };
-            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+            GetAllSpriteRenderers();
         }
 
+        /// <summary>
+        /// saves all sprite renderers on the object and it's children, grandchildren, etc.
+        /// </summary>
+        private void GetAllSpriteRenderers()
+        {
+            //use to store ALL children & this object
+            Queue<Transform> queue = new Queue<Transform>();
+            queue.Enqueue(transform);
+
+            while (queue.Count > 0)
+            {
+                var newParent = queue.Dequeue();
+
+                //save if it has a sprite renderer
+                if (newParent.gameObject.GetComponent<SpriteRenderer>())
+                {
+                    spriteRenderers.Add(new SavedSpriteRenderer(newParent.gameObject.GetComponent<SpriteRenderer>()));
+                }
+               
+                foreach (Transform child in newParent) queue.Enqueue(child);
+            }
+        }
 
         /// <summary>
         /// Enables or disables tinting of the sprite.
@@ -36,9 +58,43 @@ namespace Cardificer
         /// <returns> The time to stay tinted. </returns>
         private IEnumerator Flash()
         {
-            spriteRenderer.color = invincibilityFlashColor;
+            foreach (var renderer in spriteRenderers) 
+            {
+                renderer.ShowColor(invincibilityFlashColor);
+            }
+
             yield return new WaitForSeconds(flashDuration);
-            spriteRenderer.color = Color.white;
+
+       
+            foreach (var renderer in spriteRenderers)
+            {
+                renderer.RestoreSpriteColor();
+            }
+        }
+    }
+
+    //this is jank sorry (last minute)!
+    //saves color before sprite starts flashing red so it can be restored
+    public class SavedSpriteRenderer
+    {
+        private SpriteRenderer renderer;
+        private Color originalSpriteColor;
+
+        public SavedSpriteRenderer(SpriteRenderer spriteRenderer)
+        {
+            renderer = spriteRenderer;
+            originalSpriteColor = renderer.color;
+        }
+
+        //restore the sprite renderer's original color
+        public void RestoreSpriteColor()
+        {
+            renderer.color = originalSpriteColor;
+        }
+
+        public void ShowColor(Color color)
+        {
+            renderer.color = color;
         }
     }
 }
