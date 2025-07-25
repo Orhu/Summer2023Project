@@ -59,7 +59,7 @@ namespace Cardificer
         /// </summary>
         private void Update()
         {
-            if (!animator.hasBoundPlayables) { return; }
+            if (!animator.hasBoundPlayables || animator.GetCurrentAnimatorClipInfo(0).Length == 0) { return; }
 
             AnimationClip currentClip = animator.GetCurrentAnimatorClipInfo(0)[0].clip;
             if (currentClip == null) { return; }

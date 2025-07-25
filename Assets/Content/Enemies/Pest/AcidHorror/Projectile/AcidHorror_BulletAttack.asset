@@ -45,10 +45,10 @@ MonoBehaviour:
   immuneToShield: 0
   immuneToReflect: 0
   shape: {fileID: 11400000, guid: 3ef7965b567ec6c46b84120752715582, type: 2}
-  lifetime: 1.5
+  lifetime: 2
   initialSpeed: 6
-  acceleration: 0
-  minSpeed: 0
+  acceleration: -3
+  minSpeed: 4
   maxSpeed: 6
   homingSpeed: 0
   homingTime: 0
@@ -56,8 +56,8 @@ MonoBehaviour:
   homingAimMode: 6
   switchAfterHit: 0
   visualObject: {fileID: 1174841353149921431, guid: 4d047c0583cf97b49812e2ac841d2141, type: 3}
-  detachVisualsBeforeDestroy: 0
-  detatchedVisualsTimeBeforeDestroy: 0
+  detachVisualsBeforeDestroy: 1
+  detatchedVisualsTimeBeforeDestroy: 0.75
   travelSound:
     outputAudioMixerGroup: {fileID: 0}
     useDefaultSettings: 1
@@ -115,8 +115,8 @@ MonoBehaviour:
     audioClip: {fileID: 0}
   spawnLocation: 0
   aimMode: 0
-  waitForProjectileDeath: 0
-  chargeTime: 0
+  waitForProjectileDeath: 1
+  chargeTime: 0.1
   additionalActionTime: 1.5
   _spawnSequence:
   - delay: 0
