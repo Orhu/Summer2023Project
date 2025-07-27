@@ -28,16 +28,21 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="machine"> The state machine to be used. </param>
         public void OnStateUpdate(BaseStateMachine machine)
         {
-            if (updateActions.Count == 0) return;
-
-            foreach (var action in updateActions)
+            if (updateActions.Count != 0)
             {
-                action.Execute(machine);
+                foreach (var action in updateActions)
+                {
+                    action.Execute(machine);
+                }
+
             }
 
-            foreach (var transition in transitions)
+            if (transitions.Count != 0) 
             {
-                transition.Evaluate(machine);
+                foreach (var transition in transitions)
+                {
+                    transition.Evaluate(machine);
+                }
             }
         }
 

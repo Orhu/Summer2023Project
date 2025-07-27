@@ -25,8 +25,12 @@ MonoBehaviour:
       randomizePitch: 1
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 8300000, guid: 00d6fa24366068142935c1eb6de578ef, type: 3}
+  stopActionSoundOnActionComplete: 0
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
@@ -44,8 +48,8 @@ MonoBehaviour:
   immuneToReflect: 0
   shape: {fileID: 11400000, guid: 179dfe1dc169a1f4785cb651359cbccf, type: 2}
   lifetime: 1.428571
-  initialSpeed: 5
-  acceleration: -3.5
+  initialSpeed: 7
+  acceleration: -5
   minSpeed: 0
   maxSpeed: 10
   homingSpeed: 0
@@ -69,8 +73,12 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 0}
+  travelSoundFadeOutTime: 0.3
   impactSound:
     outputAudioMixerGroup: {fileID: 0}
     useDefaultSettings: 1
@@ -84,12 +92,33 @@ MonoBehaviour:
       randomizePitch: 0
       pitchRandomRange: {x: 0.8, y: 1.1}
       spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
+  chargeSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 0}
   spawnLocation: 0
   aimMode: 0
   waitForProjectileDeath: 0
-  chargeTime: 0
+  chargeTime: 0.1
   additionalActionTime: 0
   _spawnSequence:
   - delay: 0
