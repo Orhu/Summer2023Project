@@ -62,7 +62,7 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> The state machine to be used. </param>
         public void OnStateExit(BaseStateMachine stateMachine)
         {
-            Debug.Log("EXITING STATE CALLED: " + this.name + " ON THE GAMEOBJECT CALLED : " + stateMachine.gameObject.name);
+
 
             foreach (var action in exitActions)
             {
