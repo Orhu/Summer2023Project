@@ -42,8 +42,8 @@ namespace Cardificer
             {
                 var newParent = queue.Dequeue();
 
-                //save if it has a sprite renderer
-                if (newParent.gameObject.GetComponent<SpriteRenderer>())
+                //save if it has a sprite renderer & it is not a shadow
+                if (newParent.gameObject.tag != "Shadow" && newParent.gameObject.GetComponent<SpriteRenderer>())
                 {
                     spriteRenderers.Add(new SavedSpriteRenderer(newParent.gameObject.GetComponent<SpriteRenderer>()));
                 }
