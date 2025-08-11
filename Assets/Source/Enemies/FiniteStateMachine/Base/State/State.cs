@@ -28,14 +28,21 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="machine"> The state machine to be used. </param>
         public void OnStateUpdate(BaseStateMachine machine)
         {
-            foreach (var action in updateActions)
+            if (updateActions.Count != 0)
             {
-                action.Execute(machine);
+                foreach (var action in updateActions)
+                {
+                    action.Execute(machine);
+                }
+
             }
 
-            foreach (var transition in transitions)
+            if (transitions.Count != 0) 
             {
-                transition.Evaluate(machine);
+                foreach (var transition in transitions)
+                {
+                    transition.Evaluate(machine);
+                }
             }
         }
 
@@ -45,6 +52,8 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> The state machine to be used. </param>
         public void OnStateEnter(BaseStateMachine stateMachine)
         {
+            Debug.Log("JUST ENTERED STATE CALLED: " + this.name + " ON THE GAMEOBJECT CALLED : " + stateMachine.gameObject.name);
+
             foreach (var action in enterActions)
             {
                 stateMachine.cooldownData.cooldownReady.TryAdd(action, true);
@@ -58,6 +67,8 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> The state machine to be used. </param>
         public void OnStateExit(BaseStateMachine stateMachine)
         {
+
+
             foreach (var action in exitActions)
             {
                 action.Execute(stateMachine);

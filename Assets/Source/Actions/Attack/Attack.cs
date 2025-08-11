@@ -268,7 +268,7 @@ namespace Cardificer
 
             void CleanUpAttackAudio()
             {
-                if (travelSound.soundSettings.loop && averageAudio != null && travelSound.IsValid())
+                if (travelSound.soundSettings != null && travelSound.soundSettings.loop && averageAudio != null && travelSound.IsValid())
                 {
                     averageAudio.DestroyAverageAudio(travelSoundFadeOutTime);
                 }

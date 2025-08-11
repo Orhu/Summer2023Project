@@ -1,5 +1,78 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &511154787482457907
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 346843379995556417}
+    m_Modifications:
+    - target: {fileID: 348937357776744742, guid: 646569162ad6fd64a8cd118f7e7906fd, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 348937357776744742, guid: 646569162ad6fd64a8cd118f7e7906fd, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.0325893
+      objectReference: {fileID: 0}
+    - target: {fileID: 348937357776744742, guid: 646569162ad6fd64a8cd118f7e7906fd, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.1886406
+      objectReference: {fileID: 0}
+    - target: {fileID: 348937357776744742, guid: 646569162ad6fd64a8cd118f7e7906fd, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.6841172
+      objectReference: {fileID: 0}
+    - target: {fileID: 348937357776744742, guid: 646569162ad6fd64a8cd118f7e7906fd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.0069999695
+      objectReference: {fileID: 0}
+    - target: {fileID: 348937357776744742, guid: 646569162ad6fd64a8cd118f7e7906fd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.16699982
+      objectReference: {fileID: 0}
+    - target: {fileID: 348937357776744742, guid: 646569162ad6fd64a8cd118f7e7906fd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 348937357776744742, guid: 646569162ad6fd64a8cd118f7e7906fd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9998672
+      objectReference: {fileID: 0}
+    - target: {fileID: 348937357776744742, guid: 646569162ad6fd64a8cd118f7e7906fd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 348937357776744742, guid: 646569162ad6fd64a8cd118f7e7906fd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 348937357776744742, guid: 646569162ad6fd64a8cd118f7e7906fd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.01629923
+      objectReference: {fileID: 0}
+    - target: {fileID: 348937357776744742, guid: 646569162ad6fd64a8cd118f7e7906fd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 348937357776744742, guid: 646569162ad6fd64a8cd118f7e7906fd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 348937357776744742, guid: 646569162ad6fd64a8cd118f7e7906fd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 1.868
+      objectReference: {fileID: 0}
+    - target: {fileID: 4355347897111521371, guid: 646569162ad6fd64a8cd118f7e7906fd, type: 3}
+      propertyPath: m_Name
+      value: Shadow
+      objectReference: {fileID: 0}
+    - target: {fileID: 4362372307813234030, guid: 646569162ad6fd64a8cd118f7e7906fd, type: 3}
+      propertyPath: fakeParent
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 646569162ad6fd64a8cd118f7e7906fd, type: 3}
 --- !u!1001 &4887076022813334090
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59,6 +132,18 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 72e4d902cb1c426459ec3f51cea3c89a, type: 3}
+    - target: {fileID: 8508642434945351140, guid: 624017bd6b72b3442a5c0a2867d27c74, type: 3}
+      propertyPath: m_Color.b
+      value: 0.66087574
+      objectReference: {fileID: 0}
+    - target: {fileID: 8508642434945351140, guid: 624017bd6b72b3442a5c0a2867d27c74, type: 3}
+      propertyPath: m_Color.g
+      value: 0.7526258
+      objectReference: {fileID: 0}
+    - target: {fileID: 8508642434945351140, guid: 624017bd6b72b3442a5c0a2867d27c74, type: 3}
+      propertyPath: m_Color.r
+      value: 0.7924528
+      objectReference: {fileID: 0}
     - target: {fileID: 8508642434945351140, guid: 624017bd6b72b3442a5c0a2867d27c74, type: 3}
       propertyPath: m_SortingLayer
       value: -5
@@ -126,6 +211,7 @@ MonoBehaviour:
   immediatelyDamage: 1
   noTriggerDamage: 0
   noCollisionDamage: 0
+  fragile: 0
   damageOnInteractSound:
     outputAudioMixerGroup: {fileID: 0}
     useDefaultSettings: 1
@@ -144,3 +230,8 @@ MonoBehaviour:
       lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 0}
+--- !u!4 &346843379995556417 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5116754967814381579, guid: 624017bd6b72b3442a5c0a2867d27c74, type: 3}
+  m_PrefabInstance: {fileID: 4887076022813334090}
+  m_PrefabAsset: {fileID: 0}
