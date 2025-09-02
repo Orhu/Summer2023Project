@@ -1,7 +1,6 @@
 ﻿
 using System.Collections;
 using UnityEngine;
-using MovementType = Cardificer.RoomInterface.MovementType;
 
 namespace Cardificer.FiniteStateMachine
 {

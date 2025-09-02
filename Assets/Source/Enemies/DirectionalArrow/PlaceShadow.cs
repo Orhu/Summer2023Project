@@ -1,9 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Net.Sockets;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 //positions shadow
 public class PlaceShadow : MonoBehaviour

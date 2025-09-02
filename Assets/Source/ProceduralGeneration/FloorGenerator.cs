@@ -3,8 +3,6 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Events;
-using Skaillz.EditInline;
 
 namespace Cardificer
 {

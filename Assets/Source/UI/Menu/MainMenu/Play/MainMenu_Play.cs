@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,15 +15,12 @@ namespace Cardificer
         [Tooltip("The button bound to the NewGame() function.")]
         [SerializeField] private Button newGameButton;
 
-        [Tooltip("The button bound to the Tutorial() function.")]
-        [SerializeField] private Button tutorialButton;
-
         /// <summary>
         /// Set initial selection.
         /// </summary>
         private void OnEnable()
         {
-            initialSelection = (SaveManager.autosaveExists ? continueButton : (SaveManager.tutorialCompleted ? newGameButton : tutorialButton)).gameObject;
+            initialSelection = (SaveManager.autosaveExists ? continueButton : newGameButton).gameObject;
         }
 
         /// <summary>
@@ -61,25 +56,6 @@ namespace Cardificer
             SaveManager.ClearTransientSaves();
             FloorSceneManager.LoadFloor(0);
             MenuManager.Close<MainMenu_Play>();
-        }
-
-        /// <summary>
-        /// Clears autosaves and starts a new game.
-        /// </summary>
-        public void Tutorial()
-        {
-            AsyncOperation operation = SceneManager.LoadSceneAsync("Tutorial");
-            MenuManager.Open<LoadingScreen>(true, true);
-            MenuManager.Close<MainMenu_Play>();
-        }
-
-        /// <summary>
-        /// Clears autosaves and starts a new game.
-        /// </summary>
-        public void Sanctum()
-        {
-            MenuManager.Close<MainMenu_Play>();
-            throw new System.NotImplementedException("Sanctum hasn't been made yet.");
         }
     }
 }

@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Cardificer;
 using Cardificer.FiniteStateMachine;
 using UnityEngine;
 

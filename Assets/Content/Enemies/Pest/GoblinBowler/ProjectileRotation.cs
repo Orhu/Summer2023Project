@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 //applied to projectile that should spin + change spin direction when it hits another surface

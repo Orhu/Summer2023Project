@@ -1,8 +1,5 @@
 using Cardificer;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Timeline;
 
 /// <summary>
 /// Intantiates an AverageAudio that follows this GameObject and plays a BasicSound on Start(), then fades out and destroys the AverageAudio when this GameObject is destroyed.

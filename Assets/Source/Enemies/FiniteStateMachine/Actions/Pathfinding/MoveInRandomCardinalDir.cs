@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ChaseData = Cardificer.FiniteStateMachine.BaseStateMachine.ChaseData;
 using Random = UnityEngine.Random;
 
 namespace Cardificer.FiniteStateMachine

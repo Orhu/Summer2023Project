@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 //applied to a gameObject with an animator to trigger an attack animaton when the player is detected.
