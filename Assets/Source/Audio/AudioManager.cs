@@ -51,11 +51,7 @@ namespace Cardificer
 
             transform.position = new Vector3 (0,0,0); 
 
-            audioListenerGameObject = new GameObject();
-            audioListenerGameObject.name = "AudioListenerGameObject";
-            audioListenerGameObject.AddComponent<AudioListener>();
-            audioListenerGameObject.transform.SetParent(transform);
-
+            ResetAudioListener();
         }
 
         #region event subscription in OnEnable and OnDisable
@@ -86,6 +82,9 @@ namespace Cardificer
         /// </summary>
         public void ResetAudioListener()
         {
+            audioListenerGameObject = new GameObject();
+            audioListenerGameObject.name = "AudioListenerGameObject";
+            audioListenerGameObject.AddComponent<AudioListener>();
             audioListenerGameObject.transform.SetParent(transform);
         }
 
@@ -129,8 +128,7 @@ namespace Cardificer
 
             }
 
-            audioListenerGameObject.transform.position = new Vector3(0, 0, -5);
-
+            if (audioListenerGameObject is not null) audioListenerGameObject.transform.position = new Vector3(0, 0, -5);
         }
 
         /// <summary>
