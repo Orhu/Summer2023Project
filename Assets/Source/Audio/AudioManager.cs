@@ -208,7 +208,7 @@ namespace Cardificer
             else
             {
                 if (printDebugMessages) print($"Playing {soundBase.name} on {target.name}!");
-                PlaySoundBaseOnAudioSource(soundBase, GetAudioSourceFromTarget(target, makeUnique));
+                PlaySoundBaseOnAudioSource(soundBase, GetAudioSourceFromTarget(target, makeUnique), startVolume);
             }
 
         }

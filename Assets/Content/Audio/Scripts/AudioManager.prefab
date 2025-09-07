@@ -44,77 +44,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de89ba02ce5e25648be234d157690370, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ambientTracks:
-  - outputAudioMixerGroup: {fileID: 4941467244766181081, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
-    useDefaultSettings: 0
+  ambientMusic:
+    outputAudioMixerGroup: {fileID: 4941467244766181081, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 1
     soundSettings:
-      priority: 200
-      loop: 1
+      priority: 128
+      loop: 0
       volume: 1
       randomizeVolume: 0
-      volumeRandomRange: {x: 0, y: 0}
+      volumeRandomRange: {x: 0.8, y: 1}
       pitch: 1
       randomizePitch: 0
-      pitchRandomRange: {x: 0, y: 0}
-      spatialBlend: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
       spread: 0
       bufferTime: 0
-      lastTriggeredTime: 0
+      lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 8300000, guid: cb035d7582c9762468c357bc755be2d0, type: 3}
     musicSpeedChanging: 0
-  - outputAudioMixerGroup: {fileID: 4941467244766181081, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
-    useDefaultSettings: 0
-    soundSettings:
-      priority: 200
-      loop: 1
-      volume: 0.5
-      randomizeVolume: 0
-      volumeRandomRange: {x: 0, y: 0}
-      pitch: 1
-      randomizePitch: 0
-      pitchRandomRange: {x: 0, y: 0}
-      spatialBlend: 0
-      spread: 0
-      bufferTime: 0
-      lastTriggeredTime: 0
-    audioSourceInUse: {fileID: 0}
-    audioClip: {fileID: 8300000, guid: 870734d7904df324e9be9ca546f06b95, type: 3}
-    musicSpeedChanging: 0
-  battleTracks:
-  - outputAudioMixerGroup: {fileID: 2597315503625110496, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
-    useDefaultSettings: 0
-    soundSettings:
-      priority: 200
-      loop: 1
-      volume: 1
-      randomizeVolume: 0
-      volumeRandomRange: {x: 0, y: 0}
-      pitch: 1
-      randomizePitch: 0
-      pitchRandomRange: {x: 0, y: 0}
-      spatialBlend: 0
-      spread: 0
-      bufferTime: 0
-      lastTriggeredTime: 0
-    audioSourceInUse: {fileID: 0}
-    audioClip: {fileID: 8300000, guid: 7e6b108fd8ec8e64bbb59e2894973151, type: 3}
-    musicSpeedChanging: 0
-  ambientAudioMixerGroup: {fileID: 4941467244766181081, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
-  battleAudioMixerGroup: {fileID: 2597315503625110496, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
-  bossAudioMixerGroup: {fileID: -6801332617967227567, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
-  speedUpDuration: 1
-  slowDownDuration: 1
-  durationToFadeOutChuggingAmbience: 20
-  fadeOutChuggingAmbienceDuration: 10
-  frameDelaySetPoint: 20
   mainMenuMusic:
     outputAudioMixerGroup: {fileID: 4941467244766181081, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
     useDefaultSettings: 0
     soundSettings:
       priority: 128
       loop: 0
-      volume: 0.766
+      volume: 1
       randomizeVolume: 0
       volumeRandomRange: {x: 0.8, y: 1}
       pitch: 1
@@ -126,6 +81,25 @@ MonoBehaviour:
       lastTriggeredTime: 50000
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 8300000, guid: 763d0cd0a2262ba469ed660a4e880812, type: 3}
+    musicSpeedChanging: 0
+  battleMusic:
+    outputAudioMixerGroup: {fileID: 2597315503625110496, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 7e6b108fd8ec8e64bbb59e2894973151, type: 3}
     musicSpeedChanging: 0
   bossMusic:
     outputAudioMixerGroup: {fileID: -6801332617967227567, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
@@ -146,6 +120,14 @@ MonoBehaviour:
     audioSourceInUse: {fileID: 0}
     audioClip: {fileID: 8300000, guid: 615cc12671fb9944fbfc775040b24655, type: 3}
     musicSpeedChanging: 0
+  masterAudioMixerGroup: {fileID: 24300002, guid: 928a3018dcca9fd4bb6fd821c6f3784d, type: 2}
+  speedUpDuration: 1
+  slowDownDuration: 1
+  durationToFadeOutChuggingAmbience: 20
+  fadeOutChuggingAmbienceDuration: 10
+  frameDelaySetPoint: 20
+  ambiMixerGroupDefaultVolume: 0
+  battleMixerGroupDefaultVolume: 0
 --- !u!1 &4061888833403217252
 GameObject:
   m_ObjectHideFlags: 0

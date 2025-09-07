@@ -12,7 +12,7 @@ public class StartBossMusic : MonoBehaviour
 
     private void OnDestroy()
     {
-        MusicManager.instance.SetMusicToAmbientMusicFromBossMusic_public();
+        //MusicManager.instance.SetMusicToAmbientMusicFromBossMusic_public();
     }
 
 }
