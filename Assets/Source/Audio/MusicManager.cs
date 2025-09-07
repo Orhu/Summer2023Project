@@ -6,22 +6,13 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
 
-namespace Cardificer
-{
     public class MusicManager : MonoBehaviour
     {
         public static MusicManager instance;
 
         public MusicSound ambientMusic, mainMenuMusic, battleMusic, bossMusic;
-        private bool musicSpeedChanging = false, musicSpeedUp = false, musicSpeedDown = false;
-        private int musicSpeed = 0;
-        private List<AudioSource> activeMusicAudioSources = new List<AudioSource>();
-        //public AudioMixerGroup ambientAudioMixerGroup;
-        //public AudioMixerGroup battleAudioMixerGroup;
-        //public AudioMixerGroup bossAudioMixerGroup;
         public AudioMixerGroup masterAudioMixerGroup;
         public float speedUpDuration, slowDownDuration, durationToFadeOutChuggingAmbience, fadeOutChuggingAmbienceDuration;
-        private float pitchChangeAmountTargetUp = 1.222222222222222222222222222222f, pitchChangeAmountTargetDown = 0.81818181818181818181818f;
         public int frameDelaySetPoint;
         public float ambiMixerGroupDefaultVolume, battleMixerGroupDefaultVolume;
 
@@ -41,36 +32,14 @@ namespace Cardificer
             DontDestroyOnLoad(this.gameObject);
             transform.position = new Vector3(0, 0, 0);
 
-            //ambientAudioMixerGroup.audioMixer.SetFloat("ambiVolume", ambiMixerGroupDefaultVolume);
-            //battleAudioMixerGroup.audioMixer.SetFloat("battleVolume", battleMixerGroupDefaultVolume);
-
         }
 
         private void Start()
         {
-            //AudioManager.instance.PlaySoundBaseOnTarget(mainMenuMusic, this.transform, true);
             StartCoroutine(FadeInAudio(0.05f));
 
         }
 
-        private void Update()
-        {
-            //if (!musicSpeedChanging && Input.GetKeyDown(KeyCode.P))
-            //{
-
-            //    if (musicSpeed == 0)
-            //    {
-            //        StartCoroutine(SetMusicBattleState(speedUpDuration));
-
-            //    }
-            //    else if (musicSpeed == 1)
-            //    {
-
-            //        StartCoroutine(SetMusicAmbientState(slowDownDuration));
-
-            //    }
-            //}
-        }
 
         private IEnumerator FadeInAudio(float fadeInDuration)
         {
@@ -199,5 +168,5 @@ namespace Cardificer
         }
 
     }
-}
+
 

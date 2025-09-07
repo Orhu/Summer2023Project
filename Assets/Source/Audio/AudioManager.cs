@@ -26,13 +26,14 @@ namespace Cardificer
         private List<SoundBase> soundsToDestroyList = new List<SoundBase>();
         //private List<AverageAudio> averageAudioList = new List<AverageAudio>();
         private List<SoundContainer> activeSoundContainers = new List<SoundContainer>();
-        private List<AudioSource> audioSourcesToDestroy = new List<AudioSource>();
+        [HideInInspector] public List<AudioSource> audioSourcesToDestroy = new List<AudioSource>();
 
         [Tooltip("Default SoundSettings to be applied when a SoundBase has 'Use Default Settings' set to true.")]
         public SoundSettings _defaultSoundSettings;
 
         //Serialized Random for use in random SoundContainer playback
         private System.Random random = new System.Random();
+        private MusicManager musicManager;
 
         /// <summary>
         /// Implementing the singleton pattern and DontDestroyOnLoad. Creates the AudioListener GameObject. 
@@ -52,6 +53,7 @@ namespace Cardificer
             transform.position = new Vector3 (0,0,0); 
 
             ResetAudioListener();
+            musicManager = GetComponentInChildren<MusicManager>();
         }
 
         #region event subscription in OnEnable and OnDisable
@@ -74,7 +76,23 @@ namespace Cardificer
         /// </summary>
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            SetUpAudioListeners();
+            //SetUpAudioListeners();
+
+            switch (scene.name)
+            {
+
+                case ("Floor1"):
+                    musicManager.StartLevelMusic();
+                    break;
+
+                case ("MainMenu"):
+                    musicManager.StartMainMenuMusic();
+                    break;
+
+                default:
+                    break;
+            }
+
         }
 
         /// <summary>
