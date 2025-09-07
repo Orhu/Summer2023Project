@@ -12,7 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1530e9822e976fe4cbb7edc373f05a02, type: 3}
   m_Name: ComsicApprentice_BulletAttack
   m_EditorClassIdentifier: 
-  actionAudioClip: {fileID: 0}
+  actionSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
+  stopActionSoundOnActionComplete: 0
   projectilePrefab: {fileID: -4312951206435015734, guid: caea6d033e6e90448ab0812d820e970b, type: 3}
   previewerPrefab: {fileID: 7840944358340528015, guid: 9a9a0475eb6232943a0d6fc48156ae9b, type: 3}
   attack:
@@ -20,6 +38,7 @@ MonoBehaviour:
     damageType: 1
     statusEffects: []
     invertInvincibility: 0
+    dontShowDamageNumber: 0
   hitCount: 1
   applyDamageOnHit: 1
   modifiers:
@@ -27,11 +46,11 @@ MonoBehaviour:
   immuneToShield: 0
   immuneToReflect: 0
   shape: {fileID: 11400000, guid: 03be031aea4eded47b7107eb7eff0c44, type: 2}
-  lifetime: 0.67
-  initialSpeed: 36
-  acceleration: 0
-  minSpeed: 36
-  maxSpeed: 36
+  lifetime: 1
+  initialSpeed: 14.8
+  acceleration: -10
+  minSpeed: 2
+  maxSpeed: 30
   homingSpeed: 0
   homingTime: 0
   homingDelay: 0
@@ -40,49 +59,84 @@ MonoBehaviour:
   visualObject: {fileID: 7935539856848076492, guid: 9c484883c8f03164ab2422ce1119ca8b, type: 3}
   detachVisualsBeforeDestroy: 0
   detatchedVisualsTimeBeforeDestroy: 0
-  travelAudioClip: {fileID: 0}
-  impactAudioClip: {fileID: 0}
+  travelSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
+  travelSoundFadeOutTime: 0.3
+  impactSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
+  chargeSound:
+    outputAudioMixerGroup: {fileID: 0}
+    useDefaultSettings: 1
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 1
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.5
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 0}
   spawnLocation: 0
   aimMode: 0
   waitForProjectileDeath: 0
-  chargeTime: 0.5
-  additionalActionTime: 0
+  chargeTime: 0.23
+  additionalActionTime: 2
   _spawnSequence:
   - delay: 0
     angle: 0
-    offset: {x: 0, y: 0}
+    offset: {x: 1, y: 0}
+  - delay: 0.03
+    angle: 0
+    offset: {x: 0.5, y: 0}
+  - delay: 0.05
+    angle: 0
+    offset: {x: 0.5, y: 0}
   - delay: 0.06
     angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.06
+    offset: {x: 0.5, y: 0}
+  - delay: 0.09
     angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.06
+    offset: {x: 0.5, y: 0}
+  - delay: 0.12
     angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.06
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.06
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.06
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.06
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.06
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.06
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.06
-    angle: 0
-    offset: {x: 0, y: 0}
-  - delay: 0.06
-    angle: 0
-    offset: {x: 0, y: 0}
+    offset: {x: 0.5, y: 0}
   randomAngle: 0
   randomOffset: 0

@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using AttackSequence = Cardificer.FiniteStateMachine.COD_DrawCards.AttackSequence;
 
 namespace Cardificer.FiniteStateMachine
 {

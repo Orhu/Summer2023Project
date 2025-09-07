@@ -249,7 +249,10 @@ namespace Cardificer
 
                             Vector2 drawLocation = neighborCell.location - localCurrentRoom.roomLocation;
                             cellVisual.transform.localPosition = new Vector2(cellVisual.transform.localPosition.x + (drawLocation.x * cellSize.x), cellVisual.transform.localPosition.y + (drawLocation.y * cellSize.y));
-                            cellVisual.GetComponent<Image>().color = new Color(0.25f, 0.25f, 0.25f, 0.85f);
+
+                            //reduce color's alpha value if it is undiscovered
+                            Color cellColor = cellVisual.GetComponent<Image>().color;
+                            cellVisual.GetComponent<Image>().color = new Color(cellColor.r, cellColor.g, cellColor.b, .2f); //new: used to be grey
 
                             if (neighborCell.room.roomType.roomTypeSprite && neighborCell.room.roomType.displayName != "Exit")
                             {

@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using ChaseData = Cardificer.FiniteStateMachine.BaseStateMachine.ChaseData;
 
 namespace Cardificer.FiniteStateMachine
 {

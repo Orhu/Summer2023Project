@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Random = System.Random;
 
 namespace Cardificer.FiniteStateMachine
 {

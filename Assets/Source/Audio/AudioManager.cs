@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Linq;
-using System;
 
 namespace Cardificer
 {
@@ -27,15 +26,13 @@ namespace Cardificer
         private List<SoundBase> soundsToDestroyList = new List<SoundBase>();
         //private List<AverageAudio> averageAudioList = new List<AverageAudio>();
         private List<SoundContainer> activeSoundContainers = new List<SoundContainer>();
-        public List<AudioSource> audioSourcesToDestroy = new List<AudioSource>();
+        private List<AudioSource> audioSourcesToDestroy = new List<AudioSource>();
 
         [Tooltip("Default SoundSettings to be applied when a SoundBase has 'Use Default Settings' set to true.")]
         public SoundSettings _defaultSoundSettings;
 
         //Serialized Random for use in random SoundContainer playback
         private System.Random random = new System.Random();
-
-        private MusicManager musicManager;
 
         /// <summary>
         /// Implementing the singleton pattern and DontDestroyOnLoad. Creates the AudioListener GameObject. 
@@ -54,13 +51,7 @@ namespace Cardificer
 
             transform.position = new Vector3 (0,0,0); 
 
-            audioListenerGameObject = new GameObject();
-            audioListenerGameObject.name = "AudioListenerGameObject";
-            audioListenerGameObject.AddComponent<AudioListener>();
-            audioListenerGameObject.transform.SetParent(transform);
-
-            musicManager = GetComponentInChildren<MusicManager>();
-
+            ResetAudioListener();
         }
 
         #region event subscription in OnEnable and OnDisable
@@ -84,42 +75,6 @@ namespace Cardificer
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             SetUpAudioListeners();
-            //print(scene.name);
-
-            switch (scene.name)
-            {
-
-                case ("MainMenu"):
-                    musicManager.StartMainMenuMusic();
-                    break;
-
-                case ("Floor1"):
-
-                    musicManager.StartLevelMusic();
-                    break;
-
-                default:
-
-                    print("You went to a scene without a set action for transitioning the music and the default case in the AudioManager OnSceneLoaded method was reached.");
-                    break;            
-            
-            }
-
-        }
-
-        public void StartMusic()
-        {
-            musicManager.StartLevelMusic();
-        }
-
-        public void SetMusicStateToAmbient()
-        {
-            musicManager.SetMusicToAmbientState_public();
-        }
-
-        public void SetMusicStateToBattle()
-        {
-            musicManager.SetMusicToBattleState_public();
         }
 
         /// <summary>
@@ -127,6 +82,9 @@ namespace Cardificer
         /// </summary>
         public void ResetAudioListener()
         {
+            audioListenerGameObject = new GameObject();
+            audioListenerGameObject.name = "AudioListenerGameObject";
+            audioListenerGameObject.AddComponent<AudioListener>();
             audioListenerGameObject.transform.SetParent(transform);
         }
 
@@ -170,8 +128,7 @@ namespace Cardificer
 
             }
 
-            audioListenerGameObject.transform.position = new Vector3(0, 0, -5);
-
+            if (audioListenerGameObject is not null) audioListenerGameObject.transform.position = new Vector3(0, 0, -5);
         }
 
         /// <summary>
@@ -185,54 +142,13 @@ namespace Cardificer
             
             if (!SoundShouldPlay(soundBase)) { 
 
-                if (printDebugMessages) print($"{soundBase.name} should not play!"); 
+                if (printDebugMessages) print("sound should not play!"); 
             }
 
             else
             {
-                if (printDebugMessages) print($"Playing {soundBase.name} on {target.name}!");
+                if (printDebugMessages) print("Playing soundbase!");
                 PlaySoundBaseOnAudioSource(soundBase, GetAudioSourceFromTarget(target, makeUnique));
-            }
-
-        }
-
-        public void PlaySoundBaseOnTarget(SoundBase soundBase, Transform target, bool makeUnique, float startVolume)
-        {
-
-            if (!SoundShouldPlay(soundBase))
-            {
-
-                if (printDebugMessages) print($"{soundBase.name} should not play!");
-            }
-
-            else
-            {
-                if (printDebugMessages) print($"Playing {soundBase.name} on {target.name}!");
-                PlaySoundBaseOnAudioSource(soundBase, GetAudioSourceFromTarget(target, makeUnique), startVolume);
-            }
-
-        }
-
-        /// <summary>
-        /// Starts a SoundBase on a Transform.  
-        /// </summary>
-        /// <param name="soundBase">The SoundBase to play. </param>
-        /// <param name="target">The Transform to play the SoundBase on. </param>
-        /// <param name="makeUnique">If true will create a new AudioSource if there is one currently playing on the Target. </param>
-        public void PlaySoundBaseOnTarget(SoundBase soundBase, Transform target, bool makeUnique, out AudioSource audioSourcePlayingOn)
-        {
-
-            if (!SoundShouldPlay(soundBase))
-            {
-                audioSourcePlayingOn = null;
-                if (printDebugMessages) print($"{soundBase.name} should not play!");
-            }
-
-            else
-            {
-                audioSourcePlayingOn = GetAudioSourceFromTarget(target, makeUnique);
-                if (printDebugMessages) print($"Playing {soundBase.name} on {target.name}!");
-                PlaySoundBaseOnAudioSource(soundBase, audioSourcePlayingOn);
             }
 
         }
@@ -257,7 +173,7 @@ namespace Cardificer
         /// <param name="target">The Transform to get the AudioSource from. </param>
         /// <param name="makeUnique">If true will create a new AudioSource if there is one currently playing on the Target. </param>
         /// <returns> Always returns an AudioSource even if there is no AudioSource on the target Transform </returns>
-        public AudioSource GetAudioSourceFromTarget(Transform target, bool makeUnique)
+        private AudioSource GetAudioSourceFromTarget(Transform target, bool makeUnique)
         {
 
             AudioSource targetAudioSource = target.GetComponent<AudioSource>();
@@ -331,40 +247,20 @@ namespace Cardificer
                     break;
                 }
 
-                case SoundType.MusicSound:
-                {
-                    MusicSound music = (MusicSound)soundBase;
-                    PlayMusic(music, audioSource);
-
-                    break;
-                }
-
                 default:
                 {
-                    print("Default case in AudioManager.PlaySoundBaseOnAudioSource reached!\nSoundBases can only be of type 'BasicSound', 'SoundContainer', or 'MusicSound'");
+                    print("Default case in AudioManager.PlaySoundBaseOnAudioSource reached!\nSoundBases can only be of type 'BasicSound' or 'SoundContainer'");
                     break;
                 }
             }
         }
 
-
-        private void PlaySoundBaseOnAudioSource(SoundBase soundBase, AudioSource audioSource, float startVolume)
-        {
-
-            soundBase.audioSourceInUse = audioSource;
-            audioSource.volume = startVolume;
-
-            MusicSound music = (MusicSound)soundBase;
-            PlayMusic(music, audioSource);
-        
-        }
-
-            /// <summary>
-            /// Plays a BasicSound on an AudioSource. 
-            /// </summary>
-            /// <param name="sound">The BasicSound to start playing at a location.</param>
-            /// <param name="audioSource">The AudioSource that will play the BasicSound.</param>
-            private void PlaySound(BasicSound sound, AudioSource audioSource)
+        /// <summary>
+        /// Plays a BasicSound on an AudioSource. 
+        /// </summary>
+        /// <param name="sound">The BasicSound to start playing at a location.</param>
+        /// <param name="audioSource">The AudioSource that will play the BasicSound.</param>
+        private void PlaySound(BasicSound sound, AudioSource audioSource)
         {
             if (audioSource.isPlaying)
             {
@@ -379,26 +275,8 @@ namespace Cardificer
             if (sound.audioClip != null)
                 audioSource.Play();
             else
-                print($"Tried to play a sound ({sound.name}) on {audioSource.gameObject.name}, but the AudioClip was null.");
+                print($"Tried to play a sound ({sound.name}) on {audioSource.gameObject.name}.");
 
-        }
-
-        private void PlayMusic(MusicSound musicSound, AudioSource audioSource)
-        {
-            if (audioSource.isPlaying)
-            {
-                GameObject go = audioSource.gameObject;
-                audioSource = go.AddComponent<AudioSource>();
-
-            }
-
-            audioSource.clip = musicSound.audioClip;
-            ApplySoundSettingsToAudioSource(musicSound, audioSource);
-
-            if (musicSound.audioClip != null)
-                audioSource.Play();
-            else
-                print($"Tried to play a sound ({musicSound.name}) on {audioSource.gameObject.name}.");
         }
 
         /// <summary>
@@ -453,9 +331,6 @@ namespace Cardificer
             if (!soundContainer.IsValid()) yield break;
 
             int soundsLength = soundContainer.clipsInContainer.Length;
-            bool shouldPlay = true;
-            AudioClip clipToPlay = null;
-            int randomInt;
 
             if (soundsLength < 1)
             {
@@ -493,8 +368,8 @@ namespace Cardificer
                     for (int i = 0; i < soundsLength; i++)
                     {
 
-                        randomInt = random.Next(clips.Count);
-                        clipToPlay = clips[randomInt];
+                        int randomInt = random.Next(clips.Count);
+                        AudioClip clipToPlay = clips[randomInt];
                         float awaitTime = clipToPlay.length;
                         ApplySoundSettingsToAudioSource(soundContainer, audioSource, clipToPlay);
 
@@ -507,15 +382,14 @@ namespace Cardificer
                     }
 
                     break;
-                    
 
                 //Plays through each AudioClip in the container randomly, not caring if a sound plays more than once per loop
                 case SoundContainerType.RandomRandom:
 
                     for (int i = 0; i < soundsLength; i++)
                     {
-                        randomInt = random.Next(soundsLength);
-                        clipToPlay = soundContainer.clipsInContainer[randomInt];
+                        int randomInt = random.Next(soundsLength);
+                        AudioClip clipToPlay = soundContainer.clipsInContainer[randomInt];
                         float awaitTime = clipToPlay.length;
                         if (audioSource == null) yield break;
                         ApplySoundSettingsToAudioSource(soundContainer, audioSource, clipToPlay);
@@ -531,19 +405,31 @@ namespace Cardificer
                 //Plays only one random AudioClip in the SoundContainer
                 case SoundContainerType.RandomOneshot:
 
-                    randomInt = random.Next(soundsLength);
-                    clipToPlay = soundContainer.clipsInContainer[randomInt];
-                    float awaitTimeOneshot = clipToPlay.length;
-                    if (audioSource == null) yield break;
-                    ApplySoundSettingsToAudioSource(soundContainer, audioSource, clipToPlay);
-                    audioSource.Play();
-                    yield return new WaitForSeconds(awaitTimeOneshot);
+                    if (!soundContainer.IsValid())
+                    {
+                        print($"No clips found in {soundContainer.name} trying to play on {audioSource.gameObject.name}");
+                        break;
+                    }
+
+                    soundContainer.loopContainer = false;
+
+                    AudioClip oneshotToPlay = soundContainer.clipsInContainer[random.Next(soundsLength)];
+
+                    if (!audioSource.isPlaying)
+                    {
+                        ApplySoundSettingsToAudioSource(soundContainer, audioSource, oneshotToPlay);
+                    }
+
+                    audioSource.PlayOneShot(oneshotToPlay);
+
+                    float clipLength = oneshotToPlay.length;
+                    StartCoroutine(HandleRandomOneShotPlayback(soundContainer, clipLength));
 
                     break;
 
             }
 
-            if (!soundContainer.loopContainer || soundContainer.audioSourceInUse == null)
+            if ((!soundContainer.loopContainer && soundContainer.containerType != SoundContainerType.RandomOneshot) || soundContainer.audioSourceInUse == null)
             {
                 soundContainer.isPlaying = false;
             }
@@ -635,40 +521,6 @@ namespace Cardificer
         }
 
         /// <summary>
-        /// Applies the settings from a MusicSound to an AudioSource. Random values are assigned in this method.
-        /// </summary>
-        /// <param name="musicSound">The SoundContainer to get the settings from.</param>
-        /// <param name="audioSource">The AudioSource to apply the settings onto.</param>
-        public void ApplySoundSettingsToAudioSource(MusicSound musicSound, AudioSource audioSource)
-        {
-
-            //audioSource.clip = clip;
-            audioSource.outputAudioMixerGroup = musicSound.outputAudioMixerGroup;
-            musicSound.audioSourceInUse = audioSource;
-
-            if (musicSound.useDefaultSettings) //default settings set on AudioManager Component
-            {
-
-                audioSource.priority = _defaultSoundSettings.priority;
-                audioSource.loop = _defaultSoundSettings.loop;
-                audioSource.pitch = _defaultSoundSettings.pitch;
-                audioSource.volume = _defaultSoundSettings.volume;
-                audioSource.spatialBlend = _defaultSoundSettings.spatialBlend;
-                audioSource.spread = _defaultSoundSettings.spread;
-
-            }
-            else //use settings found on the MusicSound.
-            {
-                audioSource.priority = musicSound.soundSettings.priority;
-                audioSource.loop = musicSound.soundSettings.loop;
-                audioSource.volume = musicSound.GetVolume();
-                audioSource.pitch = musicSound.GetPitch();
-                audioSource.spatialBlend = musicSound.soundSettings.spatialBlend;
-                audioSource.spread = musicSound.soundSettings.spread;
-            }
-        }
-
-        /// <summary>
         /// Apply SoundSettings from a SoundContainer to an AudioSource, using a clip from a different source.
         /// </summary>
         /// <param name="soundContainer">The SoundContainer to get the settings from.</param>
@@ -738,7 +590,7 @@ namespace Cardificer
                 {
                     audioSourcesToDestroy.Remove(audioSource);
                     audioSource.Stop();
-                    //print("destroying audio source on " + audioSource.name);
+                    if (printDebugMessages) print("destroying audio source on " + audioSource.name);
                     Destroy(audioSource);
                     return;
                 }
@@ -783,15 +635,13 @@ namespace Cardificer
                 yield return null;
             }
 
-            if (destroyObjectOrAudioSource && audioSourceToFade != null)
+            if (destroyObjectOrAudioSource)
             {
                 Destroy(audioSourceToFade.gameObject);
 
             }
             else
             {
-
-                if (audioSourceToFade == null) yield break;
 
                 AudioSource[] sources = audioSourceToFade.gameObject.GetComponents<AudioSource>();
                 if (sources.Length <= 1)
@@ -847,35 +697,6 @@ namespace Cardificer
             else { return true; }
 
         }
-
-        public void PlayDefaultChargeSoundOnTarget(float chargeTime, Transform transform)
-        {
-            StartCoroutine(PlayDefaultChargeSound(chargeTime, transform));
-        }
-
-        private IEnumerator PlayDefaultChargeSound(float chargeTime, Transform target)
-        {
-
-            BasicSound defaultChargeSFX = SoundGetter.Instance.defaultChargeSound;
-            float curTime = 0;
-
-            PlaySoundBaseOnTarget(defaultChargeSFX, target, true, out AudioSource audioSourceToManipulate);
-            audioSourceToManipulate.volume = 0;
-
-            while (curTime < chargeTime) 
-            {
-                float value = Mathf.Lerp(0, defaultChargeSFX.GetVolume(), curTime / chargeTime);
-                audioSourceToManipulate.volume = 1 - Mathf.Cos((value * Mathf.PI) / 2); ;
-
-                curTime += Time.deltaTime;
-                yield return null;
-            
-            }
-
-            audioSourceToManipulate.Stop();
-
-        }
-
 
     }
 

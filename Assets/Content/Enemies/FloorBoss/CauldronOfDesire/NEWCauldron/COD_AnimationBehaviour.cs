@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 //keeps track of the number of cards the cauldron draws and resets after 3 have been flipped

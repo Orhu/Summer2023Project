@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a35acca2b866a4a854023149e2de6f, type: 3}
+  m_Name: GiantRat_WanderToIdle
+  m_EditorClassIdentifier: 
+  trueState: {fileID: 11400000, guid: a92fd1b50fe0b0744927d1f4831f31f5, type: 2}
+  decisions:
+  - invert: 0
+    decision: {fileID: 11400000, guid: 5cb7c62bc129e77448f9237e851c7e8b, type: 2}
+    nextOperator: 1
+  - invert: 0
+    decision: {fileID: 11400000, guid: 0a33ed4af85c5da4995e7041b7d22b5a, type: 2}
+    nextOperator: 1
+  - invert: 0
+    decision: {fileID: 11400000, guid: c5d5f3602b66d244d96c5a64c1dda842, type: 2}
+    nextOperator: 1
