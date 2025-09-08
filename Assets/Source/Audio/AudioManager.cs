@@ -100,10 +100,16 @@ namespace Cardificer
         /// </summary>
         public void ResetAudioListener()
         {
-            audioListenerGameObject = new GameObject();
-            audioListenerGameObject.name = "AudioListenerGameObject";
-            audioListenerGameObject.AddComponent<AudioListener>();
-            audioListenerGameObject.transform.SetParent(transform);
+
+            if(GameObject.Find("AudioListenerGameObject") == null)
+            {
+                audioListenerGameObject = new GameObject();
+                audioListenerGameObject.name = "AudioListenerGameObject";
+                audioListenerGameObject.AddComponent<AudioListener>();
+                audioListenerGameObject.transform.SetParent(transform);
+
+            }
+
         }
 
         /// <summary>
@@ -257,7 +263,6 @@ namespace Cardificer
                     
                 case SoundType.SoundContainer:
                 {
-                        
                     SoundContainer container = (SoundContainer)soundBase;
                     container.shouldPlay = true;
                     StartCoroutine(PlaySoundContainer(container, audioSource));
@@ -347,6 +352,7 @@ namespace Cardificer
         private IEnumerator PlaySoundContainer(SoundContainer soundContainer, AudioSource audioSource)
         {
             if (!soundContainer.IsValid()) yield break;
+            print("playing " + soundContainer.name);
 
             int soundsLength = soundContainer.clipsInContainer.Length;
 
@@ -406,10 +412,11 @@ namespace Cardificer
 
                     for (int i = 0; i < soundsLength; i++)
                     {
+                        if (audioSource == null) yield break;
+
                         int randomInt = random.Next(soundsLength);
                         AudioClip clipToPlay = soundContainer.clipsInContainer[randomInt];
                         float awaitTime = clipToPlay.length;
-                        if (audioSource == null) yield break;
                         ApplySoundSettingsToAudioSource(soundContainer, audioSource, clipToPlay);
                         audioSource.Play();
                         yield return new WaitForSeconds(awaitTime);
@@ -423,6 +430,9 @@ namespace Cardificer
                 //Plays only one random AudioClip in the SoundContainer
                 case SoundContainerType.RandomOneshot:
 
+                    //print("whoa");
+                    if (audioSource == null) yield break;
+
                     if (!soundContainer.IsValid())
                     {
                         print($"No clips found in {soundContainer.name} trying to play on {audioSource.gameObject.name}");
@@ -433,15 +443,14 @@ namespace Cardificer
 
                     AudioClip oneshotToPlay = soundContainer.clipsInContainer[random.Next(soundsLength)];
 
-                    if (!audioSource.isPlaying)
-                    {
-                        ApplySoundSettingsToAudioSource(soundContainer, audioSource, oneshotToPlay);
-                    }
+                    ApplySoundSettingsToAudioSource(soundContainer, audioSource);
+                    audioSource.clip = oneshotToPlay;
+                    audioSource.Play();
 
-                    audioSource.PlayOneShot(oneshotToPlay);
+                    float waitTime = oneshotToPlay.length;
 
-                    float clipLength = oneshotToPlay.length;
-                    StartCoroutine(HandleRandomOneShotPlayback(soundContainer, clipLength));
+                    yield return new WaitForSeconds(waitTime + 1);
+                    soundContainer.isPlaying = false;
 
                     break;
 
@@ -451,7 +460,7 @@ namespace Cardificer
             {
                 soundContainer.isPlaying = false;
             }
-            else
+            else if (soundContainer.loopContainer)
             {
                 StartCoroutine(PlaySoundContainer(soundContainer, audioSource));
             }
@@ -655,7 +664,7 @@ namespace Cardificer
 
             if (destroyObjectOrAudioSource)
             {
-                Destroy(audioSourceToFade.gameObject);
+                if(audioSourceToFade != null) Destroy(audioSourceToFade.gameObject);
 
             }
             else

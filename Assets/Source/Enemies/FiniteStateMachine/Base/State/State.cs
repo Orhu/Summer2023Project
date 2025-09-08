@@ -52,7 +52,7 @@ namespace Cardificer.FiniteStateMachine
         /// <param name="stateMachine"> The state machine to be used. </param>
         public void OnStateEnter(BaseStateMachine stateMachine)
         {
-            Debug.Log("JUST ENTERED STATE CALLED: " + this.name + " ON THE GAMEOBJECT CALLED : " + stateMachine.gameObject.name);
+            //Debug.Log("JUST ENTERED STATE CALLED: " + this.name + " ON THE GAMEOBJECT CALLED : " + stateMachine.gameObject.name);
 
             foreach (var action in enterActions)
             {

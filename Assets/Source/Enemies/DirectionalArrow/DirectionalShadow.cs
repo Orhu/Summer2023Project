@@ -59,7 +59,7 @@ namespace Cardificer
         {
             if (targetDir == ArrowDirection.None)
             {
-                Debug.Log("STOPPED case");
+                //Debug.Log("STOPPED case");
 
                 //use the default animation & ensure our x values are not inverted
                 anim.SetInteger("direction", 0);
@@ -69,7 +69,7 @@ namespace Cardificer
            
             if (targetDir == ArrowDirection.Left)
             {
-                Debug.Log("LEFT case");
+                //Debug.Log("LEFT case");
 
                 anim.SetInteger("direction", 1);
                 currentDirection = ArrowDirection.Left;
@@ -78,7 +78,7 @@ namespace Cardificer
 
             if (targetDir == ArrowDirection.Right)
             {
-                Debug.Log("RIGHT case");
+                //Debug.Log("RIGHT case");
 
                 anim.SetInteger("direction", 2);
                 currentDirection = ArrowDirection.Right;
@@ -87,7 +87,7 @@ namespace Cardificer
 
             if (targetDir == ArrowDirection.Up)
             {
-                Debug.Log("UP case");
+                //Debug.Log("UP case");
 
                 anim.SetInteger("direction", 3);
                 currentDirection = ArrowDirection.Up;
